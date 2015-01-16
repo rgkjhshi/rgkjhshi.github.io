@@ -1,0 +1,13 @@
+---
+layout: default
+title: 文章列表
+---
+
+  <ul class="post-list">
+    {% for post in site.posts %}
+        <a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+        <span style="float:right; width:100px; "> {{ post.date | date: '%Y-%m-%d' }} </span>
+        <!-- <span style="float:right; width:100px; "> {{ post.category }} </span> -->
+        <br>
+    {% endfor %}
+  </ul>
