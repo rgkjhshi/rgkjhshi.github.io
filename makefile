@@ -5,8 +5,9 @@ deploy:
     git commit -m "update source"
     cp -r _site ~/tmp/
     git checkout gh-pages
-    rm -r ./*
-    cp -r /tmp/_site/* ./
+    rm -rf *
+    cp -r ~/tmp/_site/* ./
+    rm -rf ~/tmp/_site/./*
     git add -A
     git commit -m "deploy blog"
     git push origin gh-pages
