@@ -7,7 +7,7 @@ deploy:
 	git checkout gh-pages
 	rm -rf *
 	cp -r ~/tmp/_site/* ./
-	rm -rf ~/tmp/_site/./*
+	rm -rf ~/tmp/_site 
 	git add -A
 	git commit -m "deploy blog"
 	git push origin gh-pages
