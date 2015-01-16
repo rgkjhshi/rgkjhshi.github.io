@@ -6,9 +6,109 @@
 </description>
     <link>http://yourdomain.com/blog/</link>
     <atom:link href="http://yourdomain.com/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 16 Jan 2015 14:19:02 +0800</pubDate>
-    <lastBuildDate>Fri, 16 Jan 2015 14:19:02 +0800</lastBuildDate>
+    <pubDate>Fri, 16 Jan 2015 20:27:54 +0800</pubDate>
+    <lastBuildDate>Fri, 16 Jan 2015 20:27:54 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>MySQL数据类型</title>
+        <description>&lt;p&gt;MySQL中的数据类型以及使用时需要注意的地方记录如下  &lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2&gt;本文结构&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#anchor1&quot;&gt;数字类型&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#anchor2&quot;&gt;日期类型&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#anchor3&quot;&gt;字符类型&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;anchor1&quot;&gt; 数字类型 &lt;/h2&gt;
+
+&lt;p&gt;数字类型包括:  &lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt; &lt;code&gt;TINYINT, SMALLINT, MEDIUMINT,  INT, BIGINT&lt;/code&gt; &lt;/li&gt;
+&lt;li&gt; &lt;code&gt;DECIMAL&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;    &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;类型&lt;/span&gt;    &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;长度&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Byte&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;最小值&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SIGNED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;UNSIGNED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;最大值&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SIGNED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;UNSIGNED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  
+    &lt;span class=&quot;o&quot;&gt;|:-----------&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|:------------:|-------------------------:|-------------------------:|&lt;/span&gt; 
+    &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;TINYINT&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;       &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;128&lt;/span&gt;                   &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  &lt;span class=&quot;mi&quot;&gt;127&lt;/span&gt;                     &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; 
+    &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;             &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;              &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;                      &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  &lt;span class=&quot;mi&quot;&gt;255&lt;/span&gt;                     &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; 
+    &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;SMALLINT&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;       &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;32768&lt;/span&gt;                 &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  &lt;span class=&quot;mi&quot;&gt;32767&lt;/span&gt;                   &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; 
+    &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;             &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;              &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;                      &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  &lt;span class=&quot;mi&quot;&gt;65535&lt;/span&gt;                   &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; 
+    &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;MEDIUMINT&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;       &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8388608&lt;/span&gt;               &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  &lt;span class=&quot;mi&quot;&gt;8388607&lt;/span&gt;                 &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; 
+    &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;             &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;              &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;                      &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  &lt;span class=&quot;mi&quot;&gt;16777215&lt;/span&gt;                &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; 
+    &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;INT&lt;/span&gt;     &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;       &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2147483648&lt;/span&gt;            &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  &lt;span class=&quot;mi&quot;&gt;2147483647&lt;/span&gt;              &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; 
+    &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;             &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;              &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;                      &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  &lt;span class=&quot;mi&quot;&gt;4294967295&lt;/span&gt;              &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; 
+    &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;BIGINT&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;       &lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;9223372036854775808&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  &lt;span class=&quot;mi&quot;&gt;9223372036854775807&lt;/span&gt;     &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; 
+    &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;             &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;              &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;                      &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  &lt;span class=&quot;mi&quot;&gt;18446744073709551615&lt;/span&gt;    &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;DECIMAL(M,D)&lt;/code&gt;:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt; M 代表精度,即总共的位数,范围1-65&lt;/li&gt;
+&lt;li&gt; D 代表小数部分的位数,范围0-30,但不能大于M &lt;/li&gt;
+&lt;li&gt; 如果插入数值超过M,则只显示该精度内的最大值&lt;/li&gt;
+&lt;li&gt; &lt;code&gt;price DECIMAL(5, 2)&lt;/code&gt; 表示最大值为 999.99&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;下面这段代码注意：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-mysql&quot; data-lang=&quot;mysql&quot;&gt;    &lt;span class=&quot;ss&quot;&gt;`status`&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;TINYINT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;UNSIGNED&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NOT&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;NULL&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;AUTO_INCREMENT&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol&gt;
+&lt;li&gt; 整数类型后面的长度表示显示数字时的宽度。&lt;/li&gt;
+&lt;li&gt; 尽量使用 &lt;code&gt;TINYINT&lt;/code&gt; 表示状态&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;anchor2&quot;&gt; 日期类型 &lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;DATE&lt;/code&gt; : 3字节, &lt;code&gt;&amp;#39;YYYY-MM-DD&amp;#39;&lt;/code&gt;格式, 范围是 &lt;code&gt;&amp;#39;1000-01-01&amp;#39; ~ &amp;#39;9999-12-31&amp;#39;&lt;/code&gt;。如果只记录日期, 存储空间、性能都要比varchar(10)要好。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;TIMESTAMP&lt;/code&gt; : 4字节,&lt;code&gt;&amp;#39;YYYY-MM-DD HH:MM:SS&amp;#39;&lt;/code&gt;格式, 范围是&lt;code&gt;&amp;#39;1970-01-01 00:00:01&amp;#39; ~ &amp;#39;2038-01-19 03:14:07&amp;#39;&lt;/code&gt;。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;DATETIME&lt;/code&gt; : 8字节,&lt;code&gt;&amp;#39;YYYY-MM-DD HH:MM:SS&amp;#39;&lt;/code&gt;格式, 范围是&lt;code&gt;&amp;#39;1000-01-01 00:00:00&amp;#39; ~ &amp;#39;9999-12- 31 23:59:59&amp;#39;&lt;/code&gt;。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;注意:  &lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt; 一个表中日期类只能存在一个定义默认值为 CURRENT_TIMESTAMP的 timestamp列&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;anchor3&quot;&gt; 字符类型 &lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt; &lt;code&gt;CHAR&lt;/code&gt; : 定长文本字符类型&lt;/li&gt;
+&lt;li&gt; &lt;code&gt;VARCHAR&lt;/code&gt;: 变长文本字符类型&lt;/li&gt;
+&lt;li&gt; &lt;code&gt;TEXT&lt;/code&gt; : 大变长文本字符类型&lt;/li&gt;
+&lt;li&gt; &lt;code&gt;BINARY&lt;/code&gt; : 类似于char, 变长二进制字符类型&lt;/li&gt;
+&lt;li&gt; &lt;code&gt;VARBINARY&lt;/code&gt; : 类似于varchar, 变长二进制字符类型 &lt;/li&gt;
+&lt;li&gt; &lt;code&gt;BLOB&lt;/code&gt; : 大变长二进制字符类型 &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;注意:  &lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt; &lt;code&gt;VARCHAR(4)&lt;/code&gt; 表示的是4个字符，而不是字节，能够存放四个汉字，另外，一般varchar会在开头使用1到2个字节来记录字符串的实际长度&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;hr&gt;
+</description>
+        <pubDate>Fri, 16 Jan 2015 00:00:00 +0800</pubDate>
+        <link>http://yourdomain.com/blog/mysql/2015/01/16/MySQL%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/blog/mysql/2015/01/16/MySQL%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B.html</guid>
+        
+        
+        <category>mysql</category>
+        
+      </item>
     
       <item>
         <title>测试一下</title>
@@ -330,9 +430,8 @@ ______
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&amp;lt;a href=&amp;quot;http://example.com/&amp;quot;&amp;gt;http://example.com/&amp;lt;/a&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;邮件的自动链接也很类似，只是 Markdown 会先做一个编码转换的过程，把文字字符转成 16 进位码的 HTML 实体，这样的格式可以糊弄一些不好的邮址收集机器人，例如：&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;mailto:address@example.com&quot;&gt;address@example.com&lt;/a&gt;&lt;/p&gt;
-
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&amp;lt;address@example.com&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Markdown 会转成：&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&amp;lt;a href=&amp;quot;&amp;amp;#x6D;&amp;amp;#x61;i&amp;amp;#x6C;&amp;amp;#x74;&amp;amp;#x6F;:&amp;amp;#x61;&amp;amp;#x64;&amp;amp;#x64;&amp;amp;#x72;&amp;amp;#x65;
 &amp;amp;#115;&amp;amp;#115;&amp;amp;#64;&amp;amp;#101;&amp;amp;#120;&amp;amp;#x61;&amp;amp;#109;&amp;amp;#x70;&amp;amp;#x6C;e&amp;amp;#x2E;&amp;amp;#99;&amp;amp;#111;
