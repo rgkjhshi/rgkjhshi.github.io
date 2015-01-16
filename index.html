@@ -6,7 +6,6 @@ title: 文章列表
   <ul class="post-list">
     {% for post in site.posts %}
         <a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
-        <p> {{  post.url }} </p>
         <span style="float:right; width:100px; "> {{ post.date | date: '%Y-%m-%d' }} </span>
         <!-- <span style="float:right; width:100px; "> {{ post.category }} </span> -->
         <br>

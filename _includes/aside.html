@@ -1,6 +1,6 @@
 <aside>
     <h1 style="margin:auto 0;"> 目录分类 </h1>
     {% for cat in site.categories %}
-        <a style="display: block; " href="{{ /cat[0] | prepend: site.baseurl }} "> {{ cat[0] }} ({{ cat | last | size}}) </a>
+        <a style="display: block; " href="{{ site.baseurl }}/{{ cat[0] }} "> {{ cat[0] }} ({{ cat | last | size}}) </a>
     {% endfor %}
 </aside>
