@@ -1,4 +1,4 @@
 github.io
 =========
 
-[Blog](http://rgkjhshi.github.io/Blog/)
+博客地址: [http://rgkjhshi.github.io/blog/](http://rgkjhshi.github.io/blog/)
