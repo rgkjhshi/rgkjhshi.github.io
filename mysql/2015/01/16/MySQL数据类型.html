@@ -36,15 +36,17 @@
 </header>
       <!-- 侧边栏 -->
       <aside>
-    <h1 style="margin:auto 0;"> 目录分类 </h1>
+    <h1> 目录分类 </h1>
     
         <a style="display: block; " href="/blog/info "> info (1) </a>
     
         <a style="display: block; " href="/blog/markdown "> markdown (1) </a>
     
-        <a style="display: block; " href="/blog/java "> java (2) </a>
+        <a style="display: block; " href="/blog/java "> java (1) </a>
     
         <a style="display: block; " href="/blog/mysql "> mysql (1) </a>
+    
+        <a style="display: block; " href="/blog/mybatis "> mybatis (2) </a>
     
 </aside>
 
@@ -137,7 +139,9 @@
 <p>注意:  </p>
 
 <ol>
-<li> <code>VARCHAR(4)</code> 表示的是4个字符，而不是字节，能够存放四个汉字，另外，一般varchar会在开头使用1到2个字节来记录字符串的实际长度</li>
+<li> <code>VARCHAR</code> 类型最多能存储65535个字节长度的数据，如果采用 <code>UTF8</code> 编码，则每个字符占3字节，即最大长度为 <code>65535/3=21845</code> 个字符</li>
+<li> <code>VARCHAR(4)</code> 表示的是4个字符，而不是字节，一个字母和一个汉字都是一个字符</li>
+<li> <code>VARCHAR</code> 开头会占用1到2个字节来存储字符串实际长度(长度超过255时要2个字节),最大长度不超过65535。不会影响上面所说的字符长度。</li>
 </ol>
 
 <hr>
