@@ -134,9 +134,11 @@
 <p><strong>项目的文件清单</strong></p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">    src
     |--com.test.mybatis
+    |  |--bean
+    |  |  |--User.java
+    |  |--mapper
+    |  |  |--UserMapper.java
     |  |--TestMybatis.java
-    |  |--User.java
-    |  |--UserMapper.java
     resources
     |--mappers
     |  |--UserMapper.xml
@@ -147,7 +149,7 @@
 <span class="cp">&lt;!DOCTYPE configuration PUBLIC &quot;-//mybatis.org//DTD Config 3.0//EN&quot; &quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;&gt;</span>
 <span class="nt">&lt;configuration&gt;</span>
     <span class="nt">&lt;typeAliases&gt;</span>
-        <span class="nt">&lt;typeAlias</span> <span class="na">alias=</span><span class="s">&quot;User&quot;</span> <span class="na">type=</span><span class="s">&quot;com.test.mybatis.User&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;typeAlias</span> <span class="na">alias=</span><span class="s">&quot;User&quot;</span> <span class="na">type=</span><span class="s">&quot;com.test.mybatis.bean.User&quot;</span><span class="nt">/&gt;</span>
     <span class="nt">&lt;/typeAliases&gt;</span>
 
     <span class="nt">&lt;environments</span> <span class="na">default=</span><span class="s">&quot;development&quot;</span><span class="nt">&gt;</span>
@@ -170,7 +172,7 @@
 <p><strong>Mapper文件: mappers/UserMapper.xml</strong></p>
 <div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
 <span class="cp">&lt;!DOCTYPE mapper PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot; &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;</span>
-<span class="nt">&lt;mapper</span> <span class="na">namespace=</span><span class="s">&quot;com.test.mybatis.UserMapper&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;mapper</span> <span class="na">namespace=</span><span class="s">&quot;com.test.mybatis.mapper.UserMapper&quot;</span><span class="nt">&gt;</span>
 
     <span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&quot;selectUserById&quot;</span> <span class="na">parameterType=</span><span class="s">&quot;java.lang.Integer&quot;</span> <span class="na">resultType=</span><span class="s">&quot;User&quot;</span><span class="nt">&gt;</span>
         SELECT id, username, password

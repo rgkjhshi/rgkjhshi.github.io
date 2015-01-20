@@ -6,8 +6,8 @@
 </description>
     <link>http://yourdomain.com/blog/</link>
     <atom:link href="http://yourdomain.com/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 19 Jan 2015 22:37:50 +0800</pubDate>
-    <lastBuildDate>Mon, 19 Jan 2015 22:37:50 +0800</lastBuildDate>
+    <pubDate>Tue, 20 Jan 2015 10:56:53 +0800</pubDate>
+    <lastBuildDate>Tue, 20 Jan 2015 10:56:53 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -28,6 +28,7 @@
 &lt;li&gt; &lt;a href=&quot;#TypeHandler2&quot;&gt;注册TypeHandler&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt; &lt;a href=&quot;#TypeHandler3&quot;&gt;自动获取TypeHandler&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#mappers&quot;&gt;mappers 映射器&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;hr&gt;
@@ -218,7 +219,8 @@ iterator    Iterator
 &lt;p&gt;&lt;a id=&quot;TypeHandler2&quot;&gt;&lt;/a&gt;
 &lt;strong&gt;注册TypeHandler&lt;/strong&gt; &lt;/p&gt;
 
-&lt;p&gt;建立了自己的TypeHandler之后就需要把它注册到Mybatis的配置文件中，让Mybatis能够识别并使用它。注册TypeHandler主要有两种方式:&lt;/p&gt;
+&lt;p&gt;MyBatis 在&lt;code&gt;TypeHandlerRegistry&lt;/code&gt;类中已经注册了许多TypeHandler。&lt;br&gt;
+我们建立了自己的TypeHandler之后就需要把它注册到Mybatis的配置文件中，让Mybatis能够识别并使用它。注册TypeHandler主要有两种方式:&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt; 一种是通过typeHandler来注册，这样一次只能注册一个TypeHandler。&lt;br&gt;
@@ -301,13 +303,37 @@ MyBatis会通过窥探属性的原始类型来推断由类型处理器处理的 
 或者我们可以通过&lt;code&gt;typeHandler&lt;/code&gt;属性指定到底使用哪个&lt;code&gt;TypeHandler&lt;/code&gt;，这样不指定&lt;code&gt;javaType&lt;/code&gt;和&lt;code&gt;jdbcType&lt;/code&gt;也可以达到同样效果。&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;result&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;interests&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;interests&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;typeHandler=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;org.mybatis.example.StringArrayTypeHandler&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;&lt;em&gt;&lt;code&gt;mapper.xml&lt;/code&gt;文件的内容后面会讲&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;code&gt;mapper.xml&lt;/code&gt;文件的内容请参考后续文章中的动态SQL&lt;/em&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;mappers&quot;&gt; mappers 映射器 &lt;/h2&gt;
+
+&lt;p&gt;MyBatis的配置文件&lt;code&gt;mybtis-config.xml&lt;/code&gt;中有&lt;code&gt;mappers&lt;/code&gt;元素，其作用是告诉MyBatis去哪里找SQL映射语句。&lt;br&gt;
+一般情况会有一个&lt;code&gt;Maper接口&lt;/code&gt;和一个&lt;code&gt;Mapper.xml&lt;/code&gt;对应(在&lt;code&gt;Mapper接口&lt;/code&gt;中全部使用注解除外)，注册&lt;code&gt;Mapper&lt;/code&gt;的方法归纳如下：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;mappers&amp;gt;&lt;/span&gt;  
+   &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 通过package元素将会把指定包下面的所有Mapper接口进行注册 --&amp;gt;&lt;/span&gt;  
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;package&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;com.test.mybatis.bean&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;  
+   &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 通过mapper元素的resource属性可以指定资源中的Mapper.xml文件 --&amp;gt;&lt;/span&gt;  
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;mapper&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resource=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;mapper/UserMapper.xml&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;  
+   &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 通过mapper元素的url属性可以指定一个通过URL请求道的Mapper.xml文件 --&amp;gt;&lt;/span&gt;  
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;mapper&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;url=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;file:///var/mappers/UserMapper.xml&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;  
+   &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 通过mapper元素的class属性可以指定一个Mapper接口进行注册 --&amp;gt;&lt;/span&gt;  
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;mapper&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;com.test.mybatis.mapper.UserMapper&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;  
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/mappers&amp;gt;&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt; &lt;code&gt;mapper&lt;/code&gt;元素的三个属性&lt;code&gt;resource&lt;/code&gt;、&lt;code&gt;url&lt;/code&gt;和&lt;code&gt;class&lt;/code&gt;对于每个&lt;code&gt;mapper&lt;/code&gt;元素只能指定一个，不能都指定，也不能都不指定。&lt;/li&gt;
+&lt;li&gt; 如果&lt;code&gt;Mapper接口&lt;/code&gt;全部使用注解，并且没有与之对应的&lt;code&gt;mapper.xml&lt;/code&gt;文件时，可以&lt;code&gt;package&lt;/code&gt;元素和&lt;code&gt;mapper&lt;/code&gt;元素的&lt;code&gt;class&lt;/code&gt;属性这两种方式注册接口。&lt;/li&gt;
+&lt;/ol&gt;
 
 &lt;hr&gt;
 </description>
-        <pubDate>Mon, 19 Jan 2015 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/blog/mybatis/2015/01/19/MyBatis(%E4%BA%8C)%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/blog/mybatis/2015/01/19/MyBatis(%E4%BA%8C)%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.html</guid>
+        <pubDate>Tue, 20 Jan 2015 00:00:00 +0800</pubDate>
+        <link>http://yourdomain.com/blog/mybatis/2015/01/20/MyBatis(%E4%BA%8C)%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/blog/mybatis/2015/01/20/MyBatis(%E4%BA%8C)%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.html</guid>
         
         
         <category>mybatis</category>
@@ -395,9 +421,11 @@ MyBatis会通过窥探属性的原始类型来推断由类型处理器处理的 
 &lt;p&gt;&lt;strong&gt;项目的文件清单&lt;/strong&gt;&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;    src
     |--com.test.mybatis
+    |  |--bean
+    |  |  |--User.java
+    |  |--mapper
+    |  |  |--UserMapper.java
     |  |--TestMybatis.java
-    |  |--User.java
-    |  |--UserMapper.java
     resources
     |--mappers
     |  |--UserMapper.xml
@@ -408,7 +436,7 @@ MyBatis会通过窥探属性的原始类型来推断由类型处理器处理的 
 &lt;span class=&quot;cp&quot;&gt;&amp;lt;!DOCTYPE configuration PUBLIC &amp;quot;-//mybatis.org//DTD Config 3.0//EN&amp;quot; &amp;quot;http://mybatis.org/dtd/mybatis-3-config.dtd&amp;quot;&amp;gt;&lt;/span&gt;
 &lt;span class=&quot;nt&quot;&gt;&amp;lt;configuration&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;nt&quot;&gt;&amp;lt;typeAliases&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;typeAlias&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;alias=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;User&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;com.test.mybatis.User&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;typeAlias&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;alias=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;User&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;com.test.mybatis.bean.User&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;nt&quot;&gt;&amp;lt;/typeAliases&amp;gt;&lt;/span&gt;
 
     &lt;span class=&quot;nt&quot;&gt;&amp;lt;environments&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;default=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;development&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
@@ -431,7 +459,7 @@ MyBatis会通过窥探属性的原始类型来推断由类型处理器处理的 
 &lt;p&gt;&lt;strong&gt;Mapper文件: mappers/UserMapper.xml&lt;/strong&gt;&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;&lt;/span&gt;
 &lt;span class=&quot;cp&quot;&gt;&amp;lt;!DOCTYPE mapper PUBLIC &amp;quot;-//mybatis.org//DTD Mapper 3.0//EN&amp;quot; &amp;quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&amp;quot;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;mapper&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;namespace=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;com.test.mybatis.UserMapper&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;mapper&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;namespace=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;com.test.mybatis.mapper.UserMapper&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
 
     &lt;span class=&quot;nt&quot;&gt;&amp;lt;select&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;selectUserById&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;parameterType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;java.lang.Integer&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resultType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;User&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
         SELECT id, username, password
