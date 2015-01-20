@@ -3,11 +3,12 @@ layout: default
 title: 文章列表
 ---
 
-  <ul class="post-list">
+  <div class="post-list">
     {% for post in site.posts %}
-        <a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+    <div style="width:100%; ">
+        <a style="display:inline-block;" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
         <span style="float:right; width:100px; "> {{ post.date | date: '%Y-%m-%d' }} </span>
         <!-- <span style="float:right; width:100px; "> {{ post.category }} </span> -->
-        <br>
+    </div>
     {% endfor %}
-  </ul>
+  </div>

@@ -2,15 +2,13 @@
 layout: default
 ---
 
-<ul class="post-list">
+<div class="post-list">
   {% for post in site.categories[page.category] %}
-    <li>
-      <div class="post-title">
-        <a href="{{ post.url | prepend: site.baseurl }}"> {{post.title}}</a>
-        <span style="float:right; width:100px; "> {{ post.date | date: '%Y-%m-%d' }} </span>
-        </br>
-      </div>
-    </li>
+    <div class="post-title">
+      <a style="display:inline-block;" href="{{ post.url | prepend: site.baseurl }}"> {{post.title}}</a>
+      <span style="float:right; width:100px; "> {{ post.date | date: '%Y-%m-%d' }} </span>
+      </br>
+    </div>
 
     <!-- 摘要 -->
    <!--  <div class="post-preview">
@@ -18,4 +16,4 @@ layout: default
       <a href="{{site.baseurl}}{{post.url}}"> Read More ... </a> </br>
     </div> -->
   {% endfor %}
-</ul>
+</div>
