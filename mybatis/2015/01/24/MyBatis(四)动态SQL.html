@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="description" content="MyBatis的动态SQL是基于ONGL表达式的">
+
+    <!-- <title>MyBatis(四): 动态SQL</title> -->
+    <title>Michael King's Blog</title>
+
+    <script src="/blog/assets/js/scale.fix.js"></script>
+    <link rel="stylesheet" href="/blog/assets/css/styles.css">
+    <link rel="stylesheet" href="/blog/assets/css/pygment_trac.css">
+    <link rel="canonical" href="http://yourdomain.com/blog/mybatis/2015/01/24/MyBatis(%E5%9B%9B)%E5%8A%A8%E6%80%81SQL.html">
+    <link rel="alternate" type="application/rss+xml" title="Michael King's Blog" href="http://yourdomain.com/blog/feed.xml" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+
+  <body>
+    <div class="page">
+
+      <!-- 头部 -->
+      <header>
+  <h1> <a href="/blog/">Michael King's Blog</a> </h1>
+  <p>水到绝境是飞瀑</p>
+  <ul>
+      <li><a href="https://github.com//blog/tree/gh-pages">View On <strong>GitHub</strong></a></li>
+      <li><a href="https://github.com//blog/tree/gh-pages">View On <strong>GitHub</strong></a></li>
+      <li><a href="https://github.com//blog/tree/gh-pages">View On <strong>GitHub</strong></a></li>
+  </ul>
+</header>
+      <!-- 侧边栏 -->
+      <aside>
+    <h1> 目录分类 </h1>
+    
+        <a style="display: block; " href="/blog/markdown "> markdown (1) </a>
+    
+        <a style="display: block; " href="/blog/java "> java (1) </a>
+    
+        <a style="display: block; " href="/blog/mysql "> mysql (1) </a>
+    
+        <a style="display: block; " href="/blog/mybatis "> mybatis (4) </a>
+    
+</aside>
+
+      <!-- 内容主体 -->
+      <div class="wrapper">
+        <!-- 文章内容 -->
+        <section>
+          <h1> MyBatis(四): 动态SQL </h1>
+          <p>MyBatis的动态SQL是基于ONGL表达式的</p>
+
+<hr>
+
+<h2>本文结构</h2>
+
+<ul>
+<li><a href="#if">if</a></li>
+<li><a href="#where">where</a></li>
+<li><a href="#set">set</a></li>
+<li><a href="#foreach">foreach</a></li>
+<li><a href="#choose">choose (when, otherwise)</a></li>
+</ul>
+
+<hr>
+
+<h2 id="if"> if </h2>
+
+<p>if一般是where的一部分，如</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&quot;findBlog&quot;</span> <span class="na">resultType=</span><span class="s">&quot;Blog&quot;</span><span class="nt">&gt;</span>
+  SELECT * FROM BLOG WHERE 1 = 1 
+  <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&quot;title != null&quot;</span><span class="nt">&gt;</span>
+    AND title LIKE CONCAT(CONCAT(&#39;%&#39;, #{title}), &#39;%&#39;)
+    <span class="c">&lt;!-- mysql也可以这样写：AND title LIKE &quot;%&quot;#{title}&quot;%&quot; --&gt;</span>
+  <span class="nt">&lt;/if&gt;</span>
+  <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&quot;author != null and author.name != null&quot;</span><span class="nt">&gt;</span>
+    AND author_name like #{author.name}
+  <span class="nt">&lt;/if&gt;</span>
+<span class="nt">&lt;/select&gt;</span>
+</code></pre></div>
+<hr>
+
+<h2 id="where"> where </h2>
+
+<p>像上面的例子，为了拼接sql，专门写了个 WHERE 1 = 1，<code>where</code>标签就能避免这样的问题，它会自动去除不该有的<code>AND</code>或<code>OR</code></p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&quot;findBlog&quot;</span> <span class="na">resultType=</span><span class="s">&quot;Blog&quot;</span><span class="nt">&gt;</span>
+  SELECT * FROM blog
+  <span class="nt">&lt;where&gt;</span> 
+    <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&quot;state != null&quot;</span><span class="nt">&gt;</span>
+         state = #{state}
+    <span class="nt">&lt;/if&gt;</span> 
+    <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&quot;title != null&quot;</span><span class="nt">&gt;</span>
+        AND title like #{title}
+    <span class="nt">&lt;/if&gt;</span>
+    <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&quot;author != null and author.name != null&quot;</span><span class="nt">&gt;</span>
+        AND author_name like #{author.name}
+    <span class="nt">&lt;/if&gt;</span>
+  <span class="nt">&lt;/where&gt;</span>
+<span class="nt">&lt;/select&gt;</span>
+</code></pre></div>
+<hr>
+
+<h2 id="set"> set </h2>
+
+<p>set元素主要是用在更新操作的时候，它会智能去掉最后的逗号。如果set中一个条件都不满足，则会报错。</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;update</span> <span class="na">id=</span><span class="s">&quot;updateBlog&quot;</span> <span class="na">parameterType=</span><span class="s">&quot;Blog&quot;</span><span class="nt">&gt;</span>  
+    UPDATE blog  
+    <span class="nt">&lt;set&gt;</span>  
+        <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&quot;title != null&quot;</span><span class="nt">&gt;</span>  
+            title = #{title},  
+        <span class="nt">&lt;/if&gt;</span>  
+        <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&quot;content != null&quot;</span><span class="nt">&gt;</span>  
+            content = #{content},  
+        <span class="nt">&lt;/if&gt;</span>  
+        <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&quot;owner != null&quot;</span><span class="nt">&gt;</span>  
+            owner = #{owner}  
+        <span class="nt">&lt;/if&gt;</span>  
+    <span class="nt">&lt;/set&gt;</span>  
+    where id = #{id}  
+<span class="nt">&lt;/update&gt;</span>  
+</code></pre></div>
+<hr>
+
+<h2 id="foreach"> foreach </h2>
+
+<p>foreach主要用在in语句中，它可以在SQL语句中遍历一个集合。</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&quot;foreachTest&quot;</span> <span class="na">parameterType=</span><span class="s">&quot;java.util.List&quot;</span> <span class="na">resultType=</span><span class="s">&quot;Blog&quot;</span><span class="nt">&gt;</span>  
+    SELECT * FROM blog WHERE id in  
+    <span class="nt">&lt;foreach</span> <span class="na">collection=</span><span class="s">&quot;list&quot;</span> <span class="na">index=</span><span class="s">&quot;index&quot;</span> <span class="na">item=</span><span class="s">&quot;item&quot;</span> <span class="na">open=</span><span class="s">&quot;(&quot;</span> <span class="na">separator=</span><span class="s">&quot;,&quot;</span> <span class="na">close=</span><span class="s">&quot;)&quot;</span><span class="nt">&gt;</span>  
+        #{item}  
+    <span class="nt">&lt;/foreach&gt;</span>  
+<span class="nt">&lt;/select&gt;</span>
+</code></pre></div>
+<ul>
+<li><code>item</code>声明可以用在元素体内的集合项，相当于集合每一个元素进行迭代时的别名<br></li>
+<li><code>index</code>声明可以用在元素体内的索引变量，即元素的位置。
+
+<ul>
+<li>比如上例中，如果list里面的元素为&quot;[3,6,9]&quot;，则&#39;item&#39;的值会分别为&quot;3,6,9&quot;，而<code>index</code>则分别为&quot;0,1,2&quot;</li>
+</ul></li>
+<li><code>open separator close</code>用于指定开闭匹配的字符串以及在迭代之间放置分隔符，如 &quot;(1,2,3,4)&quot;</li>
+<li><code>collection</code>属性比较容易出错
+
+<ul>
+<li>当传入参数(parameterType)是单个参数且参数类型是一个List的时候，collection属性值为list，就像上面，传入参数<code>parameterType=&quot;java.util.List&quot;</code></li>
+<li>当传入参数(parameterType)是单个参数且参数类型是一个array数组的时候，collection的属性值为array，比如<code>parameterType=&quot;[Ljava.lang.Integer;&quot;</code></li>
+<li>传入的参数是多个的时候，肯定要先封装成一个Map，这个时候collection属性值就是传入的map中List或array数组类型的变量的key值，比如<code>parameterType=&quot;java.util.Map&quot;</code>，传入的map中有一个key为&quot;idList&quot;的List对象，则这个时候collection的属性值就应该是idList。</li>
+</ul></li>
+</ul>
+
+<hr>
+
+<h2 id="choose"> choose (when, otherwise) </h2>
+
+<p>choose元素的作用就相当于JAVA中的switch语句</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&quot;chooseTest&quot;</span> <span class="na">parameterType=</span><span class="s">&quot;Blog&quot;</span> <span class="na">resultType=</span><span class="s">&quot;Blog&quot;</span><span class="nt">&gt;</span>  
+    SELECT * FROM blog WHERE 1 = 1   
+    <span class="nt">&lt;choose&gt;</span>  
+        <span class="nt">&lt;when</span> <span class="na">test=</span><span class="s">&quot;title != null&quot;</span><span class="nt">&gt;</span>  
+            and title = #{title}  
+        <span class="nt">&lt;/when&gt;</span>  
+        <span class="nt">&lt;when</span> <span class="na">test=</span><span class="s">&quot;content != null&quot;</span><span class="nt">&gt;</span>  
+            and content = #{content}  
+        <span class="nt">&lt;/when&gt;</span>  
+        <span class="nt">&lt;otherwise&gt;</span>  
+            and author = &quot;Michael&quot;  
+        <span class="nt">&lt;/otherwise&gt;</span>  
+    <span class="nt">&lt;/choose&gt;</span>  
+<span class="nt">&lt;/select&gt;</span> 
+</code></pre></div>
+<hr>
+
+        </section>
+      </div>
+
+      <footer>
+  <p>Project maintained by <a href="https://github.com/"></a></p>
+  <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+</footer>
+<!--[if !IE]><script>fixScale(document);</script><![endif]-->
+  </page>
+  </body>
+
+</html>

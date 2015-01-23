@@ -6,9 +6,142 @@
 </description>
     <link>http://yourdomain.com/blog/</link>
     <atom:link href="http://yourdomain.com/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 23 Jan 2015 11:42:01 +0800</pubDate>
-    <lastBuildDate>Fri, 23 Jan 2015 11:42:01 +0800</lastBuildDate>
+    <pubDate>Fri, 23 Jan 2015 21:52:25 +0800</pubDate>
+    <lastBuildDate>Fri, 23 Jan 2015 21:52:25 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>MyBatis(四): 动态SQL</title>
+        <description>&lt;p&gt;MyBatis的动态SQL是基于ONGL表达式的&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2&gt;本文结构&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#if&quot;&gt;if&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#where&quot;&gt;where&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#set&quot;&gt;set&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#foreach&quot;&gt;foreach&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#choose&quot;&gt;choose (when, otherwise)&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;if&quot;&gt; if &lt;/h2&gt;
+
+&lt;p&gt;if一般是where的一部分，如&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;select&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;findBlog&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resultType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Blog&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  SELECT * FROM BLOG WHERE 1 = 1 
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;if&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;title != null&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    AND title LIKE CONCAT(CONCAT(&amp;#39;%&amp;#39;, #{title}), &amp;#39;%&amp;#39;)
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- mysql也可以这样写：AND title LIKE &amp;quot;%&amp;quot;#{title}&amp;quot;%&amp;quot; --&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/if&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;if&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;author != null and author.name != null&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    AND author_name like #{author.name}
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/if&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/select&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+
+&lt;h2 id=&quot;where&quot;&gt; where &lt;/h2&gt;
+
+&lt;p&gt;像上面的例子，为了拼接sql，专门写了个 WHERE 1 = 1，&lt;code&gt;where&lt;/code&gt;标签就能避免这样的问题，它会自动去除不该有的&lt;code&gt;AND&lt;/code&gt;或&lt;code&gt;OR&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;select&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;findBlog&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resultType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Blog&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  SELECT * FROM blog
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;where&amp;gt;&lt;/span&gt; 
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;if&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;state != null&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+         state = #{state}
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/if&amp;gt;&lt;/span&gt; 
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;if&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;title != null&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        AND title like #{title}
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/if&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;if&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;author != null and author.name != null&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        AND author_name like #{author.name}
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/if&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/where&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/select&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+
+&lt;h2 id=&quot;set&quot;&gt; set &lt;/h2&gt;
+
+&lt;p&gt;set元素主要是用在更新操作的时候，它会智能去掉最后的逗号。如果set中一个条件都不满足，则会报错。&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;update&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;updateBlog&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;parameterType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Blog&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;  
+    UPDATE blog  
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;set&amp;gt;&lt;/span&gt;  
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;if&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;title != null&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;  
+            title = #{title},  
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/if&amp;gt;&lt;/span&gt;  
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;if&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;content != null&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;  
+            content = #{content},  
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/if&amp;gt;&lt;/span&gt;  
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;if&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;owner != null&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;  
+            owner = #{owner}  
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/if&amp;gt;&lt;/span&gt;  
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/set&amp;gt;&lt;/span&gt;  
+    where id = #{id}  
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/update&amp;gt;&lt;/span&gt;  
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+
+&lt;h2 id=&quot;foreach&quot;&gt; foreach &lt;/h2&gt;
+
+&lt;p&gt;foreach主要用在in语句中，它可以在SQL语句中遍历一个集合。&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;select&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;foreachTest&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;parameterType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;java.util.List&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resultType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Blog&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;  
+    SELECT * FROM blog WHERE id in  
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;foreach&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;collection=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;list&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;index=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;index&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;item=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;item&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;open=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;(&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;separator=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;,&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;close=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;)&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;  
+        #{item}  
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/foreach&amp;gt;&lt;/span&gt;  
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/select&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;item&lt;/code&gt;声明可以用在元素体内的集合项，相当于集合每一个元素进行迭代时的别名&lt;br&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;index&lt;/code&gt;声明可以用在元素体内的索引变量，即元素的位置。
+
+&lt;ul&gt;
+&lt;li&gt;比如上例中，如果list里面的元素为&amp;quot;[3,6,9]&amp;quot;，则&amp;#39;item&amp;#39;的值会分别为&amp;quot;3,6,9&amp;quot;，而&lt;code&gt;index&lt;/code&gt;则分别为&amp;quot;0,1,2&amp;quot;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;open separator close&lt;/code&gt;用于指定开闭匹配的字符串以及在迭代之间放置分隔符，如 &amp;quot;(1,2,3,4)&amp;quot;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;collection&lt;/code&gt;属性比较容易出错
+
+&lt;ul&gt;
+&lt;li&gt;当传入参数(parameterType)是单个参数且参数类型是一个List的时候，collection属性值为list，就像上面，传入参数&lt;code&gt;parameterType=&amp;quot;java.util.List&amp;quot;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;当传入参数(parameterType)是单个参数且参数类型是一个array数组的时候，collection的属性值为array，比如&lt;code&gt;parameterType=&amp;quot;[Ljava.lang.Integer;&amp;quot;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;传入的参数是多个的时候，肯定要先封装成一个Map，这个时候collection属性值就是传入的map中List或array数组类型的变量的key值，比如&lt;code&gt;parameterType=&amp;quot;java.util.Map&amp;quot;&lt;/code&gt;，传入的map中有一个key为&amp;quot;idList&amp;quot;的List对象，则这个时候collection的属性值就应该是idList。&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;choose&quot;&gt; choose (when, otherwise) &lt;/h2&gt;
+
+&lt;p&gt;choose元素的作用就相当于JAVA中的switch语句&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;select&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;chooseTest&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;parameterType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Blog&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resultType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Blog&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;  
+    SELECT * FROM blog WHERE 1 = 1   
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;choose&amp;gt;&lt;/span&gt;  
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;when&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;title != null&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;  
+            and title = #{title}  
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/when&amp;gt;&lt;/span&gt;  
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;when&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;content != null&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;  
+            and content = #{content}  
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/when&amp;gt;&lt;/span&gt;  
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;otherwise&amp;gt;&lt;/span&gt;  
+            and author = &amp;quot;Michael&amp;quot;  
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/otherwise&amp;gt;&lt;/span&gt;  
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/choose&amp;gt;&lt;/span&gt;  
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/select&amp;gt;&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+</description>
+        <pubDate>Sat, 24 Jan 2015 00:00:00 +0800</pubDate>
+        <link>http://yourdomain.com/blog/mybatis/2015/01/24/MyBatis(%E5%9B%9B)%E5%8A%A8%E6%80%81SQL.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/blog/mybatis/2015/01/24/MyBatis(%E5%9B%9B)%E5%8A%A8%E6%80%81SQL.html</guid>
+        
+        
+        <category>mybatis</category>
+        
+      </item>
     
       <item>
         <title>MyBatis(三): Mapper.xml映射文件</title>
