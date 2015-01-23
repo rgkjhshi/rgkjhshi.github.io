@@ -6,9 +6,256 @@
 </description>
     <link>http://yourdomain.com/blog/</link>
     <atom:link href="http://yourdomain.com/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 20 Jan 2015 15:22:37 +0800</pubDate>
-    <lastBuildDate>Tue, 20 Jan 2015 15:22:37 +0800</lastBuildDate>
+    <pubDate>Fri, 23 Jan 2015 11:42:01 +0800</pubDate>
+    <lastBuildDate>Fri, 23 Jan 2015 11:42:01 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>MyBatis(三): Mapper.xml映射文件</title>
+        <description>&lt;p&gt;&lt;code&gt;Mapper.xml&lt;/code&gt;文件的主要功能是映射SQL语句，对数据库进行增删改查操作，与JDBC代码相比，更加方便。&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2&gt;本文结构&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#select&quot;&gt;select 语句简介&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#insert&quot;&gt;insert update delete 简介&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#parameter&quot;&gt;Parameters 参数&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#ResultMap&quot;&gt;ResultMap&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;select&quot;&gt; select 语句简介 &lt;/h2&gt;
+
+&lt;p&gt;查询语句是 MyBatis 中最常用的元素之一，先来个例子&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;select&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;selectPerson&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;parameterType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;int&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resultType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;hashmap&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  SELECT * FROM PERSON WHERE ID = #{id}
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/select&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;其中的&lt;code&gt;XXXType&lt;/code&gt;使用的都是&lt;strong&gt;完全限定名&lt;/strong&gt;或者&lt;strong&gt;&lt;a href=&quot;/blog/mybatis/2015/01/20/MyBatis(%E4%BA%8C)%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.html#typeAliases&quot;&gt;别名&lt;/a&gt;&lt;/strong&gt;，其中的符号&lt;code&gt;#{id}&lt;/code&gt;会使用预处理语句，在 SQL 中会由一个“?”来标识，在&lt;code&gt;JDBC&lt;/code&gt;中相当于这样：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// Similar JDBC code, NOT MyBatis…&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;selectPerson&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;SELECT * FROM PERSON WHERE ID=?&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;PreparedStatement&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ps&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;prepareStatement&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;selectPerson&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;ps&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setInt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;select&lt;/code&gt; 元素还有很多属性&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;              &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;在命名空间中唯一的标识符&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;可以被用来引用这条语句&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;resultType&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;如果是集合情形&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;那应该是集合可以包含的类型&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;而不能是集合本身&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;比如返回的结果是多个Persion&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;这里应该写Persion而不是List&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;resultMap&lt;/span&gt;       &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;外部resultMap的命名引用&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;与resultType不能同时使用&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;后面会具体讲&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;parameterType&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;默认值:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unset&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;可选&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MyBatis可以通过TypeHandler推断出具体传入语句的参数&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;flushCache&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;默认值:&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;true表示任何时候只要语句被调用&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;都会导致本地缓存和二级缓存都会被清空&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;useCache&lt;/span&gt;        &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;默认值:&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;true表示本条语句的结果被二级缓存&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;timeout&lt;/span&gt;         &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;默认:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unset&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;在抛出异常之前&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;驱动程序等待数据库返回请求结果的秒数&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;resultSetType&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;默认:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unset&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;取值为FORWARD_ONLY&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SCROLL_SENSITIVE或SCROLL_INSENSITIVE中的一个&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;fetchSize&lt;/span&gt;       &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;默认:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unset&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;驱动程序每次批量返回的结果行数和这个设置值相等&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;statementType&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;默认值:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PREPARED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;STATEMENT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PREPARED或CALLABLE的一个&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;这会让MyBatis分别使用Statement&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PreparedStatement或CallableStatement&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;databaseId&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;如果配置了&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;databaseIdProvider&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MyBatis&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;会加载所有的不带databaseId或匹配当前databaseId的语句&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;如果带或者不带的语句都有&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;则不带的会被忽略&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;resultOrdered&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;默认值:&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;这个设置仅针对嵌套结果select语句适用:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;如果为&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;就是假设包含了嵌套结果集或是分组了&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;这样的话当返回一个主结果行的时候&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;就不会发生有对前面结果集的引用的情况&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;这就使得在获取嵌套的结果集的时候不至于导致内存不够用&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;resultSets&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;这个设置仅对多结果集的情况适用&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;它将列出语句执行后返回的结果集并每个结果集给一个名称&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;名称是逗号分隔的&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+
+&lt;h2 id=&quot;insert&quot;&gt; insert, update 和 delete 简介&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;insert, update, delete&lt;/code&gt;同&lt;code&gt;select&lt;/code&gt;类似，也有许多属性，其中  &lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt; &lt;code&gt;id, parameterType, timeout, statementType, databaseId&lt;/code&gt;与select元素中的属性相同;&lt;br&gt;&lt;/li&gt;
+&lt;li&gt; &lt;code&gt;flushCache&lt;/code&gt;的默认值为&amp;#39;true&amp;#39;&lt;/li&gt;
+&lt;li&gt; 还有些是&lt;code&gt;insert和update&lt;/code&gt;所特有的属性，如:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;useGeneratedKeys&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;默认值:&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;为true时会令MyBatis使用JDBC的getGeneratedKeys方法来取出由数据库内部生成的主键&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;keyProperty&lt;/span&gt;       &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;默认:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unset&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;唯一标记一个属性&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MyBatis会通过getGeneratedKeys的返回值或者通过insert语句的selectKey子元素设置它的键值&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;如果希望得到多个生成的列&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;也可以是逗号分隔的属性名称列表&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;keyColumn&lt;/span&gt;         &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;通过生成的键值设置表中的列名&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;当主键列不是表中的第一列的时候需要设置&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;如果希望得到多个生成的列&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;也可以是逗号分隔的属性名称列表&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;例如下面这段代码，如果你的数据库支持自动生成主键的字段（比如 MySQL 和 SQL Server），那么你可以设置 useGeneratedKeys=”true”，然后再把 keyProperty 设置到目标属性上就OK了。&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;insert&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;insertAuthor&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;useGeneratedKeys=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;true&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;keyProperty=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  insert into Author (username,password,email,bio)
+  values (#{username},#{password},#{email},#{bio})
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/insert&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+
+&lt;h2 id=&quot;parameter&quot;&gt; Parameters 参数 &lt;/h2&gt;
+
+&lt;p&gt;参数是 MyBatis 非常强大的功能, &lt;code&gt;parameterType=&amp;quot;anyType&amp;quot;&lt;/code&gt;其中的&lt;code&gt;anyType&lt;/code&gt;可以是&lt;code&gt;int&lt;/code&gt;等基本类型，也可以是&lt;code&gt;User&lt;/code&gt;等复杂类型。  &lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;insert&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;insertUser&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;parameterType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;User&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  insert into users (id, username, password)
+  values (#{id}, #{username}, #{password})
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/insert&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;上例中，传入的事复杂类型&lt;code&gt;User&lt;/code&gt;，将会在&lt;code&gt;User&lt;/code&gt;中查找id、username 和 password 属性，并放入对应位置。如果是&lt;code&gt;int&lt;/code&gt;或&lt;code&gt;String&lt;/code&gt;等类型，不存在属性，则直接将其值放入对应的位置。&lt;/p&gt;
+
+&lt;p&gt;另外，参数映射也可以指定映射类型，甚至可以指定类型处理器，像之前讲一样，&lt;code&gt;javaType&lt;/code&gt;通常可以根据参数对象去推测。&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt; #{age,javaType=int,jdbcType=NUMERIC,typeHandler=MyTypeHandler}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;字符串替换&lt;/h3&gt;
+
+&lt;p&gt;默认情况下,使用#{}格式的语法会创建预处理语句属性并安全地设置值（比如?）。不过有时只想直接在 SQL 语句中插入一个不改变的字符串，就可以这样使用参数：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;ORDER BY ${columnName}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;这里 MyBatis 不会修改或转义字符串&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;ResultMap&quot;&gt; ResultMap &lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;resultMap&lt;/code&gt; 元素是MyBatis中最重要最强大的元素，resultMap元素本身有一些属性，如下代码，&lt;code&gt;id&lt;/code&gt;用于标识该&lt;code&gt;resultMap&lt;/code&gt;，&lt;code&gt;type&lt;/code&gt;用于指定该&lt;code&gt;resultMap&lt;/code&gt;映射到哪个&lt;code&gt;JavaBean&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;resultMap&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;blogResultMap&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Blog&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;...&lt;span class=&quot;nt&quot;&gt;&amp;lt;/resultMap&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;它还有很多子元素，下面是&lt;code&gt;resultMap&lt;/code&gt;元素的概念图&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;resultMap&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;constructor - 类在实例化时,用来注入结果到构造方法中
+
+&lt;ul&gt;
+&lt;li&gt;idArg - ID 参数;标记结果作为 ID 可以帮助提高整体效能&lt;/li&gt;
+&lt;li&gt;arg - 注入到构造方法的一个普通结果&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;id – 一个 ID 结果;标记结果作为 ID 可以帮助提高整体效能&lt;/li&gt;
+&lt;li&gt;result – 注入到字段或 JavaBean 属性的普通结果&lt;/li&gt;
+&lt;li&gt;association – 一个复杂的类型关联;许多结果将包成这种类型
+
+&lt;ul&gt;
+&lt;li&gt;嵌入结果映射 – 结果映射自身的关联,或者参考一个&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;collection – 复杂类型的集
+
+&lt;ul&gt;
+&lt;li&gt;嵌入结果映射 – 结果映射自身的集,或者参考一个&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;discriminator – 使用结果值来决定使用哪个结果映射
+
+&lt;ul&gt;
+&lt;li&gt;case – 基于某某些值的结果映射&lt;/li&gt;
+&lt;li&gt;嵌入结果映射 – 这种情形结果也映射它本身,因此可以包含很多相 同的元素,或者它可以参照一个外部的结果映射&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;由于DTD的限制，这些元素出现的顺序必须按照上面的顺序  &lt;/p&gt;
+
+&lt;p&gt;下面详细说明&lt;code&gt;resultMap&lt;/code&gt;的每个子元素&lt;/p&gt;
+
+&lt;h3&gt;id和result&lt;/h3&gt;
+
+&lt;p&gt;这是最基本的内容，这两者之间的唯一不同是&lt;code&gt;id&lt;/code&gt;所指定属性将是能够唯一标识对象的属性，这能提高效率，特别是有联合映射时。&lt;br&gt;
+&lt;code&gt;id&lt;/code&gt;和&lt;code&gt;reslut&lt;/code&gt;元素有&lt;code&gt;column, property, javaType, jdbcType, typeHandler&lt;/code&gt;等属性，其中&lt;code&gt;column&lt;/code&gt;用于指定数据库中的列名，&lt;code&gt;property&lt;/code&gt;用于指定&lt;code&gt;JavaBean&lt;/code&gt;对应的属性，其他属性则与之前讲的一样。&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;id&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;result&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;user_name&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;username&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;构造方法constructor&lt;/h3&gt;
+
+&lt;p&gt;如果&lt;code&gt;resultMap&lt;/code&gt;所映射的&lt;code&gt;JavaBean&lt;/code&gt;的构造方法需要提供参数，则&lt;code&gt;constructor&lt;/code&gt;就不能缺少了&lt;br&gt;
+&lt;code&gt;constructor&lt;/code&gt;有&lt;code&gt;idArg&lt;/code&gt;和&lt;code&gt;arg&lt;/code&gt;两个子元素，意义差不多(参见&lt;code&gt;id&lt;/code&gt;和&lt;code&gt;result&lt;/code&gt;的区别)，都是给构造方法提供参数。他们的属性也同&lt;code&gt;id&lt;/code&gt;和&lt;code&gt;result&lt;/code&gt;一样&lt;br&gt;
+&lt;code&gt;constructor&lt;/code&gt;常用的形式如下：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;idArg&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;javaType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;int&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;arg&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;username&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;javaType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;String&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/constructor&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt; Java 没有自查(反射)参数名的方法，所以要保证这里的参数顺序同&lt;code&gt;JavaBean&lt;/code&gt;定义的顺序一致，而且数据类型也是确定的。&lt;/p&gt;
+
+&lt;h3&gt;关联association&lt;/h3&gt;
+
+&lt;p&gt;关联元素处理“有一个”类型的关系。比如,一个博客有一个作者，就像下面这样&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;c1&quot;&gt;//来自 Author.java&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Author&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;age&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;//来自 Blog.java&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Blog&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Author&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;author&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//数据库中对应的字段是 author_id int类型&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;可以这样做级联查询&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;resultMap&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;BlogResultMap&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Blog&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;id&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;result&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;title&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;title&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;result&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;content&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;content&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 只要提供了返回类型，像上面的id和result指定的字段，即使不指定MyBatis也能自动封装 --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;association&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;author_id&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;author&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;javaType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Author&amp;quot;&lt;/span&gt;
+                 &lt;span class=&quot;na&quot;&gt;select=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;com.test.mybatis.mapper.AuthorMapper.selectAuthorById&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+                 &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 这里如果起了别名也可使用 --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/resultMap&amp;gt;&lt;/span&gt;
+
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;select&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;selectBlogById&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;parameterType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;int&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resultMap=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;BlogResultMap&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    SELECT * FROM blog WHERE id = #{id}
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/select&amp;gt;&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 来自 AuthorMapper.xml --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;select&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;selectAuthorById&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;parameterType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;int&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resultType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Author&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    SELECT * FROM author WHERE id = #{id}
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/select&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;association&lt;/code&gt;是通过把column指定的字段作为参数，传给select子查询的。&lt;/p&gt;
+
+&lt;h3&gt;集合collection&lt;/h3&gt;
+
+&lt;p&gt;如果博客有了许多评论，则会出现“一对多”的情形，比如上面的&lt;code&gt;Blog&lt;/code&gt;会多出一个属性&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;    &lt;span class=&quot;c1&quot;&gt;//Blog.java新增的属性&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Comment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;comments&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;//Comment.java&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Comment&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Blog&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;blog&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;那么对于&lt;code&gt;Blog&lt;/code&gt;的查询将变成这样&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;resultMap&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;BlogResultMap&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Blog&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;id&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;result&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;title&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;title&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;result&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;content&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;content&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 只要提供了返回类型，像上面的id和result指定的字段，即使不指定MyBatis也能自动封装 --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;association&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;author_id&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;author&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;javaType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Author&amp;quot;&lt;/span&gt;
+                 &lt;span class=&quot;na&quot;&gt;select=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;com.test.mybatis.mapper.AuthorMapper.selectAuthorById&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+                 &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 这里如果起了别名也可使用 --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;collection&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;comments&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;javaType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;ArrayList&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ofType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Comment&amp;quot;&lt;/span&gt; 
+                &lt;span class=&quot;na&quot;&gt;select=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;com.test.mybatis.mapper.CommentMapper.selectCommentForBlog&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/resultMap&amp;gt;&lt;/span&gt;
+
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;select&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;selectBlogById&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;parameterType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;int&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resultMap=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;BlogResultMap&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    SELECT * FROM blog WHERE id = #{id}
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/select&amp;gt;&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 来自 AuthorMapper.xml --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;select&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;selectAuthorById&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;parameterType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;int&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resultType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Author&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    SELECT * FROM author WHERE id = #{id}
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/select&amp;gt;&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 来自 CommentMapper.xml --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;select&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;selectCommentForBlog&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;parameterType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;int&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resultType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Comment&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    SELECT * FROM comment WHERE blog_id = #{id}
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/select&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;其中的&lt;code&gt;ofType&lt;/code&gt;用于表示集合中所存放的类型，上面可以理解为产生了一个&lt;code&gt;ArrayList&amp;lt;Comment&amp;gt; comments&lt;/code&gt;，&lt;code&gt;javaType&lt;/code&gt;属性可以省略；&lt;code&gt;column&lt;/code&gt;指定了id作为传入参数&lt;/p&gt;
+
+&lt;hr&gt;
+</description>
+        <pubDate>Thu, 22 Jan 2015 00:00:00 +0800</pubDate>
+        <link>http://yourdomain.com/blog/mybatis/2015/01/22/MyBatis(%E4%B8%89)Mapper.xml%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/blog/mybatis/2015/01/22/MyBatis(%E4%B8%89)Mapper.xml%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6.html</guid>
+        
+        
+        <category>mybatis</category>
+        
+      </item>
     
       <item>
         <title>MyBatis(二): 配置文件</title>
@@ -134,8 +381,9 @@ iterator    Iterator
 无论是 MyBatis 在预处理语句（PreparedStatement）中设置参数时，还是从结果集中取出值时，都会用类型处理器以合适的方式进行转换。
 &lt;code&gt;typeHandler&lt;/code&gt;就是进行&lt;code&gt;jdbcType&lt;/code&gt;和&lt;code&gt;javaType&lt;/code&gt;之间的转换的。&lt;/p&gt;
 
-&lt;p&gt;&lt;a id=&quot;TypeHandler1&quot;&gt;&lt;/a&gt;
-&lt;strong&gt;自定义TypeHandler&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a id=&quot;TypeHandler1&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3&gt;自定义TypeHandler&lt;/h3&gt;
 
 &lt;p&gt;MyBatis已经自动注册了一些TypeHandler，我们仍然可以写自己的TypeHandler，具体方法是：实现&lt;code&gt;org.apache.ibatis.type.TypeHandler&lt;/code&gt;接口，或继承&lt;code&gt;org.apache.ibatis.type.BaseTypeHandler&lt;/code&gt;抽象类并实现其中的抽象方法，然后指明自己的TypeHandler是哪个&lt;code&gt;jdbcType&lt;/code&gt;和&lt;code&gt;javaType&lt;/code&gt;之间的转换。&lt;br&gt;
 推荐使用BaseTypeHandler，因为它对&lt;code&gt;null&lt;/code&gt;值进行了过滤，而且它继承了&lt;code&gt;TypeReference&lt;/code&gt;抽象类，通过&lt;code&gt;TypeReference&lt;/code&gt;的&lt;code&gt;getRawType()&lt;/code&gt;方法可以获取到当前TypeHandler所使用泛型的原始类型。这对Mybatis在注册TypeHandler的时候是非常有好处的。在没有指定javaType的情况下，Mybatis在注册TypeHandler时可以通过它来获取当前TypeHandler所使用泛型的原始类型作为要注册的TypeHandler的javaType类型。&lt;br&gt;
@@ -216,8 +464,9 @@ iterator    Iterator
     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;&lt;a id=&quot;TypeHandler2&quot;&gt;&lt;/a&gt;
-&lt;strong&gt;注册TypeHandler&lt;/strong&gt; &lt;/p&gt;
+&lt;p&gt;&lt;a id=&quot;TypeHandler2&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3&gt;注册TypeHandler&lt;/h3&gt;
 
 &lt;p&gt;MyBatis 在&lt;code&gt;TypeHandlerRegistry&lt;/code&gt;类中已经注册了许多TypeHandler。&lt;br&gt;
 我们建立了自己的TypeHandler之后就需要把它注册到Mybatis的配置文件中，让Mybatis能够识别并使用它。注册TypeHandler主要有两种方式:&lt;/p&gt;
@@ -266,8 +515,9 @@ MyBatis会通过窥探属性的原始类型来推断由类型处理器处理的 
 &lt;li&gt; 无&lt;code&gt;javaType&lt;/code&gt;无&lt;code&gt;jdbcType&lt;/code&gt;，且当前的&lt;code&gt;TypeHandler&lt;/code&gt;未继承&lt;code&gt;TypeReference&lt;/code&gt;抽象类，那么Mybatis会注册对应&lt;code&gt;null&lt;/code&gt;和&lt;code&gt;null&lt;/code&gt;的&lt;code&gt;TypeHandler&lt;/code&gt;。&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;&lt;a id=&quot;TypeHandler3&quot;&gt;&lt;/a&gt;
-&lt;strong&gt;自动获取TypeHandler&lt;/strong&gt; &lt;/p&gt;
+&lt;p&gt;&lt;a id=&quot;TypeHandler3&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3&gt;自动获取TypeHandler&lt;/h3&gt;
 
 &lt;p&gt;上面是讲 MyBatis 是如何注册TypeHandler，下面讲 Mybatis 是如何获取对应的TypeHandler进行类型转换的。&lt;/p&gt;
 
@@ -310,24 +560,43 @@ MyBatis会通过窥探属性的原始类型来推断由类型处理器处理的 
 &lt;h2 id=&quot;mappers&quot;&gt; mappers 映射器 &lt;/h2&gt;
 
 &lt;p&gt;MyBatis的配置文件&lt;code&gt;mybtis-config.xml&lt;/code&gt;中有&lt;code&gt;mappers&lt;/code&gt;元素，其作用是告诉MyBatis去哪里找SQL映射语句。&lt;br&gt;
-一般情况会有一个&lt;code&gt;Maper接口&lt;/code&gt;和一个&lt;code&gt;Mapper.xml&lt;/code&gt;对应(在&lt;code&gt;Mapper接口&lt;/code&gt;中全部使用注解除外)，注册&lt;code&gt;Mapper&lt;/code&gt;的方法归纳如下：&lt;/p&gt;
+一般情况会有一个&lt;code&gt;Maper接口&lt;/code&gt;和一个&lt;code&gt;Mapper.xml&lt;/code&gt;对应(这里指xml文件的&lt;code&gt;namespace&lt;/code&gt;与接口对应)，注册&lt;code&gt;Mapper&lt;/code&gt;的方法归纳如下：&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;mappers&amp;gt;&lt;/span&gt;  
-   &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 通过package元素将会把指定包下面的所有Mapper接口进行注册 --&amp;gt;&lt;/span&gt;  
-   &lt;span class=&quot;nt&quot;&gt;&amp;lt;package&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;com.test.mybatis.bean&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;  
    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 通过mapper元素的resource属性可以指定资源中的Mapper.xml文件 --&amp;gt;&lt;/span&gt;  
    &lt;span class=&quot;nt&quot;&gt;&amp;lt;mapper&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resource=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;mapper/UserMapper.xml&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;  
    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 通过mapper元素的url属性可以指定一个通过URL请求道的Mapper.xml文件 --&amp;gt;&lt;/span&gt;  
    &lt;span class=&quot;nt&quot;&gt;&amp;lt;mapper&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;url=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;file:///var/mappers/UserMapper.xml&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;  
    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 通过mapper元素的class属性可以指定一个Mapper接口进行注册 --&amp;gt;&lt;/span&gt;  
    &lt;span class=&quot;nt&quot;&gt;&amp;lt;mapper&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;com.test.mybatis.mapper.UserMapper&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;  
+   &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 通过package元素将会把指定包下面的所有Mapper接口进行注册 --&amp;gt;&lt;/span&gt;  
+   &lt;span class=&quot;nt&quot;&gt;&amp;lt;package&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;com.test.mybatis.bean&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;  
 &lt;span class=&quot;nt&quot;&gt;&amp;lt;/mappers&amp;gt;&lt;/span&gt; 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ol&gt;
-&lt;li&gt; &lt;code&gt;mapper&lt;/code&gt;元素的三个属性&lt;code&gt;resource&lt;/code&gt;、&lt;code&gt;url&lt;/code&gt;和&lt;code&gt;class&lt;/code&gt;对于每个&lt;code&gt;mapper&lt;/code&gt;元素只能指定一个，不能都指定，也不能都不指定。&lt;/li&gt;
-&lt;li&gt; 如果&lt;code&gt;Mapper接口&lt;/code&gt;全部使用注解，并且没有与之对应的&lt;code&gt;mapper.xml&lt;/code&gt;文件时，可以&lt;code&gt;package&lt;/code&gt;元素和&lt;code&gt;mapper&lt;/code&gt;元素的&lt;code&gt;class&lt;/code&gt;属性这两种方式注册接口。&lt;/li&gt;
+&lt;li&gt;根据mybatis3的DTD,package元素必须在mapper元素之后&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;xml&lt;/code&gt;文件的&lt;code&gt;namespace&lt;/code&gt;如果与接口不对应，则相当于一个只有接口另一个只有xml文件，两者之间没有任何关联&lt;/li&gt;
 &lt;/ol&gt;
+
+&lt;ul&gt;
+&lt;li&gt;如果只有&lt;code&gt;Mapper接口&lt;/code&gt;而无&lt;code&gt;Mapper.xml&lt;/code&gt;，则接口中必须通过注解来实现，注册时只能通过&lt;code&gt;package&lt;/code&gt;或者&lt;code&gt;class&lt;/code&gt;方式注册，调用方式如下&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;c1&quot;&gt;//获取注解后接口对应的对象&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;UserMapper&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;userMapper&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getMapper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;UserMapper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;//调用接口中的方法&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;userMapper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;findById&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;如果只有&lt;code&gt;Mapper.xml&lt;/code&gt;文件而无&lt;code&gt;Mapper接口&lt;/code&gt;，则只能通过&lt;code&gt;resource&lt;/code&gt;或&lt;code&gt;url&lt;/code&gt;来注册，调用方式也将变成：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;c1&quot;&gt;//参数中的com.mybatis.example.mapper.UserMapper是xml文件中的namespace指定的类名&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;//参数中的findById为指定的类中的方法&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sqlSession&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;selectOne&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;com.mybatis.example.mapper.UserMapper.findById&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;如果既有&lt;code&gt;Mapper接口&lt;/code&gt;又&lt;code&gt;Mapper.xml&lt;/code&gt;(&lt;code&gt;namespace&lt;/code&gt;对应才算是都有)则接口中注解不能与xml文件重复，注册最好通过&lt;code&gt;resource&lt;/code&gt;(通过&lt;code&gt;class&lt;/code&gt;或&lt;code&gt;package&lt;/code&gt;注册只会注册接口而不会关联xml文件，通过&lt;code&gt;resource&lt;/code&gt;注册不仅会注册xml文件，还会关联对应的接口)，调用方式可以采取上面两种的任意一种。&lt;br&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;hr&gt;
 </description>
@@ -957,37 +1226,12 @@ ______
 
 &lt;hr&gt;
 </description>
-        <pubDate>Sun, 04 Jan 2015 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/blog/markdown/2015/01/04/markdown%E8%AF%AD%E6%B3%95%E7%AE%80%E4%BB%8B.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/blog/markdown/2015/01/04/markdown%E8%AF%AD%E6%B3%95%E7%AE%80%E4%BB%8B.html</guid>
+        <pubDate>Thu, 01 Jan 2015 00:00:00 +0800</pubDate>
+        <link>http://yourdomain.com/blog/markdown/2015/01/01/markdown%E8%AF%AD%E6%B3%95%E7%AE%80%E4%BB%8B.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/blog/markdown/2015/01/01/markdown%E8%AF%AD%E6%B3%95%E7%AE%80%E4%BB%8B.html</guid>
         
         
         <category>markdown</category>
-        
-      </item>
-    
-      <item>
-        <title>Welcome to Jekyll!</title>
-        <description>&lt;p&gt;You’ll find this post in your &lt;code&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
-
-&lt;p&gt;To add new posts, simply add a file in the &lt;code&gt;_posts&lt;/code&gt; directory that follows the convention &lt;code&gt;YYYY-MM-DD-name-of-post.ext&lt;/code&gt; and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.&lt;/p&gt;
-
-&lt;p&gt;Jekyll also offers powerful support for code snippets:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Hi, &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Tom&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; prints &amp;#39;Hi, Tom&amp;#39; to STDOUT.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Check out the &lt;a href=&quot;http://jekyllrb.com&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://github.com/jekyll/jekyll-help&quot;&gt;Jekyll’s dedicated Help repository&lt;/a&gt;.&lt;/p&gt;
-</description>
-        <pubDate>Sat, 03 Jan 2015 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/blog/info/2015/01/03/welcome-to-jekyll.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/blog/info/2015/01/03/welcome-to-jekyll.html</guid>
-        
-        
-        <category>info</category>
         
       </item>
     
