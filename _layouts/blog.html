@@ -20,8 +20,10 @@
         </section>
         <!-- Duoshuo Comment BEGIN -->
         <div id="comments">
-            <div class="ds-thread" {% if page.id %}data-thread-key="{{ page.id }}"{% endif %} 
-            data-title="{% if page.title %}{{ page.title }}{% endif %}" data-url="{% if page.url %}{{ page.url }}{% endif %}" ></div>
+          <h2 style="padding-left:24px;">评论</h2>
+          <div class="ds-thread" {% if page.id %}data-thread-key="{{ page.id }}"{% endif %} 
+            data-title="{% if page.title %}{{ page.title }}{% endif %}" 
+            data-url="{% if page.url %}{{ page.url | prepend: site.baseurl }}{% endif %}" ></div>
         </div>
         <!-- Duoshuo Comment END -->
       </div>
