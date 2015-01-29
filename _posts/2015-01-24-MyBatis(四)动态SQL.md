@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: blog
 title:  "MyBatis(四): 动态SQL"
 date:   2015-01-24 
 category: MyBatis  

@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: blog
 title: Java 中的并发
 date:   2015-01-05 
 category: java

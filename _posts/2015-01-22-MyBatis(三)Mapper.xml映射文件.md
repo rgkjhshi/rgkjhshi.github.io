@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: blog
 title:  "MyBatis(三): Mapper.xml映射文件"
 date:   2015-01-22 
 category: MyBatis  
