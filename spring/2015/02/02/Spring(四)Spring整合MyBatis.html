@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <meta name="description" content="本文结构整合的方法SqlSessionFactoryBean的注入MapperFactoryBean使用MapperScannerConfigurer自动注册Mapper@Qualifier精装配 整合的方法 MyBatis 是以SqlSessionFactory为核心的，Spring是以BeanFactory或...">
+    <meta name="description" content="本文结构整合的方法SqlSessionFactoryBean的注入MapperFactoryBean使用MapperScannerConfigurer自动注册Mapper 整合的方法 MyBatis 是以SqlSessionFactory为核心的，Spring是以BeanFactory或ApplicationCo...">
 
     <!-- <title>Spring(四)Spring整合MyBatis</title> -->
     <title>Michael King's Blog</title>
@@ -78,7 +78,6 @@
 <li><a href="SqlSessionFactoryBean">SqlSessionFactoryBean的注入</a></li>
 <li><a href="#MapperFactoryBean">MapperFactoryBean</a></li>
 <li><a href="#MapperScannerConfigurer">使用MapperScannerConfigurer自动注册Mapper</a></li>
-<li><a href="#qualifier">@Qualifier精装配</a></li>
 </ul>
 
 <hr>
@@ -172,6 +171,15 @@
   <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;basePackage&quot;</span> <span class="na">value=</span><span class="s">&quot;com.test.mybatis_spring.mapper&quot;</span> <span class="nt">/&gt;</span>
 <span class="nt">&lt;/bean&gt;</span>
 </code></pre></div>
+<p><code>MapperScannerConfigurer</code>有一个<code>basePackage</code>属性必须指定。<code>basePackage</code>用来指定<code>Mapper</code>接口文件所在的包，在这个包或其子包下面的<code>Mapper</code>接口都将被搜索到。多个包之间可以使用逗号或者分号进行分隔。另外还有两个可以缩小搜索和注册范围的属性，一个是<code>annotationClass</code>，另一个是<code>markerInterface</code>。</p>
+
+<ul>
+<li><code>annotationClass</code>：当指定了<code>annotationClass</code>时，<code>MapperScannerConfigurer</code>将只注册使用了<code>annotationClass</code>注解标记的接口。</li>
+<li><code>markerInterface</code>：<code>markerInterface</code>用于指定一个接口，当指定了<code>markerInterface</code>之后，<code>MapperScannerConfigurer</code>将只注册继承自<code>markerInterface</code>的接口。</li>
+</ul>
+
+<p>如果上述两个属性都指定了的话，那么<code>MapperScannerConfigurer</code>将取它们的并集，而不是交集。</p>
+
 <hr>
 
         </section>
