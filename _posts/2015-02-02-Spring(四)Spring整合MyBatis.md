@@ -11,9 +11,11 @@ category: Spring
 ## 本文结构
 
 * [整合的方法](#id1)
-* [SqlSessionFactoryBean的注入](SqlSessionFactoryBean)
+* [SqlSessionFactoryBean的注入](#SqlSessionFactoryBean)
 * [MapperFactoryBean](#MapperFactoryBean)
 * [使用MapperScannerConfigurer自动注册Mapper](#MapperScannerConfigurer)
+* [事务管理](#transactionManager)
+
 
 *****
 
@@ -35,6 +37,7 @@ MyBatis 是以`SqlSessionFactory`为核心的，Spring是以`BeanFactory`或`App
 
 <h2 id="SqlSessionFactoryBean"> SqlSessionFactoryBean的注入 </h2>
 
+在`MyBatis`中,`session`工厂可以使用`SqlSessionFactoryBuilder`来创建。而在`MyBatis-Spring`中,则使用`SqlSessionFactoryBean`来替代。
 要想实现对`SqlSessionFactoryBean`的注入，需要在spring的配置文件中添加这样的一个bean元素：
 
 ```xml
@@ -123,4 +126,33 @@ public interface UserMapper {
 
 如果上述两个属性都指定了的话，那么`MapperScannerConfigurer`将取它们的并集，而不是交集。
 
+*****
+
+<h2 id="transactionManager"> 事务管理 </h2>
+
+`MyBatis-Spring`利用了存在于`Spring`中的`DataSourceTransactionManager`进行事务管理。一旦`Spring`的`PlatformTransactionManager`配置好了,就可以在`Spring`中以你通常的做法`(@Transactional注解)`来配置事务。在事务处理期间,会创建一个单独的`SqlSession`对象，当事务完成时,这个`session`会以合适的方式提交或回滚。
+
+要开启`Spring`的事务处理,需要在`Spring`的配置文件中创建一个`DataSourceTransactionManager`对象:
+
+```xml
+<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+  <property name="dataSource" ref="dataSource" />
+</bean>
+```
+下面这段代码展示如何编程式地控制事务：
+
+```java
+DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+
+TransactionStatus status = txManager.getTransaction(def);
+try {
+    userMapper.insertUser(user);
+}
+catch (MyException ex) {
+    txManager.rollback(status);
+    throw ex;
+}
+txManager.commit(status);
+```
 *****
