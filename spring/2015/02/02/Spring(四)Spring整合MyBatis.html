@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <meta name="description" content="本文结构整合的方法SqlSessionFactoryBean的注入MapperFactoryBean使用MapperScannerConfigurer自动注册Mapper 整合的方法 MyBatis 是以SqlSessionFactory为核心的，Spring是以BeanFactory或ApplicationCo...">
+    <meta name="description" content="本文结构整合的方法SqlSessionFactoryBean的注入MapperFactoryBean使用MapperScannerConfigurer自动注册Mapper事务管理">
 
     <!-- <title>Spring(四)Spring整合MyBatis</title> -->
     <title>Michael King's Blog</title>
@@ -73,9 +73,10 @@
 
 <ul>
 <li><a href="#id1">整合的方法</a></li>
-<li><a href="SqlSessionFactoryBean">SqlSessionFactoryBean的注入</a></li>
+<li><a href="#SqlSessionFactoryBean">SqlSessionFactoryBean的注入</a></li>
 <li><a href="#MapperFactoryBean">MapperFactoryBean</a></li>
 <li><a href="#MapperScannerConfigurer">使用MapperScannerConfigurer自动注册Mapper</a></li>
+<li><a href="#transactionManager">事务管理</a></li>
 </ul>
 
 <hr>
@@ -95,7 +96,8 @@
 
 <h2 id="SqlSessionFactoryBean"> SqlSessionFactoryBean的注入 </h2>
 
-<p>要想实现对<code>SqlSessionFactoryBean</code>的注入，需要在spring的配置文件中添加这样的一个bean元素：</p>
+<p>在<code>MyBatis</code>中,<code>session</code>工厂可以使用<code>SqlSessionFactoryBuilder</code>来创建。而在<code>MyBatis-Spring</code>中,则使用<code>SqlSessionFactoryBean</code>来替代。
+要想实现对<code>SqlSessionFactoryBean</code>的注入，需要在spring的配置文件中添加这样的一个bean元素：</p>
 <div class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="c">&lt;!-- 读取properties文件 --&gt;</span>
     <span class="nt">&lt;context:property-placeholder</span> <span class="na">location=</span><span class="s">&quot;classpath:jdbc.properties&quot;</span><span class="nt">/&gt;</span>
     <span class="c">&lt;!-- 配置数据源 --&gt;</span>
@@ -178,6 +180,31 @@
 
 <p>如果上述两个属性都指定了的话，那么<code>MapperScannerConfigurer</code>将取它们的并集，而不是交集。</p>
 
+<hr>
+
+<h2 id="transactionManager"> 事务管理 </h2>
+
+<p><code>MyBatis-Spring</code>利用了存在于<code>Spring</code>中的<code>DataSourceTransactionManager</code>进行事务管理。一旦<code>Spring</code>的<code>PlatformTransactionManager</code>配置好了,就可以在<code>Spring</code>中以你通常的做法<code>(@Transactional注解)</code>来配置事务。在事务处理期间,会创建一个单独的<code>SqlSession</code>对象，当事务完成时,这个<code>session</code>会以合适的方式提交或回滚。</p>
+
+<p>要开启<code>Spring</code>的事务处理,需要在<code>Spring</code>的配置文件中创建一个<code>DataSourceTransactionManager</code>对象:</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;transactionManager&quot;</span> <span class="na">class=</span><span class="s">&quot;org.springframework.jdbc.datasource.DataSourceTransactionManager&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;dataSource&quot;</span> <span class="na">ref=</span><span class="s">&quot;dataSource&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></div>
+<p>下面这段代码展示如何编程式地控制事务：</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">DefaultTransactionDefinition</span> <span class="n">def</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">DefaultTransactionDefinition</span><span class="o">();</span>
+<span class="n">def</span><span class="o">.</span><span class="na">setPropagationBehavior</span><span class="o">(</span><span class="n">TransactionDefinition</span><span class="o">.</span><span class="na">PROPAGATION_REQUIRED</span><span class="o">);</span>
+
+<span class="n">TransactionStatus</span> <span class="n">status</span> <span class="o">=</span> <span class="n">txManager</span><span class="o">.</span><span class="na">getTransaction</span><span class="o">(</span><span class="n">def</span><span class="o">);</span>
+<span class="k">try</span> <span class="o">{</span>
+    <span class="n">userMapper</span><span class="o">.</span><span class="na">insertUser</span><span class="o">(</span><span class="n">user</span><span class="o">);</span>
+<span class="o">}</span>
+<span class="k">catch</span> <span class="o">(</span><span class="n">MyException</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">txManager</span><span class="o">.</span><span class="na">rollback</span><span class="o">(</span><span class="n">status</span><span class="o">);</span>
+    <span class="k">throw</span> <span class="n">ex</span><span class="o">;</span>
+<span class="o">}</span>
+<span class="n">txManager</span><span class="o">.</span><span class="na">commit</span><span class="o">(</span><span class="n">status</span><span class="o">);</span>
+</code></pre></div>
 <hr>
 
         </section>
