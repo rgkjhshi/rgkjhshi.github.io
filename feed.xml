@@ -6,9 +6,125 @@
 </description>
     <link>http://yourdomain.com/blog/</link>
     <atom:link href="http://yourdomain.com/blog/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 30 Jan 2015 20:42:45 +0800</pubDate>
-    <lastBuildDate>Fri, 30 Jan 2015 20:42:45 +0800</lastBuildDate>
+    <pubDate>Tue, 03 Feb 2015 16:22:45 +0800</pubDate>
+    <lastBuildDate>Tue, 03 Feb 2015 16:22:45 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>Spring(四)Spring整合MyBatis</title>
+        <description>&lt;hr&gt;
+
+&lt;h2&gt;本文结构&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#id1&quot;&gt;整合的方法&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;SqlSessionFactoryBean&quot;&gt;SqlSessionFactoryBean的注入&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#MapperFactoryBean&quot;&gt;MapperFactoryBean&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#MapperScannerConfigurer&quot;&gt;使用MapperScannerConfigurer自动注册Mapper&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#qualifier&quot;&gt;@Qualifier精装配&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;id1&quot;&gt; 整合的方法 &lt;/h2&gt;
+
+&lt;p&gt;MyBatis 是以&lt;code&gt;SqlSessionFactory&lt;/code&gt;为核心的，Spring是以&lt;code&gt;BeanFactory&lt;/code&gt;或&lt;code&gt;ApplicationContext&lt;/code&gt;为核心的。把两者整合在一起，&lt;code&gt;Mybatis-Spring&lt;/code&gt;封装了一个&lt;code&gt;SqlSessionFactoryBean&lt;/code&gt;，在这个&lt;code&gt;Bean&lt;/code&gt;里可以产生&lt;code&gt;SqlSessionFactory&lt;/code&gt;。所以通过Spring的IoC实现&lt;code&gt;SqlSessionFactoryBean&lt;/code&gt;的注入即可将二者整合。&lt;/p&gt;
+
+&lt;p&gt;使用&lt;code&gt;Mybatis-Spring&lt;/code&gt;模块需要&lt;code&gt;mybatis-spring-x.x.x.jar&lt;/code&gt;包，如果使用&lt;code&gt;Maven&lt;/code&gt;，则需在&lt;code&gt;pom.xml&lt;/code&gt;文件中添加下面代码：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.mybatis&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;mybatis-spring&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;x.x.x&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+
+&lt;h2 id=&quot;SqlSessionFactoryBean&quot;&gt; SqlSessionFactoryBean的注入 &lt;/h2&gt;
+
+&lt;p&gt;要想实现对&lt;code&gt;SqlSessionFactoryBean&lt;/code&gt;的注入，需要在spring的配置文件中添加这样的一个bean元素：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 读取properties文件 --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;context:property-placeholder&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;location=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;classpath:jdbc.properties&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 配置数据源 --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;dataSource&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;org.apache.commons.dbcp.BasicDataSource&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;destroy-method=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;close&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+       &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;driverClassName&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;${jdbc.driver}&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+       &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;url&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;${jdbc.url}&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+       &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;username&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;${jdbc.username}&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+       &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;password&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;${jdbc.password}&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- SqlSessionFactoryBean --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;sqlSessionFactory&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;org.mybatis.spring.SqlSessionFactoryBean&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- dataSource用于指定mybatis的数据源 --&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;dataSource&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;dataSource&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- mapperLocations用于指定mybatis中mapper文件所在的位置 --&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;mapperLocations&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;classpath:mapper/*.xml&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 自动重命名 --&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;typeAliasesPackage&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;com.test.mybatis_spring.model&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 用于指定mybatis配置文件的位置 --&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;configLocation&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;classpath:mybatis-config.xml&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;构建&lt;code&gt;SqlSessionFactoryBean&lt;/code&gt;的时候，&lt;code&gt;dataSource&lt;/code&gt;属性是必须指定的，它表示用于连接数据库的数据源。我们也可以指定一些其他的属性，如：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;typeAliasesPackage&lt;/code&gt;：实体类所在的包，自动取包中不包括包名的简单类名作为别名。多个package之间可以用逗号或者分号等来进行分隔。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;typeAliases&lt;/code&gt;：数组类型，用来指定别名的。指定了这个属性后，Mybatis会把这个类型的短名称作为这个类型的别名，前提是该类上没有&lt;code&gt;@Alias&lt;/code&gt;注解，否则将使用该注解对应的值作为此种类型的别名。如：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt; &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;typeAliases&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;  
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;array&amp;gt;&lt;/span&gt;  
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;com.test.mybatis.model.Blog&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;  
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;com.test.mybatis.model.Comment&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;  
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/array&amp;gt;&lt;/span&gt;  
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;plugins&lt;/code&gt;：数组类型，用来指定Mybatis的&lt;code&gt;Interceptor&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;typeHandlersPackage&lt;/code&gt;：用来指定&lt;code&gt;TypeHandler&lt;/code&gt;所在的包，自动把该包下面的类注册为对应的&lt;code&gt;TypeHandler&lt;/code&gt;。多个package之间可以用逗号或者分号等来进行分隔。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;typeHandlers&lt;/code&gt;：数组类型，用来指定&lt;code&gt;TypeHandler&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;MapperFactoryBean&quot;&gt; MapperFactoryBean &lt;/h2&gt;
+
+&lt;p&gt;通过&lt;code&gt;SqlSessionFactoryBean&lt;/code&gt;可以产生&lt;code&gt;SqlSessionFactory&lt;/code&gt;，在MyBatis中，通过&lt;code&gt;sqlSessionFactory.openSession()&lt;/code&gt;得到&lt;code&gt;sqlSession&lt;/code&gt;，然后通过&lt;code&gt;session.getMapper(xxx.class)&lt;/code&gt;得到对应的&lt;code&gt;Mapper&lt;/code&gt;。在Spring中，通过&lt;code&gt;MapperFactoryBean&lt;/code&gt;可以获取到我们想要的&lt;code&gt;Mapper&lt;/code&gt;对象。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;MapperFactoryBean&lt;/code&gt;实现了Spring的&lt;code&gt;FactoryBean&lt;/code&gt;接口，所以&lt;code&gt;MapperFactoryBean&lt;/code&gt;是通过&lt;code&gt;FactoryBean&lt;/code&gt;接口中定义的&lt;code&gt;getObject&lt;/code&gt;方法来获取对应的&lt;code&gt;Mapper&lt;/code&gt;对象的。在定义一个&lt;code&gt;MapperFactoryBean&lt;/code&gt;的时候有两个属性需要我们注入，一个是Mybatis-Spring用来生成实现了&lt;code&gt;SqlSession&lt;/code&gt;接口的&lt;code&gt;SqlSessionTemplate&lt;/code&gt;对象的&lt;code&gt;sqlSessionFactory&lt;/code&gt;；另一个是我们所要返回的对应的&lt;code&gt;Mapper&lt;/code&gt;接口。&lt;/p&gt;
+
+&lt;p&gt;比如，有一个&lt;code&gt;UserMapper&lt;/code&gt;接口:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;c1&quot;&gt;//UserMapper.java&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UserMapper&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;nd&quot;&gt;@Select&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;SELECT * FROM users WHERE id = #{userId}&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getUser&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@Param&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;userId&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;userId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;使用&lt;code&gt;MapperFactoryBean&lt;/code&gt;把接口加入到 Spring 中:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;userMapper&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;org.mybatis.spring.mapper.MapperFactoryBean&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 指定的映射器类必须是一个接口,而不是具体的实现类 --&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;mapperInterface&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;com.test.mybatis_spring.mapper.UserMapper&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;sqlSessionFactory&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;sqlSessionFactory&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;定义好&lt;code&gt;Mapper&lt;/code&gt;接口对应的&lt;code&gt;MapperFactoryBean&lt;/code&gt;之后，就可以把对应的&lt;code&gt;Mapper&lt;/code&gt;接口注入到由Spring管理的bean对象中了。当我们需要使用到相应的&lt;code&gt;Mapper&lt;/code&gt;接口时，&lt;code&gt;MapperFactoryBean&lt;/code&gt;会从它的&lt;code&gt;getObject&lt;/code&gt;方法中获取对应的&lt;code&gt;Mapper&lt;/code&gt;接口，而&lt;code&gt;getObject&lt;/code&gt;内部还是通过我们注入的属性调用&lt;code&gt;SqlSession&lt;/code&gt;接口的&lt;code&gt;getMapper()&lt;/code&gt;方法来返回对应的&lt;code&gt;Mapper&lt;/code&gt;接口。这样就通过把&lt;code&gt;SqlSessionFactory&lt;/code&gt;和相应的&lt;code&gt;Mapper&lt;/code&gt;接口交给Spring管理实现了Mybatis跟Spring的整合。&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;MapperScannerConfigurer&quot;&gt; 使用MapperScannerConfigurer自动注册Mapper &lt;/h2&gt;
+
+&lt;p&gt;像上面一个&lt;code&gt;Mapper&lt;/code&gt;就需要定义一个对应的&lt;code&gt;MapperFactoryBean&lt;/code&gt;。&lt;code&gt;Mybatis-Spring&lt;/code&gt;提供了一个叫&lt;code&gt;MapperScannerConfigurer&lt;/code&gt;的类，可以自动注册&lt;code&gt;Mapper&lt;/code&gt;对应的&lt;code&gt;MapperFactoryBean&lt;/code&gt;对象。我们只需要在配置文件中添加这样的内容：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;org.mybatis.spring.mapper.MapperScannerConfigurer&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;basePackage&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;com.test.mybatis_spring.mapper&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+</description>
+        <pubDate>Mon, 02 Feb 2015 00:00:00 +0800</pubDate>
+        <link>http://yourdomain.com/blog/spring/2015/02/02/Spring(%E5%9B%9B)Spring%E6%95%B4%E5%90%88MyBatis.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/blog/spring/2015/02/02/Spring(%E5%9B%9B)Spring%E6%95%B4%E5%90%88MyBatis.html</guid>
+        
+        
+        <category>spring</category>
+        
+      </item>
     
       <item>
         <title>Spring(三): 注解</title>
@@ -32,9 +148,9 @@
 
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;@Component&lt;/code&gt;: 标注一个普通的&lt;code&gt;Spring Bean&lt;/code&gt;；&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;@Controller&lt;/code&gt;: 标注一个控制器组件类；&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;@Service&lt;/code&gt;: 标注一个业务逻辑组件类；&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;@Repository&lt;/code&gt;: 标注一个Dao组件；&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;@Controller&lt;/code&gt;: 标注一个控制器组件类(控制层)；&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;@Service&lt;/code&gt;: 标注一个业务逻辑组件类(业务层)；&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;@Repository&lt;/code&gt;: 标注一个Dao组件(持久层)；&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;然后在spring的配置文件中添加&lt;code&gt;&amp;lt;context:component-scan base-package=&amp;quot;&amp;quot; /&amp;gt;&lt;/code&gt;，会自动搜索包下所有以&lt;code&gt;@Component&lt;/code&gt;、&lt;code&gt;@Controller&lt;/code&gt;、&lt;code&gt;@Service&lt;/code&gt;、&lt;code&gt;@Repository&lt;/code&gt;注释的java类，当作&lt;code&gt;Spring Bean&lt;/code&gt;处理。&lt;/p&gt;
@@ -1567,195 +1683,6 @@ MyBatis会通过窥探属性的原始类型来推断由类型处理器处理的 
         
         
         <category>java</category>
-        
-      </item>
-    
-      <item>
-        <title>markdown 语法简介</title>
-        <description>&lt;p&gt;Markdown是用于书写纯文本文件的语言，通过一些特殊标记使文本更加容易读，而且兼容HTML。&lt;br&gt;
-如果想看本文的例子，可以将代码块中的文字复制到&lt;a href=&quot;http://tool.oschina.net/markdown/&quot;&gt;在线 Markdown 编译器&lt;/a&gt;来查看效果&lt;br&gt;
-本文是我在使用Markdown时所作的总结，更详细的Markdown语法请看&lt;a href=&quot;http://wowubuntu.com/markdown/basic.html&quot;&gt;Markdown 语法说明 (简体中文版)&lt;/a&gt;  &lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2&gt;本文结构&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#anchor1&quot;&gt;标题&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#anchor2&quot;&gt;分割线&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#anchor3&quot;&gt;代码&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#anchor4&quot;&gt;引用&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#anchor5&quot;&gt;列表&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#anchor6&quot;&gt;链接&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#anchor7&quot;&gt;强调&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#anchor8&quot;&gt;图片&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#anchor9&quot;&gt;自动链接&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;anchor1&quot;&gt; 标题 &lt;/h2&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;这样表示H1
-=========
-
-# 这也可以表示H1
-
-这表示H2
--------
-
-## 这也是H2 ##
-
-### H3 后面放几个`#`都无所谓
-
-#### H4 H1~H6 都可以用`#`方式来表达
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-
-&lt;h2 id=&quot;anchor2&quot;&gt; 分割线 &lt;/h2&gt;
-
-&lt;p&gt;一行中用三个以上的星号、减号、底线都能建立一个分隔线，行内可以有空格，但不能有其他东西。如下均可以：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;* * *  
-***
-*****
-- - -
-----------------------------------------
-______
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-
-&lt;h2&gt;段落和换行&lt;/h2&gt;
-
-&lt;p&gt;文字前后要有一个以上的空行才会产生段落，文本中的换行并不会产生换行符&lt;code&gt;&amp;lt;br /&amp;gt;&lt;/code&gt;，如果要强制产生换行符&lt;code&gt;&amp;lt;br /&amp;gt;&lt;/code&gt;的话，可以在行末尾加两个空格。如下：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;这样是不产
-生换行的
-
-如果在末尾加两个空格  
-就会强制换行
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-
-&lt;h2 id=&quot;anchor3&quot;&gt; 代码 &lt;/h2&gt;
-
-&lt;p&gt;代码分为行内的代码(如&lt;code&gt;printf()&lt;/code&gt;)和代码块，建立代码块需要将代码块缩紧4个空格或一个tab键，行内代码可通过反引号&lt;code&gt;`&lt;/code&gt;实现。如下：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;这是普通段落
-
-    这是代码块
-
-这是行内代码`printf()`
-
-如果行内代码本身包含反引号，可以使用多个反引号来开启和关闭代码块，  
-如：`` `foo` ``，为了能正确表示一开始就有反引号的情况，中间的内容要用空格隔开。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-
-&lt;h2 id=&quot;anchor4&quot;&gt; 引用 &lt;/h2&gt;
-
-&lt;p&gt;在行首添加&lt;code&gt;&amp;gt;&lt;/code&gt;表示引用，如下：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&amp;gt; 行首加引用
-&amp;gt; 
-&amp;gt; 也可以偷懒，只在每
-一段的开头加一个也可以
-&amp;gt;
-&amp;gt; 还能嵌套引用 
-&amp;gt; 
-&amp;gt; &amp;gt; 嵌套引用  
-&amp;gt;
-&amp;gt; ### 里面还能写其他的markdown语法
-&amp;gt;
-&amp;gt;     printf(&amp;quot;代码区块也可以&amp;quot;);
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-
-&lt;h2 id=&quot;anchor5&quot;&gt; 列表 &lt;/h2&gt;
-
-&lt;p&gt;Markdown 支持有序列表和无序列表，无需列表会转换成html中的&lt;code&gt;&amp;lt;ul&amp;gt;&lt;/code&gt;，有序列表会转换成html中的&lt;code&gt;&amp;lt;ol&amp;gt;&lt;/code&gt;。&lt;/p&gt;
-
-&lt;p&gt;无序列表使用星号、加号或是减号作为列表标记，标记与内容间至少有一个空格，如：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;*   Red
-*   Green
-+   Blue
--   Yello
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;有序列表则使用数字接着一个英文句点，如：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;1.  Bird
-2.  McHale
-3.  Parish
-9.  数字的序号是无所谓的
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-
-&lt;h2 id=&quot;anchor6&quot;&gt; 链接 &lt;/h2&gt;
-
-&lt;p&gt;链接语法包括行内式和参考式两种形式&lt;br&gt;
-行内式的链接，链接文字都是用 [方括号] 来标记， 如：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;这是个链接[百度](http://www.baidu.com #maodian)
-这是个链接[百度](http://www.baidu.com &amp;quot;Title&amp;quot;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;参考式是在链接文字的括号后面再接上另一个方括号，而在第二个方括号里填入用以辨识链接的标记(不区分大小写)，如：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;这是[百度][1]  
-这是[谷歌][2]
-
-[1]: http://www.baidu.com &amp;quot;Optional Title Here&amp;quot;
-[2]: http://www.google.com &amp;quot;Optional Title Here&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;其内容定义的形式为：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt; 方括号（前面可以选择性地加上至多三个空格来缩进），里面输入链接文字&lt;/li&gt;
-&lt;li&gt; 接着一个冒号&lt;/li&gt;
-&lt;li&gt; 接着一个以上的空格或制表符&lt;/li&gt;
-&lt;li&gt; 接着链接的网址&lt;/li&gt;
-&lt;li&gt; 选择性地接着 title 内容，可以用双引号或是括弧包着&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;anchor7&quot;&gt; 强调 &lt;/h2&gt;
-
-&lt;p&gt;Markdown 使用星号（&lt;code&gt;*&lt;/code&gt;）和底线（&lt;code&gt;_&lt;/code&gt;）作为标记强调字词的符号，被 &lt;code&gt;*&lt;/code&gt; 或 &lt;code&gt;_&lt;/code&gt; 包围的字词会被转成用 &lt;code&gt;&amp;lt;em&amp;gt;&lt;/code&gt; 标签包围，
-用两个 &lt;code&gt;*&lt;/code&gt; 或 &lt;code&gt;_&lt;/code&gt; 包起来的话，则会被转成 &lt;code&gt;&amp;lt;strong&amp;gt;&lt;/code&gt;。&lt;br&gt;
-如果 &lt;code&gt;*&lt;/code&gt; 和 &lt;code&gt;_&lt;/code&gt; 两边都有空白的话，它们就只会被当成普通符号。&lt;br&gt;
-如果要在文字前后直接插入普通的星号或底线，就需要用反斜线来转义。&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;anchor8&quot;&gt; 图片 &lt;/h2&gt;
-
-&lt;p&gt;图片跟链接很类似，同样分为行内式和参考式。只是比链接前面多了一个&lt;code&gt;!&lt;/code&gt;，如：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;![Alt text](/path/to/img.jpg &amp;quot;Optional title&amp;quot;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-
-&lt;h2 id=&quot;anchor9&quot;&gt; 自动链接 &lt;/h2&gt;
-
-&lt;p&gt;Markdown 支持以比较简短的自动链接形式来处理&lt;strong&gt;网址&lt;/strong&gt;和&lt;strong&gt;电子邮箱&lt;/strong&gt;，只要用尖括号包起来。&lt;/p&gt;
-
-&lt;p&gt;网址的链接文字就和链接地址一样，例如：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&amp;lt;http://example.com/&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Markdown 会转为：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&amp;lt;a href=&amp;quot;http://example.com/&amp;quot;&amp;gt;http://example.com/&amp;lt;/a&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;邮件的自动链接也很类似，只是 Markdown 会先做一个编码转换的过程，把文字字符转成 16 进位码的 HTML 实体，这样的格式可以糊弄一些不好的邮址收集机器人，例如：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&amp;lt;address@example.com&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Markdown 会转成：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&amp;lt;a href=&amp;quot;&amp;amp;#x6D;&amp;amp;#x61;i&amp;amp;#x6C;&amp;amp;#x74;&amp;amp;#x6F;:&amp;amp;#x61;&amp;amp;#x64;&amp;amp;#x64;&amp;amp;#x72;&amp;amp;#x65;
-&amp;amp;#115;&amp;amp;#115;&amp;amp;#64;&amp;amp;#101;&amp;amp;#120;&amp;amp;#x61;&amp;amp;#109;&amp;amp;#x70;&amp;amp;#x6C;e&amp;amp;#x2E;&amp;amp;#99;&amp;amp;#111;
-&amp;amp;#109;&amp;quot;&amp;gt;&amp;amp;#x61;&amp;amp;#x64;&amp;amp;#x64;&amp;amp;#x72;&amp;amp;#x65;&amp;amp;#115;&amp;amp;#115;&amp;amp;#64;&amp;amp;#101;&amp;amp;#120;&amp;amp;#x61;
-&amp;amp;#109;&amp;amp;#x70;&amp;amp;#x6C;e&amp;amp;#x2E;&amp;amp;#99;&amp;amp;#111;&amp;amp;#109;&amp;lt;/a&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;这段字（其实是 &lt;code&gt;&amp;lt;a href=&amp;quot;mailto:address@example.com&amp;quot;&amp;gt;address@example.com&amp;lt;/a&amp;gt;&lt;/code&gt;) 会变成一个可以点击的「address@example.com」链接。
-貌似邮件自动链接在开始提到的&lt;a href=&quot;http://tool.oschina.net/markdown/&quot;&gt;在线 Markdown 编译器&lt;/a&gt;中不起作用&lt;/p&gt;
-
-&lt;hr&gt;
-</description>
-        <pubDate>Thu, 01 Jan 2015 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/blog/markdown/2015/01/01/markdown%E8%AF%AD%E6%B3%95%E7%AE%80%E4%BB%8B.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/blog/markdown/2015/01/01/markdown%E8%AF%AD%E6%B3%95%E7%AE%80%E4%BB%8B.html</guid>
-        
-        
-        <category>markdown</category>
         
       </item>
     

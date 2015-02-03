@@ -60,7 +60,7 @@
     
         <a style="display: block; " href="/blog/mybatis "> mybatis (4) </a>
     
-        <a style="display: block; " href="/blog/spring "> spring (3) </a>
+        <a style="display: block; " href="/blog/spring "> spring (4) </a>
     
 </aside>
 
@@ -89,9 +89,9 @@
 
 <ul>
 <li><code>@Component</code>: 标注一个普通的<code>Spring Bean</code>；</li>
-<li><code>@Controller</code>: 标注一个控制器组件类；</li>
-<li><code>@Service</code>: 标注一个业务逻辑组件类；</li>
-<li><code>@Repository</code>: 标注一个Dao组件；</li>
+<li><code>@Controller</code>: 标注一个控制器组件类(控制层)；</li>
+<li><code>@Service</code>: 标注一个业务逻辑组件类(业务层)；</li>
+<li><code>@Repository</code>: 标注一个Dao组件(持久层)；</li>
 </ul>
 
 <p>然后在spring的配置文件中添加<code>&lt;context:component-scan base-package=&quot;&quot; /&gt;</code>，会自动搜索包下所有以<code>@Component</code>、<code>@Controller</code>、<code>@Service</code>、<code>@Repository</code>注释的java类，当作<code>Spring Bean</code>处理。</p>

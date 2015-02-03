@@ -61,7 +61,7 @@
     
         <a style="display: block; " href="/blog/mybatis "> mybatis (4) </a>
     
-        <a style="display: block; " href="/blog/spring "> spring (3) </a>
+        <a style="display: block; " href="/blog/spring "> spring (4) </a>
     
 </aside>
 
@@ -71,6 +71,120 @@
         <section>
           <h1> spring 文章列表 </h1>
           <div class="post-list">
+  
+    <div class="post-title">
+      <a style="display:inline-block;" href="/blog/spring/2015/02/02/Spring(%E5%9B%9B)Spring%E6%95%B4%E5%90%88MyBatis.html"> Spring(四)Spring整合MyBatis</a>
+      <span style="float:right; width:100px; "> 2015-02-02 </span>
+      </br>
+    </div>
+
+    <!-- 摘要 -->
+   <!--  <div class="post-preview">
+      <hr>
+
+<h2>本文结构</h2>
+
+<ul>
+<li><a href="#id1">整合的方法</a></li>
+<li><a href="SqlSessionFactoryBean">SqlSessionFactoryBean的注入</a></li>
+<li><a href="#MapperFactoryBean">MapperFactoryBean</a></li>
+<li><a href="#MapperScannerConfigurer">使用MapperScannerConfigurer自动注册Mapper</a></li>
+<li><a href="#qualifier">@Qualifier精装配</a></li>
+</ul>
+
+<hr>
+
+<h2 id="id1"> 整合的方法 </h2>
+
+<p>MyBatis 是以<code>SqlSessionFactory</code>为核心的，Spring是以<code>BeanFactory</code>或<code>ApplicationContext</code>为核心的。把两者整合在一起，<code>Mybatis-Spring</code>封装了一个<code>SqlSessionFactoryBean</code>，在这个<code>Bean</code>里可以产生<code>SqlSessionFactory</code>。所以通过Spring的IoC实现<code>SqlSessionFactoryBean</code>的注入即可将二者整合。</p>
+
+<p>使用<code>Mybatis-Spring</code>模块需要<code>mybatis-spring-x.x.x.jar</code>包，如果使用<code>Maven</code>，则需在<code>pom.xml</code>文件中添加下面代码：</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+  <span class="nt">&lt;groupId&gt;</span>org.mybatis<span class="nt">&lt;/groupId&gt;</span>
+  <span class="nt">&lt;artifactId&gt;</span>mybatis-spring<span class="nt">&lt;/artifactId&gt;</span>
+  <span class="nt">&lt;version&gt;</span>x.x.x<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div>
+<hr>
+
+<h2 id="SqlSessionFactoryBean"> SqlSessionFactoryBean的注入 </h2>
+
+<p>要想实现对<code>SqlSessionFactoryBean</code>的注入，需要在spring的配置文件中添加这样的一个bean元素：</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="c">&lt;!-- 读取properties文件 --&gt;</span>
+    <span class="nt">&lt;context:property-placeholder</span> <span class="na">location=</span><span class="s">&quot;classpath:jdbc.properties&quot;</span><span class="nt">/&gt;</span>
+    <span class="c">&lt;!-- 配置数据源 --&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;dataSource&quot;</span> <span class="na">class=</span><span class="s">&quot;org.apache.commons.dbcp.BasicDataSource&quot;</span> <span class="na">destroy-method=</span><span class="s">&quot;close&quot;</span><span class="nt">&gt;</span>
+       <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;driverClassName&quot;</span> <span class="na">value=</span><span class="s">&quot;${jdbc.driver}&quot;</span> <span class="nt">/&gt;</span>
+       <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;url&quot;</span> <span class="na">value=</span><span class="s">&quot;${jdbc.url}&quot;</span> <span class="nt">/&gt;</span>
+       <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;username&quot;</span> <span class="na">value=</span><span class="s">&quot;${jdbc.username}&quot;</span> <span class="nt">/&gt;</span>
+       <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;password&quot;</span> <span class="na">value=</span><span class="s">&quot;${jdbc.password}&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+    <span class="c">&lt;!-- SqlSessionFactoryBean --&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;sqlSessionFactory&quot;</span> <span class="na">class=</span><span class="s">&quot;org.mybatis.spring.SqlSessionFactoryBean&quot;</span><span class="nt">&gt;</span>
+        <span class="c">&lt;!-- dataSource用于指定mybatis的数据源 --&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;dataSource&quot;</span> <span class="na">ref=</span><span class="s">&quot;dataSource&quot;</span><span class="nt">/&gt;</span>
+        <span class="c">&lt;!-- mapperLocations用于指定mybatis中mapper文件所在的位置 --&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;mapperLocations&quot;</span> <span class="na">value=</span><span class="s">&quot;classpath:mapper/*.xml&quot;</span><span class="nt">/&gt;</span>
+        <span class="c">&lt;!-- 自动重命名 --&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;typeAliasesPackage&quot;</span> <span class="na">value=</span><span class="s">&quot;com.test.mybatis_spring.model&quot;</span> <span class="nt">/&gt;</span>
+        <span class="c">&lt;!-- 用于指定mybatis配置文件的位置 --&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;configLocation&quot;</span> <span class="na">value=</span><span class="s">&quot;classpath:mybatis-config.xml&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span> 
+</code></pre></div>
+<p>构建<code>SqlSessionFactoryBean</code>的时候，<code>dataSource</code>属性是必须指定的，它表示用于连接数据库的数据源。我们也可以指定一些其他的属性，如：</p>
+
+<ul>
+<li><code>typeAliasesPackage</code>：实体类所在的包，自动取包中不包括包名的简单类名作为别名。多个package之间可以用逗号或者分号等来进行分隔。</li>
+<li><code>typeAliases</code>：数组类型，用来指定别名的。指定了这个属性后，Mybatis会把这个类型的短名称作为这个类型的别名，前提是该类上没有<code>@Alias</code>注解，否则将使用该注解对应的值作为此种类型的别名。如：</li>
+</ul>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"> <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;typeAliases&quot;</span><span class="nt">&gt;</span>  
+    <span class="nt">&lt;array&gt;</span>  
+        <span class="nt">&lt;value&gt;</span>com.test.mybatis.model.Blog<span class="nt">&lt;/value&gt;</span>  
+        <span class="nt">&lt;value&gt;</span>com.test.mybatis.model.Comment<span class="nt">&lt;/value&gt;</span>  
+    <span class="nt">&lt;/array&gt;</span>  
+<span class="nt">&lt;/property&gt;</span>
+</code></pre></div>
+<ul>
+<li><code>plugins</code>：数组类型，用来指定Mybatis的<code>Interceptor</code>。</li>
+<li><code>typeHandlersPackage</code>：用来指定<code>TypeHandler</code>所在的包，自动把该包下面的类注册为对应的<code>TypeHandler</code>。多个package之间可以用逗号或者分号等来进行分隔。</li>
+<li><code>typeHandlers</code>：数组类型，用来指定<code>TypeHandler</code>。</li>
+</ul>
+
+<hr>
+
+<h2 id="MapperFactoryBean"> MapperFactoryBean </h2>
+
+<p>通过<code>SqlSessionFactoryBean</code>可以产生<code>SqlSessionFactory</code>，在MyBatis中，通过<code>sqlSessionFactory.openSession()</code>得到<code>sqlSession</code>，然后通过<code>session.getMapper(xxx.class)</code>得到对应的<code>Mapper</code>。在Spring中，通过<code>MapperFactoryBean</code>可以获取到我们想要的<code>Mapper</code>对象。</p>
+
+<p><code>MapperFactoryBean</code>实现了Spring的<code>FactoryBean</code>接口，所以<code>MapperFactoryBean</code>是通过<code>FactoryBean</code>接口中定义的<code>getObject</code>方法来获取对应的<code>Mapper</code>对象的。在定义一个<code>MapperFactoryBean</code>的时候有两个属性需要我们注入，一个是Mybatis-Spring用来生成实现了<code>SqlSession</code>接口的<code>SqlSessionTemplate</code>对象的<code>sqlSessionFactory</code>；另一个是我们所要返回的对应的<code>Mapper</code>接口。</p>
+
+<p>比如，有一个<code>UserMapper</code>接口:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">//UserMapper.java</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserMapper</span> <span class="o">{</span>
+  <span class="nd">@Select</span><span class="o">(</span><span class="s">&quot;SELECT * FROM users WHERE id = #{userId}&quot;</span><span class="o">)</span>
+  <span class="n">User</span> <span class="nf">getUser</span><span class="o">(</span><span class="nd">@Param</span><span class="o">(</span><span class="s">&quot;userId&quot;</span><span class="o">)</span> <span class="n">String</span> <span class="n">userId</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>使用<code>MapperFactoryBean</code>把接口加入到 Spring 中:</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;userMapper&quot;</span> <span class="na">class=</span><span class="s">&quot;org.mybatis.spring.mapper.MapperFactoryBean&quot;</span><span class="nt">&gt;</span>
+  <span class="c">&lt;!-- 指定的映射器类必须是一个接口,而不是具体的实现类 --&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;mapperInterface&quot;</span> <span class="na">value=</span><span class="s">&quot;com.test.mybatis_spring.mapper.UserMapper&quot;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;sqlSessionFactory&quot;</span> <span class="na">ref=</span><span class="s">&quot;sqlSessionFactory&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></div>
+<p>定义好<code>Mapper</code>接口对应的<code>MapperFactoryBean</code>之后，就可以把对应的<code>Mapper</code>接口注入到由Spring管理的bean对象中了。当我们需要使用到相应的<code>Mapper</code>接口时，<code>MapperFactoryBean</code>会从它的<code>getObject</code>方法中获取对应的<code>Mapper</code>接口，而<code>getObject</code>内部还是通过我们注入的属性调用<code>SqlSession</code>接口的<code>getMapper()</code>方法来返回对应的<code>Mapper</code>接口。这样就通过把<code>SqlSessionFactory</code>和相应的<code>Mapper</code>接口交给Spring管理实现了Mybatis跟Spring的整合。</p>
+
+<hr>
+
+<h2 id="MapperScannerConfigurer"> 使用MapperScannerConfigurer自动注册Mapper </h2>
+
+<p>像上面一个<code>Mapper</code>就需要定义一个对应的<code>MapperFactoryBean</code>。<code>Mybatis-Spring</code>提供了一个叫<code>MapperScannerConfigurer</code>的类，可以自动注册<code>Mapper</code>对应的<code>MapperFactoryBean</code>对象。我们只需要在配置文件中添加这样的内容：</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.mybatis.spring.mapper.MapperScannerConfigurer&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;basePackage&quot;</span> <span class="na">value=</span><span class="s">&quot;com.test.mybatis_spring.mapper&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/bean&gt;</span>
+</code></pre></div> 
+      <a href="/blog/spring/2015/02/02/Spring(%E5%9B%9B)Spring%E6%95%B4%E5%90%88MyBatis.html"> Read More ... </a> </br>
+    </div> -->
   
     <div class="post-title">
       <a style="display:inline-block;" href="/blog/spring/2015/01/29/Spring(%E4%B8%89)%E6%B3%A8%E8%A7%A3.html"> Spring(三): 注解</a>
@@ -100,9 +214,9 @@
 
 <ul>
 <li><code>@Component</code>: 标注一个普通的<code>Spring Bean</code>；</li>
-<li><code>@Controller</code>: 标注一个控制器组件类；</li>
-<li><code>@Service</code>: 标注一个业务逻辑组件类；</li>
-<li><code>@Repository</code>: 标注一个Dao组件；</li>
+<li><code>@Controller</code>: 标注一个控制器组件类(控制层)；</li>
+<li><code>@Service</code>: 标注一个业务逻辑组件类(业务层)；</li>
+<li><code>@Repository</code>: 标注一个Dao组件(持久层)；</li>
 </ul>
 
 <p>然后在spring的配置文件中添加<code>&lt;context:component-scan base-package=&quot;&quot; /&gt;</code>，会自动搜索包下所有以<code>@Component</code>、<code>@Controller</code>、<code>@Service</code>、<code>@Repository</code>注释的java类，当作<code>Spring Bean</code>处理。</p>
