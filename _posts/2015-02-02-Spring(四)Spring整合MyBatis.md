@@ -14,7 +14,6 @@ category: Spring
 * [SqlSessionFactoryBean的注入](SqlSessionFactoryBean)
 * [MapperFactoryBean](#MapperFactoryBean)
 * [使用MapperScannerConfigurer自动注册Mapper](#MapperScannerConfigurer)
-* [@Qualifier精装配](#qualifier)
 
 *****
 
@@ -117,16 +116,11 @@ public interface UserMapper {
   <property name="basePackage" value="com.test.mybatis_spring.mapper" />
 </bean>
 ```
+`MapperScannerConfigurer`有一个`basePackage`属性必须指定。`basePackage`用来指定`Mapper`接口文件所在的包，在这个包或其子包下面的`Mapper`接口都将被搜索到。多个包之间可以使用逗号或者分号进行分隔。另外还有两个可以缩小搜索和注册范围的属性，一个是`annotationClass`，另一个是`markerInterface`。
 
+* `annotationClass`：当指定了`annotationClass`时，`MapperScannerConfigurer`将只注册使用了`annotationClass`注解标记的接口。
+* `markerInterface`：`markerInterface`用于指定一个接口，当指定了`markerInterface`之后，`MapperScannerConfigurer`将只注册继承自`markerInterface`的接口。
 
-
-
-
-
-
-
-
-
-
+如果上述两个属性都指定了的话，那么`MapperScannerConfigurer`将取它们的并集，而不是交集。
 
 *****
