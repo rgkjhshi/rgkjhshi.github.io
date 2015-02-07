@@ -107,7 +107,7 @@ public class LoginController {
 }
 ```
 上面例子中请求的URL后面的路径为：`/admin/login`，即方法上的`@RequestMapping`注解是在类的注解基础上的，如果类上没有`@RequestMapping`注解，则方法上注解的路径就是绝对路径了。  
-另外注解'@ResponseBody'表示直接返回结果，否则，返回的字符串会被当成一个模板文件(如jsp)，具体内容后续文章再说。
+另外注解`@ResponseBody`表示直接返回结果，否则，返回的字符串会被当成一个模板文件(如jsp)，具体内容后续文章再说。
 
 <h3 id="spring"> spring的配置 </h3>
 
