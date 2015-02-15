@@ -60,6 +60,8 @@
     
         <a style="display: block; " href="/spring "> spring (6) </a>
     
+        <a style="display: block; " href="/mac开发 "> mac开发 (1) </a>
+    
 </aside>
 
       <!-- 内容主体 -->
@@ -153,7 +155,8 @@
 <h2 id="finally"> 在finally中修改返回值 </h2>
 
 <p>另外，由于<code>finally</code>块一定会执行，所以可以在函数返回结果之前修改返回值，但一定要小心，有些情况下能够修改返回值，有些情况下是无法修改的。</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestFinally</span> <span class="o">{</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// TestFinally.java</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestFinally</span> <span class="o">{</span>
     <span class="n">Man</span> <span class="nf">test1</span><span class="o">()</span> <span class="o">{</span>
         <span class="n">Man</span> <span class="n">man1</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Man</span><span class="o">();</span>
         <span class="n">Man</span> <span class="n">man2</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Man</span><span class="o">();</span>
@@ -179,8 +182,8 @@
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">testFinally</span><span class="o">.</span><span class="na">test2</span><span class="o">());</span>    <span class="c1">// 输出 name:world</span>
     <span class="o">}</span>
 <span class="o">}</span>
-
-<span class="kd">class</span> <span class="nc">Man</span><span class="o">{</span>
+<span class="c1">// Man.java</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Man</span><span class="o">{</span>
     <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;hello&quot;</span><span class="o">;</span>
     <span class="kd">public</span> <span class="n">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
