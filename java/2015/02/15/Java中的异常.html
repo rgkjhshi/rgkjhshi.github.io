@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="description" content="Java中的异常类都继承自Throwable类，Throwable有两个子类：Exception(异常)和Error(错误)，二者都各自包含大量子类。本文结构异常的结构关系图异常的分类finally里的return在finally中修改返回值">
+
+    <!-- <title>Java中的异常</title> -->
+    <title>Michael King's Blog</title>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"shisong"};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] 
+             || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+        </script>
+    <!-- 多说公共JS代码 end -->
+    <script src="/assets/js/scale.fix.js"></script>
+    <link rel="shortcut icon" href="/assets/images/favicon.ico">
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="stylesheet" href="/assets/css/pygment_trac.css">
+    <link rel="canonical" href="http://yourdomain.com/java/2015/02/15/Java%E4%B8%AD%E7%9A%84%E5%BC%82%E5%B8%B8.html">
+    <link rel="alternate" type="application/rss+xml" title="Michael King's Blog" href="http://yourdomain.com/feed.xml" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+
+  <body>
+    <div class="page">
+
+      <!-- 头部 -->
+      <header>
+  <h1> <a href="/">Michael King's Blog</a> </h1>
+  <p>水到绝境是飞瀑</p>
+  <!-- <ul>
+      <li><a href="https://github.com/rgkjhshi/blog/tree/gh-pages">View On <strong>GitHub</strong></a></li>
+  </ul> -->
+</header>
+      <!-- 侧边栏 -->
+      <aside>
+    <h1> 目录分类 </h1>
+    
+        <a style="display: block; " href="/markdown "> markdown (1) </a>
+    
+        <a style="display: block; " href="/java "> java (2) </a>
+    
+        <a style="display: block; " href="/mysql "> mysql (1) </a>
+    
+        <a style="display: block; " href="/mybatis "> mybatis (4) </a>
+    
+        <a style="display: block; " href="/spring "> spring (6) </a>
+    
+</aside>
+
+      <!-- 内容主体 -->
+      <div class="wrapper">
+        <!-- 文章内容 -->
+        <section>
+          <h1> Java中的异常 </h1>
+          <hr>
+
+<p>Java中的异常类都继承自<code>Throwable</code>类，<code>Throwable</code>有两个子类：<code>Exception(异常)</code>和<code>Error(错误)</code>，二者都各自包含大量子类。</p>
+
+<hr>
+
+<h2>本文结构</h2>
+
+<ul>
+<li><a href="#structure">异常的结构关系图</a></li>
+<li><a href="#exception">异常的分类</a></li>
+<li><a href="#return">finally里的return</a></li>
+<li><a href="#finally">在finally中修改返回值</a></li>
+</ul>
+
+<hr>
+
+<h2 id="structure"> 异常的结构关系图 </h2>
+
+<p><img src="/assets/images/java_exception.jpg" alt="异常的继承结构关系图" title="异常的继承结构关系图"></p>
+
+<hr>
+
+<h2 id="exception"> 异常的分类 </h2>
+
+<p>Java的异常可分为：错误、不受检查异常、受检查异常。</p>
+
+<ul>
+<li><code>Error(错误)</code>: 是程序无法处理的错误，一旦出现会导致严重后果，一般会停止运行。</li>
+<li><code>Exception(异常)</code>: 是程序本身可以处理的异常，又分为不受检查异常和受检查异常。
+
+<ul>
+<li>不受检查异常: <code>RuntimeException</code>及其子类都是不检查异常，该类异常可以捕捉处理，也可以不捕捉处理。</li>
+<li>受检查异常: 除了<code>Error</code>和<code>RuntimeException</code>之外的所有异常都是受检查的，要么使用<code>try...catch</code>捕捉，要么在方法上声明<code>throws</code>。</li>
+</ul></li>
+</ul>
+
+<hr>
+
+<h2 id="return"> finally中的return </h2>
+
+<p>一般情况下<code>finally</code>总会被执行，即使前面执行到了<code>return</code>语句，在执行完之前也会执行<code>finally</code>，在<code>finally</code>中使用<code>return</code>语句是非常不好的习惯。</p>
+
+<ul>
+<li><code>finally</code>的<code>return</code>会覆盖其他<code>return</code>的值，如下标记B就吞掉了标记A的返回值；</li>
+<li><code>finally</code>的<code>return</code>会吞掉<code>catch</code>块中抛出的异常，如下标记D就吞掉了标记C抛出的异常。</li>
+</ul>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestException</span> <span class="o">{</span>
+    <span class="kt">boolean</span> <span class="nf">testEx</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kt">boolean</span> <span class="n">ret</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">testEx1</span><span class="o">();</span>          <span class="cm">/* 将不会抛出异常，因为testEx1中catch块抛出的异常被finally里的return吞掉了；</span>
+<span class="cm">                                   若testEx1中的finally里无return，则会抛出异常</span>
+<span class="cm">                                */</span>
+            <span class="k">return</span> <span class="n">ret</span><span class="o">;</span>        <span class="cm">/* 该语句正常执行，该语句标记为A */</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span> <span class="cm">/* 捕获不到异常 */</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;testEx, catch exception&quot;</span><span class="o">);</span> <span class="c1">//不打印</span>
+        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;testEx, finally&quot;</span><span class="o">);</span>         <span class="c1">//打印</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="k">return</span> <span class="n">ret</span><span class="o">;</span>       <span class="cm">/* 该语句会吞掉之前标记A的return值，该语句标记为B */</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="kt">boolean</span> <span class="nf">testEx1</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">9</span> <span class="o">/</span> <span class="mi">0</span><span class="o">;</span>       <span class="cm">/* 将抛出 ArithmeticException */</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>         <span class="cm">/* 执行不到 */</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>  <span class="cm">/* 捕获异常 */</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;testEx1, catch exception&quot;</span><span class="o">);</span> <span class="c1">// 打印</span>
+            <span class="k">throw</span> <span class="n">e</span><span class="o">;</span>             <span class="cm">/* 抛出异常 该语句标记为C */</span>
+        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;testEx1, finally&quot;</span><span class="o">);</span> <span class="c1">// 打印</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>        <span class="cm">/* 返回，并且catch中跑出的异常被忽略了 该语句标记为D */</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">TestException</span> <span class="n">testException</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">TestException</span><span class="o">();</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">testException</span><span class="o">.</span><span class="na">testEx</span><span class="o">());</span>    <span class="c1">// 将输出标记B的返回值: false</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<hr>
+
+<h2 id="finally"> 在finally中修改返回值 </h2>
+
+<p>另外，由于<code>finally</code>块一定会执行，所以可以在函数返回结果之前修改返回值，但一定要小心，有些情况下能够修改返回值，有些情况下是无法修改的。</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestFinally</span> <span class="o">{</span>
+    <span class="n">Man</span> <span class="nf">test1</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">Man</span> <span class="n">man1</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Man</span><span class="o">();</span>
+        <span class="n">Man</span> <span class="n">man2</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Man</span><span class="o">();</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">man1</span><span class="o">;</span>   <span class="c1">// 返回man1</span>
+        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+            <span class="n">man2</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">&quot;world&quot;</span><span class="o">);</span>
+            <span class="n">man1</span> <span class="o">=</span> <span class="n">man2</span><span class="o">;</span>   <span class="c1">// 修改man1</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="n">Man</span> <span class="nf">test2</span><span class="o">(){</span>
+        <span class="n">Man</span> <span class="n">man1</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Man</span><span class="o">();</span>
+        <span class="n">Man</span> <span class="n">man2</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Man</span><span class="o">();</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">man1</span><span class="o">;</span>   <span class="c1">// 返回man1</span>
+        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+            <span class="n">man1</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">&quot;world&quot;</span><span class="o">);</span> <span class="c1">// 修改man1</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">TestFinally</span> <span class="n">testFinally</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">TestFinally</span><span class="o">();</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">testFinally</span><span class="o">.</span><span class="na">test1</span><span class="o">());</span>    <span class="c1">// 输出 name:hello</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">testFinally</span><span class="o">.</span><span class="na">test2</span><span class="o">());</span>    <span class="c1">// 输出 name:world</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">Man</span><span class="o">{</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;hello&quot;</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&quot;name:&quot;</span> <span class="o">+</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p><code>test1</code>中<code>man1 = man2;</code>确实执行了，但是在执行<code>finally</code>块之前，<code>return</code>的值就确定了，所以返回的<code>man1</code>仍是原来的;
+<code>test2</code>中<code>man1.setName(&quot;world&quot;);</code>也执行了，并且在此之前,<code>return</code>的值也确定了，但这句并未改变<code>man1</code>的值(引用地址)，而是改变了<code>name</code>属性的值。</p>
+
+<hr>
+
+        </section>
+        <!-- Duoshuo Comment BEGIN -->
+        <div id="comments">
+          <h2 style="padding-left:24px;">评论</h2>
+          <div class="ds-thread" data-thread-key="/java/2015/02/15/Java中的异常" 
+            data-title="Java中的异常" 
+            data-url="/java/2015/02/15/Java%E4%B8%AD%E7%9A%84%E5%BC%82%E5%B8%B8.html" ></div>
+        </div>
+        <!-- Duoshuo Comment END -->
+      </div>
+
+      <footer>
+  <p>Project maintained by <a href="https://github.com/rgkjhshi">rgkjhshi</a></p>
+  <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+  <p style="padding-right: 50px;">
+    <!-- cnzz统计工具 -->
+    <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+  </p>
+
+  
+</footer>
+<!--[if !IE]><script>fixScale(document);</script><![endif]-->
+  </page>
+  </body>
+
+</html>
