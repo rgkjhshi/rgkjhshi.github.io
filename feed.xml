@@ -6,9 +6,268 @@
 </description>
     <link>http://yourdomain.com/</link>
     <atom:link href="http://yourdomain.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 17 Feb 2015 13:16:52 +0800</pubDate>
-    <lastBuildDate>Tue, 17 Feb 2015 13:16:52 +0800</lastBuildDate>
+    <pubDate>Sun, 22 Feb 2015 00:29:02 +0800</pubDate>
+    <lastBuildDate>Sun, 22 Feb 2015 00:29:02 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>Java类加载器</title>
+        <description>&lt;p&gt;&lt;code&gt;java.lang.Class.forName(…)&lt;/code&gt;和&lt;code&gt;java.lang.ClassNotFoundExcetpion&lt;/code&gt;是我们经常遇到的，藏在他们身后的，是Java的类加载器。&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2&gt;本文结构&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#ClassLoader&quot;&gt;JVM预定义的三种类加载器&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#Bootstrap&quot;&gt;启动(Bootstrap)类加载器&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#Extension&quot;&gt;标准扩展(Extension)类加载器&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#System&quot;&gt;系统(System)类加载器&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#parent&quot;&gt;双亲委派机制&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#check&quot;&gt;程序验证&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#check1&quot;&gt;parent的验证&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#check2&quot;&gt;默认的类加载器&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#check3&quot;&gt;双亲委派以及类加载器的加载位置&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#notice&quot;&gt;注意&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;ClassLoader&quot;&gt; JVM预定义的三种类加载器 &lt;/h2&gt;
+
+&lt;p&gt;JVM预定义的三种类加载器有：启动(Bootstrap)类加载器、标准扩展(Extension)类加载器和系统(System)类加载器，当一个JVM启动的时候，Java缺省开始使用这些类装入器。&lt;br&gt;
+除了以上三种类加载器，还有一种比较特殊的类型就是线程上下文类加载器，这个暂不介绍。&lt;/p&gt;
+
+&lt;h3 id=&quot;Bootstrap&quot;&gt; 启动(Bootstrap)类加载器 &lt;/h3&gt;
+
+&lt;p&gt;启动类加载器是通过&lt;code&gt;java.lang.ClassLoader&lt;/code&gt;中的&lt;code&gt;private native final Class findLoadedClass0(String name);&lt;/code&gt;这一本地方法实现的类装入器，它负责将&lt;code&gt;&amp;lt;Java_Runtime_Home&amp;gt;/lib&lt;/code&gt;下面的类库加载到内存中。&lt;/p&gt;
+
+&lt;h3 id=&quot;Extension&quot;&gt; 标准扩展(Extension)类加载器 &lt;/h3&gt;
+
+&lt;p&gt;扩展类加载器是由Sun的&lt;code&gt;ExtClassLoader(sun.misc.Launcher$ExtClassLoader)&lt;/code&gt;实现，它负责将&lt;code&gt;&amp;lt;Java_Runtime_Home &amp;gt;/lib/ext&lt;/code&gt;或者由系统变量 &lt;code&gt;java.ext.dir&lt;/code&gt;指定位置中的类库加载到内存中。&lt;/p&gt;
+
+&lt;h3 id=&quot;System&quot;&gt; 系统(System)类加载器 &lt;/h3&gt;
+
+&lt;p&gt;系统类加载器是由Sun的&lt;code&gt;AppClassLoader(sun.misc.Launcher$AppClassLoader)&lt;/code&gt;实现，它负责将系统类路径&lt;code&gt;CLASSPATH&lt;/code&gt;中指定的类库加载到内存中。&lt;/p&gt;
+
+&lt;p&gt;上面三种类型的类加载器中，启动(Bootstrap)类加载器是通过本地方法实现的，无法直接获取到启动类加载器的引用；而标准扩展(Extension)类加载器和系统(System)类加载器均为&lt;code&gt;sun.misc.Launcher&lt;/code&gt;的内部类，分别对应&lt;code&gt;ExtClassLoader&lt;/code&gt;和&lt;code&gt;AppClassLoader&lt;/code&gt;，这两个内部类均继承自&lt;code&gt;URLClassLoader&lt;/code&gt;，其继承关系为：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;java&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;net&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;URLClassLoader&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;java&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;security&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;SecureClassLoader&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;java&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;lang&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;ClassLoader&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;所以&lt;code&gt;ExtClassLoader&lt;/code&gt;和&lt;code&gt;AppClassLoader&lt;/code&gt;这两个内部类间接继承自&lt;code&gt;ClassLoader&lt;/code&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;parent&quot;&gt; 双亲委派机制 &lt;/h2&gt;
+
+&lt;p&gt;JVM在加载类时默认采用的是双亲委派机制，就是某个特定的类加载器在接到加载类的请求时，首先将加载任务委托给双亲加载器，依次递归，如果双亲加载器可以完成类加载任务，就成功返回；只有双亲类加载器无法完成此加载任务时，才自己去加载。&lt;br&gt;
+注意这里的双亲并不是继承上的关系，而是指的&lt;code&gt;ClassLoader&lt;/code&gt;中的一个字段。在源码中更容易描述双亲委派机制：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;c1&quot;&gt;//java.lang.ClassLoader.java&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// 双亲的定义&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ClassLoader&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// 加载方法&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loadClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ClassNotFoundException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;loadClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loadClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;resolve&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ClassNotFoundException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;synchronized&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getClassLoadingLock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;c1&quot;&gt;// First, check if the class has already been loaded&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;Class&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;findLoadedClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;c1&quot;&gt;//如果没有加载过，则进行加载&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;nanoTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;c1&quot;&gt;// 先检查双亲&lt;/span&gt;
+                    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;parent&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 如果有双亲，则委派给双亲去加载&lt;/span&gt;
+                        &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;loadClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+                    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 没有双亲才使用Bootstrap类加载器加载&lt;/span&gt;
+                        &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;findBootstrapClassOrNull&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+                    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ClassNotFoundException&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;c1&quot;&gt;// ClassNotFoundException thrown if class not found&lt;/span&gt;
+                    &lt;span class=&quot;c1&quot;&gt;// from the non-null parent class loader&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+                &lt;span class=&quot;c1&quot;&gt;// 如果父类加载器和启动类加载器都不能完成加载任务，才调用自身的加载功能&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;c1&quot;&gt;// If still not found, then invoke findClass in order&lt;/span&gt;
+                    &lt;span class=&quot;c1&quot;&gt;// to find the class.&lt;/span&gt;
+                    &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;nanoTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;findClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+                    &lt;span class=&quot;c1&quot;&gt;// this is the defining class loader; record the stats&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;sun&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;misc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;PerfCounter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getParentDelegationTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;sun&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;misc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;PerfCounter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getFindClassTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addElapsedTimeFrom&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;sun&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;misc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;PerfCounter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getFindClasses&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;increment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;resolve&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;resolveClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;从源码中可以看出，双亲为&lt;code&gt;null&lt;/code&gt;时才会调用&lt;code&gt;Bootstrap&lt;/code&gt;启动类加载器，所以启动类加载器可以当成是最后一个双亲。&lt;br&gt;
+&lt;code&gt;ExtClassLoader&lt;/code&gt;和&lt;code&gt;AppClassLoader&lt;/code&gt;这两个内部类继承自&lt;code&gt;URLClassLoader&lt;/code&gt;，而&lt;code&gt;URLClassLoader&lt;/code&gt;和&lt;code&gt;SecureClassLoader&lt;/code&gt;中仅做了一些检查，双亲委派机制在各个类加载器中是一直有效的。&lt;/p&gt;
+
+&lt;p&gt;另外&lt;code&gt;parent&lt;/code&gt;被&lt;code&gt;private final&lt;/code&gt;修饰，并且定义的时候没有赋初值，这就必须在构造方法中进行赋值。&lt;br&gt;
+我们从源码中分析下各个类加载器的&lt;code&gt;parent&lt;/code&gt;到底被赋值为什么。&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// java.loang.ClassLoader.java&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// 三个构造方法&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ClassLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;checkCreateClassLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getSystemClassLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ClassLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ClassLoader&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;checkCreateClassLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ClassLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;unused&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ClassLoader&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;parent&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// 不指定parent时，默认的parent为系统(System)类加载器，即AppClassLoader&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ClassLoader&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getSystemClassLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// 通过java.lang.ClassLoader.getSystemClassLoader()可以直接获取到系统类加载器，后面会通过代码进行测试&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;==========================================================================================================&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// sun.misc.Launcher.java&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ClassLoader&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// Launcher 的构造方法&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Launcher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// Create the extension class loader&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;ClassLoader&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;extcl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 这里定义了 extcl&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;extcl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ExtClassLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getExtClassLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 调用了内部类ExtClassLoader的方法，生成了ExtClassLoader&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IOException&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;InternalError&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Could not create extension class loader&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// Now create the class loader to use to launch the application&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+           &lt;span class=&quot;n&quot;&gt;loader&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AppClassLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getAppClassLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;extcl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 调用了内部类的getAppClassLoader方法&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IOException&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;InternalError&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Could not create application class loader&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// 内部类 AppClassLoader&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AppClassLoader&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;URLClassLoader&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// AppClassLoader 的构造方法，所以生成AppClassLoader时必须指定parent&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;AppClassLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;URL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;urls&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ClassLoader&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;c1&quot;&gt;// 在此设置了 AppClassLoader 的 parent&lt;/span&gt;
+            &lt;span class=&quot;kd&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;urls&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;factory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// 内部类的方法&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ClassLoader&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getAppClassLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ClassLoader&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;extcl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOException&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getProperty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;java.class.path&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getClassPath&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AccessController&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;doPrivileged&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PrivilegedAction&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AppClassLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AppClassLoader&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;URL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;urls&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;URL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pathToURLs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+                    &lt;span class=&quot;c1&quot;&gt;// 这里指定了 AppClassLoader 的parent为extcl&lt;/span&gt;
+                    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;AppClassLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;urls&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;extcl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 生成了AppClassLoader并且设置其parent为extcl&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// 内部类 ExtClassLoader&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ExtClassLoader&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;URLClassLoader&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// ExtClassLoader 的构造方法&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ExtClassLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dirs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;c1&quot;&gt;// 调用URLClassLoader的构造方法 URLClassLoader(URL[] urls, ClassLoader parent, URLStreamHandlerFactory factory) &lt;/span&gt;
+            &lt;span class=&quot;c1&quot;&gt;// 直接把 ExtClassLoader 的 parent 设置为null&lt;/span&gt;
+            &lt;span class=&quot;kd&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getExtURLs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dirs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;factory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;通过以上的源码分析可知，在&lt;code&gt;sun.misc.Launcher.java&lt;/code&gt;中做了如下工作&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;将Launcher默认的类加载器&lt;code&gt;loader&lt;/code&gt;设置为&lt;code&gt;AppClassLoader&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;将&lt;code&gt;AppClassLoader&lt;/code&gt;的&lt;code&gt;parent&lt;/code&gt;设置为&lt;code&gt;ExtClassLoader&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;将&lt;code&gt;ExtClassLoader&lt;/code&gt;的&lt;code&gt;parent&lt;/code&gt;设置为&lt;code&gt;null&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;check&quot;&gt; 程序验证 &lt;/h2&gt;
+
+&lt;h4 id=&quot;check1&quot;&gt; 验证一: parent的验证 &lt;/h4&gt;
+
+&lt;p&gt;程序源码:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TestClassLoader&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ClassLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getSystemClassLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ClassLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getSystemClassLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getParent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ClassLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getSystemClassLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getParent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getParent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;printStackTrace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;输出结果为：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sun.misc.Launcher$AppClassLoader@30a4effe
+sun.misc.Launcher$ExtClassLoader@1c8825a5
+null
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;这说明&lt;code&gt;AppClassLoader&lt;/code&gt;的双亲为&lt;code&gt;ExtClassLoader&lt;/code&gt;，&lt;code&gt;ExtClassLoader&lt;/code&gt;的双亲为&lt;code&gt;null&lt;/code&gt;，这跟分析源码得出的结论一致。&lt;/p&gt;
+
+&lt;h4 id=&quot;check2&quot;&gt; 验证二: 默认的类加载器 &lt;/h4&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TestClassLoader&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;c1&quot;&gt;// 通过Class.forName加载类&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;Class&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loadedClass&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;forName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;com.test.classloader.TestClassLoader&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;c1&quot;&gt;// 查看被加载的类是被那个类加载器加载的&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;loadedClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getClassLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;printStackTrace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;输出结果为:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sun.misc.Launcher$AppClassLoader@30a4effe
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;这说明系统默认的类加载器为&lt;code&gt;AppClassLoader&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h4 id=&quot;check3&quot;&gt; 验证三: 双亲委派以及类加载器的加载位置 &lt;/h4&gt;
+
+&lt;p&gt;将上面编译好的class文件打包成&lt;code&gt;classloader.jar&lt;/code&gt;(最好使用集成工具进行打包)，将&lt;code&gt;classloader.jar&lt;/code&gt;放到&lt;code&gt;&amp;lt;Java_Runtime_Home &amp;gt;/lib/ext&lt;/code&gt;目录下，再次运行，结果成了  &lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;sun.misc.Launcher$ExtClassLoader@2e5f8245
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;这说明通过双亲委派机制，&lt;code&gt;ExtClassLoader&lt;/code&gt;抢先加载了类&lt;br&gt;
+将&lt;code&gt;classloader.jar&lt;/code&gt;拷贝一份到&lt;code&gt;&amp;lt;Java_Runtime_Home &amp;gt;/lib&lt;/code&gt;目录下，再次运行，结果仍为&lt;code&gt;sun.misc.Launcher$ExtClassLoader@2e5f8245&lt;/code&gt;&lt;br&gt;
+这说明放到&lt;code&gt;&amp;lt;Java_Runtime_Home &amp;gt;/lib&lt;/code&gt;目录下的文件并没有被加载，这跟双亲委派机制并不矛盾。
+&lt;strong&gt;虚拟机出于安全等因素考虑，不会加载&lt;code&gt;&amp;lt;Java_Runtime_Home&amp;gt;/lib&lt;/code&gt;存在的陌生类，开发者通过将要加载的非JDK自身的类放置到此目录下期待启动类加载器加载是不可能的。&lt;/strong&gt;&lt;br&gt;
+做个进一步验证，删除&lt;code&gt;&amp;lt;Java_Runtime_Home&amp;gt;/lib/ext&lt;/code&gt;目录下的&lt;code&gt;classloader.jar&lt;/code&gt;和工程输出目录下对应的class文件，然后再运行测试代码，则将会有&lt;code&gt;ClassNotFoundException&lt;/code&gt;异常抛出。&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;notice&quot;&gt; 注意 &lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;在JVM中一个类用其全名和一个加载类&lt;code&gt;ClassLoader&lt;/code&gt;的实例作为唯一标识，不同类加载器加载的类将被置于不同的命名空间，所以&lt;strong&gt;不同类加载器加载的相同类，其类型也是不一样的&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;编写自定义类加载器时，不要覆写已有的&lt;code&gt;loadClass(...)&lt;/code&gt;方法。&lt;/li&gt;
+&lt;li&gt;用户自定义类加载器不指定父类加载器，可以加载&lt;code&gt;&amp;lt;Java_Runtime_Home&amp;gt;/lib&lt;/code&gt;下的类，但不能加载&lt;code&gt;&amp;lt;Java_Runtime_Home&amp;gt;/lib/ext&lt;/code&gt;目录下的类。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;hr&gt;
+</description>
+        <pubDate>Sat, 21 Feb 2015 00:00:00 +0800</pubDate>
+        <link>http://yourdomain.com/java/2015/02/21/java%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/java/2015/02/21/java%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8.html</guid>
+        
+        
+        <category>java</category>
+        
+      </item>
     
       <item>
         <title>Java基础整理</title>
@@ -1248,253 +1507,6 @@ AOP 的功能完全集成到了 Spring 事务管理、日志和其他各种特�
         <pubDate>Sat, 24 Jan 2015 00:00:00 +0800</pubDate>
         <link>http://yourdomain.com/mybatis/2015/01/24/MyBatis(%E5%9B%9B)%E5%8A%A8%E6%80%81SQL.html</link>
         <guid isPermaLink="true">http://yourdomain.com/mybatis/2015/01/24/MyBatis(%E5%9B%9B)%E5%8A%A8%E6%80%81SQL.html</guid>
-        
-        
-        <category>mybatis</category>
-        
-      </item>
-    
-      <item>
-        <title>MyBatis(三): Mapper.xml映射文件</title>
-        <description>&lt;p&gt;&lt;code&gt;Mapper.xml&lt;/code&gt;文件的主要功能是映射SQL语句，对数据库进行增删改查操作，与JDBC代码相比，更加方便。&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2&gt;本文结构&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#select&quot;&gt;select 语句简介&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#insert&quot;&gt;insert update delete 简介&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#parameter&quot;&gt;Parameters 参数&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#ResultMap&quot;&gt;ResultMap&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;select&quot;&gt; select 语句简介 &lt;/h2&gt;
-
-&lt;p&gt;查询语句是 MyBatis 中最常用的元素之一，先来个例子&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;select&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;selectPerson&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;parameterType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;int&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resultType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;hashmap&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-  SELECT * FROM PERSON WHERE ID = #{id}
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/select&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;其中的&lt;code&gt;XXXType&lt;/code&gt;使用的都是&lt;strong&gt;完全限定名&lt;/strong&gt;或者&lt;strong&gt;&lt;a href=&quot;/blog/mybatis/2015/01/20/MyBatis(%E4%BA%8C)%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.html#typeAliases&quot;&gt;别名&lt;/a&gt;&lt;/strong&gt;，其中的符号&lt;code&gt;#{id}&lt;/code&gt;会使用预处理语句，在 SQL 中会由一个“?”来标识，在&lt;code&gt;JDBC&lt;/code&gt;中相当于这样：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// Similar JDBC code, NOT MyBatis…&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;selectPerson&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;SELECT * FROM PERSON WHERE ID=?&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;PreparedStatement&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ps&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;prepareStatement&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;selectPerson&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;ps&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setInt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;&lt;code&gt;select&lt;/code&gt; 元素还有很多属性&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;              &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;在命名空间中唯一的标识符&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;可以被用来引用这条语句&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;resultType&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;如果是集合情形&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;那应该是集合可以包含的类型&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;而不能是集合本身&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;比如返回的结果是多个Persion&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;这里应该写Persion而不是List&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;resultMap&lt;/span&gt;       &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;外部resultMap的命名引用&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;与resultType不能同时使用&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;后面会具体讲&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;parameterType&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;默认值:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unset&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;可选&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MyBatis可以通过TypeHandler推断出具体传入语句的参数&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;flushCache&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;默认值:&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;true表示任何时候只要语句被调用&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;都会导致本地缓存和二级缓存都会被清空&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;useCache&lt;/span&gt;        &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;默认值:&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;true表示本条语句的结果被二级缓存&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;timeout&lt;/span&gt;         &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;默认:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unset&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;在抛出异常之前&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;驱动程序等待数据库返回请求结果的秒数&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;resultSetType&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;默认:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unset&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;取值为FORWARD_ONLY&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SCROLL_SENSITIVE或SCROLL_INSENSITIVE中的一个&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;fetchSize&lt;/span&gt;       &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;默认:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unset&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;驱动程序每次批量返回的结果行数和这个设置值相等&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;statementType&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;默认值:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PREPARED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;STATEMENT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PREPARED或CALLABLE的一个&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;这会让MyBatis分别使用Statement&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PreparedStatement或CallableStatement&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;databaseId&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;如果配置了&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;databaseIdProvider&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MyBatis&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;会加载所有的不带databaseId或匹配当前databaseId的语句&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;如果带或者不带的语句都有&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;则不带的会被忽略&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;resultOrdered&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;默认值:&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;这个设置仅针对嵌套结果select语句适用:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;如果为&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;就是假设包含了嵌套结果集或是分组了&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;这样的话当返回一个主结果行的时候&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;就不会发生有对前面结果集的引用的情况&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;这就使得在获取嵌套的结果集的时候不至于导致内存不够用&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;resultSets&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;这个设置仅对多结果集的情况适用&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;它将列出语句执行后返回的结果集并每个结果集给一个名称&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;名称是逗号分隔的&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-
-&lt;h2 id=&quot;insert&quot;&gt; insert, update 和 delete 简介&lt;/h2&gt;
-
-&lt;p&gt;&lt;code&gt;insert, update, delete&lt;/code&gt;同&lt;code&gt;select&lt;/code&gt;类似，也有许多属性，其中  &lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt; &lt;code&gt;id, parameterType, timeout, statementType, databaseId&lt;/code&gt;与select元素中的属性相同;&lt;br&gt;&lt;/li&gt;
-&lt;li&gt; &lt;code&gt;flushCache&lt;/code&gt;的默认值为&amp;#39;true&amp;#39;&lt;/li&gt;
-&lt;li&gt; 还有些是&lt;code&gt;insert和update&lt;/code&gt;所特有的属性，如:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;useGeneratedKeys&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;默认值:&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;为true时会令MyBatis使用JDBC的getGeneratedKeys方法来取出由数据库内部生成的主键&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;keyProperty&lt;/span&gt;       &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;默认:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;unset&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;唯一标记一个属性&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MyBatis会通过getGeneratedKeys的返回值或者通过insert语句的selectKey子元素设置它的键值&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;如果希望得到多个生成的列&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;也可以是逗号分隔的属性名称列表&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;keyColumn&lt;/span&gt;         &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;通过生成的键值设置表中的列名&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;当主键列不是表中的第一列的时候需要设置&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;如果希望得到多个生成的列&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;也可以是逗号分隔的属性名称列表&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;例如下面这段代码，如果你的数据库支持自动生成主键的字段（比如 MySQL 和 SQL Server），那么你可以设置 useGeneratedKeys=”true”，然后再把 keyProperty 设置到目标属性上就OK了。&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;insert&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;insertAuthor&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;useGeneratedKeys=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;true&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;keyProperty=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-  insert into Author (username,password,email,bio)
-  values (#{username},#{password},#{email},#{bio})
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/insert&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-
-&lt;h2 id=&quot;parameter&quot;&gt; Parameters 参数 &lt;/h2&gt;
-
-&lt;p&gt;参数是 MyBatis 非常强大的功能, &lt;code&gt;parameterType=&amp;quot;anyType&amp;quot;&lt;/code&gt;其中的&lt;code&gt;anyType&lt;/code&gt;可以是&lt;code&gt;int&lt;/code&gt;等基本类型，也可以是&lt;code&gt;User&lt;/code&gt;等复杂类型。  &lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;insert&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;insertUser&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;parameterType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;User&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-  insert into users (id, username, password)
-  values (#{id}, #{username}, #{password})
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/insert&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;上例中，传入的事复杂类型&lt;code&gt;User&lt;/code&gt;，将会在&lt;code&gt;User&lt;/code&gt;中查找id、username 和 password 属性，并放入对应位置。如果是&lt;code&gt;int&lt;/code&gt;或&lt;code&gt;String&lt;/code&gt;等类型，不存在属性，则直接将其值放入对应的位置。&lt;/p&gt;
-
-&lt;p&gt;另外，参数映射也可以指定映射类型，甚至可以指定类型处理器，像之前讲一样，&lt;code&gt;javaType&lt;/code&gt;通常可以根据参数对象去推测。&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt; #{age,javaType=int,jdbcType=NUMERIC,typeHandler=MyTypeHandler}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h3&gt;字符串替换&lt;/h3&gt;
-
-&lt;p&gt;默认情况下,使用#{}格式的语法会创建预处理语句属性并安全地设置值（比如?）。不过有时只想直接在 SQL 语句中插入一个不改变的字符串，就可以这样使用参数：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;ORDER BY ${columnName}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;这里 MyBatis 不会修改或转义字符串&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;ResultMap&quot;&gt; ResultMap &lt;/h2&gt;
-
-&lt;p&gt;&lt;code&gt;resultMap&lt;/code&gt; 元素是MyBatis中最重要最强大的元素，resultMap元素本身有一些属性，如下代码，&lt;code&gt;id&lt;/code&gt;用于标识该&lt;code&gt;resultMap&lt;/code&gt;，&lt;code&gt;type&lt;/code&gt;用于指定该&lt;code&gt;resultMap&lt;/code&gt;映射到哪个&lt;code&gt;JavaBean&lt;/code&gt;&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;resultMap&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;blogResultMap&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Blog&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;...&lt;span class=&quot;nt&quot;&gt;&amp;lt;/resultMap&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;它还有很多子元素，下面是&lt;code&gt;resultMap&lt;/code&gt;元素的概念图&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;resultMap&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;constructor - 类在实例化时,用来注入结果到构造方法中
-
-&lt;ul&gt;
-&lt;li&gt;idArg - ID 参数;标记结果作为 ID 可以帮助提高整体效能&lt;/li&gt;
-&lt;li&gt;arg - 注入到构造方法的一个普通结果&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;id – 一个 ID 结果;标记结果作为 ID 可以帮助提高整体效能&lt;/li&gt;
-&lt;li&gt;result – 注入到字段或 JavaBean 属性的普通结果&lt;/li&gt;
-&lt;li&gt;association – 一个复杂的类型关联;许多结果将包成这种类型
-
-&lt;ul&gt;
-&lt;li&gt;嵌入结果映射 – 结果映射自身的关联,或者参考一个&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;collection – 复杂类型的集
-
-&lt;ul&gt;
-&lt;li&gt;嵌入结果映射 – 结果映射自身的集,或者参考一个&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;discriminator – 使用结果值来决定使用哪个结果映射
-
-&lt;ul&gt;
-&lt;li&gt;case – 基于某某些值的结果映射&lt;/li&gt;
-&lt;li&gt;嵌入结果映射 – 这种情形结果也映射它本身,因此可以包含很多相 同的元素,或者它可以参照一个外部的结果映射&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;由于DTD的限制，这些元素出现的顺序必须按照上面的顺序  &lt;/p&gt;
-
-&lt;p&gt;下面详细说明&lt;code&gt;resultMap&lt;/code&gt;的每个子元素&lt;/p&gt;
-
-&lt;h3&gt;id和result&lt;/h3&gt;
-
-&lt;p&gt;这是最基本的内容，这两者之间的唯一不同是&lt;code&gt;id&lt;/code&gt;所指定属性将是能够唯一标识对象的属性，这能提高效率，特别是有联合映射时。&lt;br&gt;
-&lt;code&gt;id&lt;/code&gt;和&lt;code&gt;reslut&lt;/code&gt;元素有&lt;code&gt;column, property, javaType, jdbcType, typeHandler&lt;/code&gt;等属性，其中&lt;code&gt;column&lt;/code&gt;用于指定数据库中的列名，&lt;code&gt;property&lt;/code&gt;用于指定&lt;code&gt;JavaBean&lt;/code&gt;对应的属性，其他属性则与之前讲的一样。&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;id&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;result&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;user_name&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;username&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h3&gt;构造方法constructor&lt;/h3&gt;
-
-&lt;p&gt;如果&lt;code&gt;resultMap&lt;/code&gt;所映射的&lt;code&gt;JavaBean&lt;/code&gt;的构造方法需要提供参数，则&lt;code&gt;constructor&lt;/code&gt;就不能缺少了&lt;br&gt;
-&lt;code&gt;constructor&lt;/code&gt;有&lt;code&gt;idArg&lt;/code&gt;和&lt;code&gt;arg&lt;/code&gt;两个子元素，意义差不多(参见&lt;code&gt;id&lt;/code&gt;和&lt;code&gt;result&lt;/code&gt;的区别)，都是给构造方法提供参数。他们的属性也同&lt;code&gt;id&lt;/code&gt;和&lt;code&gt;result&lt;/code&gt;一样&lt;br&gt;
-&lt;code&gt;constructor&lt;/code&gt;常用的形式如下：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;idArg&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;javaType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;int&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;arg&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;username&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;javaType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;String&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/constructor&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt; Java 没有自查(反射)参数名的方法，所以要保证这里的参数顺序同&lt;code&gt;JavaBean&lt;/code&gt;定义的顺序一致，而且数据类型也是确定的。&lt;/p&gt;
-
-&lt;h3&gt;关联association&lt;/h3&gt;
-
-&lt;p&gt;关联元素处理“有一个”类型的关系。比如,一个博客有一个作者，就像下面这样&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;c1&quot;&gt;//来自 Author.java&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Author&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;age&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;//来自 Blog.java&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Blog&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Author&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;author&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//数据库中对应的字段是 author_id int类型&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;可以这样做级联查询&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;resultMap&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;BlogResultMap&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Blog&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;id&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;result&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;title&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;title&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;result&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;content&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;content&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 只要提供了返回类型，像上面的id和result指定的字段，即使不指定MyBatis也能自动封装 --&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;association&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;author_id&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;author&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;javaType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Author&amp;quot;&lt;/span&gt;
-                 &lt;span class=&quot;na&quot;&gt;select=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;com.test.mybatis.mapper.AuthorMapper.selectAuthorById&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-                 &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 这里如果起了别名也可使用 --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/resultMap&amp;gt;&lt;/span&gt;
-
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;select&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;selectBlogById&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;parameterType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;int&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resultMap=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;BlogResultMap&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    SELECT * FROM blog WHERE id = #{id}
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/select&amp;gt;&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 来自 AuthorMapper.xml --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;select&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;selectAuthorById&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;parameterType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;int&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resultType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Author&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    SELECT * FROM author WHERE id = #{id}
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/select&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;&lt;code&gt;association&lt;/code&gt;是通过把column指定的字段作为参数，传给select子查询的。&lt;/p&gt;
-
-&lt;h3&gt;集合collection&lt;/h3&gt;
-
-&lt;p&gt;如果博客有了许多评论，则会出现“一对多”的情形，比如上面的&lt;code&gt;Blog&lt;/code&gt;会多出一个属性&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;    &lt;span class=&quot;c1&quot;&gt;//Blog.java新增的属性&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Comment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;comments&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;//Comment.java&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Comment&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Blog&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;blog&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;那么对于&lt;code&gt;Blog&lt;/code&gt;的查询将变成这样&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;resultMap&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;BlogResultMap&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Blog&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;id&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;result&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;title&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;title&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;result&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;content&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;content&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 只要提供了返回类型，像上面的id和result指定的字段，即使不指定MyBatis也能自动封装 --&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;association&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;author_id&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;author&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;javaType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Author&amp;quot;&lt;/span&gt;
-                 &lt;span class=&quot;na&quot;&gt;select=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;com.test.mybatis.mapper.AuthorMapper.selectAuthorById&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-                 &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 这里如果起了别名也可使用 --&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;collection&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;property=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;comments&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;javaType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;ArrayList&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;column=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;id&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ofType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Comment&amp;quot;&lt;/span&gt; 
-                &lt;span class=&quot;na&quot;&gt;select=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;com.test.mybatis.mapper.CommentMapper.selectCommentForBlog&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/resultMap&amp;gt;&lt;/span&gt;
-
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;select&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;selectBlogById&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;parameterType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;int&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resultMap=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;BlogResultMap&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    SELECT * FROM blog WHERE id = #{id}
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/select&amp;gt;&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 来自 AuthorMapper.xml --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;select&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;selectAuthorById&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;parameterType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;int&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resultType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Author&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    SELECT * FROM author WHERE id = #{id}
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/select&amp;gt;&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 来自 CommentMapper.xml --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;select&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;selectCommentForBlog&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;parameterType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;int&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resultType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Comment&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    SELECT * FROM comment WHERE blog_id = #{id}
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/select&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;其中的&lt;code&gt;ofType&lt;/code&gt;用于表示集合中所存放的类型，上面可以理解为产生了一个&lt;code&gt;ArrayList&amp;lt;Comment&amp;gt; comments&lt;/code&gt;，&lt;code&gt;javaType&lt;/code&gt;属性可以省略；&lt;code&gt;column&lt;/code&gt;指定了id作为传入参数&lt;/p&gt;
-
-&lt;hr&gt;
-</description>
-        <pubDate>Thu, 22 Jan 2015 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/mybatis/2015/01/22/MyBatis(%E4%B8%89)Mapper.xml%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/mybatis/2015/01/22/MyBatis(%E4%B8%89)Mapper.xml%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6.html</guid>
         
         
         <category>mybatis</category>
