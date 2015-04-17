@@ -63,7 +63,7 @@ shift + cmd + v        :    调出IDEA寄存器中保存的最近复制的N份�
 cmd + /                :    注释或取消注释
 cmd + w                :    选中当前光标所在的字
 shift + cmd + enter    :    补全当前行,最常用的场景时补全当前行后的;号并将光标定位到下一行
-shift + cmd + L        :    格式化代码
+alt + cmd + L          :    格式化代码
 shift + cmd + O        :    static import
 shift + cmd + up/down  :    将当前代码段上/下移
 shift + alt + up/down  :    将当前行上/下移
