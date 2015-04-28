@@ -6,9 +6,122 @@
 </description>
     <link>http://yourdomain.com/</link>
     <atom:link href="http://yourdomain.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 21 Apr 2015 11:00:58 +0800</pubDate>
-    <lastBuildDate>Tue, 21 Apr 2015 11:00:58 +0800</lastBuildDate>
+    <pubDate>Tue, 28 Apr 2015 08:50:07 +0800</pubDate>
+    <lastBuildDate>Tue, 28 Apr 2015 08:50:07 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>注解(Annotation)</title>
+        <description>&lt;p&gt;刚用到Spring中的注解时，感觉真是太方便了，其实在JDK1.5就已经支持注解了，1.5以后默认内置了三个注解&lt;br&gt;
+@Override:只能用在方法之上的，表示重写父类的方法。&lt;br&gt;
+@Deprecated:可用在任何元素上，表示API已过时，编译时会产生警告。&lt;br&gt;
+@SuppressWarnings: 可以关闭警告信息。  &lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2&gt;本文结构&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#define&quot;&gt;如何定义注解&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#rule&quot;&gt;注解的使用规则&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;define&quot;&gt; 如何定义注解 &lt;/h2&gt;
+
+&lt;p&gt;我们可以通过关键字&lt;code&gt;class&lt;/code&gt;来声明一个类，类似的我们可以用某东西来声明注解，用来声明注解的这东西叫做&amp;quot;元注解&amp;quot;。&lt;br&gt;
+在&lt;code&gt;java.lang.annotation&lt;/code&gt;包中定义了4个元注解，分别是: &lt;code&gt;@Target、 @Retention、 @Documented、 @Inherited&lt;/code&gt;  &lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;@Target&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;@Target&lt;/code&gt;用于说明Annotation所修饰的对象范围，比如用于修饰类、接口、构造方法、成员方法、成员变量等，它作用范围的取值有:  &lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;ElementType.CONSTRUCTOR     : 用于描述构造器  
+ElementType.FIELD           : 用于描述字段  
+ElementType.LOCAL_VARIABLE  : 用于描述局部变量  
+ElementType.METHOD          : 用于描述方法  
+ElementType.PACKAGE         : 用于描述包  
+ElementType.PARAMETER       : 用于描述参数  
+ElementType.TYPE            : 用于描述类、接口(包括注解类型) 或enum声明  
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;@Retention&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;@Retention&lt;/code&gt;定义Annotation的有效期，即生命周期，如是源码级还是class级还是可以被加载到虚拟机，它的取值有:   &lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;RetentionPoicy.SOURCE       : 在源文件中有效（即源文件保留）
+RetentionPoicy.CLASS        : 在class文件中有效（即class保留）
+RetentionPoicy.RUNTIME      : 在运行时有效（即运行时保留）
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;@Documented&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;@Documented&lt;/code&gt;是一个标记注解，没有成员，表示可以被javadoc文档化&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;@Inherited&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;@Inherited&lt;/code&gt;是一个标记注解，允许子类继承父类中的注解  &lt;/p&gt;
+
+&lt;p&gt;下面是定义注解的例子:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.lang.annotation.ElementType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.lang.annotation.Retention&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.lang.annotation.RetentionPolicy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.lang.annotation.Target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;nd&quot;&gt;@Retention&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;RetentionPolicy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;RUNTIME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;// 表示注解将被加载到虚拟机&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;({&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ElementType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;METHOD&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ElementType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;TYPE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;})&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// MyAnnotation 可修饰方法和类等&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nd&quot;&gt;@interface&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MyAnnotation&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;       &lt;span class=&quot;c1&quot;&gt;// @interface 即为定义注解的“关键字”&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;//为注解添加属性&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;color&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;default&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//为属性提供默认值&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;};&lt;/span&gt; 
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// 测试文件&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// (value=&amp;quot;not default&amp;quot;)则可以写成(&amp;quot;not default&amp;quot;)value比较特殊，其他不可以省略写&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@MyAnnotation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;color&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;red&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 注解中没有默认值的必须赋值； &lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AnnotationTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//检查类AnnotationTest是否含有@MyAnnotation注解&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AnnotationTest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isAnnotationPresent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MyAnnotation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;c1&quot;&gt;//若存在就提取注解的值&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;MyAnnotation&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;annotation&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MyAnnotation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AnnotationTest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getAnnotation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MyAnnotation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;annotation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;color&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;annotation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+
+&lt;h2 id=&quot;rule&quot;&gt; 注解的使用规则 &lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;使用&lt;code&gt;@interface&lt;/code&gt;定义注解时，自动继承了&lt;code&gt;java.lang.annotation.Annotation&lt;/code&gt;接口，由编译程序自动完成其他细节。&lt;br&gt;&lt;/li&gt;
+&lt;li&gt;定义注解时，不能继承其他的注解或接口。&lt;br&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;@interface&lt;/code&gt;用来声明一个注解，其中的每一个方法实际上是声明了一个配置参数。方法的名称就是参数的名称，返回值类型就是参数的类型。&lt;/li&gt;
+&lt;li&gt;参数类型只能是基本类型、String、Class、enum、Annotation或这些类型的数组。&lt;/li&gt;
+&lt;li&gt;可以通过default来声明参数的默认值。&lt;/li&gt;
+&lt;li&gt;参数只能用public或默认(default)这两个访问权修饰.例如,String value();这里把方法设为defaul默认类型；&lt;/li&gt;
+&lt;li&gt;如果只有一个参数成员,最好把参数名称设为&amp;quot;value&amp;quot;,后加小括号，指定其值时可以是(value=&amp;quot;abc&amp;quot;)或简写成(&amp;quot;abc&amp;quot;)，其他名字的成员不能简写。&lt;/li&gt;
+&lt;li&gt;注解元素必须有确定的值，要么在定义注解的默认值中指定，要么在使用注解时指定，非基本类型的注解元素的值不可为null。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;hr&gt;
+</description>
+        <pubDate>Mon, 27 Apr 2015 00:00:00 +0800</pubDate>
+        <link>http://yourdomain.com/java/2015/04/27/%E6%B3%A8%E8%A7%A3(Annotation).html</link>
+        <guid isPermaLink="true">http://yourdomain.com/java/2015/04/27/%E6%B3%A8%E8%A7%A3(Annotation).html</guid>
+        
+        
+        <category>java</category>
+        
+      </item>
     
       <item>
         <title>Java类加载器</title>
@@ -1378,139 +1491,6 @@ AOP 的功能完全集成到了 Spring 事务管理、日志和其他各种特�
         
         
         <category>spring</category>
-        
-      </item>
-    
-      <item>
-        <title>MyBatis(四): 动态SQL</title>
-        <description>&lt;p&gt;MyBatis的动态SQL是基于ONGL表达式的&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2&gt;本文结构&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#if&quot;&gt;if&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#where&quot;&gt;where&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#set&quot;&gt;set&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#foreach&quot;&gt;foreach&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#choose&quot;&gt;choose (when, otherwise)&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;if&quot;&gt; if &lt;/h2&gt;
-
-&lt;p&gt;if一般是where的一部分，如&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;select&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;findBlog&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resultType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Blog&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-  SELECT * FROM BLOG WHERE 1 = 1 
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;if&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;title != null&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    AND title LIKE CONCAT(CONCAT(&amp;#39;%&amp;#39;, #{title}), &amp;#39;%&amp;#39;)
-    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- mysql也可以这样写：AND title LIKE &amp;quot;%&amp;quot;#{title}&amp;quot;%&amp;quot; --&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/if&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;if&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;author != null and author.name != null&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    AND author_name like #{author.name}
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/if&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/select&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-
-&lt;h2 id=&quot;where&quot;&gt; where &lt;/h2&gt;
-
-&lt;p&gt;像上面的例子，为了拼接sql，专门写了个 WHERE 1 = 1，&lt;code&gt;where&lt;/code&gt;标签就能避免这样的问题，它会自动去除不该有的&lt;code&gt;AND&lt;/code&gt;或&lt;code&gt;OR&lt;/code&gt;&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;select&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;findBlog&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resultType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Blog&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-  SELECT * FROM blog
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;where&amp;gt;&lt;/span&gt; 
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;if&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;state != null&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-         state = #{state}
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/if&amp;gt;&lt;/span&gt; 
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;if&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;title != null&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-        AND title like #{title}
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/if&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;if&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;author != null and author.name != null&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-        AND author_name like #{author.name}
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/if&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/where&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/select&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-
-&lt;h2 id=&quot;set&quot;&gt; set &lt;/h2&gt;
-
-&lt;p&gt;set元素主要是用在更新操作的时候，它会智能去掉最后的逗号。如果set中一个条件都不满足，则会报错。&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;update&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;updateBlog&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;parameterType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Blog&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;  
-    UPDATE blog  
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;set&amp;gt;&lt;/span&gt;  
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;if&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;title != null&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;  
-            title = #{title},  
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/if&amp;gt;&lt;/span&gt;  
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;if&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;content != null&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;  
-            content = #{content},  
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/if&amp;gt;&lt;/span&gt;  
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;if&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;owner != null&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;  
-            owner = #{owner}  
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/if&amp;gt;&lt;/span&gt;  
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/set&amp;gt;&lt;/span&gt;  
-    where id = #{id}  
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/update&amp;gt;&lt;/span&gt;  
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-
-&lt;h2 id=&quot;foreach&quot;&gt; foreach &lt;/h2&gt;
-
-&lt;p&gt;foreach主要用在in语句中，它可以在SQL语句中遍历一个集合。&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;select&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;foreachTest&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;parameterType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;java.util.List&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resultType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Blog&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;  
-    SELECT * FROM blog WHERE id in  
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;foreach&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;collection=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;list&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;index=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;index&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;item=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;item&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;open=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;(&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;separator=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;,&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;close=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;)&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;  
-        #{item}  
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/foreach&amp;gt;&lt;/span&gt;  
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/select&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;item&lt;/code&gt;声明可以用在元素体内的集合项，相当于集合每一个元素进行迭代时的别名&lt;br&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;index&lt;/code&gt;声明可以用在元素体内的索引变量，即元素的位置。
-
-&lt;ul&gt;
-&lt;li&gt;比如上例中，如果list里面的元素为&amp;quot;[3,6,9]&amp;quot;，则&amp;#39;item&amp;#39;的值会分别为&amp;quot;3,6,9&amp;quot;，而&lt;code&gt;index&lt;/code&gt;则分别为&amp;quot;0,1,2&amp;quot;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;open separator close&lt;/code&gt;用于指定开闭匹配的字符串以及在迭代之间放置分隔符，如 &amp;quot;(1,2,3,4)&amp;quot;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;collection&lt;/code&gt;属性比较容易出错
-
-&lt;ul&gt;
-&lt;li&gt;当传入参数(parameterType)是单个参数且参数类型是一个List的时候，collection属性值为list，就像上面，传入参数&lt;code&gt;parameterType=&amp;quot;java.util.List&amp;quot;&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;当传入参数(parameterType)是单个参数且参数类型是一个array数组的时候，collection的属性值为array，比如&lt;code&gt;parameterType=&amp;quot;[Ljava.lang.Integer;&amp;quot;&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;传入的参数是多个的时候，肯定要先封装成一个Map，这个时候collection属性值就是传入的map中List或array数组类型的变量的key值，比如&lt;code&gt;parameterType=&amp;quot;java.util.Map&amp;quot;&lt;/code&gt;，传入的map中有一个key为&amp;quot;idList&amp;quot;的List对象，则这个时候collection的属性值就应该是idList。&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;choose&quot;&gt; choose (when, otherwise) &lt;/h2&gt;
-
-&lt;p&gt;choose元素的作用就相当于JAVA中的switch语句&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;select&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;chooseTest&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;parameterType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Blog&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resultType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Blog&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;  
-    SELECT * FROM blog WHERE 1 = 1   
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;choose&amp;gt;&lt;/span&gt;  
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;when&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;title != null&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;  
-            and title = #{title}  
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/when&amp;gt;&lt;/span&gt;  
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;when&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;content != null&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;  
-            and content = #{content}  
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/when&amp;gt;&lt;/span&gt;  
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;otherwise&amp;gt;&lt;/span&gt;  
-            and author = &amp;quot;Michael&amp;quot;  
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/otherwise&amp;gt;&lt;/span&gt;  
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/choose&amp;gt;&lt;/span&gt;  
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/select&amp;gt;&lt;/span&gt; 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-</description>
-        <pubDate>Sat, 24 Jan 2015 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/mybatis/2015/01/24/MyBatis(%E5%9B%9B)%E5%8A%A8%E6%80%81SQL.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/mybatis/2015/01/24/MyBatis(%E5%9B%9B)%E5%8A%A8%E6%80%81SQL.html</guid>
-        
-        
-        <category>mybatis</category>
         
       </item>
     
