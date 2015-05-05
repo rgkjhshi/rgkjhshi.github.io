@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <!-- 友荐验证 -->
+    <meta name="ujianVerification" content="654a6637a32e63afd8b08107fd450b26" />
+    <!-- 百度站长 -->
+    <meta name="baidu-site-verification" content="GPA6lcsek1" />
+    <!-- 百度联盟 -->
+    <meta name="baidu_union_verify" content="ac6ebb71e8799ec6ea670135de9dd2b3">
+    <!-- 搜狗联盟 -->
+    <meta name="domain_verify" content="pmrgi33nmfuw4ir2ejwg65tfonugs43pnzts4y3oeiwcez3vnfsceorcmyyweyrrgeywmzdegeytiyrrg44wgy3ggezwcztbhaydezdfhe2selbcoruw2zktmf3gkir2ge2dgmbrha4tembtgaztm7i">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="description" content="vim 的常用快捷键">
+
+    <!-- <title>Vim常用快捷键</title> -->
+    <title>Michael King's Blog</title>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"shisong"};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] 
+             || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+        </script>
+    <!-- 多说公共JS代码 end -->
+    <script src="/assets/js/scale.fix.js"></script>
+    <link rel="shortcut icon" href="/assets/images/favicon.ico">
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="stylesheet" href="/assets/css/pygment_trac.css">
+    <link rel="canonical" href="http://yourdomain.com/mac%E5%BC%80%E5%8F%91/2015/05/04/Vim%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE.html">
+    <link rel="alternate" type="application/rss+xml" title="Michael King's Blog" href="http://yourdomain.com/feed.xml" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+
+  <body>
+    <div class="page">
+
+      <!-- 头部 -->
+      <header>
+  <h1> <a href="/">Michael King's Blog</a> </h1>
+  <p>水到绝境是飞瀑</p>
+  <!-- <ul>
+      <li><a href="https://github.com/rgkjhshi/blog/tree/gh-pages">View On <strong>GitHub</strong></a></li>
+  </ul> -->
+</header>
+      <!-- 侧边栏 -->
+      <aside>
+    <h1> 文章分类 </h1>
+    
+        <a style="display: block; " href="/markdown "> markdown (1) </a>
+    
+        <a style="display: block; " href="/java "> java (5) </a>
+    
+        <a style="display: block; " href="/mysql "> mysql (1) </a>
+    
+        <a style="display: block; " href="/mybatis "> mybatis (4) </a>
+    
+        <a style="display: block; " href="/spring "> spring (5) </a>
+    
+        <a style="display: block; " href="/mac开发 "> mac开发 (2) </a>
+    
+        <a style="display: block; " href="/link.html "> 友情链接 </a>
+</aside>
+
+      <!-- 内容主体 -->
+      <div class="wrapper">
+        <!-- 文章内容 -->
+        <section>
+          <h1> Vim常用快捷键 </h1>
+          <p>vim 的常用快捷键</p>
+
+<hr>
+
+<h2>本文结构</h2>
+
+<ul>
+<li><a href="#move">光标移动</a></li>
+<li><a href="#search">查找替换</a></li>
+<li><a href="#edit">编辑操作</a></li>
+<li><a href="#window">窗口操作</a></li>
+</ul>
+
+<hr>
+
+<h2 id="move"> 光标移动 </h2>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">h</span> <span class="o">/</span> <span class="n">l</span> <span class="o">/</span> <span class="n">j</span> <span class="o">/</span> <span class="n">k</span>      <span class="o">:</span>    <span class="n">左</span><span class="o">/</span><span class="n">下</span><span class="o">/</span><span class="n">上</span><span class="o">/</span><span class="n">右</span>  <span class="n">移动</span>
+<span class="n">nj</span> <span class="o">/</span> <span class="n">nl</span>            <span class="o">:</span>    <span class="n">上</span><span class="o">/</span><span class="n">下移动n行</span>
+<span class="n">ctrl</span> <span class="o">+</span> <span class="n">b</span> <span class="o">/</span> <span class="n">f</span>       <span class="o">:</span>    <span class="n">上</span><span class="o">/</span><span class="n">下翻一页</span> 
+<span class="n">ctrl</span> <span class="o">+</span> <span class="n">u</span> <span class="o">/</span> <span class="n">d</span>       <span class="o">:</span>    <span class="n">上</span><span class="o">/</span><span class="n">下翻半页</span> 
+<span class="mi">0</span> <span class="o">/</span> <span class="n">$</span>              <span class="o">:</span>    <span class="n">移动到行首</span><span class="o">/</span><span class="n">行尾</span>
+<span class="o">^</span>                  <span class="o">:</span>    <span class="n">移动到行首第一个字符处</span>
+<span class="o">(</span> <span class="o">/</span> <span class="o">)</span>              <span class="o">:</span>    <span class="n">移动光标到上</span><span class="o">/</span><span class="n">下一个句子</span>
+<span class="o">{</span> <span class="o">/</span> <span class="o">}</span>              <span class="o">:</span>    <span class="n">移动到段首</span><span class="o">/</span><span class="n">段尾</span>
+<span class="n">b</span> <span class="o">/</span> <span class="n">w</span>              <span class="o">:</span>    <span class="n">移动到上</span><span class="o">/</span><span class="n">下一个词</span>
+<span class="n">gg</span> <span class="o">/</span> <span class="n">G</span>             <span class="o">:</span>    <span class="n">移动到文档开始</span><span class="o">/</span><span class="n">结尾</span>
+<span class="o">%</span>                  <span class="o">:</span>    <span class="n">移动到匹配的</span><span class="o">{}.().[]</span><span class="n">处</span><span class="o">(</span><span class="n">光标必须在其上</span><span class="o">)</span>
+<span class="n">ngg</span> <span class="n">或</span> <span class="n">nG</span> <span class="n">或</span> <span class="o">:</span><span class="n">n</span>     <span class="o">:</span>    <span class="n">跳到第n行</span>
+<span class="n">H</span> <span class="o">/</span> <span class="n">M</span> <span class="o">/</span> <span class="n">L</span>          <span class="o">:</span>    <span class="n">移动光标到屏幕顶端</span><span class="o">/</span><span class="n">中间</span><span class="o">/</span><span class="n">底部</span>
+</code></pre></div>
+<hr>
+
+<h2 id="search"> 查找替换 </h2>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="err">#</span> <span class="o">/</span> <span class="o">*</span>              <span class="o">:</span>    <span class="n">向前</span><span class="o">/</span><span class="n">后查找关键字</span><span class="o">(</span><span class="n">光标必须在其上</span><span class="o">)</span>
+<span class="n">fx</span><span class="o">,</span> <span class="n">Fx</span><span class="o">,</span> <span class="n">tx</span><span class="o">,</span> <span class="n">Tx</span>     <span class="o">:</span>    <span class="n">在当前行查找字符x</span>
+<span class="o">:</span><span class="n">s</span><span class="o">/</span><span class="n">s1</span><span class="o">/</span><span class="n">s2</span>           <span class="o">:</span>    <span class="n">将下一个s1替换为s2</span>
+<span class="o">:%</span><span class="n">s</span><span class="o">/</span><span class="n">s1</span><span class="o">/</span><span class="n">s2</span>          <span class="o">:</span>    <span class="n">全部替换</span>
+<span class="o">:</span><span class="n">s</span><span class="o">/</span><span class="n">s1</span><span class="o">/</span><span class="n">s2</span><span class="o">/</span><span class="n">g</span>         <span class="o">:</span>    <span class="n">只换当前行</span>
+<span class="o">:</span><span class="n">n1</span><span class="o">,</span><span class="n">n2</span> <span class="n">s</span><span class="o">/</span><span class="n">s1</span><span class="o">/</span><span class="n">s2</span><span class="o">/</span><span class="n">g</span>   <span class="o">:</span>    <span class="n">替换</span> <span class="n">n1</span><span class="o">~</span><span class="n">n2</span> <span class="n">行</span>
+<span class="o">:/</span><span class="n">string</span>           <span class="o">:</span>    <span class="n">搜索字符串string</span><span class="o">,</span> <span class="n">搜索下一处为n</span><span class="err">，</span><span class="n">搜索上一处为N</span>
+<span class="o">:?</span><span class="n">string</span>           <span class="o">:</span>    <span class="n">搜索字符串string</span><span class="o">,</span> <span class="n">搜索下一处为N</span><span class="err">，</span><span class="n">搜索上一处为n</span>
+</code></pre></div>
+<hr>
+
+<h2 id="edit"> 编辑代码 </h2>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">i</span> <span class="o">/</span> <span class="n">a</span>              <span class="o">:</span>     <span class="n">光标前</span><span class="o">/</span><span class="n">后插入</span>
+<span class="n">I</span> <span class="o">/</span> <span class="n">A</span>              <span class="o">:</span>     <span class="n">行首</span><span class="o">/</span><span class="n">行尾插入</span>
+<span class="n">o</span> <span class="o">/</span> <span class="n">O</span>              <span class="o">:</span>     <span class="n">后</span><span class="o">/</span><span class="n">前一行插入</span>
+<span class="n">s</span> <span class="o">/</span> <span class="n">S</span>              <span class="o">:</span>     <span class="n">删除字符插入</span> <span class="o">/</span> <span class="n">删除行插入</span>
+<span class="n">x</span>                  <span class="o">:</span>     <span class="n">删除当前字符</span>
+<span class="n">D</span> <span class="o">/</span> <span class="n">C</span>              <span class="o">:</span>     <span class="n">删除到行尾</span>
+<span class="n">dd</span> <span class="o">/</span> <span class="n">cc</span>            <span class="o">:</span>     <span class="n">删除行</span><span class="o">()</span> <span class="o">/</span> <span class="n">删除行并进入插入模式</span><span class="o">(</span><span class="n">等同于S</span><span class="o">)</span>
+<span class="n">dw</span> <span class="o">/</span> <span class="n">cw</span>            <span class="o">:</span>     <span class="n">删除单词</span> <span class="o">/</span> <span class="n">删除单词并进入插入模式</span>
+<span class="n">x或dl</span> <span class="o">/</span> <span class="n">s或cl</span>       <span class="o">:</span>     <span class="n">删除字符</span> <span class="o">/</span> <span class="n">删除字符并进入插入模式</span>
+<span class="n">p</span> <span class="o">/</span> <span class="n">xp</span> <span class="o">/</span> <span class="n">ddp</span>       <span class="o">:</span>     <span class="n">粘贴</span> <span class="o">/</span> <span class="n">交换两个字符</span> <span class="o">/</span> <span class="n">交换两行</span>
+<span class="n">y</span> <span class="o">/</span> <span class="n">yy或Y</span>          <span class="o">:</span>     <span class="n">复制</span> <span class="o">/</span> <span class="n">复制一行</span>
+<span class="n">u</span>                  <span class="o">:</span>     <span class="n">撤销</span>
+<span class="n">ctrl</span> <span class="o">+</span> <span class="n">r</span>           <span class="o">:</span>     <span class="n">重做</span>
+<span class="n">J</span>                  <span class="o">:</span>     <span class="n">合并两行</span>
+</code></pre></div>
+<hr>
+
+<h2 id="window"> 窗口操作 </h2>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="o">:</span><span class="n">split</span> <span class="o">/</span> <span class="n">vsplit</span>    <span class="o">:</span>     <span class="n">分割一个窗口</span>
+<span class="o">:</span><span class="k">new</span> <span class="o">/</span> <span class="o">?</span><span class="n">vnew</span>       <span class="o">:</span>     <span class="n">创建一个窗口</span>
+<span class="o">:</span><span class="n">close</span>             <span class="o">:</span>     <span class="n">关闭当前窗口</span>
+<span class="o">:</span><span class="n">only</span>              <span class="o">:</span>     <span class="n">仅保留当前窗口</span>
+<span class="n">ctrl</span> <span class="o">+</span> <span class="n">w</span><span class="o">,</span><span class="n">h</span>         <span class="o">:</span>     <span class="n">到左边窗口</span>
+<span class="n">ctrl</span> <span class="o">+</span> <span class="n">w</span><span class="o">,</span><span class="n">l</span>         <span class="o">:</span>     <span class="n">到右边窗口</span>
+<span class="n">ctrl</span> <span class="o">+</span> <span class="n">w</span><span class="o">,</span><span class="n">k</span>         <span class="o">:</span>     <span class="n">到上边窗口</span>
+<span class="n">ctrl</span> <span class="o">+</span> <span class="n">w</span><span class="o">,</span><span class="n">j</span>         <span class="o">:</span>     <span class="n">到下边窗口</span>
+<span class="n">ctrl</span> <span class="o">+</span> <span class="n">w</span><span class="o">,</span><span class="n">t</span>         <span class="o">:</span>     <span class="n">到顶部窗口</span>
+<span class="n">ctrl</span> <span class="o">+</span> <span class="n">w</span><span class="o">,</span><span class="n">b</span>         <span class="o">:</span>     <span class="n">到底部窗口</span>
+</code></pre></div>
+<hr>
+
+        </section>
+
+        <!-- 广告位 BEGIN -->
+
+        <!-- UJian Button BEGIN -->
+        <script type="text/javascript">var ujian_config = {target:1};</script>
+        <script type="text/javascript" src="http://v1.ujian.cc/code/ujian.js?type=slide&pos=left&fade=1&uid=1746608"></script>
+        <a href="http://www.ujian.cc" style="border:0;"><img src="http://img.ujian.cc/pixel.png" alt="友荐云推荐" style="border:0;padding:0;margin:0;" /></a>
+        <!-- UJian Button END -->
+          
+        <div id="add">
+          <h2 style="padding-left:24px;">广而告之</h2>
+          <script type="text/javascript">var sogou_ad_id=420265;var sogou_ad_height=90;var sogou_ad_width=760;</script>
+          <script type='text/javascript' src='http://images.sohu.com/cs/jsfile/js/c.js'></script>
+        </div>
+        <!-- 广告位 END -->
+
+        <!-- Duoshuo Comment BEGIN -->
+        <div id="comments">
+          <h2 style="padding-left:24px;">评论</h2>
+          <div class="ds-thread" data-thread-key="/mac%E5%BC%80%E5%8F%91/2015/05/04/Vim常用快捷键" 
+            data-title="Vim常用快捷键" 
+            data-url="/mac%E5%BC%80%E5%8F%91/2015/05/04/Vim%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE.html" ></div>
+        </div>
+        <!-- Duoshuo Comment END -->
+      </div>
+
+      <footer>
+  <p>Project maintained by <a href="https://github.com/rgkjhshi">rgkjhshi</a> on github</p>
+
+  <p style="padding-right: 150px; padding-left: 20px;">
+    <!-- cnzz统计工具 -->
+    <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+  </p>
+
+  <p>京ICP备14015515号-1</p>
+
+  
+</footer>
+<!--[if !IE]><script>fixScale(document);</script><![endif]-->
+  </page>
+  </body>
+
+</html>
