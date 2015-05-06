@@ -93,7 +93,7 @@ shift + cmd + c        :    引入一个常量
 ```java
 cmd + p                :    查询某方法的参数信息
 cmd + b                :    跳到调用方法的定义处
-shift + cmd + b        :    跳到方法的实现处
+alt + cmd + b          :    跳到方法的实现处
 cmd + u                :    跳到方法在父类或接口的定义处
 ctrl + up/down         :    跳到上/下一方法
 alt + cmd + left/right :    跳到上/下一次光标查看处
