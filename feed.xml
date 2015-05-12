@@ -6,9 +6,91 @@
 </description>
     <link>http://yourdomain.com/</link>
     <atom:link href="http://yourdomain.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 11 May 2015 22:39:13 +0800</pubDate>
-    <lastBuildDate>Mon, 11 May 2015 22:39:13 +0800</lastBuildDate>
+    <pubDate>Tue, 12 May 2015 21:11:29 +0800</pubDate>
+    <lastBuildDate>Tue, 12 May 2015 21:11:29 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>git常用命令</title>
+        <description>&lt;p&gt;git 的常用命令&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2&gt;本文结构&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#branch&quot;&gt;分支操作&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#reset&quot;&gt;撤销操作&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#log&quot;&gt;log显示&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#remote&quot;&gt;显示远程仓库信息&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;branch&quot;&gt; 分支操作 &lt;/h2&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;git&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;branch&lt;/span&gt;             &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;查看本地分支&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;git&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;branch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;          &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;查看所有分支&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;包括远程&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;git&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;branch&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;        &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;创建分支&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;git&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;branch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;     &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;删除分支&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;git&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;checkout&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;切换分支&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;git&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;checkout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;创建&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;切换分支&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;git&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;merge&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;         &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;合并某分支到当前分支&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;git&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;push&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;origin&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;delete&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;branchname&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;     &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;删除远程分支&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol&gt;
+&lt;li&gt;合并分支一般使用 &lt;code&gt;git merge --no-ff -m &amp;quot;merge with no-ff&amp;quot; branchName&lt;/code&gt; 表示禁用“Fast forward”，合并就跟一次提交一样&lt;/li&gt;
+&lt;li&gt;语法: &lt;code&gt;git push [远程名] [本地分支]:[远程分支]&lt;/code&gt; 如果省略 &lt;code&gt;[本地分支]&lt;/code&gt; 表示将空白分支提到远程分支，也能够删除远程分支&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;reset&quot;&gt; 撤销操作 &lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;重新提交&lt;/strong&gt;: 若暂存区没有新的修改，相当于重写了提交信息&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;$ git commit --amend -m &amp;quot;message&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;丢弃工作区的修改&lt;/strong&gt;: 若有add则从暂存区恢复，若无add则从仓库恢复。&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;$ git checkout -- filename
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;注：&lt;code&gt;git checkout -- file&lt;/code&gt;命令中的“--”很重要，没有“--”，就变成了“创建一个新分支”的命令  &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;撤销暂存区修改&lt;/strong&gt;: 把暂存区的修改回退到工作区。&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;$ git reset HEAD readme.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;回退版本&lt;/strong&gt;: HEAD表示当前版本，上一个版本就是HEAD^，上上一个版本就是HEAD^^，上100个版本可写成HEAD~100。用上hard参数后，文件会回到原来的commit状态，不用hard参数，工作目录的文件修改会保留，状态为未提交。&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;git reset --hard HEAD^
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+
+&lt;h2 id=&quot;log&quot;&gt; log显示 &lt;/h2&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;git&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;graph&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pretty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;oneline&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;abbrev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;commit&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;--graph&lt;/code&gt;可以看到分支合并图&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--pretty=oneline&lt;/code&gt;Log会显示在一行 &lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--abbrev-commit&lt;/code&gt; 会显示版本号的缩写形式&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;如果之前有过版本回退操作，则&lt;code&gt;git log&lt;/code&gt;只能显示当前版本之前的记录，如果想看所有的记录(包括当前版本之后的版本)，可以使用：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;$ git reflog
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+
+&lt;h2 id=&quot;remote&quot;&gt; 显示远程仓库信息 &lt;/h2&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;$ git remote -v
+origin  git@github.com:rgkjhshi/blog.git (fetch)
+origin  git@github.com:rgkjhshi/blog.git (push)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+</description>
+        <pubDate>Tue, 12 May 2015 00:00:00 +0800</pubDate>
+        <link>http://yourdomain.com/mac%E5%BC%80%E5%8F%91/2015/05/12/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/mac%E5%BC%80%E5%8F%91/2015/05/12/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4.html</guid>
+        
+        
+        <category>mac开发</category>
+        
+      </item>
     
       <item>
         <title>Vim常用快捷键</title>
@@ -1238,127 +1320,6 @@ Java语言本身不能对操作系统底层进行访问和操作，但是可以�
         <pubDate>Mon, 02 Feb 2015 00:00:00 +0800</pubDate>
         <link>http://yourdomain.com/spring/2015/02/02/Spring(%E5%9B%9B)Spring%E6%95%B4%E5%90%88MyBatis.html</link>
         <guid isPermaLink="true">http://yourdomain.com/spring/2015/02/02/Spring(%E5%9B%9B)Spring%E6%95%B4%E5%90%88MyBatis.html</guid>
-        
-        
-        <category>spring</category>
-        
-      </item>
-    
-      <item>
-        <title>Spring(三): 注解</title>
-        <description>&lt;hr&gt;
-
-&lt;h2&gt;本文结构&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#bean&quot;&gt;Bean的注解&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#scope&quot;&gt;@Scope作用域&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#resource&quot;&gt;@Resource依赖配置&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#autowired&quot;&gt;@Autowired自动装配&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#qualifier&quot;&gt;@Qualifier精装配&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;bean&quot;&gt; Bean的注解 &lt;/h2&gt;
-
-&lt;p&gt;Spring提供了如下几个&lt;code&gt;Annotation&lt;/code&gt;来标注&lt;code&gt;Spring Bean&lt;/code&gt;:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;@Component&lt;/code&gt;: 标注一个普通的&lt;code&gt;Spring Bean&lt;/code&gt;；&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;@Controller&lt;/code&gt;: 标注一个控制器组件类(控制层)；&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;@Service&lt;/code&gt;: 标注一个业务逻辑组件类(业务层)；&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;@Repository&lt;/code&gt;: 标注一个Dao组件(持久层)；&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;然后在spring的配置文件中添加&lt;code&gt;&amp;lt;context:component-scan base-package=&amp;quot;&amp;quot; /&amp;gt;&lt;/code&gt;，会自动搜索包下所有以&lt;code&gt;@Component&lt;/code&gt;、&lt;code&gt;@Controller&lt;/code&gt;、&lt;code&gt;@Service&lt;/code&gt;、&lt;code&gt;@Repository&lt;/code&gt;注释的java类，当作&lt;code&gt;Spring Bean&lt;/code&gt;处理。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;添加注解时如果不指定名字，则会默认生成一个与类同名但是第一个字母小写的名字，如&lt;code&gt;HelloServiceImpl&lt;/code&gt;会自动生成&lt;code&gt;helloServiceImpl&lt;/code&gt;。&lt;br&gt;
-当然可以自己指定名字，像下面这样：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;helloService&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;HelloServiceImpl&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HelloService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@Resource&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Hello&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hello&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;c1&quot;&gt;// 如果有&amp;lt;bean&amp;gt;元素且使用了&amp;lt;property&amp;gt;子标签，setter必须有&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;setHello&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Hello&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hello&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;hello&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hello&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;testHello&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;hello&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sayHello&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-
-&lt;h2 id=&quot;scope&quot;&gt; Scope作用域 &lt;/h2&gt;
-
-&lt;p&gt;&lt;code&gt;@Scope&lt;/code&gt;用于指定一个&lt;code&gt;Bean&lt;/code&gt;产生的方式，默认为&amp;#39;singleton&amp;#39;，可以通过注解直接指定&lt;code&gt;Bean&lt;/code&gt;的&lt;code&gt;scope&lt;/code&gt;，例如:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;nd&quot;&gt;@Scope&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;prototype&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;helloService&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;HelloServiceImpl&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HelloService&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-
-&lt;h2 id=&quot;resource&quot;&gt; Resource依赖配置 &lt;/h2&gt;
-
-&lt;p&gt;像上面例子中的&lt;code&gt;private Hello hello;&lt;/code&gt;加上了&lt;code&gt;@Resource&lt;/code&gt;注解，这样就可以将相应的&lt;code&gt;Bean&lt;/code&gt;注入到该属性中。&lt;br&gt;
-&lt;code&gt;@Resource&lt;/code&gt;有一个name属性，用于指定需要被注入的Bean的实例的标识(id)，也就是说，使用&lt;code&gt;@Resource&lt;/code&gt;的&lt;code&gt;name属性&lt;/code&gt;与&lt;code&gt;&amp;lt;property../&amp;gt;&lt;/code&gt;元素的&lt;code&gt;ref属性&lt;/code&gt;具有相同的效果。&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;    &lt;span class=&quot;nd&quot;&gt;@Resource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;hello&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Hello&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hello&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;//注解中的name作用与下面的ref作用相同&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;property&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;属性名&amp;quot;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ref&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Bean的id&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;使用&lt;code&gt;@Resource&lt;/code&gt;可以标识属性、setter方法&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;当使用&lt;code&gt;@Resource&lt;/code&gt;修饰&lt;code&gt;setter&lt;/code&gt;方法，若省略name属性，则name属性默认值是从该setter方法去掉set子串之后首字母小写的子串。&lt;/li&gt;
-&lt;li&gt;当使用&lt;code&gt;@Resource&lt;/code&gt;修饰&lt;code&gt;Field&lt;/code&gt;时，若省略name，则默认与Field的相同。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;autowired&quot;&gt; Autowired自动装配 &lt;/h2&gt;
-
-&lt;p&gt;像上面的&lt;code&gt;@Resource&lt;/code&gt;是通过&lt;code&gt;byName&lt;/code&gt;方式（通过id）进行注入，而&lt;code&gt;@Autowired&lt;/code&gt;是通过&lt;code&gt;byType&lt;/code&gt;策略进行注入，所以若有多个同类型的&lt;code&gt;Bean&lt;/code&gt;就容易出问题，为了避免这种问题，一般与&lt;code&gt;Qualifier&lt;/code&gt;精装配联合使用。&lt;/p&gt;
-
-&lt;p&gt;使用&lt;code&gt;@Autowired&lt;/code&gt;可以标识属性、setter方法、普通方法、构造器（例子见@Qualifier中）&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;当&lt;code&gt;@Autowired&lt;/code&gt;标注&lt;code&gt;Field&lt;/code&gt;时，Spring会把容器中的与该&lt;code&gt;Field&lt;/code&gt;类型匹配的&lt;code&gt;Bean&lt;/code&gt;注入该属性，如果Spring容器中有多个同类型的&lt;code&gt;Bean&lt;/code&gt;与&lt;code&gt;Field&lt;/code&gt;类型匹配，则会出现异常。&lt;/li&gt;
-&lt;li&gt;当&lt;code&gt;@Autowired&lt;/code&gt;标注数组或集合类的属性时，Spring会自动搜索Spring容器中所有与数组类型相匹配的类型的Bean，并把这些Bean当作数组的元素来创建数组。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;qualifier&quot;&gt; Qualifier精装配 &lt;/h2&gt;
-
-&lt;p&gt;为了避免自动装配的问题，实现精确的配置，Spring提供&lt;code&gt;@Qualifier&lt;/code&gt;，可以根据Bean标识(id)来指定自动装配。&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;    &lt;span class=&quot;c1&quot;&gt;// 标注属性&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Autowired&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Qualifier&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;hello&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Hello&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hello&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;c1&quot;&gt;// Autowired标注数组，则所有Hello类型的Bean都会放到数组里&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Autowired&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Hello&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hellos&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;c1&quot;&gt;// Autowired标注构造方法，Qualifier标注方法的形参&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Autowired&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;HelloServiceImpl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@Qualifier&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;hello&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Hello&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hello&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;hello&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hello&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-</description>
-        <pubDate>Thu, 29 Jan 2015 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/spring/2015/01/29/Spring(%E4%B8%89)%E6%B3%A8%E8%A7%A3.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/spring/2015/01/29/Spring(%E4%B8%89)%E6%B3%A8%E8%A7%A3.html</guid>
         
         
         <category>spring</category>
