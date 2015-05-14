@@ -331,7 +331,15 @@
 <h2>本文结构</h2>
 
 <ul>
-<li><a href="#instruction">Spring框架简介</a></li>
+<li><a href="#instruction">Spring框架简介</a>
+
+<ul>
+<li><a href="#core">Core Container</a></li>
+<li><a href="#aop">AOP</a></li>
+<li><a href="#data">Data Access/Integration</a></li>
+<li><a href="#web">Web</a></li>
+<li><a href="#test">Test</a></li>
+</ul></li>
 <li><a href="#example">Spring简单项目示例</a></li>
 </ul>
 
@@ -339,20 +347,55 @@
 
 <h2 id="instruction"> Spring框架简介 </h2>
 
-<p>Spring是一个开源框架，主要优势是其分层架构，由7个模块组成。网上找了个Spring的结构图</p>
+<p>Spring是一个开源框架，Spring Framework 的功能被组织成了20来个模块。以Spring4.x为例，这些模块分成 Core Container, Data Access/Integration, Web, AOP (Aspect Oriented Programming), Instrumentation, Messaging, 和 Test等</p>
 
-<p><img src="/assets/images/spring_framework.gif" alt="Spring框架的7个模块" title="Spring框架的7个模块"></p>
+<p><img src="/assets/images/spring_framework.png" alt="Spring框架" title="Spring框架"></p>
 
-<p>Spring框架的每个模块（或组件）都可以单独存在，或者与其他一个或多个模块联合实现，包括与Struts等MVC框架或Hibernate等ORM框架的集成。每个模块介绍如下：</p>
+<h3 id="instruction"> Core Container </h3>
+
+<p><code>Core Container</code> 由 <code>spring-core, spring-beans, spring-context, spring-context-support</code> 和 <code>spring-expression (Spring Expression Language)</code> 模块组成</p>
 
 <ul>
-<li><code>Spring Core</code>: 核心容器提供 Spring 框架的基本功能。核心容器的主要组件是<code>BeanFactory</code>，它是工厂模式的实现。<code>BeanFactory</code>使用<em>控制反转</em>（IOC） 模式将应用程序的配置和依赖性规范与实际的应用程序代码分开。</li>
-<li><code>Spring Context</code>: Spring 上下文是一个配置文件，向 Spring 框架提供上下文信息。Spring 上下文包括企业服务，例如 JNDI、EJB、电子邮件、国际化、校验和调度功能。</li>
-<li><code>Spring AOP</code>: 该模块直接将面向方面的编程功能集成到了 Spring 框架中，通过使用 Spring AOP，不用依赖 EJB 组件，就可以将声明性事务管理集成到应用程序中。</li>
-<li><code>Spring DAO</code>: JDBC DAO 抽象层提供了有意义的异常层次结构，可用该结构来管理异常处理和不同数据库抛出的错误消息。</li>
-<li><code>Spring ORM</code>: Spring 框架插入了若干个 ORM 框架，从而提供了 ORM 的对象关系工具，其中包括 JDO、Hibernate 和 iBatis SQL Map。所有这些都遵从 Spring 的通用事务和 DAO 异常层次结构。</li>
-<li><code>Spring Web</code>: Web 上下文模块建立在应用程序上下文模块之上，为基于 Web 的应用程序提供了上下文。Web 模块还简化了处理多部分请求以及将请求参数绑定到域对象的工作。</li>
-<li><code>Spring Web MVC</code>: MVC 框架是一个全功能的构建 Web 应用程序的 MVC 实现。MVC 容纳了大量视图技术，其中包括 JSP、Velocity、Tiles、iText 和 POI。</li>
+<li><code>spring-core</code> 和 <code>spring-beans</code> 提供框架的基础部分，包括 <code>IoC</code> 和 <code>Dependency Injection</code> 主要组件是<code>BeanFactory</code>,它 是一个复杂的工厂模式的实现。</li>
+<li><code>Context(spring-context)</code> 模块建立在<code>Core</code> 和 <code>Beans</code> 模块的基础上，向 Spring 框架提供上下文信息。 <code>ApplicationContext</code> 是 Context 模块的焦点。<code>spring-context-support</code> 对常见第三方库集成进Spring应用上下文提供支持。</li>
+<li><code>SpEL(spring-expression)</code> 模块提供了一个强大的 <code>Expression Language</code>(表达式语言)用来在运行时查询和操作对象映射。这是JSP2.1规范所指定的统一表达式语言(unified EL)的一种延续。</li>
+</ul>
+
+<h3 id="aop"> AOP、Aspects、Instrumentation、Messaging </h3>
+
+<ul>
+<li><code>spring-aop</code> 模块提供 <code>AOP Alliance-compliant</code>(AOP联盟)的面向切面编程实现，允许你自定义，比如，方法拦截器和切入点完全分离代码。</li>
+<li><code>spring-aspects</code> 模块提供了集成使用 AspectJ。</li>
+<li><code>spring-instrument</code> 模块提供了对某些应用程序服务器的代理接口。</li>
+<li><code>spring-messaging</code> 模块从 Spring 集成项目中抽象出来，比如 Message, MessageChannel, MessageHandler 及其他用来提供基于消息的基础服务。该模块还包括一组消息映射方法的注解。</li>
+</ul>
+
+<h3 id="data"> Data Access/Integration 数据访问/集成 </h3>
+
+<p><code>Data Access/Integration</code> 层由 <code>JDBC, ORM, OXM, JMS</code> 和 <code>Transaction</code> 模块组成。</p>
+
+<ul>
+<li><code>spring-jdbc</code> 模块提供了不需要编写冗长的JDBC代码和解析数据库厂商特有的错误代码的JDBC抽象层。</li>
+<li><code>spring-tx</code> 模块支持可编程和声明式事务管理，用于实现特殊的接口和你所有的POJO类（Plain Old Java Objects）。</li>
+<li><code>spring-orm</code> 模块提供了流行的 <code>object-relational mapping</code>(对象-关系映射)API，其包含<code>JPA，JDO，Hibernate</code>。</li>
+<li><code>spring-oxm</code> 模块提供了抽象层用于支持<code>Object/XML mapping</code>(对象/XML映射)的实现,如<code>JAXB、Castor、XMLBeans、JiBX</code>和<code>XStream</code>等。</li>
+<li><code>spring-jms</code> 模块(<code>Java Messaging Service</code>)包含生产和消费信息的功能。 从 Spring Framework 4.1 开始提供集成 spring-messaging 模块。</li>
+</ul>
+
+<h3 id="web"> Web </h3>
+
+<p><code>Web</code> 层由 <code>spring-web, spring-webmvc, spring-websocket</code>和<code>spring-webmvc-portlet</code>组成。</p>
+
+<ul>
+<li><code>spring-web</code> 模块提供了基本的面向web开发的集成功能，例如多方文件上传、使用<code>Servlet listeners</code>以及Web开发应用程序上下文初始化IoC容器等，也包含HTTP客户端以及Spring远程访问的web相关部分。</li>
+<li><code>spring-webmvc</code> 模块(也被称为<code>Web Servlet</code>模块)包含Spring的<code>model-view-controller</code>(模型-视图-控制器(MVC))和<code>REST Web Services</code>实现的Web应用程序，并且集成了Spring Framework所有的其他功能。</li>
+<li><code>spring-webmvc-portlet</code> 模块(也被称为<code>Web-Portlet</code>模块)使用一个Portlet的环境和spring-webmvc模块功能的镜像提供了MVC模式的实现。</li>
+</ul>
+
+<h3 id="test"> Test </h3>
+
+<ul>
+<li><code>spring-test</code> 模块支持通过组合JUnit或TestNG来进行单元测试和集成测试。它提供了连续加载的ApplicationContext并且缓存这些上下文。它还提供了<code>mock object</code>(模仿对象)，可以隔离测试代码。</li>
 </ul>
 
 <h3>控制反转(IoC)和依赖注入</h3>
