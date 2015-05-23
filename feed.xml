@@ -6,8 +6,8 @@
 </description>
     <link>http://yourdomain.com/</link>
     <atom:link href="http://yourdomain.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 23 May 2015 18:47:37 +0800</pubDate>
-    <lastBuildDate>Sat, 23 May 2015 18:47:37 +0800</lastBuildDate>
+    <pubDate>Sat, 23 May 2015 19:44:07 +0800</pubDate>
+    <lastBuildDate>Sat, 23 May 2015 19:44:07 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -38,6 +38,8 @@
 &lt;li&gt;&lt;a href=&quot;#Log4j1_use&quot;&gt;Log4j1&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#Log4j2_use&quot;&gt;Log4j2&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;#LogBack_use&quot;&gt;LogBack&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#JCL_use&quot;&gt;JCL&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#slf4j_use&quot;&gt;slf4j&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
@@ -59,7 +61,8 @@
 
 &lt;h2 id=&quot;introduction&quot;&gt; 各个日志组件的介绍 &lt;/h2&gt;
 
-&lt;p&gt;先认识下这些组件的名字，混个脸熟。&lt;/p&gt;
+&lt;p&gt;日志框架(实现): JUL、 Log4j、 LogBack&lt;br&gt;
+日志门面(接口): JCL(common-logging)、 SLF4J&lt;/p&gt;
 
 &lt;h3 id=&quot;JUL&quot;&gt; JUL &lt;/h3&gt;
 
@@ -244,6 +247,37 @@ jar包的maven依赖:&lt;/p&gt;
 &lt;p&gt;结果输出:&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;18:00:35.409 [main] INFO  com.test.log.LogTest - ch.qos.logback.classic.Logger
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&quot;JCL_use&quot;&gt; JCL(common-logging) &lt;/h3&gt;
+
+&lt;p&gt;JCL需要&lt;code&gt;commons-logging&lt;/code&gt;的&lt;code&gt;jar&lt;/code&gt;包&lt;br&gt;
+本文只演示使用方法，对输出结果暂不解释，后面的文章会解释原理&lt;/p&gt;
+
+&lt;p&gt;jar包的maven依赖:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;        &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;commons-logging&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;commons-logging&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;1.2&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;代码示例:
+
+```java
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+public class LogTest {
+    private static final Log logger = LogFactory.getLog(LogTest.class.getName());
+    public static void main(String[] args) {
+        logger.info(logger.getClass().getName());
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;结果输出:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;五月 23, 2015 7:19:09 下午 com.test.log.LogTest main
+信息: org.apache.commons.logging.impl.Jdk14Logger
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&quot;slf4j_use&quot;&gt; slf4j &lt;/h3&gt;
+
+&lt;p&gt;slf4j只有接口没有实现，必须结合其他日志的实现一起使用&lt;/p&gt;
+
 &lt;hr&gt;
 </description>
         <pubDate>Mon, 18 May 2015 00:00:00 +0800</pubDate>

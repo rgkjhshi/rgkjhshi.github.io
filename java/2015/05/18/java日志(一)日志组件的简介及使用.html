@@ -107,6 +107,8 @@
 <li><a href="#Log4j1_use">Log4j1</a></li>
 <li><a href="#Log4j2_use">Log4j2</a></li>
 <li><a href="#LogBack_use">LogBack</a></li>
+<li><a href="#JCL_use">JCL</a></li>
+<li><a href="#slf4j_use">slf4j</a></li>
 </ul></li>
 </ul>
 
@@ -128,7 +130,8 @@
 
 <h2 id="introduction"> 各个日志组件的介绍 </h2>
 
-<p>先认识下这些组件的名字，混个脸熟。</p>
+<p>日志框架(实现): JUL、 Log4j、 LogBack<br>
+日志门面(接口): JCL(common-logging)、 SLF4J</p>
 
 <h3 id="JUL"> JUL </h3>
 
@@ -313,6 +316,37 @@ jar包的maven依赖:</p>
 <p>结果输出:</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">18:00:35.409 [main] INFO  com.test.log.LogTest - ch.qos.logback.classic.Logger
 </code></pre></div>
+<h3 id="JCL_use"> JCL(common-logging) </h3>
+
+<p>JCL需要<code>commons-logging</code>的<code>jar</code>包<br>
+本文只演示使用方法，对输出结果暂不解释，后面的文章会解释原理</p>
+
+<p>jar包的maven依赖:</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml">        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>commons-logging<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>commons-logging<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>1.2<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div><div class="highlight"><pre><code class="language-text" data-lang="text">代码示例:
+
+```java
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+public class LogTest {
+    private static final Log logger = LogFactory.getLog(LogTest.class.getName());
+    public static void main(String[] args) {
+        logger.info(logger.getClass().getName());
+    }
+}
+</code></pre></div>
+<p>结果输出:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">五月 23, 2015 7:19:09 下午 com.test.log.LogTest main
+信息: org.apache.commons.logging.impl.Jdk14Logger
+</code></pre></div>
+<h3 id="slf4j_use"> slf4j </h3>
+
+<p>slf4j只有接口没有实现，必须结合其他日志的实现一起使用</p>
+
 <hr>
 
         </section>
