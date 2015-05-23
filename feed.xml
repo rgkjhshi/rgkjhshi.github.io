@@ -6,9 +6,254 @@
 </description>
     <link>http://yourdomain.com/</link>
     <atom:link href="http://yourdomain.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 14 May 2015 11:16:46 +0800</pubDate>
-    <lastBuildDate>Thu, 14 May 2015 11:16:46 +0800</lastBuildDate>
+    <pubDate>Sat, 23 May 2015 18:47:37 +0800</pubDate>
+    <lastBuildDate>Sat, 23 May 2015 18:47:37 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>java日志(一):日志组件简介及使用</title>
+        <description>&lt;p&gt;java中的日志组件太多了，经常听到的有&lt;code&gt;log4j, slf4j, logbak&lt;/code&gt;等，不太熟悉的有&lt;code&gt;common-logging, JUL, JCL&lt;/code&gt;等，
+刚开始接触的时候感觉很晕，不知道这些都是干嘛的，甚至不理解为啥都是记日志的，为什么要整出这么多不同的东西来。后来从头到尾梳理了一遍，才稍微有点清晰。&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2&gt;本文结构&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#what&quot;&gt;日志都做什么&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;日志组件的介绍&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#JUL&quot;&gt;JUL&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#common-logging&quot;&gt;common-logging&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#slf4j&quot;&gt;slf4j&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#Log4j&quot;&gt;Log4j&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#LogBack&quot;&gt;LogBack&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#many&quot;&gt;为什么有这么多不同日志组件&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#use&quot;&gt;各日志组件的用法&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#JUL_use&quot;&gt;JUL&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#Log4j1_use&quot;&gt;Log4j1&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#Log4j2_use&quot;&gt;Log4j2&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#LogBack_use&quot;&gt;LogBack&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;what&quot;&gt; 日志都做什么 &lt;/h2&gt;
+
+&lt;p&gt;平时写代码想看看输出结果的时候一般直接用&lt;code&gt;System.out&lt;/code&gt;来输出了，感觉也挺好用的，为什么还要有专门的组件记录日志？
+下面给出了几条日志组件应该具有的功能:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;能够在不同阶段输出不同级别的信息&lt;/li&gt;
+&lt;li&gt;日志不能影响正常的程序效率&lt;/li&gt;
+&lt;li&gt;日志挂了不能影响到正常业务&lt;/li&gt;
+&lt;li&gt;还有好多&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;introduction&quot;&gt; 各个日志组件的介绍 &lt;/h2&gt;
+
+&lt;p&gt;先认识下这些组件的名字，混个脸熟。&lt;/p&gt;
+
+&lt;h3 id=&quot;JUL&quot;&gt; JUL &lt;/h3&gt;
+
+&lt;p&gt;JUL即&lt;code&gt;Java Util Logging&lt;/code&gt;, 是JVM提供的日志组件，在&lt;code&gt;rt.jar&lt;/code&gt;的&lt;code&gt;java.util.logging&lt;/code&gt;包里&lt;/p&gt;
+
+&lt;h3 id=&quot;common-logging&quot;&gt; common-logging &lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;common-logging&lt;/code&gt;即&lt;code&gt;Apache Commons Logging&lt;/code&gt;,之前叫&lt;code&gt;Jakarta Commons Logging, JCL&lt;/code&gt;，是apache提供的一个通用的日志接口。
+内部有个&lt;code&gt;Simple logger&lt;/code&gt;的简单实现，但很弱，一般配合log4j等第三方实现使用。&lt;/p&gt;
+
+&lt;h3 id=&quot;slf4j&quot;&gt; slf4j &lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;slf4j&lt;/code&gt;即&lt;code&gt;Simple Logging Facade for JAVA&lt;/code&gt;，java简单日志门面。类似于&lt;code&gt;Apache Common-Logging&lt;/code&gt;，也是一个日志接口。
+SLF4J一般配合第三方实现通过slf4j的桥接包来使用。&lt;/p&gt;
+
+&lt;h3 id=&quot;Log4j&quot;&gt; Log4j &lt;/h3&gt;
+
+&lt;p&gt;Apache的一个开放源代码项目，日志的实现，比较好用，得到了广泛使用。&lt;br&gt;
+Log4j有两个版本，一个是log4j1，它使用properties文件进行配置；&lt;br&gt;
+另一个是log4j2，跟log4j1不兼容，它使用xml文件进行配置；Log4j2包括两个部分：
+&lt;code&gt;log4j-api&lt;/code&gt;日志接口，&lt;code&gt;log4j-core&lt;/code&gt;日志实现。它这么分，有点也想作为日志门面的意思。&lt;/p&gt;
+
+&lt;h3 id=&quot;LogBack&quot;&gt; LogBack &lt;/h3&gt;
+
+&lt;p&gt;Logback是由log4j创始人设计的又一个开源日志组件。&lt;br&gt;
+分为三个模块：&lt;code&gt;logback-core,logback-classic&lt;/code&gt;和&lt;code&gt;logback-access&lt;/code&gt;。&lt;br&gt;
+&lt;code&gt;logback-core&lt;/code&gt;是其它两个模块的基础模块。&lt;code&gt;logback-classic&lt;/code&gt;是log4j的一个改良版本，并且完整实现了&lt;code&gt;SLF4J API&lt;/code&gt;。&lt;br&gt;
+&lt;code&gt;logback-access&lt;/code&gt;访问模块与Servlet容器集成提供通过Http来访问日记的功能。&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;many&quot;&gt; 为什么有这么多不同日志组件 &lt;/h2&gt;
+
+&lt;p&gt;反正有很多，各有各的用法。JDK里的JUL好像不太好用，后来Log4j得到了广泛应用。
+日志组件越来越多，如果一个应用程序中有两个组件，而这两个组件恰好用了不同的日志工具，那这个应用不就有两个日志输出了。&lt;br&gt;
+这时候出现了&lt;code&gt;Apache Commons Logging(JCL)&lt;/code&gt;，它只提供log接口，具体的实现则是在&lt;strong&gt;运行时动态查找&lt;/strong&gt;。只要遵守JCL借口的日志工具，都可以通过JCL来使用。&lt;br&gt;
+JCL是在运行时动态查找具体的日志实现，当项目很大时，JCL的动态绑定并不是总能成功，解决办法是在项目部署时提前指定绑定哪个日志工具，这就出现了SLF4J。&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;use&quot;&gt; 各日志组件的用法 &lt;/h2&gt;
+
+&lt;p&gt;常用的日志组件有 &lt;code&gt;JUL, Log4j(Log4j1、 Log4j2), Logback&lt;/code&gt;，下面是他们的用法&lt;/p&gt;
+
+&lt;h3 id=&quot;JUL_use&quot;&gt; JUL &lt;/h3&gt;
+
+&lt;p&gt;依赖jdk，无需额外jar包&lt;br&gt;
+代码示例:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.util.logging.Logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LogTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Logger&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LOGGER&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LogTest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;LOGGER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LOGGER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;结果输出:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;五月 23, 2015 4:49:11 下午 com.test.log.LogTest main
+信息: java.util.logging.Logger
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&quot;Log4j1_use&quot;&gt; Log4j1 &lt;/h3&gt;
+
+&lt;p&gt;需要&lt;code&gt;log4j&lt;/code&gt;版本&lt;code&gt;1.2.**&lt;/code&gt;的&lt;code&gt;jar&lt;/code&gt;包&lt;br&gt;
+需要properties配置文件(名为&lt;code&gt;log4j.properties&lt;/code&gt;放在classpath下)； 无配置文件无法输出日志。&lt;br&gt;
+jar包的maven依赖:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;        &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;log4j&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;log4j&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;1.2.14&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;log4j.properties&lt;/code&gt;配置文件:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-properties&quot; data-lang=&quot;properties&quot;&gt;&lt;span class=&quot;na&quot;&gt;log4j.rootLogger&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;debug, console&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;log4j.appender.console&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;org.apache.log4j.ConsoleAppender&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;log4j.appender.console.layout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;org.apache.log4j.PatternLayout&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;log4j.appender.console.layout.ConversionPattern&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;%-d{yyyy-MM-dd HH:mm:ss} %m%n&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;代码示例:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.apache.log4j.Logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 引入的是类&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LogTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Logger&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LOGGER&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LogTest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;LOGGER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;debug&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LOGGER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;结果输出:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;2015-05-23 17:44:07 org.apache.log4j.Logger
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&quot;Log4j2_use&quot;&gt; Log4j2 &lt;/h3&gt;
+
+&lt;p&gt;Log4j2需要&lt;code&gt;log4j-api、log4j-core&lt;/code&gt;版本&lt;code&gt;2.*&lt;/code&gt;的&lt;code&gt;jar&lt;/code&gt;包&lt;br&gt;
+需要xml配置文件(名为&lt;code&gt;log4j2.xml&lt;/code&gt;放在classpath下)； 不支持properties文件； 无配置文件无法输出日志。&lt;br&gt;
+jar包的maven依赖:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;        &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.apache.logging.log4j&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;log4j-api&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;2.2&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.apache.logging.log4j&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;log4j-core&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;2.2&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;log4j2.xml&lt;/code&gt;配置文件:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;Configuration&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;status=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;WARN&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;Appenders&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;Console&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Console&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;target=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;SYSTEM_OUT&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;PatternLayout&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;pattern=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/Console&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/Appenders&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;Loggers&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;Root&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;level=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;debug&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;AppenderRef&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Console&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/Root&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/Loggers&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/Configuration&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;代码示例:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.apache.logging.log4j.LogManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.apache.logging.log4j.Logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 引入的是接口&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LogTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Logger&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LOGGER&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LogManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LogTest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;LOGGER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LOGGER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;结果输出:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;18:00:35.409 [main] INFO  com.test.log.LogTest - org.apache.logging.log4j.core.Logger
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&quot;LogBack_use&quot;&gt; LogBack &lt;/h3&gt;
+
+&lt;p&gt;Logback需要&lt;code&gt;logback-core、logback-classic[、slf4j-api]&lt;/code&gt;的&lt;code&gt;jar&lt;/code&gt;包(&lt;code&gt;logback-classic&lt;/code&gt;实现了&lt;code&gt;slf4j-api&lt;/code&gt;)&lt;br&gt;
+配置文件:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;在&lt;code&gt;classpath&lt;/code&gt;中寻找&lt;code&gt;logback.groovy&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;若无，则在&lt;code&gt;classpath&lt;/code&gt;中寻找&lt;code&gt;logback-test.xml&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;若无，则在&lt;code&gt;classpath&lt;/code&gt;中寻找&lt;code&gt;logback.xml&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;若无，则使用&lt;code&gt;JVM&lt;/code&gt;的&lt;code&gt;ServiceLoader&lt;/code&gt;实现&lt;code&gt;com.qos.logback.classic.spi.Configurator&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;以上都没成功，则&lt;code&gt;logbak&lt;/code&gt;使用自己的&lt;code&gt;BasicConfigurator&lt;/code&gt;配置，将日志输出到控制台&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;jar包的maven依赖:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;        &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;ch.qos.logback&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;logback-core&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;1.1.3&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;ch.qos.logback&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;logback-classic&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;1.1.3&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;logback.xml&lt;/code&gt;配置文件:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;configuration&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;SYSTEM_OUT&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;ch.qos.logback.core.ConsoleAppender&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;encoder&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;pattern&amp;gt;&lt;/span&gt;%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n&lt;span class=&quot;nt&quot;&gt;&amp;lt;/pattern&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/encoder&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/appender&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;root&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;level=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;DEBUG&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender-ref&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;SYSTEM_OUT&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/root&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/configuration&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;代码示例:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.slf4j.Logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.slf4j.LoggerFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LogTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Logger&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LOGGER&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LoggerFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LogTest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;LOGGER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LOGGER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;结果输出:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;18:00:35.409 [main] INFO  com.test.log.LogTest - ch.qos.logback.classic.Logger
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+</description>
+        <pubDate>Mon, 18 May 2015 00:00:00 +0800</pubDate>
+        <link>http://yourdomain.com/java/2015/05/18/java%E6%97%A5%E5%BF%97(%E4%B8%80)%E6%97%A5%E5%BF%97%E7%BB%84%E4%BB%B6%E7%9A%84%E7%AE%80%E4%BB%8B%E5%8F%8A%E4%BD%BF%E7%94%A8.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/java/2015/05/18/java%E6%97%A5%E5%BF%97(%E4%B8%80)%E6%97%A5%E5%BF%97%E7%BB%84%E4%BB%B6%E7%9A%84%E7%AE%80%E4%BB%8B%E5%8F%8A%E4%BD%BF%E7%94%A8.html</guid>
+        
+        
+        <category>java</category>
+        
+      </item>
     
       <item>
         <title>git常用命令</title>
@@ -1055,7 +1300,7 @@ Java语言本身不能对操作系统底层进行访问和操作，但是可以�
       </item>
     
       <item>
-        <title>Spring(五)SpringMVC的简单使用</title>
+        <title>Spring(五)springmvc的简单使用</title>
         <description>&lt;p&gt;&lt;code&gt;SpringMVC&lt;/code&gt;是在Spring基础上的一个MVC框架，可以很方便地进行web项目开发。&lt;/p&gt;
 
 &lt;hr&gt;
@@ -1167,162 +1412,9 @@ Java语言本身不能对操作系统底层进行访问和操作，但是可以�
 &lt;hr&gt;
 </description>
         <pubDate>Thu, 05 Feb 2015 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/spring/2015/02/05/Spring(%E4%BA%94)SpringMVC%E7%9A%84%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/spring/2015/02/05/Spring(%E4%BA%94)SpringMVC%E7%9A%84%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8.html</guid>
+        <link>http://yourdomain.com/2015/02/05/Spring(%E4%BA%94)SpringMVC%E7%9A%84%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/2015/02/05/Spring(%E4%BA%94)SpringMVC%E7%9A%84%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8.html</guid>
         
-        
-        <category>spring</category>
-        
-      </item>
-    
-      <item>
-        <title>Spring(四)Spring整合MyBatis</title>
-        <description>&lt;hr&gt;
-
-&lt;h2&gt;本文结构&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#id1&quot;&gt;整合的方法&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#SqlSessionFactoryBean&quot;&gt;SqlSessionFactoryBean的注入&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#MapperFactoryBean&quot;&gt;MapperFactoryBean&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#MapperScannerConfigurer&quot;&gt;使用MapperScannerConfigurer自动注册Mapper&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#transactionManager&quot;&gt;事务管理&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;id1&quot;&gt; 整合的方法 &lt;/h2&gt;
-
-&lt;p&gt;MyBatis 是以&lt;code&gt;SqlSessionFactory&lt;/code&gt;为核心的，Spring是以&lt;code&gt;BeanFactory&lt;/code&gt;或&lt;code&gt;ApplicationContext&lt;/code&gt;为核心的。把两者整合在一起，&lt;code&gt;Mybatis-Spring&lt;/code&gt;封装了一个&lt;code&gt;SqlSessionFactoryBean&lt;/code&gt;，在这个&lt;code&gt;Bean&lt;/code&gt;里可以产生&lt;code&gt;SqlSessionFactory&lt;/code&gt;。所以通过Spring的IoC实现&lt;code&gt;SqlSessionFactoryBean&lt;/code&gt;的注入即可将二者整合。&lt;/p&gt;
-
-&lt;p&gt;使用&lt;code&gt;Mybatis-Spring&lt;/code&gt;模块需要&lt;code&gt;mybatis-spring-x.x.x.jar&lt;/code&gt;包，如果使用&lt;code&gt;Maven&lt;/code&gt;，则需在&lt;code&gt;pom.xml&lt;/code&gt;文件中添加下面代码：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.mybatis&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;mybatis-spring&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;x.x.x&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-
-&lt;h2 id=&quot;SqlSessionFactoryBean&quot;&gt; SqlSessionFactoryBean的注入 &lt;/h2&gt;
-
-&lt;p&gt;在&lt;code&gt;MyBatis&lt;/code&gt;中,&lt;code&gt;session&lt;/code&gt;工厂可以使用&lt;code&gt;SqlSessionFactoryBuilder&lt;/code&gt;来创建。而在&lt;code&gt;MyBatis-Spring&lt;/code&gt;中,则使用&lt;code&gt;SqlSessionFactoryBean&lt;/code&gt;来替代。
-要想实现对&lt;code&gt;SqlSessionFactoryBean&lt;/code&gt;的注入，需要在spring的配置文件中添加这样的一个bean元素：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 读取properties文件 --&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;context:property-placeholder&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;location=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;classpath:jdbc.properties&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 配置数据源 --&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;dataSource&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;org.apache.commons.dbcp.BasicDataSource&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;destroy-method=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;close&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-       &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;driverClassName&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;${jdbc.driver}&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-       &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;url&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;${jdbc.url}&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-       &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;username&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;${jdbc.username}&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-       &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;password&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;${jdbc.password}&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- SqlSessionFactoryBean --&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;sqlSessionFactory&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;org.mybatis.spring.SqlSessionFactoryBean&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- dataSource用于指定mybatis的数据源 --&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;dataSource&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;dataSource&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- mapperLocations用于指定mybatis中mapper文件所在的位置 --&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;mapperLocations&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;classpath:mapper/*.xml&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 自动重命名 --&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;typeAliasesPackage&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;com.test.mybatis_spring.model&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 用于指定mybatis配置文件的位置 --&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;configLocation&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;classpath:mybatis-config.xml&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt; 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;构建&lt;code&gt;SqlSessionFactoryBean&lt;/code&gt;的时候，&lt;code&gt;dataSource&lt;/code&gt;属性是必须指定的，它表示用于连接数据库的数据源。我们也可以指定一些其他的属性，如：&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;typeAliasesPackage&lt;/code&gt;：实体类所在的包，自动取包中不包括包名的简单类名作为别名。多个package之间可以用逗号或者分号等来进行分隔。&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;typeAliases&lt;/code&gt;：数组类型，用来指定别名的。指定了这个属性后，Mybatis会把这个类型的短名称作为这个类型的别名，前提是该类上没有&lt;code&gt;@Alias&lt;/code&gt;注解，否则将使用该注解对应的值作为此种类型的别名。如：&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt; &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;typeAliases&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;  
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;array&amp;gt;&lt;/span&gt;  
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;com.test.mybatis.model.Blog&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;  
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;com.test.mybatis.model.Comment&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;  
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/array&amp;gt;&lt;/span&gt;  
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;plugins&lt;/code&gt;：数组类型，用来指定Mybatis的&lt;code&gt;Interceptor&lt;/code&gt;。&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;typeHandlersPackage&lt;/code&gt;：用来指定&lt;code&gt;TypeHandler&lt;/code&gt;所在的包，自动把该包下面的类注册为对应的&lt;code&gt;TypeHandler&lt;/code&gt;。多个package之间可以用逗号或者分号等来进行分隔。&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;typeHandlers&lt;/code&gt;：数组类型，用来指定&lt;code&gt;TypeHandler&lt;/code&gt;。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;MapperFactoryBean&quot;&gt; MapperFactoryBean &lt;/h2&gt;
-
-&lt;p&gt;通过&lt;code&gt;SqlSessionFactoryBean&lt;/code&gt;可以产生&lt;code&gt;SqlSessionFactory&lt;/code&gt;，在MyBatis中，通过&lt;code&gt;sqlSessionFactory.openSession()&lt;/code&gt;得到&lt;code&gt;sqlSession&lt;/code&gt;，然后通过&lt;code&gt;session.getMapper(xxx.class)&lt;/code&gt;得到对应的&lt;code&gt;Mapper&lt;/code&gt;。在Spring中，通过&lt;code&gt;MapperFactoryBean&lt;/code&gt;可以获取到我们想要的&lt;code&gt;Mapper&lt;/code&gt;对象。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;MapperFactoryBean&lt;/code&gt;实现了Spring的&lt;code&gt;FactoryBean&lt;/code&gt;接口，所以&lt;code&gt;MapperFactoryBean&lt;/code&gt;是通过&lt;code&gt;FactoryBean&lt;/code&gt;接口中定义的&lt;code&gt;getObject&lt;/code&gt;方法来获取对应的&lt;code&gt;Mapper&lt;/code&gt;对象的。在定义一个&lt;code&gt;MapperFactoryBean&lt;/code&gt;的时候有两个属性需要我们注入，一个是Mybatis-Spring用来生成实现了&lt;code&gt;SqlSession&lt;/code&gt;接口的&lt;code&gt;SqlSessionTemplate&lt;/code&gt;对象的&lt;code&gt;sqlSessionFactory&lt;/code&gt;；另一个是我们所要返回的对应的&lt;code&gt;Mapper&lt;/code&gt;接口。&lt;/p&gt;
-
-&lt;p&gt;比如，有一个&lt;code&gt;UserMapper&lt;/code&gt;接口:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;c1&quot;&gt;//UserMapper.java&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UserMapper&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;nd&quot;&gt;@Select&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;SELECT * FROM users WHERE id = #{userId}&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getUser&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@Param&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;userId&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;userId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;使用&lt;code&gt;MapperFactoryBean&lt;/code&gt;把接口加入到 Spring 中:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;userMapper&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;org.mybatis.spring.mapper.MapperFactoryBean&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 指定的映射器类必须是一个接口,而不是具体的实现类 --&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;mapperInterface&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;com.test.mybatis_spring.mapper.UserMapper&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;sqlSessionFactory&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;sqlSessionFactory&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;定义好&lt;code&gt;Mapper&lt;/code&gt;接口对应的&lt;code&gt;MapperFactoryBean&lt;/code&gt;之后，就可以把对应的&lt;code&gt;Mapper&lt;/code&gt;接口注入到由Spring管理的bean对象中了。当我们需要使用到相应的&lt;code&gt;Mapper&lt;/code&gt;接口时，&lt;code&gt;MapperFactoryBean&lt;/code&gt;会从它的&lt;code&gt;getObject&lt;/code&gt;方法中获取对应的&lt;code&gt;Mapper&lt;/code&gt;接口，而&lt;code&gt;getObject&lt;/code&gt;内部还是通过我们注入的属性调用&lt;code&gt;SqlSession&lt;/code&gt;接口的&lt;code&gt;getMapper()&lt;/code&gt;方法来返回对应的&lt;code&gt;Mapper&lt;/code&gt;接口。这样就通过把&lt;code&gt;SqlSessionFactory&lt;/code&gt;和相应的&lt;code&gt;Mapper&lt;/code&gt;接口交给Spring管理实现了Mybatis跟Spring的整合。&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;MapperScannerConfigurer&quot;&gt; 使用MapperScannerConfigurer自动注册Mapper &lt;/h2&gt;
-
-&lt;p&gt;像上面一个&lt;code&gt;Mapper&lt;/code&gt;就需要定义一个对应的&lt;code&gt;MapperFactoryBean&lt;/code&gt;。&lt;code&gt;Mybatis-Spring&lt;/code&gt;提供了一个叫&lt;code&gt;MapperScannerConfigurer&lt;/code&gt;的类，可以自动注册&lt;code&gt;Mapper&lt;/code&gt;对应的&lt;code&gt;MapperFactoryBean&lt;/code&gt;对象。我们只需要在配置文件中添加这样的内容：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;org.mybatis.spring.mapper.MapperScannerConfigurer&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;basePackage&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;com.test.mybatis_spring.mapper&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;&lt;code&gt;MapperScannerConfigurer&lt;/code&gt;有一个&lt;code&gt;basePackage&lt;/code&gt;属性必须指定。&lt;code&gt;basePackage&lt;/code&gt;用来指定&lt;code&gt;Mapper&lt;/code&gt;接口文件所在的包，在这个包或其子包下面的&lt;code&gt;Mapper&lt;/code&gt;接口都将被搜索到。多个包之间可以使用逗号或者分号进行分隔。另外还有两个可以缩小搜索和注册范围的属性，一个是&lt;code&gt;annotationClass&lt;/code&gt;，另一个是&lt;code&gt;markerInterface&lt;/code&gt;。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;annotationClass&lt;/code&gt;：当指定了&lt;code&gt;annotationClass&lt;/code&gt;时，&lt;code&gt;MapperScannerConfigurer&lt;/code&gt;将只注册使用了&lt;code&gt;annotationClass&lt;/code&gt;注解标记的接口。&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;markerInterface&lt;/code&gt;：&lt;code&gt;markerInterface&lt;/code&gt;用于指定一个接口，当指定了&lt;code&gt;markerInterface&lt;/code&gt;之后，&lt;code&gt;MapperScannerConfigurer&lt;/code&gt;将只注册继承自&lt;code&gt;markerInterface&lt;/code&gt;的接口。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;如果上述两个属性都指定了的话，那么&lt;code&gt;MapperScannerConfigurer&lt;/code&gt;将取它们的并集，而不是交集。&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;transactionManager&quot;&gt; 事务管理 &lt;/h2&gt;
-
-&lt;p&gt;&lt;code&gt;MyBatis-Spring&lt;/code&gt;利用了存在于&lt;code&gt;Spring&lt;/code&gt;中的&lt;code&gt;DataSourceTransactionManager&lt;/code&gt;进行事务管理。一旦&lt;code&gt;Spring&lt;/code&gt;的&lt;code&gt;PlatformTransactionManager&lt;/code&gt;配置好了,就可以在&lt;code&gt;Spring&lt;/code&gt;中以你通常的做法&lt;code&gt;(@Transactional注解)&lt;/code&gt;来配置事务。在事务处理期间,会创建一个单独的&lt;code&gt;SqlSession&lt;/code&gt;对象，当事务完成时,这个&lt;code&gt;session&lt;/code&gt;会以合适的方式提交或回滚。&lt;/p&gt;
-
-&lt;p&gt;要开启&lt;code&gt;Spring&lt;/code&gt;的事务处理,需要在&lt;code&gt;Spring&lt;/code&gt;的配置文件中创建一个&lt;code&gt;DataSourceTransactionManager&lt;/code&gt;对象:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;transactionManager&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;org.springframework.jdbc.datasource.DataSourceTransactionManager&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;dataSource&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;dataSource&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;下面这段代码展示如何编程式地控制事务：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;DefaultTransactionDefinition&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;DefaultTransactionDefinition&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;def&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setPropagationBehavior&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TransactionDefinition&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;PROPAGATION_REQUIRED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;TransactionStatus&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;status&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;txManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getTransaction&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;def&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;userMapper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;insertUser&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MyException&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ex&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;txManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;rollback&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ex&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;txManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;commit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-</description>
-        <pubDate>Mon, 02 Feb 2015 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/spring/2015/02/02/Spring(%E5%9B%9B)Spring%E6%95%B4%E5%90%88MyBatis.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/spring/2015/02/02/Spring(%E5%9B%9B)Spring%E6%95%B4%E5%90%88MyBatis.html</guid>
-        
-        
-        <category>spring</category>
         
       </item>
     
