@@ -1,6 +1,6 @@
 ---
 layout: blog
-title:  Spring(四)Spring整合MyBatis
+title:  Spring(四): Spring整合MyBatis
 date:   2015-02-02 
 category: Spring  
 ---
