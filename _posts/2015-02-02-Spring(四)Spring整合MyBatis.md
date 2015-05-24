@@ -1,7 +1,7 @@
 ---
 layout: blog
-title:  Spring(四): Spring整合MyBatis
-date:   2015-02-02 
+title:  "Spring(四): Spring整合MyBatis"
+date:   2015-02-02
 category: Spring  
 ---
 
@@ -60,13 +60,13 @@ MyBatis 是以`SqlSessionFactory`为核心的，Spring是以`BeanFactory`或`App
         <property name="typeAliasesPackage" value="com.test.mybatis_spring.model" />
         <!-- 用于指定mybatis配置文件的位置 -->
         <property name="configLocation" value="classpath:mybatis-config.xml"/>
-    </bean> 
+    </bean>
 ```
 构建`SqlSessionFactoryBean`的时候，`dataSource`属性是必须指定的，它表示用于连接数据库的数据源。我们也可以指定一些其他的属性，如：
 
 * `typeAliasesPackage`：实体类所在的包，自动取包中不包括包名的简单类名作为别名。多个package之间可以用逗号或者分号等来进行分隔。
 * `typeAliases`：数组类型，用来指定别名的。指定了这个属性后，Mybatis会把这个类型的短名称作为这个类型的别名，前提是该类上没有`@Alias`注解，否则将使用该注解对应的值作为此种类型的别名。如：
- 
+
  ```xml
  <property name="typeAliases">  
     <array>  

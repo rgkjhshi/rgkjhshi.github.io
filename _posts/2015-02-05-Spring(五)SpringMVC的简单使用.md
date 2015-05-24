@@ -1,7 +1,7 @@
 ---
 layout: blog
-title:  Spring(五): SpringMVC的简单使用
-date:   2015-02-05 
+title:  "Spring(五): SpringMVC的简单使用"
+date:   2015-02-05
 category: Spring  
 ---
 
@@ -47,7 +47,7 @@ public class LoginServlet extends HttpServlet {
 <servlet>
     <servlet-name>LoginServlet</servlet-name>
     <servlet-class>com.test.servlet.LoginServlet</servlet-class>
-</servlet>    
+</servlet>
 <servlet-mapping>
     <!-- 要与之前定义的 servlet-name 一致 -->
     <servlet-name>LoginServlet</servlet-name>
