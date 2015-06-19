@@ -91,6 +91,7 @@
 <li><a href="#pessimistic">悲观锁</a></li>
 <li><a href="#optimistic">乐观锁</a></li>
 <li><a href="#use">for update用法</a></li>
+<li><a href="#test">测试记录</a></li>
 </ul>
 
 <hr>
@@ -151,6 +152,36 @@
 直到第一个终端<code>commit</code>之后，第二个终端才会读取到被锁住的那一行的数据。
 若等待时间过长(终端1迟迟未commit)，则终端2会产生超时错误。</p>
 
+<hr>
+
+<h2 id="test"> 测试记录 </h2>
+
+<p>主要是测试下，什么情况下是 Row Lock，什么情况下是 Table Lock。  </p>
+
+<h3>以下情况是 Row Lock</h3>
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="c1">-- 使用了主键索引</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">user</span> <span class="k">where</span> <span class="n">id</span><span class="o">=</span><span class="mi">1</span> <span class="k">for</span> <span class="k">update</span><span class="p">;</span>
+<span class="c1">-- 使用了其它索引</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">user</span> <span class="k">where</span> <span class="n">user_name</span><span class="o">=</span><span class="s1">&#39;user1&#39;</span> <span class="k">for</span> <span class="k">update</span><span class="p">;</span>
+<span class="c1">-- 使用 like 但是可以唯一确定一行</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">user</span> <span class="k">where</span> <span class="n">user_name</span> <span class="k">like</span> <span class="s1">&#39;user1%&#39;</span> <span class="k">for</span> <span class="k">update</span><span class="p">;</span>
+</code></pre></div>
+<h3>以下情况是 Table Lock</h3>
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="c1">-- 主键不明确</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">user</span> <span class="k">where</span> <span class="n">id</span> <span class="o">!=</span> <span class="mi">1</span> <span class="k">for</span> <span class="k">update</span><span class="p">;</span>
+<span class="c1">-- 没有用上任何索引</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">user</span> <span class="k">where</span> <span class="n">remark</span><span class="o">=</span><span class="s1">&#39;remark1&#39;</span> <span class="k">for</span> <span class="k">update</span><span class="p">;</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">user</span> <span class="k">where</span> <span class="n">user_name</span> <span class="k">like</span> <span class="s1">&#39;%user1&#39;</span> <span class="k">for</span> <span class="k">update</span><span class="p">;</span>  <span class="c1">-- 虽然能确定一行，但是没用上索引</span>
+<span class="c1">-- 使用了 like 不能唯一确定一行</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">user</span> <span class="k">where</span> <span class="n">user_name</span> <span class="k">like</span> <span class="s1">&#39;user%&#39;</span> <span class="k">for</span> <span class="k">update</span><span class="p">;</span>   <span class="c1">-- 这条用上了索引</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">user</span> <span class="k">where</span> <span class="n">user_name</span> <span class="k">like</span> <span class="s1">&#39;%user%&#39;</span> <span class="k">for</span> <span class="k">update</span><span class="p">;</span>  <span class="c1">-- 这条没有用上索引</span>
+<span class="c1">-- 未查到数据，但是未使用任何索引</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">user</span> <span class="k">where</span> <span class="n">remark</span><span class="o">=</span><span class="s1">&#39;test&#39;</span> <span class="k">for</span> <span class="k">update</span><span class="p">;</span>
+</code></pre></div>
+<h3>以下情况 无 Lock</h3>
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="c1">-- 未查到数据，但是使用了索引</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">user</span> <span class="k">where</span> <span class="n">user_name</span><span class="o">=</span><span class="s1">&#39;user9&#39;</span> <span class="k">for</span> <span class="k">update</span><span class="p">;</span>
+</code></pre></div>
 <hr>
 
         </section>
