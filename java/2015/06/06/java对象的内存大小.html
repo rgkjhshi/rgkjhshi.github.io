@@ -95,6 +95,8 @@ java通过JVM进行内存管理，它的内存占用情况是怎样的？</p>
 <li><a href="#header">对象头部的大小</a></li>
 <li><a href="#alloc">java对象的内存分配</a></li>
 <li><a href="#calculate">对象大小的计算</a></li>
+<li><a href="#program">编程计算对象的大小</a></li>
+<li><a href="#use">在程序中使用例子中的jar包</a></li>
 </ul>
 
 <hr>
@@ -306,6 +308,118 @@ java通过JVM进行内存管理，它的内存占用情况是怎样的？</p>
         <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
     <span class="o">}</span>
 </code></pre></div>
+<hr>
+
+<h2 id="program"> 编程计算对象的大小 </h2>
+
+<p>JDK7的<code>java.lang.instrument</code>包中有个<code>Instrumentation API</code>提供了<code>getObjectSize</code>方法来计算对象的大小,
+这个方法返回的是对象的大小，不包括其成员变量所引用的对象(<code>sun.instrumentInstrumentationImpl</code>实现了该接口)。
+而且，这个方法不能直接使用，必须实现一个<code>instrumentation</code>代理类并且打包进JAR文件。</p>
+
+<h3>定义代理类</h3>
+
+<p>我们这样定义代理类:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SizeOf</span> <span class="o">{</span>
+    <span class="cm">/**</span>
+<span class="cm">     * JVM将在启动时通过{@link #premain}初始化此成员变量.</span>
+<span class="cm">     */</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">Instrumentation</span> <span class="n">instrumentation</span><span class="o">;</span>
+    <span class="cm">/**</span>
+<span class="cm">     * JVM会调用该函数来初始化代理类</span>
+<span class="cm">     *</span>
+<span class="cm">     * @param agentArgs premain 函数得到的程序参数，随同 “–javaagent:”一起传入。</span>
+<span class="cm">     *                  eg:java -javaagent:jar 文件的位置 [= 传入 premain 的参数 ]</span>
+<span class="cm">     * @param inst      java.lang.instrument.Instrumentation 的实例，由 JVM 自动传入</span>
+<span class="cm">     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">premain</span><span class="o">(</span><span class="n">String</span> <span class="n">agentArgs</span><span class="o">,</span> <span class="n">Instrumentation</span> <span class="n">inst</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">instrumentation</span> <span class="o">=</span> <span class="n">inst</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="cm">/**</span>
+<span class="cm">     * 返回对象大小，不包括其成员变量所引用的对象</span>
+<span class="cm">     *</span>
+<span class="cm">     * @param object 需要计算大小的对象</span>
+<span class="cm">     * @return 对象的大小</span>
+<span class="cm">     * @see java.lang.instrument.Instrumentation#getObjectSize(Object objectToSize)</span>
+<span class="cm">     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">long</span> <span class="nf">sizeOf</span><span class="o">(</span><span class="n">Object</span> <span class="n">object</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">instrumentation</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalStateException</span><span class="o">(</span><span class="s">&quot;Instrumentation is null&quot;</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">instrumentation</span><span class="o">.</span><span class="na">getObjectSize</span><span class="o">(</span><span class="n">object</span><span class="o">);</span>  <span class="c1">// 通过Instrumentation的实现类计算</span>
+    <span class="o">}</span>
+    <span class="cm">/**</span>
+<span class="cm">     * 返回包含引用对象在内的大小(需要我们自己计算)</span>
+<span class="cm">     *</span>
+<span class="cm">     * @param obj 需要计算大小的对象</span>
+<span class="cm">     * @return 对象的全部大小</span>
+<span class="cm">     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">long</span> <span class="nf">fullSizeOf</span><span class="o">(</span><span class="n">Object</span> <span class="n">obj</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<h3>将代理类打成jar包</h3>
+
+<p>为了让JVM知道instrumentation代理类的存在，必须将其打包进JAR文件并且设定manifest.mf文件中的属性。
+在我们的例子中，需要设定如下属性：</p>
+<div class="highlight"><pre><code class="language-properties" data-lang="properties"><span class="na">Premain-Class</span><span class="o">:</span> <span class="s">代理类SizeOf的全类名  </span>
+<span class="na">Can-Redefine-Classes</span><span class="o">:</span> <span class="s">true</span>
+</code></pre></div>
+<p>我们可以通过maven工具进行打包，打包的时候可以指定生成<code>manifest.mf</code>的属性，
+在<code>pom.xml</code>文件中可以在<code>&lt;build&gt;</code>元素中添加<code>&lt;plugins&gt;</code>元素，添加maven打包插件，就像这样:</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;build&gt;</span>
+        <span class="nt">&lt;plugins&gt;</span>
+            <span class="c">&lt;!-- maven 打包插件, 可指定生成的 META-INF/manifest.mf 文件中的属性 --&gt;</span>
+            <span class="nt">&lt;plugin&gt;</span>
+                <span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
+                <span class="nt">&lt;artifactId&gt;</span>maven-jar-plugin<span class="nt">&lt;/artifactId&gt;</span>
+                <span class="nt">&lt;version&gt;</span>2.1<span class="nt">&lt;/version&gt;</span>
+                <span class="nt">&lt;configuration&gt;</span>
+                    <span class="nt">&lt;archive&gt;</span>
+                        <span class="c">&lt;!-- 生成 manifest.mf 时添加的属性 --&gt;</span>
+                        <span class="nt">&lt;manifestEntries&gt;</span>
+                            <span class="nt">&lt;Premain-Class&gt;</span>cn.loveshisong.sizeof.SizeOf<span class="nt">&lt;/Premain-Class&gt;</span>
+                            <span class="nt">&lt;Can-Redefine-Classes&gt;</span>true<span class="nt">&lt;/Can-Redefine-Classes&gt;</span>
+                        <span class="nt">&lt;/manifestEntries&gt;</span>
+                    <span class="nt">&lt;/archive&gt;</span>
+                <span class="nt">&lt;/configuration&gt;</span>
+            <span class="nt">&lt;/plugin&gt;</span>
+        <span class="nt">&lt;/plugins&gt;</span>
+    <span class="nt">&lt;/build&gt;</span>
+</code></pre></div>
+<h3>配置虚拟机参数，使用代理</h3>
+
+<p>另外，Java程序必须使用 -javaagent 参数指向该jar文件来启动。我们的例子中形如：</p>
+<div class="highlight"><pre><code class="language-properties" data-lang="properties"><span class="na">java -javaagent</span><span class="o">:</span><span class="s">代理类jar包的位置  </span>
+<span class="na">java -javaagent</span><span class="o">:</span><span class="s">sizeofag.jar (jar包在classpath中可以这么写)</span>
+</code></pre></div>
+<p>我们可以在进行测试的时候，通过maven的插件来指定JVM运行参数:</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;build&gt;</span>
+        <span class="nt">&lt;plugins&gt;</span>
+            <span class="c">&lt;!-- 上面那个plugin不要忘了加上 --&gt;</span>
+            <span class="c">&lt;!-- 测试运行器(Test Runner), 执行到特定生命周期阶段的时候，通过该插件来执行JUnit或者TestNG的测试用例 --&gt;</span>
+            <span class="c">&lt;!-- maven-surefire-plugin 在test时默认执行 src/test/java/ 下所有名为*Test.java和*TestCase.java的测试类 --&gt;</span>
+            <span class="nt">&lt;plugin&gt;</span>
+                <span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
+                <span class="nt">&lt;artifactId&gt;</span>maven-surefire-plugin<span class="nt">&lt;/artifactId&gt;</span>
+                <span class="nt">&lt;configuration&gt;</span>
+                    <span class="nt">&lt;forkMode&gt;</span>pertest<span class="nt">&lt;/forkMode&gt;</span>
+                    <span class="c">&lt;!-- argLine指定了VM运行参数 --&gt;</span>
+                    <span class="nt">&lt;argLine&gt;</span>-javaagent:${basedir}/target/sizeof-${project.version}.jar<span class="nt">&lt;/argLine&gt;</span>
+                    <span class="nt">&lt;workingDirectory&gt;</span>${basedir}/target<span class="nt">&lt;/workingDirectory&gt;</span>
+                    <span class="nt">&lt;useSystemClassLoader&gt;</span>true<span class="nt">&lt;/useSystemClassLoader&gt;</span>
+                <span class="nt">&lt;/configuration&gt;</span>
+            <span class="nt">&lt;/plugin&gt;</span>
+
+        <span class="nt">&lt;/plugins&gt;</span>
+    <span class="nt">&lt;/build&gt;</span>
+</code></pre></div>
+<p>这样我们在使用<code>junit</code>进行单元测试的时候，就已经给JVM传递了参数。</p>
+
+<hr>
+
+<h2 id="use"> 在程序中使用例子中的jar包 </h2>
+
+<p>只有一点，在其它项目中使用这个打包好的jar包时，记得给JVM传递代理类参数。<br>
+另外，不同机器可能junit的测试会有问题，最好把源码下载下来，自己打包，必要时删掉测试代码。</p>
+
 <hr>
 
         </section>
