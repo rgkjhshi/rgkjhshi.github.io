@@ -16,10 +16,9 @@
     <meta name="domain_verify" content="pmrgi33nmfuw4ir2ejwg65tfonugs43pnzts4y3oeiwcez3vnfsceorcmyyweyrrgeywmzdegeytiyrrg44wgy3ggezwcztbhaydezdfhe2selbcoruw2zktmf3gkir2ge2dgmbrha4tembtgaztm7i">
     
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
-">
+    <meta name="description" content="jdk自带的log工具java.util.logging的简单分析目录加载过程源码解析特殊说明 加载过程 Logger.getLogger(&quot;className&quot;)加载整个日志的过程简单概括如下1. 生成LogManagerLogManager静态初始化先读取系统属性&quot;java.ut...">
 
-    <!-- <title>java 文章列表</title> -->
+    <!-- <title>java日志(二)JUL源码分析</title> -->
     <title>Michael King's Blog</title>
 
     <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
@@ -39,7 +38,7 @@
     <link rel="shortcut icon" href="/assets/images/favicon.ico">
     <link rel="stylesheet" href="/assets/css/styles.css">
     <link rel="stylesheet" href="/assets/css/pygment_trac.css">
-    <link rel="canonical" href="http://yourdomain.com/java/">
+    <link rel="canonical" href="http://yourdomain.com/java/2015/06/04/java%E6%97%A5%E5%BF%97(%E4%BA%8C)JUL%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90.html">
     <link rel="alternate" type="application/rss+xml" title="Michael King's Blog" href="http://yourdomain.com/feed.xml" />
 
     <!--[if lt IE 9]>
@@ -83,32 +82,8 @@
       <div class="wrapper">
         <!-- 文章内容 -->
         <section>
-          <h1> java 文章列表 </h1>
-          <div class="post-list">
-  
-    <div class="post-title">
-      <a style="display:inline-block;" href="/java/2015/06/06/java%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F.html"> java对象的内存大小</a>
-      <span style="float:right; width:100px; "> 2015-06-06 </span>
-      </br>
-    </div>
-
-    <!-- 摘要 -->
-   <!--  <div class="post-preview">
-      <p>C语言需要开发者进行内存管理，所以开发者对内存的分配比较清楚，可以通过<code>sizeof()</code>函数获取一个变量的大小；<br>
-java通过JVM进行内存管理，它的内存占用情况是怎样的？</p>
- 
-      <a href="/java/2015/06/06/java%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F.html"> Read More ... </a> </br>
-    </div> -->
-  
-    <div class="post-title">
-      <a style="display:inline-block;" href="/java/2015/06/04/java%E6%97%A5%E5%BF%97(%E4%BA%8C)JUL%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90.html"> java日志(二)JUL源码分析</a>
-      <span style="float:right; width:100px; "> 2015-06-04 </span>
-      </br>
-    </div>
-
-    <!-- 摘要 -->
-   <!--  <div class="post-preview">
-      <p>jdk自带的log工具<code>java.util.logging</code>的简单分析</p>
+          <h1> java日志(二)JUL源码分析 </h1>
+          <p>jdk自带的log工具<code>java.util.logging</code>的简单分析</p>
 
 <hr>
 
@@ -369,212 +344,32 @@ java通过JVM进行内存管理，它的内存占用情况是怎样的？</p>
 <span class="k">fi</span>
 </code></pre></div>
 <hr>
- 
-      <a href="/java/2015/06/04/java%E6%97%A5%E5%BF%97(%E4%BA%8C)JUL%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90.html"> Read More ... </a> </br>
-    </div> -->
-  
-    <div class="post-title">
-      <a style="display:inline-block;" href="/java/2015/05/18/java%E6%97%A5%E5%BF%97(%E4%B8%80)%E6%97%A5%E5%BF%97%E7%BB%84%E4%BB%B6%E7%9A%84%E7%AE%80%E4%BB%8B%E5%8F%8A%E4%BD%BF%E7%94%A8.html"> java日志(一):日志组件简介及使用</a>
-      <span style="float:right; width:100px; "> 2015-05-18 </span>
-      </br>
-    </div>
-
-    <!-- 摘要 -->
-   <!--  <div class="post-preview">
-      <p>java中的日志组件太多了，经常听到的有<code>log4j, slf4j, logbak</code>等，不太熟悉的有<code>common-logging, JUL, JCL</code>等，
-刚开始接触的时候感觉很晕，不知道这些都是干嘛的，甚至不理解为啥都是记日志的，为什么要整出这么多不同的东西来。后来从头到尾梳理了一遍，才稍微有点清晰。</p>
- 
-      <a href="/java/2015/05/18/java%E6%97%A5%E5%BF%97(%E4%B8%80)%E6%97%A5%E5%BF%97%E7%BB%84%E4%BB%B6%E7%9A%84%E7%AE%80%E4%BB%8B%E5%8F%8A%E4%BD%BF%E7%94%A8.html"> Read More ... </a> </br>
-    </div> -->
-  
-    <div class="post-title">
-      <a style="display:inline-block;" href="/java/2015/04/27/%E6%B3%A8%E8%A7%A3(Annotation).html"> 注解(Annotation)</a>
-      <span style="float:right; width:100px; "> 2015-04-27 </span>
-      </br>
-    </div>
-
-    <!-- 摘要 -->
-   <!--  <div class="post-preview">
-      <p>刚用到Spring中的注解时，感觉真是太方便了，其实在JDK1.5就已经支持注解了，1.5以后默认内置了三个注解<br>
-@Override:只能用在方法之上的，表示重写父类的方法。<br>
-@Deprecated:可用在任何元素上，表示API已过时，编译时会产生警告。<br>
-@SuppressWarnings: 可以关闭警告信息。  </p>
- 
-      <a href="/java/2015/04/27/%E6%B3%A8%E8%A7%A3(Annotation).html"> Read More ... </a> </br>
-    </div> -->
-  
-    <div class="post-title">
-      <a style="display:inline-block;" href="/java/2015/02/21/java%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8.html"> Java类加载器</a>
-      <span style="float:right; width:100px; "> 2015-02-21 </span>
-      </br>
-    </div>
-
-    <!-- 摘要 -->
-   <!--  <div class="post-preview">
-      <p><code>java.lang.Class.forName(…)</code>和<code>java.lang.ClassNotFoundExcetpion</code>是我们经常遇到的，藏在他们身后的，是Java的类加载器。</p>
- 
-      <a href="/java/2015/02/21/java%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8.html"> Read More ... </a> </br>
-    </div> -->
-  
-    <div class="post-title">
-      <a style="display:inline-block;" href="/java/2015/02/16/java%E5%9F%BA%E7%A1%80%E6%95%B4%E7%90%86.html"> Java基础整理</a>
-      <span style="float:right; width:100px; "> 2015-02-16 </span>
-      </br>
-    </div>
-
-    <!-- 摘要 -->
-   <!--  <div class="post-preview">
-      <p>回顾<code>Java</code>的基础知识，不知道该从哪里开始入手，便从<code>Java</code>的关键字开始，由此扩展出相关知识。</p>
- 
-      <a href="/java/2015/02/16/java%E5%9F%BA%E7%A1%80%E6%95%B4%E7%90%86.html"> Read More ... </a> </br>
-    </div> -->
-  
-    <div class="post-title">
-      <a style="display:inline-block;" href="/java/2015/02/14/Java%E4%B8%AD%E7%9A%84%E5%BC%82%E5%B8%B8.html"> Java中的异常</a>
-      <span style="float:right; width:100px; "> 2015-02-14 </span>
-      </br>
-    </div>
-
-    <!-- 摘要 -->
-   <!--  <div class="post-preview">
-      <p>Java中的异常类都继承自<code>Throwable</code>类，<code>Throwable</code>有两个子类：<code>Exception(异常)</code>和<code>Error(错误)</code>，二者都各自包含大量子类。</p>
- 
-      <a href="/java/2015/02/14/Java%E4%B8%AD%E7%9A%84%E5%BC%82%E5%B8%B8.html"> Read More ... </a> </br>
-    </div> -->
-  
-    <div class="post-title">
-      <a style="display:inline-block;" href="/java/2015/01/05/java-concurrency.html"> Java中的并发</a>
-      <span style="float:right; width:100px; "> 2015-01-05 </span>
-      </br>
-    </div>
-
-    <!-- 摘要 -->
-   <!--  <div class="post-preview">
-      <h2>如何创建一个线程</h2>
-
-<p>按 Java 语言规范中的说法，创建线程只有一种方式，就是创建一个 Thread 对象。而从 HotSpot 虚拟机的角度看，创建一个虚拟机线程
-有两种方式，一种是创建 Thread 对象，另一种是创建 一个本地线程，加入到虚拟机线程中。</p>
-
-<p>如果从 Java 语法的角度。有两种方法。</p>
-
-<p>第一是继承 Thread 类，实现 run 方法，并创建子类对象。</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">startThreadUseSubClass</span><span class="o">()</span> <span class="o">{</span>
-        <span class="kd">class</span> <span class="nc">MyThread</span> <span class="kd">extends</span> <span class="n">Thread</span> <span class="o">{</span>
-            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
-                <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;start thread using Subclass of Thread&quot;</span><span class="o">);</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-
-        <span class="n">MyThread</span> <span class="n">thread</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">MyThread</span><span class="o">();</span>
-        <span class="n">thread</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
-    <span class="o">}</span>
-</code></pre></div>
-<p>另一种是传递给 Thread 构造函数一个 Runnable 对象。</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">startThreadUseRunnalbe</span><span class="o">()</span> <span class="o">{</span>
-        <span class="n">Thread</span> <span class="n">thread</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Thread</span><span class="o">(</span><span class="k">new</span> <span class="nf">Runnable</span><span class="o">()</span> <span class="o">{</span>
-            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
-                <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;start thread using runnable&quot;</span><span class="o">);</span>
-            <span class="o">}</span>
-        <span class="o">});</span>
-        <span class="n">thread</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
-    <span class="o">}</span>
-</code></pre></div>
-<p>当然， Runnalbe 对象，也不是只有这一种形式，例如如果我们想要线程执行时返回一个值，就需要用到另一种 Runnalbe 对象，它
-对原来的 Runnalbe 对象进行了包装。</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">startFutureTask</span><span class="o">()</span> <span class="o">{</span>
-        <span class="n">FutureTask</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">task</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FutureTask</span><span class="o">&lt;&gt;(</span><span class="k">new</span> <span class="n">Callable</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;()</span> <span class="o">{</span>
-            <span class="kd">public</span> <span class="n">Integer</span> <span class="nf">call</span><span class="o">()</span> <span class="o">{</span>
-                <span class="k">return</span> <span class="mi">1</span><span class="o">;</span>
-            <span class="o">}</span>
-        <span class="o">});</span>
-
-        <span class="k">new</span> <span class="nf">Thread</span><span class="o">(</span><span class="n">task</span><span class="o">).</span><span class="na">start</span><span class="o">();</span>
-
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="n">Integer</span> <span class="n">result</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
-            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;future result &quot;</span> <span class="o">+</span> <span class="n">result</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ExecutionException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-</code></pre></div>
-<h2>结束线程</h2>
-
-<h2>wait 与 sleep</h2>
-
-<p>sleep 会使得当前线程休眠一段时间，但并不会释放已经得到的锁。</p>
-
-<p>wait 会阻塞住，并释放已经得到的锁。一直到有人调用 notify 或者 notifyAll，它会重新尝试得到锁，然后再唤醒。</p>
-
-<h2>线程池</h2>
-
-<h3>好处</h3>
-
-<ul>
-<li>复用</li>
-</ul>
-
-<p>线程池中有一系列线程，这些线程在执行完任务后，并不会被销毁，而会从任务队列中取出任务，执行这些任务。这样，就避免为每个任务
-都创建线程，销毁线程。 在有大量短命线程的场景下，如果创建线程和销毁线程的时间比线程执行任务的时间还长，显然是不划算的，这时候，使用线程池就会有明显
-的好处。</p>
-
-<ul>
-<li>流控</li>
-</ul>
-
-<p>同时，可以设置线程数目，这样，线程不会增大到影响系统整体性能的程度。当任务太多时，可以在队列中排队，
-如果有空闲线程，他们会从队列中取出任务执行。</p>
-
-<h3>使用</h3>
-
-<ul>
-<li>线程数目</li>
-</ul>
-
-<p>那么，线程的数目要设置成多少呢？这需要根据任务类型的不同来设置，假如是大量计算型的任务，他们不会阻塞，那么可以将线程数目设置
-为处理器数目。而如果任务中涉及大量IO，有些线程会阻塞住，这样就要根据阻塞线程数目与运行线程数目的比例，以及处理器数目来设置
-线程总数目。例如阻塞线程数目与运行线程数目之比为n, 处理器数目为p，那么可以设置 n * (p + 1) 个线程，保证有 n 个线程处于运行
-状态。</p>
-
-<ul>
-<li>Executors</li>
-</ul>
-
-<p>JDK 的 java.util.concurrent.Executors 类提供了几个静态的方法，用于创建不同类型的线程池。</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">ExecutorService</span> <span class="n">service</span> <span class="o">=</span> <span class="n">Executors</span><span class="o">.</span><span class="na">newFixedThreadPool</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span>
-<span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Future</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;&gt;</span> <span class="n">results</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;();</span>
-<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">14</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-    <span class="n">Future</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">r</span> <span class="o">=</span> <span class="n">service</span><span class="o">.</span><span class="na">submit</span><span class="o">(</span><span class="k">new</span> <span class="n">Callable</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;()</span> <span class="o">{</span>
-        <span class="kd">public</span> <span class="n">Integer</span> <span class="nf">call</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nf">Random</span><span class="o">().</span><span class="na">nextInt</span><span class="o">();</span>
-    <span class="o">});</span>
-    <span class="n">results</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">r</span><span class="o">);</span>
-<span class="o">}</span>
-</code></pre></div>
-<p><code>newFixedThreadPool</code> 可以创建固定数目的线程，一旦创建不会自动销毁线程，即便长期没有任务。除非显式关闭线程池。如果任务队列中有任务，就取出任务执行。</p>
-
-<p>另外，还可以使用 <code>newCachedThreadPool</code> 方法创建一个不设定固定线程数目的线程池，它有一个特性，线程完成任务后，如果一分钟之内又有新任务，就会复用这个线程执行新任务。如果超过一分钟还没有任务执行，就会自动销毁。</p>
-
-<p>另外，还提供了 <code>newSingleThreadExecutor</code> 创建有一个工作线程的线程池。</p>
-
-<h3>原理</h3>
-
-<p>JDK 中的线程池通过 HashSet 存储工作者线程，通过 BlockingQueue 来存储待处理任务。</p>
-
-<p>通过核心工作者数目(corePoolSize) 和 最大工作者数目(maximumPoolSize) 来确定如何处理任务。如果当前工作者线程数目
-小于核心工作者数目，则创建一个工作者线程执行这个任务。否则，将这个任务放入待处理队列。如果入队失败，再看看当前工作
-者数目是不是小于最大工作者数目，如果小于，则创建工作者线程执行这个任务。否则，拒绝执行这个任务。</p>
-
-<p>另外，如果待处理队列中没有任务要处理，并且工作者线程数目超过了核心工作者数目，那么，需要减少工作者线程数目。</p>
- 
-      <a href="/java/2015/01/05/java-concurrency.html"> Read More ... </a> </br>
-    </div> -->
-  
-</div>
 
         </section>
+
+        <!-- 广告位 BEGIN -->
+
+        <!-- UJian Button BEGIN -->
+        <script type="text/javascript">var ujian_config = {target:1};</script>
+        <script type="text/javascript" src="http://v1.ujian.cc/code/ujian.js?type=slide&pos=left&fade=1&uid=1746608"></script>
+        <a href="http://www.ujian.cc" style="border:0;"><img src="http://img.ujian.cc/pixel.png" alt="友荐云推荐" style="border:0;padding:0;margin:0;" /></a>
+        <!-- UJian Button END -->
+
+        <!-- <div id="add">
+          <h2 style="padding-left:24px;">广而告之</h2>
+          <script type="text/javascript">var sogou_ad_id=429088; var sogou_ad_height=90; var sogou_ad_width=760; </script>
+          <script type='text/javascript' src='http://images.sohu.com/cs/jsfile/js/c.js'></script>
+        </div> -->
+        <!-- 广告位 END -->
+
+        <!-- Duoshuo Comment BEGIN -->
+        <div id="comments">
+          <h2 style="padding-left:24px;">评论</h2>
+          <div class="ds-thread" data-thread-key="/java/2015/06/04/java日志(二)JUL源码分析"
+            data-title="java日志(二)JUL源码分析"
+            data-url="/java/2015/06/04/java%E6%97%A5%E5%BF%97(%E4%BA%8C)JUL%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90.html" ></div>
+        </div>
+        <!-- Duoshuo Comment END -->
       </div>
 
       <footer>
