@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="keywords" content="石松的官方网站,python,java,sql,编程" />
+    <meta name="description" content="石松的官方网站,研究互联网产品和技术" />
+    <!-- 友荐验证 -->
+    <meta name="ujianVerification" content="654a6637a32e63afd8b08107fd450b26" />
+    <!-- 百度站长 -->
+    <meta name="baidu-site-verification" content="GPA6lcsek1" />
+    <!-- 百度联盟 -->
+    <meta name="baidu_union_verify" content="3e5dc151785637ee4ae78f94d8dcf504">
+    <!-- 搜狗联盟 -->
+    <meta name="domain_verify" content="pmrgi33nmfuw4ir2ejwg65tfonugs43pnzts4y3oeiwcez3vnfsceorcmyyweyrrgeywmzdegeytiyrrg44wgy3ggezwcztbhaydezdfhe2selbcoruw2zktmf3gkir2ge2dgmbrha4tembtgaztm7i">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="description" content="logback配置文件的简单介绍，主要内容均来自logback官方文档">
+
+    <!-- <title>java日志(三)logback配置文件</title> -->
+    <title>Michael King's Blog</title>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"shisong"};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] 
+             || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+        </script>
+    <!-- 多说公共JS代码 end -->
+    <script src="/assets/js/scale.fix.js"></script>
+    <link rel="shortcut icon" href="/assets/images/favicon.ico">
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="stylesheet" href="/assets/css/pygment_trac.css">
+    <link rel="canonical" href="http://yourdomain.com/java/2015/07/03/java%E6%97%A5%E5%BF%97(%E4%B8%89)logback%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.html">
+    <link rel="alternate" type="application/rss+xml" title="Michael King's Blog" href="http://yourdomain.com/feed.xml" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+
+  <body>
+    <div class="page">
+
+      <!-- 头部 -->
+      <header>
+  <h1> <a href="/">Michael King's Blog</a> </h1>
+  <p>水到绝境是飞瀑</p>
+  <!-- <ul>
+      <li><a href="https://github.com/rgkjhshi/blog/tree/gh-pages">View On <strong>GitHub</strong></a></li>
+  </ul> -->
+</header>
+      <!-- 侧边栏 -->
+      <aside>
+    <h1> 文章分类 </h1>
+    
+        <a style="display: block; " href="/markdown "> markdown (1) </a>
+    
+        <a style="display: block; " href="/java "> java (9) </a>
+    
+        <a style="display: block; " href="/mysql "> mysql (2) </a>
+    
+        <a style="display: block; " href="/mybatis "> mybatis (4) </a>
+    
+        <a style="display: block; " href="/spring "> spring (5) </a>
+    
+        <a style="display: block; " href="/mac开发 "> mac开发 (4) </a>
+    
+        <a style="display: block; " href="/安全相关 "> 安全相关 (1) </a>
+    
+        <a style="display: block; " href="/link.html "> 友情链接 </a>
+</aside>
+
+      <!-- 内容主体 -->
+      <div class="wrapper">
+        <!-- 文章内容 -->
+        <section>
+          <h1> java日志(三)logback配置文件 </h1>
+          <p>logback配置文件的简单介绍，主要内容均来自<a href="http://logback.qos.ch/manual/">logback官方文档</a></p>
+
+<hr>
+
+<h2>本文结构</h2>
+
+<ul>
+<li><a href="#structure">logback配置文件的结构</a></li>
+<li><a href="#configuration">configuration元素</a>
+
+<ul>
+<li><a href="#debug">debug属性</a></li>
+<li><a href="#scan">scan属性</a></li>
+</ul></li>
+<li><a href="#logger">logger元素</a>
+
+<ul>
+<li><a href="#name">name属性</a></li>
+<li><a href="#level">level属性</a></li>
+<li><a href="#additivity">additivity属性</a></li>
+</ul></li>
+<li><a href="#appender">appender元素</a>
+
+<ul>
+<li><a href="#encoder">encoder子元素</a></li>
+<li><a href="#layout">layout子元素</a></li>
+<li><a href="#pattern">日志格式的详细说明(pattern元素)</a></li>
+</ul></li>
+</ul>
+
+<hr>
+
+<h2 id="structure"> logback配置文件的结构 </h2>
+
+<p>logback配置文件的跟节点为<code>&lt;configuration&gt;</code>,它的子节点有3个:<code>root、logger、appender</code>，除了<code>root</code>之外，每个都可以多次出现。<br>
+下面是我画的一个结构图，实线表示节点，虚线表示属性</p>
+
+<p><img src="/assets/images/logbak_config.png" alt="logback配置文件结构图" title="结构图"></p>
+
+<ul>
+<li><code>appender</code>:用于描述日志的输出格式，是输出到控制台还是输出到文件，日志滚动打包策略等。</li>
+<li><code>logger</code>:用来制定把什么内容用哪个<code>appender</code>输出。</li>
+<li><code>root</code>:默认的<code>logger</code>。</li>
+</ul>
+
+<hr>
+
+<h2 id="configuration"> configuration元素 </h2>
+
+<p><code>configuration</code>元素是logback配置文件的根元素，它也有许多可选属性，如: <code>debug、scan、scanPeriod</code>等
+<h3 id="debug"> debug 属性 </h3>
+如果logback的配置文件加载过程中出现了warning或error，则logback会把自身状态的日志打印出来，如下:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">00:16:31,885 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.test.log] to INFO
+00:16:31,885 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting additivity of logger [com.test.log] to false
+00:16:31,885 |-ERROR in ch.qos.logback.core.joran.action.AppenderRefAction - Could not find an appender named [STDOUT]. Did you define it below instead of above in the configuration file?
+00:16:31,885 |-ERROR in ch.qos.logback.core.joran.action.AppenderRefAction - See http://logback.qos.ch/codes.html#appender_order for more details.
+00:16:31,885 |-INFO in ch.qos.logback.classic.joran.action.RootLoggerAction - Setting level of ROOT logger to DEBUG
+00:16:31,885 |-ERROR in ch.qos.logback.core.joran.action.AppenderRefAction - Could not find an appender named [STDOUT]. Did you define it below instead of above in the configuration file?
+00:16:31,885 |-ERROR in ch.qos.logback.core.joran.action.AppenderRefAction - See http://logback.qos.ch/codes.html#appender_order for more details.
+00:16:31,885 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - End of configuration.
+00:16:31,888 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@36577c06 - Registering current configuration as safe fallback point
+</code></pre></div>
+<p>如果加载过程未出现警告或者错误，就不会打印出来了。<br>
+若指定了<code>debug=&quot;true&quot;</code>，即使不出现警告和错误，也会打印出logback内部的状态日志。
+<h3 id="scan"> scan 属性 </h3>
+可通过属性设置<code>scan=&quot;true&quot;</code>，在配置文件发生改变时自动重新加载配置文件，默认1分钟重新扫描一次。<br>
+可通过属性设置<code>scanPeriod=&quot;30 seconds&quot;</code>，指定30秒扫描一次。<br>
+扫描间隔的单位可以是<code>milliseconds, seconds, minutes 或 hours</code>，若不指定单位，默认为<code>milliseconds</code>。</p>
+
+<hr>
+
+<p><h2 id="logger"> logger元素 </h3>
+<code>logger</code>元素用于配置代码中的logger，它有属性如: <code>name、level、additivity</code>，其中<code>name</code>属性是必须的，其他2个可选。
+有0个或多个子元素<code>&lt;appender-ref ref=&quot;STDOUT&quot; /&gt;</code>来指定日志输出的格式。若0个，则不指定输出格式，就不会输出了。<br>
+<strong>注意</strong><code>root</code>是最顶级的logger，它只有个可选属性level。</p>
+
+<h3 id="name"> name 属性 </h3>
+
+<p>在java代码中，getLogger(String className)的参数一样获取到的logger是同一个，如下面的<code>logger1</code>和<code>logger2</code>就是同一个对象:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Logger</span> <span class="n">logger1</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="s">&quot;org.slf4j.Logger&quot;</span><span class="o">);</span>
+<span class="n">Logger</span> <span class="n">logger2</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="s">&quot;org.slf4j.Logger&quot;</span><span class="o">);</span>
+</code></pre></div>
+<p>日志<code>logger</code>有个<code>name</code>属性，跟代码中传的参数有一定的关系，举个例子:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="o">&lt;!--</span> <span class="n">配置文件中</span> <span class="o">--&gt;</span>
+    <span class="o">&lt;</span><span class="n">logger</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;A.B&quot;</span> <span class="n">level</span><span class="o">=</span><span class="s">&quot;debug&quot;</span> <span class="o">&gt;</span>
+    <span class="c1">// java 代码中</span>
+    <span class="n">Logger</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="s">&quot;A.B.C&quot;</span><span class="o">);</span>
+</code></pre></div>
+<p>输出的日志会先在配置文件中匹配名字为&quot;A.B.C&quot;的logger，未找到，匹配到了&quot;A.B&quot;的logger，则按照其指定的<code>appender</code>格式进行输出。
+<h3 id="level"> level属性 </h3>
+日志的级别有: <code>TRACE &lt; DEBUG &lt; INFO &lt;  WARN &lt; ERROR (ALL、OFF)</code><br>
+日志级别是可以继承的，root不用指定级别，默认就是&quot;DEBUG&quot;. 举个继承的例子:
+<table>
+    <tr>
+        <th>Logger name</th>
+        <th>Assigned level</th>
+        <th>Effective level</th>
+    </tr>
+    <tr class="alt" align="left">
+        <td>root</td>
+        <td>DEBUG</td>
+        <td>DEBUG</td>
+    </tr>
+    <tr align="left">
+        <td>X</td>
+        <td>INFO</td>
+        <td>INFO</td>
+    </tr>
+    <tr class="alt" align="left">
+        <td>X.Y</td>
+        <td>未指定</td>
+        <td>INFO(继承来的)</td>
+    </tr>
+    <tr align="left">
+        <td>X.Y.Z</td>
+        <td>ERROR</td>
+        <td>ERROR(自己有)</td>
+    </tr>
+</table></p>
+
+<h3 id="additivity"> additivity属性 </h3>
+
+<p>该属性表示日志的可叠加性，默认为true,表示到达本logger的日志通过本日志的appender指定格式输出之后，仍会将日志扩散给父logger。<br>
+弄个表格就容易看清楚了:
+<table class="bodyTable">
+    <tr>
+        <th>Logger Name</th>
+        <th>Attached Appenders</th>
+        <th>Additivity Flag</th>
+        <th>Output Targets</th>
+        <th>Comment</th>
+    </tr>
+    <tr>
+        <td>root</td>
+        <td>A1</td>
+        <td>not applicable</td>
+        <td>A1</td>
+        <td>root没有父logger，<br>所以additivity属性对root不适用
+        </td>
+    </tr>
+    <tr class="alt">
+        <td>x</td>
+        <td>A-x1, A-x2</td>
+        <td>true</td>
+        <td>A1, <br>A-x1, A-x2</td>
+        <td>&quot;x&quot;(自己)的appender<br>扩散到root的appender</td>
+    </tr>
+    <tr>
+        <td>x.y</td>
+        <td>none</td>
+        <td>true</td>
+        <td>A1, <br>A-x1, A-x2</td>
+        <td>扩散到&quot;x&quot;和root的appender.</td>
+    </tr>
+    <tr class="alt">
+        <td>x.y.z</td>
+        <td>A-xyz1</td>
+        <td>true</td>
+        <td>A1, <br>A-x1, A-x2, <br>A-xyz1</td>
+        <td>&quot;x.y.z&quot;的appender<br>扩散到&quot;x&quot;和root的appender.</td>
+    </tr>
+    <tr>
+        <td>security</td>
+        <td>A-sec</td>
+        <td class="blue"><span class="blue">false</span></td>
+        <td>A-sec</td>
+        <td>
+            additivity=<code>false</code>.<br>
+            只用到 appender A-sec.
+        </td>
+    </tr>
+    <tr class="alt">
+        <td>security.access</td>
+        <td>none</td>
+        <td>true</td>
+        <td>A-sec</td>
+        <td>
+            &quot;security&quot;中的additivity＝<code>false</code>.<br>
+            只扩散到了&quot;security&quot; 的appender.
+        </td>
+    </tr>
+</table>
+<strong>注意</strong><br>
+最后一个小例子:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="c1">// java代码,A.B.C包中的类</span>
+    <span class="n">logger</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">&quot;debug&quot;</span><span class="o">);</span>
+    <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">&quot;info&quot;</span><span class="o">);</span>
+    <span class="c1">// logger配置: 无additivity,默认true会扩散，无appender-ref,不会打印</span>
+    <span class="o">&lt;</span><span class="n">logger</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;A.B.C&quot;</span> <span class="n">level</span><span class="o">=</span><span class="s">&quot;info&quot;</span> <span class="o">/&gt;</span>
+    <span class="c1">// root配置: 级别为最高的OFF</span>
+    <span class="o">&lt;</span><span class="n">root</span> <span class="n">level</span><span class="o">=</span><span class="s">&quot;OFF&quot;</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="n">appender</span><span class="o">-</span><span class="n">ref</span> <span class="n">ref</span><span class="o">=</span><span class="s">&quot;STDOUT&quot;</span><span class="o">/&gt;</span>
+    <span class="o">&lt;/</span><span class="n">root</span><span class="o">&gt;</span>
+</code></pre></div>
+<p>运行的结果是会打印&quot;info&quot;.<br>
+因为logger配置了级别为info，但是并不打印，扩散到了root;<br>
+root级别为OFF，但是logger扩散过来的日志级别仍为继承的info.<br>
+所以只有A.B.C包中级别大于等于info的日志会被打印。</p>
+
+<p><h2 id="appender"> appender元素 </h3>
+<code>appender</code>元素内容稍微多点，它有2个必需属性:<code>name</code>和<code>class</code>。<br>
+有3个可选的子元素<code>&lt;encoder&gt;、&lt;layout&gt;、&lt;filter&gt;</code>，这3个子元素可有0个或者多个。<br>
+一般只用<code>&lt;encoder&gt;</code>，它包装了<code>&lt;layout&gt;</code>。</p>
+
+<h3 id="encoder"> encoder 子元素 </h3>
+
+<p><code>encoder</code>的作用是把消息转化成输出流，可以控制消息怎么转化，何时输出等。<br>
+而<code>layout</code>仅指定消息输出的格式，不能控制消息什么时候输出，不能控制消息暂存到flush然后一下子批量输出。<br>
+实际上<code>encoder</code>内部包装了<code>PatternLayout</code>，然后又多了一些控制功能。
+来个例子:</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- 一般这样写 --&gt;</span>
+<span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">&quot;FILE&quot;</span> <span class="na">class=</span><span class="s">&quot;ch.qos.logback.core.FileAppender&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;file&gt;</span>testFile.log<span class="nt">&lt;/file&gt;</span>
+  ...
+  <span class="c">&lt;!-- 默认的class就是这个最常用的Encoder类型，所以class可以不指定 --&gt;</span>
+  <span class="nt">&lt;encoder</span> <span class="na">class=</span><span class="s">&quot;ch.qos.logback.classic.encoder.PatternLayoutEncoder&quot;</span><span class="nt">&gt;</span>
+     <span class="c">&lt;!-- encoder 包装了ch.qos.logback.classic.PatternLayout --&gt;</span>
+    <span class="nt">&lt;pattern&gt;</span>%msg%n<span class="nt">&lt;/pattern&gt;</span>
+    <span class="c">&lt;!-- 是否立刻输出，默认为true,为false表示先存到缓冲区，然后一起输出，速度是true的4倍，但是appender不正常关闭可能导致丢失缓冲区里的log --&gt;</span>
+    <span class="nt">&lt;immediateFlush&gt;</span>false<span class="nt">&lt;/immediateFlush&gt;</span>
+  <span class="nt">&lt;/encoder&gt;</span>
+<span class="nt">&lt;/appender&gt;</span>
+<span class="c">&lt;!-- 这种写法基本不推荐 --&gt;</span>
+<span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">&quot;FILE&quot;</span> <span class="na">class=</span><span class="s">&quot;ch.qos.logback.core.FileAppender&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;file&gt;</span>testFile.log<span class="nt">&lt;/file&gt;</span>
+  ...
+  <span class="nt">&lt;layout</span> <span class="na">class=</span><span class="s">&quot;ch.qos.logback.classic.PatternLayout&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;pattern&gt;</span>%msg%n<span class="nt">&lt;/pattern&gt;</span>
+  <span class="nt">&lt;/layout&gt;</span>
+<span class="nt">&lt;/appender&gt;</span>  
+</code></pre></div>
+<h3 id="layout"> layout 子元素 </h3>
+
+<p><code>layout</code>用于指定输出格式,有个class属性，不写默认是<code>ch.qos.logback.classic.PatternLayout</code>。<br>
+也可以自己定义layout，然后像下面这样使用(一般也不自己定义):</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml">  <span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">&quot;STDOUT&quot;</span> <span class="na">class=</span><span class="s">&quot;ch.qos.logback.core.ConsoleAppender&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;encoder</span> <span class="na">class=</span><span class="s">&quot;ch.qos.logback.core.encoder.LayoutWrappingEncoder&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;layout</span> <span class="na">class=</span><span class="s">&quot;chapters.layouts.MySampleLayout&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/encoder&gt;</span>
+  <span class="nt">&lt;/appender&gt;</span>
+</code></pre></div>
+<p>我们一般使用的方式是上一小结那样，仅自己指定输出格式,输出格式很有必要说明,先来个简单的介绍,下一小节详细介绍pattern</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">&quot;STDOUT&quot;</span> <span class="na">class=</span><span class="s">&quot;ch.qos.logback.core.ConsoleAppender&quot;</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- class默认就是这个类，可不写 --&gt;</span>
+    <span class="nt">&lt;layout</span> <span class="na">class=</span><span class="s">&quot;ch.qos.logback.classic.PatternLayout&quot;</span><span class="nt">&gt;</span>
+        <span class="c">&lt;!-- %d表示日期，</span>
+<span class="c">             %thread表示线程名，</span>
+<span class="c">             %-5level：级别左对齐显示最少5个字符宽度(不足则补空格),</span>
+<span class="c">             %msg：日志消息，</span>
+<span class="c">             %n是换行符</span>
+<span class="c">        --&gt;</span>
+        <span class="nt">&lt;pattern&gt;</span>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n<span class="nt">&lt;/pattern&gt;</span>
+    <span class="nt">&lt;/layout&gt;</span>
+<span class="nt">&lt;/appender&gt;</span>
+</code></pre></div>
+<h3 id="pattern"> 日志格式的详细说明(pattern元素) </h3>
+
+<p>不管是<code>encoder</code>元素中还是<code>layout</code>元素中，都少不了<code>pattern</code>，它是用来描述日志输出格式的。<br>
+下面就是格式的详细介绍</p>
+
+<ul>
+<li><strong>长度限定 : {length}</strong></li>
+</ul>
+
+<p>像<code>%logger, %class</code>等都可以通过<code>length</code>来限定长度，对其进行缩写，不过这个长度有点特殊，举个例子说明会更明白:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nl">有个logger这样定义:</span>
+<span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="s">&quot;Aaaaa.Bbbbb.TestLength&quot;</span><span class="o">);</span>
+   <span class="n">格式</span>       <span class="o">|</span>       <span class="n">结果</span>
+<span class="o">%</span><span class="n">logger</span><span class="o">{</span><span class="mi">0</span><span class="o">}</span>    <span class="o">:</span>   <span class="n">TestLength</span>
+<span class="o">%</span><span class="n">logger</span><span class="o">{</span><span class="mi">1</span><span class="o">}</span>    <span class="o">:</span>   <span class="n">A</span><span class="o">.</span><span class="na">B</span><span class="o">.</span><span class="na">TestLength</span>
+<span class="o">%</span><span class="n">logger</span><span class="o">{</span><span class="mi">17</span><span class="o">}</span>   <span class="o">:</span>   <span class="n">A</span><span class="o">.</span><span class="na">B</span><span class="o">.</span><span class="na">TestLength</span>
+<span class="o">%</span><span class="n">logger</span><span class="o">{</span><span class="mi">18</span><span class="o">}</span>   <span class="o">:</span>   <span class="n">A</span><span class="o">.</span><span class="na">Bbbbb</span><span class="o">.</span><span class="na">TestLength</span>
+<span class="o">%</span><span class="n">logger</span><span class="o">{</span><span class="mi">21</span><span class="o">}</span>   <span class="o">:</span>   <span class="n">A</span><span class="o">.</span><span class="na">Bbbbb</span><span class="o">.</span><span class="na">TestLength</span>
+<span class="o">%</span><span class="n">logger</span><span class="o">{</span><span class="mi">22</span><span class="o">}</span>   <span class="o">:</span>   <span class="n">Aaaaa</span><span class="o">.</span><span class="na">Bbbbb</span><span class="o">.</span><span class="na">TestLength</span>
+</code></pre></div>
+<p>最右边的那个类名总是显示的;<br>
+由于<code>A.Bbbbb.TestLength</code>长度为18，所以<code>0&lt;lenght&lt;18</code>时会被缩写成<code>A.B.TestLength</code>;<br>
+由于<code>Aaaaa.Bbbbb.TestLength</code>长度为22，所以<code>18&lt;lenght&lt;22</code>时会被缩写成<code>A.Bbbbb.TestLength</code>;<br>
+<code>lenght&gt;=22</code>时不缩写;<br>
+<strong>length总结</strong> :</p>
+
+<ol>
+<li>0只显示短类名(最右边的); 非0显示全类名，但是包名可能会被缩写，缩写成只有一个首字母</li>
+<li>缩写时最外层包最先被缩写，右边的包名最先不被缩写</li>
+<li>不缩写的前提是: <code>总长度&lt;=lenght</code></li>
+</ol>
+
+<ul>
+<li><strong>日志名 : %c{length} / %lo{length} / %logger{length}</strong></li>
+</ul>
+
+<p>产生日志的Logger的全名，可通过length缩写， <code>%logger{36}、%c{36}</code>效果是一样的。  </p>
+
+<ul>
+<li><strong>类名 : %C{length} / %class{length}</strong></li>
+</ul>
+
+<p>产生日志的类的全名， 如类&quot;A.B.MyClass&quot;中有个Logger名字为&quot;A.B.MyLogger&quot;，前者是类名，后者是日志名。</p>
+
+<ul>
+<li><strong>方法名 : %M / %method</strong></li>
+</ul>
+
+<p>产生日志的方法名。</p>
+
+<ul>
+<li><strong>文件名 : %F / %file</strong></li>
+</ul>
+
+<p>产生日志的java源文件名， 如&quot;LogbackTest.java&quot;。</p>
+
+<ul>
+<li><strong>行号 : %L / %line</strong></li>
+</ul>
+
+<p>日志行产生的行号。</p>
+
+<ul>
+<li><strong>行号 : %m / %msg / %message</strong></li>
+</ul>
+
+<p>日志中输出的信息</p>
+
+<ul>
+<li><strong>行号 : %d{pattern} / %date{pattern} / %message</strong></li>
+</ul>
+
+<p>产生日志的时间。日志的格式如下:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="o">%</span><span class="n">d</span>                     <span class="o">:</span> <span class="mi">2015</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">07</span> <span class="mi">22</span><span class="o">:</span><span class="mi">45</span><span class="o">:</span><span class="mi">25</span><span class="o">,</span><span class="mi">665</span>
+<span class="o">%</span><span class="n">date</span>                  <span class="o">:</span> <span class="mi">2015</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">07</span> <span class="mi">22</span><span class="o">:</span><span class="mi">45</span><span class="o">:</span><span class="mi">25</span><span class="o">,</span><span class="mi">665</span>
+<span class="o">%</span><span class="n">date</span><span class="o">{</span><span class="nl">HH:mm:</span><span class="n">ss</span><span class="o">.</span><span class="na">SSS</span><span class="o">}</span>    <span class="o">:</span> <span class="mi">22</span><span class="o">:</span><span class="mi">45</span><span class="o">:</span><span class="mf">25.665</span>
+<span class="o">%</span><span class="n">date</span><span class="o">{</span><span class="n">yyyy</span><span class="o">-</span><span class="n">MM</span><span class="o">-</span><span class="n">dd</span> <span class="nl">HH:mm:</span><span class="n">ss</span><span class="o">.</span><span class="na">SSS</span><span class="o">}</span>  <span class="mi">2015</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">07</span> <span class="mi">22</span><span class="o">:</span><span class="mi">45</span><span class="o">:</span><span class="mf">25.665</span>
+<span class="n">注意那个毫秒前一定要写成点</span><span class="o">(.)</span>
+</code></pre></div>
+<ul>
+<li><strong>格式控制</strong></li>
+</ul>
+
+<p><code>&quot;.&quot;</code>前面是最短长度，不够则补白；<code>&quot;.&quot;</code>后面是最大长度。直接来个例子:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java">   <span class="n">格式化串</span>         <span class="n">logger名</span>                <span class="n">结果</span>
+<span class="o">[%</span><span class="mf">20.20</span><span class="n">logger</span><span class="o">]</span>    <span class="n">main</span><span class="o">.</span><span class="na">Name</span>             <span class="o">[</span>           <span class="n">main</span><span class="o">.</span><span class="na">Name</span><span class="o">]</span>
+<span class="o">[%-</span><span class="mf">20.20</span><span class="n">logger</span><span class="o">]</span>   <span class="n">main</span><span class="o">.</span><span class="na">Name</span>             <span class="o">[</span><span class="n">main</span><span class="o">.</span><span class="na">Name</span>           <span class="o">]</span>
+<span class="o">[%</span><span class="mf">10.10</span><span class="n">logger</span><span class="o">]</span>    <span class="n">main</span><span class="o">.</span><span class="na">foo</span><span class="o">.</span><span class="na">foo</span><span class="o">.</span><span class="na">bar</span><span class="o">.</span><span class="na">Name</span> <span class="o">[</span><span class="n">o</span><span class="o">.</span><span class="na">bar</span><span class="o">.</span><span class="na">Name</span><span class="o">]</span>
+<span class="o">[%</span><span class="mi">10</span><span class="o">.-</span><span class="mi">10</span><span class="n">logger</span><span class="o">]</span>   <span class="n">main</span><span class="o">.</span><span class="na">foo</span><span class="o">.</span><span class="na">foo</span><span class="o">.</span><span class="na">bar</span><span class="o">.</span><span class="na">Name</span> <span class="o">[</span><span class="n">main</span><span class="o">.</span><span class="na">foo</span><span class="o">.</span><span class="na">f</span><span class="o">]</span>
+</code></pre></div>
+<hr>
+
+        </section>
+
+        <!-- 广告位 BEGIN -->
+
+        <!-- UJian Button BEGIN -->
+        <script type="text/javascript">var ujian_config = {target:1};</script>
+        <script type="text/javascript" src="http://v1.ujian.cc/code/ujian.js?type=slide&pos=left&fade=1&uid=1746608"></script>
+        <a href="http://www.ujian.cc" style="border:0;"><img src="http://img.ujian.cc/pixel.png" alt="友荐云推荐" style="border:0;padding:0;margin:0;" /></a>
+        <!-- UJian Button END -->
+
+        <!-- <div id="add">
+          <h2 style="padding-left:24px;">广而告之</h2>
+          <script type="text/javascript">var sogou_ad_id=429088; var sogou_ad_height=90; var sogou_ad_width=760; </script>
+          <script type='text/javascript' src='http://images.sohu.com/cs/jsfile/js/c.js'></script>
+        </div> -->
+        <!-- 广告位 END -->
+
+        <!-- Duoshuo Comment BEGIN -->
+        <div id="comments">
+          <h2 style="padding-left:24px;">评论</h2>
+          <div class="ds-thread" data-thread-key="/java/2015/07/03/java日志(三)logback配置文件"
+            data-title="java日志(三)logback配置文件"
+            data-url="/java/2015/07/03/java%E6%97%A5%E5%BF%97(%E4%B8%89)logback%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.html" ></div>
+        </div>
+        <!-- Duoshuo Comment END -->
+      </div>
+
+      <footer>
+  <p>Project maintained by <a href="https://github.com/rgkjhshi">rgkjhshi</a> on github</p>
+
+  <p style="padding-right: 150px; padding-left: 20px;">
+    <!-- cnzz统计工具 -->
+    <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+  </p>
+
+  <p>京ICP备14015515号-1</p>
+
+  
+</footer>
+<!--[if !IE]><script>fixScale(document);</script><![endif]-->
+  </page>
+  </body>
+
+</html>
