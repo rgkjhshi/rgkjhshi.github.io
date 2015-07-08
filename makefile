@@ -21,7 +21,7 @@ deploy:
 	# 推送到 github gh-pages 分支
 	git push github gh-pages
 	# 推送到 gitcafe gh-pages 分支
-	git push gitcafe gh-pages
+#	git push gitcafe gh-pages
 	# 切换到本地 master 分支
 	git checkout master
 	# 推送到 github gh-pages 分支
