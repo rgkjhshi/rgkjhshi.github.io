@@ -19,9 +19,9 @@ deploy:
 	git add -A
 	git commit -m "deploy blog"
 	# 推送到 github gh-pages 分支
-	git push origin gh-pages
+	git push github gh-pages
 	# 切换到本地 master 分支
 	git checkout master
 	# 推送到 github gh-pages 分支
-	git push origin master
+	git push github master
  
