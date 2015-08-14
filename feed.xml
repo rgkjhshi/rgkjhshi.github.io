@@ -6,8 +6,8 @@
 </description>
     <link>http://yourdomain.com/</link>
     <atom:link href="http://yourdomain.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 14 Aug 2015 16:00:18 +0800</pubDate>
-    <lastBuildDate>Fri, 14 Aug 2015 16:00:18 +0800</lastBuildDate>
+    <pubDate>Fri, 14 Aug 2015 16:07:58 +0800</pubDate>
+    <lastBuildDate>Fri, 14 Aug 2015 16:07:58 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -665,7 +665,7 @@ java通过JVM进行内存管理，它的内存占用情况是怎样的？&lt;/p&
 
 &lt;h3&gt;padding&lt;/h3&gt;
 
-&lt;p&gt;8字节对齐的填充&lt;/p&gt;
+&lt;p&gt;8字节对齐的填充(这个部分可被称为gap，开启压缩的时候，这个gap会尽量用一个int或者float填充)&lt;/p&gt;
 
 &lt;hr&gt;
 
@@ -721,7 +721,7 @@ java通过JVM进行内存管理，它的内存占用情况是怎样的？&lt;/p&
 &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;                  &lt;span class=&quot;c1&quot;&gt;// int 4B&lt;/span&gt;
 &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;transient&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hash32&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// int 4B&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;因此一个String对象的大小为:&lt;code&gt;24 = 16(header) + 4 + 4 + 4&lt;/code&gt;&lt;br&gt;
+&lt;p&gt;因此一个String对象的大小为:&lt;code&gt;24 = 8(_mark) + 4(_compressed_klass) + 4 + 4 + 4&lt;/code&gt;(gap部分被填充)&lt;br&gt;
 &lt;code&gt;String s = &amp;quot;abc&amp;quot;&lt;/code&gt;是String的成员变量value数组指向&lt;code&gt;&amp;quot;abc&amp;quot;&lt;/code&gt;&lt;/p&gt;
 
 &lt;hr&gt;

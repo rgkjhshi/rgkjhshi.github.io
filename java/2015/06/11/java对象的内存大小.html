@@ -167,7 +167,7 @@ java通过JVM进行内存管理，它的内存占用情况是怎样的？</p>
 
 <h3>padding</h3>
 
-<p>8字节对齐的填充</p>
+<p>8字节对齐的填充(这个部分可被称为gap，开启压缩的时候，这个gap会尽量用一个int或者float填充)</p>
 
 <hr>
 
@@ -223,7 +223,7 @@ java通过JVM进行内存管理，它的内存占用情况是怎样的？</p>
 <span class="kd">private</span> <span class="kt">int</span> <span class="n">hash</span><span class="o">;</span>                  <span class="c1">// int 4B</span>
 <span class="kd">private</span> <span class="kd">transient</span> <span class="kt">int</span> <span class="n">hash32</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>  <span class="c1">// int 4B</span>
 </code></pre></div>
-<p>因此一个String对象的大小为:<code>24 = 16(header) + 4 + 4 + 4</code><br>
+<p>因此一个String对象的大小为:<code>24 = 8(_mark) + 4(_compressed_klass) + 4 + 4 + 4</code>(gap部分被填充)<br>
 <code>String s = &quot;abc&quot;</code>是String的成员变量value数组指向<code>&quot;abc&quot;</code></p>
 
 <hr>
