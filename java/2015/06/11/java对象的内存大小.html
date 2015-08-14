@@ -212,7 +212,7 @@ java通过JVM进行内存管理，它的内存占用情况是怎样的？</p>
 <h3>数组对象</h3>
 
 <p>数组对象的对象头中，array size将占用4B，紧跟着就是数组对象的数组元素</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kt">int</span> <span class="n">o</span><span class="o">[]</span> <span class="o">=</span> <span class="o">{}</span>  <span class="c1">// 16(header) = 12(_mark) + 4(_compressed_klass) + 4(size)</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kt">int</span> <span class="n">o</span><span class="o">[]</span> <span class="o">=</span> <span class="o">{}</span>  <span class="c1">// 16(header) = 8(_mark) + 4(_compressed_klass) + 4(size)</span>
 <span class="kt">byte</span><span class="o">[]</span> <span class="n">o</span> <span class="o">=</span> <span class="o">{</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">};</span>    <span class="c1">// 24 = 16 + 1*5 + 3(padding)</span>
 <span class="n">object</span><span class="o">[]</span> <span class="n">o</span> <span class="o">=</span> <span class="o">{</span><span class="k">new</span> <span class="nf">object</span><span class="o">()};</span>   <span class="c1">// 24 = 16 + 4*1 + 4(padding)</span>
 </code></pre></div>
