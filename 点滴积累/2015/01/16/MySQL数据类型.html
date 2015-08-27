@@ -38,7 +38,7 @@
     <link rel="shortcut icon" href="/assets/images/favicon.ico">
     <link rel="stylesheet" href="/assets/css/styles.css">
     <link rel="stylesheet" href="/assets/css/pygment_trac.css">
-    <link rel="canonical" href="http://yourdomain.com/mysql/2015/01/16/MySQL%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B.html">
+    <link rel="canonical" href="http://yourdomain.com/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015/01/16/MySQL%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B.html">
     <link rel="alternate" type="application/rss+xml" title="Michael King's Blog" href="http://yourdomain.com/feed.xml" />
 
     <!--[if lt IE 9]>
@@ -61,19 +61,15 @@
       <aside>
     <h1> 文章分类 </h1>
     
-        <a style="display: block; " href="/markdown "> markdown (1) </a>
+        <a style="display: block; " href="/点滴积累 "> 点滴积累 (5) </a>
     
         <a style="display: block; " href="/java "> java (9) </a>
-    
-        <a style="display: block; " href="/mysql "> mysql (2) </a>
     
         <a style="display: block; " href="/mybatis "> mybatis (4) </a>
     
         <a style="display: block; " href="/spring "> spring (5) </a>
     
         <a style="display: block; " href="/mac开发 "> mac开发 (4) </a>
-    
-        <a style="display: block; " href="/安全相关 "> 安全相关 (1) </a>
     
         <a style="display: block; " href="/link.html "> 友情链接 </a>
 </aside>
@@ -102,33 +98,33 @@
 <p>数字类型包括:  </p>
 
 <ul>
-<li> <code>TINYINT, SMALLINT, MEDIUMINT,  INT, BIGINT</code> </li>
+<li> <code>TINYINT, SMALLINT, MEDIUMINT,  INT, BIGINT</code></li>
 <li> <code>DECIMAL</code></li>
 </ul>
 <div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="o">|</span>     <span class="n">类型</span>    <span class="o">|</span>   <span class="n">长度</span><span class="o">(</span><span class="n">Byte</span><span class="o">)</span>  <span class="o">|</span>  <span class="n">最小值</span><span class="o">(</span><span class="n">SIGNED</span><span class="o">/</span><span class="n">UNSIGNED</span><span class="o">)</span>  <span class="o">|</span>  <span class="n">最大值</span><span class="o">(</span><span class="n">SIGNED</span><span class="o">/</span><span class="n">UNSIGNED</span><span class="o">)</span>  <span class="o">|</span>  
-    <span class="o">|:-----------</span> <span class="o">|:------------:|-------------------------:|-------------------------:|</span> 
-    <span class="o">|</span>   <span class="n">TINYINT</span>   <span class="o">|</span>       <span class="mi">1</span>      <span class="o">|</span>   <span class="o">-</span><span class="mi">128</span>                   <span class="o">|</span>  <span class="mi">127</span>                     <span class="o">|</span> 
-    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span>   <span class="mi">0</span>                      <span class="o">|</span>  <span class="mi">255</span>                     <span class="o">|</span> 
-    <span class="o">|</span>   <span class="n">SMALLINT</span>  <span class="o">|</span>       <span class="mi">2</span>      <span class="o">|</span>   <span class="o">-</span><span class="mi">32768</span>                 <span class="o">|</span>  <span class="mi">32767</span>                   <span class="o">|</span> 
-    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span>   <span class="mi">0</span>                      <span class="o">|</span>  <span class="mi">65535</span>                   <span class="o">|</span> 
-    <span class="o">|</span>  <span class="n">MEDIUMINT</span>  <span class="o">|</span>       <span class="mi">3</span>      <span class="o">|</span>   <span class="o">-</span><span class="mi">8388608</span>               <span class="o">|</span>  <span class="mi">8388607</span>                 <span class="o">|</span> 
-    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span>   <span class="mi">0</span>                      <span class="o">|</span>  <span class="mi">16777215</span>                <span class="o">|</span> 
-    <span class="o">|</span>     <span class="n">INT</span>     <span class="o">|</span>       <span class="mi">4</span>      <span class="o">|</span>   <span class="o">-</span><span class="mi">2147483648</span>            <span class="o">|</span>  <span class="mi">2147483647</span>              <span class="o">|</span> 
-    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span>   <span class="mi">0</span>                      <span class="o">|</span>  <span class="mi">4294967295</span>              <span class="o">|</span> 
-    <span class="o">|</span>    <span class="n">BIGINT</span>   <span class="o">|</span>       <span class="mi">8</span>      <span class="o">|</span>   <span class="o">-</span><span class="mi">9223372036854775808</span>   <span class="o">|</span>  <span class="mi">9223372036854775807</span>     <span class="o">|</span> 
-    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span>   <span class="mi">0</span>                      <span class="o">|</span>  <span class="mi">18446744073709551615</span>    <span class="o">|</span> 
+    <span class="o">|:-----------</span> <span class="o">|:------------:|-------------------------:|-------------------------:|</span>
+    <span class="o">|</span>   <span class="n">TINYINT</span>   <span class="o">|</span>       <span class="mi">1</span>      <span class="o">|</span>   <span class="o">-</span><span class="mi">128</span>                   <span class="o">|</span>  <span class="mi">127</span>                     <span class="o">|</span>
+    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span>   <span class="mi">0</span>                      <span class="o">|</span>  <span class="mi">255</span>                     <span class="o">|</span>
+    <span class="o">|</span>   <span class="n">SMALLINT</span>  <span class="o">|</span>       <span class="mi">2</span>      <span class="o">|</span>   <span class="o">-</span><span class="mi">32768</span>                 <span class="o">|</span>  <span class="mi">32767</span>                   <span class="o">|</span>
+    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span>   <span class="mi">0</span>                      <span class="o">|</span>  <span class="mi">65535</span>                   <span class="o">|</span>
+    <span class="o">|</span>  <span class="n">MEDIUMINT</span>  <span class="o">|</span>       <span class="mi">3</span>      <span class="o">|</span>   <span class="o">-</span><span class="mi">8388608</span>               <span class="o">|</span>  <span class="mi">8388607</span>                 <span class="o">|</span>
+    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span>   <span class="mi">0</span>                      <span class="o">|</span>  <span class="mi">16777215</span>                <span class="o">|</span>
+    <span class="o">|</span>     <span class="n">INT</span>     <span class="o">|</span>       <span class="mi">4</span>      <span class="o">|</span>   <span class="o">-</span><span class="mi">2147483648</span>            <span class="o">|</span>  <span class="mi">2147483647</span>              <span class="o">|</span>
+    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span>   <span class="mi">0</span>                      <span class="o">|</span>  <span class="mi">4294967295</span>              <span class="o">|</span>
+    <span class="o">|</span>    <span class="n">BIGINT</span>   <span class="o">|</span>       <span class="mi">8</span>      <span class="o">|</span>   <span class="o">-</span><span class="mi">9223372036854775808</span>   <span class="o">|</span>  <span class="mi">9223372036854775807</span>     <span class="o">|</span>
+    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span>   <span class="mi">0</span>                      <span class="o">|</span>  <span class="mi">18446744073709551615</span>    <span class="o">|</span>
 </code></pre></div>
 <p><code>DECIMAL(M,D)</code>:</p>
 
 <ol>
 <li> M 代表精度,即总共的位数,范围1-65</li>
-<li> D 代表小数部分的位数,范围0-30,但不能大于M </li>
+<li> D 代表小数部分的位数,范围0-30,但不能大于M</li>
 <li> 如果插入数值超过M,则只显示该精度内的最大值</li>
 <li> <code>price DECIMAL(5, 2)</code> 表示最大值为 999.99</li>
 </ol>
 
 <p>下面这段代码注意：</p>
-<div class="highlight"><pre><code class="language-mysql" data-lang="mysql">    <span class="ss">`status`</span> <span class="kt">TINYINT</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="k">UNSIGNED</span> <span class="k">NOT</span> <span class="no">NULL</span> <span class="kp">AUTO_INCREMENT</span> 
+<div class="highlight"><pre><code class="language-mysql" data-lang="mysql">    <span class="ss">`status`</span> <span class="kt">TINYINT</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="k">UNSIGNED</span> <span class="k">NOT</span> <span class="no">NULL</span> <span class="kp">AUTO_INCREMENT</span>
 </code></pre></div>
 <ol>
 <li> 整数类型后面的长度表示显示数字时的宽度。</li>
@@ -160,8 +156,8 @@
 <li> <code>VARCHAR</code>: 变长文本字符类型</li>
 <li> <code>TEXT</code> : 大变长文本字符类型</li>
 <li> <code>BINARY</code> : 类似于char, 变长二进制字符类型</li>
-<li> <code>VARBINARY</code> : 类似于varchar, 变长二进制字符类型 </li>
-<li> <code>BLOB</code> : 大变长二进制字符类型 </li>
+<li> <code>VARBINARY</code> : 类似于varchar, 变长二进制字符类型</li>
+<li> <code>BLOB</code> : 大变长二进制字符类型</li>
 </ul>
 
 <p>注意:  </p>
@@ -194,9 +190,9 @@
         <!-- Duoshuo Comment BEGIN -->
         <div id="comments">
           <h2 style="padding-left:24px;">评论</h2>
-          <div class="ds-thread" data-thread-key="/mysql/2015/01/16/MySQL数据类型"
+          <div class="ds-thread" data-thread-key="/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015/01/16/MySQL数据类型"
             data-title="MySQL数据类型"
-            data-url="/mysql/2015/01/16/MySQL%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B.html" ></div>
+            data-url="/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015/01/16/MySQL%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B.html" ></div>
         </div>
         <!-- Duoshuo Comment END -->
       </div>

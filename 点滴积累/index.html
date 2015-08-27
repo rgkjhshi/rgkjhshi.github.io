@@ -16,9 +16,10 @@
     <meta name="domain_verify" content="pmrgi33nmfuw4ir2ejwg65tfonugs43pnzts4y3oeiwcez3vnfsceorcmyyweyrrgeywmzdegeytiyrrg44wgy3ggezwcztbhaydezdfhe2selbcoruw2zktmf3gkir2ge2dgmbrha4tembtgaztm7i">
     
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <meta name="description" content="Markdown是用于书写纯文本文件的语言，通过一些特殊标记使文本更加容易读，而且兼容HTML。如果想看本文的例子，可以将代码块中的文字复制到在线 Markdown 编译器来查看效果本文是我在使用Markdown时所作的总结，更详细的Markdown语法请看Markdown 语法说明 (简体中文版)  本文结构标...">
+    <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+">
 
-    <!-- <title>markdown 语法简介</title> -->
+    <!-- <title>点滴积累 文章列表</title> -->
     <title>Michael King's Blog</title>
 
     <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
@@ -38,7 +39,7 @@
     <link rel="shortcut icon" href="/assets/images/favicon.ico">
     <link rel="stylesheet" href="/assets/css/styles.css">
     <link rel="stylesheet" href="/assets/css/pygment_trac.css">
-    <link rel="canonical" href="http://yourdomain.com/markdown/2015/01/01/markdown%E8%AF%AD%E6%B3%95%E7%AE%80%E4%BB%8B.html">
+    <link rel="canonical" href="http://yourdomain.com/点滴积累/">
     <link rel="alternate" type="application/rss+xml" title="Michael King's Blog" href="http://yourdomain.com/feed.xml" />
 
     <!--[if lt IE 9]>
@@ -61,19 +62,15 @@
       <aside>
     <h1> 文章分类 </h1>
     
-        <a style="display: block; " href="/markdown "> markdown (1) </a>
+        <a style="display: block; " href="/点滴积累 "> 点滴积累 (5) </a>
     
         <a style="display: block; " href="/java "> java (9) </a>
-    
-        <a style="display: block; " href="/mysql "> mysql (2) </a>
     
         <a style="display: block; " href="/mybatis "> mybatis (4) </a>
     
         <a style="display: block; " href="/spring "> spring (5) </a>
     
         <a style="display: block; " href="/mac开发 "> mac开发 (4) </a>
-    
-        <a style="display: block; " href="/安全相关 "> 安全相关 (1) </a>
     
         <a style="display: block; " href="/link.html "> 友情链接 </a>
 </aside>
@@ -82,9 +79,155 @@
       <div class="wrapper">
         <!-- 文章内容 -->
         <section>
-          <h1> markdown 语法简介 </h1>
-          <p>Markdown是用于书写纯文本文件的语言，通过一些特殊标记使文本更加容易读，而且兼容HTML。<br>
-如果想看本文的例子，可以将代码块中的文字复制到<a href="http://tool.oschina.net/markdown/">在线 Markdown 编译器</a>来查看效果<br>
+          <h1> 点滴积累 文章列表 </h1>
+          <div class="post-list">
+  
+    <div class="post-title">
+      <a style="display:inline-block;" href="/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015/08/27/Json%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%A0%BC%E5%BC%8F.html"> Json对象的格式</a>
+      <span style="float:right; width:100px; "> 2015-08-27 </span>
+      </br>
+    </div>
+
+    <!-- 摘要 -->
+   <!--  <div class="post-preview">
+      <p>某天聊天时听到有人说，json应该以 <code>{</code> 开头，以 <code>}</code>结尾，顿时发觉Json的标准格式是什么样子的很有必要记录下。<br>
+另外附上一个很不错的在线验证及格式化Json的网站:<a href="http://json.cn">Json.cn</a>  </p>
+
+<hr>
+
+<h2>本文结构</h2>
+
+<ul>
+<li><a href="#introduce">Json简介</a></li>
+<li><a href="#JavaScriptObject">JavaScript中的对象</a></li>
+<li><a href="#JSONObject">JSON中的对象</a></li>
+</ul>
+
+<hr>
+
+<h2 id="introduce"> Json简介 </h2>
+
+<p>JSON是 <code>JavaScript Object Notation</code> 的缩写，它是一种数据交换格式，2002年由道格拉斯·克罗克福特（Douglas Crockford）发明的。<br>
+在它之前，大家都用<code>XML</code>来交换数据，XML是纯文本格式，本身不难，但是加上 <code>DTD、XSD、XSLT</code> 等一堆规范后就相当复杂了。  </p>
+
+<hr>
+
+<h2 id="JavaScriptObject"> JavaScript中的对象 </h2>
+
+<p>既然JSON是<code>JavaScript Object Notation</code>，我们就看看JavaScript中都有什么对象。<br>
+JavaScript的对象是一种无序的集合数据类型，它由若干键值对组成,
+一个普通的js对象用一个<code>{...}</code>表示，键值对以<code>key : value</code>形式声明。<br>
+除此之外还有 <code>number、string、boolean</code>等对象，可以通过 <code>typeof obj</code>来获取对象的类型，如下：</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// 普通对象</span>
+<span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">name</span>   <span class="o">:</span> <span class="s2">&quot;小明&quot;</span><span class="p">,</span>
+    <span class="nx">gender</span> <span class="o">:</span> <span class="s2">&quot;男&quot;</span><span class="p">,</span>
+    <span class="nx">age</span>    <span class="o">:</span> <span class="mi">28</span>
+<span class="p">};</span>
+<span class="c1">// 空对象</span>
+<span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="c1">// 数组对象</span>
+<span class="kd">var</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
+<span class="c1">// 数字对象</span>
+<span class="kd">var</span> <span class="nx">num1</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">num2</span> <span class="o">=</span> <span class="mf">123.456</span><span class="p">;</span>
+<span class="c1">// 字符串</span>
+<span class="kd">var</span> <span class="nx">str</span> <span class="o">=</span> <span class="s2">&quot;abcde&quot;</span><span class="p">;</span>
+<span class="c1">// 布尔</span>
+<span class="kd">var</span> <span class="nx">bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+
+<span class="k">typeof</span> <span class="nx">obj</span><span class="p">;</span> <span class="c1">// object</span>
+<span class="k">typeof</span> <span class="nx">o</span><span class="p">;</span>   <span class="c1">// object</span>
+<span class="k">typeof</span> <span class="nx">arr</span><span class="p">;</span> <span class="c1">// object</span>
+
+<span class="k">typeof</span> <span class="nx">num1</span><span class="p">;</span> <span class="c1">// number</span>
+<span class="k">typeof</span> <span class="nx">num2</span><span class="p">;</span> <span class="c1">// number</span>
+<span class="k">typeof</span> <span class="nx">str</span><span class="p">;</span>  <span class="c1">// string</span>
+<span class="k">typeof</span> <span class="nx">bool</span><span class="p">;</span> <span class="c1">// boolean</span>
+</code></pre></div>
+<p>上面例子中，虽然<code>{}, null, []</code>都是<code>object</code>，但是他们的形式不太一样。</p>
+
+<hr>
+
+<h2 id="JSONObject"> JSON中的对象 </h2>
+
+<p>JSON中的对象来自于JavaScript中，总共以下这几种数据类型:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">number</span>  <span class="o">:</span> <span class="n">js中的number</span><span class="o">;</span>
+<span class="kt">boolean</span> <span class="o">:</span> <span class="n">js中的boolean</span><span class="o">,</span> <span class="n">即true或false</span><span class="o">;</span>
+<span class="n">string</span>  <span class="o">:</span> <span class="n">js中的string</span><span class="o">;</span>
+<span class="kc">null</span>    <span class="o">:</span> <span class="n">js中的null</span><span class="o">;</span>
+<span class="n">array</span>   <span class="o">:</span> <span class="n">js中的的Array</span><span class="o">,</span> <span class="n">即</span><span class="o">[]</span><span class="n">形式的对象</span><span class="o">;</span>
+<span class="n">object</span>  <span class="o">:</span> <span class="n">js中的普通对象</span><span class="o">,</span> <span class="n">即</span><span class="o">{</span> <span class="o">...</span> <span class="o">}</span><span class="n">形式的对象</span><span class="o">.</span>
+</code></pre></div>
+<p>另外JSON还规定了字符集必须用UTF-8, 字符串必须用双引号<code>&quot;&quot;</code>, 对象中的key也必须用双引号<code>&quot;&quot;</code><br>
+所以，以下的json都是正确的:</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="kc">null</span>
+<span class="s2">&quot;一个字符串&quot;</span>
+<span class="mf">3.14</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;asdf&quot;</span><span class="p">]</span>
+<span class="p">{</span><span class="nt">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;Rose&quot;</span><span class="p">,</span> <span class="nt">&quot;age&quot;</span><span class="p">:</span> <span class="mi">18</span><span class="p">}</span>
+</code></pre></div>
+<p><strong>注意:</strong></p>
+
+<ul>
+<li><code>{&quot;name&quot; : &quot;Rose&quot;, &quot;age&quot;: 18}</code>是普通对象, <code>3.14</code>也是一个对象，两者都是合法的json串</li>
+<li>&quot;<code>null, 3.14</code>&quot;这样不是合法的json串，要表示多个对象，必须放到普通对象中以键值对的形式出现</li>
+</ul>
+
+<hr>
+ 
+      <a href="/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015/08/27/Json%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%A0%BC%E5%BC%8F.html"> Read More ... </a> </br>
+    </div> -->
+  
+    <div class="post-title">
+      <a style="display:inline-block;" href="/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015/06/24/CSRF.html"> CSRF</a>
+      <span style="float:right; width:100px; "> 2015-06-24 </span>
+      </br>
+    </div>
+
+    <!-- 摘要 -->
+   <!--  <div class="post-preview">
+      <p>CSRF算是比较简单的Web攻击方式了吧，我们来看看它到底是什么。</p>
+ 
+      <a href="/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015/06/24/CSRF.html"> Read More ... </a> </br>
+    </div> -->
+  
+    <div class="post-title">
+      <a style="display:inline-block;" href="/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015/06/17/MySQL%E5%8A%A0%E9%94%81.html"> MySQL加锁</a>
+      <span style="float:right; width:100px; "> 2015-06-17 </span>
+      </br>
+    </div>
+
+    <!-- 摘要 -->
+   <!--  <div class="post-preview">
+      <p>最近碰到了MySQL中的<code>for update</code>语法，这是用来加锁的，将学习的过程记录下来</p>
+ 
+      <a href="/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015/06/17/MySQL%E5%8A%A0%E9%94%81.html"> Read More ... </a> </br>
+    </div> -->
+  
+    <div class="post-title">
+      <a style="display:inline-block;" href="/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015/01/16/MySQL%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B.html"> MySQL数据类型</a>
+      <span style="float:right; width:100px; "> 2015-01-16 </span>
+      </br>
+    </div>
+
+    <!-- 摘要 -->
+   <!--  <div class="post-preview">
+      <p>MySQL中的数据类型以及使用时需要注意的地方记录如下  </p>
+ 
+      <a href="/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015/01/16/MySQL%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B.html"> Read More ... </a> </br>
+    </div> -->
+  
+    <div class="post-title">
+      <a style="display:inline-block;" href="/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015/01/01/markdown%E8%AF%AD%E6%B3%95%E7%AE%80%E4%BB%8B.html"> markdown 语法简介</a>
+      <span style="float:right; width:100px; "> 2015-01-01 </span>
+      </br>
+    </div>
+
+    <!-- 摘要 -->
+   <!--  <div class="post-preview">
+      <p>Markdown是用于书写纯文本文件的语言，通过一些特殊标记使文本更加容易读，而且兼容HTML。<br>
+如果想看本文的例子，可以将代码块中的文字复制到<a href="http://tool.oschina.net/markdown/">在线 Markdown 编译器</a>来查看效果
 本文是我在使用Markdown时所作的总结，更详细的Markdown语法请看<a href="http://wowubuntu.com/markdown/basic.html">Markdown 语法说明 (简体中文版)</a>  </p>
 
 <hr>
@@ -163,12 +306,12 @@ ______
 
 <p>在行首添加<code>&gt;</code>表示引用，如下：</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">&gt; 行首加引用
-&gt; 
+&gt;
 &gt; 也可以偷懒，只在每
 一段的开头加一个也可以
 &gt;
-&gt; 还能嵌套引用 
-&gt; 
+&gt; 还能嵌套引用
+&gt;
 &gt; &gt; 嵌套引用  
 &gt;
 &gt; ### 里面还能写其他的markdown语法
@@ -260,32 +403,13 @@ ______
 貌似邮件自动链接在开始提到的<a href="http://tool.oschina.net/markdown/">在线 Markdown 编译器</a>中不起作用</p>
 
 <hr>
+ 
+      <a href="/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015/01/01/markdown%E8%AF%AD%E6%B3%95%E7%AE%80%E4%BB%8B.html"> Read More ... </a> </br>
+    </div> -->
+  
+</div>
 
         </section>
-
-        <!-- 广告位 BEGIN -->
-
-        <!-- UJian Button BEGIN -->
-        <script type="text/javascript">var ujian_config = {target:1};</script>
-        <script type="text/javascript" src="http://v1.ujian.cc/code/ujian.js?type=slide&pos=left&fade=1&uid=1746608"></script>
-        <a href="http://www.ujian.cc" style="border:0;"><img src="http://img.ujian.cc/pixel.png" alt="友荐云推荐" style="border:0;padding:0;margin:0;" /></a>
-        <!-- UJian Button END -->
-
-        <!-- <div id="add">
-          <h2 style="padding-left:24px;">广而告之</h2>
-          <script type="text/javascript">var sogou_ad_id=429088; var sogou_ad_height=90; var sogou_ad_width=760; </script>
-          <script type='text/javascript' src='http://images.sohu.com/cs/jsfile/js/c.js'></script>
-        </div> -->
-        <!-- 广告位 END -->
-
-        <!-- Duoshuo Comment BEGIN -->
-        <div id="comments">
-          <h2 style="padding-left:24px;">评论</h2>
-          <div class="ds-thread" data-thread-key="/markdown/2015/01/01/markdown语法简介"
-            data-title="markdown 语法简介"
-            data-url="/markdown/2015/01/01/markdown%E8%AF%AD%E6%B3%95%E7%AE%80%E4%BB%8B.html" ></div>
-        </div>
-        <!-- Duoshuo Comment END -->
       </div>
 
       <footer>

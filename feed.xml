@@ -6,9 +6,106 @@
 </description>
     <link>http://yourdomain.com/</link>
     <atom:link href="http://yourdomain.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 14 Aug 2015 16:07:58 +0800</pubDate>
-    <lastBuildDate>Fri, 14 Aug 2015 16:07:58 +0800</lastBuildDate>
+    <pubDate>Thu, 27 Aug 2015 22:15:58 +0800</pubDate>
+    <lastBuildDate>Thu, 27 Aug 2015 22:15:58 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>Json对象的格式</title>
+        <description>&lt;p&gt;某天聊天时听到有人说，json应该以 &lt;code&gt;{&lt;/code&gt; 开头，以 &lt;code&gt;}&lt;/code&gt;结尾，顿时发觉Json的标准格式是什么样子的很有必要记录下。&lt;br&gt;
+另外附上一个很不错的在线验证及格式化Json的网站:&lt;a href=&quot;http://json.cn&quot;&gt;Json.cn&lt;/a&gt;  &lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2&gt;本文结构&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#introduce&quot;&gt;Json简介&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#JavaScriptObject&quot;&gt;JavaScript中的对象&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#JSONObject&quot;&gt;JSON中的对象&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;introduce&quot;&gt; Json简介 &lt;/h2&gt;
+
+&lt;p&gt;JSON是 &lt;code&gt;JavaScript Object Notation&lt;/code&gt; 的缩写，它是一种数据交换格式，2002年由道格拉斯·克罗克福特（Douglas Crockford）发明的。&lt;br&gt;
+在它之前，大家都用&lt;code&gt;XML&lt;/code&gt;来交换数据，XML是纯文本格式，本身不难，但是加上 &lt;code&gt;DTD、XSD、XSLT&lt;/code&gt; 等一堆规范后就相当复杂了。  &lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;JavaScriptObject&quot;&gt; JavaScript中的对象 &lt;/h2&gt;
+
+&lt;p&gt;既然JSON是&lt;code&gt;JavaScript Object Notation&lt;/code&gt;，我们就看看JavaScript中都有什么对象。&lt;br&gt;
+JavaScript的对象是一种无序的集合数据类型，它由若干键值对组成,
+一个普通的js对象用一个&lt;code&gt;{...}&lt;/code&gt;表示，键值对以&lt;code&gt;key : value&lt;/code&gt;形式声明。&lt;br&gt;
+除此之外还有 &lt;code&gt;number、string、boolean&lt;/code&gt;等对象，可以通过 &lt;code&gt;typeof obj&lt;/code&gt;来获取对象的类型，如下：&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// 普通对象&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;obj&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;小明&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;gender&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;男&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;age&lt;/span&gt;    &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;28&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 空对象&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;o&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 数组对象&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;arr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 数字对象&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;num1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;num2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;123.456&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 字符串&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;str&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;abcde&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 布尔&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bool&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;typeof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// object&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;typeof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;// object&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;typeof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;arr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// object&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;typeof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;num1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// number&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;typeof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;num2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// number&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;typeof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// string&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;typeof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bool&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// boolean&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;上面例子中，虽然&lt;code&gt;{}, null, []&lt;/code&gt;都是&lt;code&gt;object&lt;/code&gt;，但是他们的形式不太一样。&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;JSONObject&quot;&gt; JSON中的对象 &lt;/h2&gt;
+
+&lt;p&gt;JSON中的对象来自于JavaScript中，总共以下这几种数据类型:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;number&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;js中的number&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;js中的boolean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;即true或false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;string&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;js中的string&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;    &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;js中的null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;js中的的Array&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;即&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;形式的对象&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;object&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;js中的普通对象&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;即&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;形式的对象&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;另外JSON还规定了字符集必须用UTF-8, 字符串必须用双引号&lt;code&gt;&amp;quot;&amp;quot;&lt;/code&gt;, 对象中的key也必须用双引号&lt;code&gt;&amp;quot;&amp;quot;&lt;/code&gt;&lt;br&gt;
+所以，以下的json都是正确的:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-json&quot; data-lang=&quot;json&quot;&gt;&lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;&amp;quot;一个字符串&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;3.14&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;asdf&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;quot;name&amp;quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Rose&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;&amp;quot;age&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;18&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;注意:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;{&amp;quot;name&amp;quot; : &amp;quot;Rose&amp;quot;, &amp;quot;age&amp;quot;: 18}&lt;/code&gt;是普通对象, &lt;code&gt;3.14&lt;/code&gt;也是一个对象，两者都是合法的json串&lt;/li&gt;
+&lt;li&gt;&amp;quot;&lt;code&gt;null, 3.14&lt;/code&gt;&amp;quot;这样不是合法的json串，要表示多个对象，必须放到普通对象中以键值对的形式出现&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+</description>
+        <pubDate>Thu, 27 Aug 2015 00:00:00 +0800</pubDate>
+        <link>http://yourdomain.com/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015/08/27/Json%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%A0%BC%E5%BC%8F.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015/08/27/Json%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%A0%BC%E5%BC%8F.html</guid>
+        
+        
+        <category>点滴积累</category>
+        
+      </item>
     
       <item>
         <title>java日志(三)logback配置文件</title>
@@ -457,11 +554,11 @@ www.A.com站在用户登录后，会将登陆凭证保存在本地cookie中，A�
 &lt;hr&gt;
 </description>
         <pubDate>Wed, 24 Jun 2015 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/%E5%AE%89%E5%85%A8%E7%9B%B8%E5%85%B3/2015/06/24/CSRF.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/%E5%AE%89%E5%85%A8%E7%9B%B8%E5%85%B3/2015/06/24/CSRF.html</guid>
+        <link>http://yourdomain.com/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015/06/24/CSRF.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015/06/24/CSRF.html</guid>
         
         
-        <category>安全相关</category>
+        <category>点滴积累</category>
         
       </item>
     
@@ -571,11 +668,11 @@ www.A.com站在用户登录后，会将登陆凭证保存在本地cookie中，A�
 &lt;hr&gt;
 </description>
         <pubDate>Wed, 17 Jun 2015 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/mysql/2015/06/17/MySQL%E5%8A%A0%E9%94%81.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/mysql/2015/06/17/MySQL%E5%8A%A0%E9%94%81.html</guid>
+        <link>http://yourdomain.com/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015/06/17/MySQL%E5%8A%A0%E9%94%81.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015/06/17/MySQL%E5%8A%A0%E9%94%81.html</guid>
         
         
-        <category>mysql</category>
+        <category>点滴积累</category>
         
       </item>
     
@@ -1702,119 +1799,6 @@ origin  git@github.com:rgkjhshi/blog.git (push)
         
         
         <category>mac开发</category>
-        
-      </item>
-    
-      <item>
-        <title>注解(Annotation)</title>
-        <description>&lt;p&gt;刚用到Spring中的注解时，感觉真是太方便了，其实在JDK1.5就已经支持注解了，1.5以后默认内置了三个注解&lt;br&gt;
-@Override:只能用在方法之上的，表示重写父类的方法。&lt;br&gt;
-@Deprecated:可用在任何元素上，表示API已过时，编译时会产生警告。&lt;br&gt;
-@SuppressWarnings: 可以关闭警告信息。  &lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2&gt;本文结构&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#define&quot;&gt;如何定义注解&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#rule&quot;&gt;注解的使用规则&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;define&quot;&gt; 如何定义注解 &lt;/h2&gt;
-
-&lt;p&gt;我们可以通过关键字&lt;code&gt;class&lt;/code&gt;来声明一个类，类似的我们可以用某东西来声明注解，用来声明注解的这东西叫做&amp;quot;元注解&amp;quot;。&lt;br&gt;
-在&lt;code&gt;java.lang.annotation&lt;/code&gt;包中定义了4个元注解，分别是: &lt;code&gt;@Target、 @Retention、 @Documented、 @Inherited&lt;/code&gt;  &lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;@Target&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;code&gt;@Target&lt;/code&gt;用于说明Annotation所修饰的对象范围，比如用于修饰类、接口、构造方法、成员方法、成员变量等，它作用范围的取值有:  &lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;ElementType.CONSTRUCTOR     : 用于描述构造器  
-ElementType.FIELD           : 用于描述字段  
-ElementType.LOCAL_VARIABLE  : 用于描述局部变量  
-ElementType.METHOD          : 用于描述方法  
-ElementType.PACKAGE         : 用于描述包  
-ElementType.PARAMETER       : 用于描述参数  
-ElementType.TYPE            : 用于描述类、接口(包括注解类型) 或enum声明  
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ul&gt;
-&lt;li&gt;@Retention&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;code&gt;@Retention&lt;/code&gt;定义Annotation的有效期，即生命周期，如是源码级还是class级还是可以被加载到虚拟机，它的取值有:   &lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;RetentionPoicy.SOURCE       : 在源文件中有效（即源文件保留）
-RetentionPoicy.CLASS        : 在class文件中有效（即class保留）
-RetentionPoicy.RUNTIME      : 在运行时有效（即运行时保留）
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ul&gt;
-&lt;li&gt;@Documented&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;code&gt;@Documented&lt;/code&gt;是一个标记注解，没有成员，表示可以被javadoc文档化&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;@Inherited&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;code&gt;@Inherited&lt;/code&gt;是一个标记注解，允许子类继承父类中的注解  &lt;/p&gt;
-
-&lt;p&gt;下面是定义注解的例子:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.lang.annotation.ElementType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.lang.annotation.Retention&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.lang.annotation.RetentionPolicy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.lang.annotation.Target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;nd&quot;&gt;@Retention&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;RetentionPolicy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;RUNTIME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;// 表示注解将被加载到虚拟机&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@Target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;({&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ElementType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;METHOD&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ElementType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;TYPE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;})&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// MyAnnotation 可修饰方法和类等&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nd&quot;&gt;@interface&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MyAnnotation&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;       &lt;span class=&quot;c1&quot;&gt;// @interface 即为定义注解的“关键字”&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;//为注解添加属性&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;color&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;default&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//为属性提供默认值&lt;/span&gt;
-    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;};&lt;/span&gt; 
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;// 测试文件&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// (value=&amp;quot;not default&amp;quot;)则可以写成(&amp;quot;not default&amp;quot;)value比较特殊，其他不可以省略写&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@MyAnnotation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;color&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;red&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 注解中没有默认值的必须赋值； &lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AnnotationTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//检查类AnnotationTest是否含有@MyAnnotation注解&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AnnotationTest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isAnnotationPresent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MyAnnotation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;//若存在就提取注解的值&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;MyAnnotation&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;annotation&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MyAnnotation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AnnotationTest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getAnnotation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MyAnnotation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;annotation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;color&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;annotation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-
-&lt;h2 id=&quot;rule&quot;&gt; 注解的使用规则 &lt;/h2&gt;
-
-&lt;ol&gt;
-&lt;li&gt;使用&lt;code&gt;@interface&lt;/code&gt;定义注解时，自动继承了&lt;code&gt;java.lang.annotation.Annotation&lt;/code&gt;接口，由编译程序自动完成其他细节。&lt;br&gt;&lt;/li&gt;
-&lt;li&gt;定义注解时，不能继承其他的注解或接口。&lt;br&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;@interface&lt;/code&gt;用来声明一个注解，其中的每一个方法实际上是声明了一个配置参数。方法的名称就是参数的名称，返回值类型就是参数的类型。&lt;/li&gt;
-&lt;li&gt;参数类型只能是基本类型、String、Class、enum、Annotation或这些类型的数组。&lt;/li&gt;
-&lt;li&gt;可以通过default来声明参数的默认值。&lt;/li&gt;
-&lt;li&gt;参数只能用public或默认(default)这两个访问权修饰.例如,String value();这里把方法设为defaul默认类型；&lt;/li&gt;
-&lt;li&gt;如果只有一个参数成员,最好把参数名称设为&amp;quot;value&amp;quot;,后加小括号，指定其值时可以是(value=&amp;quot;abc&amp;quot;)或简写成(&amp;quot;abc&amp;quot;)，其他名字的成员不能简写。&lt;/li&gt;
-&lt;li&gt;注解元素必须有确定的值，要么在定义注解的默认值中指定，要么在使用注解时指定，非基本类型的注解元素的值不可为null。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;hr&gt;
-</description>
-        <pubDate>Mon, 27 Apr 2015 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/java/2015/04/27/%E6%B3%A8%E8%A7%A3(Annotation).html</link>
-        <guid isPermaLink="true">http://yourdomain.com/java/2015/04/27/%E6%B3%A8%E8%A7%A3(Annotation).html</guid>
-        
-        
-        <category>java</category>
         
       </item>
     
