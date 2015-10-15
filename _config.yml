@@ -1,29 +1,49 @@
+# 生成文章的目录位置
+# permalink: /:year-:month-:day/:title/
+permalink: /:categories/:year-:month-:day-:title.html
 # Site settings
-#
-title: Michael King's Blog
-email: rgkjhshi@126.com
-description: > # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://yourdomain.com" # the base hostname & protocol for your site
-twitter_username: rgkjhshi
+title: 逆水行舟
+email: rgkjhshi@gmail.com
+description: Michael King's Blog
+baseurl: "" # the subpath of your site, e.g. /blog/
+# url: "http://yourdomain.com" # the base hostname & protocol for your site
 github_username:  rgkjhshi
-username: rgkjhshi
+url: "http://127.0.0.1:4000"
 
 # Build settings
-#
-# markdown 的解释器， redcarpet可以支持三个反引号包裹代码块
-# markdown: kramdown
-markdown: redcarpet
-safe: false  # 关闭安全模式，以便 Jekyll 解析时会运行插件
+# 代码高亮
 highlighter: pygments # 高亮显示 取值有 'rouge', 'pygments'
-excerpt_separator: "\n\n\n" # 指定摘要分割符号
-# paginate: 5 # 指定分页时一页大小
+# markdown 的解释器, 默认是 kramdown
+markdown: redcarpet
+# 关闭安全模式，以便 Jekyll 解析时会运行插件
+safe: false
+# 指定摘要分割符号
+# excerpt_separator: "\n\n\n"
+# 指定分页时一页大小
+# paginate: 5
+# paginate_path: ":num"
 
 # 多说评论系统
 comments :
     provider : duoshuo
     duoshuo : Michael
     short_name : Michael
+
+redcarpet:
+  extensions: [
+   "no_intra_emphasis"   # 不解析单词中的下划线
+   ,"fenced_code_blocks" # 三个 ~ 或 ` 包围的文本会被解析成代码块
+   # ,"autolink"           # 自动链接
+   ,"tables"             # |---|:---|---:|:---:| 上面一行是表头
+   ,"strikethrough"      # 两个 ~ 包围的会解析成删除线
+   ,"superscript"        # 上标 文本^上标一^^上标二
+   ,"with_toc_data"      # 给生成的 Header 标签增加锚点
+   ,"footnotes"
+   ,"highlight"
+   ,"underline"
+   ,"quote"
+   ,"lax_spacing"
+   ,"prettify"
+#   ,"html_toc"
+#   ,"space_after_headers" #后面必须加空格，否则不会被解析为标题
+  ]

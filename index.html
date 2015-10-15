@@ -3,12 +3,20 @@ layout: default
 title: 文章列表
 ---
 
-  <div class="post-list">
-    {% for post in site.posts %}
-    <div style="width:100%; ">
-        <a style="display:inline-block;" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
-        <span style="float:right; width:100px; "> {{ post.date | date: '%Y-%m-%d' }} </span>
-        <!-- <span style="float:right; width:100px; "> {{ post.category }} </span> -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>{{ page.title }}</h1>
     </div>
-    {% endfor %}
-  </div>
+    <div class="uk-grid">
+        <ul >
+            {% for post in site.posts %}
+            <li class="link-list-item">
+                <span class="item-head"> {{ post.date | date: '%Y-%m-%d' }} </span>
+                <span class="item-head uk-icon-angle-double-right uk-icon-small"> </span>
+                <a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }} </span>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

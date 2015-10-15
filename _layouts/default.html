@@ -1,27 +1,26 @@
 <!DOCTYPE html>
 <html>
 
-  {% include head.html %}
+{% include head.html %}
 
-  <body>
-    <div class="page">
+<body>
 
-      <!-- 头部 -->
-      {% include header.html %}
-      <!-- 侧边栏 -->
-      {% include aside.html %}
+    {% include header.html %}
 
-      <!-- 内容主体 -->
-      <div class="wrapper">
-        <!-- 文章内容 -->
-        <section>
-          <h1> {{ page.title }} </h1>
-          {{ content }}
-        </section>
-      </div>
+    <div class="uk-container uk-container-center">
+        {{ content }}
+    </div>
 
-      {% include footer.html %}
-  </page>
-  </body>
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    {% include footer.html %}
+
+</body>
 
 </html>

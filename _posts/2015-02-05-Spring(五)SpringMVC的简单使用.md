@@ -2,7 +2,8 @@
 layout: blog
 title:  "Spring(五): SpringMVC的简单使用"
 date:   2015-02-05
-category: Spring  
+category: 编程技术  
+tag: Spring
 ---
 
 

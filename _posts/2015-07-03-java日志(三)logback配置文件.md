@@ -1,9 +1,9 @@
 ---
 layout: blog
-title:  "java日志(三)logback配置文件"
-date:   2015-07-03
-category: java  
-comments: true
+title:  java日志(三):logback配置文件
+date: 2015-07-03
+category: 编程技术
+tag: Java日志
 ---
 logback配置文件的简单介绍，主要内容均来自[logback官方文档](http://logback.qos.ch/manual/)
 
@@ -33,7 +33,7 @@ logback配置文件的简单介绍，主要内容均来自[logback官方文档](
 logback配置文件的跟节点为`<configuration>`,它的子节点有3个:`root、logger、appender`，除了`root`之外，每个都可以多次出现。  
 下面是我画的一个结构图，实线表示节点，虚线表示属性
 
-![logback配置文件结构图]({{ "/assets/images/logbak_config.png"  | prepend: site.baseurl }} "结构图")
+![logback配置文件结构图]({{ "/static/images/logbak_config.png"  | prepend: site.baseurl }} "结构图")
 
 * `appender`:用于描述日志的输出格式，是输出到控制台还是输出到文件，日志滚动打包策略等。
 * `logger`:用来制定把什么内容用哪个`appender`输出。
@@ -49,13 +49,13 @@ logback配置文件的跟节点为`<configuration>`,它的子节点有3个:`root
 ```
 00:16:31,885 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.test.log] to INFO
 00:16:31,885 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting additivity of logger [com.test.log] to false
-00:16:31,885 |-ERROR in ch.qos.logback.core.joran.action.AppenderRefAction - Could not find an appender named [STDOUT]. Did you define it below instead of above in the configuration file?
-00:16:31,885 |-ERROR in ch.qos.logback.core.joran.action.AppenderRefAction - See http://logback.qos.ch/codes.html#appender_order for more details.
+00:16:31,885 |-ERROR in ch.qos.logback.core.joran.action.AppenderRefAction - Could not find an appender named [STDOUT]....
+00:16:31,885 |-ERROR in ch.qos.logback.core.joran.action.AppenderRefAction - See ... for more details.
 00:16:31,885 |-INFO in ch.qos.logback.classic.joran.action.RootLoggerAction - Setting level of ROOT logger to DEBUG
-00:16:31,885 |-ERROR in ch.qos.logback.core.joran.action.AppenderRefAction - Could not find an appender named [STDOUT]. Did you define it below instead of above in the configuration file?
-00:16:31,885 |-ERROR in ch.qos.logback.core.joran.action.AppenderRefAction - See http://logback.qos.ch/codes.html#appender_order for more details.
+00:16:31,885 |-ERROR in ch.qos.logback.core.joran.action.AppenderRefAction - Could not find an appender named [STDOUT]....
+00:16:31,885 |-ERROR in ch.qos.logback.core.joran.action.AppenderRefAction - See ... for more details.
 00:16:31,885 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - End of configuration.
-00:16:31,888 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@36577c06 - Registering current configuration as safe fallback point
+00:16:31,888 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@36577c06 - Registering current configuration as...
 ```
 如果加载过程未出现警告或者错误，就不会打印出来了。  
 若指定了`debug="true"`，即使不出现警告和错误，也会打印出logback内部的状态日志。

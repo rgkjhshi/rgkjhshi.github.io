@@ -1,51 +1,18 @@
-<!DOCTYPE html>
-<html>
-
-  {% include head.html %}
-
-  <body>
-    <div class="page">
-
-      <!-- 头部 -->
-      {% include header.html %}
-      <!-- 侧边栏 -->
-      {% include aside.html %}
-
-      <!-- 内容主体 -->
-      <div class="wrapper">
-        <!-- 文章内容 -->
-        <section>
-          <h1> {{ page.title }} </h1>
-          {{ content }}
-        </section>
-
-        <!-- 广告位 BEGIN -->
-
-        <!-- UJian Button BEGIN -->
-        <script type="text/javascript">var ujian_config = {target:1};</script>
-        <script type="text/javascript" src="http://v1.ujian.cc/code/ujian.js?type=slide&pos=left&fade=1&uid=1746608"></script>
-        <a href="http://www.ujian.cc" style="border:0;"><img src="http://img.ujian.cc/pixel.png" alt="友荐云推荐" style="border:0;padding:0;margin:0;" /></a>
-        <!-- UJian Button END -->
-
-        <!-- <div id="add">
-          <h2 style="padding-left:24px;">广而告之</h2>
-          <script type="text/javascript">var sogou_ad_id=429088; var sogou_ad_height=90; var sogou_ad_width=760; </script>
-          <script type='text/javascript' src='http://images.sohu.com/cs/jsfile/js/c.js'></script>
-        </div> -->
-        <!-- 广告位 END -->
-
-        <!-- Duoshuo Comment BEGIN -->
-        <div id="comments">
-          <h2 style="padding-left:24px;">评论</h2>
-          <div class="ds-thread" {% if page.id %}data-thread-key="{{ page.id }}"{% endif %}
-            data-title="{% if page.title %}{{ page.title }}{% endif %}"
-            data-url="{% if page.url %}{{ page.url | prepend: site.baseurl }}{% endif %}" ></div>
+---
+layout: default
+---
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>{{ page.title }}</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            {{ content }}
         </div>
-        <!-- Duoshuo Comment END -->
-      </div>
+    </div>
 
-      {% include footer.html %}
-  </page>
-  </body>
-
-</html>
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="{{ page.id }}" data-title="{{ page.title }}" data-url="{{ page.url }}"></div>
+    <!-- 多说评论框 end -->
+</div>

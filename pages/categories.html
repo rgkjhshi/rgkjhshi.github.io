@@ -1,0 +1,42 @@
+---
+layout: default
+title: Categories
+---
+
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>{{ page.title }}</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-3-4">
+            {% for category in site.categories %}
+            <div class="link-list-title" id="{{ category | first }}" >{{ category | first }}</div>
+            {% for posts in category %}
+            {% for post in posts %}
+            {% if post.url %}
+            <div class="link-list-item">
+                <span class="item-head"> {{ post.date | date: '%Y-%m-%d' }} </span>
+                <span class="item-head uk-icon-angle-double-right uk-icon-small"> </span>
+                <a href="{{ post.url | prepend: site.baseurl | prepend: site.url}}">{{ post.title }}</a>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endfor %}
+            {% endfor %}
+        </div>
+        <div class="uk-width-1-4">
+            <div id="sticker" data-uk-sticky="{top:50}">
+                <ul>
+                    {% for category in site.categories %}
+                    <li class="link-list-item">
+                        <a href="{{ category | first | prepend: '/categories.html#' | prepend: site.url }}" data-uk-smooth-scroll="{offset: 50}">
+                            <span class="item-head">{{ category | first }}</span>
+                            <span class="item-head">({{ category | last | size }})</span>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

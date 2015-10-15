@@ -1,0 +1,32 @@
+---
+layout: default
+title: Archive
+---
+
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>{{ page.title }}</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            {% for post in site.posts %}
+            <!-- 先输出归档年份 -->
+                {% unless post.next %}  <!-- 没有下一篇文章的时候(next是时间顺序的下一个) -->
+            <div class="link-list-title" id="{{ post.date | date: '%Y' }}" >{{ post.date | date: '%Y' }}</div>
+                {% else %}
+                    {% capture year %} {{ post.date | date: '%Y'  | prepend:"" }} {% endcapture %}
+                    {% capture nextYear %} {{ post.next.date | date: '%Y' | prepend:"" }} {% endcapture %}
+                    {% if year != nextYear %}
+            <div class="link-list-title" id="{{ post.date | date: '%Y' }}" >{{ post.date | date: '%Y' }}</div>
+                    {% endif %}
+                {% endunless %}
+            <!-- 输出文章列表 -->
+            <div class="link-list-item">
+                <span class="item-head"> {{ post.date | date: '%Y-%m-%d' }} </span>
+                <span class="item-head uk-icon-angle-double-right uk-icon-small"> </span>
+                <a href="{{ post.url | prepend: site.baseurl | prepend: site.url}}">{{ post.title }}</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>

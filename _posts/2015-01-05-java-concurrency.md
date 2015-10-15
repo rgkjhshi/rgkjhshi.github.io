@@ -1,8 +1,9 @@
 ---
 layout: blog
 title: Java中的并发
-date:  2015-01-05 
-category: java
+date:  2015-01-05
+category: 编程技术
+tag: Java
 ---
 
 
@@ -73,7 +74,7 @@ sleep 会使得当前线程休眠一段时间，但并不会释放已经得到�
 
 wait 会阻塞住，并释放已经得到的锁。一直到有人调用 notify 或者 notifyAll，它会重新尝试得到锁，然后再唤醒。
 
-## 线程池 
+## 线程池
 
 ### 好处
 
@@ -119,7 +120,7 @@ for (int i = 0; i < 14; i++) {
 
 另外，还提供了 `newSingleThreadExecutor` 创建有一个工作线程的线程池。
 
-### 原理 
+### 原理
 
 JDK 中的线程池通过 HashSet 存储工作者线程，通过 BlockingQueue 来存储待处理任务。
 

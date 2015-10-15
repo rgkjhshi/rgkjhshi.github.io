@@ -1,8 +1,9 @@
 ---
-layout    : blog
-title    :  Intellij Idea快捷键forMac
-date    :   2015-02-15 
-category    : Mac开发  
+layout: blog
+title:  Intellij Idea快捷键forMac
+date:   2015-02-15
+category: 快捷速查  
+tag: 快捷键
 ---
 
 
@@ -38,7 +39,7 @@ shift + cmd + e        :    最近修改文件列表
 <h2 id="search"> 搜索内容 </h2>
 
 ```java
-cmd + f                :    开始搜索 
+cmd + f                :    开始搜索
 cmd + r                :    搜索替换
 ctrl + shift + f       :    (在project中使用)在当前目录下递归查找
 ctrl + shift + r       :    (在project中使用)在当前目录下递归替换

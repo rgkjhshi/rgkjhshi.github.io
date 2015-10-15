@@ -1,9 +1,9 @@
 ---
 layout: blog
 title:  "MyBatis(四): 动态SQL"
-date:   2015-01-24 
-category: MyBatis  
-comments: true
+date:   2015-01-24
+category: 编程技术  
+tag: MyBatis
 ---
 
 MyBatis的动态SQL是基于ONGL表达式的
@@ -29,7 +29,7 @@ if一般是where的一部分，如
 
 ```xml
 <select id="findBlog" resultType="Blog">
-  SELECT * FROM BLOG WHERE 1 = 1 
+  SELECT * FROM BLOG WHERE 1 = 1
   <if test="title != null">
     AND title LIKE CONCAT(CONCAT('%', #{title}), '%')
     <!-- mysql也可以这样写：AND title LIKE "%"#{title}"%" -->
@@ -48,10 +48,10 @@ if一般是where的一部分，如
 ```xml
 <select id="findBlog" resultType="Blog">
   SELECT * FROM blog
-  <where> 
+  <where>
     <if test="state != null">
          state = #{state}
-    </if> 
+    </if>
     <if test="title != null">
         AND title like #{title}
     </if>
@@ -127,7 +127,7 @@ choose元素的作用就相当于JAVA中的switch语句
             and author = "Michael"  
         </otherwise>  
     </choose>  
-</select> 
+</select>
 ```
 
 *****

@@ -1,7 +1,22 @@
-<header>
-  <h1> <a href="{{ site.baseurl }}/">{{ site.title }}</a> </h1>
-  <p>水到绝境是飞瀑</p>
-  <!-- <ul>
-      <li><a href="https://github.com/{{site.username}}/blog/tree/gh-pages">View On <strong>GitHub</strong></a></li>
-  </ul> -->
+<header class="header" id＝"header">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="{{ site.url  }}"> {{ site.title }} -- {{site.description}} </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="{{ site.url  }}"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="{{ '/pages/archive.html' | prepend:site.baseurl | prepend: site.url  }}" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="{{ '/pages/categories.html' | prepend:site.baseurl | prepend: site.url  }}" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="{{ '/pages/tags.html' | prepend:site.baseurl | prepend: site.url  }}" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="{{ '/pages/about.html' | prepend:site.baseurl | prepend: site.url  }}" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/{{site.github_username}}" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="{{ '/feed.xml' | prepend:site.baseurl | prepend: site.url  }}" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
 </header>
+<!-- header end -->

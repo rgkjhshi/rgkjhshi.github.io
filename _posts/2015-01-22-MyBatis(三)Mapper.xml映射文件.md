@@ -1,9 +1,9 @@
 ---
 layout: blog
 title:  "MyBatis(三): Mapper.xml映射文件"
-date:   2015-01-22 
-category: MyBatis  
-comments: true
+date:   2015-01-22
+category: 编程技术  
+tag: MyBatis
 ---
 
 `Mapper.xml`文件的主要功能是映射SQL语句，对数据库进行增删改查操作，与JDBC代码相比，更加方便。
@@ -230,7 +230,7 @@ public class Comment {
     <association column="author_id" property="author" javaType="Author"
                  select="com.test.mybatis.mapper.AuthorMapper.selectAuthorById"/>
                  <!-- 这里如果起了别名也可使用 -->
-    <collection property="comments" javaType="ArrayList" column="id" ofType="Comment" 
+    <collection property="comments" javaType="ArrayList" column="id" ofType="Comment"
                 select="com.test.mybatis.mapper.CommentMapper.selectCommentForBlog"/>
 </resultMap>
 
