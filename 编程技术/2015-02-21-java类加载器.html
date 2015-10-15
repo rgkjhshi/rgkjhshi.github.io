@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="Java类加载器, 编程技术, Java, 逆水行舟" />
+    <meta name="description" content="Java类加载器, 编程技术, Java, java.lang.Class.forName(…)和java.lang.ClassNotFoundExcetpion是我们经常遇到的，藏在他们身后的，是Java的类加载器。" />
+
+    <title>Java类加载器</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="http://127.0.0.1:4000/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://127.0.0.1:4000/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-02-21-java%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://127.0.0.1:4000/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/uikit.min.js"></script>
+    <!-- sticky -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "Michael"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" id＝"header">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://127.0.0.1:4000"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://127.0.0.1:4000"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="http://127.0.0.1:4000/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>Java类加载器</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <p><code class="prettyprint">java.lang.Class.forName(…)</code>和<code class="prettyprint">java.lang.ClassNotFoundExcetpion</code>是我们经常遇到的，藏在他们身后的，是Java的类加载器。</p>
+
+<hr>
+
+<h2 id="本文结构">本文结构</h2>
+
+<ul>
+<li><a href="#ClassLoader">JVM预定义的三种类加载器</a>
+
+<ul>
+<li><a href="#Bootstrap">启动(Bootstrap)类加载器</a></li>
+<li><a href="#Extension">标准扩展(Extension)类加载器</a></li>
+<li><a href="#System">系统(System)类加载器</a></li>
+</ul></li>
+<li><a href="#parent">双亲委派机制</a></li>
+<li><a href="#check">程序验证</a>
+
+<ul>
+<li><a href="#check1">parent的验证</a></li>
+<li><a href="#check2">默认的类加载器</a></li>
+<li><a href="#check3">双亲委派以及类加载器的加载位置</a></li>
+</ul></li>
+<li><a href="#notice">注意</a></li>
+</ul>
+
+<hr>
+
+<h2 id="ClassLoader"> JVM预定义的三种类加载器 </h2>
+
+<p>JVM预定义的三种类加载器有：启动(Bootstrap)类加载器、标准扩展(Extension)类加载器和系统(System)类加载器，当一个JVM启动的时候，Java缺省开始使用这些类装入器。<br>
+除了以上三种类加载器，还有一种比较特殊的类型就是线程上下文类加载器，这个暂不介绍。</p>
+
+<h3 id="Bootstrap"> 启动(Bootstrap)类加载器 </h3>
+
+<p>启动类加载器是通过<code class="prettyprint">java.lang.ClassLoader</code>中的<code class="prettyprint">private native final Class findLoadedClass0(String name);</code>这一本地方法实现的类装入器，它负责将<code class="prettyprint">&lt;Java_Runtime_Home&gt;/lib</code>下面的类库加载到内存中。</p>
+
+<h3 id="Extension"> 标准扩展(Extension)类加载器 </h3>
+
+<p>扩展类加载器是由Sun的<code class="prettyprint">ExtClassLoader(sun.misc.Launcher$ExtClassLoader)</code>实现，它负责将<code class="prettyprint">&lt;Java_Runtime_Home &gt;/lib/ext</code>或者由系统变量 <code class="prettyprint">java.ext.dir</code>指定位置中的类库加载到内存中。</p>
+
+<h3 id="System"> 系统(System)类加载器 </h3>
+
+<p>系统类加载器是由Sun的<code class="prettyprint">AppClassLoader(sun.misc.Launcher$AppClassLoader)</code>实现，它负责将系统类路径<code class="prettyprint">CLASSPATH</code>中指定的类库加载到内存中。</p>
+
+<p>上面三种类型的类加载器中，启动(Bootstrap)类加载器是通过本地方法实现的，无法直接获取到启动类加载器的引用；而标准扩展(Extension)类加载器和系统(System)类加载器均为<code class="prettyprint">sun.misc.Launcher</code>的内部类，分别对应<code class="prettyprint">ExtClassLoader</code>和<code class="prettyprint">AppClassLoader</code>，这两个内部类均继承自<code class="prettyprint">URLClassLoader</code>，其继承关系为：</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">java</span><span class="o">.</span><span class="na">net</span><span class="o">.</span><span class="na">URLClassLoader</span> <span class="o">-&gt;</span> <span class="n">java</span><span class="o">.</span><span class="na">security</span><span class="o">.</span><span class="na">SecureClassLoader</span> <span class="o">-&gt;</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">ClassLoader</span>
+</code></pre></div>
+<p>所以<code class="prettyprint">ExtClassLoader</code>和<code class="prettyprint">AppClassLoader</code>这两个内部类间接继承自<code class="prettyprint">ClassLoader</code></p>
+
+<hr>
+
+<h2 id="parent"> 双亲委派机制 </h2>
+
+<p>JVM在加载类时默认采用的是双亲委派机制，就是某个特定的类加载器在接到加载类的请求时，首先将加载任务委托给双亲加载器，依次递归，如果双亲加载器可以完成类加载任务，就成功返回；只有双亲类加载器无法完成此加载任务时，才自己去加载。<br>
+注意这里的双亲并不是继承上的关系，而是指的<code class="prettyprint">ClassLoader</code>中的一个字段。在源码中更容易描述双亲委派机制：</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">//java.lang.ClassLoader.java</span>
+    <span class="c1">// 双亲的定义</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">ClassLoader</span> <span class="n">parent</span><span class="o">;</span>
+    <span class="c1">// 加载方法</span>
+    <span class="kd">public</span> <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">loadClass</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ClassNotFoundException</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">loadClass</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="kd">protected</span> <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">loadClass</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">resolve</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ClassNotFoundException</span> <span class="o">{</span>
+        <span class="kd">synchronized</span> <span class="o">(</span><span class="n">getClassLoadingLock</span><span class="o">(</span><span class="n">name</span><span class="o">))</span> <span class="o">{</span>
+            <span class="c1">// First, check if the class has already been loaded</span>
+            <span class="n">Class</span> <span class="n">c</span> <span class="o">=</span> <span class="n">findLoadedClass</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+            <span class="c1">//如果没有加载过，则进行加载</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="kt">long</span> <span class="n">t0</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">nanoTime</span><span class="o">();</span>
+                <span class="k">try</span> <span class="o">{</span>
+                    <span class="c1">// 先检查双亲</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">parent</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>  <span class="c1">// 如果有双亲，则委派给双亲去加载</span>
+                        <span class="n">c</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="na">loadClass</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span> <span class="c1">// 没有双亲才使用Bootstrap类加载器加载</span>
+                        <span class="n">c</span> <span class="o">=</span> <span class="n">findBootstrapClassOrNull</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ClassNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="c1">// ClassNotFoundException thrown if class not found</span>
+                    <span class="c1">// from the non-null parent class loader</span>
+                <span class="o">}</span>
+                <span class="c1">// 如果父类加载器和启动类加载器都不能完成加载任务，才调用自身的加载功能</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="c1">// If still not found, then invoke findClass in order</span>
+                    <span class="c1">// to find the class.</span>
+                    <span class="kt">long</span> <span class="n">t1</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">nanoTime</span><span class="o">();</span>
+                    <span class="n">c</span> <span class="o">=</span> <span class="n">findClass</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+                    <span class="c1">// this is the defining class loader; record the stats</span>
+                    <span class="n">sun</span><span class="o">.</span><span class="na">misc</span><span class="o">.</span><span class="na">PerfCounter</span><span class="o">.</span><span class="na">getParentDelegationTime</span><span class="o">().</span><span class="na">addTime</span><span class="o">(</span><span class="n">t1</span> <span class="o">-</span> <span class="n">t0</span><span class="o">);</span>
+                    <span class="n">sun</span><span class="o">.</span><span class="na">misc</span><span class="o">.</span><span class="na">PerfCounter</span><span class="o">.</span><span class="na">getFindClassTime</span><span class="o">().</span><span class="na">addElapsedTimeFrom</span><span class="o">(</span><span class="n">t1</span><span class="o">);</span>
+                    <span class="n">sun</span><span class="o">.</span><span class="na">misc</span><span class="o">.</span><span class="na">PerfCounter</span><span class="o">.</span><span class="na">getFindClasses</span><span class="o">().</span><span class="na">increment</span><span class="o">();</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">resolve</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">resolveClass</span><span class="o">(</span><span class="n">c</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="n">c</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre></div>
+<p>从源码中可以看出，双亲为<code class="prettyprint">null</code>时才会调用<code class="prettyprint">Bootstrap</code>启动类加载器，所以启动类加载器可以当成是最后一个双亲。<br>
+<code class="prettyprint">ExtClassLoader</code>和<code class="prettyprint">AppClassLoader</code>这两个内部类继承自<code class="prettyprint">URLClassLoader</code>，而<code class="prettyprint">URLClassLoader</code>和<code class="prettyprint">SecureClassLoader</code>中仅做了一些检查，双亲委派机制在各个类加载器中是一直有效的。</p>
+
+<p>另外<code class="prettyprint">parent</code>被<code class="prettyprint">private final</code>修饰，并且定义的时候没有赋初值，这就必须在构造方法中进行赋值。<br>
+我们从源码中分析下各个类加载器的<code class="prettyprint">parent</code>到底被赋值为什么。</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// java.loang.ClassLoader.java</span>
+    <span class="c1">// 三个构造方法</span>
+    <span class="kd">protected</span> <span class="nf">ClassLoader</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">(</span><span class="n">checkCreateClassLoader</span><span class="o">(),</span> <span class="n">getSystemClassLoader</span><span class="o">());</span>
+    <span class="o">}</span>
+    <span class="kd">protected</span> <span class="nf">ClassLoader</span><span class="o">(</span><span class="n">ClassLoader</span> <span class="n">parent</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">(</span><span class="n">checkCreateClassLoader</span><span class="o">(),</span> <span class="n">parent</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="kd">private</span> <span class="nf">ClassLoader</span><span class="o">(</span><span class="n">Void</span> <span class="n">unused</span><span class="o">,</span> <span class="n">ClassLoader</span> <span class="n">parent</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">parent</span> <span class="o">=</span> <span class="n">parent</span><span class="o">;</span>
+        <span class="o">...</span>
+    <span class="o">}</span>
+    <span class="c1">// 不指定parent时，默认的parent为系统(System)类加载器，即AppClassLoader</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">ClassLoader</span> <span class="nf">getSystemClassLoader</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// 通过java.lang.ClassLoader.getSystemClassLoader()可以直接获取到系统类加载器，后面会通过代码进行测试</span>
+        <span class="o">...</span>
+    <span class="o">}</span>
+<span class="o">==========================================================================================================</span>
+<span class="c1">// sun.misc.Launcher.java</span>
+    <span class="kd">private</span> <span class="n">ClassLoader</span> <span class="n">loader</span><span class="o">;</span>
+    <span class="c1">// Launcher 的构造方法</span>
+    <span class="kd">public</span> <span class="nf">Launcher</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// Create the extension class loader</span>
+        <span class="n">ClassLoader</span> <span class="n">extcl</span><span class="o">;</span>  <span class="c1">// 这里定义了 extcl</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">extcl</span> <span class="o">=</span> <span class="n">ExtClassLoader</span><span class="o">.</span><span class="na">getExtClassLoader</span><span class="o">();</span> <span class="c1">// 调用了内部类ExtClassLoader的方法，生成了ExtClassLoader</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">InternalError</span><span class="o">(</span><span class="s">&quot;Could not create extension class loader&quot;</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="c1">// Now create the class loader to use to launch the application</span>
+        <span class="k">try</span> <span class="o">{</span>
+           <span class="n">loader</span> <span class="o">=</span> <span class="n">AppClassLoader</span><span class="o">.</span><span class="na">getAppClassLoader</span><span class="o">(</span><span class="n">extcl</span><span class="o">);</span>  <span class="c1">// 调用了内部类的getAppClassLoader方法</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">InternalError</span><span class="o">(</span><span class="s">&quot;Could not create application class loader&quot;</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="o">...</span>
+    <span class="o">}</span>
+    <span class="c1">// 内部类 AppClassLoader</span>
+    <span class="kd">static</span> <span class="kd">class</span> <span class="nc">AppClassLoader</span> <span class="kd">extends</span> <span class="n">URLClassLoader</span> <span class="o">{</span>
+        <span class="c1">// AppClassLoader 的构造方法，所以生成AppClassLoader时必须指定parent</span>
+        <span class="n">AppClassLoader</span><span class="o">(</span><span class="n">URL</span><span class="o">[]</span> <span class="n">urls</span><span class="o">,</span> <span class="n">ClassLoader</span> <span class="n">parent</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// 在此设置了 AppClassLoader 的 parent</span>
+            <span class="kd">super</span><span class="o">(</span><span class="n">urls</span><span class="o">,</span> <span class="n">parent</span><span class="o">,</span> <span class="n">factory</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="c1">// 内部类的方法</span>
+        <span class="kd">public</span> <span class="kd">static</span> <span class="n">ClassLoader</span> <span class="nf">getAppClassLoader</span><span class="o">(</span><span class="kd">final</span> <span class="n">ClassLoader</span> <span class="n">extcl</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span>
+        <span class="o">{</span>
+            <span class="kd">final</span> <span class="n">String</span> <span class="n">s</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">&quot;java.class.path&quot;</span><span class="o">);</span>
+            <span class="kd">final</span> <span class="n">File</span><span class="o">[]</span> <span class="n">path</span> <span class="o">=</span> <span class="o">(</span><span class="n">s</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">?</span> <span class="k">new</span> <span class="n">File</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">:</span> <span class="n">getClassPath</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
+            <span class="k">return</span> <span class="n">AccessController</span><span class="o">.</span><span class="na">doPrivileged</span><span class="o">(</span> <span class="k">new</span> <span class="n">PrivilegedAction</span><span class="o">&lt;</span><span class="n">AppClassLoader</span><span class="o">&gt;()</span> <span class="o">{</span>
+                    <span class="kd">public</span> <span class="n">AppClassLoader</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+                    <span class="n">URL</span><span class="o">[]</span> <span class="n">urls</span> <span class="o">=</span> <span class="o">(</span><span class="n">s</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">?</span> <span class="k">new</span> <span class="n">URL</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">:</span> <span class="n">pathToURLs</span><span class="o">(</span><span class="n">path</span><span class="o">);</span>
+                    <span class="c1">// 这里指定了 AppClassLoader 的parent为extcl</span>
+                    <span class="k">return</span> <span class="k">new</span> <span class="nf">AppClassLoader</span><span class="o">(</span><span class="n">urls</span><span class="o">,</span> <span class="n">extcl</span><span class="o">);</span>  <span class="c1">// 生成了AppClassLoader并且设置其parent为extcl</span>
+                <span class="o">}</span>
+            <span class="o">});</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="c1">// 内部类 ExtClassLoader</span>
+    <span class="kd">static</span> <span class="kd">class</span> <span class="nc">ExtClassLoader</span> <span class="kd">extends</span> <span class="n">URLClassLoader</span> <span class="o">{</span>
+        <span class="c1">// ExtClassLoader 的构造方法</span>
+        <span class="kd">public</span> <span class="nf">ExtClassLoader</span><span class="o">(</span><span class="n">File</span><span class="o">[]</span> <span class="n">dirs</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+            <span class="c1">// 调用URLClassLoader的构造方法 URLClassLoader(URL[] urls, ClassLoader parent, URLStreamHandlerFactory factory)</span>
+            <span class="c1">// 直接把 ExtClassLoader 的 parent 设置为null</span>
+            <span class="kd">super</span><span class="o">(</span><span class="n">getExtURLs</span><span class="o">(</span><span class="n">dirs</span><span class="o">),</span> <span class="kc">null</span><span class="o">,</span> <span class="n">factory</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre></div>
+<p>通过以上的源码分析可知，在<code class="prettyprint">sun.misc.Launcher.java</code>中做了如下工作</p>
+
+<ol>
+<li>将Launcher默认的类加载器<code class="prettyprint">loader</code>设置为<code class="prettyprint">AppClassLoader</code></li>
+<li>将<code class="prettyprint">AppClassLoader</code>的<code class="prettyprint">parent</code>设置为<code class="prettyprint">ExtClassLoader</code></li>
+<li>将<code class="prettyprint">ExtClassLoader</code>的<code class="prettyprint">parent</code>设置为<code class="prettyprint">null</code></li>
+</ol>
+
+<hr>
+
+<h2 id="check"> 程序验证 </h2>
+
+<h4 id="check1"> 验证一: parent的验证 </h4>
+
+<p>程序源码:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestClassLoader</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">ClassLoader</span><span class="o">.</span><span class="na">getSystemClassLoader</span><span class="o">());</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">ClassLoader</span><span class="o">.</span><span class="na">getSystemClassLoader</span><span class="o">().</span><span class="na">getParent</span><span class="o">());</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">ClassLoader</span><span class="o">.</span><span class="na">getSystemClassLoader</span><span class="o">().</span><span class="na">getParent</span><span class="o">().</span><span class="na">getParent</span><span class="o">());</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>输出结果为：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sun.misc.Launcher$AppClassLoader@30a4effe
+sun.misc.Launcher$ExtClassLoader@1c8825a5
+null
+</code></pre></div>
+<p>这说明<code class="prettyprint">AppClassLoader</code>的双亲为<code class="prettyprint">ExtClassLoader</code>，<code class="prettyprint">ExtClassLoader</code>的双亲为<code class="prettyprint">null</code>，这跟分析源码得出的结论一致。</p>
+
+<h4 id="check2"> 验证二: 默认的类加载器 </h4>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestClassLoader</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="c1">// 通过Class.forName加载类</span>
+            <span class="n">Class</span> <span class="n">loadedClass</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">&quot;com.test.classloader.TestClassLoader&quot;</span><span class="o">);</span>
+            <span class="c1">// 查看被加载的类是被那个类加载器加载的</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">loadedClass</span><span class="o">.</span><span class="na">getClassLoader</span><span class="o">());</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>输出结果为:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sun.misc.Launcher$AppClassLoader@30a4effe
+</code></pre></div>
+<p>这说明系统默认的类加载器为<code class="prettyprint">AppClassLoader</code>。</p>
+
+<h4 id="check3"> 验证三: 双亲委派以及类加载器的加载位置 </h4>
+
+<p>将上面编译好的class文件打包成<code class="prettyprint">classloader.jar</code>(最好使用集成工具进行打包)，将<code class="prettyprint">classloader.jar</code>放到<code class="prettyprint">&lt;Java_Runtime_Home &gt;/lib/ext</code>目录下，再次运行，结果成了  </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">sun.misc.Launcher$ExtClassLoader@2e5f8245
+</code></pre></div>
+<p>这说明通过双亲委派机制，<code class="prettyprint">ExtClassLoader</code>抢先加载了类<br>
+将<code class="prettyprint">classloader.jar</code>拷贝一份到<code class="prettyprint">&lt;Java_Runtime_Home &gt;/lib</code>目录下，再次运行，结果仍为<code class="prettyprint">sun.misc.Launcher$ExtClassLoader@2e5f8245</code><br>
+这说明放到<code class="prettyprint">&lt;Java_Runtime_Home &gt;/lib</code>目录下的文件并没有被加载，这跟双亲委派机制并不矛盾。
+<strong>虚拟机出于安全等因素考虑，不会加载<code class="prettyprint">&lt;Java_Runtime_Home&gt;/lib</code>存在的陌生类，开发者通过将要加载的非JDK自身的类放置到此目录下期待启动类加载器加载是不可能的。</strong><br>
+做个进一步验证，删除<code class="prettyprint">&lt;Java_Runtime_Home&gt;/lib/ext</code>目录下的<code class="prettyprint">classloader.jar</code>和工程输出目录下对应的class文件，然后再运行测试代码，则将会有<code class="prettyprint">ClassNotFoundException</code>异常抛出。</p>
+
+<hr>
+
+<h2 id="notice"> 注意 </h2>
+
+<ol>
+<li>在JVM中一个类用其全名和一个加载类<code class="prettyprint">ClassLoader</code>的实例作为唯一标识，不同类加载器加载的类将被置于不同的命名空间，所以<strong>不同类加载器加载的相同类，其类型也是不一样的</strong>。</li>
+<li>编写自定义类加载器时，不要覆写已有的<code class="prettyprint">loadClass(...)</code>方法。</li>
+<li>用户自定义类加载器不指定父类加载器，可以加载<code class="prettyprint">&lt;Java_Runtime_Home&gt;/lib</code>下的类，但不能加载<code class="prettyprint">&lt;Java_Runtime_Home&gt;/lib/ext</code>目录下的类。</li>
+</ol>
+
+<hr>
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/java类加载器" data-title="Java类加载器" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-02-21-java%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- header end -->
+
+
+</body>
+
+</html>

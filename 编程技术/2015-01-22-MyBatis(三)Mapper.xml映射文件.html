@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="MyBatis(三): Mapper.xml映射文件, 编程技术, MyBatis, 逆水行舟" />
+    <meta name="description" content="MyBatis(三): Mapper.xml映射文件, 编程技术, MyBatis, Mapper.xml文件的主要功能是映射SQL语句，对数据库进行增删改查操作，与JDBC代码相比，更加方便。" />
+
+    <title>MyBatis(三): Mapper.xml映射文件</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="http://127.0.0.1:4000/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://127.0.0.1:4000/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-01-22-MyBatis(%E4%B8%89)Mapper.xml%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://127.0.0.1:4000/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/uikit.min.js"></script>
+    <!-- sticky -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "Michael"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" id＝"header">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://127.0.0.1:4000"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://127.0.0.1:4000"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="http://127.0.0.1:4000/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>MyBatis(三): Mapper.xml映射文件</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <p><code class="prettyprint">Mapper.xml</code>文件的主要功能是映射SQL语句，对数据库进行增删改查操作，与JDBC代码相比，更加方便。</p>
+
+<hr>
+
+<h2 id="本文结构">本文结构</h2>
+
+<ul>
+<li><a href="#select">select 语句简介</a></li>
+<li><a href="#insert">insert update delete 简介</a></li>
+<li><a href="#parameter">Parameters 参数</a></li>
+<li><a href="#ResultMap">ResultMap</a></li>
+</ul>
+
+<hr>
+
+<h2 id="select"> select 语句简介 </h2>
+
+<p>查询语句是 MyBatis 中最常用的元素之一，先来个例子</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&quot;selectPerson&quot;</span> <span class="na">parameterType=</span><span class="s">&quot;int&quot;</span> <span class="na">resultType=</span><span class="s">&quot;hashmap&quot;</span><span class="nt">&gt;</span>
+  SELECT * FROM PERSON WHERE ID = #{id}
+<span class="nt">&lt;/select&gt;</span>
+</code></pre></div>
+<p>其中的<code class="prettyprint">XXXType</code>使用的都是<strong>完全限定名</strong>或者<strong><a href="/blog/mybatis/2015/01/20/MyBatis(%E4%BA%8C)%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.html#typeAliases">别名</a></strong>，其中的符号<code class="prettyprint">#{id}</code>会使用预处理语句，在 SQL 中会由一个“?”来标识，在<code class="prettyprint">JDBC</code>中相当于这样：</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// Similar JDBC code, NOT MyBatis…</span>
+<span class="n">String</span> <span class="n">selectPerson</span> <span class="o">=</span> <span class="s">&quot;SELECT * FROM PERSON WHERE ID=?&quot;</span><span class="o">;</span>
+<span class="n">PreparedStatement</span> <span class="n">ps</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="na">prepareStatement</span><span class="o">(</span><span class="n">selectPerson</span><span class="o">);</span>
+<span class="n">ps</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="n">id</span><span class="o">);</span>
+</code></pre></div>
+<p><code class="prettyprint">select</code> 元素还有很多属性</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">id</span>              <span class="o">|</span> <span class="n">在命名空间中唯一的标识符</span><span class="o">,</span> <span class="n">可以被用来引用这条语句</span>
+<span class="n">resultType</span>      <span class="o">|</span> <span class="n">如果是集合情形</span><span class="o">,</span> <span class="n">那应该是集合可以包含的类型</span><span class="o">,</span> <span class="n">而不能是集合本身</span><span class="o">.</span> <span class="n">比如返回的结果是多个Persion</span><span class="o">,</span> <span class="n">这里应该写Persion而不是List</span>
+<span class="n">resultMap</span>       <span class="o">|</span> <span class="n">外部resultMap的命名引用</span><span class="o">,</span> <span class="n">与resultType不能同时使用</span><span class="o">.</span> <span class="n">后面会具体讲</span>
+<span class="n">parameterType</span>   <span class="o">|</span> <span class="nl">默认值:</span><span class="n">unset</span><span class="o">.</span> <span class="n">可选</span><span class="o">,</span> <span class="n">MyBatis可以通过TypeHandler推断出具体传入语句的参数</span>
+<span class="n">flushCache</span>      <span class="o">|</span> <span class="nl">默认值:</span><span class="kc">false</span><span class="o">.</span> <span class="n">true表示任何时候只要语句被调用</span><span class="o">,</span> <span class="n">都会导致本地缓存和二级缓存都会被清空</span>
+<span class="n">useCache</span>        <span class="o">|</span> <span class="nl">默认值:</span><span class="kc">true</span><span class="o">.</span> <span class="n">true表示本条语句的结果被二级缓存</span>
+<span class="n">timeout</span>         <span class="o">|</span> <span class="nl">默认:</span><span class="n">unset</span><span class="o">.</span> <span class="n">在抛出异常之前</span><span class="o">,</span> <span class="n">驱动程序等待数据库返回请求结果的秒数</span>
+<span class="n">resultSetType</span>   <span class="o">|</span> <span class="nl">默认:</span><span class="n">unset</span><span class="o">.</span> <span class="n">取值为FORWARD_ONLY</span><span class="o">,</span><span class="n">SCROLL_SENSITIVE或SCROLL_INSENSITIVE中的一个</span>
+<span class="n">fetchSize</span>       <span class="o">|</span> <span class="nl">默认:</span><span class="n">unset</span><span class="o">.</span> <span class="n">驱动程序每次批量返回的结果行数和这个设置值相等</span>
+<span class="n">statementType</span>   <span class="o">|</span> <span class="nl">默认值:</span><span class="n">PREPARED</span><span class="o">.</span> <span class="n">STATEMENT</span><span class="o">,</span><span class="n">PREPARED或CALLABLE的一个</span><span class="o">.</span> <span class="n">这会让MyBatis分别使用Statement</span><span class="o">,</span><span class="n">PreparedStatement或CallableStatement</span>
+<span class="n">databaseId</span>      <span class="o">|</span> <span class="n">如果配置了</span> <span class="n">databaseIdProvider</span><span class="o">,</span> <span class="n">MyBatis</span> <span class="n">会加载所有的不带databaseId或匹配当前databaseId的语句</span><span class="o">;</span><span class="n">如果带或者不带的语句都有</span><span class="o">,</span><span class="n">则不带的会被忽略</span>
+<span class="n">resultOrdered</span>   <span class="o">|</span> <span class="nl">默认值:</span><span class="kc">false</span><span class="o">.</span> <span class="nl">这个设置仅针对嵌套结果select语句适用:</span><span class="n">如果为</span> <span class="kc">true</span><span class="o">,</span><span class="n">就是假设包含了嵌套结果集或是分组了</span><span class="o">,</span><span class="n">这样的话当返回一个主结果行的时候</span><span class="o">,</span><span class="n">就不会发生有对前面结果集的引用的情况</span><span class="o">.</span> <span class="n">这就使得在获取嵌套的结果集的时候不至于导致内存不够用</span>
+<span class="n">resultSets</span>      <span class="o">|</span> <span class="n">这个设置仅对多结果集的情况适用</span><span class="o">,</span> <span class="n">它将列出语句执行后返回的结果集并每个结果集给一个名称</span><span class="o">,</span><span class="n">名称是逗号分隔的</span>
+</code></pre></div>
+<hr>
+
+<h2 id="insert"> insert, update 和 delete 简介</h2>
+
+<p><code class="prettyprint">insert, update, delete</code>同<code class="prettyprint">select</code>类似，也有许多属性，其中  </p>
+
+<ul>
+<li> <code class="prettyprint">id, parameterType, timeout, statementType, databaseId</code>与select元素中的属性相同;<br></li>
+<li> <code class="prettyprint">flushCache</code>的默认值为&#39;true&#39;</li>
+<li> 还有些是<code class="prettyprint">insert和update</code>所特有的属性，如:</li>
+</ul>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">useGeneratedKeys</span>  <span class="o">|</span> <span class="nl">默认值:</span><span class="kc">false</span><span class="o">.</span> <span class="n">为true时会令MyBatis使用JDBC的getGeneratedKeys方法来取出由数据库内部生成的主键</span>
+<span class="n">keyProperty</span>       <span class="o">|</span> <span class="nl">默认:</span><span class="n">unset</span><span class="o">.</span> <span class="n">唯一标记一个属性</span><span class="o">,</span><span class="n">MyBatis会通过getGeneratedKeys的返回值或者通过insert语句的selectKey子元素设置它的键值</span><span class="o">.</span> <span class="n">如果希望得到多个生成的列</span><span class="o">,</span><span class="n">也可以是逗号分隔的属性名称列表</span>
+<span class="n">keyColumn</span>         <span class="o">|</span> <span class="n">通过生成的键值设置表中的列名</span><span class="o">,</span><span class="n">当主键列不是表中的第一列的时候需要设置</span><span class="o">.</span> <span class="n">如果希望得到多个生成的列</span><span class="o">,</span><span class="n">也可以是逗号分隔的属性名称列表</span>
+</code></pre></div>
+<p>例如下面这段代码，如果你的数据库支持自动生成主键的字段（比如 MySQL 和 SQL Server），那么你可以设置 useGeneratedKeys=”true”，然后再把 keyProperty 设置到目标属性上就OK了。</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;insert</span> <span class="na">id=</span><span class="s">&quot;insertAuthor&quot;</span> <span class="na">useGeneratedKeys=</span><span class="s">&quot;true&quot;</span> <span class="na">keyProperty=</span><span class="s">&quot;id&quot;</span><span class="nt">&gt;</span>
+  insert into Author (username,password,email,bio)
+  values (#{username},#{password},#{email},#{bio})
+<span class="nt">&lt;/insert&gt;</span>
+</code></pre></div>
+<hr>
+
+<h2 id="parameter"> Parameters 参数 </h2>
+
+<p>参数是 MyBatis 非常强大的功能, <code class="prettyprint">parameterType=&quot;anyType&quot;</code>其中的<code class="prettyprint">anyType</code>可以是<code class="prettyprint">int</code>等基本类型，也可以是<code class="prettyprint">User</code>等复杂类型。  </p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;insert</span> <span class="na">id=</span><span class="s">&quot;insertUser&quot;</span> <span class="na">parameterType=</span><span class="s">&quot;User&quot;</span><span class="nt">&gt;</span>
+  insert into users (id, username, password)
+  values (#{id}, #{username}, #{password})
+<span class="nt">&lt;/insert&gt;</span>
+</code></pre></div>
+<p>上例中，传入的事复杂类型<code class="prettyprint">User</code>，将会在<code class="prettyprint">User</code>中查找id、username 和 password 属性，并放入对应位置。如果是<code class="prettyprint">int</code>或<code class="prettyprint">String</code>等类型，不存在属性，则直接将其值放入对应的位置。</p>
+
+<p>另外，参数映射也可以指定映射类型，甚至可以指定类型处理器，像之前讲一样，<code class="prettyprint">javaType</code>通常可以根据参数对象去推测。</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"> #{age,javaType=int,jdbcType=NUMERIC,typeHandler=MyTypeHandler}
+</code></pre></div>
+<h3 id="字符串替换">字符串替换</h3>
+
+<p>默认情况下,使用#{}格式的语法会创建预处理语句属性并安全地设置值（比如?）。不过有时只想直接在 SQL 语句中插入一个不改变的字符串，就可以这样使用参数：</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml">ORDER BY ${columnName}
+</code></pre></div>
+<p>这里 MyBatis 不会修改或转义字符串</p>
+
+<hr>
+
+<h2 id="ResultMap"> ResultMap </h2>
+
+<p><code class="prettyprint">resultMap</code> 元素是MyBatis中最重要最强大的元素，resultMap元素本身有一些属性，如下代码，<code class="prettyprint">id</code>用于标识该<code class="prettyprint">resultMap</code>，<code class="prettyprint">type</code>用于指定该<code class="prettyprint">resultMap</code>映射到哪个<code class="prettyprint">JavaBean</code></p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">&quot;blogResultMap&quot;</span> <span class="na">type=</span><span class="s">&quot;Blog&quot;</span><span class="nt">&gt;</span>...<span class="nt">&lt;/resultMap&gt;</span>
+</code></pre></div>
+<p>它还有很多子元素，下面是<code class="prettyprint">resultMap</code>元素的概念图</p>
+
+<p><strong>resultMap</strong></p>
+
+<ul>
+<li>constructor - 类在实例化时,用来注入结果到构造方法中
+
+<ul>
+<li>idArg - ID 参数;标记结果作为 ID 可以帮助提高整体效能</li>
+<li>arg - 注入到构造方法的一个普通结果</li>
+</ul></li>
+<li>id – 一个 ID 结果;标记结果作为 ID 可以帮助提高整体效能</li>
+<li>result – 注入到字段或 JavaBean 属性的普通结果</li>
+<li>association – 一个复杂的类型关联;许多结果将包成这种类型
+
+<ul>
+<li>嵌入结果映射 – 结果映射自身的关联,或者参考一个</li>
+</ul></li>
+<li>collection – 复杂类型的集
+
+<ul>
+<li>嵌入结果映射 – 结果映射自身的集,或者参考一个</li>
+</ul></li>
+<li>discriminator – 使用结果值来决定使用哪个结果映射
+
+<ul>
+<li>case – 基于某某些值的结果映射</li>
+<li>嵌入结果映射 – 这种情形结果也映射它本身,因此可以包含很多相 同的元素,或者它可以参照一个外部的结果映射</li>
+</ul></li>
+</ul>
+
+<p><strong>注意</strong>由于DTD的限制，这些元素出现的顺序必须按照上面的顺序  </p>
+
+<p>下面详细说明<code class="prettyprint">resultMap</code>的每个子元素</p>
+
+<h3 id="id和result">id和result</h3>
+
+<p>这是最基本的内容，这两者之间的唯一不同是<code class="prettyprint">id</code>所指定属性将是能够唯一标识对象的属性，这能提高效率，特别是有联合映射时。<br>
+<code class="prettyprint">id</code>和<code class="prettyprint">reslut</code>元素有<code class="prettyprint">column, property, javaType, jdbcType, typeHandler</code>等属性，其中<code class="prettyprint">column</code>用于指定数据库中的列名，<code class="prettyprint">property</code>用于指定<code class="prettyprint">JavaBean</code>对应的属性，其他属性则与之前讲的一样。</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;id</span> <span class="na">column=</span><span class="s">&quot;id&quot;</span> <span class="na">property=</span><span class="s">&quot;id&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;user_name&quot;</span> <span class="na">property=</span><span class="s">&quot;username&quot;</span><span class="nt">/&gt;</span>
+</code></pre></div>
+<h3 id="构造方法constructor">构造方法constructor</h3>
+
+<p>如果<code class="prettyprint">resultMap</code>所映射的<code class="prettyprint">JavaBean</code>的构造方法需要提供参数，则<code class="prettyprint">constructor</code>就不能缺少了<br>
+<code class="prettyprint">constructor</code>有<code class="prettyprint">idArg</code>和<code class="prettyprint">arg</code>两个子元素，意义差不多(参见<code class="prettyprint">id</code>和<code class="prettyprint">result</code>的区别)，都是给构造方法提供参数。他们的属性也同<code class="prettyprint">id</code>和<code class="prettyprint">result</code>一样<br>
+<code class="prettyprint">constructor</code>常用的形式如下：</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;constructor&gt;</span>
+  <span class="nt">&lt;idArg</span> <span class="na">column=</span><span class="s">&quot;id&quot;</span> <span class="na">javaType=</span><span class="s">&quot;int&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;arg</span> <span class="na">column=</span><span class="s">&quot;username&quot;</span> <span class="na">javaType=</span><span class="s">&quot;String&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/constructor&gt;</span>
+</code></pre></div>
+<p><strong>注意</strong> Java 没有自查(反射)参数名的方法，所以要保证这里的参数顺序同<code class="prettyprint">JavaBean</code>定义的顺序一致，而且数据类型也是确定的。</p>
+
+<h3 id="关联association">关联association</h3>
+
+<p>关联元素处理“有一个”类型的关系。比如,一个博客有一个作者，就像下面这样</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">//来自 Author.java</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Author</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">age</span><span class="o">;</span>
+    <span class="o">...</span>
+<span class="o">}</span>
+<span class="c1">//来自 Blog.java</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Blog</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">title</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">content</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">Author</span> <span class="n">author</span><span class="o">;</span> <span class="c1">//数据库中对应的字段是 author_id int类型</span>
+    <span class="o">...</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>可以这样做级联查询</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">&quot;BlogResultMap&quot;</span> <span class="na">type=</span><span class="s">&quot;Blog&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;id</span> <span class="na">column=</span><span class="s">&quot;id&quot;</span> <span class="na">property=</span><span class="s">&quot;id&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;title&quot;</span> <span class="na">property=</span><span class="s">&quot;title&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;content&quot;</span> <span class="na">property=</span><span class="s">&quot;content&quot;</span><span class="nt">/&gt;</span>
+    <span class="c">&lt;!-- 只要提供了返回类型，像上面的id和result指定的字段，即使不指定MyBatis也能自动封装 --&gt;</span>
+    <span class="nt">&lt;association</span> <span class="na">column=</span><span class="s">&quot;author_id&quot;</span> <span class="na">property=</span><span class="s">&quot;author&quot;</span> <span class="na">javaType=</span><span class="s">&quot;Author&quot;</span>
+                 <span class="na">select=</span><span class="s">&quot;com.test.mybatis.mapper.AuthorMapper.selectAuthorById&quot;</span><span class="nt">/&gt;</span>
+                 <span class="c">&lt;!-- 这里如果起了别名也可使用 --&gt;</span>
+<span class="nt">&lt;/resultMap&gt;</span>
+
+<span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&quot;selectBlogById&quot;</span> <span class="na">parameterType=</span><span class="s">&quot;int&quot;</span> <span class="na">resultMap=</span><span class="s">&quot;BlogResultMap&quot;</span><span class="nt">&gt;</span>
+    SELECT * FROM blog WHERE id = #{id}
+<span class="nt">&lt;/select&gt;</span>
+
+<span class="c">&lt;!-- 来自 AuthorMapper.xml --&gt;</span>
+<span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&quot;selectAuthorById&quot;</span> <span class="na">parameterType=</span><span class="s">&quot;int&quot;</span> <span class="na">resultType=</span><span class="s">&quot;Author&quot;</span><span class="nt">&gt;</span>
+    SELECT * FROM author WHERE id = #{id}
+<span class="nt">&lt;/select&gt;</span>
+</code></pre></div>
+<p><code class="prettyprint">association</code>是通过把column指定的字段作为参数，传给select子查询的。</p>
+
+<h3 id="集合collection">集合collection</h3>
+
+<p>如果博客有了许多评论，则会出现“一对多”的情形，比如上面的<code class="prettyprint">Blog</code>会多出一个属性</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="c1">//Blog.java新增的属性</span>
+    <span class="kd">private</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Comment</span><span class="o">&gt;</span> <span class="n">comments</span><span class="o">;</span>
+
+<span class="c1">//Comment.java</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Comment</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">content</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">Blog</span> <span class="n">blog</span><span class="o">;</span>
+    <span class="o">...</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>那么对于<code class="prettyprint">Blog</code>的查询将变成这样</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">&quot;BlogResultMap&quot;</span> <span class="na">type=</span><span class="s">&quot;Blog&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;id</span> <span class="na">column=</span><span class="s">&quot;id&quot;</span> <span class="na">property=</span><span class="s">&quot;id&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;title&quot;</span> <span class="na">property=</span><span class="s">&quot;title&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;content&quot;</span> <span class="na">property=</span><span class="s">&quot;content&quot;</span><span class="nt">/&gt;</span>
+    <span class="c">&lt;!-- 只要提供了返回类型，像上面的id和result指定的字段，即使不指定MyBatis也能自动封装 --&gt;</span>
+    <span class="nt">&lt;association</span> <span class="na">column=</span><span class="s">&quot;author_id&quot;</span> <span class="na">property=</span><span class="s">&quot;author&quot;</span> <span class="na">javaType=</span><span class="s">&quot;Author&quot;</span>
+                 <span class="na">select=</span><span class="s">&quot;com.test.mybatis.mapper.AuthorMapper.selectAuthorById&quot;</span><span class="nt">/&gt;</span>
+                 <span class="c">&lt;!-- 这里如果起了别名也可使用 --&gt;</span>
+    <span class="nt">&lt;collection</span> <span class="na">property=</span><span class="s">&quot;comments&quot;</span> <span class="na">javaType=</span><span class="s">&quot;ArrayList&quot;</span> <span class="na">column=</span><span class="s">&quot;id&quot;</span> <span class="na">ofType=</span><span class="s">&quot;Comment&quot;</span>
+                <span class="na">select=</span><span class="s">&quot;com.test.mybatis.mapper.CommentMapper.selectCommentForBlog&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/resultMap&gt;</span>
+
+<span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&quot;selectBlogById&quot;</span> <span class="na">parameterType=</span><span class="s">&quot;int&quot;</span> <span class="na">resultMap=</span><span class="s">&quot;BlogResultMap&quot;</span><span class="nt">&gt;</span>
+    SELECT * FROM blog WHERE id = #{id}
+<span class="nt">&lt;/select&gt;</span>
+
+<span class="c">&lt;!-- 来自 AuthorMapper.xml --&gt;</span>
+<span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&quot;selectAuthorById&quot;</span> <span class="na">parameterType=</span><span class="s">&quot;int&quot;</span> <span class="na">resultType=</span><span class="s">&quot;Author&quot;</span><span class="nt">&gt;</span>
+    SELECT * FROM author WHERE id = #{id}
+<span class="nt">&lt;/select&gt;</span>
+
+<span class="c">&lt;!-- 来自 CommentMapper.xml --&gt;</span>
+<span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&quot;selectCommentForBlog&quot;</span> <span class="na">parameterType=</span><span class="s">&quot;int&quot;</span> <span class="na">resultType=</span><span class="s">&quot;Comment&quot;</span><span class="nt">&gt;</span>
+    SELECT * FROM comment WHERE blog_id = #{id}
+<span class="nt">&lt;/select&gt;</span>
+</code></pre></div>
+<p>其中的<code class="prettyprint">ofType</code>用于表示集合中所存放的类型，上面可以理解为产生了一个<code class="prettyprint">ArrayList&lt;Comment&gt; comments</code>，<code class="prettyprint">javaType</code>属性可以省略；<code class="prettyprint">column</code>指定了id作为传入参数</p>
+
+<hr>
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/MyBatis(三)Mapper.xml映射文件" data-title="MyBatis(三): Mapper.xml映射文件" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-01-22-MyBatis(%E4%B8%89)Mapper.xml%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- header end -->
+
+
+</body>
+
+</html>

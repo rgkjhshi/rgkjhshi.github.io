@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="Spring(一): 入门, 编程技术, Spring, 逆水行舟" />
+    <meta name="description" content="Spring(一): 入门, 编程技术, Spring, " />
+
+    <title>Spring(一): 入门</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="http://127.0.0.1:4000/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://127.0.0.1:4000/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-01-26-Spring(%E4%B8%80)%E5%85%A5%E9%97%A8.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://127.0.0.1:4000/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/uikit.min.js"></script>
+    <!-- sticky -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "Michael"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" id＝"header">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://127.0.0.1:4000"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://127.0.0.1:4000"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="http://127.0.0.1:4000/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>Spring(一): 入门</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <hr>
+
+<h2 id="本文结构">本文结构</h2>
+
+<ul>
+<li><a href="#instruction">Spring框架简介</a>
+
+<ul>
+<li><a href="#core">Core Container</a></li>
+<li><a href="#aop">AOP</a></li>
+<li><a href="#data">Data Access/Integration</a></li>
+<li><a href="#web">Web</a></li>
+<li><a href="#test">Test</a></li>
+</ul></li>
+<li><a href="#example">Spring简单项目示例</a></li>
+</ul>
+
+<hr>
+
+<h2 id="instruction"> Spring框架简介 </h2>
+
+<p>Spring是一个开源框架，Spring Framework 的功能被组织成了20来个模块。以Spring4.x为例，官方的框架图如下:</p>
+
+<p><img src="/assets/images/spring_framework.png" alt="Spring框架" title="Spring框架"></p>
+
+<p>我画的模块之间的依赖关系如下(绿色为springframework的模块):</p>
+
+<p><img src="/assets/images/spring_framework_jar.png" alt="Spring模块" title="Spring模块"></p>
+
+<h3 id="instruction"> Core Container </h3>
+
+<p><code class="prettyprint">Core Container</code> 由 <code class="prettyprint">spring-core, spring-beans, spring-context, spring-context-support</code> 和 <code class="prettyprint">spring-expression (Spring Expression Language)</code> 模块组成</p>
+
+<ul>
+<li><code class="prettyprint">spring-core</code> 和 <code class="prettyprint">spring-beans</code> 提供框架的基础部分，包括 <code class="prettyprint">IoC</code> 和 <code class="prettyprint">Dependency Injection</code> 主要组件是<code class="prettyprint">BeanFactory</code>,它 是一个复杂的工厂模式的实现。</li>
+<li><code class="prettyprint">Context(spring-context)</code> 模块建立在<code class="prettyprint">Core</code> 和 <code class="prettyprint">Beans</code> 模块的基础上，向 Spring 框架提供上下文信息。 <code class="prettyprint">ApplicationContext</code> 是 Context 模块的焦点。<code class="prettyprint">spring-context-support</code> 对常见第三方库集成进Spring应用上下文提供支持。</li>
+<li><code class="prettyprint">SpEL(spring-expression)</code> 模块提供了一个强大的 <code class="prettyprint">Expression Language</code>(表达式语言)用来在运行时查询和操作对象映射。这是JSP2.1规范所指定的统一表达式语言(unified EL)的一种延续。</li>
+</ul>
+
+<h3 id="aop"> AOP、Aspects、Instrumentation、Messaging </h3>
+
+<ul>
+<li><code class="prettyprint">spring-aop</code> 模块提供 <code class="prettyprint">AOP Alliance-compliant</code>(AOP联盟)的面向切面编程实现，允许你自定义，比如，方法拦截器和切入点完全分离代码。</li>
+<li><code class="prettyprint">spring-aspects</code> 模块提供了集成使用 AspectJ。</li>
+<li><code class="prettyprint">spring-instrument</code> 模块提供了对某些应用程序服务器的代理接口。</li>
+<li><code class="prettyprint">spring-messaging</code> 模块从 Spring 集成项目中抽象出来，比如 Message, MessageChannel, MessageHandler 及其他用来提供基于消息的基础服务。该模块还包括一组消息映射方法的注解。</li>
+</ul>
+
+<h3 id="data"> Data Access/Integration 数据访问/集成 </h3>
+
+<p><code class="prettyprint">Data Access/Integration</code> 层由 <code class="prettyprint">JDBC, ORM, OXM, JMS</code> 和 <code class="prettyprint">Transaction</code> 模块组成。</p>
+
+<ul>
+<li><code class="prettyprint">spring-jdbc</code> 模块提供了不需要编写冗长的JDBC代码和解析数据库厂商特有的错误代码的JDBC抽象层。</li>
+<li><code class="prettyprint">spring-tx</code> 模块支持可编程和声明式事务管理，用于实现特殊的接口和你所有的POJO类（Plain Old Java Objects）。</li>
+<li><code class="prettyprint">spring-orm</code> 模块提供了流行的 <code class="prettyprint">object-relational mapping</code>(对象-关系映射)API，其包含<code class="prettyprint">JPA，JDO，Hibernate</code>。</li>
+<li><code class="prettyprint">spring-oxm</code> 模块提供了抽象层用于支持<code class="prettyprint">Object/XML mapping</code>(对象/XML映射)的实现,如<code class="prettyprint">JAXB、Castor、XMLBeans、JiBX</code>和<code class="prettyprint">XStream</code>等。</li>
+<li><code class="prettyprint">spring-jms</code> 模块(<code class="prettyprint">Java Messaging Service</code>)包含生产和消费信息的功能。 从 Spring Framework 4.1 开始提供集成 spring-messaging 模块。</li>
+</ul>
+
+<h3 id="web"> Web </h3>
+
+<p><code class="prettyprint">Web</code> 层由 <code class="prettyprint">spring-web, spring-webmvc, spring-websocket</code>和<code class="prettyprint">spring-webmvc-portlet</code>组成。</p>
+
+<ul>
+<li><code class="prettyprint">spring-web</code> 模块提供了基本的面向web开发的集成功能，例如多方文件上传、使用<code class="prettyprint">Servlet listeners</code>以及Web开发应用程序上下文初始化IoC容器等，也包含HTTP客户端以及Spring远程访问的web相关部分。</li>
+<li><code class="prettyprint">spring-webmvc</code> 模块(也被称为<code class="prettyprint">Web Servlet</code>模块)包含Spring的<code class="prettyprint">model-view-controller</code>(模型-视图-控制器(MVC))和<code class="prettyprint">REST Web Services</code>实现的Web应用程序，并且集成了Spring Framework所有的其他功能。</li>
+<li><code class="prettyprint">spring-webmvc-portlet</code> 模块(也被称为<code class="prettyprint">Web-Portlet</code>模块)使用一个Portlet的环境和spring-webmvc模块功能的镜像提供了MVC模式的实现。</li>
+</ul>
+
+<h3 id="test"> Test </h3>
+
+<ul>
+<li><code class="prettyprint">spring-test</code> 模块支持通过组合JUnit或TestNG来进行单元测试和集成测试。它提供了连续加载的ApplicationContext并且缓存这些上下文。它还提供了<code class="prettyprint">mock object</code>(模仿对象)，可以隔离测试代码。</li>
+</ul>
+
+<h3 id="控制反转(ioc)和依赖注入">控制反转(IoC)和依赖注入</h3>
+
+<p><strong>控制反转</strong>(Inversion of Control)和<strong>依赖注入</strong>(Dependency Injection)意思差不多。当某个实例(调用者)需要调用另一个实例(被调用者)时，之前是通过调用者来创建被调用者的实例(new一个实例)，现在创建被调用者的工作交给Spring的容器来完成，称为“控制反转”。
+我们描述创建被调用者的方式，由IoC容器来创建管理对象，然后注入到调用者中去，这就是“依赖注入“。注入的方式有通过<code class="prettyprint">JavaBean</code>属性(setter方法)注入和通过构造方法注入。</p>
+
+<h3 id="面向方面编程(aop)">面向方面编程(AOP)</h3>
+
+<p>面向方面的编程，即 AOP(Aspect Oriented Programming)，是一种编程技术，它允许程序员对横切关注点或横切典型的职责分界线的行为进行模块化（例如日志和事务管理）。AOP 的核心构造是方面，它将那些影响多个类的行为封装到可重用的模块中。
+AOP 和 IOC 是补充性的技术，它们都运用模块化方式解决企业应用程序开发中的复杂问题。在典型的面向对象开发方式中，可能要将日志记录语句放在所有方法和 Java 类中才能实现日志功能。在 AOP 方式中，可以反过来将日志服务模块化，并以声明的方式将它们应用到需要日志的组件上。当然，优势就是 Java 类不需要知道日志服务的存在，也不需要考虑相关的代码。所以，用 Spring AOP 编写的应用程序代码是松散耦合的。
+AOP 的功能完全集成到了 Spring 事务管理、日志和其他各种特性的上下文中。</p>
+
+<hr>
+
+<h2 id="example"> Spring简单项目示例 </h2>
+
+<p><code class="prettyprint">BeanFactory</code>是 Spring 作为 IOC 容器核心接口，<code class="prettyprint">ApplicationContext</code>是<code class="prettyprint">BeanFactory</code>的扩展，功能得到了进一步增强。<br>
+下面是一个简单的Spring的例子
+目录结构如下:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">    src
+    |--com.test.spring
+    |  |--dao
+    |  |  |--impl
+    |  |  |  |--HelloImpl.java
+    |  |  |--Hello.java
+    |  |--service
+    |  |  |--impl
+    |  |  |  |--HelloServiceImpl.java
+    |  |  |--HelloService.java
+    |  |--TestSpring.java
+    resources
+    |--spring.xml
+</code></pre></div>
+<p>源文件内容如下:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// Hello.java</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Hello</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">sayHello</span><span class="o">();</span>
+<span class="o">}</span>
+
+<span class="c1">// HelloImpl.java</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloImpl</span> <span class="kd">implements</span> <span class="n">Hello</span><span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">sayHello</span><span class="o">(){</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Hello!&quot;</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1">// HelloService.java</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">HelloService</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testHello</span><span class="o">();</span>
+<span class="o">}</span>
+
+<span class="c1">// HelloServiceImpl.java</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloServiceImpl</span> <span class="kd">implements</span> <span class="n">HelloService</span><span class="o">{</span>
+    <span class="kd">private</span> <span class="n">Hello</span> <span class="n">hello</span><span class="o">;</span>
+    <span class="c1">// setter 方法必须写，否则无法注入</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setHello</span><span class="o">(</span><span class="n">Hello</span> <span class="n">hello</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">hello</span> <span class="o">=</span> <span class="n">hello</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testHello</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">hello</span><span class="o">.</span><span class="na">sayHello</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1">//TestSpring.java</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestSpring</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// 读取 classpath 下面的配置文件，实例化容器</span>
+        <span class="n">ApplicationContext</span> <span class="n">context</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ClassPathXmlApplicationContext</span><span class="o">(</span><span class="s">&quot;spring.xml&quot;</span><span class="o">);</span>
+
+        <span class="c1">// 这里的字符串是配置文件中通过id指定的</span>
+        <span class="n">Hello</span> <span class="n">hello</span> <span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">&quot;hello&quot;</span><span class="o">,</span> <span class="n">HelloImpl</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+<span class="c1">//        Hello hello = (Hello) context.getBean(&quot;helloImpl&quot;);</span>
+        <span class="n">hello</span><span class="o">.</span><span class="na">sayHello</span><span class="o">();</span>
+
+        <span class="c1">// 注入到HelloServiceImpl 中的 hello 属性中</span>
+        <span class="n">HelloService</span> <span class="n">helloService</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">&quot;helloService&quot;</span><span class="o">,</span> <span class="n">HelloService</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">helloService</span><span class="o">.</span><span class="na">testHello</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>配置文件<code class="prettyprint">spring.xml</code>内容如下</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.springframework.org/schema/beans&quot;</span>
+       <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+       <span class="na">xmlns:tx=</span><span class="s">&quot;http://www.springframework.org/schema/tx&quot;</span>
+       <span class="na">xmlns:context=</span><span class="s">&quot;http://www.springframework.org/schema/context&quot;</span>
+       <span class="na">xsi:schemaLocation=</span><span class="s">&quot;</span>
+<span class="s">            http://www.springframework.org/schema/beans</span>
+<span class="s">            http://www.springframework.org/schema/beans/spring-beans.xsd</span>
+<span class="s">            http://www.springframework.org/schema/tx</span>
+<span class="s">            http://www.springframework.org/schema/tx/spring-tx.xsd</span>
+<span class="s">            http://www.springframework.org/schema/context</span>
+<span class="s">            http://www.springframework.org/schema/context/spring-context-3.0.xsd&quot;</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;hello&quot;</span> <span class="na">class=</span><span class="s">&quot;com.test.spring.dao.impl.HelloImpl&quot;</span><span class="nt">&gt;&lt;/bean&gt;</span>
+
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;helloService&quot;</span> <span class="na">class=</span><span class="s">&quot;com.test.spring.service.impl.HelloServiceImpl&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;hello&quot;</span> <span class="na">ref=</span><span class="s">&quot;hello&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre></div>
+<hr>
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/Spring(一)入门" data-title="Spring(一): 入门" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-01-26-Spring(%E4%B8%80)%E5%85%A5%E9%97%A8.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- header end -->
+
+
+</body>
+
+</html>

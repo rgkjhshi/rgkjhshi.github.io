@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="java日志(一):日志组件简介及使用, 编程技术, Java日志, 逆水行舟" />
+    <meta name="description" content="java日志(一):日志组件简介及使用, 编程技术, Java日志, java中的日志组件太多了，经常听到的有log4j, slf4j, logbak等，不太熟悉的有common-logging, JUL, JCL等，刚开始接触的时候感觉很晕，不知道这些都是干嘛的，甚至不理解为啥都是记日志的，为什么要整出这么多不同的东西来。后来从头到尾梳理了一遍，才稍微有点清晰。" />
+
+    <title>java日志(一):日志组件简介及使用</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="http://127.0.0.1:4000/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://127.0.0.1:4000/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-05-18-java%E6%97%A5%E5%BF%97(%E4%B8%80)%E6%97%A5%E5%BF%97%E7%BB%84%E4%BB%B6%E7%9A%84%E7%AE%80%E4%BB%8B%E5%8F%8A%E4%BD%BF%E7%94%A8.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://127.0.0.1:4000/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/uikit.min.js"></script>
+    <!-- sticky -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "Michael"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" id＝"header">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://127.0.0.1:4000"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://127.0.0.1:4000"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="http://127.0.0.1:4000/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>java日志(一):日志组件简介及使用</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <p>java中的日志组件太多了，经常听到的有<code class="prettyprint">log4j, slf4j, logbak</code>等，不太熟悉的有<code class="prettyprint">common-logging, JUL, JCL</code>等，
+刚开始接触的时候感觉很晕，不知道这些都是干嘛的，甚至不理解为啥都是记日志的，为什么要整出这么多不同的东西来。后来从头到尾梳理了一遍，才稍微有点清晰。</p>
+
+<hr>
+
+<h2 id="本文结构">本文结构</h2>
+
+<ul>
+<li><a href="#what">日志都做什么</a></li>
+<li><a href="#introduction">日志组件的介绍</a>
+
+<ul>
+<li><a href="#JUL">JUL</a></li>
+<li><a href="#common-logging">common-logging</a></li>
+<li><a href="#slf4j">slf4j</a></li>
+<li><a href="#Log4j">Log4j</a></li>
+<li><a href="#LogBack">LogBack</a></li>
+</ul></li>
+<li><a href="#many">为什么有这么多不同日志组件</a></li>
+<li><a href="#use">各日志组件的用法</a>
+
+<ul>
+<li><a href="#JUL_use">JUL</a></li>
+<li><a href="#Log4j1_use">Log4j1</a></li>
+<li><a href="#Log4j2_use">Log4j2</a></li>
+<li><a href="#LogBack_use">LogBack</a></li>
+<li><a href="#JCL_use">JCL</a></li>
+<li><a href="#slf4j_use">slf4j</a></li>
+</ul></li>
+</ul>
+
+<hr>
+
+<h2 id="what"> 日志都做什么 </h2>
+
+<p>平时写代码想看看输出结果的时候一般直接用<code class="prettyprint">System.out</code>来输出了，感觉也挺好用的，为什么还要有专门的组件记录日志？
+下面给出了几条日志组件应该具有的功能:</p>
+
+<ol>
+<li>能够在不同阶段输出不同级别的信息</li>
+<li>日志不能影响正常的程序效率</li>
+<li>日志挂了不能影响到正常业务</li>
+<li>还有好多</li>
+</ol>
+
+<hr>
+
+<h2 id="introduction"> 各个日志组件的介绍 </h2>
+
+<p>日志框架(实现): JUL、 Log4j、 LogBack<br>
+日志门面(接口): JCL(common-logging)、 SLF4J</p>
+
+<h3 id="JUL"> JUL </h3>
+
+<p>JUL即<code class="prettyprint">Java Util Logging</code>, 是JVM提供的日志组件，在<code class="prettyprint">rt.jar</code>的<code class="prettyprint">java.util.logging</code>包里</p>
+
+<h3 id="common-logging"> common-logging </h3>
+
+<p><code class="prettyprint">common-logging</code>即<code class="prettyprint">Apache Commons Logging</code>,之前叫<code class="prettyprint">Jakarta Commons Logging, JCL</code>，是apache提供的一个通用的日志接口。
+内部有个<code class="prettyprint">Simple logger</code>的简单实现，但很弱，一般配合log4j等第三方实现使用。</p>
+
+<h3 id="slf4j"> slf4j </h3>
+
+<p><code class="prettyprint">slf4j</code>即<code class="prettyprint">Simple Logging Facade for JAVA</code>，java简单日志门面。类似于<code class="prettyprint">Apache Common-Logging</code>，也是一个日志接口。
+SLF4J一般配合第三方实现通过slf4j的桥接包来使用。</p>
+
+<h3 id="Log4j"> Log4j </h3>
+
+<p>Apache的一个开放源代码项目，日志的实现，比较好用，得到了广泛使用。<br>
+Log4j有两个版本，一个是log4j1，它使用properties文件进行配置；<br>
+另一个是log4j2，跟log4j1不兼容，它使用xml文件进行配置；Log4j2包括两个部分：
+<code class="prettyprint">log4j-api</code>日志接口，<code class="prettyprint">log4j-core</code>日志实现。它这么分，有点也想作为日志门面的意思。</p>
+
+<h3 id="LogBack"> LogBack </h3>
+
+<p>Logback是由log4j创始人设计的又一个开源日志组件。<br>
+分为三个模块：<code class="prettyprint">logback-core,logback-classic</code>和<code class="prettyprint">logback-access</code>。<br>
+<code class="prettyprint">logback-core</code>是其它两个模块的基础模块。<code class="prettyprint">logback-classic</code>是log4j的一个改良版本，并且完整实现了<code class="prettyprint">SLF4J API</code>。<br>
+<code class="prettyprint">logback-access</code>访问模块与Servlet容器集成提供通过Http来访问日记的功能。</p>
+
+<hr>
+
+<h2 id="many"> 为什么有这么多不同日志组件 </h2>
+
+<p>反正有很多，各有各的用法。JDK里的JUL好像不太好用，后来Log4j得到了广泛应用。
+日志组件越来越多，如果一个应用程序中有两个组件，而这两个组件恰好用了不同的日志工具，那这个应用不就有两个日志输出了。<br>
+这时候出现了<code class="prettyprint">Apache Commons Logging(JCL)</code>，它只提供log接口，具体的实现则是在<strong>运行时动态查找</strong>。只要遵守JCL借口的日志工具，都可以通过JCL来使用。<br>
+JCL是在运行时动态查找具体的日志实现，当项目很大时，JCL的动态绑定并不是总能成功，解决办法是在项目部署时提前指定绑定哪个日志工具，这就出现了SLF4J。</p>
+
+<hr>
+
+<h2 id="use"> 各日志组件的用法 </h2>
+
+<p>常用的日志组件有 <code class="prettyprint">JUL, Log4j(Log4j1、 Log4j2), Logback</code>，下面是他们的用法</p>
+
+<h3 id="JUL_use"> JUL </h3>
+
+<p>依赖jdk，无需额外jar包<br>
+代码示例:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.util.logging.Logger</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">LogTest</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">LogTest</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">LOGGER</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="n">LOGGER</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>结果输出:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">五月 23, 2015 4:49:11 下午 com.test.log.LogTest main
+信息: java.util.logging.Logger
+</code></pre></div>
+<h3 id="Log4j1_use"> Log4j1 </h3>
+
+<p>需要<code class="prettyprint">log4j</code>版本<code class="prettyprint">1.2.**</code>的<code class="prettyprint">jar</code>包<br>
+需要properties配置文件(名为<code class="prettyprint">log4j.properties</code>放在classpath下)； 无配置文件无法输出日志。<br>
+jar包的maven依赖:</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml">        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>log4j<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>log4j<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>1.2.14<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div>
+<p><code class="prettyprint">log4j.properties</code>配置文件:</p>
+<div class="highlight"><pre><code class="language-properties" data-lang="properties"><span class="na">log4j.rootLogger</span> <span class="o">=</span> <span class="s">debug, console</span>
+<span class="na">log4j.appender.console</span> <span class="o">=</span> <span class="s">org.apache.log4j.ConsoleAppender</span>
+<span class="na">log4j.appender.console.layout</span> <span class="o">=</span> <span class="s">org.apache.log4j.PatternLayout</span>
+<span class="na">log4j.appender.console.layout.ConversionPattern</span> <span class="o">=</span> <span class="s">%-d{yyyy-MM-dd HH:mm:ss} %m%n</span>
+</code></pre></div>
+<p>代码示例:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">org.apache.log4j.Logger</span><span class="o">;</span> <span class="c1">// 引入的是类</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">LogTest</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">LogTest</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">LOGGER</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="n">LOGGER</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>结果输出:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">2015-05-23 17:44:07 org.apache.log4j.Logger
+</code></pre></div>
+<h3 id="Log4j2_use"> Log4j2 </h3>
+
+<p>Log4j2需要<code class="prettyprint">log4j-api、log4j-core</code>版本<code class="prettyprint">2.*</code>的<code class="prettyprint">jar</code>包<br>
+需要xml配置文件(名为<code class="prettyprint">log4j2.xml</code>放在classpath下)； 不支持properties文件； 无配置文件无法输出日志。<br>
+jar包的maven依赖:</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml">        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.apache.logging.log4j<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>log4j-api<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>2.2<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.apache.logging.log4j<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>log4j-core<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>2.2<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div>
+<p><code class="prettyprint">log4j2.xml</code>配置文件:</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;Configuration</span> <span class="na">status=</span><span class="s">&quot;WARN&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;Appenders&gt;</span>
+        <span class="nt">&lt;Console</span> <span class="na">name=</span><span class="s">&quot;Console&quot;</span> <span class="na">target=</span><span class="s">&quot;SYSTEM_OUT&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;PatternLayout</span> <span class="na">pattern=</span><span class="s">&quot;%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/Console&gt;</span>
+    <span class="nt">&lt;/Appenders&gt;</span>
+    <span class="nt">&lt;Loggers&gt;</span>
+        <span class="nt">&lt;Root</span> <span class="na">level=</span><span class="s">&quot;debug&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;AppenderRef</span> <span class="na">ref=</span><span class="s">&quot;Console&quot;</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/Root&gt;</span>
+    <span class="nt">&lt;/Loggers&gt;</span>
+<span class="nt">&lt;/Configuration&gt;</span>
+</code></pre></div>
+<p>代码示例:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">org.apache.logging.log4j.LogManager</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.logging.log4j.Logger</span><span class="o">;</span>  <span class="c1">// 引入的是接口</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">LogTest</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">LogManager</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">LogTest</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">LOGGER</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="n">LOGGER</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>结果输出:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">18:00:35.409 [main] INFO  com.test.log.LogTest - org.apache.logging.log4j.core.Logger
+</code></pre></div>
+<h3 id="LogBack_use"> LogBack </h3>
+
+<p>Logback需要<code class="prettyprint">logback-core、logback-classic[、slf4j-api]</code>的<code class="prettyprint">jar</code>包(<code class="prettyprint">logback-classic</code>实现了<code class="prettyprint">slf4j-api</code>)<br>
+配置文件:</p>
+
+<ol>
+<li>在<code class="prettyprint">classpath</code>中寻找<code class="prettyprint">logback.groovy</code></li>
+<li>若无，则在<code class="prettyprint">classpath</code>中寻找<code class="prettyprint">logback-test.xml</code></li>
+<li>若无，则在<code class="prettyprint">classpath</code>中寻找<code class="prettyprint">logback.xml</code></li>
+<li>若无，则使用<code class="prettyprint">JVM</code>的<code class="prettyprint">ServiceLoader</code>实现<code class="prettyprint">com.qos.logback.classic.spi.Configurator</code></li>
+<li>以上都没成功，则<code class="prettyprint">logbak</code>使用自己的<code class="prettyprint">BasicConfigurator</code>配置，将日志输出到控制台</li>
+</ol>
+
+<p>jar包的maven依赖:</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml">        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>ch.qos.logback<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>logback-core<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>1.1.3<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>ch.qos.logback<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>logback-classic<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>1.1.3<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div>
+<p><code class="prettyprint">logback.xml</code>配置文件:</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="nt">&lt;configuration&gt;</span>
+    <span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">&quot;SYSTEM_OUT&quot;</span> <span class="na">class=</span><span class="s">&quot;ch.qos.logback.core.ConsoleAppender&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;encoder&gt;</span>
+            <span class="nt">&lt;pattern&gt;</span>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n<span class="nt">&lt;/pattern&gt;</span>
+        <span class="nt">&lt;/encoder&gt;</span>
+    <span class="nt">&lt;/appender&gt;</span>
+    <span class="nt">&lt;root</span> <span class="na">level=</span><span class="s">&quot;DEBUG&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">&quot;SYSTEM_OUT&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/root&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span>
+</code></pre></div>
+<p>代码示例:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">org.slf4j.Logger</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.slf4j.LoggerFactory</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">LogTest</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">LogTest</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">LOGGER</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="n">LOGGER</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>结果输出:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">18:00:35.409 [main] INFO  com.test.log.LogTest - ch.qos.logback.classic.Logger
+</code></pre></div>
+<h3 id="JCL_use"> JCL(common-logging) </h3>
+
+<p>JCL需要<code class="prettyprint">commons-logging</code>的<code class="prettyprint">jar</code>包<br>
+本文只演示使用方法，对输出结果暂不解释，后面的文章会解释原理</p>
+
+<p>jar包的maven依赖:</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml">        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>commons-logging<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>commons-logging<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>1.2<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div>
+<p>代码示例:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">org.apache.commons.logging.Log</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.commons.logging.LogFactory</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">LogTest</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Log</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">LogFactory</span><span class="o">.</span><span class="na">getLog</span><span class="o">(</span><span class="n">LogTest</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="n">logger</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>结果输出:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">五月 23, 2015 7:19:09 下午 com.test.log.LogTest main
+信息: org.apache.commons.logging.impl.Jdk14Logger
+</code></pre></div>
+<h3 id="slf4j_use"> slf4j </h3>
+
+<p>slf4j只有接口没有实现，必须结合其他日志的实现一起使用</p>
+
+<hr>
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/java日志(一)日志组件的简介及使用" data-title="java日志(一):日志组件简介及使用" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-05-18-java%E6%97%A5%E5%BF%97(%E4%B8%80)%E6%97%A5%E5%BF%97%E7%BB%84%E4%BB%B6%E7%9A%84%E7%AE%80%E4%BB%8B%E5%8F%8A%E4%BD%BF%E7%94%A8.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- header end -->
+
+
+</body>
+
+</html>

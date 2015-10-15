@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="MySQL加锁, 点滴积累, MySQL, 逆水行舟" />
+    <meta name="description" content="MySQL加锁, 点滴积累, MySQL, 最近碰到了MySQL中的for update语法，这是用来加锁的，将学习的过程记录下来" />
+
+    <title>MySQL加锁</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="http://127.0.0.1:4000/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://127.0.0.1:4000/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-06-17-MySQL%E5%8A%A0%E9%94%81.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://127.0.0.1:4000/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/uikit.min.js"></script>
+    <!-- sticky -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "Michael"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" id＝"header">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://127.0.0.1:4000"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://127.0.0.1:4000"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="http://127.0.0.1:4000/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>MySQL加锁</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <p>最近碰到了MySQL中的<code class="prettyprint">for update</code>语法，这是用来加锁的，将学习的过程记录下来</p>
+
+<hr>
+
+<h2 id="目录">目录</h2>
+
+<ul>
+<li><a href="#pessimistic">悲观锁</a></li>
+<li><a href="#optimistic">乐观锁</a></li>
+<li><a href="#use">for update用法</a></li>
+<li><a href="#test">测试记录</a></li>
+</ul>
+
+<hr>
+
+<h2 id="pessimistic"> 悲观锁 </h2>
+
+<p>悲观锁(Pessimistic Lock)认为每次读取数据都是不安全的，所以每次读取数据的时候都会加锁。<br>
+比如mysql里的<code class="prettyprint">for update</code>就属于这类，可以锁一行，也可锁住整个表，加锁之后别人就无法同时进行操作了。<br>
+悲观锁一般用于写操作比较多的地方。</p>
+
+<hr>
+
+<h2 id="optimistic"> 乐观锁 </h2>
+
+<p>乐观锁(Optimistic Lock)认为每次读取数据的时候是安全的，只有在更新操作的时候才会判断是否有别人修改过数据。<br>
+这种锁一般通过其它方式来控制，比如通过版本号机制等。<br>
+乐观锁一般用于读操作比较多的地方，这样可以提高吞吐量。</p>
+
+<hr>
+
+<h2 id="use"> for update用法 </h2>
+
+<p>先来一个测试用的表:</p>
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="o">`</span><span class="k">user</span><span class="o">`</span> <span class="p">(</span>
+  <span class="o">`</span><span class="n">id</span><span class="o">`</span> <span class="nb">bigint</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="n">AUTO_INCREMENT</span> <span class="k">COMMENT</span> <span class="s1">&#39;自增主键&#39;</span><span class="p">,</span>
+  <span class="o">`</span><span class="n">user_name</span><span class="o">`</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">COMMENT</span> <span class="s1">&#39;用户名&#39;</span><span class="p">,</span>
+  <span class="o">`</span><span class="n">remark</span><span class="o">`</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">COMMENT</span> <span class="s1">&#39;备注&#39;</span><span class="p">,</span>
+  <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="p">),</span>
+  <span class="k">UNIQUE</span> <span class="k">KEY</span> <span class="o">`</span><span class="n">uniq_user_name</span><span class="o">`</span> <span class="p">(</span><span class="o">`</span><span class="n">user_name</span><span class="o">`</span><span class="p">)</span>
+<span class="p">)</span> <span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span> <span class="n">AUTO_INCREMENT</span><span class="o">=</span><span class="mi">1</span> <span class="k">DEFAULT</span> <span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8</span> <span class="k">COMMENT</span><span class="o">=</span><span class="s1">&#39;用户表&#39;</span><span class="p">;</span>
+</code></pre></div>
+<p>表中数据:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">+----+-----------+---------+
+| id | user_name | remark  |
++----+-----------+---------+
+|  1 | user1     | remark1 |
+|  2 | user2     | remark2 |
+|  3 | user3     | remark3 |
++----+-----------+---------+
+</code></pre></div>
+<p>这样来使用for update</p>
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">BEGIN</span><span class="p">;</span>
+<span class="k">SELECT</span> <span class="o">*</span> <span class="n">FORM</span> <span class="k">user</span> <span class="k">WHERE</span> <span class="n">id</span><span class="o">=</span><span class="mi">1</span> <span class="k">for</span> <span class="k">update</span><span class="p">;</span>
+<span class="k">COMMIT</span><span class="p">;</span>
+</code></pre></div>
+<p>注意:  </p>
+
+<ol>
+<li><code class="prettyprint">for update</code>必须在<code class="prettyprint">BEGIN/COMMIT</code>块中才会起作用</li>
+<li>明确使用索引的，会使用行锁(Row Lock)，不使用索引或索引不明确(如id&gt;2)，会使用表锁(Table Lock)</li>
+</ol>
+
+<p>我们来测试一下,通过两个终端分别进行操作，如图:<br>
+<img src="/static/images/lock1.png" alt="测试图片1">
+<img src="/static/images/lock2.png" alt="测试图片2"></p>
+
+<p>我们在第一个终端中开启事务使用了行锁，但未<code class="prettyprint">commit</code>，第二个终端中再查询该行则会被阻塞，处于等待状态。
+直到第一个终端<code class="prettyprint">commit</code>之后，第二个终端才会读取到被锁住的那一行的数据。
+若等待时间过长(终端1迟迟未commit)，则终端2会产生超时错误。</p>
+
+<hr>
+
+<h2 id="test"> 测试记录 </h2>
+
+<p>主要是测试下，什么情况下是 Row Lock，什么情况下是 Table Lock。  </p>
+
+<h3 id="以下情况是-row-lock">以下情况是 Row Lock</h3>
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="c1">-- 使用了主键索引</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">user</span> <span class="k">where</span> <span class="n">id</span><span class="o">=</span><span class="mi">1</span> <span class="k">for</span> <span class="k">update</span><span class="p">;</span>
+<span class="c1">-- 使用了其它索引</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">user</span> <span class="k">where</span> <span class="n">user_name</span><span class="o">=</span><span class="s1">&#39;user1&#39;</span> <span class="k">for</span> <span class="k">update</span><span class="p">;</span>
+<span class="c1">-- 使用 like 但是可以唯一确定一行</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">user</span> <span class="k">where</span> <span class="n">user_name</span> <span class="k">like</span> <span class="s1">&#39;user1%&#39;</span> <span class="k">for</span> <span class="k">update</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="以下情况是-table-lock">以下情况是 Table Lock</h3>
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="c1">-- 主键不明确</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">user</span> <span class="k">where</span> <span class="n">id</span> <span class="o">!=</span> <span class="mi">1</span> <span class="k">for</span> <span class="k">update</span><span class="p">;</span>
+<span class="c1">-- 没有用上任何索引</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">user</span> <span class="k">where</span> <span class="n">remark</span><span class="o">=</span><span class="s1">&#39;remark1&#39;</span> <span class="k">for</span> <span class="k">update</span><span class="p">;</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">user</span> <span class="k">where</span> <span class="n">user_name</span> <span class="k">like</span> <span class="s1">&#39;%user1&#39;</span> <span class="k">for</span> <span class="k">update</span><span class="p">;</span>  <span class="c1">-- 虽然能确定一行，但是没用上索引</span>
+<span class="c1">-- 使用了 like 不能唯一确定一行</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">user</span> <span class="k">where</span> <span class="n">user_name</span> <span class="k">like</span> <span class="s1">&#39;user%&#39;</span> <span class="k">for</span> <span class="k">update</span><span class="p">;</span>   <span class="c1">-- 这条用上了索引</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">user</span> <span class="k">where</span> <span class="n">user_name</span> <span class="k">like</span> <span class="s1">&#39;%user%&#39;</span> <span class="k">for</span> <span class="k">update</span><span class="p">;</span>  <span class="c1">-- 这条没有用上索引</span>
+<span class="c1">-- 未查到数据，但是未使用任何索引</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">user</span> <span class="k">where</span> <span class="n">remark</span><span class="o">=</span><span class="s1">&#39;test&#39;</span> <span class="k">for</span> <span class="k">update</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="以下情况-无-lock">以下情况 无 Lock</h3>
+<div class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="c1">-- 未查到数据，但是使用了索引</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">user</span> <span class="k">where</span> <span class="n">user_name</span><span class="o">=</span><span class="s1">&#39;user9&#39;</span> <span class="k">for</span> <span class="k">update</span><span class="p">;</span>
+</code></pre></div>
+<hr>
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/MySQL加锁" data-title="MySQL加锁" data-url="/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-06-17-MySQL%E5%8A%A0%E9%94%81.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- header end -->
+
+
+</body>
+
+</html>

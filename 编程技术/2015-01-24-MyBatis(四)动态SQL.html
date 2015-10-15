@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="MyBatis(四): 动态SQL, 编程技术, MyBatis, 逆水行舟" />
+    <meta name="description" content="MyBatis(四): 动态SQL, 编程技术, MyBatis, MyBatis的动态SQL是基于ONGL表达式的" />
+
+    <title>MyBatis(四): 动态SQL</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="http://127.0.0.1:4000/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://127.0.0.1:4000/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-01-24-MyBatis(%E5%9B%9B)%E5%8A%A8%E6%80%81SQL.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://127.0.0.1:4000/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/uikit.min.js"></script>
+    <!-- sticky -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "Michael"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" id＝"header">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://127.0.0.1:4000"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://127.0.0.1:4000"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="http://127.0.0.1:4000/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>MyBatis(四): 动态SQL</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <p>MyBatis的动态SQL是基于ONGL表达式的</p>
+
+<hr>
+
+<h2 id="本文结构">本文结构</h2>
+
+<ul>
+<li><a href="#if">if</a></li>
+<li><a href="#where">where</a></li>
+<li><a href="#set">set</a></li>
+<li><a href="#foreach">foreach</a></li>
+<li><a href="#choose">choose (when, otherwise)</a></li>
+</ul>
+
+<hr>
+
+<h2 id="if"> if </h2>
+
+<p>if一般是where的一部分，如</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&quot;findBlog&quot;</span> <span class="na">resultType=</span><span class="s">&quot;Blog&quot;</span><span class="nt">&gt;</span>
+  SELECT * FROM BLOG WHERE 1 = 1
+  <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&quot;title != null&quot;</span><span class="nt">&gt;</span>
+    AND title LIKE CONCAT(CONCAT(&#39;%&#39;, #{title}), &#39;%&#39;)
+    <span class="c">&lt;!-- mysql也可以这样写：AND title LIKE &quot;%&quot;#{title}&quot;%&quot; --&gt;</span>
+  <span class="nt">&lt;/if&gt;</span>
+  <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&quot;author != null and author.name != null&quot;</span><span class="nt">&gt;</span>
+    AND author_name like #{author.name}
+  <span class="nt">&lt;/if&gt;</span>
+<span class="nt">&lt;/select&gt;</span>
+</code></pre></div>
+<hr>
+
+<h2 id="where"> where </h2>
+
+<p>像上面的例子，为了拼接sql，专门写了个 WHERE 1 = 1，<code class="prettyprint">where</code>标签就能避免这样的问题，它会自动去除不该有的<code class="prettyprint">AND</code>或<code class="prettyprint">OR</code></p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&quot;findBlog&quot;</span> <span class="na">resultType=</span><span class="s">&quot;Blog&quot;</span><span class="nt">&gt;</span>
+  SELECT * FROM blog
+  <span class="nt">&lt;where&gt;</span>
+    <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&quot;state != null&quot;</span><span class="nt">&gt;</span>
+         state = #{state}
+    <span class="nt">&lt;/if&gt;</span>
+    <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&quot;title != null&quot;</span><span class="nt">&gt;</span>
+        AND title like #{title}
+    <span class="nt">&lt;/if&gt;</span>
+    <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&quot;author != null and author.name != null&quot;</span><span class="nt">&gt;</span>
+        AND author_name like #{author.name}
+    <span class="nt">&lt;/if&gt;</span>
+  <span class="nt">&lt;/where&gt;</span>
+<span class="nt">&lt;/select&gt;</span>
+</code></pre></div>
+<hr>
+
+<h2 id="set"> set </h2>
+
+<p>set元素主要是用在更新操作的时候，它会智能去掉最后的逗号。如果set中一个条件都不满足，则会报错。</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;update</span> <span class="na">id=</span><span class="s">&quot;updateBlog&quot;</span> <span class="na">parameterType=</span><span class="s">&quot;Blog&quot;</span><span class="nt">&gt;</span>  
+    UPDATE blog  
+    <span class="nt">&lt;set&gt;</span>  
+        <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&quot;title != null&quot;</span><span class="nt">&gt;</span>  
+            title = #{title},  
+        <span class="nt">&lt;/if&gt;</span>  
+        <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&quot;content != null&quot;</span><span class="nt">&gt;</span>  
+            content = #{content},  
+        <span class="nt">&lt;/if&gt;</span>  
+        <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">&quot;owner != null&quot;</span><span class="nt">&gt;</span>  
+            owner = #{owner}  
+        <span class="nt">&lt;/if&gt;</span>  
+    <span class="nt">&lt;/set&gt;</span>  
+    where id = #{id}  
+<span class="nt">&lt;/update&gt;</span>  
+</code></pre></div>
+<hr>
+
+<h2 id="foreach"> foreach </h2>
+
+<p>foreach主要用在in语句中，它可以在SQL语句中遍历一个集合。</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&quot;foreachTest&quot;</span> <span class="na">parameterType=</span><span class="s">&quot;java.util.List&quot;</span> <span class="na">resultType=</span><span class="s">&quot;Blog&quot;</span><span class="nt">&gt;</span>  
+    SELECT * FROM blog WHERE id in  
+    <span class="nt">&lt;foreach</span> <span class="na">collection=</span><span class="s">&quot;list&quot;</span> <span class="na">index=</span><span class="s">&quot;index&quot;</span> <span class="na">item=</span><span class="s">&quot;item&quot;</span> <span class="na">open=</span><span class="s">&quot;(&quot;</span> <span class="na">separator=</span><span class="s">&quot;,&quot;</span> <span class="na">close=</span><span class="s">&quot;)&quot;</span><span class="nt">&gt;</span>  
+        #{item}  
+    <span class="nt">&lt;/foreach&gt;</span>  
+<span class="nt">&lt;/select&gt;</span>
+</code></pre></div>
+<ul>
+<li><code class="prettyprint">item</code>声明可以用在元素体内的集合项，相当于集合每一个元素进行迭代时的别名<br></li>
+<li><code class="prettyprint">index</code>声明可以用在元素体内的索引变量，即元素的位置。
+
+<ul>
+<li>比如上例中，如果list里面的元素为<q>[3,6,9]</q>，则&#39;item&#39;的值会分别为<q>3,6,9</q>，而<code class="prettyprint">index</code>则分别为<q>0,1,2</q></li>
+</ul></li>
+<li><code class="prettyprint">open separator close</code>用于指定开闭匹配的字符串以及在迭代之间放置分隔符，如 <q>(1,2,3,4)</q></li>
+<li><code class="prettyprint">collection</code>属性比较容易出错
+
+<ul>
+<li>当传入参数(parameterType)是单个参数且参数类型是一个List的时候，collection属性值为list，就像上面，传入参数<code class="prettyprint">parameterType=&quot;java.util.List&quot;</code></li>
+<li>当传入参数(parameterType)是单个参数且参数类型是一个array数组的时候，collection的属性值为array，比如<code class="prettyprint">parameterType=&quot;[Ljava.lang.Integer;&quot;</code></li>
+<li>传入的参数是多个的时候，肯定要先封装成一个Map，这个时候collection属性值就是传入的map中List或array数组类型的变量的key值，比如<code class="prettyprint">parameterType=&quot;java.util.Map&quot;</code>，传入的map中有一个key为<q>idList</q>的List对象，则这个时候collection的属性值就应该是idList。</li>
+</ul></li>
+</ul>
+
+<hr>
+
+<h2 id="choose"> choose (when, otherwise) </h2>
+
+<p>choose元素的作用就相当于JAVA中的switch语句</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&quot;chooseTest&quot;</span> <span class="na">parameterType=</span><span class="s">&quot;Blog&quot;</span> <span class="na">resultType=</span><span class="s">&quot;Blog&quot;</span><span class="nt">&gt;</span>  
+    SELECT * FROM blog WHERE 1 = 1   
+    <span class="nt">&lt;choose&gt;</span>  
+        <span class="nt">&lt;when</span> <span class="na">test=</span><span class="s">&quot;title != null&quot;</span><span class="nt">&gt;</span>  
+            and title = #{title}  
+        <span class="nt">&lt;/when&gt;</span>  
+        <span class="nt">&lt;when</span> <span class="na">test=</span><span class="s">&quot;content != null&quot;</span><span class="nt">&gt;</span>  
+            and content = #{content}  
+        <span class="nt">&lt;/when&gt;</span>  
+        <span class="nt">&lt;otherwise&gt;</span>  
+            and author = &quot;Michael&quot;  
+        <span class="nt">&lt;/otherwise&gt;</span>  
+    <span class="nt">&lt;/choose&gt;</span>  
+<span class="nt">&lt;/select&gt;</span>
+</code></pre></div>
+<hr>
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/MyBatis(四)动态SQL" data-title="MyBatis(四): 动态SQL" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-01-24-MyBatis(%E5%9B%9B)%E5%8A%A8%E6%80%81SQL.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- header end -->
+
+
+</body>
+
+</html>

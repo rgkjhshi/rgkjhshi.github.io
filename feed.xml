@@ -1,119 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Michael King&#39;s Blog</title>
-    <description>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
-</description>
-    <link>http://yourdomain.com/</link>
-    <atom:link href="http://yourdomain.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 27 Aug 2015 22:15:58 +0800</pubDate>
-    <lastBuildDate>Thu, 27 Aug 2015 22:15:58 +0800</lastBuildDate>
+    <title>逆水行舟</title>
+    <description>Michael King&#39;s Blog</description>
+    <link>http://127.0.0.1:4000/</link>
+    <atom:link href="http://127.0.0.1:4000/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Thu, 15 Oct 2015 15:50:53 +0800</pubDate>
+    <lastBuildDate>Thu, 15 Oct 2015 15:50:53 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
-        <title>Json对象的格式</title>
-        <description>&lt;p&gt;某天聊天时听到有人说，json应该以 &lt;code&gt;{&lt;/code&gt; 开头，以 &lt;code&gt;}&lt;/code&gt;结尾，顿时发觉Json的标准格式是什么样子的很有必要记录下。&lt;br&gt;
-另外附上一个很不错的在线验证及格式化Json的网站:&lt;a href=&quot;http://json.cn&quot;&gt;Json.cn&lt;/a&gt;  &lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2&gt;本文结构&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#introduce&quot;&gt;Json简介&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#JavaScriptObject&quot;&gt;JavaScript中的对象&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#JSONObject&quot;&gt;JSON中的对象&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;introduce&quot;&gt; Json简介 &lt;/h2&gt;
-
-&lt;p&gt;JSON是 &lt;code&gt;JavaScript Object Notation&lt;/code&gt; 的缩写，它是一种数据交换格式，2002年由道格拉斯·克罗克福特（Douglas Crockford）发明的。&lt;br&gt;
-在它之前，大家都用&lt;code&gt;XML&lt;/code&gt;来交换数据，XML是纯文本格式，本身不难，但是加上 &lt;code&gt;DTD、XSD、XSLT&lt;/code&gt; 等一堆规范后就相当复杂了。  &lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;JavaScriptObject&quot;&gt; JavaScript中的对象 &lt;/h2&gt;
-
-&lt;p&gt;既然JSON是&lt;code&gt;JavaScript Object Notation&lt;/code&gt;，我们就看看JavaScript中都有什么对象。&lt;br&gt;
-JavaScript的对象是一种无序的集合数据类型，它由若干键值对组成,
-一个普通的js对象用一个&lt;code&gt;{...}&lt;/code&gt;表示，键值对以&lt;code&gt;key : value&lt;/code&gt;形式声明。&lt;br&gt;
-除此之外还有 &lt;code&gt;number、string、boolean&lt;/code&gt;等对象，可以通过 &lt;code&gt;typeof obj&lt;/code&gt;来获取对象的类型，如下：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// 普通对象&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;obj&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;小明&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;gender&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;男&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;age&lt;/span&gt;    &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;28&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// 空对象&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;o&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// 数组对象&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;arr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// 数字对象&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;num1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;num2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;123.456&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// 字符串&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;str&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;abcde&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// 布尔&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bool&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;typeof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// object&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;typeof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;// object&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;typeof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;arr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// object&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;typeof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;num1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// number&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;typeof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;num2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// number&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;typeof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// string&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;typeof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bool&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// boolean&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;上面例子中，虽然&lt;code&gt;{}, null, []&lt;/code&gt;都是&lt;code&gt;object&lt;/code&gt;，但是他们的形式不太一样。&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;JSONObject&quot;&gt; JSON中的对象 &lt;/h2&gt;
-
-&lt;p&gt;JSON中的对象来自于JavaScript中，总共以下这几种数据类型:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;number&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;js中的number&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;js中的boolean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;即true或false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;string&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;js中的string&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;    &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;js中的null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;js中的的Array&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;即&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;形式的对象&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;object&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;js中的普通对象&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;即&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;形式的对象&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;另外JSON还规定了字符集必须用UTF-8, 字符串必须用双引号&lt;code&gt;&amp;quot;&amp;quot;&lt;/code&gt;, 对象中的key也必须用双引号&lt;code&gt;&amp;quot;&amp;quot;&lt;/code&gt;&lt;br&gt;
-所以，以下的json都是正确的:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-json&quot; data-lang=&quot;json&quot;&gt;&lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;
-&lt;span class=&quot;s2&quot;&gt;&amp;quot;一个字符串&amp;quot;&lt;/span&gt;
-&lt;span class=&quot;mf&quot;&gt;3.14&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;asdf&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;quot;name&amp;quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Rose&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;&amp;quot;age&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;18&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;&lt;strong&gt;注意:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;{&amp;quot;name&amp;quot; : &amp;quot;Rose&amp;quot;, &amp;quot;age&amp;quot;: 18}&lt;/code&gt;是普通对象, &lt;code&gt;3.14&lt;/code&gt;也是一个对象，两者都是合法的json串&lt;/li&gt;
-&lt;li&gt;&amp;quot;&lt;code&gt;null, 3.14&lt;/code&gt;&amp;quot;这样不是合法的json串，要表示多个对象，必须放到普通对象中以键值对的形式出现&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-</description>
-        <pubDate>Thu, 27 Aug 2015 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015/08/27/Json%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%A0%BC%E5%BC%8F.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015/08/27/Json%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%A0%BC%E5%BC%8F.html</guid>
-        
-        
-        <category>点滴积累</category>
-        
-      </item>
-    
-      <item>
-        <title>java日志(三)logback配置文件</title>
+        <title>java日志(三):logback配置文件</title>
         <description>&lt;p&gt;logback配置文件的简单介绍，主要内容均来自&lt;a href=&quot;http://logback.qos.ch/manual/&quot;&gt;logback官方文档&lt;/a&gt;&lt;/p&gt;
 
 &lt;hr&gt;
 
-&lt;h2&gt;本文结构&lt;/h2&gt;
+&lt;h2 id=&quot;本文结构&quot;&gt;本文结构&lt;/h2&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#structure&quot;&gt;logback配置文件的结构&lt;/a&gt;&lt;/li&gt;
@@ -143,64 +45,71 @@ JavaScript的对象是一种无序的集合数据类型，它由若干键值对�
 
 &lt;h2 id=&quot;structure&quot;&gt; logback配置文件的结构 &lt;/h2&gt;
 
-&lt;p&gt;logback配置文件的跟节点为&lt;code&gt;&amp;lt;configuration&amp;gt;&lt;/code&gt;,它的子节点有3个:&lt;code&gt;root、logger、appender&lt;/code&gt;，除了&lt;code&gt;root&lt;/code&gt;之外，每个都可以多次出现。&lt;br&gt;
+&lt;p&gt;logback配置文件的跟节点为&lt;code class=&quot;prettyprint&quot;&gt;&amp;lt;configuration&amp;gt;&lt;/code&gt;,它的子节点有3个:&lt;code class=&quot;prettyprint&quot;&gt;root、logger、appender&lt;/code&gt;，除了&lt;code class=&quot;prettyprint&quot;&gt;root&lt;/code&gt;之外，每个都可以多次出现。&lt;br&gt;
 下面是我画的一个结构图，实线表示节点，虚线表示属性&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/images/logbak_config.png&quot; alt=&quot;logback配置文件结构图&quot; title=&quot;结构图&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/static/images/logbak_config.png&quot; alt=&quot;logback配置文件结构图&quot; title=&quot;结构图&quot;&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;appender&lt;/code&gt;:用于描述日志的输出格式，是输出到控制台还是输出到文件，日志滚动打包策略等。&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;logger&lt;/code&gt;:用来制定把什么内容用哪个&lt;code&gt;appender&lt;/code&gt;输出。&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;root&lt;/code&gt;:默认的&lt;code&gt;logger&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;appender&lt;/code&gt;:用于描述日志的输出格式，是输出到控制台还是输出到文件，日志滚动打包策略等。&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;logger&lt;/code&gt;:用来制定把什么内容用哪个&lt;code class=&quot;prettyprint&quot;&gt;appender&lt;/code&gt;输出。&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;root&lt;/code&gt;:默认的&lt;code class=&quot;prettyprint&quot;&gt;logger&lt;/code&gt;。&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;hr&gt;
 
 &lt;h2 id=&quot;configuration&quot;&gt; configuration元素 &lt;/h2&gt;
 
-&lt;p&gt;&lt;code&gt;configuration&lt;/code&gt;元素是logback配置文件的根元素，它也有许多可选属性，如: &lt;code&gt;debug、scan、scanPeriod&lt;/code&gt;等
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;configuration&lt;/code&gt;元素是logback配置文件的根元素，它也有许多可选属性，如: &lt;code class=&quot;prettyprint&quot;&gt;debug、scan、scanPeriod&lt;/code&gt;等&lt;/p&gt;
+
 &lt;h3 id=&quot;debug&quot;&gt; debug 属性 &lt;/h3&gt;
-如果logback的配置文件加载过程中出现了warning或error，则logback会把自身状态的日志打印出来，如下:&lt;/p&gt;
+
+&lt;p&gt;如果logback的配置文件加载过程中出现了warning或error，则logback会把自身状态的日志打印出来，如下:&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;00:16:31,885 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.test.log] to INFO
 00:16:31,885 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting additivity of logger [com.test.log] to false
-00:16:31,885 |-ERROR in ch.qos.logback.core.joran.action.AppenderRefAction - Could not find an appender named [STDOUT]. Did you define it below instead of above in the configuration file?
-00:16:31,885 |-ERROR in ch.qos.logback.core.joran.action.AppenderRefAction - See http://logback.qos.ch/codes.html#appender_order for more details.
+00:16:31,885 |-ERROR in ch.qos.logback.core.joran.action.AppenderRefAction - Could not find an appender named [STDOUT]....
+00:16:31,885 |-ERROR in ch.qos.logback.core.joran.action.AppenderRefAction - See ... for more details.
 00:16:31,885 |-INFO in ch.qos.logback.classic.joran.action.RootLoggerAction - Setting level of ROOT logger to DEBUG
-00:16:31,885 |-ERROR in ch.qos.logback.core.joran.action.AppenderRefAction - Could not find an appender named [STDOUT]. Did you define it below instead of above in the configuration file?
-00:16:31,885 |-ERROR in ch.qos.logback.core.joran.action.AppenderRefAction - See http://logback.qos.ch/codes.html#appender_order for more details.
+00:16:31,885 |-ERROR in ch.qos.logback.core.joran.action.AppenderRefAction - Could not find an appender named [STDOUT]....
+00:16:31,885 |-ERROR in ch.qos.logback.core.joran.action.AppenderRefAction - See ... for more details.
 00:16:31,885 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - End of configuration.
-00:16:31,888 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@36577c06 - Registering current configuration as safe fallback point
+00:16:31,888 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@36577c06 - Registering current configuration as...
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;如果加载过程未出现警告或者错误，就不会打印出来了。&lt;br&gt;
-若指定了&lt;code&gt;debug=&amp;quot;true&amp;quot;&lt;/code&gt;，即使不出现警告和错误，也会打印出logback内部的状态日志。
+若指定了&lt;code class=&quot;prettyprint&quot;&gt;debug=&amp;quot;true&amp;quot;&lt;/code&gt;，即使不出现警告和错误，也会打印出logback内部的状态日志。&lt;/p&gt;
+
 &lt;h3 id=&quot;scan&quot;&gt; scan 属性 &lt;/h3&gt;
-可通过属性设置&lt;code&gt;scan=&amp;quot;true&amp;quot;&lt;/code&gt;，在配置文件发生改变时自动重新加载配置文件，默认1分钟重新扫描一次。&lt;br&gt;
-可通过属性设置&lt;code&gt;scanPeriod=&amp;quot;30 seconds&amp;quot;&lt;/code&gt;，指定30秒扫描一次。&lt;br&gt;
-扫描间隔的单位可以是&lt;code&gt;milliseconds, seconds, minutes 或 hours&lt;/code&gt;，若不指定单位，默认为&lt;code&gt;milliseconds&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;可通过属性设置&lt;code class=&quot;prettyprint&quot;&gt;scan=&amp;quot;true&amp;quot;&lt;/code&gt;，在配置文件发生改变时自动重新加载配置文件，默认1分钟重新扫描一次。&lt;br&gt;
+可通过属性设置&lt;code class=&quot;prettyprint&quot;&gt;scanPeriod=&amp;quot;30 seconds&amp;quot;&lt;/code&gt;，指定30秒扫描一次。&lt;br&gt;
+扫描间隔的单位可以是&lt;code class=&quot;prettyprint&quot;&gt;milliseconds, seconds, minutes 或 hours&lt;/code&gt;，若不指定单位，默认为&lt;code class=&quot;prettyprint&quot;&gt;milliseconds&lt;/code&gt;。&lt;/p&gt;
 
 &lt;hr&gt;
 
 &lt;p&gt;&lt;h2 id=&quot;logger&quot;&gt; logger元素 &lt;/h3&gt;
-&lt;code&gt;logger&lt;/code&gt;元素用于配置代码中的logger，它有属性如: &lt;code&gt;name、level、additivity&lt;/code&gt;，其中&lt;code&gt;name&lt;/code&gt;属性是必须的，其他2个可选。
-有0个或多个子元素&lt;code&gt;&amp;lt;appender-ref ref=&amp;quot;STDOUT&amp;quot; /&amp;gt;&lt;/code&gt;来指定日志输出的格式。若0个，则不指定输出格式，就不会输出了。&lt;br&gt;
-&lt;strong&gt;注意&lt;/strong&gt;&lt;code&gt;root&lt;/code&gt;是最顶级的logger，它只有个可选属性level。&lt;/p&gt;
+&lt;code class=&quot;prettyprint&quot;&gt;logger&lt;/code&gt;元素用于配置代码中的logger，它有属性如: &lt;code class=&quot;prettyprint&quot;&gt;name、level、additivity&lt;/code&gt;，其中&lt;code class=&quot;prettyprint&quot;&gt;name&lt;/code&gt;属性是必须的，其他2个可选。
+有0个或多个子元素&lt;code class=&quot;prettyprint&quot;&gt;&amp;lt;appender-ref ref=&amp;quot;STDOUT&amp;quot; /&amp;gt;&lt;/code&gt;来指定日志输出的格式。若0个，则不指定输出格式，就不会输出了。&lt;br&gt;
+&lt;strong&gt;注意&lt;/strong&gt;&lt;code class=&quot;prettyprint&quot;&gt;root&lt;/code&gt;是最顶级的logger，它只有个可选属性level。&lt;/p&gt;
 
 &lt;h3 id=&quot;name&quot;&gt; name 属性 &lt;/h3&gt;
 
-&lt;p&gt;在java代码中，getLogger(String className)的参数一样获取到的logger是同一个，如下面的&lt;code&gt;logger1&lt;/code&gt;和&lt;code&gt;logger2&lt;/code&gt;就是同一个对象:&lt;/p&gt;
+&lt;p&gt;在java代码中，getLogger(String className)的参数一样获取到的logger是同一个，如下面的&lt;code class=&quot;prettyprint&quot;&gt;logger1&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;logger2&lt;/code&gt;就是同一个对象:&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;Logger&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;logger1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LoggerFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;org.slf4j.Logger&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;Logger&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;logger2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LoggerFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;org.slf4j.Logger&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;日志&lt;code&gt;logger&lt;/code&gt;有个&lt;code&gt;name&lt;/code&gt;属性，跟代码中传的参数有一定的关系，举个例子:&lt;/p&gt;
+&lt;p&gt;日志&lt;code class=&quot;prettyprint&quot;&gt;logger&lt;/code&gt;有个&lt;code class=&quot;prettyprint&quot;&gt;name&lt;/code&gt;属性，跟代码中传的参数有一定的关系，举个例子:&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;    &lt;span class=&quot;o&quot;&gt;&amp;lt;!--&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;配置文件中&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;--&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;A.B&amp;quot;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;level&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;debug&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;c1&quot;&gt;// java 代码中&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;Logger&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LoggerFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;A.B.C&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;输出的日志会先在配置文件中匹配名字为&amp;quot;A.B.C&amp;quot;的logger，未找到，匹配到了&amp;quot;A.B&amp;quot;的logger，则按照其指定的&lt;code&gt;appender&lt;/code&gt;格式进行输出。
+&lt;p&gt;输出的日志会先在配置文件中匹配名字为&lt;q&gt;A.B.C&lt;/q&gt;的logger，未找到，匹配到了&lt;q&gt;A.B&lt;/q&gt;的logger，则按照其指定的&lt;code class=&quot;prettyprint&quot;&gt;appender&lt;/code&gt;格式进行输出。&lt;/p&gt;
+
 &lt;h3 id=&quot;level&quot;&gt; level属性 &lt;/h3&gt;
-日志的级别有: &lt;code&gt;TRACE &amp;lt; DEBUG &amp;lt; INFO &amp;lt;  WARN &amp;lt; ERROR (ALL、OFF)&lt;/code&gt;&lt;br&gt;
-日志级别是可以继承的，root不用指定级别，默认就是&amp;quot;DEBUG&amp;quot;. 举个继承的例子:
+
+&lt;p&gt;日志的级别有: &lt;code class=&quot;prettyprint&quot;&gt;TRACE &amp;lt; DEBUG &amp;lt; INFO &amp;lt;  WARN &amp;lt; ERROR (ALL、OFF)&lt;/code&gt;&lt;br&gt;
+日志级别是可以继承的，root不用指定级别，默认就是&lt;q&gt;DEBUG&lt;/q&gt;. 举个继承的例子:&lt;/p&gt;
+
 &lt;table&gt;
     &lt;tr&gt;
         &lt;th&gt;Logger name&lt;/th&gt;
@@ -227,12 +136,13 @@ JavaScript的对象是一种无序的集合数据类型，它由若干键值对�
         &lt;td&gt;ERROR&lt;/td&gt;
         &lt;td&gt;ERROR(自己有)&lt;/td&gt;
     &lt;/tr&gt;
-&lt;/table&gt;&lt;/p&gt;
+&lt;/table&gt;
 
 &lt;h3 id=&quot;additivity&quot;&gt; additivity属性 &lt;/h3&gt;
 
 &lt;p&gt;该属性表示日志的可叠加性，默认为true,表示到达本logger的日志通过本日志的appender指定格式输出之后，仍会将日志扩散给父logger。&lt;br&gt;
-弄个表格就容易看清楚了:
+弄个表格就容易看清楚了:&lt;/p&gt;
+
 &lt;table class=&quot;bodyTable&quot;&gt;
     &lt;tr&gt;
         &lt;th&gt;Logger Name&lt;/th&gt;
@@ -254,21 +164,21 @@ JavaScript的对象是一种无序的集合数据类型，它由若干键值对�
         &lt;td&gt;A-x1, A-x2&lt;/td&gt;
         &lt;td&gt;true&lt;/td&gt;
         &lt;td&gt;A1, &lt;br&gt;A-x1, A-x2&lt;/td&gt;
-        &lt;td&gt;&amp;quot;x&amp;quot;(自己)的appender&lt;br&gt;扩散到root的appender&lt;/td&gt;
+        &lt;td&gt;&quot;x&quot;(自己)的appender&lt;br&gt;扩散到root的appender&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
         &lt;td&gt;x.y&lt;/td&gt;
         &lt;td&gt;none&lt;/td&gt;
         &lt;td&gt;true&lt;/td&gt;
         &lt;td&gt;A1, &lt;br&gt;A-x1, A-x2&lt;/td&gt;
-        &lt;td&gt;扩散到&amp;quot;x&amp;quot;和root的appender.&lt;/td&gt;
+        &lt;td&gt;扩散到&quot;x&quot;和root的appender.&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr class=&quot;alt&quot;&gt;
         &lt;td&gt;x.y.z&lt;/td&gt;
         &lt;td&gt;A-xyz1&lt;/td&gt;
         &lt;td&gt;true&lt;/td&gt;
         &lt;td&gt;A1, &lt;br&gt;A-x1, A-x2, &lt;br&gt;A-xyz1&lt;/td&gt;
-        &lt;td&gt;&amp;quot;x.y.z&amp;quot;的appender&lt;br&gt;扩散到&amp;quot;x&amp;quot;和root的appender.&lt;/td&gt;
+        &lt;td&gt;&quot;x.y.z&quot;的appender&lt;br&gt;扩散到&quot;x&quot;和root的appender.&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
         &lt;td&gt;security&lt;/td&gt;
@@ -286,12 +196,13 @@ JavaScript的对象是一种无序的集合数据类型，它由若干键值对�
         &lt;td&gt;true&lt;/td&gt;
         &lt;td&gt;A-sec&lt;/td&gt;
         &lt;td&gt;
-            &amp;quot;security&amp;quot;中的additivity＝&lt;code&gt;false&lt;/code&gt;.&lt;br&gt;
-            只扩散到了&amp;quot;security&amp;quot; 的appender.
+            &quot;security&quot;中的additivity＝&lt;code&gt;false&lt;/code&gt;.&lt;br&gt;
+            只扩散到了&quot;security&quot; 的appender.
         &lt;/td&gt;
     &lt;/tr&gt;
 &lt;/table&gt;
-&lt;strong&gt;注意&lt;/strong&gt;&lt;br&gt;
+
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;&lt;br&gt;
 最后一个小例子:&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;    &lt;span class=&quot;c1&quot;&gt;// java代码,A.B.C包中的类&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;debug&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;debug&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
@@ -303,21 +214,21 @@ JavaScript的对象是一种无序的集合数据类型，它由若干键值对�
         &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;appender&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ref&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ref&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;STDOUT&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;运行的结果是会打印&amp;quot;info&amp;quot;.&lt;br&gt;
+&lt;p&gt;运行的结果是会打印&lt;q&gt;info&lt;/q&gt;.&lt;br&gt;
 因为logger配置了级别为info，但是并不打印，扩散到了root;&lt;br&gt;
 root级别为OFF，但是logger扩散过来的日志级别仍为继承的info.&lt;br&gt;
 所以只有A.B.C包中级别大于等于info的日志会被打印。&lt;/p&gt;
 
 &lt;p&gt;&lt;h2 id=&quot;appender&quot;&gt; appender元素 &lt;/h3&gt;
-&lt;code&gt;appender&lt;/code&gt;元素内容稍微多点，它有2个必需属性:&lt;code&gt;name&lt;/code&gt;和&lt;code&gt;class&lt;/code&gt;。&lt;br&gt;
-有3个可选的子元素&lt;code&gt;&amp;lt;encoder&amp;gt;、&amp;lt;layout&amp;gt;、&amp;lt;filter&amp;gt;&lt;/code&gt;，这3个子元素可有0个或者多个。&lt;br&gt;
-一般只用&lt;code&gt;&amp;lt;encoder&amp;gt;&lt;/code&gt;，它包装了&lt;code&gt;&amp;lt;layout&amp;gt;&lt;/code&gt;。&lt;/p&gt;
+&lt;code class=&quot;prettyprint&quot;&gt;appender&lt;/code&gt;元素内容稍微多点，它有2个必需属性:&lt;code class=&quot;prettyprint&quot;&gt;name&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;class&lt;/code&gt;。&lt;br&gt;
+有3个可选的子元素&lt;code class=&quot;prettyprint&quot;&gt;&amp;lt;encoder&amp;gt;、&amp;lt;layout&amp;gt;、&amp;lt;filter&amp;gt;&lt;/code&gt;，这3个子元素可有0个或者多个。&lt;br&gt;
+一般只用&lt;code class=&quot;prettyprint&quot;&gt;&amp;lt;encoder&amp;gt;&lt;/code&gt;，它包装了&lt;code class=&quot;prettyprint&quot;&gt;&amp;lt;layout&amp;gt;&lt;/code&gt;。&lt;/p&gt;
 
 &lt;h3 id=&quot;encoder&quot;&gt; encoder 子元素 &lt;/h3&gt;
 
-&lt;p&gt;&lt;code&gt;encoder&lt;/code&gt;的作用是把消息转化成输出流，可以控制消息怎么转化，何时输出等。&lt;br&gt;
-而&lt;code&gt;layout&lt;/code&gt;仅指定消息输出的格式，不能控制消息什么时候输出，不能控制消息暂存到flush然后一下子批量输出。&lt;br&gt;
-实际上&lt;code&gt;encoder&lt;/code&gt;内部包装了&lt;code&gt;PatternLayout&lt;/code&gt;，然后又多了一些控制功能。
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;encoder&lt;/code&gt;的作用是把消息转化成输出流，可以控制消息怎么转化，何时输出等。&lt;br&gt;
+而&lt;code class=&quot;prettyprint&quot;&gt;layout&lt;/code&gt;仅指定消息输出的格式，不能控制消息什么时候输出，不能控制消息暂存到flush然后一下子批量输出。&lt;br&gt;
+实际上&lt;code class=&quot;prettyprint&quot;&gt;encoder&lt;/code&gt;内部包装了&lt;code class=&quot;prettyprint&quot;&gt;PatternLayout&lt;/code&gt;，然后又多了一些控制功能。
 来个例子:&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 一般这样写 --&amp;gt;&lt;/span&gt;
 &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;FILE&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;ch.qos.logback.core.FileAppender&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
@@ -342,7 +253,7 @@ root级别为OFF，但是logger扩散过来的日志级别仍为继承的info.&l
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h3 id=&quot;layout&quot;&gt; layout 子元素 &lt;/h3&gt;
 
-&lt;p&gt;&lt;code&gt;layout&lt;/code&gt;用于指定输出格式,有个class属性，不写默认是&lt;code&gt;ch.qos.logback.classic.PatternLayout&lt;/code&gt;。&lt;br&gt;
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;layout&lt;/code&gt;用于指定输出格式,有个class属性，不写默认是&lt;code class=&quot;prettyprint&quot;&gt;ch.qos.logback.classic.PatternLayout&lt;/code&gt;。&lt;br&gt;
 也可以自己定义layout，然后像下面这样使用(一般也不自己定义):&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;  &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;STDOUT&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;ch.qos.logback.core.ConsoleAppender&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;nt&quot;&gt;&amp;lt;encoder&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;ch.qos.logback.core.encoder.LayoutWrappingEncoder&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
@@ -366,14 +277,14 @@ root级别为OFF，但是logger扩散过来的日志级别仍为继承的info.&l
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h3 id=&quot;pattern&quot;&gt; 日志格式的详细说明(pattern元素) &lt;/h3&gt;
 
-&lt;p&gt;不管是&lt;code&gt;encoder&lt;/code&gt;元素中还是&lt;code&gt;layout&lt;/code&gt;元素中，都少不了&lt;code&gt;pattern&lt;/code&gt;，它是用来描述日志输出格式的。&lt;br&gt;
+&lt;p&gt;不管是&lt;code class=&quot;prettyprint&quot;&gt;encoder&lt;/code&gt;元素中还是&lt;code class=&quot;prettyprint&quot;&gt;layout&lt;/code&gt;元素中，都少不了&lt;code class=&quot;prettyprint&quot;&gt;pattern&lt;/code&gt;，它是用来描述日志输出格式的。&lt;br&gt;
 下面就是格式的详细介绍&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;长度限定 : {length}&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;像&lt;code&gt;%logger, %class&lt;/code&gt;等都可以通过&lt;code&gt;length&lt;/code&gt;来限定长度，对其进行缩写，不过这个长度有点特殊，举个例子说明会更明白:&lt;/p&gt;
+&lt;p&gt;像&lt;code class=&quot;prettyprint&quot;&gt;%logger, %class&lt;/code&gt;等都可以通过&lt;code class=&quot;prettyprint&quot;&gt;length&lt;/code&gt;来限定长度，对其进行缩写，不过这个长度有点特殊，举个例子说明会更明白:&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;nl&quot;&gt;有个logger这样定义:&lt;/span&gt;
 &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Logger&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LoggerFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Aaaaa.Bbbbb.TestLength&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
    &lt;span class=&quot;n&quot;&gt;格式&lt;/span&gt;       &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;       &lt;span class=&quot;n&quot;&gt;结果&lt;/span&gt;
@@ -385,28 +296,28 @@ root级别为OFF，但是logger扩散过来的日志级别仍为继承的info.&l
 &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;22&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;Aaaaa&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Bbbbb&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;TestLength&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;最右边的那个类名总是显示的;&lt;br&gt;
-由于&lt;code&gt;A.Bbbbb.TestLength&lt;/code&gt;长度为18，所以&lt;code&gt;0&amp;lt;lenght&amp;lt;18&lt;/code&gt;时会被缩写成&lt;code&gt;A.B.TestLength&lt;/code&gt;;&lt;br&gt;
-由于&lt;code&gt;Aaaaa.Bbbbb.TestLength&lt;/code&gt;长度为22，所以&lt;code&gt;18&amp;lt;lenght&amp;lt;22&lt;/code&gt;时会被缩写成&lt;code&gt;A.Bbbbb.TestLength&lt;/code&gt;;&lt;br&gt;
-&lt;code&gt;lenght&amp;gt;=22&lt;/code&gt;时不缩写;&lt;br&gt;
+由于&lt;code class=&quot;prettyprint&quot;&gt;A.Bbbbb.TestLength&lt;/code&gt;长度为18，所以&lt;code class=&quot;prettyprint&quot;&gt;0&amp;lt;lenght&amp;lt;18&lt;/code&gt;时会被缩写成&lt;code class=&quot;prettyprint&quot;&gt;A.B.TestLength&lt;/code&gt;;&lt;br&gt;
+由于&lt;code class=&quot;prettyprint&quot;&gt;Aaaaa.Bbbbb.TestLength&lt;/code&gt;长度为22，所以&lt;code class=&quot;prettyprint&quot;&gt;18&amp;lt;lenght&amp;lt;22&lt;/code&gt;时会被缩写成&lt;code class=&quot;prettyprint&quot;&gt;A.Bbbbb.TestLength&lt;/code&gt;;&lt;br&gt;
+&lt;code class=&quot;prettyprint&quot;&gt;lenght&amp;gt;=22&lt;/code&gt;时不缩写;&lt;br&gt;
 &lt;strong&gt;length总结&lt;/strong&gt; :&lt;/p&gt;
 
 &lt;ol&gt;
 &lt;li&gt;0只显示短类名(最右边的); 非0显示全类名，但是包名可能会被缩写，缩写成只有一个首字母&lt;/li&gt;
 &lt;li&gt;缩写时最外层包最先被缩写，右边的包名最先不被缩写&lt;/li&gt;
-&lt;li&gt;不缩写的前提是: &lt;code&gt;总长度&amp;lt;=lenght&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;不缩写的前提是: &lt;code class=&quot;prettyprint&quot;&gt;总长度&amp;lt;=lenght&lt;/code&gt;&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;日志名 : %c{length} / %lo{length} / %logger{length}&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;产生日志的Logger的全名，可通过length缩写， &lt;code&gt;%logger{36}、%c{36}&lt;/code&gt;效果是一样的。  &lt;/p&gt;
+&lt;p&gt;产生日志的Logger的全名，可通过length缩写， &lt;code class=&quot;prettyprint&quot;&gt;%logger{36}、%c{36}&lt;/code&gt;效果是一样的。  &lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;类名 : %C{length} / %class{length}&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;产生日志的类的全名， 如类&amp;quot;A.B.MyClass&amp;quot;中有个Logger名字为&amp;quot;A.B.MyLogger&amp;quot;，前者是类名，后者是日志名。&lt;/p&gt;
+&lt;p&gt;产生日志的类的全名， 如类&lt;q&gt;A.B.MyClass&lt;/q&gt;中有个Logger名字为&lt;q&gt;A.B.MyLogger&lt;/q&gt;，前者是类名，后者是日志名。&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;方法名 : %M / %method&lt;/strong&gt;&lt;/li&gt;
@@ -418,7 +329,7 @@ root级别为OFF，但是logger扩散过来的日志级别仍为继承的info.&l
 &lt;li&gt;&lt;strong&gt;文件名 : %F / %file&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;产生日志的java源文件名， 如&amp;quot;LogbackTest.java&amp;quot;。&lt;/p&gt;
+&lt;p&gt;产生日志的java源文件名， 如&lt;q&gt;LogbackTest.java&lt;/q&gt;。&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;行号 : %L / %line&lt;/strong&gt;&lt;/li&gt;
@@ -447,7 +358,7 @@ root级别为OFF，但是logger扩散过来的日志级别仍为继承的info.&l
 &lt;li&gt;&lt;strong&gt;格式控制&lt;/strong&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;code&gt;&amp;quot;.&amp;quot;&lt;/code&gt;前面是最短长度，不够则补白；&lt;code&gt;&amp;quot;.&amp;quot;&lt;/code&gt;后面是最大长度。直接来个例子:&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;&amp;quot;.&amp;quot;&lt;/code&gt;前面是最短长度，不够则补白；&lt;code class=&quot;prettyprint&quot;&gt;&amp;quot;.&amp;quot;&lt;/code&gt;后面是最大长度。直接来个例子:&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;   &lt;span class=&quot;n&quot;&gt;格式化串&lt;/span&gt;         &lt;span class=&quot;n&quot;&gt;logger名&lt;/span&gt;                &lt;span class=&quot;n&quot;&gt;结果&lt;/span&gt;
 &lt;span class=&quot;o&quot;&gt;[%&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;20.20&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Name&lt;/span&gt;             &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;           &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
 &lt;span class=&quot;o&quot;&gt;[%-&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;20.20&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Name&lt;/span&gt;             &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Name&lt;/span&gt;           &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
@@ -457,11 +368,13 @@ root级别为OFF，但是logger扩散过来的日志级别仍为继承的info.&l
 &lt;hr&gt;
 </description>
         <pubDate>Fri, 03 Jul 2015 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/java/2015/07/03/java%E6%97%A5%E5%BF%97(%E4%B8%89)logback%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/java/2015/07/03/java%E6%97%A5%E5%BF%97(%E4%B8%89)logback%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.html</guid>
+        <link>http://127.0.0.1:4000/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-07-03-java%E6%97%A5%E5%BF%97(%E4%B8%89)logback%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.html</link>
+        <guid isPermaLink="true">http://127.0.0.1:4000/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-07-03-java%E6%97%A5%E5%BF%97(%E4%B8%89)logback%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.html</guid>
+        
+        <category>Java日志</category>
         
         
-        <category>java</category>
+        <category>编程技术</category>
         
       </item>
     
@@ -471,7 +384,7 @@ root级别为OFF，但是logger扩散过来的日志级别仍为继承的info.&l
 
 &lt;hr&gt;
 
-&lt;h2&gt;目录&lt;/h2&gt;
+&lt;h2 id=&quot;目录&quot;&gt;目录&lt;/h2&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;CSRF简介&lt;/a&gt;&lt;/li&gt;
@@ -520,7 +433,7 @@ www.A.com站在用户登录后，会将登陆凭证保存在本地cookie中，A�
 
 &lt;p&gt;防范的方法有许多，Token方式是最主流的。&lt;/p&gt;
 
-&lt;h3&gt;Token&lt;/h3&gt;
+&lt;h3 id=&quot;token&quot;&gt;Token&lt;/h3&gt;
 
 &lt;p&gt;CSRF能攻击成功，根本原因是：操作所带的参数均被攻击者猜测到了。&lt;br&gt;
 根据这个原因，我们就可以添加一个Token参数，其值是随机的，使攻击者不知道无法猜到。&lt;br&gt;
@@ -541,12 +454,12 @@ www.A.com站在用户登录后，会将登陆凭证保存在本地cookie中，A�
 下次请求时会把hiddin域中的token和cookie里的加密token都提交给服务器，服务器得到cookie里的加密token进行解密，
 然后跟hiddin域提交过来的token进行对比。&lt;/p&gt;
 
-&lt;h3&gt;验证码&lt;/h3&gt;
+&lt;h3 id=&quot;验证码&quot;&gt;验证码&lt;/h3&gt;
 
 &lt;p&gt;验证码不仅可用来防止暴力破解，还可以有效防止CSRF的攻击。
 但问题在于，不可能在用户的所有操作上都需要输入验证码。只有一些关键的操作，才能要求输入验证码。&lt;/p&gt;
 
-&lt;h3&gt;Referer字段检查&lt;/h3&gt;
+&lt;h3 id=&quot;referer字段检查&quot;&gt;Referer字段检查&lt;/h3&gt;
 
 &lt;p&gt;当浏览器向web服务器发出请求的时候，在HTTP的请求头(Request Headers)中一般会带上Referer，告诉服务器用户从哪个站点链接过来的。
 服务器通过判断请求头中的referer，也能避免CSRF的攻击。&lt;/p&gt;
@@ -554,8 +467,10 @@ www.A.com站在用户登录后，会将登陆凭证保存在本地cookie中，A�
 &lt;hr&gt;
 </description>
         <pubDate>Wed, 24 Jun 2015 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015/06/24/CSRF.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015/06/24/CSRF.html</guid>
+        <link>http://127.0.0.1:4000/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-06-24-CSRF.html</link>
+        <guid isPermaLink="true">http://127.0.0.1:4000/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-06-24-CSRF.html</guid>
+        
+        <category>CSRF</category>
         
         
         <category>点滴积累</category>
@@ -564,11 +479,11 @@ www.A.com站在用户登录后，会将登陆凭证保存在本地cookie中，A�
     
       <item>
         <title>MySQL加锁</title>
-        <description>&lt;p&gt;最近碰到了MySQL中的&lt;code&gt;for update&lt;/code&gt;语法，这是用来加锁的，将学习的过程记录下来&lt;/p&gt;
+        <description>&lt;p&gt;最近碰到了MySQL中的&lt;code class=&quot;prettyprint&quot;&gt;for update&lt;/code&gt;语法，这是用来加锁的，将学习的过程记录下来&lt;/p&gt;
 
 &lt;hr&gt;
 
-&lt;h2&gt;目录&lt;/h2&gt;
+&lt;h2 id=&quot;目录&quot;&gt;目录&lt;/h2&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#pessimistic&quot;&gt;悲观锁&lt;/a&gt;&lt;/li&gt;
@@ -582,7 +497,7 @@ www.A.com站在用户登录后，会将登陆凭证保存在本地cookie中，A�
 &lt;h2 id=&quot;pessimistic&quot;&gt; 悲观锁 &lt;/h2&gt;
 
 &lt;p&gt;悲观锁(Pessimistic Lock)认为每次读取数据都是不安全的，所以每次读取数据的时候都会加锁。&lt;br&gt;
-比如mysql里的&lt;code&gt;for update&lt;/code&gt;就属于这类，可以锁一行，也可锁住整个表，加锁之后别人就无法同时进行操作了。&lt;br&gt;
+比如mysql里的&lt;code class=&quot;prettyprint&quot;&gt;for update&lt;/code&gt;就属于这类，可以锁一行，也可锁住整个表，加锁之后别人就无法同时进行操作了。&lt;br&gt;
 悲观锁一般用于写操作比较多的地方。&lt;/p&gt;
 
 &lt;hr&gt;
@@ -623,16 +538,16 @@ www.A.com站在用户登录后，会将登陆凭证保存在本地cookie中，A�
 &lt;p&gt;注意:  &lt;/p&gt;
 
 &lt;ol&gt;
-&lt;li&gt;&lt;code&gt;for update&lt;/code&gt;必须在&lt;code&gt;BEGIN/COMMIT&lt;/code&gt;块中才会起作用&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;for update&lt;/code&gt;必须在&lt;code class=&quot;prettyprint&quot;&gt;BEGIN/COMMIT&lt;/code&gt;块中才会起作用&lt;/li&gt;
 &lt;li&gt;明确使用索引的，会使用行锁(Row Lock)，不使用索引或索引不明确(如id&amp;gt;2)，会使用表锁(Table Lock)&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;我们来测试一下,通过两个终端分别进行操作，如图:
-&lt;img src=&quot;/assets/images/lock1.png&quot; alt=&quot;测试图片1&quot;&gt;
-&lt;img src=&quot;/assets/images/lock2.png&quot; alt=&quot;测试图片2&quot;&gt;&lt;/p&gt;
+&lt;p&gt;我们来测试一下,通过两个终端分别进行操作，如图:&lt;br&gt;
+&lt;img src=&quot;/static/images/lock1.png&quot; alt=&quot;测试图片1&quot;&gt;
+&lt;img src=&quot;/static/images/lock2.png&quot; alt=&quot;测试图片2&quot;&gt;&lt;/p&gt;
 
-&lt;p&gt;我们在第一个终端中开启事务使用了行锁，但未&lt;code&gt;commit&lt;/code&gt;，第二个终端中再查询该行则会被阻塞，处于等待状态。
-直到第一个终端&lt;code&gt;commit&lt;/code&gt;之后，第二个终端才会读取到被锁住的那一行的数据。
+&lt;p&gt;我们在第一个终端中开启事务使用了行锁，但未&lt;code class=&quot;prettyprint&quot;&gt;commit&lt;/code&gt;，第二个终端中再查询该行则会被阻塞，处于等待状态。
+直到第一个终端&lt;code class=&quot;prettyprint&quot;&gt;commit&lt;/code&gt;之后，第二个终端才会读取到被锁住的那一行的数据。
 若等待时间过长(终端1迟迟未commit)，则终端2会产生超时错误。&lt;/p&gt;
 
 &lt;hr&gt;
@@ -641,7 +556,7 @@ www.A.com站在用户登录后，会将登陆凭证保存在本地cookie中，A�
 
 &lt;p&gt;主要是测试下，什么情况下是 Row Lock，什么情况下是 Table Lock。  &lt;/p&gt;
 
-&lt;h3&gt;以下情况是 Row Lock&lt;/h3&gt;
+&lt;h3 id=&quot;以下情况是-row-lock&quot;&gt;以下情况是 Row Lock&lt;/h3&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;c1&quot;&gt;-- 使用了主键索引&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;c1&quot;&gt;-- 使用了其它索引&lt;/span&gt;
@@ -649,7 +564,7 @@ www.A.com站在用户登录后，会将登陆凭证保存在本地cookie中，A�
 &lt;span class=&quot;c1&quot;&gt;-- 使用 like 但是可以唯一确定一行&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_name&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;like&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;user1%&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h3&gt;以下情况是 Table Lock&lt;/h3&gt;
+&lt;h3 id=&quot;以下情况是-table-lock&quot;&gt;以下情况是 Table Lock&lt;/h3&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;c1&quot;&gt;-- 主键不明确&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;c1&quot;&gt;-- 没有用上任何索引&lt;/span&gt;
@@ -661,15 +576,17 @@ www.A.com站在用户登录后，会将登陆凭证保存在本地cookie中，A�
 &lt;span class=&quot;c1&quot;&gt;-- 未查到数据，但是未使用任何索引&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;remark&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;test&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h3&gt;以下情况 无 Lock&lt;/h3&gt;
+&lt;h3 id=&quot;以下情况-无-lock&quot;&gt;以下情况 无 Lock&lt;/h3&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;c1&quot;&gt;-- 未查到数据，但是使用了索引&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;user9&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;hr&gt;
 </description>
         <pubDate>Wed, 17 Jun 2015 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015/06/17/MySQL%E5%8A%A0%E9%94%81.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015/06/17/MySQL%E5%8A%A0%E9%94%81.html</guid>
+        <link>http://127.0.0.1:4000/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-06-17-MySQL%E5%8A%A0%E9%94%81.html</link>
+        <guid isPermaLink="true">http://127.0.0.1:4000/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-06-17-MySQL%E5%8A%A0%E9%94%81.html</guid>
+        
+        <category>MySQL</category>
         
         
         <category>点滴积累</category>
@@ -678,12 +595,12 @@ www.A.com站在用户登录后，会将登陆凭证保存在本地cookie中，A�
     
       <item>
         <title>java对象的内存大小</title>
-        <description>&lt;p&gt;C语言需要开发者进行内存管理，所以开发者对内存的分配比较清楚，可以通过&lt;code&gt;sizeof()&lt;/code&gt;函数获取一个变量的大小；&lt;br&gt;
+        <description>&lt;p&gt;C语言需要开发者进行内存管理，所以开发者对内存的分配比较清楚，可以通过&lt;code class=&quot;prettyprint&quot;&gt;sizeof()&lt;/code&gt;函数获取一个变量的大小；&lt;br&gt;
 java通过JVM进行内存管理，它的内存占用情况是怎样的？&lt;/p&gt;
 
 &lt;hr&gt;
 
-&lt;h2&gt;目录&lt;/h2&gt;
+&lt;h2 id=&quot;目录&quot;&gt;目录&lt;/h2&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#primitive&quot;&gt;原始类型的大小&lt;/a&gt;&lt;/li&gt;
@@ -716,17 +633,17 @@ java通过JVM进行内存管理，它的内存占用情况是怎样的？&lt;/p&
 &lt;h2 id=&quot;reference&quot;&gt; 引用的大小 &lt;/h2&gt;
 
 &lt;p&gt;java中没有指针，只有引用，引用是安全的，这个说法不错，但实际上引用也就是指针,&lt;br&gt;
-所以32位的地址对应的指针大小为4B(4&lt;code&gt;*&lt;/code&gt;8bits)，64位的地址对应的指针大小为8B(8&lt;code&gt;*&lt;/code&gt;8bits)。&lt;br&gt;
-但是，从JDK6以后JVM都默认开启了&lt;strong&gt;指针压缩&lt;/strong&gt;(JVM运行参数为&lt;code&gt;-XX:+UseCompressedOops&lt;/code&gt;)。&lt;br&gt;
+所以32位的地址对应的指针大小为4B(4&lt;code class=&quot;prettyprint&quot;&gt;*&lt;/code&gt;8bits)，64位的地址对应的指针大小为8B(8&lt;code class=&quot;prettyprint&quot;&gt;*&lt;/code&gt;8bits)。&lt;br&gt;
+但是，从JDK6以后JVM都默认开启了&lt;strong&gt;指针压缩&lt;/strong&gt;(JVM运行参数为&lt;code class=&quot;prettyprint&quot;&gt;-XX:+UseCompressedOops&lt;/code&gt;)。&lt;br&gt;
 开启指针压缩后引用就成了4字节，所以:&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;32位JVM，引用为4B&lt;/li&gt;
-&lt;li&gt;64位JVM开启&lt;code&gt;UseCompressedOops&lt;/code&gt;，引用为4B&lt;/li&gt;
-&lt;li&gt;64位JVM未开启&lt;code&gt;UseCompressedOops&lt;/code&gt;，引用为8B&lt;/li&gt;
+&lt;li&gt;64位JVM开启&lt;code class=&quot;prettyprint&quot;&gt;UseCompressedOops&lt;/code&gt;，引用为4B&lt;/li&gt;
+&lt;li&gt;64位JVM未开启&lt;code class=&quot;prettyprint&quot;&gt;UseCompressedOops&lt;/code&gt;，引用为8B&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;可通过&lt;code&gt;jinfo -flag UseCompressedOops &amp;lt;pid&amp;gt;&lt;/code&gt;查看是否开启了指针压缩&lt;/p&gt;
+&lt;p&gt;可通过&lt;code class=&quot;prettyprint&quot;&gt;jinfo -flag UseCompressedOops &amp;lt;pid&amp;gt;&lt;/code&gt;查看是否开启了指针压缩&lt;/p&gt;
 
 &lt;hr&gt;
 
@@ -745,22 +662,22 @@ java通过JVM进行内存管理，它的内存占用情况是怎样的？&lt;/p&
 |    mark word     |   klass pointer  |  array size (opt) |    padding    |
 +------------------+------------------+-------------------+---------------+
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h3&gt;mark word&lt;/h3&gt;
+&lt;h3 id=&quot;mark-word&quot;&gt;mark word&lt;/h3&gt;
 
 &lt;p&gt;用于存储对象自身的运行时数据，如哈希码(HashCode)、GC分代年龄(Generational GCAge)等。&lt;br&gt;
 在32位机中占4B，在64位机中占8B。&lt;br&gt;
 它是非固定的数据结构以便在极小的空间内存储尽量多的信息，它会根据对象的状态复用自己的存储空间。&lt;/p&gt;
 
-&lt;h3&gt;klass pointer&lt;/h3&gt;
+&lt;h3 id=&quot;klass-pointer&quot;&gt;klass pointer&lt;/h3&gt;
 
 &lt;p&gt;用于存储指向方法区对象类型数据的指针。&lt;br&gt;
-在32位JVM上为4B，在未开启&lt;code&gt;UseCompressedOops&lt;/code&gt;的64位JVM上为8B，在开启&lt;code&gt;UseCompressedOops&lt;/code&gt;的64位机上为4B。&lt;/p&gt;
+在32位JVM上为4B，在未开启&lt;code class=&quot;prettyprint&quot;&gt;UseCompressedOops&lt;/code&gt;的64位JVM上为8B，在开启&lt;code class=&quot;prettyprint&quot;&gt;UseCompressedOops&lt;/code&gt;的64位机上为4B。&lt;/p&gt;
 
-&lt;h3&gt;array size&lt;/h3&gt;
+&lt;h3 id=&quot;array-size&quot;&gt;array size&lt;/h3&gt;
 
 &lt;p&gt;如果该对象是数组对象的话，还会有一个额外的部分用于存储数组长度&lt;/p&gt;
 
-&lt;h3&gt;padding&lt;/h3&gt;
+&lt;h3 id=&quot;padding&quot;&gt;padding&lt;/h3&gt;
 
 &lt;p&gt;8字节对齐的填充(这个部分可被称为gap，开启压缩的时候，这个gap会尽量用一个int或者float填充)&lt;/p&gt;
 
@@ -769,9 +686,9 @@ java通过JVM进行内存管理，它的内存占用情况是怎样的？&lt;/p&
 &lt;h2 id=&quot;alloc&quot;&gt; java对象的内存分配 &lt;/h2&gt;
 
 &lt;p&gt;一个对象在内存中存储的布局可以分为三块区域：对象头(Header)、实例数据(Instance Data)、对齐填充(Padding)。&lt;br&gt;
-按照64位JVM默认的开启&lt;code&gt;UseCompressedOops&lt;/code&gt;的情况说明普通对象、数组对象、字符串对象的内存分配&lt;/p&gt;
+按照64位JVM默认的开启&lt;code class=&quot;prettyprint&quot;&gt;UseCompressedOops&lt;/code&gt;的情况说明普通对象、数组对象、字符串对象的内存分配&lt;/p&gt;
 
-&lt;h3&gt;普通对象&lt;/h3&gt;
+&lt;h3 id=&quot;普通对象&quot;&gt;普通对象&lt;/h3&gt;
 
 &lt;p&gt;普通对象的对象头中，无array size，有或者无padding，紧跟着就是对象的成员变量&lt;br&gt;
 网上找了个例子来说明:&lt;/p&gt;
@@ -793,55 +710,55 @@ java通过JVM进行内存管理，它的内存占用情况是怎样的？&lt;/p&
 &lt;span class=&quot;nl&quot;&gt;J:&lt;/span&gt;                 &lt;span class=&quot;mh&quot;&gt;0x00000007d569f1e0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mh&quot;&gt;0x007effff&lt;/span&gt;
 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;padding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;):&lt;/span&gt;         &lt;span class=&quot;mh&quot;&gt;0x00000007d569f1e4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mh&quot;&gt;0x00000000&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h4&gt;说明&lt;/h4&gt;
+&lt;h4 id=&quot;说明&quot;&gt;说明&lt;/h4&gt;
 
 &lt;ol&gt;
 &lt;li&gt;JDK7默认开了&lt;a href=&quot;http://rednaxelafx.iteye.com/blog/1010079&quot;&gt;压缩指针&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;无论开不开&lt;code&gt;UseCompressedOops&lt;/code&gt;， 64位&lt;code&gt;HotSpot VM&lt;/code&gt;的&lt;code&gt;mark word&lt;/code&gt;都是8字节。&lt;/li&gt;
-&lt;li&gt;如果开启&lt;code&gt;UseCompressedOops&lt;/code&gt;的话，&lt;code&gt;_compressed_klass&lt;/code&gt;占4字节；反之则&lt;code&gt;_klass&lt;/code&gt;占8字节。&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;_compressed_klass&lt;/code&gt;要转换回到正常oop需要做一定运算，具体是什么运算取决于当前的压缩模式&lt;/li&gt;
+&lt;li&gt;无论开不开&lt;code class=&quot;prettyprint&quot;&gt;UseCompressedOops&lt;/code&gt;， 64位&lt;code class=&quot;prettyprint&quot;&gt;HotSpot VM&lt;/code&gt;的&lt;code class=&quot;prettyprint&quot;&gt;mark word&lt;/code&gt;都是8字节。&lt;/li&gt;
+&lt;li&gt;如果开启&lt;code class=&quot;prettyprint&quot;&gt;UseCompressedOops&lt;/code&gt;的话，&lt;code class=&quot;prettyprint&quot;&gt;_compressed_klass&lt;/code&gt;占4字节；反之则&lt;code class=&quot;prettyprint&quot;&gt;_klass&lt;/code&gt;占8字节。&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;_compressed_klass&lt;/code&gt;要转换回到正常oop需要做一定运算，具体是什么运算取决于当前的压缩模式&lt;/li&gt;
 &lt;li&gt;这个对象头只需要8+4=12B，而long/double必须在8B对齐的地址上分配，所以中间有4字节的空隙(gap)。&lt;/li&gt;
 &lt;li&gt;这个gap可以尽可能的填充1个int/float，或者2个short/char，或者4个byte/boolean。&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h3&gt;数组对象&lt;/h3&gt;
+&lt;h3 id=&quot;数组对象&quot;&gt;数组对象&lt;/h3&gt;
 
 &lt;p&gt;数组对象的对象头中，array size将占用4B，紧跟着就是数组对象的数组元素&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 16(header) = 8(_mark) + 4(_compressed_klass) + 4(size)&lt;/span&gt;
 &lt;span class=&quot;kt&quot;&gt;byte&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;};&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;// 24 = 16 + 1*5 + 3(padding)&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()};&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;// 24 = 16 + 4*1 + 4(padding)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h3&gt;字符串对象&lt;/h3&gt;
+&lt;h3 id=&quot;字符串对象&quot;&gt;字符串对象&lt;/h3&gt;
 
 &lt;p&gt;把字符串对象当成一个普通的对象来看，它有3个实例成员(可能不同版本jdk，String的成员不太一样，但是算法是一样的):&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;char&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[];&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;// 一个数组的引用，4B&lt;/span&gt;
 &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;                  &lt;span class=&quot;c1&quot;&gt;// int 4B&lt;/span&gt;
 &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;transient&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hash32&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// int 4B&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;因此一个String对象的大小为:&lt;code&gt;24 = 8(_mark) + 4(_compressed_klass) + 4 + 4 + 4&lt;/code&gt;(gap部分被填充)&lt;br&gt;
-&lt;code&gt;String s = &amp;quot;abc&amp;quot;&lt;/code&gt;是String的成员变量value数组指向&lt;code&gt;&amp;quot;abc&amp;quot;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;因此一个String对象的大小为:&lt;code class=&quot;prettyprint&quot;&gt;24 = 8(_mark) + 4(_compressed_klass) + 4 + 4 + 4&lt;/code&gt;(gap部分被填充)&lt;br&gt;
+&lt;code class=&quot;prettyprint&quot;&gt;String s = &amp;quot;abc&amp;quot;&lt;/code&gt;是String的成员变量value数组指向&lt;code class=&quot;prettyprint&quot;&gt;&amp;quot;abc&amp;quot;&lt;/code&gt;&lt;/p&gt;
 
 &lt;hr&gt;
 
 &lt;h2 id=&quot;calculate&quot;&gt; 对象大小的计算 &lt;/h2&gt;
 
-&lt;p&gt;原始类型的大小是固定的，不需要计算；对象的大小可用&lt;code&gt;java.lang.instrument.Instrumentation&lt;/code&gt;计算(后面再说)；
-但是&lt;code&gt;Instrumentation#getObjectSize&lt;/code&gt;方法返回的大小不包括对象的成员变量所引用的对象。&lt;br&gt;
+&lt;p&gt;原始类型的大小是固定的，不需要计算；对象的大小可用&lt;code class=&quot;prettyprint&quot;&gt;java.lang.instrument.Instrumentation&lt;/code&gt;计算(后面再说)；
+但是&lt;code class=&quot;prettyprint&quot;&gt;Instrumentation#getObjectSize&lt;/code&gt;方法返回的大小不包括对象的成员变量所引用的对象。&lt;br&gt;
 我们可以遍历对象的成员变量进行递归计算，在计算时需要考虑到：&lt;/p&gt;
 
 &lt;ol&gt;
 &lt;li&gt;对象的static成员不需要计算(类成员在静态区)&lt;/li&gt;
 &lt;li&gt;如果两个成员变量引用的是同一个对象，则这个对象不能重复计算，即算过的不能再算&lt;/li&gt;
-&lt;li&gt;原生类型的成员变量不需要计算，如Person类有个成员变量&lt;code&gt;int age&lt;/code&gt;, 计算Person的实例大小的时候已经算上int的大小了，
+&lt;li&gt;原生类型的成员变量不需要计算，如Person类有个成员变量&lt;code class=&quot;prettyprint&quot;&gt;int age&lt;/code&gt;, 计算Person的实例大小的时候已经算上int的大小了，
 变量age不能再计算了，也没办法再计算，因为age不是引用。&lt;/li&gt;
-&lt;li&gt;享元模式的成员变量不需要计算，如&lt;code&gt;Integer#valueOf()&lt;/code&gt;值在&lt;code&gt;-128~127&lt;/code&gt;之间的都是享元，&lt;code&gt;Enum&lt;/code&gt;对象都是享元。&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;intern string&lt;/code&gt;不需要计算,&lt;code&gt;intern string&lt;/code&gt;在java8之前存在于字符串常量池，位于永生代(非堆)&lt;/li&gt;
+&lt;li&gt;享元模式的成员变量不需要计算，如&lt;code class=&quot;prettyprint&quot;&gt;Integer#valueOf()&lt;/code&gt;值在&lt;code class=&quot;prettyprint&quot;&gt;-128~127&lt;/code&gt;之间的都是享元，&lt;code class=&quot;prettyprint&quot;&gt;Enum&lt;/code&gt;对象都是享元。&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;intern string&lt;/code&gt;不需要计算,&lt;code class=&quot;prettyprint&quot;&gt;intern string&lt;/code&gt;在java8之前存在于字符串常量池，位于永生代(非堆)&lt;/li&gt;
 &lt;li&gt;数组对象需要遍历每个对象进行计算&lt;/li&gt;
 &lt;li&gt;对于普通对象，如果该对象有父类，则需要计算继承自父类的成员变量&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;p&gt;也就是说计算对象大小的时候可以分为三类: 直接跳过计算的对象(1、2、3、4、5)、数组对象(6)、普通对象(7)&lt;br&gt;
-我们用&lt;code&gt;Stack&amp;lt;Object&amp;gt; stack&lt;/code&gt;来存放待计算对象(初始只有一个元素), 用&lt;code&gt;IdentityHashMap&lt;/code&gt;记录&lt;code&gt;visited&lt;/code&gt;的对象&lt;br&gt;
+我们用&lt;code class=&quot;prettyprint&quot;&gt;Stack&amp;lt;Object&amp;gt; stack&lt;/code&gt;来存放待计算对象(初始只有一个元素), 用&lt;code class=&quot;prettyprint&quot;&gt;IdentityHashMap&lt;/code&gt;记录&lt;code class=&quot;prettyprint&quot;&gt;visited&lt;/code&gt;的对象&lt;br&gt;
 完整项目代码在&lt;a href=&quot;https://github.com/rgkjhshi/sizeof&quot;&gt;我的github&lt;/a&gt;上,这里给出代码片段:&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;    &lt;span class=&quot;cm&quot;&gt;/**&lt;/span&gt;
 &lt;span class=&quot;cm&quot;&gt;     * 判断该对象是否需要跳过计算&lt;/span&gt;
@@ -909,11 +826,11 @@ java通过JVM进行内存管理，它的内存占用情况是怎样的？&lt;/p&
 
 &lt;h2 id=&quot;program&quot;&gt; 编程计算对象的大小 &lt;/h2&gt;
 
-&lt;p&gt;JDK7的&lt;code&gt;java.lang.instrument&lt;/code&gt;包中有个&lt;code&gt;Instrumentation API&lt;/code&gt;提供了&lt;code&gt;getObjectSize&lt;/code&gt;方法来计算对象的大小,
-这个方法返回的是对象的大小，不包括其成员变量所引用的对象(&lt;code&gt;sun.instrumentInstrumentationImpl&lt;/code&gt;实现了该接口)。
-而且，这个方法不能直接使用，必须实现一个&lt;code&gt;instrumentation&lt;/code&gt;代理类并且打包进JAR文件。&lt;/p&gt;
+&lt;p&gt;JDK7的&lt;code class=&quot;prettyprint&quot;&gt;java.lang.instrument&lt;/code&gt;包中有个&lt;code class=&quot;prettyprint&quot;&gt;Instrumentation API&lt;/code&gt;提供了&lt;code class=&quot;prettyprint&quot;&gt;getObjectSize&lt;/code&gt;方法来计算对象的大小,
+这个方法返回的是对象的大小，不包括其成员变量所引用的对象(&lt;code class=&quot;prettyprint&quot;&gt;sun.instrumentInstrumentationImpl&lt;/code&gt;实现了该接口)。
+而且，这个方法不能直接使用，必须实现一个&lt;code class=&quot;prettyprint&quot;&gt;instrumentation&lt;/code&gt;代理类并且打包进JAR文件。&lt;/p&gt;
 
-&lt;h3&gt;定义代理类&lt;/h3&gt;
+&lt;h3 id=&quot;定义代理类&quot;&gt;定义代理类&lt;/h3&gt;
 
 &lt;p&gt;我们这样定义代理类:&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SizeOf&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
@@ -952,15 +869,15 @@ java通过JVM进行内存管理，它的内存占用情况是怎样的？&lt;/p&
     &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;fullSizeOf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h3&gt;将代理类打成jar包&lt;/h3&gt;
+&lt;h3 id=&quot;将代理类打成jar包&quot;&gt;将代理类打成jar包&lt;/h3&gt;
 
 &lt;p&gt;为了让JVM知道instrumentation代理类的存在，必须将其打包进JAR文件并且设定manifest.mf文件中的属性。
 在我们的例子中，需要设定如下属性：&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-properties&quot; data-lang=&quot;properties&quot;&gt;&lt;span class=&quot;na&quot;&gt;Premain-Class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;代理类SizeOf的全类名  &lt;/span&gt;
 &lt;span class=&quot;na&quot;&gt;Can-Redefine-Classes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;true&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;我们可以通过maven工具进行打包，打包的时候可以指定生成&lt;code&gt;manifest.mf&lt;/code&gt;的属性，
-在&lt;code&gt;pom.xml&lt;/code&gt;文件中可以在&lt;code&gt;&amp;lt;build&amp;gt;&lt;/code&gt;元素中添加&lt;code&gt;&amp;lt;plugins&amp;gt;&lt;/code&gt;元素，添加maven打包插件，就像这样:&lt;/p&gt;
+&lt;p&gt;我们可以通过maven工具进行打包，打包的时候可以指定生成&lt;code class=&quot;prettyprint&quot;&gt;manifest.mf&lt;/code&gt;的属性，
+在&lt;code class=&quot;prettyprint&quot;&gt;pom.xml&lt;/code&gt;文件中可以在&lt;code class=&quot;prettyprint&quot;&gt;&amp;lt;build&amp;gt;&lt;/code&gt;元素中添加&lt;code class=&quot;prettyprint&quot;&gt;&amp;lt;plugins&amp;gt;&lt;/code&gt;元素，添加maven打包插件，就像这样:&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;    &lt;span class=&quot;nt&quot;&gt;&amp;lt;build&amp;gt;&lt;/span&gt;
         &lt;span class=&quot;nt&quot;&gt;&amp;lt;plugins&amp;gt;&lt;/span&gt;
             &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- maven 打包插件, 可指定生成的 META-INF/manifest.mf 文件中的属性 --&amp;gt;&lt;/span&gt;
@@ -981,7 +898,7 @@ java通过JVM进行内存管理，它的内存占用情况是怎样的？&lt;/p&
         &lt;span class=&quot;nt&quot;&gt;&amp;lt;/plugins&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;nt&quot;&gt;&amp;lt;/build&amp;gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h3&gt;配置虚拟机参数，使用代理&lt;/h3&gt;
+&lt;h3 id=&quot;配置虚拟机参数，使用代理&quot;&gt;配置虚拟机参数，使用代理&lt;/h3&gt;
 
 &lt;p&gt;另外，Java程序必须使用 -javaagent 参数指向该jar文件来启动。我们的例子中形如：&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-properties&quot; data-lang=&quot;properties&quot;&gt;&lt;span class=&quot;na&quot;&gt;java -javaagent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;代理类jar包的位置  &lt;/span&gt;
@@ -1008,7 +925,7 @@ java通过JVM进行内存管理，它的内存占用情况是怎样的？&lt;/p&
         &lt;span class=&quot;nt&quot;&gt;&amp;lt;/plugins&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;nt&quot;&gt;&amp;lt;/build&amp;gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;这样我们在使用&lt;code&gt;junit&lt;/code&gt;进行单元测试的时候，就已经给JVM传递了参数。&lt;/p&gt;
+&lt;p&gt;这样我们在使用&lt;code class=&quot;prettyprint&quot;&gt;junit&lt;/code&gt;进行单元测试的时候，就已经给JVM传递了参数。&lt;/p&gt;
 
 &lt;hr&gt;
 
@@ -1020,21 +937,23 @@ java通过JVM进行内存管理，它的内存占用情况是怎样的？&lt;/p&
 &lt;hr&gt;
 </description>
         <pubDate>Thu, 11 Jun 2015 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/java/2015/06/11/java%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/java/2015/06/11/java%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F.html</guid>
+        <link>http://127.0.0.1:4000/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-06-11-java%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F.html</link>
+        <guid isPermaLink="true">http://127.0.0.1:4000/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-06-11-java%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F.html</guid>
+        
+        <category>JVM</category>
         
         
-        <category>java</category>
+        <category>编程技术</category>
         
       </item>
     
       <item>
-        <title>java日志(二)JUL源码分析</title>
-        <description>&lt;p&gt;jdk自带的log工具&lt;code&gt;java.util.logging&lt;/code&gt;的简单分析&lt;/p&gt;
+        <title>java日志(二):JUL源码分析</title>
+        <description>&lt;p&gt;jdk自带的log工具&lt;code class=&quot;prettyprint&quot;&gt;java.util.logging&lt;/code&gt;的简单分析&lt;/p&gt;
 
 &lt;hr&gt;
 
-&lt;h2&gt;目录&lt;/h2&gt;
+&lt;h2 id=&quot;目录&quot;&gt;目录&lt;/h2&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#step&quot;&gt;加载过程&lt;/a&gt;&lt;/li&gt;
@@ -1046,28 +965,28 @@ java通过JVM进行内存管理，它的内存占用情况是怎样的？&lt;/p&
 
 &lt;h2 id=&quot;step&quot;&gt; 加载过程 &lt;/h2&gt;
 
-&lt;p&gt;Logger.getLogger(&amp;quot;className&amp;quot;)加载整个日志的过程简单概括如下&lt;/p&gt;
+&lt;p&gt;Logger.getLogger(&lt;q&gt;className&lt;/q&gt;)加载整个日志的过程简单概括如下&lt;/p&gt;
 
-&lt;h3&gt;1. 生成LogManager&lt;/h3&gt;
+&lt;h3 id=&quot;1.-生成logmanager&quot;&gt;1. 生成LogManager&lt;/h3&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;LogManager静态初始化&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;先读取系统属性&amp;quot;java.util.logging.manager&amp;quot;初始化LogManager&lt;/li&gt;
+&lt;li&gt;先读取系统属性&lt;q&gt;java.util.logging.manager&lt;/q&gt;初始化LogManager&lt;/li&gt;
 &lt;li&gt;若无此属性，则默认通过构造方法初始化LogManager&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
 &lt;li&gt;&lt;p&gt;通过getLogManager方法获取LogManager(读取longging配置的过程)&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;加载系统属性&amp;quot;java.util.logging.config.class&amp;quot;，有就直接返回&lt;/li&gt;
-&lt;li&gt;加载系统属性&amp;quot;java.util.logging.config.file&amp;quot;，有就加载这个配置&lt;/li&gt;
-&lt;li&gt;若无则默认加载java.home下 &amp;quot;lib/logging.properties&amp;quot;配置文件&lt;/li&gt;
+&lt;li&gt;加载系统属性&lt;q&gt;java.util.logging.config.class&lt;/q&gt;，有就直接返回&lt;/li&gt;
+&lt;li&gt;加载系统属性&lt;q&gt;java.util.logging.config.file&lt;/q&gt;，有就加载这个配置&lt;/li&gt;
+&lt;li&gt;若无则默认加载java.home下 &lt;q&gt;lib/logging.properties&lt;/q&gt;配置文件&lt;/li&gt;
 &lt;li&gt;返回LogManager&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3&gt;2. 通过LogManager的demandLogger方法返回Logger&lt;/h3&gt;
+&lt;h3 id=&quot;2.-通过logmanager的demandlogger方法返回logger&quot;&gt;2. 通过LogManager的demandLogger方法返回Logger&lt;/h3&gt;
 
 &lt;ul&gt;
 &lt;li&gt;若已创建该logger，直接返回该logger&lt;/li&gt;
@@ -1087,7 +1006,7 @@ java通过JVM进行内存管理，它的内存占用情况是怎样的？&lt;/p&
     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;从&lt;code&gt;Logger.getLogger(XXX.class.getName())&lt;/code&gt;开始,进入&lt;code&gt;java.util.logging.Logger&lt;/code&gt;源码中可以看到&lt;/p&gt;
+&lt;p&gt;从&lt;code class=&quot;prettyprint&quot;&gt;Logger.getLogger(XXX.class.getName())&lt;/code&gt;开始,进入&lt;code class=&quot;prettyprint&quot;&gt;java.util.logging.Logger&lt;/code&gt;源码中可以看到&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Logger&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
         &lt;span class=&quot;c1&quot;&gt;// 直接调用了另一个方法&lt;/span&gt;
         &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;demandLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Reflection&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getCallerClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
@@ -1103,7 +1022,7 @@ java通过JVM进行内存管理，它的内存占用情况是怎样的？&lt;/p&
        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;manager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;demandLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;resourceBundleName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;caller&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 最后通过这个方法返回Logger&lt;/span&gt;
    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;接下来看看&lt;code&gt;LogManager.getLogManager()&lt;/code&gt;，不过在此之前，首先要注意，&lt;code&gt;LogManager&lt;/code&gt;有一个静态初始化方法：&lt;/p&gt;
+&lt;p&gt;接下来看看&lt;code class=&quot;prettyprint&quot;&gt;LogManager.getLogManager()&lt;/code&gt;，不过在此之前，首先要注意，&lt;code class=&quot;prettyprint&quot;&gt;LogManager&lt;/code&gt;有一个静态初始化方法：&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;    &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
         &lt;span class=&quot;c1&quot;&gt;// AccessController.doPrivileged()方法表示执行一些特权内容，跟Linux中的登陆有点类似。&lt;/span&gt;
         &lt;span class=&quot;c1&quot;&gt;// Linux中的login程序必须访问password文件从而获得用户授权信息，但是用户不能随意的访问password文件。&lt;/span&gt;
@@ -1146,7 +1065,7 @@ java通过JVM进行内存管理，它的内存占用情况是怎样的？&lt;/p&
             &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;&lt;code&gt;LogManager&lt;/code&gt;初始化方法执行完了之后，再来看&lt;code&gt;LogManager.getLogManager()&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;LogManager&lt;/code&gt;初始化方法执行完了之后，再来看&lt;code class=&quot;prettyprint&quot;&gt;LogManager.getLogManager()&lt;/code&gt;&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LogManager&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getLogManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
         &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;manager&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;// manager为类变量，只有一份。已经初始化了，不会为空&lt;/span&gt;
             &lt;span class=&quot;n&quot;&gt;manager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;readPrimordialConfiguration&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 读取原始配置&lt;/span&gt;
@@ -1245,7 +1164,7 @@ java通过JVM进行内存管理，它的内存占用情况是怎样的？&lt;/p&
         &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;&lt;code&gt;LogManager.getLogManager&lt;/code&gt;分析完了，再看看mananer是怎么返回Logger的&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;LogManager.getLogManager&lt;/code&gt;分析完了，再看看mananer是怎么返回Logger的&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;Logger&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;demandLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;resourceBundleName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;caller&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;c1&quot;&gt;// 如果给定name的logger已经创建过了，则返回原来创建的，保证同name的logger只有一个&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;Logger&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
@@ -1266,13 +1185,13 @@ java通过JVM进行内存管理，它的内存占用情况是怎样的？&lt;/p&
 
 &lt;h2 id=&quot;remark&quot;&gt; 特殊说明 &lt;/h2&gt;
 
-&lt;p&gt;凡是有加载系统属性的地方，就提供了用户自定义的接口，比如上面的&amp;quot;java.util.logging.manager&amp;quot;、
-&amp;quot;java.util.logging.config.class&amp;quot;、&amp;quot;java.util.logging.config.file&amp;quot;，用户可以自己设置这些系统属性来进行自定义。&lt;/p&gt;
+&lt;p&gt;凡是有加载系统属性的地方，就提供了用户自定义的接口，比如上面的&lt;q&gt;java.util.logging.manager&lt;/q&gt;、
+&lt;q&gt;java.util.logging.config.class&lt;/q&gt;、&lt;q&gt;java.util.logging.config.file&lt;/q&gt;，用户可以自己设置这些系统属性来进行自定义。&lt;/p&gt;
 
-&lt;p&gt;比如在tomcat的启动文件&lt;code&gt;catalina.sh&lt;/code&gt;中,就有这样的配置&lt;/p&gt;
+&lt;p&gt;比如在tomcat的启动文件&lt;code class=&quot;prettyprint&quot;&gt;catalina.sh&lt;/code&gt;中,就有这样的配置&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;修改属性&amp;quot;java.util.logging.manager&amp;quot;,自定义&lt;code&gt;LogManager&lt;/code&gt;，使用自己的&lt;code&gt;ClassLoaderLogManager&lt;/code&gt;:&lt;/li&gt;
+&lt;li&gt;修改属性&lt;q&gt;java.util.logging.manager&lt;/q&gt;,自定义&lt;code class=&quot;prettyprint&quot;&gt;LogManager&lt;/code&gt;，使用自己的&lt;code class=&quot;prettyprint&quot;&gt;ClassLoaderLogManager&lt;/code&gt;:&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span class=&quot;c&quot;&gt;# -z 表示判断指定的变量是否存在值&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; -z &lt;span class=&quot;s2&quot;&gt;&amp;quot;$LOGGING_MANAGER&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then&lt;/span&gt;
@@ -1280,7 +1199,7 @@ java通过JVM进行内存管理，它的内存占用情况是怎样的？&lt;/p&
 &lt;span class=&quot;k&quot;&gt;fi&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;ul&gt;
-&lt;li&gt;修改属性&amp;quot;java.util.logging.config.file”,自定义配置文件，使用自己的&lt;code&gt;%CATALINA_BASE%\conf\logging.properties&lt;/code&gt;文件:&lt;/li&gt;
+&lt;li&gt;修改属性&amp;quot;java.util.logging.config.file”,自定义配置文件，使用自己的&lt;code class=&quot;prettyprint&quot;&gt;%CATALINA_BASE%\conf\logging.properties&lt;/code&gt;文件:&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; -z &lt;span class=&quot;s2&quot;&gt;&amp;quot;$LOGGING_CONFIG&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then&lt;/span&gt;
   &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; -r &lt;span class=&quot;s2&quot;&gt;&amp;quot;$CATALINA_BASE&amp;quot;&lt;/span&gt;/conf/logging.properties &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then&lt;/span&gt;
@@ -1293,22 +1212,24 @@ java通过JVM进行内存管理，它的内存占用情况是怎样的？&lt;/p&
 &lt;hr&gt;
 </description>
         <pubDate>Thu, 04 Jun 2015 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/java/2015/06/04/java%E6%97%A5%E5%BF%97(%E4%BA%8C)JUL%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/java/2015/06/04/java%E6%97%A5%E5%BF%97(%E4%BA%8C)JUL%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90.html</guid>
+        <link>http://127.0.0.1:4000/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-06-04-java%E6%97%A5%E5%BF%97(%E4%BA%8C)JUL%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90.html</link>
+        <guid isPermaLink="true">http://127.0.0.1:4000/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-06-04-java%E6%97%A5%E5%BF%97(%E4%BA%8C)JUL%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90.html</guid>
+        
+        <category>Java日志</category>
         
         
-        <category>java</category>
+        <category>编程技术</category>
         
       </item>
     
       <item>
         <title>java日志(一):日志组件简介及使用</title>
-        <description>&lt;p&gt;java中的日志组件太多了，经常听到的有&lt;code&gt;log4j, slf4j, logbak&lt;/code&gt;等，不太熟悉的有&lt;code&gt;common-logging, JUL, JCL&lt;/code&gt;等，
+        <description>&lt;p&gt;java中的日志组件太多了，经常听到的有&lt;code class=&quot;prettyprint&quot;&gt;log4j, slf4j, logbak&lt;/code&gt;等，不太熟悉的有&lt;code class=&quot;prettyprint&quot;&gt;common-logging, JUL, JCL&lt;/code&gt;等，
 刚开始接触的时候感觉很晕，不知道这些都是干嘛的，甚至不理解为啥都是记日志的，为什么要整出这么多不同的东西来。后来从头到尾梳理了一遍，才稍微有点清晰。&lt;/p&gt;
 
 &lt;hr&gt;
 
-&lt;h2&gt;本文结构&lt;/h2&gt;
+&lt;h2 id=&quot;本文结构&quot;&gt;本文结构&lt;/h2&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#what&quot;&gt;日志都做什么&lt;/a&gt;&lt;/li&gt;
@@ -1338,7 +1259,7 @@ java通过JVM进行内存管理，它的内存占用情况是怎样的？&lt;/p&
 
 &lt;h2 id=&quot;what&quot;&gt; 日志都做什么 &lt;/h2&gt;
 
-&lt;p&gt;平时写代码想看看输出结果的时候一般直接用&lt;code&gt;System.out&lt;/code&gt;来输出了，感觉也挺好用的，为什么还要有专门的组件记录日志？
+&lt;p&gt;平时写代码想看看输出结果的时候一般直接用&lt;code class=&quot;prettyprint&quot;&gt;System.out&lt;/code&gt;来输出了，感觉也挺好用的，为什么还要有专门的组件记录日志？
 下面给出了几条日志组件应该具有的功能:&lt;/p&gt;
 
 &lt;ol&gt;
@@ -1357,16 +1278,16 @@ java通过JVM进行内存管理，它的内存占用情况是怎样的？&lt;/p&
 
 &lt;h3 id=&quot;JUL&quot;&gt; JUL &lt;/h3&gt;
 
-&lt;p&gt;JUL即&lt;code&gt;Java Util Logging&lt;/code&gt;, 是JVM提供的日志组件，在&lt;code&gt;rt.jar&lt;/code&gt;的&lt;code&gt;java.util.logging&lt;/code&gt;包里&lt;/p&gt;
+&lt;p&gt;JUL即&lt;code class=&quot;prettyprint&quot;&gt;Java Util Logging&lt;/code&gt;, 是JVM提供的日志组件，在&lt;code class=&quot;prettyprint&quot;&gt;rt.jar&lt;/code&gt;的&lt;code class=&quot;prettyprint&quot;&gt;java.util.logging&lt;/code&gt;包里&lt;/p&gt;
 
 &lt;h3 id=&quot;common-logging&quot;&gt; common-logging &lt;/h3&gt;
 
-&lt;p&gt;&lt;code&gt;common-logging&lt;/code&gt;即&lt;code&gt;Apache Commons Logging&lt;/code&gt;,之前叫&lt;code&gt;Jakarta Commons Logging, JCL&lt;/code&gt;，是apache提供的一个通用的日志接口。
-内部有个&lt;code&gt;Simple logger&lt;/code&gt;的简单实现，但很弱，一般配合log4j等第三方实现使用。&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;common-logging&lt;/code&gt;即&lt;code class=&quot;prettyprint&quot;&gt;Apache Commons Logging&lt;/code&gt;,之前叫&lt;code class=&quot;prettyprint&quot;&gt;Jakarta Commons Logging, JCL&lt;/code&gt;，是apache提供的一个通用的日志接口。
+内部有个&lt;code class=&quot;prettyprint&quot;&gt;Simple logger&lt;/code&gt;的简单实现，但很弱，一般配合log4j等第三方实现使用。&lt;/p&gt;
 
 &lt;h3 id=&quot;slf4j&quot;&gt; slf4j &lt;/h3&gt;
 
-&lt;p&gt;&lt;code&gt;slf4j&lt;/code&gt;即&lt;code&gt;Simple Logging Facade for JAVA&lt;/code&gt;，java简单日志门面。类似于&lt;code&gt;Apache Common-Logging&lt;/code&gt;，也是一个日志接口。
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;slf4j&lt;/code&gt;即&lt;code class=&quot;prettyprint&quot;&gt;Simple Logging Facade for JAVA&lt;/code&gt;，java简单日志门面。类似于&lt;code class=&quot;prettyprint&quot;&gt;Apache Common-Logging&lt;/code&gt;，也是一个日志接口。
 SLF4J一般配合第三方实现通过slf4j的桥接包来使用。&lt;/p&gt;
 
 &lt;h3 id=&quot;Log4j&quot;&gt; Log4j &lt;/h3&gt;
@@ -1374,14 +1295,14 @@ SLF4J一般配合第三方实现通过slf4j的桥接包来使用。&lt;/p&gt;
 &lt;p&gt;Apache的一个开放源代码项目，日志的实现，比较好用，得到了广泛使用。&lt;br&gt;
 Log4j有两个版本，一个是log4j1，它使用properties文件进行配置；&lt;br&gt;
 另一个是log4j2，跟log4j1不兼容，它使用xml文件进行配置；Log4j2包括两个部分：
-&lt;code&gt;log4j-api&lt;/code&gt;日志接口，&lt;code&gt;log4j-core&lt;/code&gt;日志实现。它这么分，有点也想作为日志门面的意思。&lt;/p&gt;
+&lt;code class=&quot;prettyprint&quot;&gt;log4j-api&lt;/code&gt;日志接口，&lt;code class=&quot;prettyprint&quot;&gt;log4j-core&lt;/code&gt;日志实现。它这么分，有点也想作为日志门面的意思。&lt;/p&gt;
 
 &lt;h3 id=&quot;LogBack&quot;&gt; LogBack &lt;/h3&gt;
 
 &lt;p&gt;Logback是由log4j创始人设计的又一个开源日志组件。&lt;br&gt;
-分为三个模块：&lt;code&gt;logback-core,logback-classic&lt;/code&gt;和&lt;code&gt;logback-access&lt;/code&gt;。&lt;br&gt;
-&lt;code&gt;logback-core&lt;/code&gt;是其它两个模块的基础模块。&lt;code&gt;logback-classic&lt;/code&gt;是log4j的一个改良版本，并且完整实现了&lt;code&gt;SLF4J API&lt;/code&gt;。&lt;br&gt;
-&lt;code&gt;logback-access&lt;/code&gt;访问模块与Servlet容器集成提供通过Http来访问日记的功能。&lt;/p&gt;
+分为三个模块：&lt;code class=&quot;prettyprint&quot;&gt;logback-core,logback-classic&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;logback-access&lt;/code&gt;。&lt;br&gt;
+&lt;code class=&quot;prettyprint&quot;&gt;logback-core&lt;/code&gt;是其它两个模块的基础模块。&lt;code class=&quot;prettyprint&quot;&gt;logback-classic&lt;/code&gt;是log4j的一个改良版本，并且完整实现了&lt;code class=&quot;prettyprint&quot;&gt;SLF4J API&lt;/code&gt;。&lt;br&gt;
+&lt;code class=&quot;prettyprint&quot;&gt;logback-access&lt;/code&gt;访问模块与Servlet容器集成提供通过Http来访问日记的功能。&lt;/p&gt;
 
 &lt;hr&gt;
 
@@ -1389,14 +1310,14 @@ Log4j有两个版本，一个是log4j1，它使用properties文件进行配置�
 
 &lt;p&gt;反正有很多，各有各的用法。JDK里的JUL好像不太好用，后来Log4j得到了广泛应用。
 日志组件越来越多，如果一个应用程序中有两个组件，而这两个组件恰好用了不同的日志工具，那这个应用不就有两个日志输出了。&lt;br&gt;
-这时候出现了&lt;code&gt;Apache Commons Logging(JCL)&lt;/code&gt;，它只提供log接口，具体的实现则是在&lt;strong&gt;运行时动态查找&lt;/strong&gt;。只要遵守JCL借口的日志工具，都可以通过JCL来使用。&lt;br&gt;
+这时候出现了&lt;code class=&quot;prettyprint&quot;&gt;Apache Commons Logging(JCL)&lt;/code&gt;，它只提供log接口，具体的实现则是在&lt;strong&gt;运行时动态查找&lt;/strong&gt;。只要遵守JCL借口的日志工具，都可以通过JCL来使用。&lt;br&gt;
 JCL是在运行时动态查找具体的日志实现，当项目很大时，JCL的动态绑定并不是总能成功，解决办法是在项目部署时提前指定绑定哪个日志工具，这就出现了SLF4J。&lt;/p&gt;
 
 &lt;hr&gt;
 
 &lt;h2 id=&quot;use&quot;&gt; 各日志组件的用法 &lt;/h2&gt;
 
-&lt;p&gt;常用的日志组件有 &lt;code&gt;JUL, Log4j(Log4j1、 Log4j2), Logback&lt;/code&gt;，下面是他们的用法&lt;/p&gt;
+&lt;p&gt;常用的日志组件有 &lt;code class=&quot;prettyprint&quot;&gt;JUL, Log4j(Log4j1、 Log4j2), Logback&lt;/code&gt;，下面是他们的用法&lt;/p&gt;
 
 &lt;h3 id=&quot;JUL_use&quot;&gt; JUL &lt;/h3&gt;
 
@@ -1416,8 +1337,8 @@ JCL是在运行时动态查找具体的日志实现，当项目很大时，JCL�
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h3 id=&quot;Log4j1_use&quot;&gt; Log4j1 &lt;/h3&gt;
 
-&lt;p&gt;需要&lt;code&gt;log4j&lt;/code&gt;版本&lt;code&gt;1.2.**&lt;/code&gt;的&lt;code&gt;jar&lt;/code&gt;包&lt;br&gt;
-需要properties配置文件(名为&lt;code&gt;log4j.properties&lt;/code&gt;放在classpath下)； 无配置文件无法输出日志。&lt;br&gt;
+&lt;p&gt;需要&lt;code class=&quot;prettyprint&quot;&gt;log4j&lt;/code&gt;版本&lt;code class=&quot;prettyprint&quot;&gt;1.2.**&lt;/code&gt;的&lt;code class=&quot;prettyprint&quot;&gt;jar&lt;/code&gt;包&lt;br&gt;
+需要properties配置文件(名为&lt;code class=&quot;prettyprint&quot;&gt;log4j.properties&lt;/code&gt;放在classpath下)； 无配置文件无法输出日志。&lt;br&gt;
 jar包的maven依赖:&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;        &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
             &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;log4j&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
@@ -1425,7 +1346,7 @@ jar包的maven依赖:&lt;/p&gt;
             &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;1.2.14&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
         &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;&lt;code&gt;log4j.properties&lt;/code&gt;配置文件:&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;log4j.properties&lt;/code&gt;配置文件:&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-properties&quot; data-lang=&quot;properties&quot;&gt;&lt;span class=&quot;na&quot;&gt;log4j.rootLogger&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;debug, console&lt;/span&gt;
 &lt;span class=&quot;na&quot;&gt;log4j.appender.console&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;org.apache.log4j.ConsoleAppender&lt;/span&gt;
 &lt;span class=&quot;na&quot;&gt;log4j.appender.console.layout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;org.apache.log4j.PatternLayout&lt;/span&gt;
@@ -1445,8 +1366,8 @@ jar包的maven依赖:&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h3 id=&quot;Log4j2_use&quot;&gt; Log4j2 &lt;/h3&gt;
 
-&lt;p&gt;Log4j2需要&lt;code&gt;log4j-api、log4j-core&lt;/code&gt;版本&lt;code&gt;2.*&lt;/code&gt;的&lt;code&gt;jar&lt;/code&gt;包&lt;br&gt;
-需要xml配置文件(名为&lt;code&gt;log4j2.xml&lt;/code&gt;放在classpath下)； 不支持properties文件； 无配置文件无法输出日志。&lt;br&gt;
+&lt;p&gt;Log4j2需要&lt;code class=&quot;prettyprint&quot;&gt;log4j-api、log4j-core&lt;/code&gt;版本&lt;code class=&quot;prettyprint&quot;&gt;2.*&lt;/code&gt;的&lt;code class=&quot;prettyprint&quot;&gt;jar&lt;/code&gt;包&lt;br&gt;
+需要xml配置文件(名为&lt;code class=&quot;prettyprint&quot;&gt;log4j2.xml&lt;/code&gt;放在classpath下)； 不支持properties文件； 无配置文件无法输出日志。&lt;br&gt;
 jar包的maven依赖:&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;        &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
             &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.apache.logging.log4j&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
@@ -1459,7 +1380,7 @@ jar包的maven依赖:&lt;/p&gt;
             &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;2.2&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
         &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;&lt;code&gt;log4j2.xml&lt;/code&gt;配置文件:&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;log4j2.xml&lt;/code&gt;配置文件:&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;&lt;/span&gt;
 &lt;span class=&quot;nt&quot;&gt;&amp;lt;Configuration&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;status=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;WARN&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;nt&quot;&gt;&amp;lt;Appenders&amp;gt;&lt;/span&gt;
@@ -1489,15 +1410,15 @@ jar包的maven依赖:&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h3 id=&quot;LogBack_use&quot;&gt; LogBack &lt;/h3&gt;
 
-&lt;p&gt;Logback需要&lt;code&gt;logback-core、logback-classic[、slf4j-api]&lt;/code&gt;的&lt;code&gt;jar&lt;/code&gt;包(&lt;code&gt;logback-classic&lt;/code&gt;实现了&lt;code&gt;slf4j-api&lt;/code&gt;)&lt;br&gt;
+&lt;p&gt;Logback需要&lt;code class=&quot;prettyprint&quot;&gt;logback-core、logback-classic[、slf4j-api]&lt;/code&gt;的&lt;code class=&quot;prettyprint&quot;&gt;jar&lt;/code&gt;包(&lt;code class=&quot;prettyprint&quot;&gt;logback-classic&lt;/code&gt;实现了&lt;code class=&quot;prettyprint&quot;&gt;slf4j-api&lt;/code&gt;)&lt;br&gt;
 配置文件:&lt;/p&gt;
 
 &lt;ol&gt;
-&lt;li&gt;在&lt;code&gt;classpath&lt;/code&gt;中寻找&lt;code&gt;logback.groovy&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;若无，则在&lt;code&gt;classpath&lt;/code&gt;中寻找&lt;code&gt;logback-test.xml&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;若无，则在&lt;code&gt;classpath&lt;/code&gt;中寻找&lt;code&gt;logback.xml&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;若无，则使用&lt;code&gt;JVM&lt;/code&gt;的&lt;code&gt;ServiceLoader&lt;/code&gt;实现&lt;code&gt;com.qos.logback.classic.spi.Configurator&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;以上都没成功，则&lt;code&gt;logbak&lt;/code&gt;使用自己的&lt;code&gt;BasicConfigurator&lt;/code&gt;配置，将日志输出到控制台&lt;/li&gt;
+&lt;li&gt;在&lt;code class=&quot;prettyprint&quot;&gt;classpath&lt;/code&gt;中寻找&lt;code class=&quot;prettyprint&quot;&gt;logback.groovy&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;若无，则在&lt;code class=&quot;prettyprint&quot;&gt;classpath&lt;/code&gt;中寻找&lt;code class=&quot;prettyprint&quot;&gt;logback-test.xml&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;若无，则在&lt;code class=&quot;prettyprint&quot;&gt;classpath&lt;/code&gt;中寻找&lt;code class=&quot;prettyprint&quot;&gt;logback.xml&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;若无，则使用&lt;code class=&quot;prettyprint&quot;&gt;JVM&lt;/code&gt;的&lt;code class=&quot;prettyprint&quot;&gt;ServiceLoader&lt;/code&gt;实现&lt;code class=&quot;prettyprint&quot;&gt;com.qos.logback.classic.spi.Configurator&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;以上都没成功，则&lt;code class=&quot;prettyprint&quot;&gt;logbak&lt;/code&gt;使用自己的&lt;code class=&quot;prettyprint&quot;&gt;BasicConfigurator&lt;/code&gt;配置，将日志输出到控制台&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;p&gt;jar包的maven依赖:&lt;/p&gt;
@@ -1512,7 +1433,7 @@ jar包的maven依赖:&lt;/p&gt;
             &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;1.1.3&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
         &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;&lt;code&gt;logback.xml&lt;/code&gt;配置文件:&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;logback.xml&lt;/code&gt;配置文件:&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;&lt;/span&gt;
 &lt;span class=&quot;nt&quot;&gt;&amp;lt;configuration&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;SYSTEM_OUT&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;ch.qos.logback.core.ConsoleAppender&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
@@ -1540,7 +1461,7 @@ jar包的maven依赖:&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h3 id=&quot;JCL_use&quot;&gt; JCL(common-logging) &lt;/h3&gt;
 
-&lt;p&gt;JCL需要&lt;code&gt;commons-logging&lt;/code&gt;的&lt;code&gt;jar&lt;/code&gt;包&lt;br&gt;
+&lt;p&gt;JCL需要&lt;code class=&quot;prettyprint&quot;&gt;commons-logging&lt;/code&gt;的&lt;code class=&quot;prettyprint&quot;&gt;jar&lt;/code&gt;包&lt;br&gt;
 本文只演示使用方法，对输出结果暂不解释，后面的文章会解释原理&lt;/p&gt;
 
 &lt;p&gt;jar包的maven依赖:&lt;/p&gt;
@@ -1571,11 +1492,13 @@ jar包的maven依赖:&lt;/p&gt;
 &lt;hr&gt;
 </description>
         <pubDate>Mon, 18 May 2015 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/java/2015/05/18/java%E6%97%A5%E5%BF%97(%E4%B8%80)%E6%97%A5%E5%BF%97%E7%BB%84%E4%BB%B6%E7%9A%84%E7%AE%80%E4%BB%8B%E5%8F%8A%E4%BD%BF%E7%94%A8.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/java/2015/05/18/java%E6%97%A5%E5%BF%97(%E4%B8%80)%E6%97%A5%E5%BF%97%E7%BB%84%E4%BB%B6%E7%9A%84%E7%AE%80%E4%BB%8B%E5%8F%8A%E4%BD%BF%E7%94%A8.html</guid>
+        <link>http://127.0.0.1:4000/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-05-18-java%E6%97%A5%E5%BF%97(%E4%B8%80)%E6%97%A5%E5%BF%97%E7%BB%84%E4%BB%B6%E7%9A%84%E7%AE%80%E4%BB%8B%E5%8F%8A%E4%BD%BF%E7%94%A8.html</link>
+        <guid isPermaLink="true">http://127.0.0.1:4000/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-05-18-java%E6%97%A5%E5%BF%97(%E4%B8%80)%E6%97%A5%E5%BF%97%E7%BB%84%E4%BB%B6%E7%9A%84%E7%AE%80%E4%BB%8B%E5%8F%8A%E4%BD%BF%E7%94%A8.html</guid>
+        
+        <category>Java日志</category>
         
         
-        <category>java</category>
+        <category>编程技术</category>
         
       </item>
     
@@ -1585,7 +1508,7 @@ jar包的maven依赖:&lt;/p&gt;
 
 &lt;hr&gt;
 
-&lt;h2&gt;本文结构&lt;/h2&gt;
+&lt;h2 id=&quot;本文结构&quot;&gt;本文结构&lt;/h2&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#branch&quot;&gt;分支操作&lt;/a&gt;&lt;/li&gt;
@@ -1607,8 +1530,8 @@ jar包的maven依赖:&lt;/p&gt;
 &lt;span class=&quot;n&quot;&gt;git&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;push&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;origin&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;delete&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;branchname&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;     &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;删除远程分支&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;ol&gt;
-&lt;li&gt;合并分支一般使用 &lt;code&gt;git merge --no-ff -m &amp;quot;merge with no-ff&amp;quot; branchName&lt;/code&gt; 表示禁用“Fast forward”，合并就跟一次提交一样&lt;/li&gt;
-&lt;li&gt;语法: &lt;code&gt;git push [远程名] [本地分支]:[远程分支]&lt;/code&gt; 如果省略 &lt;code&gt;[本地分支]&lt;/code&gt; 表示将空白分支提到远程分支，也能够删除远程分支&lt;/li&gt;
+&lt;li&gt;合并分支一般使用 &lt;code class=&quot;prettyprint&quot;&gt;git merge --no-ff -m &amp;quot;merge with no-ff&amp;quot; branchName&lt;/code&gt; 表示禁用“Fast forward”，合并就跟一次提交一样&lt;/li&gt;
+&lt;li&gt;语法: &lt;code class=&quot;prettyprint&quot;&gt;git push [远程名] [本地分支]:[远程分支]&lt;/code&gt; 如果省略 &lt;code class=&quot;prettyprint&quot;&gt;[本地分支]&lt;/code&gt; 表示将空白分支提到远程分支，也能够删除远程分支&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;hr&gt;
@@ -1621,12 +1544,12 @@ jar包的maven依赖:&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;丢弃工作区的修改&lt;/strong&gt;: 若有add则从暂存区恢复，若无add则从仓库恢复。&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;$ git checkout -- filename
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;注：&lt;code&gt;git checkout -- file&lt;/code&gt;命令中的“--”很重要，没有“--”，就变成了“创建一个新分支”的命令  &lt;/p&gt;
+&lt;p&gt;注：&lt;code class=&quot;prettyprint&quot;&gt;git checkout -- file&lt;/code&gt;命令中的“--”很重要，没有“--”，就变成了“创建一个新分支”的命令  &lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;撤销暂存区修改&lt;/strong&gt;: 把暂存区的修改回退到工作区。&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;$ git reset HEAD readme.txt
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;&lt;strong&gt;回退版本&lt;/strong&gt;: HEAD表示当前版本，上一个版本就是HEAD^，上上一个版本就是HEAD^^，上100个版本可写成HEAD~100。用上hard参数后，文件会回到原来的commit状态，不用hard参数，工作目录的文件修改会保留，状态为未提交。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;回退版本&lt;/strong&gt;: &lt;code class=&quot;prettyprint&quot;&gt;HEAD&lt;/code&gt;表示当前版本，上一个版本就是&lt;code class=&quot;prettyprint&quot;&gt;HEAD^&lt;/code&gt;，上上一个版本就是&lt;code class=&quot;prettyprint&quot;&gt;HEAD^^&lt;/code&gt;，上100个版本可写成&lt;code class=&quot;prettyprint&quot;&gt;HEAD~100&lt;/code&gt;。用上hard参数后，文件会回到原来的commit状态，不用hard参数，工作目录的文件修改会保留，状态为未提交。&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;git reset --hard HEAD^
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;hr&gt;
@@ -1635,12 +1558,12 @@ jar包的maven依赖:&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;git&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;log&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;graph&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pretty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;oneline&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;abbrev&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;commit&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;ol&gt;
-&lt;li&gt;&lt;code&gt;--graph&lt;/code&gt;可以看到分支合并图&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;--pretty=oneline&lt;/code&gt;Log会显示在一行 &lt;/li&gt;
-&lt;li&gt;&lt;code&gt;--abbrev-commit&lt;/code&gt; 会显示版本号的缩写形式&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;--graph&lt;/code&gt;可以看到分支合并图&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;--pretty=oneline&lt;/code&gt;Log会显示在一行&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;--abbrev-commit&lt;/code&gt; 会显示版本号的缩写形式&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;如果之前有过版本回退操作，则&lt;code&gt;git log&lt;/code&gt;只能显示当前版本之前的记录，如果想看所有的记录(包括当前版本之后的版本)，可以使用：&lt;/p&gt;
+&lt;p&gt;如果之前有过版本回退操作，则&lt;code class=&quot;prettyprint&quot;&gt;git log&lt;/code&gt;只能显示当前版本之前的记录，如果想看所有的记录(包括当前版本之后的版本)，可以使用：&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;$ git reflog
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;hr&gt;
@@ -1653,11 +1576,13 @@ origin  git@github.com:rgkjhshi/blog.git (push)
 &lt;hr&gt;
 </description>
         <pubDate>Tue, 12 May 2015 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/mac%E5%BC%80%E5%8F%91/2015/05/12/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/mac%E5%BC%80%E5%8F%91/2015/05/12/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4.html</guid>
+        <link>http://127.0.0.1:4000/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-05-12-git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4.html</link>
+        <guid isPermaLink="true">http://127.0.0.1:4000/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-05-12-git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4.html</guid>
+        
+        <category>Git</category>
         
         
-        <category>mac开发</category>
+        <category>点滴积累</category>
         
       </item>
     
@@ -1667,7 +1592,7 @@ origin  git@github.com:rgkjhshi/blog.git (push)
 
 &lt;hr&gt;
 
-&lt;h2&gt;本文结构&lt;/h2&gt;
+&lt;h2 id=&quot;本文结构&quot;&gt;本文结构&lt;/h2&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#move&quot;&gt;光标移动&lt;/a&gt;&lt;/li&gt;
@@ -1681,8 +1606,8 @@ origin  git@github.com:rgkjhshi/blog.git (push)
 &lt;h2 id=&quot;move&quot;&gt; 光标移动 &lt;/h2&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;左&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;下&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;上&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;右&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;移动&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;nj&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nl&lt;/span&gt;            &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;上&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;下移动n行&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;ctrl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;       &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;上&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;下翻一页&lt;/span&gt; 
-&lt;span class=&quot;n&quot;&gt;ctrl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;u&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;       &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;上&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;下翻半页&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;ctrl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;       &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;上&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;下翻一页&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;ctrl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;u&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;       &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;上&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;下翻半页&lt;/span&gt;
 &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;$&lt;/span&gt;              &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;移动到行首&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;行尾&lt;/span&gt;
 &lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;                  &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;移动到行首第一个字符处&lt;/span&gt;
 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;              &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;移动光标到上&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;下一个句子&lt;/span&gt;
@@ -1740,11 +1665,13 @@ origin  git@github.com:rgkjhshi/blog.git (push)
 &lt;hr&gt;
 </description>
         <pubDate>Mon, 04 May 2015 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/mac%E5%BC%80%E5%8F%91/2015/05/04/Vim%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/mac%E5%BC%80%E5%8F%91/2015/05/04/Vim%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE.html</guid>
+        <link>http://127.0.0.1:4000/%E5%BF%AB%E6%8D%B7%E9%80%9F%E6%9F%A5/2015-05-04-Vim%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE.html</link>
+        <guid isPermaLink="true">http://127.0.0.1:4000/%E5%BF%AB%E6%8D%B7%E9%80%9F%E6%9F%A5/2015-05-04-Vim%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE.html</guid>
+        
+        <category>快捷键</category>
         
         
-        <category>mac开发</category>
+        <category>快捷速查</category>
         
       </item>
     
@@ -1754,7 +1681,7 @@ origin  git@github.com:rgkjhshi/blog.git (push)
 
 &lt;hr&gt;
 
-&lt;h2&gt;本文结构&lt;/h2&gt;
+&lt;h2 id=&quot;本文结构&quot;&gt;本文结构&lt;/h2&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;#picture&quot;&gt;系统截图工具&lt;/a&gt;&lt;/li&gt;
@@ -1768,7 +1695,7 @@ origin  git@github.com:rgkjhshi/blog.git (push)
 &lt;h2 id=&quot;picture&quot;&gt; 系统截图工具 &lt;/h2&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;Commond&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Shift&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;                &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;全屏截图并保存到桌面&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;Command&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Shift&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;                &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;部分截图并保存到桌面&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Command&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Shift&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Space&lt;/span&gt;        &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;截取窗口并保存到桌面&lt;/span&gt; 
+&lt;span class=&quot;n&quot;&gt;Command&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Shift&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Space&lt;/span&gt;        &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;截取窗口并保存到桌面&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;Ctrl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Command&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Shift&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;         &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;全屏截图并保存到剪切板&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;Ctrl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Command&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Shift&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;         &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;部分截图并保存到剪切板&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;Ctrl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Command&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Shift&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Space&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;截图窗口并保存到剪切板&lt;/span&gt;
@@ -1794,11 +1721,128 @@ origin  git@github.com:rgkjhshi/blog.git (push)
 &lt;hr&gt;
 </description>
         <pubDate>Mon, 04 May 2015 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/mac%E5%BC%80%E5%8F%91/2015/05/04/Mac%20OS%20X%20%E5%BF%AB%E6%8D%B7%E9%94%AE.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/mac%E5%BC%80%E5%8F%91/2015/05/04/Mac%20OS%20X%20%E5%BF%AB%E6%8D%B7%E9%94%AE.html</guid>
+        <link>http://127.0.0.1:4000/%E5%BF%AB%E6%8D%B7%E9%80%9F%E6%9F%A5/2015-05-04-Mac%20OS%20X%20%E5%BF%AB%E6%8D%B7%E9%94%AE.html</link>
+        <guid isPermaLink="true">http://127.0.0.1:4000/%E5%BF%AB%E6%8D%B7%E9%80%9F%E6%9F%A5/2015-05-04-Mac%20OS%20X%20%E5%BF%AB%E6%8D%B7%E9%94%AE.html</guid>
+        
+        <category>快捷键</category>
         
         
-        <category>mac开发</category>
+        <category>快捷速查</category>
+        
+      </item>
+    
+      <item>
+        <title>java注解(Annotation)</title>
+        <description>&lt;p&gt;刚用到Spring中的注解时，感觉真是太方便了，其实在JDK1.5就已经支持注解了，1.5以后默认内置了三个注解&lt;br&gt;
+@Override:只能用在方法之上的，表示重写父类的方法。&lt;br&gt;
+@Deprecated:可用在任何元素上，表示API已过时，编译时会产生警告。&lt;br&gt;
+@SuppressWarnings: 可以关闭警告信息。  &lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;本文结构&quot;&gt;本文结构&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#define&quot;&gt;如何定义注解&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#rule&quot;&gt;注解的使用规则&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;define&quot;&gt; 如何定义注解 &lt;/h2&gt;
+
+&lt;p&gt;我们可以通过关键字&lt;code class=&quot;prettyprint&quot;&gt;class&lt;/code&gt;来声明一个类，类似的我们可以用某东西来声明注解，用来声明注解的这东西叫做&lt;q&gt;元注解&lt;/q&gt;。&lt;br&gt;
+在&lt;code class=&quot;prettyprint&quot;&gt;java.lang.annotation&lt;/code&gt;包中定义了4个元注解，分别是: &lt;code class=&quot;prettyprint&quot;&gt;@Target、 @Retention、 @Documented、 @Inherited&lt;/code&gt;  &lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;@Target&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;@Target&lt;/code&gt;用于说明Annotation所修饰的对象范围，比如用于修饰类、接口、构造方法、成员方法、成员变量等，它作用范围的取值有:  &lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;ElementType.CONSTRUCTOR     : 用于描述构造器  
+ElementType.FIELD           : 用于描述字段  
+ElementType.LOCAL_VARIABLE  : 用于描述局部变量  
+ElementType.METHOD          : 用于描述方法  
+ElementType.PACKAGE         : 用于描述包  
+ElementType.PARAMETER       : 用于描述参数  
+ElementType.TYPE            : 用于描述类、接口(包括注解类型) 或enum声明  
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;@Retention&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;@Retention&lt;/code&gt;定义Annotation的有效期，即生命周期，如是源码级还是class级还是可以被加载到虚拟机，它的取值有:   &lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;RetentionPoicy.SOURCE       : 在源文件中有效（即源文件保留）
+RetentionPoicy.CLASS        : 在class文件中有效（即class保留）
+RetentionPoicy.RUNTIME      : 在运行时有效（即运行时保留）
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;@Documented&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;@Documented&lt;/code&gt;是一个标记注解，没有成员，表示可以被javadoc文档化&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;@Inherited&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;@Inherited&lt;/code&gt;是一个标记注解，允许子类继承父类中的注解  &lt;/p&gt;
+
+&lt;p&gt;下面是定义注解的例子:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.lang.annotation.ElementType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.lang.annotation.Retention&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.lang.annotation.RetentionPolicy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.lang.annotation.Target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;nd&quot;&gt;@Retention&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;RetentionPolicy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;RUNTIME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;// 表示注解将被加载到虚拟机&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;({&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ElementType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;METHOD&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ElementType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;TYPE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;})&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// MyAnnotation 可修饰方法和类等&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nd&quot;&gt;@interface&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MyAnnotation&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;       &lt;span class=&quot;c1&quot;&gt;// @interface 即为定义注解的“关键字”&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;//为注解添加属性&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;color&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;default&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//为属性提供默认值&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;};&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// 测试文件&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// (value=&amp;quot;not default&amp;quot;)则可以写成(&amp;quot;not default&amp;quot;)value比较特殊，其他不可以省略写&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@MyAnnotation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;color&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;red&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 注解中没有默认值的必须赋值；&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AnnotationTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//检查类AnnotationTest是否含有@MyAnnotation注解&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AnnotationTest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isAnnotationPresent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MyAnnotation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;c1&quot;&gt;//若存在就提取注解的值&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;MyAnnotation&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;annotation&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MyAnnotation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AnnotationTest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getAnnotation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MyAnnotation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;annotation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;color&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;annotation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+
+&lt;h2 id=&quot;rule&quot;&gt; 注解的使用规则 &lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;使用&lt;code class=&quot;prettyprint&quot;&gt;@interface&lt;/code&gt;定义注解时，自动继承了&lt;code class=&quot;prettyprint&quot;&gt;java.lang.annotation.Annotation&lt;/code&gt;接口，由编译程序自动完成其他细节。&lt;br&gt;&lt;/li&gt;
+&lt;li&gt;定义注解时，不能继承其他的注解或接口。&lt;br&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;@interface&lt;/code&gt;用来声明一个注解，其中的每一个方法实际上是声明了一个配置参数。方法的名称就是参数的名称，返回值类型就是参数的类型。&lt;/li&gt;
+&lt;li&gt;参数类型只能是基本类型、String、Class、enum、Annotation或这些类型的数组。&lt;/li&gt;
+&lt;li&gt;可以通过default来声明参数的默认值。&lt;/li&gt;
+&lt;li&gt;参数只能用public或默认(default)这两个访问权修饰.例如,String value();这里把方法设为defaul默认类型；&lt;/li&gt;
+&lt;li&gt;如果只有一个参数成员,最好把参数名称设为&lt;q&gt;value&lt;/q&gt;,后加小括号，指定其值时可以是(value=&lt;q&gt;abc&lt;/q&gt;)或简写成(&lt;q&gt;abc&lt;/q&gt;)，其他名字的成员不能简写。&lt;/li&gt;
+&lt;li&gt;注解元素必须有确定的值，要么在定义注解的默认值中指定，要么在使用注解时指定，非基本类型的注解元素的值不可为null。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;hr&gt;
+</description>
+        <pubDate>Mon, 27 Apr 2015 00:00:00 +0800</pubDate>
+        <link>http://127.0.0.1:4000/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-04-27-java%E6%B3%A8%E8%A7%A3(Annotation).html</link>
+        <guid isPermaLink="true">http://127.0.0.1:4000/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-04-27-java%E6%B3%A8%E8%A7%A3(Annotation).html</guid>
+        
+        <category>Java</category>
+        
+        
+        <category>编程技术</category>
         
       </item>
     

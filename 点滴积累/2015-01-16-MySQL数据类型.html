@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="MySQL数据类型, 点滴积累, MySQL, 逆水行舟" />
+    <meta name="description" content="MySQL数据类型, 点滴积累, MySQL, MySQL中的数据类型以及使用时需要注意的地方记录如下  " />
+
+    <title>MySQL数据类型</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="http://127.0.0.1:4000/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://127.0.0.1:4000/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-01-16-MySQL%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://127.0.0.1:4000/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/uikit.min.js"></script>
+    <!-- sticky -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "Michael"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" id＝"header">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://127.0.0.1:4000"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://127.0.0.1:4000"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="http://127.0.0.1:4000/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>MySQL数据类型</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <p>MySQL中的数据类型以及使用时需要注意的地方记录如下  </p>
+
+<hr>
+
+<h2 id="本文结构">本文结构</h2>
+
+<ul>
+<li><a href="#anchor1">数字类型</a></li>
+<li><a href="#anchor2">日期类型</a></li>
+<li><a href="#anchor3">字符类型</a></li>
+</ul>
+
+<hr>
+
+<h2 id="anchor1"> 数字类型 </h2>
+
+<p>数字类型包括:  </p>
+
+<ul>
+<li> <code class="prettyprint">TINYINT, SMALLINT, MEDIUMINT,  INT, BIGINT</code></li>
+<li> <code class="prettyprint">DECIMAL</code></li>
+</ul>
+<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="o">|</span>     <span class="n">类型</span>    <span class="o">|</span>   <span class="n">长度</span><span class="o">(</span><span class="n">Byte</span><span class="o">)</span>  <span class="o">|</span>  <span class="n">最小值</span><span class="o">(</span><span class="n">SIGNED</span><span class="o">/</span><span class="n">UNSIGNED</span><span class="o">)</span>  <span class="o">|</span>  <span class="n">最大值</span><span class="o">(</span><span class="n">SIGNED</span><span class="o">/</span><span class="n">UNSIGNED</span><span class="o">)</span>  <span class="o">|</span>  
+    <span class="o">|:-----------</span> <span class="o">|:------------:|-------------------------:|-------------------------:|</span>
+    <span class="o">|</span>   <span class="n">TINYINT</span>   <span class="o">|</span>       <span class="mi">1</span>      <span class="o">|</span>   <span class="o">-</span><span class="mi">128</span>                   <span class="o">|</span>  <span class="mi">127</span>                     <span class="o">|</span>
+    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span>   <span class="mi">0</span>                      <span class="o">|</span>  <span class="mi">255</span>                     <span class="o">|</span>
+    <span class="o">|</span>   <span class="n">SMALLINT</span>  <span class="o">|</span>       <span class="mi">2</span>      <span class="o">|</span>   <span class="o">-</span><span class="mi">32768</span>                 <span class="o">|</span>  <span class="mi">32767</span>                   <span class="o">|</span>
+    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span>   <span class="mi">0</span>                      <span class="o">|</span>  <span class="mi">65535</span>                   <span class="o">|</span>
+    <span class="o">|</span>  <span class="n">MEDIUMINT</span>  <span class="o">|</span>       <span class="mi">3</span>      <span class="o">|</span>   <span class="o">-</span><span class="mi">8388608</span>               <span class="o">|</span>  <span class="mi">8388607</span>                 <span class="o">|</span>
+    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span>   <span class="mi">0</span>                      <span class="o">|</span>  <span class="mi">16777215</span>                <span class="o">|</span>
+    <span class="o">|</span>     <span class="n">INT</span>     <span class="o">|</span>       <span class="mi">4</span>      <span class="o">|</span>   <span class="o">-</span><span class="mi">2147483648</span>            <span class="o">|</span>  <span class="mi">2147483647</span>              <span class="o">|</span>
+    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span>   <span class="mi">0</span>                      <span class="o">|</span>  <span class="mi">4294967295</span>              <span class="o">|</span>
+    <span class="o">|</span>    <span class="n">BIGINT</span>   <span class="o">|</span>       <span class="mi">8</span>      <span class="o">|</span>   <span class="o">-</span><span class="mi">9223372036854775808</span>   <span class="o">|</span>  <span class="mi">9223372036854775807</span>     <span class="o">|</span>
+    <span class="o">|</span>             <span class="o">|</span>              <span class="o">|</span>   <span class="mi">0</span>                      <span class="o">|</span>  <span class="mi">18446744073709551615</span>    <span class="o">|</span>
+</code></pre></div>
+<p><code class="prettyprint">DECIMAL(M,D)</code>:</p>
+
+<ol>
+<li> M 代表精度,即总共的位数,范围1-65</li>
+<li> D 代表小数部分的位数,范围0-30,但不能大于M</li>
+<li> 如果插入数值超过M,则只显示该精度内的最大值</li>
+<li> <code class="prettyprint">price DECIMAL(5, 2)</code> 表示最大值为 999.99</li>
+</ol>
+
+<p>下面这段代码注意：</p>
+<div class="highlight"><pre><code class="language-mysql" data-lang="mysql">    <span class="ss">`status`</span> <span class="kt">TINYINT</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="k">UNSIGNED</span> <span class="k">NOT</span> <span class="no">NULL</span> <span class="kp">AUTO_INCREMENT</span>
+</code></pre></div>
+<ol>
+<li> 整数类型后面的长度表示显示数字时的宽度。</li>
+<li> 尽量使用 <code class="prettyprint">TINYINT</code> 表示状态</li>
+</ol>
+
+<hr>
+
+<h2 id="anchor2"> 日期类型 </h2>
+
+<ul>
+<li><p><code class="prettyprint">DATE</code> : 3字节, <code class="prettyprint">&#39;YYYY-MM-DD&#39;</code>格式, 范围是 <code class="prettyprint">&#39;1000-01-01&#39; ~ &#39;9999-12-31&#39;</code>。如果只记录日期, 存储空间、性能都要比varchar(10)要好。</p></li>
+<li><p><code class="prettyprint">TIMESTAMP</code> : 4字节,<code class="prettyprint">&#39;YYYY-MM-DD HH:MM:SS&#39;</code>格式, 范围是<code class="prettyprint">&#39;1970-01-01 00:00:01&#39; ~ &#39;2038-01-19 03:14:07&#39;</code>。</p></li>
+<li><p><code class="prettyprint">DATETIME</code> : 8字节,<code class="prettyprint">&#39;YYYY-MM-DD HH:MM:SS&#39;</code>格式, 范围是<code class="prettyprint">&#39;1000-01-01 00:00:00&#39; ~ &#39;9999-12- 31 23:59:59&#39;</code>。</p></li>
+</ul>
+
+<p>注意:  </p>
+
+<ol>
+<li> 一个表中日期类只能存在一个定义默认值为 CURRENT_TIMESTAMP的 timestamp列</li>
+</ol>
+
+<hr>
+
+<h2 id="anchor3"> 字符类型 </h2>
+
+<ul>
+<li> <code class="prettyprint">CHAR</code> : 定长文本字符类型</li>
+<li> <code class="prettyprint">VARCHAR</code>: 变长文本字符类型</li>
+<li> <code class="prettyprint">TEXT</code> : 大变长文本字符类型</li>
+<li> <code class="prettyprint">BINARY</code> : 类似于char, 变长二进制字符类型</li>
+<li> <code class="prettyprint">VARBINARY</code> : 类似于varchar, 变长二进制字符类型</li>
+<li> <code class="prettyprint">BLOB</code> : 大变长二进制字符类型</li>
+</ul>
+
+<p>注意:  </p>
+
+<ol>
+<li> <code class="prettyprint">VARCHAR</code> 类型最多能存储65535个字节长度的数据，如果采用 <code class="prettyprint">UTF8</code> 编码，则每个字符占3字节，即最大长度为 <code class="prettyprint">65535/3=21845</code> 个字符</li>
+<li> <code class="prettyprint">VARCHAR(4)</code> 表示的是4个字符，而不是字节，一个字母和一个汉字都是一个字符</li>
+<li> <code class="prettyprint">VARCHAR</code> 开头会占用1到2个字节来存储字符串实际长度(长度超过255时要2个字节),最大长度不超过65535。不会影响上面所说的字符长度。</li>
+</ol>
+
+<hr>
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/MySQL数据类型" data-title="MySQL数据类型" data-url="/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-01-16-MySQL%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- header end -->
+
+
+</body>
+
+</html>

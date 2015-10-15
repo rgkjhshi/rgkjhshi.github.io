@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="CSRF, 点滴积累, CSRF, 逆水行舟" />
+    <meta name="description" content="CSRF, 点滴积累, CSRF, CSRF算是比较简单的Web攻击方式了吧，我们来看看它到底是什么。" />
+
+    <title>CSRF</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="http://127.0.0.1:4000/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://127.0.0.1:4000/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-06-24-CSRF.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://127.0.0.1:4000/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/uikit.min.js"></script>
+    <!-- sticky -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "Michael"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" id＝"header">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://127.0.0.1:4000"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://127.0.0.1:4000"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="http://127.0.0.1:4000/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>CSRF</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <p>CSRF算是比较简单的Web攻击方式了吧，我们来看看它到底是什么。</p>
+
+<hr>
+
+<h2 id="目录">目录</h2>
+
+<ul>
+<li><a href="#introduction">CSRF简介</a></li>
+<li><a href="#attact">攻击原理</a></li>
+<li><a href="#use">防范方法</a></li>
+</ul>
+
+<hr>
+
+<h2 id="introduction"> CSRF简介 </h2>
+
+<p>CSRF(Cross-site request forgery)学名叫跨站请求伪造。从名字上可看出来，跨站，至少涉及两个站点。<br>
+CSRF的流程是这样的:</p>
+
+<ol>
+<li>用户登录正常网站A</li>
+<li>用户的登陆凭证被保存在了本地cookie中</li>
+<li>用户未登出的情况下，同时又浏览了网站B(恶意网站)</li>
+<li>B站私自访问了A站的某些操作(比如删除信息等)</li>
+<li>A站检查到用户的登陆凭证，认为用户合法(删除信息这个操作就执行了)</li>
+</ol>
+
+<hr>
+
+<h2 id="attact"> 攻击原理 </h2>
+
+<p>浏览器访问某站时，会携带该站保存在本地的cookie去请求该站的服务器。<br>
+比如访问A站，就会携带A的cookie去请求A站的服务器。访问A站时，不会携带另一个站点的cookie信息。<br>
+而CSRF攻击就是利用了这点，访问B站时，B站在用户不知情的情况下悄悄访问了A，这时就携带了A站的cookie，<br>
+A站检查cookie中的登陆凭证，认为正确，结果恶意操作就被当成正确操作执行了。  </p>
+
+<p>举个例子:<br>
+www.A.com站在用户登录后，会将登陆凭证保存在本地cookie中，A站有个删除个人信息的操作www.A.com/user/，
+但需要一个参数:type(type=delete表示删除个人信息，type=modify表示修改个人信息等)。<br>
+用户登录A站之后又访问了B站(恶意网站),B站中有这样一段代码:</p>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">www.A.com/user/</span> <span class="na">method=</span><span class="s">POST</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">name=</span><span class="s">&quot;type&quot;</span> <span class="na">value=</span><span class="s">&quot;delete&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+<span class="nt">&lt;script&gt;</span> <span class="nb">document</span><span class="p">.</span><span class="nx">forms</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">submit</span><span class="p">();</span> <span class="nt">&lt;/script&gt;</span>
+</code></pre></div>
+<p>用户访问了B结果B站悄悄向A提交了删除信息的操作(访问A会携带A的cookie)，这样就是CSRF攻击了。</p>
+
+<hr>
+
+<h2 id="use"> 防范方法 </h2>
+
+<p>防范的方法有许多，Token方式是最主流的。</p>
+
+<h3 id="token">Token</h3>
+
+<p>CSRF能攻击成功，根本原因是：操作所带的参数均被攻击者猜测到了。<br>
+根据这个原因，我们就可以添加一个Token参数，其值是随机的，使攻击者不知道无法猜到。<br>
+通过Token方式防范CSRF，实施起来可以有两种方式吧，一是通过session，二是通过cookie。  </p>
+
+<ul>
+<li>通过session的方式</li>
+</ul>
+
+<p>服务端生成token，并保存在session中，然后拍给前端，放到hiddin域里。
+下次请求时就会把token提交到服务端，服务端从session中取出token和hiddin域提交过来的token对比。</p>
+
+<ul>
+<li>通过cookie的方式</li>
+</ul>
+
+<p>服务端生成token，拍给前端放到hiddin域里，然后经过加密把密文放在cookie里。
+下次请求时会把hiddin域中的token和cookie里的加密token都提交给服务器，服务器得到cookie里的加密token进行解密，
+然后跟hiddin域提交过来的token进行对比。</p>
+
+<h3 id="验证码">验证码</h3>
+
+<p>验证码不仅可用来防止暴力破解，还可以有效防止CSRF的攻击。
+但问题在于，不可能在用户的所有操作上都需要输入验证码。只有一些关键的操作，才能要求输入验证码。</p>
+
+<h3 id="referer字段检查">Referer字段检查</h3>
+
+<p>当浏览器向web服务器发出请求的时候，在HTTP的请求头(Request Headers)中一般会带上Referer，告诉服务器用户从哪个站点链接过来的。
+服务器通过判断请求头中的referer，也能避免CSRF的攻击。</p>
+
+<hr>
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/CSRF" data-title="CSRF" data-url="/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-06-24-CSRF.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- header end -->
+
+
+</body>
+
+</html>

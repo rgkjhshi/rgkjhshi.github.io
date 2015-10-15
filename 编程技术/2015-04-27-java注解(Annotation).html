@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="java注解(Annotation), 编程技术, Java, 逆水行舟" />
+    <meta name="description" content="java注解(Annotation), 编程技术, Java, 刚用到Spring中的注解时，感觉真是太方便了，其实在JDK1.5就已经支持注解了，1.5以后默认内置了三个注解@Override:只能用在方法之上的，表示重写父类的方法。@Deprecated:可用在任何元素上，表示API已过时，编译时会产生警告。@SuppressWarnings: 可以关闭警告信息。  " />
+
+    <title>java注解(Annotation)</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="http://127.0.0.1:4000/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://127.0.0.1:4000/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-04-27-java%E6%B3%A8%E8%A7%A3(Annotation).html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://127.0.0.1:4000/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/uikit.min.js"></script>
+    <!-- sticky -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "Michael"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" id＝"header">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://127.0.0.1:4000"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://127.0.0.1:4000"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="http://127.0.0.1:4000/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>java注解(Annotation)</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <p>刚用到Spring中的注解时，感觉真是太方便了，其实在JDK1.5就已经支持注解了，1.5以后默认内置了三个注解<br>
+@Override:只能用在方法之上的，表示重写父类的方法。<br>
+@Deprecated:可用在任何元素上，表示API已过时，编译时会产生警告。<br>
+@SuppressWarnings: 可以关闭警告信息。  </p>
+
+<hr>
+
+<h2 id="本文结构">本文结构</h2>
+
+<ul>
+<li><a href="#define">如何定义注解</a></li>
+<li><a href="#rule">注解的使用规则</a></li>
+</ul>
+
+<hr>
+
+<h2 id="define"> 如何定义注解 </h2>
+
+<p>我们可以通过关键字<code class="prettyprint">class</code>来声明一个类，类似的我们可以用某东西来声明注解，用来声明注解的这东西叫做<q>元注解</q>。<br>
+在<code class="prettyprint">java.lang.annotation</code>包中定义了4个元注解，分别是: <code class="prettyprint">@Target、 @Retention、 @Documented、 @Inherited</code>  </p>
+
+<ul>
+<li>@Target</li>
+</ul>
+
+<p><code class="prettyprint">@Target</code>用于说明Annotation所修饰的对象范围，比如用于修饰类、接口、构造方法、成员方法、成员变量等，它作用范围的取值有:  </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">ElementType.CONSTRUCTOR     : 用于描述构造器  
+ElementType.FIELD           : 用于描述字段  
+ElementType.LOCAL_VARIABLE  : 用于描述局部变量  
+ElementType.METHOD          : 用于描述方法  
+ElementType.PACKAGE         : 用于描述包  
+ElementType.PARAMETER       : 用于描述参数  
+ElementType.TYPE            : 用于描述类、接口(包括注解类型) 或enum声明  
+</code></pre></div>
+<ul>
+<li>@Retention</li>
+</ul>
+
+<p><code class="prettyprint">@Retention</code>定义Annotation的有效期，即生命周期，如是源码级还是class级还是可以被加载到虚拟机，它的取值有:   </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">RetentionPoicy.SOURCE       : 在源文件中有效（即源文件保留）
+RetentionPoicy.CLASS        : 在class文件中有效（即class保留）
+RetentionPoicy.RUNTIME      : 在运行时有效（即运行时保留）
+</code></pre></div>
+<ul>
+<li>@Documented</li>
+</ul>
+
+<p><code class="prettyprint">@Documented</code>是一个标记注解，没有成员，表示可以被javadoc文档化</p>
+
+<ul>
+<li>@Inherited</li>
+</ul>
+
+<p><code class="prettyprint">@Inherited</code>是一个标记注解，允许子类继承父类中的注解  </p>
+
+<p>下面是定义注解的例子:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.lang.annotation.ElementType</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.annotation.Retention</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.annotation.RetentionPolicy</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.annotation.Target</span><span class="o">;</span>
+
+<span class="nd">@Retention</span><span class="o">(</span><span class="n">RetentionPolicy</span><span class="o">.</span><span class="na">RUNTIME</span><span class="o">)</span>    <span class="c1">// 表示注解将被加载到虚拟机</span>
+<span class="nd">@Target</span><span class="o">({</span><span class="n">ElementType</span><span class="o">.</span><span class="na">METHOD</span><span class="o">,</span> <span class="n">ElementType</span><span class="o">.</span><span class="na">TYPE</span><span class="o">})</span>  <span class="c1">// MyAnnotation 可修饰方法和类等</span>
+<span class="kd">public</span> <span class="nd">@interface</span> <span class="n">MyAnnotation</span> <span class="o">{</span>       <span class="c1">// @interface 即为定义注解的“关键字”</span>
+    <span class="c1">//为注解添加属性</span>
+    <span class="n">String</span> <span class="nf">color</span><span class="o">();</span>
+    <span class="n">String</span> <span class="nf">value</span><span class="o">()</span> <span class="k">default</span> <span class="s">&quot;default&quot;</span><span class="o">;</span> <span class="c1">//为属性提供默认值</span>
+    <span class="kt">int</span><span class="o">[]</span> <span class="nf">array</span><span class="o">()</span> <span class="k">default</span> <span class="o">{</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">};</span>
+<span class="o">}</span>
+
+<span class="c1">// 测试文件</span>
+<span class="c1">// (value=&quot;not default&quot;)则可以写成(&quot;not default&quot;)value比较特殊，其他不可以省略写</span>
+<span class="nd">@MyAnnotation</span><span class="o">(</span><span class="n">color</span> <span class="o">=</span> <span class="s">&quot;red&quot;</span><span class="o">)</span>  <span class="c1">// 注解中没有默认值的必须赋值；</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AnnotationTest</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//检查类AnnotationTest是否含有@MyAnnotation注解</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">AnnotationTest</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">isAnnotationPresent</span><span class="o">(</span><span class="n">MyAnnotation</span><span class="o">.</span><span class="na">class</span><span class="o">))</span> <span class="o">{</span>
+            <span class="c1">//若存在就提取注解的值</span>
+            <span class="n">MyAnnotation</span> <span class="n">annotation</span> <span class="o">=</span> <span class="o">(</span><span class="n">MyAnnotation</span><span class="o">)</span> <span class="n">AnnotationTest</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getAnnotation</span><span class="o">(</span><span class="n">MyAnnotation</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">annotation</span><span class="o">.</span><span class="na">color</span><span class="o">());</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">annotation</span><span class="o">.</span><span class="na">value</span><span class="o">());</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<hr>
+
+<h2 id="rule"> 注解的使用规则 </h2>
+
+<ol>
+<li>使用<code class="prettyprint">@interface</code>定义注解时，自动继承了<code class="prettyprint">java.lang.annotation.Annotation</code>接口，由编译程序自动完成其他细节。<br></li>
+<li>定义注解时，不能继承其他的注解或接口。<br></li>
+<li><code class="prettyprint">@interface</code>用来声明一个注解，其中的每一个方法实际上是声明了一个配置参数。方法的名称就是参数的名称，返回值类型就是参数的类型。</li>
+<li>参数类型只能是基本类型、String、Class、enum、Annotation或这些类型的数组。</li>
+<li>可以通过default来声明参数的默认值。</li>
+<li>参数只能用public或默认(default)这两个访问权修饰.例如,String value();这里把方法设为defaul默认类型；</li>
+<li>如果只有一个参数成员,最好把参数名称设为<q>value</q>,后加小括号，指定其值时可以是(value=<q>abc</q>)或简写成(<q>abc</q>)，其他名字的成员不能简写。</li>
+<li>注解元素必须有确定的值，要么在定义注解的默认值中指定，要么在使用注解时指定，非基本类型的注解元素的值不可为null。</li>
+</ol>
+
+<hr>
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/java注解(Annotation)" data-title="java注解(Annotation)" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-04-27-java%E6%B3%A8%E8%A7%A3(Annotation).html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- header end -->
+
+
+</body>
+
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="Spring(五): SpringMVC的简单使用, 编程技术, Spring, 逆水行舟" />
+    <meta name="description" content="Spring(五): SpringMVC的简单使用, 编程技术, Spring, SpringMVC是在Spring基础上的一个MVC框架，可以很方便地进行web项目开发。" />
+
+    <title>Spring(五): SpringMVC的简单使用</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="http://127.0.0.1:4000/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://127.0.0.1:4000/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-02-05-Spring(%E4%BA%94)SpringMVC%E7%9A%84%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://127.0.0.1:4000/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/uikit.min.js"></script>
+    <!-- sticky -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "Michael"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" id＝"header">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://127.0.0.1:4000"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://127.0.0.1:4000"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="http://127.0.0.1:4000/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>Spring(五): SpringMVC的简单使用</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <p><code class="prettyprint">SpringMVC</code>是在Spring基础上的一个MVC框架，可以很方便地进行web项目开发。</p>
+
+<hr>
+
+<h2 id="本文结构">本文结构</h2>
+
+<ul>
+<li><a href="#servlet">传统的servlet</a></li>
+<li><a href="#DispatcherServlet">SpringMVC的控制转发</a>
+
+<ul>
+<li><a href="#web">web配置</a></li>
+<li><a href="#controller">类处理器</a></li>
+<li><a href="#spring">spring的配置</a></li>
+</ul></li>
+</ul>
+
+<hr>
+
+<h2 id="servlet"> 传统的servlet </h2>
+
+<p>传统的Java Web项目是通过<code class="prettyprint">Servlet</code>进行控制转发的（其实<code class="prettyprint">SpringMVC</code>也是基于<code class="prettyprint">servlet</code>的），在不使用其他框架的情况下，一个单纯使用<code class="prettyprint">servlet</code>的web项目应该是这样子的：<br>
+定义一个类(如<code class="prettyprint">LoginServlet</code>)继承<code class="prettyprint">HttpServlet</code>，重写其中的<code class="prettyprint">doGet</code>方法和<code class="prettyprint">doPost</code>方法</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">//LoginServlet.java</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">LoginServlet</span> <span class="kd">extends</span> <span class="n">HttpServlet</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">doGet</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">req</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">resp</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ServletException</span><span class="o">,</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">req</span><span class="o">.</span><span class="na">getRequestDispatcher</span><span class="o">(</span><span class="s">&quot;/login.jsp&quot;</span><span class="o">).</span><span class="na">forward</span><span class="o">(</span><span class="n">req</span><span class="o">,</span> <span class="n">resp</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">doPost</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">req</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">resp</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ServletException</span><span class="o">,</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">doPost</span><span class="o">(</span><span class="n">req</span><span class="o">,</span> <span class="n">resp</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>然后在web项目的配置文件<code class="prettyprint">web.xml</code>中添加servlet的配置：</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;servlet&gt;</span>
+    <span class="nt">&lt;servlet-name&gt;</span>LoginServlet<span class="nt">&lt;/servlet-name&gt;</span>
+    <span class="nt">&lt;servlet-class&gt;</span>com.test.servlet.LoginServlet<span class="nt">&lt;/servlet-class&gt;</span>
+<span class="nt">&lt;/servlet&gt;</span>
+<span class="nt">&lt;servlet-mapping&gt;</span>
+    <span class="c">&lt;!-- 要与之前定义的 servlet-name 一致 --&gt;</span>
+    <span class="nt">&lt;servlet-name&gt;</span>LoginServlet<span class="nt">&lt;/servlet-name&gt;</span>
+    <span class="c">&lt;!-- http请求的url --&gt;</span>
+    <span class="nt">&lt;url-pattern&gt;</span>/login<span class="nt">&lt;/url-pattern&gt;</span>
+<span class="nt">&lt;/servlet-mapping&gt;</span>
+</code></pre></div>
+<hr>
+
+<h2 id="DispatcherServlet"> SpringMVC的控制转发 </h2>
+
+<p><code class="prettyprint">SpringMVC</code>是基于<code class="prettyprint">DispatcherServlet</code>的MVC框架，<code class="prettyprint">DispatcherServlet</code>的继承关系为：</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">HttpServlet &lt;-- HttpServletBean &lt;-- FrameworkServlet &lt;-- DispatcherServlet
+</code></pre></div>
+<p>每一个请求最先访问的都是<code class="prettyprint">DispatcherServlet</code>，<code class="prettyprint">DispatcherServlet</code>负责转发<code class="prettyprint">Request</code>请求给相应的<code class="prettyprint">Handler</code>，<code class="prettyprint">Handler</code>处理以后再返回相应的视图(View)或模型(Model)或都不返回。<br>
+在使用注解的<code class="prettyprint">SpringMVC</code>中，处理器<code class="prettyprint">Handler</code>是基于<code class="prettyprint">@Controller</code>和<code class="prettyprint">@RequestMapping</code>这两个注解的，<code class="prettyprint">@Controller</code>声明一个处理器类，<code class="prettyprint">@RequestMapping</code>声明对应请求的映射关系，这样就可以提供一个非常灵活的匹配和处理方式。  </p>
+
+<h3 id="web"> web配置 </h3>
+
+<p>要想使用<code class="prettyprint">SpringMVC</code>，就得在<code class="prettyprint">web.xml</code>文件中像配置普通<code class="prettyprint">servlet</code>那样对<code class="prettyprint">DispatcherServlet</code>进行配置：</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;servlet&gt;</span>
+    <span class="nt">&lt;servlet-name&gt;</span>web<span class="nt">&lt;/servlet-name&gt;</span>
+    <span class="nt">&lt;servlet-class&gt;</span>org.springframework.web.servlet.DispatcherServlet<span class="nt">&lt;/servlet-class&gt;</span>
+    <span class="nt">&lt;init-param&gt;</span>
+        <span class="nt">&lt;param-name&gt;</span>contextConfigLocation<span class="nt">&lt;/param-name&gt;</span>
+        <span class="nt">&lt;param-value&gt;</span>classpath*:spring.xml<span class="nt">&lt;/param-value&gt;</span>
+    <span class="nt">&lt;/init-param&gt;</span>
+<span class="nt">&lt;/servlet&gt;</span>
+<span class="nt">&lt;servlet-mapping&gt;</span>
+    <span class="nt">&lt;servlet-name&gt;</span>web<span class="nt">&lt;/servlet-name&gt;</span>
+    <span class="nt">&lt;url-pattern&gt;</span>/<span class="nt">&lt;/url-pattern&gt;</span>
+<span class="nt">&lt;/servlet-mapping&gt;</span>
+</code></pre></div>
+<p>上面的<code class="prettyprint">servlet</code>配置中直接通过初始化参数设置了<code class="prettyprint">contextConfigLocation</code>，这样就会去指定的位置加载spring配置；如果设置的话，则<code class="prettyprint">SpringMVC</code>会自动到<code class="prettyprint">/WEB-INF</code>目录下寻找一个叫<code class="prettyprint">[servlet-name]-servlet.xml</code>的配置文件，像上面的例子就会找<code class="prettyprint">/WEB-INF/web-servlet.xml</code>进行加载。</p>
+
+<ul>
+<li><code class="prettyprint">classpath*:spring.xml</code>与<code class="prettyprint">classpath:spring.xml</code>的区别</li>
+</ul>
+
+<p><code class="prettyprint">classpath:spring.xml</code>表示仅加载<code class="prettyprint">classpath</code>目录下的<code class="prettyprint">spring.xml</code><br>
+<code class="prettyprint">classpath*:spring.xml</code>表示加载<code class="prettyprint">classpath</code>目录及其子目录下，还有jar包中所有名为的<code class="prettyprint">spring.xml</code>的文件</p>
+
+<h3 id="controller"> 类控制器 </h3>
+
+<p>类控制器是真正做事情的<code class="prettyprint">Handler</code>，web配置好了之后，来看看处理器类是怎么写的：</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">//LoginController.java</span>
+<span class="nd">@Controller</span>
+<span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;/admin&quot;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">LoginController</span> <span class="o">{</span>
+    <span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;/login&quot;</span><span class="o">,</span> <span class="n">method</span> <span class="o">=</span> <span class="n">RequestMethod</span><span class="o">.</span><span class="na">GET</span><span class="o">)</span>
+    <span class="nd">@ResponseBody</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">login</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">&quot;login success&quot;</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>上面例子中请求的URL后面的路径为：<code class="prettyprint">/admin/login</code>，即方法上的<code class="prettyprint">@RequestMapping</code>注解是在类的注解基础上的，如果类上没有<code class="prettyprint">@RequestMapping</code>注解，则方法上注解的路径就是绝对路径了。<br>
+另外注解<code class="prettyprint">@ResponseBody</code>表示直接返回结果，否则，返回的字符串会被当成一个模板文件(如jsp)，具体内容后续文章再说。</p>
+
+<h3 id="spring"> spring的配置 </h3>
+
+<p>通过web配置，可以把请求转发到我们定义的类控制器中处理，前提是web项目能够找到我们定义的类控制器，这就需要在spring配置文件中来指定。<br>
+这里的spring配置跟之前的差不多，无非就是让Spring能够找到我们用<code class="prettyprint">@Controller</code>注解的Bean，另外还需要添加<code class="prettyprint">&lt;mvc:annotation-driven /&gt;</code>来支持SpringMVC注解</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- 支持SpringMVC注解 --&gt;</span>
+<span class="nt">&lt;mvc:annotation-driven</span> <span class="nt">/&gt;</span>
+<span class="c">&lt;!-- 扫描 LoginController 所在的包 --&gt;</span>
+<span class="nt">&lt;context:component-scan</span> <span class="na">base-package=</span><span class="s">&quot;com.test.springMVC&quot;</span><span class="nt">/&gt;</span>
+</code></pre></div>
+<hr>
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/Spring(五)SpringMVC的简单使用" data-title="Spring(五): SpringMVC的简单使用" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-02-05-Spring(%E4%BA%94)SpringMVC%E7%9A%84%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- header end -->
+
+
+</body>
+
+</html>

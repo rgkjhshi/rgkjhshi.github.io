@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="Java基础整理, 编程技术, Java, 逆水行舟" />
+    <meta name="description" content="Java基础整理, 编程技术, Java, 回顾Java的基础知识，不知道该从哪里开始入手，便从Java的关键字开始，由此扩展出相关知识。" />
+
+    <title>Java基础整理</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="http://127.0.0.1:4000/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://127.0.0.1:4000/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-02-16-java%E5%9F%BA%E7%A1%80%E6%95%B4%E7%90%86.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://127.0.0.1:4000/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/uikit.min.js"></script>
+    <!-- sticky -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "Michael"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" id＝"header">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://127.0.0.1:4000"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://127.0.0.1:4000"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="http://127.0.0.1:4000/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>Java基础整理</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <p>回顾<code class="prettyprint">Java</code>的基础知识，不知道该从哪里开始入手，便从<code class="prettyprint">Java</code>的关键字开始，由此扩展出相关知识。</p>
+
+<hr>
+
+<h2 id="本文结构">本文结构</h2>
+
+<ul>
+<li><a href="#keywords">Java中的关键字</a></li>
+<li><a href="#identifier">标识符</a></li>
+<li><a href="#static">static关键字</a></li>
+<li><a href="#final">final关键字</a></li>
+<li><a href="#extends">继承相关</a></li>
+<li><a href="#public">访问权限</a></li>
+<li><a href="#abstract">抽象类和接口</a></li>
+<li><a href="#instanceof">instanceof操作符</a></li>
+<li><a href="#native">native关键字</a></li>
+<li><a href="#transient">transient关键字</a></li>
+<li><a href="#volatitle">volatitle关键字</a></li>
+<li><a href="#synchronilzed">synchronilzed关键字</a></li>
+</ul>
+
+<hr>
+
+<h2 id="keywords"> Java中的关键字 </h2>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="mi">1</span><span class="o">.</span> <span class="nl">包引入和包声明:</span> <span class="n">import</span><span class="o">,</span> <span class="kn">package</span>
+<span class="mi">2</span><span class="o">.</span> <span class="nl">用于类和接口的声明:</span> <span class="n">class</span><span class="o">,</span> <span class="kd">extends</span><span class="o">,</span> <span class="kd">implements</span><span class="o">,</span> <span class="kd">interface</span>
+<span class="err">3. </span><span class="nc">数据类型</span><span class="o">:</span> <span class="kt">byte</span><span class="o">,</span> <span class="kt">boolean</span><span class="o">,</span> <span class="kt">char</span><span class="o">,</span> <span class="kt">double</span><span class="o">,</span> <span class="kt">int</span><span class="o">,</span> <span class="kt">long</span><span class="o">,</span> <span class="kt">float</span><span class="o">,</span> <span class="kt">short</span>
+<span class="mi">4</span><span class="o">.</span> <span class="nl">某些数据类型的可选值:</span> <span class="n">flase</span><span class="o">,</span> <span class="n">ture</span><span class="o">,</span> <span class="kc">null</span>
+<span class="mi">5</span><span class="o">.</span> <span class="nl">流程控制:</span> <span class="k">break</span><span class="o">,</span> <span class="k">case</span><span class="o">,</span> <span class="k">continue</span><span class="o">,</span> <span class="k">default</span><span class="o">,</span> <span class="k">do</span><span class="o">,</span> <span class="k">else</span><span class="o">,</span> <span class="k">for</span><span class="o">,</span> <span class="k">if</span><span class="o">,</span> <span class="k">return</span><span class="o">,</span> <span class="k">switch</span><span class="o">,</span> <span class="k">while</span>
+<span class="mi">6</span><span class="o">.</span> <span class="nl">异常处理:</span> <span class="k">catch</span><span class="o">,</span> <span class="k">finally</span><span class="o">,</span> <span class="k">throw</span><span class="o">,</span> <span class="kd">throws</span><span class="o">,</span> <span class="k">try</span>
+<span class="mi">7</span><span class="o">.</span> <span class="nl">修饰符:</span> <span class="kd">abstract</span><span class="o">,</span> <span class="kd">final</span><span class="o">,</span> <span class="kd">native</span><span class="o">,</span> <span class="kd">private</span><span class="o">,</span> <span class="kd">protected</span><span class="o">,</span> <span class="kd">public</span><span class="o">,</span> <span class="kd">static</span><span class="o">,</span> <span class="n">synchronilzed</span><span class="o">,</span> <span class="kd">transient</span><span class="o">,</span> <span class="n">volatitle</span>
+<span class="mi">8</span><span class="o">.</span> <span class="nl">操作符:</span> <span class="k">instanceof</span>
+<span class="mi">9</span><span class="o">.</span> <span class="nl">创建对象:</span> <span class="k">new</span>
+<span class="mi">10</span><span class="o">.</span> <span class="nl">引用:</span> <span class="k">this</span><span class="o">,</span> <span class="n">supper</span>
+<span class="mi">11</span><span class="o">.</span> <span class="nl">方法返回类型:</span> <span class="kt">void</span>
+<span class="mi">12</span><span class="o">.</span> <span class="nl">保留字:</span> <span class="kd">const</span><span class="o">,</span> <span class="k">goto</span>
+</code></pre></div>
+<hr>
+
+<h2 id="identifier"> 标识符 </h2>
+
+<p>自定义标识符可以由大小写字母、数字、下划线(<code class="prettyprint">_</code>)、美元符号(<code class="prettyprint">$</code>)组成，但不能以数字开头，不能是Java中的保留字或关键字。</p>
+
+<hr>
+
+<h2 id="static"> static关键字 </h2>
+
+<ol>
+<li>静态变量: 类被加在时创建，访问静态变量不需要产生类的实例对象，不能把方法体内的变量声明为静态。</li>
+<li>静态方法: 可以用类名或实例对象访问，也可以在类的非静态方法中访问。</li>
+<li>静态代码块: 类第一次被加载时执行，且只被执行一次，其常用来进行类属性的初始化。</li>
+</ol>
+
+<p><strong>注:</strong></p>
+
+<ol>
+<li>静态方法内不能以任何方式引用<code class="prettyprint">this</code>和<code class="prettyprint">super</code>关键字。</li>
+<li>静态方法内只能直接调用静态成员(变量和方法)，而不能直接访问类中的非静态成员。</li>
+</ol>
+
+<hr>
+
+<h2 id="final"> final关键字 </h2>
+
+<p><code class="prettyprint">final</code>关键字可以修饰类、方法和属性</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">修饰类</span>   <span class="o">:</span> <span class="n">该类不能被继承</span>
+<span class="n">修饰方法</span> <span class="o">:</span> <span class="n">该方法不能被覆盖</span><span class="o">(</span><span class="n">重写</span><span class="o">)</span>
+<span class="n">修饰属性</span> <span class="o">:</span> <span class="n">该属性为常量</span><span class="o">,</span><span class="n">只能赋值一次</span><span class="o">,</span><span class="n">必须在声明时或在构造方法中显示赋值</span>
+</code></pre></div>
+<p><strong>注:</strong></p>
+
+<ol>
+<li>方法中定义的内部类只能访问该方法内的final型局部变量</li>
+<li>在Java中通常使用<code class="prettyprint">public static final</code>的组合方式标识常量，这样的常量就成为了全局的常量，且只能在定义时赋值</li>
+</ol>
+
+<hr>
+
+<h2 id="extends"> 继承相关 </h2>
+
+<ol>
+<li>只能单继承，不能多继承，但可以多层继承(<code class="prettyprint">extends、class</code>)</li>
+<li>可以实现多个接口(<code class="prettyprint">implements、interface</code>)</li>
+<li>子类继承父类所有的成员变量和成员方法，但不继承父类的构造方法。</li>
+<li>若不写构造方法，java会自动生成一个无参的构造方法，若写了任何构造方法，则不再默认生成；
+子类若不通过<code class="prettyprint">super</code>显式地调用父类构造方法，则默认调用父类无参构造方法，若父类没有无参构造方法，则会出错。</li>
+<li>子类覆盖父类的方法时，不能使用比父类中被覆盖方法更严格的访问权限。</li>
+</ol>
+
+<hr>
+
+<h2 id="public"> 访问权限 </h2>
+
+<p>访问控制修饰符共有四个: <code class="prettyprint">public、protected、(default)、private</code>, <code class="prettyprint">default</code>即为不写时的修饰。</p>
+
+<p>修饰成员:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span>    <span class="o">:</span> <span class="n">可以被所有类访问</span>
+<span class="kd">protected</span> <span class="o">:</span> <span class="n">既可以被同一包中的其他类访问</span><span class="o">,</span> <span class="n">也可以被不同包中的子类访问</span>
+<span class="k">default</span>   <span class="o">:</span> <span class="n">只能被同一包中的其他类访问</span>
+<span class="kd">private</span>   <span class="o">:</span> <span class="n">只能在这个类的内部访问</span>
+</code></pre></div>
+<p>修饰类(只有两种访问控制：<code class="prettyprint">public</code>和<code class="prettyprint">default</code>):</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span>    <span class="o">:</span> <span class="n">能被所有的类访问</span><span class="o">,</span> <span class="n">public修饰的类必须与文件名一致</span>
+<span class="k">default</span>   <span class="o">:</span> <span class="n">只能被同一包中所有的类访问</span>
+</code></pre></div>
+<hr>
+
+<h2 id="abstract"> 抽象类和接口 </h2>
+
+<h3 id="抽象类">抽象类</h3>
+
+<ol>
+<li>抽象方法的写法为<code class="prettyprint">&quot;abstract 返回值类型 抽象方法名 (参数列表);&quot;</code>，只声明不实现</li>
+<li>只要有一个抽象方法，该类就是抽象类，必须用<code class="prettyprint">abstract class</code>声明</li>
+<li>抽象类不能实例化，其子类必须覆盖所有的抽象方法后才能被实例化，否则其子类也还是抽象类</li>
+<li><code class="prettyprint">abstract</code>不能与<code class="prettyprint">private、static、final、native</code>并列修饰同一个方法</li>
+</ol>
+
+<h3 id="接口">接口</h3>
+
+<ol>
+<li>接口用<code class="prettyprint">interface</code>声明，是一种特殊的抽象类，只包含<strong>常量</strong>和方法的定义，而没方法的实现</li>
+<li>接口中定义的变量是<strong>全局静态常量</strong>，默认(不写)是用<code class="prettyprint">public static final</code>标记的</li>
+<li>一个类可以在继承一个父类的同时实现一个或多个接口，此时<code class="prettyprint">extends</code>关键字必须位于<code class="prettyprint">implements</code>关键字之前</li>
+<li>接口中的方法默认都是<code class="prettyprint">public abstract</code>类型的，即使不饰符，也是这种类型的。</li>
+</ol>
+
+<hr>
+
+<h2 id="instanceof"> instanceof操作符 </h2>
+
+<p>可以使用<code class="prettyprint">instanceof</code>操作符判断一个类是否实现了某个接口，或用来判断一个实例对象是否属于某个类。其语法格式为：对象 instanceof 类（或接口）</p>
+
+<hr>
+
+<h2 id="native"> native关键字 </h2>
+
+<p>在<code class="prettyprint">JKD</code>源码中总会看到<code class="prettyprint">native</code>的方法，如:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="c1">// Object中</span>
+    <span class="kd">public</span> <span class="kd">native</span> <span class="kt">int</span> <span class="nf">hashCode</span><span class="o">();</span>
+    <span class="kd">protected</span> <span class="kd">native</span> <span class="n">Object</span> <span class="nf">clone</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">CloneNotSupportedException</span><span class="o">;</span>
+    <span class="c1">// String中</span>
+    <span class="kd">public</span> <span class="kd">native</span> <span class="n">String</span> <span class="nf">intern</span><span class="o">();</span>
+</code></pre></div>
+<p><code class="prettyprint">native</code>关键字表明其修饰的方法是一个原生态方法，方法对应的实现不是在当前文件，而是在用其他语言（如C和C++）实现的文件中。<br>
+Java语言本身不能对操作系统底层进行访问和操作，但是可以通过JNI(Java Native Interface，本机编程接口，是SDK的一部分)调用其他语言来实现对底层的访问。<br>
+怎么写JNI这里就不说了。</p>
+
+<hr>
+
+<h2 id="transient"> transient关键字 </h2>
+
+<p><code class="prettyprint">Java</code>的序列化机制可以把实现了<code class="prettyprint">Serializable</code>接口的对象进行持久存储，而被<code class="prettyprint">transient</code>关键字修饰的字段，在序列化时就会被忽略。</p>
+
+<hr>
+
+<h2 id="volatitle"> volatitle关键字 </h2>
+
+<p><code class="prettyprint">volatitle</code>关键字用于多线程的环境中，用<code class="prettyprint">volatitle</code>修饰的变量，每次取值时都会取修改后的值，即该变量不会装入寄存器，每次改变都写入内存，每次读取都到内存中去取。<br>
+两个线程同时对<code class="prettyprint">int a = 0;</code>定义好的<code class="prettyprint">a</code>进行<code class="prettyprint">a++</code>操作时，线程1对a自增之后未写回，线程2又对a进行了自增，就会导致与预期结果不一样。</p>
+
+<hr>
+
+<h2 id="synchronilzed"> synchronilzed关键字 </h2>
+
+<p><code class="prettyprint">synchronized</code>关键字用于实现多线程的同步，在多线程访问的时候，所有加上<code class="prettyprint">synchronized</code>的方法或块语句，同一时刻只能有一个线程能够用访问。</p>
+
+<p>正好写个线程安全的单例模式(懒汉)来体现下<code class="prettyprint">volatitle</code>和<code class="prettyprint">synchronilzed</code>的作用</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">publicclass</span> <span class="n">Singleton</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">volatile</span> <span class="n">Singleton</span> <span class="n">instance</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nf">Singleton</span><span class="o">()</span> <span class="o">{</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Singleton</span> <span class="nf">getInstance</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">instance</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>  <span class="c1">// 注意这里有两次判断，里面那个判断是必须有的，外面这个判断可提高效率</span>
+            <span class="kd">synchronized</span> <span class="o">(</span><span class="n">Singleton</span><span class="o">.</span><span class="na">class</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">instance</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Singleton</span><span class="o">();</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">instance</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<hr>
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/java基础整理" data-title="Java基础整理" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-02-16-java%E5%9F%BA%E7%A1%80%E6%95%B4%E7%90%86.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- header end -->
+
+
+</body>
+
+</html>
