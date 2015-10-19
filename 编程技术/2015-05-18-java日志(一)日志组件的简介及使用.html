@@ -18,9 +18,11 @@
     <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
     <!-- jquery -->
     <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="http://loveshisong.cn/jquery.qrcode.min.js"></script>
     <!-- UK core js -->
     <script type="text/javascript" src="http://loveshisong.cn/static/js/uikit.min.js"></script>
-    <!-- sticky -->
+    <!-- UK sticky -->
     <script type="text/javascript" src="http://loveshisong.cn/static/js/components/sticky.min.js"></script>
     <!-- 本站js -->
     <script type="text/javascript" src="http://loveshisong.cn/static/js/script.js"></script>
@@ -78,13 +80,19 @@
 
 
     <div class="uk-container uk-container-center">
-        <!-- 日志默认模板 -->
+        <script>
+jQuery(function(){
+	jQuery('#qrcode').qrcode("www.baidu.com");
+})
+</script>
+<!-- 日志默认模板 -->
 <div class="uk-container content">
     <div class="page-title">
         <h1>java日志(一):日志组件简介及使用</h1>
     </div>
     <div class="uk-grid">
         <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right"></div>
             <p>java中的日志组件太多了，经常听到的有<code class="prettyprint">log4j, slf4j, logbak</code>等，不太熟悉的有<code class="prettyprint">common-logging, JUL, JCL</code>等，
 刚开始接触的时候感觉很晕，不知道这些都是干嘛的，甚至不理解为啥都是记日志的，为什么要整出这么多不同的东西来。后来从头到尾梳理了一遍，才稍微有点清晰。</p>
 

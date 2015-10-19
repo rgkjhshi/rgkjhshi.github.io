@@ -18,9 +18,11 @@
     <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
     <!-- jquery -->
     <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="http://loveshisong.cn/jquery.qrcode.min.js"></script>
     <!-- UK core js -->
     <script type="text/javascript" src="http://loveshisong.cn/static/js/uikit.min.js"></script>
-    <!-- sticky -->
+    <!-- UK sticky -->
     <script type="text/javascript" src="http://loveshisong.cn/static/js/components/sticky.min.js"></script>
     <!-- 本站js -->
     <script type="text/javascript" src="http://loveshisong.cn/static/js/script.js"></script>
@@ -78,13 +80,19 @@
 
 
     <div class="uk-container uk-container-center">
-        <!-- 日志默认模板 -->
+        <script>
+jQuery(function(){
+	jQuery('#qrcode').qrcode("www.baidu.com");
+})
+</script>
+<!-- 日志默认模板 -->
 <div class="uk-container content">
     <div class="page-title">
         <h1>java注解(Annotation)</h1>
     </div>
     <div class="uk-grid">
         <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right"></div>
             <p>刚用到Spring中的注解时，感觉真是太方便了，其实在JDK1.5就已经支持注解了，1.5以后默认内置了三个注解<br>
 @Override:只能用在方法之上的，表示重写父类的方法。<br>
 @Deprecated:可用在任何元素上，表示API已过时，编译时会产生警告。<br>

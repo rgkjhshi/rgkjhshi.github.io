@@ -18,9 +18,11 @@
     <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
     <!-- jquery -->
     <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="http://loveshisong.cn/jquery.qrcode.min.js"></script>
     <!-- UK core js -->
     <script type="text/javascript" src="http://loveshisong.cn/static/js/uikit.min.js"></script>
-    <!-- sticky -->
+    <!-- UK sticky -->
     <script type="text/javascript" src="http://loveshisong.cn/static/js/components/sticky.min.js"></script>
     <!-- 本站js -->
     <script type="text/javascript" src="http://loveshisong.cn/static/js/script.js"></script>
@@ -78,13 +80,19 @@
 
 
     <div class="uk-container uk-container-center">
-        <!-- 日志默认模板 -->
+        <script>
+jQuery(function(){
+	jQuery('#qrcode').qrcode("www.baidu.com");
+})
+</script>
+<!-- 日志默认模板 -->
 <div class="uk-container content">
     <div class="page-title">
         <h1>markdown 语法简介</h1>
     </div>
     <div class="uk-grid">
         <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right"></div>
             <p>Markdown是用于书写纯文本文件的语言，通过一些特殊标记使文本更加容易读，而且兼容HTML。<br>
 如果想看本文的例子，可以将代码块中的文字复制到<a href="http://tool.oschina.net/markdown/">在线 Markdown 编译器</a>来查看效果<br>
 本文是我在使用Markdown时所作的总结，更详细的Markdown语法请看<a href="http://wowubuntu.com/markdown/basic.html">Markdown 语法说明 (简体中文版)</a>  </p>

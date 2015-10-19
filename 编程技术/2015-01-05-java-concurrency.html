@@ -18,9 +18,11 @@
     <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
     <!-- jquery -->
     <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="http://loveshisong.cn/jquery.qrcode.min.js"></script>
     <!-- UK core js -->
     <script type="text/javascript" src="http://loveshisong.cn/static/js/uikit.min.js"></script>
-    <!-- sticky -->
+    <!-- UK sticky -->
     <script type="text/javascript" src="http://loveshisong.cn/static/js/components/sticky.min.js"></script>
     <!-- 本站js -->
     <script type="text/javascript" src="http://loveshisong.cn/static/js/script.js"></script>
@@ -78,13 +80,19 @@
 
 
     <div class="uk-container uk-container-center">
-        <!-- 日志默认模板 -->
+        <script>
+jQuery(function(){
+	jQuery('#qrcode').qrcode("www.baidu.com");
+})
+</script>
+<!-- 日志默认模板 -->
 <div class="uk-container content">
     <div class="page-title">
         <h1>Java中的并发</h1>
     </div>
     <div class="uk-grid">
         <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right"></div>
             <h2 id="如何创建一个线程">如何创建一个线程</h2>
 
 <p>按 Java 语言规范中的说法，创建线程只有一种方式，就是创建一个 Thread 对象。而从 HotSpot 虚拟机的角度看，创建一个虚拟机线程

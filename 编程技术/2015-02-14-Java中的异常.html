@@ -18,9 +18,11 @@
     <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
     <!-- jquery -->
     <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="http://loveshisong.cn/jquery.qrcode.min.js"></script>
     <!-- UK core js -->
     <script type="text/javascript" src="http://loveshisong.cn/static/js/uikit.min.js"></script>
-    <!-- sticky -->
+    <!-- UK sticky -->
     <script type="text/javascript" src="http://loveshisong.cn/static/js/components/sticky.min.js"></script>
     <!-- 本站js -->
     <script type="text/javascript" src="http://loveshisong.cn/static/js/script.js"></script>
@@ -78,13 +80,19 @@
 
 
     <div class="uk-container uk-container-center">
-        <!-- 日志默认模板 -->
+        <script>
+jQuery(function(){
+	jQuery('#qrcode').qrcode("www.baidu.com");
+})
+</script>
+<!-- 日志默认模板 -->
 <div class="uk-container content">
     <div class="page-title">
         <h1>Java中的异常</h1>
     </div>
     <div class="uk-grid">
         <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right"></div>
             <p>Java中的异常类都继承自<code class="prettyprint">Throwable</code>类，<code class="prettyprint">Throwable</code>有两个子类：<code class="prettyprint">Exception(异常)</code>和<code class="prettyprint">Error(错误)</code>，二者都各自包含大量子类。</p>
 
 <hr>
