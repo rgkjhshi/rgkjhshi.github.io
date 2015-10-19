@@ -1,6 +1,11 @@
 ---
 layout: default
 ---
+<script>
+jQuery(function(){
+	jQuery('#qrcode').qrcode("www.baidu.com");
+})
+</script>
 <!-- 日志默认模板 -->
 <div class="uk-container content">
     <div class="page-title">
@@ -8,6 +13,7 @@ layout: default
     </div>
     <div class="uk-grid">
         <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right"></div>
             {{ content }}
         </div>
     </div>
