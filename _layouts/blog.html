@@ -1,9 +1,13 @@
 ---
 layout: default
 ---
-<script>
+<script type="text/javascript">
 jQuery(function(){
-	jQuery('#qrcode').qrcode("www.baidu.com");
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "{{ page.url | prepend: site.baseurl | prepend: site.url }}"
+    });
 })
 </script>
 <!-- 日志默认模板 -->
