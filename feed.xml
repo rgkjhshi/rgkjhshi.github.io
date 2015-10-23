@@ -5,9 +5,282 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 20 Oct 2015 17:49:16 +0800</pubDate>
-    <lastBuildDate>Tue, 20 Oct 2015 17:49:16 +0800</lastBuildDate>
+    <pubDate>Fri, 23 Oct 2015 16:36:19 +0800</pubDate>
+    <lastBuildDate>Fri, 23 Oct 2015 16:36:19 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>CSS选择器</title>
+        <description>&lt;p&gt;CSS 选择器用法收集整理, 参考&lt;a href=&quot;http://www.w3.org/TR/css3-selectors/#selectors&quot;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;常见的选择器&quot;&gt;常见的选择器&lt;/h2&gt;
+
+&lt;table&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;选择器&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;*&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;用于所有元素, 少用, 很慢&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;.X&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;class选择器, &lt;code class=&quot;prettyprint&quot;&gt;class=&amp;quot;X&amp;quot;&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;#X&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;id选择器, &lt;code class=&quot;prettyprint&quot;&gt;id=&amp;quot;X&amp;quot;&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;标签选择器, 用语渲染html标签&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;xy&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;XY&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;组合选择器, 会有下面这几种:&lt;/p&gt;
+
+&lt;table&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;选择器&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;X.Y&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;class=&amp;quot;Y&amp;quot;&lt;/code&gt;的元素&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;X#Y&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;id=&amp;quot;Y&amp;quot;&lt;/code&gt;的元素&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;#X.Y&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;id=&amp;quot;X&amp;quot; class=&amp;quot;Y&amp;quot;&lt;/code&gt;的元素&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;.X#Y&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;class=&amp;quot;X&amp;quot; id=&amp;quot;Y&amp;quot;&lt;/code&gt;的元素, 跟上面一样&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;x,-y,-z&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X, Y, Z&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;批量选择器, 即多个选择器用 &lt;code class=&quot;prettyprint&quot;&gt;,&lt;/code&gt; 隔开，中间有无空格都可以，表示适用于每个被隔开的选择器&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;x-y&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X Y&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;后代选择器(中间用空格隔开), 选取 &lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt; 元素内的所有 &lt;code class=&quot;prettyprint&quot;&gt;Y&lt;/code&gt; 元素  &lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;x-&amp;gt;-y&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X &amp;gt; Y&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;子元素选择器(直接后代选择器), 选取 &lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt; 元素内的所有 &lt;strong&gt;直接出现&lt;/strong&gt; 的&lt;code class=&quot;prettyprint&quot;&gt;Y&lt;/code&gt; 元素
+相当于所有第一代子元素，而第二代子元素不会选中&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;x-+-y&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X + Y&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;临近选择器, 选取&lt;strong&gt;紧邻&lt;/strong&gt;着 &lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt; 元素后面出现的&lt;strong&gt;第一个&lt;/strong&gt; &lt;code class=&quot;prettyprint&quot;&gt;Y&lt;/code&gt; 元素&lt;br&gt;
+&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;Y&lt;/code&gt;必须是同级且中间不隔着其他元素，否则不会选中&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;x-~-y&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X ~ Y&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;也是临近选择器, 选取 &lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt; 元素后面出现的&lt;strong&gt;所有与&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;同级&lt;/strong&gt;的 &lt;code class=&quot;prettyprint&quot;&gt;Y&lt;/code&gt; 元素  &lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;属性选择器&quot;&gt;属性选择器&lt;/h2&gt;
+
+&lt;table&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&quot;text-align: left&quot;&gt;选择器&lt;/th&gt;
+&lt;th style=&quot;text-align: left&quot;&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X[foo]&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;选取具有属性&lt;code class=&quot;prettyprint&quot;&gt;foo&lt;/code&gt;的&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X[foo=&amp;quot;bar&amp;quot;]&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;选取具有属性&lt;code class=&quot;prettyprint&quot;&gt;foo&lt;/code&gt;且属性值为&lt;code class=&quot;prettyprint&quot;&gt;bar&lt;/code&gt;的&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X[foo*=&amp;quot;bar&amp;quot;]&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素的&amp;#39;foo&amp;#39;属性值中包含子串&amp;#39;bar&amp;#39;即可&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X[foo^=&amp;quot;bar&amp;quot;]&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素的&amp;#39;foo&amp;#39;属性值必须以&lt;code class=&quot;prettyprint&quot;&gt;bar&lt;/code&gt;开头&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X[foo$=&amp;quot;bar&amp;quot;]&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素的&amp;#39;foo&amp;#39;属性值必须以&lt;code class=&quot;prettyprint&quot;&gt;bar&lt;/code&gt;结尾&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X[foo~=&amp;quot;bar&amp;quot;]&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素的有个&amp;#39;foo&amp;#39;属性, 属性值是空白隔开的值列表, 值列表中有一个是&lt;code class=&quot;prettyprint&quot;&gt;bar&lt;/code&gt;即可&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;伪类选择器&quot;&gt;伪类选择器&lt;/h2&gt;
+
+&lt;table&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&quot;text-align: left&quot;&gt;选择器&lt;/th&gt;
+&lt;th style=&quot;text-align: left&quot;&gt;示例&lt;/th&gt;
+&lt;th style=&quot;text-align: left&quot;&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:link&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;a:link&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;未点击过的链接&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:visited&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;a:visited&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;已访问过的链接&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:active&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;button:active&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;获取到用户焦点时&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:hover&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;div:hover&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;鼠标移到元素上面时&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:checked&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;input[type=radio]:checked&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;被选中的元素单选框、复选框等&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:not(Y)&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;div:not(#container)&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;除 &lt;code class=&quot;prettyprint&quot;&gt;#contaienr&lt;/code&gt; 外的所有 &lt;code class=&quot;prettyprint&quot;&gt;div&lt;/code&gt; 元素&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;结构伪类选择器&quot;&gt;结构伪类选择器&lt;/h2&gt;
+
+&lt;table&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&quot;text-align: left&quot;&gt;选择器&lt;/th&gt;
+&lt;th style=&quot;text-align: left&quot;&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:nth-child(n)&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素且是父元素的第n个子元素&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:nth-last-child(n)&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素且是父元素的倒数第n个子元素&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:nth-of-type(n)&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;第n个兄弟&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:nth-last-of-type(n)&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;倒数第n个兄弟&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:first-child&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素且是父元素的第1个子元素&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:last-child&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素且是父元素的倒数第1个子元素&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:first-of-type&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;兄弟元素中的第1个&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:last-of-type&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;兄弟元素中的倒数第1个&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:only-child&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素且是父元素的唯一一个子元素&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:only-of-type&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;兄弟元素中的唯一一个(即同级别中就一个&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;伪元素选择器&quot;&gt;伪元素选择器&lt;/h2&gt;
+
+&lt;p&gt;只对块级元素生效  &lt;/p&gt;
+
+&lt;table&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&quot;text-align: left&quot;&gt;选择器&lt;/th&gt;
+&lt;th style=&quot;text-align: left&quot;&gt;示例&lt;/th&gt;
+&lt;th style=&quot;text-align: left&quot;&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X::first-line&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;p::first-line&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;第一行&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X::first-letter&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;p::first-letter&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;第一个字母&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X::before&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;在&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素之前声称某些内容&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X::after&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: left&quot;&gt;在&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素之后声称某些内容&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+
+&lt;hr&gt;
+</description>
+        <pubDate>Thu, 22 Oct 2015 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-10-22-CSS%E9%80%89%E6%8B%A9%E5%99%A8.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-10-22-CSS%E9%80%89%E6%8B%A9%E5%99%A8.html</guid>
+        
+        <category>css</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
     
       <item>
         <title>HttpServletRequest的请求路径</title>
@@ -47,36 +320,36 @@
 &lt;table&gt;&lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;变量名称&lt;/th&gt;
-&lt;th style=&quot;text-align: center&quot;&gt;变量值&lt;/th&gt;
+&lt;th&gt;变量值&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;&lt;tbody&gt;
 &lt;tr&gt;
 &lt;td&gt;ContextPath&lt;/td&gt;
-&lt;td style=&quot;text-align: center&quot;&gt;项目部署路径，没有名称(如直接部署在在ROOT里)则为空串&lt;/td&gt;
+&lt;td&gt;项目部署路径，没有名称(如直接部署在在ROOT里)则为空串&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;ServletPath&lt;/td&gt;
-&lt;td style=&quot;text-align: center&quot;&gt;请求地址(不包括项目名称)&lt;/td&gt;
+&lt;td&gt;请求地址(不包括项目名称)&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;RequestURL&lt;/td&gt;
-&lt;td style=&quot;text-align: center&quot;&gt;整个URL(不包括查询参数)&lt;/td&gt;
+&lt;td&gt;整个URL(不包括查询参数)&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;RequestURI&lt;/td&gt;
-&lt;td style=&quot;text-align: center&quot;&gt;请求地址(包括项目名称)&lt;/td&gt;
+&lt;td&gt;请求地址(包括项目名称)&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;QueryString&lt;/td&gt;
-&lt;td style=&quot;text-align: center&quot;&gt;?后面的那一堆查询串&lt;/td&gt;
+&lt;td&gt;?后面的那一堆查询串&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;&lt;/table&gt;
 
 &lt;hr&gt;
 </description>
         <pubDate>Tue, 20 Oct 2015 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-10-20-javaWeb%E9%A1%B9%E7%9B%AE%E7%9A%84%E8%AF%B7%E6%B1%82%E8%B7%AF%E5%BE%84.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-10-20-javaWeb%E9%A1%B9%E7%9B%AE%E7%9A%84%E8%AF%B7%E6%B1%82%E8%B7%AF%E5%BE%84.html</guid>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-10-20-javaWeb%E9%A1%B9%E7%9B%AE%E7%9A%84%E8%AF%B7%E6%B1%82%E8%B7%AF%E5%BE%840.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-10-20-javaWeb%E9%A1%B9%E7%9B%AE%E7%9A%84%E8%AF%B7%E6%B1%82%E8%B7%AF%E5%BE%840.html</guid>
         
         <category>java</category>
         
@@ -89,9 +362,11 @@
         <title>五险一金详解</title>
         <description>&lt;p&gt;有人说五险一金交很多钱，还不如自己拿去理财，刚开始不了解，也无从判断对错，不过现在我想说，五险一金实在是国家的大好福利。&lt;/p&gt;
 
+&lt;p&gt;{html_toc}&lt;/p&gt;
+
 &lt;hr&gt;
 
-&lt;h2 id=&quot;structure&quot;&gt; 五险一金 &lt;/h2&gt;
+&lt;h2 id=&quot;五险一金&quot;&gt;五险一金&lt;/h2&gt;
 
 &lt;p&gt;&lt;strong&gt;不同地方缴费比例不同&lt;/strong&gt;，以北京为例:  &lt;/p&gt;
 
@@ -114,9 +389,9 @@
 
 &lt;hr&gt;
 
-&lt;h2 id=&quot;structure&quot;&gt; 社保基数(社会保险缴纳基数) &lt;/h2&gt;
+&lt;h2 id=&quot;社保基数&quot;&gt;社保基数&lt;/h2&gt;
 
-&lt;p&gt;五险一金中的缴费基数是由社保基数决定的。&lt;br&gt;
+&lt;p&gt;五险一金中的缴费基数是由社保基数(社会保险缴纳基数)决定的。&lt;br&gt;
 这个社保缴费基数一般是由人力资源和社会保障局，根据上一年的平均工资计算出来的一系列的规则。&lt;br&gt;
 如&lt;a href=&quot;http://www.bjrbj.gov.cn/&quot;&gt;北京市人力资源和社会保障局&lt;/a&gt;2015年公布的&lt;a href=&quot;http://www.bjrbj.gov.cn/xxgk/gsgg/201507/t20150702_50932.html&quot;&gt;京社保发〔2015〕23号&lt;/a&gt;。
 多嘴一句，2014年北京市月平均工资为6463!&lt;/p&gt;
@@ -131,7 +406,7 @@
 
 &lt;hr&gt;
 
-&lt;h2 id=&quot;structure&quot;&gt; 养老保险 &lt;/h2&gt;
+&lt;h2 id=&quot;养老保险&quot;&gt;养老保险&lt;/h2&gt;
 
 &lt;p&gt;1998年1月1日实行统一基本养老保险制度以后参加工作且缴费年限满15年的人员，
 退休后基本养老金(退休金)由基础养老金(单位缴纳部分算出来的)和个人帐户(个人缴纳部分)养老金两部分组成。即: &lt;code class=&quot;prettyprint&quot;&gt;基本养老金&lt;/code&gt; = &lt;code class=&quot;prettyprint&quot;&gt;基础养老金&lt;/code&gt; + &lt;code class=&quot;prettyprint&quot;&gt;个人帐户养老金&lt;/code&gt;&lt;br&gt;
@@ -159,7 +434,7 @@
 
 &lt;hr&gt;
 
-&lt;h2 id=&quot;structure&quot;&gt; 医疗保险 &lt;/h2&gt;
+&lt;h2 id=&quot;医疗保险&quot;&gt;医疗保险&lt;/h2&gt;
 
 &lt;p&gt;医疗保险一般男交满25年，女交满20年退休后就可享受终生医疗保险(具体还要看地方政策)。&lt;br&gt;
 医疗保险也分两部分，一部分是统筹基金，一部分是个人帐户，个人帐户一般有个存折，可以把里面的钱取出来。&lt;br&gt;
@@ -206,7 +481,7 @@
 
 &lt;hr&gt;
 
-&lt;h2 id=&quot;structure&quot;&gt; 失业保险 &lt;/h2&gt;
+&lt;h2 id=&quot;失业保险&quot;&gt;失业保险&lt;/h2&gt;
 
 &lt;p&gt;交满一年才能享受，一般交1年拿2个月，交2年拿4个月，但一辈子最多拿24个月。&lt;br&gt;
 被公司辞退或者合同到期了不想续约的，都可以享受到。公司不给办的话，一告一个准。&lt;br&gt;
@@ -214,7 +489,7 @@
 
 &lt;hr&gt;
 
-&lt;h2 id=&quot;structure&quot;&gt; 工伤保险 &lt;/h2&gt;
+&lt;h2 id=&quot;工伤保险&quot;&gt;工伤保险&lt;/h2&gt;
 
 &lt;p&gt;个人不用缴，单位缴纳。&lt;br&gt;
 一般用的比较少，在工作时，或者上下班的路上出什么事的时候就能用上了。&lt;br&gt;
@@ -226,7 +501,7 @@
 
 &lt;hr&gt;
 
-&lt;h2 id=&quot;structure&quot;&gt; 生育保险 &lt;/h2&gt;
+&lt;h2 id=&quot;生育保险&quot;&gt;生育保险&lt;/h2&gt;
 
 &lt;p&gt;生育保险起码要交一年才能享受。&lt;br&gt;
 如果你是女性，那么生完孩子出院后要赶快把结婚证(未婚生子的报销不了)+独生子女证(一般来说生2胎的报销不了)+病历+
@@ -236,7 +511,7 @@
 
 &lt;hr&gt;
 
-&lt;h2 id=&quot;structure&quot;&gt; 住房公积金 &lt;/h2&gt;
+&lt;h2 id=&quot;住房公积金&quot;&gt;住房公积金&lt;/h2&gt;
 
 &lt;p&gt;这绝对是个好东西呀。自己交一半，公司交一半。&lt;br&gt;
 公积金可以买房子，还房贷，装修什么的也可以用。即使一辈子没用上，退休的时候也可以取出来。&lt;br&gt;
@@ -1829,95 +2104,6 @@ origin  git@github.com:rgkjhshi/blog.git (push)
         
         
         <category>点滴积累</category>
-        
-      </item>
-    
-      <item>
-        <title>Vim常用快捷键</title>
-        <description>&lt;p&gt;vim 的常用快捷键&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;本文结构&quot;&gt;本文结构&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#move&quot;&gt;光标移动&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#search&quot;&gt;查找替换&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#edit&quot;&gt;编辑操作&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#window&quot;&gt;窗口操作&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;move&quot;&gt; 光标移动 &lt;/h2&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;左&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;下&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;上&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;右&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;移动&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;nj&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nl&lt;/span&gt;            &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;上&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;下移动n行&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;ctrl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;       &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;上&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;下翻一页&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;ctrl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;u&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;       &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;上&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;下翻半页&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;$&lt;/span&gt;              &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;移动到行首&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;行尾&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;^&lt;/span&gt;                  &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;移动到行首第一个字符处&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;              &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;移动光标到上&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;下一个句子&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;              &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;移动到段首&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;段尾&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;w&lt;/span&gt;              &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;移动到上&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;下一个词&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;gg&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;G&lt;/span&gt;             &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;移动到文档开始&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;结尾&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;                  &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;移动到匹配的&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{}.().[]&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;处&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;光标必须在其上&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;ngg&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;或&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nG&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;或&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;     &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;跳到第n行&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;H&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;M&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;L&lt;/span&gt;          &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;移动光标到屏幕顶端&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;中间&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;底部&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-
-&lt;h2 id=&quot;search&quot;&gt; 查找替换 &lt;/h2&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;              &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;向前&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;后查找关键字&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;光标必须在其上&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;fx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Fx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Tx&lt;/span&gt;     &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;在当前行查找字符x&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s2&lt;/span&gt;           &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;将下一个s1替换为s2&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;:%&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s2&lt;/span&gt;          &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;全部替换&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;g&lt;/span&gt;         &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;只换当前行&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n2&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;g&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;替换&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n2&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;行&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;:/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;string&lt;/span&gt;           &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;搜索字符串string&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;搜索下一处为n&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;，&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;搜索上一处为N&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;:?&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;string&lt;/span&gt;           &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;搜索字符串string&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;搜索下一处为N&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;，&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;搜索上一处为n&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-
-&lt;h2 id=&quot;edit&quot;&gt; 编辑代码 &lt;/h2&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;              &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;光标前&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;后插入&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;I&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;              &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;行首&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;行尾插入&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;o&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;O&lt;/span&gt;              &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;后&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;前一行插入&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;S&lt;/span&gt;              &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;删除字符插入&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;删除行插入&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;                  &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;删除当前字符&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;D&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;C&lt;/span&gt;              &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;删除到行尾&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;dd&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cc&lt;/span&gt;            &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;删除行&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;删除行并进入插入模式&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;等同于S&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;dw&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cw&lt;/span&gt;            &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;删除单词&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;删除单词并进入插入模式&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;x或dl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s或cl&lt;/span&gt;       &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;删除字符&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;删除字符并进入插入模式&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;xp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ddp&lt;/span&gt;       &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;粘贴&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;交换两个字符&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;交换两行&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;yy或Y&lt;/span&gt;          &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;复制&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;复制一行&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;u&lt;/span&gt;                  &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;撤销&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;ctrl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;           &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;重做&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;J&lt;/span&gt;                  &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;合并两行&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-
-&lt;h2 id=&quot;window&quot;&gt; 窗口操作 &lt;/h2&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;vsplit&lt;/span&gt;    &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;分割一个窗口&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vnew&lt;/span&gt;       &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;创建一个窗口&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;close&lt;/span&gt;             &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;关闭当前窗口&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;only&lt;/span&gt;              &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;仅保留当前窗口&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;ctrl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;h&lt;/span&gt;         &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;到左边窗口&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;ctrl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;         &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;到右边窗口&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;ctrl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;         &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;到上边窗口&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;ctrl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;         &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;到下边窗口&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;ctrl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;         &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;到顶部窗口&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;ctrl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;         &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;     &lt;span class=&quot;n&quot;&gt;到底部窗口&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-</description>
-        <pubDate>Mon, 04 May 2015 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E5%BF%AB%E6%8D%B7%E9%80%9F%E6%9F%A5/2015-05-04-Vim%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E5%BF%AB%E6%8D%B7%E9%80%9F%E6%9F%A5/2015-05-04-Vim%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE.html</guid>
-        
-        <category>快捷键</category>
-        
-        
-        <category>快捷速查</category>
         
       </item>
     

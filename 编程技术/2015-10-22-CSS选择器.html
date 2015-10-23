@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="CSS选择器, 编程技术, css, 逆水行舟" />
+    <meta name="description" content="CSS选择器, 编程技术, css, CSS 选择器用法收集整理, 参考官方文档" />
+
+    <title>CSS选择器</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="http://loveshisong.cn/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-10-22-CSS%E9%80%89%E6%8B%A9%E5%99%A8.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/jquery.qrcode.min.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/uikit.min.js"></script>
+    <!-- UK sticky -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "shisong"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" id＝"header">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="http://loveshisong.cn/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <script type="text/javascript">
+jQuery(function(){
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-10-22-CSS%E9%80%89%E6%8B%A9%E5%99%A8.html"
+    });
+})
+</script>
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>CSS选择器</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <p>CSS 选择器用法收集整理, 参考<a href="http://www.w3.org/TR/css3-selectors/#selectors">官方文档</a></p>
+
+<hr>
+
+<h2 id="常见的选择器">常见的选择器</h2>
+
+<table><thead>
+<tr>
+<th>选择器</th>
+<th>说明</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">*</code></td>
+<td>用于所有元素, 少用, 很慢</td>
+</tr>
+<tr>
+<td><code class="prettyprint">.X</code></td>
+<td>class选择器, <code class="prettyprint">class=&quot;X&quot;</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">#X</code></td>
+<td>id选择器, <code class="prettyprint">id=&quot;X&quot;</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">X</code></td>
+<td>标签选择器, 用语渲染html标签</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+<h2 id="xy"><code class="prettyprint">XY</code></h2>
+
+<p>组合选择器, 会有下面这几种:</p>
+
+<table><thead>
+<tr>
+<th>选择器</th>
+<th>说明</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">X.Y</code></td>
+<td><code class="prettyprint">class=&quot;Y&quot;</code>的元素</td>
+</tr>
+<tr>
+<td><code class="prettyprint">X#Y</code></td>
+<td><code class="prettyprint">id=&quot;Y&quot;</code>的元素</td>
+</tr>
+<tr>
+<td><code class="prettyprint">#X.Y</code></td>
+<td><code class="prettyprint">id=&quot;X&quot; class=&quot;Y&quot;</code>的元素</td>
+</tr>
+<tr>
+<td><code class="prettyprint">.X#Y</code></td>
+<td><code class="prettyprint">class=&quot;X&quot; id=&quot;Y&quot;</code>的元素, 跟上面一样</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+<h2 id="x,-y,-z"><code class="prettyprint">X, Y, Z</code></h2>
+
+<p>批量选择器, 即多个选择器用 <code class="prettyprint">,</code> 隔开，中间有无空格都可以，表示适用于每个被隔开的选择器</p>
+
+<hr>
+
+<h2 id="x-y"><code class="prettyprint">X Y</code></h2>
+
+<p>后代选择器(中间用空格隔开), 选取 <code class="prettyprint">X</code> 元素内的所有 <code class="prettyprint">Y</code> 元素  </p>
+
+<hr>
+
+<h2 id="x-&gt;-y"><code class="prettyprint">X &gt; Y</code></h2>
+
+<p>子元素选择器(直接后代选择器), 选取 <code class="prettyprint">X</code> 元素内的所有 <strong>直接出现</strong> 的<code class="prettyprint">Y</code> 元素
+相当于所有第一代子元素，而第二代子元素不会选中</p>
+
+<hr>
+
+<h2 id="x-+-y"><code class="prettyprint">X + Y</code></h2>
+
+<p>临近选择器, 选取<strong>紧邻</strong>着 <code class="prettyprint">X</code> 元素后面出现的<strong>第一个</strong> <code class="prettyprint">Y</code> 元素<br>
+<code class="prettyprint">X</code>和<code class="prettyprint">Y</code>必须是同级且中间不隔着其他元素，否则不会选中</p>
+
+<hr>
+
+<h2 id="x-~-y"><code class="prettyprint">X ~ Y</code></h2>
+
+<p>也是临近选择器, 选取 <code class="prettyprint">X</code> 元素后面出现的<strong>所有与<code class="prettyprint">X</code>同级</strong>的 <code class="prettyprint">Y</code> 元素  </p>
+
+<hr>
+
+<h2 id="属性选择器">属性选择器</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">选择器</th>
+<th style="text-align: left">说明</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left"><code class="prettyprint">X[foo]</code></td>
+<td style="text-align: left">选取具有属性<code class="prettyprint">foo</code>的<code class="prettyprint">X</code>元素</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">X[foo=&quot;bar&quot;]</code></td>
+<td style="text-align: left">选取具有属性<code class="prettyprint">foo</code>且属性值为<code class="prettyprint">bar</code>的<code class="prettyprint">X</code>元素</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">X[foo*=&quot;bar&quot;]</code></td>
+<td style="text-align: left"><code class="prettyprint">X</code>元素的&#39;foo&#39;属性值中包含子串&#39;bar&#39;即可</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">X[foo^=&quot;bar&quot;]</code></td>
+<td style="text-align: left"><code class="prettyprint">X</code>元素的&#39;foo&#39;属性值必须以<code class="prettyprint">bar</code>开头</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">X[foo$=&quot;bar&quot;]</code></td>
+<td style="text-align: left"><code class="prettyprint">X</code>元素的&#39;foo&#39;属性值必须以<code class="prettyprint">bar</code>结尾</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">X[foo~=&quot;bar&quot;]</code></td>
+<td style="text-align: left"><code class="prettyprint">X</code>元素的有个&#39;foo&#39;属性, 属性值是空白隔开的值列表, 值列表中有一个是<code class="prettyprint">bar</code>即可</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+<h2 id="伪类选择器">伪类选择器</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">选择器</th>
+<th style="text-align: left">示例</th>
+<th style="text-align: left">说明</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left"><code class="prettyprint">X:link</code></td>
+<td style="text-align: left"><code class="prettyprint">a:link</code></td>
+<td style="text-align: left">未点击过的链接</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">X:visited</code></td>
+<td style="text-align: left"><code class="prettyprint">a:visited</code></td>
+<td style="text-align: left">已访问过的链接</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">X:active</code></td>
+<td style="text-align: left"><code class="prettyprint">button:active</code></td>
+<td style="text-align: left">获取到用户焦点时</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">X:hover</code></td>
+<td style="text-align: left"><code class="prettyprint">div:hover</code></td>
+<td style="text-align: left">鼠标移到元素上面时</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">X:checked</code></td>
+<td style="text-align: left"><code class="prettyprint">input[type=radio]:checked</code></td>
+<td style="text-align: left">被选中的元素单选框、复选框等</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">X:not(Y)</code></td>
+<td style="text-align: left"><code class="prettyprint">div:not(#container)</code></td>
+<td style="text-align: left">除 <code class="prettyprint">#contaienr</code> 外的所有 <code class="prettyprint">div</code> 元素</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+<h2 id="结构伪类选择器">结构伪类选择器</h2>
+
+<table><thead>
+<tr>
+<th style="text-align: left">选择器</th>
+<th style="text-align: left">说明</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left"><code class="prettyprint">X:nth-child(n)</code></td>
+<td style="text-align: left"><code class="prettyprint">X</code>元素且是父元素的第n个子元素</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">X:nth-last-child(n)</code></td>
+<td style="text-align: left"><code class="prettyprint">X</code>元素且是父元素的倒数第n个子元素</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">X:nth-of-type(n)</code></td>
+<td style="text-align: left">第n个兄弟<code class="prettyprint">X</code>元素</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">X:nth-last-of-type(n)</code></td>
+<td style="text-align: left">倒数第n个兄弟<code class="prettyprint">X</code>元素</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">X:first-child</code></td>
+<td style="text-align: left"><code class="prettyprint">X</code>元素且是父元素的第1个子元素</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">X:last-child</code></td>
+<td style="text-align: left"><code class="prettyprint">X</code>元素且是父元素的倒数第1个子元素</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">X:first-of-type</code></td>
+<td style="text-align: left"><code class="prettyprint">X</code>兄弟元素中的第1个</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">X:last-of-type</code></td>
+<td style="text-align: left"><code class="prettyprint">X</code>兄弟元素中的倒数第1个</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">X:only-child</code></td>
+<td style="text-align: left"><code class="prettyprint">X</code>元素且是父元素的唯一一个子元素</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">X:only-of-type</code></td>
+<td style="text-align: left"><code class="prettyprint">X</code>兄弟元素中的唯一一个(即同级别中就一个<code class="prettyprint">X</code>)</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+<h2 id="伪元素选择器">伪元素选择器</h2>
+
+<p>只对块级元素生效  </p>
+
+<table><thead>
+<tr>
+<th style="text-align: left">选择器</th>
+<th style="text-align: left">示例</th>
+<th style="text-align: left">说明</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left"><code class="prettyprint">X::first-line</code></td>
+<td style="text-align: left"><code class="prettyprint">p::first-line</code></td>
+<td style="text-align: left">第一行</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">X::first-letter</code></td>
+<td style="text-align: left"><code class="prettyprint">p::first-letter</code></td>
+<td style="text-align: left">第一个字母</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">X::before</code></td>
+<td style="text-align: left"></td>
+<td style="text-align: left">在<code class="prettyprint">X</code>元素之前声称某些内容</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">X::after</code></td>
+<td style="text-align: left"></td>
+<td style="text-align: left">在<code class="prettyprint">X</code>元素之后声称某些内容</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/CSS选择器" data-title="CSS选择器" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-10-22-CSS%E9%80%89%E6%8B%A9%E5%99%A8.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- header end -->
+
+
+</body>
+
+</html>
