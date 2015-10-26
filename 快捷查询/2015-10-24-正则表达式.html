@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="正则表达式, 快捷查询, 正则表达式, 逆水行舟" />
+    <meta name="description" content="正则表达式, 快捷查询, 正则表达式, 正则表达式收集整理" />
+
+    <title>正则表达式</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="http://loveshisong.cn/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://loveshisong.cn/%E5%BF%AB%E6%8D%B7%E6%9F%A5%E8%AF%A2/2015-10-24-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/jquery.qrcode.min.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/uikit.min.js"></script>
+    <!-- UK sticky -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "shisong"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" id＝"header">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="http://loveshisong.cn/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <script type="text/javascript">
+jQuery(function(){
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "http://loveshisong.cn/%E5%BF%AB%E6%8D%B7%E6%9F%A5%E8%AF%A2/2015-10-24-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F.html"
+    });
+})
+</script>
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>正则表达式</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <p>正则表达式收集整理</p>
+
+<hr>
+
+<table><thead>
+<tr>
+<th style="text-align: left">字符</th>
+<th style="text-align: left">说明</th>
+<th style="text-align: left">示例</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: left"><code class="prettyprint">\</code></td>
+<td style="text-align: left">转义符</td>
+<td style="text-align: left"><code class="prettyprint">\n</code>匹配换行符。<code class="prettyprint">\\</code>匹配<code class="prettyprint">\</code>，<code class="prettyprint">\(</code>匹配<code class="prettyprint">(</code></td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">^</code></td>
+<td style="text-align: left">匹配输入字符串开始的位置</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">$</code></td>
+<td style="text-align: left">匹配输入字符串结尾的位置</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">*</code></td>
+<td style="text-align: left">零次或多次匹配前面的字符或子表达式</td>
+<td style="text-align: left"><code class="prettyprint">zo*</code> 匹配<code class="prettyprint">z</code>和<code class="prettyprint">zoo</code>; <br><code class="prettyprint">*</code> 等效于 <code class="prettyprint">{0,}</code></td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">+</code></td>
+<td style="text-align: left">一次或多次匹配前面的字符或子表达式</td>
+<td style="text-align: left"><code class="prettyprint">zo+</code> 匹配<code class="prettyprint">zo</code>和<code class="prettyprint">zoo</code>,但与<code class="prettyprint">z</code>不匹配; <br><code class="prettyprint">+</code> 等效于 <code class="prettyprint">{1,}</code></td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">?</code></td>
+<td style="text-align: left">零次或一次匹配前面的字符或子表达式</td>
+<td style="text-align: left"><code class="prettyprint">do(es)?</code>匹配<code class="prettyprint">do</code>或<code class="prettyprint">does</code>; <br><code class="prettyprint">?</code> 等效于 <code class="prettyprint">{0,1}</code></td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">{n}</code></td>
+<td style="text-align: left">n 是非负整数, 正好匹配 n 次</td>
+<td style="text-align: left"><code class="prettyprint">o{2}</code>与<code class="prettyprint">Bob</code>中的<code class="prettyprint">o</code>不匹配，但与<code class="prettyprint">food</code>中的两个<code class="prettyprint">o</code>匹配</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">{n,}</code></td>
+<td style="text-align: left">至少匹配 n 次</td>
+<td style="text-align: left"><code class="prettyprint">o{2,}</code>不匹配<code class="prettyprint">Bob</code>中的<code class="prettyprint">o</code>, 但匹配<code class="prettyprint">foooood</code>中的所有<code class="prettyprint">o</code>; <br><code class="prettyprint">o{1,}</code>等效于<code class="prettyprint">o+</code>; <code class="prettyprint">o{0,}</code>等效于<code class="prettyprint">o*</code></td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">{n,m}</code></td>
+<td style="text-align: left">n &lt;= m, 匹配至少 n 次，至多 m 次</td>
+<td style="text-align: left"><code class="prettyprint">o{1,3}</code>匹配<code class="prettyprint">fooooood</code>中的头三个 <code class="prettyprint">o</code>; <br><code class="prettyprint">o{0,1}</code> 等效于 <code class="prettyprint">o?</code>; <br>注意:不能将空格插入逗号和数字之间</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">?</code></td>
+<td style="text-align: left">非贪心匹配, 匹配尽可能短的字符串;<br>常跟在<code class="prettyprint">*、+、?、{n}、{n,}、{n,m}</code>等之后<br>默认是“贪心的”, 匹配可能长的字符串</td>
+<td style="text-align: left">在字符串<code class="prettyprint">oooo</code>中，<code class="prettyprint">o+?</code>只匹配单个<code class="prettyprint">o</code>,而<code class="prettyprint">o+</code>匹配所有<code class="prettyprint">o</code></td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">.</code></td>
+<td style="text-align: left">匹配除<q>\n</q>之外的任何单个字符</td>
+<td style="text-align: left">若要匹配包括<q>\n</q>在内的任意字符，请使用<code class="prettyprint">[\s\S]</code>之类的模式</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">(pattern)</code></td>
+<td style="text-align: left">匹配<code class="prettyprint">pattern</code>并捕获该匹配的子表达式 <br>可以使用 <code class="prettyprint">$0</code>…<code class="prettyprint">$9</code> 获取匹配结果</td>
+<td style="text-align: left">若要匹配括号字符 <code class="prettyprint">(</code><code class="prettyprint">)</code>, 请使用<code class="prettyprint">\(</code><code class="prettyprint">\)</code></td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">x｜y</code></td>
+<td style="text-align: left">匹配 <code class="prettyprint">x</code> 或 <code class="prettyprint">y</code></td>
+<td style="text-align: left"><code class="prettyprint">z｜food</code> 匹配<code class="prettyprint">z</code>或<code class="prettyprint">food</code>。<code class="prettyprint">(z｜f)ood</code> 匹配<code class="prettyprint">zood</code>或<code class="prettyprint">food</code></td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">[xyz]</code></td>
+<td style="text-align: left">字符集. 匹配包含的任一字符</td>
+<td style="text-align: left"><code class="prettyprint">[abc]</code>匹配<code class="prettyprint">plain</code>中的<code class="prettyprint">a</code></td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">[^xyz]</code></td>
+<td style="text-align: left">反向字符集. 匹配未包含的任何单个字符</td>
+<td style="text-align: left"><code class="prettyprint">[^abc]</code>匹配<code class="prettyprint">plain</code>中的<code class="prettyprint">p</code></td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">[a-z]</code></td>
+<td style="text-align: left">字符范围. 匹配指定范围内的任何字符</td>
+<td style="text-align: left"><code class="prettyprint">[a-z]</code>匹配<code class="prettyprint">a</code>到<code class="prettyprint">z</code>范围内的任何小写字母</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">[^a-z]</code></td>
+<td style="text-align: left">反向字符范围. 匹配不在指定范围内的任何字符</td>
+<td style="text-align: left"><code class="prettyprint">[^a-z]</code>匹配不在<code class="prettyprint">a</code>到<code class="prettyprint">z</code>范围内的任何字符</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">[\b]</code></td>
+<td style="text-align: left">匹配一个字边界, 即字与空格间的位置</td>
+<td style="text-align: left"><code class="prettyprint">er\b</code>匹配<code class="prettyprint">never</code>中的<code class="prettyprint">er</code>, 但不匹配<code class="prettyprint">verb</code>中的<code class="prettyprint">er</code></td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">[\B]</code></td>
+<td style="text-align: left">匹配非字边界</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">[\d]</code></td>
+<td style="text-align: left">数字字符</td>
+<td style="text-align: left">等效于 <code class="prettyprint">[0-9]</code></td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">[\D]</code></td>
+<td style="text-align: left">非数字字符</td>
+<td style="text-align: left">等效于 <code class="prettyprint">[^0-9]</code></td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">[\f]</code></td>
+<td style="text-align: left">换页符</td>
+<td style="text-align: left">等效于 <code class="prettyprint">\x0c</code> 和 <code class="prettyprint">\cL</code></td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">[\n]</code></td>
+<td style="text-align: left">换行符</td>
+<td style="text-align: left">等效于 <code class="prettyprint">\x0a</code> 和 <code class="prettyprint">\cJ</code></td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">[\r]</code></td>
+<td style="text-align: left">回车符</td>
+<td style="text-align: left">等效于 <code class="prettyprint">\x0d</code> 和 <code class="prettyprint">\cM</code></td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">[\s]</code></td>
+<td style="text-align: left">匹配任何空白字符,包括空格、制表符、换页符等</td>
+<td style="text-align: left">等效于 <code class="prettyprint">[ \f\n\r\t\v]</code></td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">[\S]</code></td>
+<td style="text-align: left">非空白字符</td>
+<td style="text-align: left">等效于 <code class="prettyprint">[^ \f\n\r\t\v]</code></td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">[\t]</code></td>
+<td style="text-align: left">制表符(TAB)</td>
+<td style="text-align: left">等效于 <code class="prettyprint">\x09</code> 和 <code class="prettyprint">\cI</code></td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">[\v]</code></td>
+<td style="text-align: left">垂直制表符</td>
+<td style="text-align: left">等效于 <code class="prettyprint">\x09</code> 和 <code class="prettyprint">\cI</code></td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">[\w]</code></td>
+<td style="text-align: left">普通字符</td>
+<td style="text-align: left">等效于 <code class="prettyprint">[A-Za-z0-9_]</code>(注意有个<code class="prettyprint">_</code>)</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">[\W]</code></td>
+<td style="text-align: left">非普通字符</td>
+<td style="text-align: left">等效于 <code class="prettyprint">[^A-Za-z0-9_]</code></td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">[\cx]</code></td>
+<td style="text-align: left">匹配 <code class="prettyprint">x</code> 表示的控制字符</td>
+<td style="text-align: left"><code class="prettyprint">\cM</code> 匹配 <code class="prettyprint">Control-M</code> 或<code class="prettyprint">回车符</code><br><code class="prettyprint">x</code> 的值必须在 <code class="prettyprint">A-Z</code> 或 <code class="prettyprint">a-z</code> 之间, 否则认为 <code class="prettyprint">c</code> 就是<code class="prettyprint">c</code>字符本身</td>
+</tr>
+<tr>
+<td style="text-align: left"><code class="prettyprint">[\xn]</code></td>
+<td style="text-align: left">匹配 <code class="prettyprint">n</code>,此处的 n 是一个十六进制转义码 <br>十六进制转义码必须正好是两位数长</td>
+<td style="text-align: left"><code class="prettyprint">\x41</code>匹配字母<code class="prettyprint">A</code>, <code class="prettyprint">\x041</code>与<code class="prettyprint">\x04</code>&amp;<code class="prettyprint">1</code>等效</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E5%BF%AB%E6%8D%B7%E6%9F%A5%E8%AF%A2/正则表达式" data-title="正则表达式" data-url="/%E5%BF%AB%E6%8D%B7%E6%9F%A5%E8%AF%A2/2015-10-24-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- header end -->
+
+
+</body>
+
+</html>
