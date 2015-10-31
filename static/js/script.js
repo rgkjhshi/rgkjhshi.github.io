@@ -5,7 +5,10 @@ $(document).ready(function() {
     backToTop();
 
     $("body").quietflow({
-        theme : "starfield"
+        theme : "starfield",
+        starColor: #FFFFFF,
+        starSize: 3,
+        speed: 100
     });
 });
 
