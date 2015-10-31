@@ -8,35 +8,37 @@
     <meta name="keywords" content="java日志(一):日志组件简介及使用, 编程技术, Java日志, 逆水行舟" />
     <meta name="description" content="java日志(一):日志组件简介及使用, 编程技术, Java日志, java中的日志组件太多了，经常听到的有log4j, slf4j, logbak等，不太熟悉的有common-logging, JUL, JCL等，刚开始接触的时候感觉很晕，不知道这些都是干嘛的，甚至不理解为啥都是记日志的，为什么要整出这么多不同的东西来。后来从头到尾梳理了一遍，才稍微有点清晰。" />
 
-    <title>java日志(一):日志组件简介及使用</title>
+    <title>逆水行舟</title>
 
     <!-- ico图标 -->
-    <link rel="shortcut icon" type="image/x-icon" media="screen" href="http://loveshisong.cn/static/favicon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="http://127.0.0.1:4000/static/favicon.ico" />
     <!-- 搜索引擎收入相关 -->
-    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-05-18-java%E6%97%A5%E5%BF%97(%E4%B8%80)%E6%97%A5%E5%BF%97%E7%BB%84%E4%BB%B6%E7%9A%84%E7%AE%80%E4%BB%8B%E5%8F%8A%E4%BD%BF%E7%94%A8.html" />
+    <link rel="canonical" href="http://127.0.0.1:4000/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-05-18-java%E6%97%A5%E5%BF%97(%E4%B8%80)%E6%97%A5%E5%BF%97%E7%BB%84%E4%BB%B6%E7%9A%84%E7%AE%80%E4%BB%8B%E5%8F%8A%E4%BD%BF%E7%94%A8.html" />
     <!-- rss输出源 -->
-    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://127.0.0.1:4000/feed.xml"  />
     <!-- jquery -->
     <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
     <!-- qrcode -->
-    <script type="text/javascript" src="http://loveshisong.cn/static/js/jquery.qrcode.min.js"></script>
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/jquery.qrcode.min.js"></script>
     <!-- UK core js -->
-    <script type="text/javascript" src="http://loveshisong.cn/static/js/uikit.min.js"></script>
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/uikit.min.js"></script>
+    <!-- quietflow -->
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/quietflow.min.js"></script>
     <!-- UK sticky -->
-    <script type="text/javascript" src="http://loveshisong.cn/static/js/components/sticky.min.js"></script>
+    <!-- <script type="text/javascript" src="http://127.0.0.1:4000/static/js/components/sticky.min.js"></script> -->
     <!-- 本站js -->
-    <script type="text/javascript" src="http://loveshisong.cn/static/js/script.js"></script>
+    <script type="text/javascript" src="http://127.0.0.1:4000/static/js/script.js"></script>
     <!-- uk css-->
-    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/uikit.min.css" />
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/uikit.min.css" />
     <!-- 基本样式 -->
-    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/base.css" />
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/base.css" />
     <!-- 本站样式 -->
-    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/main.css" />
     <!-- 代码高亮 -->
-    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/highlight.css" />
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:4000/static/css/highlight.css" />
 
     <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
         var duoshuoQuery = {
             short_name: "shisong"
         };
@@ -48,29 +50,29 @@
             ds.charset = 'UTF-8';
             (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
         })();
-    </script>
+    </script> -->
     <!-- 多说公共JS代码 end -->
 </head>
 
 
 <body>
 
-    <header class="header" id＝"header">
+    <header class="header">
     <!-- 导航栏 -->
     <div class="uk-container uk-container-center">
         <div class="headwapper">
             <div class="navbar uk-float-left">
-                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
-                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+                <a class="uk-navbar-brand uk-hidden-small" href="http://127.0.0.1:4000"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://127.0.0.1:4000"></a>
             </div>
             <div class="navbar uk-float-right">
                 <ul class="navbar-nav">
-                    <li><a href="http://loveshisong.cn/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
-                    <li><a href="http://loveshisong.cn/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
-                    <li><a href="http://loveshisong.cn/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
-                    <li><a href="http://loveshisong.cn/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
                     <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
-                    <li><a href="http://loveshisong.cn/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                    <li><a href="http://127.0.0.1:4000/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
                 </ul>
             </div>
         <div>
@@ -85,7 +87,7 @@ jQuery(function(){
 	jQuery('#qrcode').qrcode({
         width: 150,
         height: 150,
-        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-05-18-java%E6%97%A5%E5%BF%97(%E4%B8%80)%E6%97%A5%E5%BF%97%E7%BB%84%E4%BB%B6%E7%9A%84%E7%AE%80%E4%BB%8B%E5%8F%8A%E4%BD%BF%E7%94%A8.html"
+        text: "http://127.0.0.1:4000/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-05-18-java%E6%97%A5%E5%BF%97(%E4%B8%80)%E6%97%A5%E5%BF%97%E7%BB%84%E4%BB%B6%E7%9A%84%E7%AE%80%E4%BB%8B%E5%8F%8A%E4%BD%BF%E7%94%A8.html"
     });
 })
 </script>
@@ -368,7 +370,7 @@ jar包的maven依赖:</p>
     </div>
 
     <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/java日志(一)日志组件的简介及使用" data-title="java日志(一):日志组件简介及使用" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-05-18-java%E6%97%A5%E5%BF%97(%E4%B8%80)%E6%97%A5%E5%BF%97%E7%BB%84%E4%BB%B6%E7%9A%84%E7%AE%80%E4%BB%8B%E5%8F%8A%E4%BD%BF%E7%94%A8.html"></div>
+    <!-- <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/java日志(一)日志组件的简介及使用" data-title="java日志(一):日志组件简介及使用" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-05-18-java%E6%97%A5%E5%BF%97(%E4%B8%80)%E6%97%A5%E5%BF%97%E7%BB%84%E4%BB%B6%E7%9A%84%E7%AE%80%E4%BB%8B%E5%8F%8A%E4%BD%BF%E7%94%A8.html"></div> -->
     <!-- 多说评论框 end -->
 </div>
 
@@ -408,7 +410,7 @@ jar包的maven依赖:</p>
         </div>
     </div>
 </footer>
-<!-- header end -->
+<!-- footer end -->
 
 
 </body>

@@ -3,6 +3,10 @@
  */
 $(document).ready(function() {
     backToTop();
+
+    $("body").quietflow({
+        theme : "starfield"
+    });
 });
 
  // 回到顶部
