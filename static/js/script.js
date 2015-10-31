@@ -3,7 +3,7 @@
  */
 $(document).ready(function() {
     backToTop();
-
+    // 动态背景
     $("body").quietflow({
         theme : "starfield",
         starColor: #FFFFFF,
