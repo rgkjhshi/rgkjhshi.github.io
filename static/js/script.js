@@ -2,7 +2,6 @@
  * 页面ready方法
  */
 $(document).ready(function() {
-    // 返回顶部
     backToTop();
     // 动态背景
     $("body").quietflow({
