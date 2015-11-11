@@ -5,13 +5,13 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 11 Nov 2015 15:12:04 +0800</pubDate>
-    <lastBuildDate>Wed, 11 Nov 2015 15:12:04 +0800</lastBuildDate>
+    <pubDate>Wed, 11 Nov 2015 18:13:28 +0800</pubDate>
+    <lastBuildDate>Wed, 11 Nov 2015 18:13:28 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
         <title>Guava之Preconditions</title>
-        <description>&lt;p&gt;Guava在com.google.common.base包中提供了个检查各种条件的类:&lt;code class=&quot;prettyprint&quot;&gt;Preconditions&lt;/code&gt;&lt;br&gt;
+        <description>&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;Preconditions&lt;/code&gt;用于各种条件检查, 在Guava的&lt;code class=&quot;prettyprint&quot;&gt;com.google.common.base&lt;/code&gt;包中&lt;br&gt;
 它提供了几个静态方法, 不满足条件时会抛出异常&lt;/p&gt;
 
 &lt;hr&gt;
@@ -96,9 +96,51 @@
       </item>
     
       <item>
+        <title>Guava之Optional</title>
+        <description>&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;Optional&lt;/code&gt;用于处理有可能为&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;的情况,在Guava的&lt;code class=&quot;prettyprint&quot;&gt;com.google.common.base&lt;/code&gt;包中&lt;br&gt;
+&lt;code class=&quot;prettyprint&quot;&gt;Optional&lt;/code&gt;是一个抽象类，有两个&lt;code class=&quot;prettyprint&quot;&gt;final&lt;/code&gt;的子类:&lt;code class=&quot;prettyprint&quot;&gt;Present&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;Absent&lt;/code&gt;&lt;br&gt;
+使用的时候直接用&lt;code class=&quot;prettyprint&quot;&gt;Optional&lt;/code&gt;即可, 不用关心&lt;code class=&quot;prettyprint&quot;&gt;Present&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;Absent&lt;/code&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;静态方法&quot;&gt;静态方法&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;Optional&lt;/code&gt;有三个常用的静态方法:  &lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Optional.of(T reference): 返回的是一个&lt;code class=&quot;prettyprint&quot;&gt;Present&lt;/code&gt;对象, 表示不能为&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;, 当&lt;code class=&quot;prettyprint&quot;&gt;reference&lt;/code&gt;为&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;时直接抛&lt;code class=&quot;prettyprint&quot;&gt;NullPointerException&lt;/code&gt;&lt;br&gt;&lt;/li&gt;
+&lt;li&gt;Optional.absent(): 返回的是一个&lt;code class=&quot;prettyprint&quot;&gt;final&lt;/code&gt;的&lt;code class=&quot;prettyprint&quot;&gt;Absent&lt;/code&gt;对象, 表示&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Optional.fromNullable(T nullableReference): 返回的可能是&lt;code class=&quot;prettyprint&quot;&gt;Present&lt;/code&gt;或者&lt;code class=&quot;prettyprint&quot;&gt;Absent&lt;/code&gt;, 表示对象肯能为&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;, 即参数为&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;时等同于&lt;code class=&quot;prettyprint&quot;&gt;absent()&lt;/code&gt;&lt;br&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;实例方法&quot;&gt;实例方法&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;boolean isPresent( ): Optional包含的T实例不为&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;，则返回true&lt;/li&gt;
+&lt;li&gt;T get( ): 返回包含实例, 若包含的实例为&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;则抛出&lt;code class=&quot;prettyprint&quot;&gt;IllegalStateException&lt;/code&gt;异常&lt;/li&gt;
+&lt;li&gt;T or(T defaultValue): &lt;code class=&quot;prettyprint&quot;&gt;a.or(b)&lt;/code&gt;a不为null返回a, 否则返回b, b为&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;时抛出&lt;code class=&quot;prettyprint&quot;&gt;NullPointerException&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;T orNull( ): &lt;code class=&quot;prettyprint&quot;&gt;a.orNull()&lt;/code&gt;a不为null返回a, 否则返回null, 逆操作是&lt;code class=&quot;prettyprint&quot;&gt;fromNullable()&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;hr&gt;
+</description>
+        <pubDate>Wed, 11 Nov 2015 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-11-Guava%E4%B9%8BOptional.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-11-Guava%E4%B9%8BOptional.html</guid>
+        
+        <category>Guava</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
+    
+      <item>
         <title>Guava之Objects</title>
-        <description>&lt;p&gt;Guava在com.google.common.base包中提供了一个好用的工具类:Objects, 里面有一些好用的静态方法&lt;br&gt;
-JDK7已经把Objects收录在了&lt;code class=&quot;prettyprint&quot;&gt;java.util.Objects&lt;/code&gt;里&lt;/p&gt;
+        <description>&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;Objects&lt;/code&gt;在Guava的&lt;code class=&quot;prettyprint&quot;&gt;com.google.common.base&lt;/code&gt;包中&lt;br&gt;
+JDK7已经把Objects收录在了&lt;code class=&quot;prettyprint&quot;&gt;java.util.Objects&lt;/code&gt;里, 现在可以直接用啦&lt;/p&gt;
 
 &lt;hr&gt;
 
@@ -632,7 +674,7 @@ JDK7已经把Objects收录在了&lt;code class=&quot;prettyprint&quot;&gt;java.u
         <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-10-22-CSS%E9%80%89%E6%8B%A9%E5%99%A8.html</link>
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-10-22-CSS%E9%80%89%E6%8B%A9%E5%99%A8.html</guid>
         
-        <category>css</category>
+        <category>CSS</category>
         
         
         <category>编程技术</category>
@@ -1466,360 +1508,6 @@ www.A.com站在用户登录后，会将登陆凭证保存在本地cookie中，A�
         
         
         <category>点滴积累</category>
-        
-      </item>
-    
-      <item>
-        <title>java对象的内存大小</title>
-        <description>&lt;p&gt;C语言需要开发者进行内存管理，所以开发者对内存的分配比较清楚，可以通过&lt;code class=&quot;prettyprint&quot;&gt;sizeof()&lt;/code&gt;函数获取一个变量的大小；&lt;br&gt;
-java通过JVM进行内存管理，它的内存占用情况是怎样的？&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;目录&quot;&gt;目录&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#primitive&quot;&gt;原始类型的大小&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#reference&quot;&gt;引用的大小&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#padding&quot;&gt;关于对齐&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#header&quot;&gt;对象头部的大小&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#alloc&quot;&gt;java对象的内存分配&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#calculate&quot;&gt;对象大小的计算&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#program&quot;&gt;编程计算对象的大小&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#use&quot;&gt;在程序中使用例子中的jar包&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;primitive&quot;&gt; 原始类型的大小 &lt;/h2&gt;
-
-&lt;p&gt;在java中，不管32位还是64位，原始类型的内存占用大小是确定的，如下:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;原始类型&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;大小&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  &lt;span class=&quot;kt&quot;&gt;byte&lt;/span&gt;    &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  &lt;span class=&quot;kt&quot;&gt;short&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  &lt;span class=&quot;kt&quot;&gt;char&lt;/span&gt;    &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;     &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  &lt;span class=&quot;kt&quot;&gt;float&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt;    &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;  &lt;span class=&quot;kt&quot;&gt;double&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;   &lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-
-&lt;h2 id=&quot;reference&quot;&gt; 引用的大小 &lt;/h2&gt;
-
-&lt;p&gt;java中没有指针，只有引用，引用是安全的，这个说法不错，但实际上引用也就是指针,&lt;br&gt;
-所以32位的地址对应的指针大小为4B(4&lt;code class=&quot;prettyprint&quot;&gt;*&lt;/code&gt;8bits)，64位的地址对应的指针大小为8B(8&lt;code class=&quot;prettyprint&quot;&gt;*&lt;/code&gt;8bits)。&lt;br&gt;
-但是，从JDK6以后JVM都默认开启了&lt;strong&gt;指针压缩&lt;/strong&gt;(JVM运行参数为&lt;code class=&quot;prettyprint&quot;&gt;-XX:+UseCompressedOops&lt;/code&gt;)。&lt;br&gt;
-开启指针压缩后引用就成了4字节，所以:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;32位JVM，引用为4B&lt;/li&gt;
-&lt;li&gt;64位JVM开启&lt;code class=&quot;prettyprint&quot;&gt;UseCompressedOops&lt;/code&gt;，引用为4B&lt;/li&gt;
-&lt;li&gt;64位JVM未开启&lt;code class=&quot;prettyprint&quot;&gt;UseCompressedOops&lt;/code&gt;，引用为8B&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;可通过&lt;code class=&quot;prettyprint&quot;&gt;jinfo -flag UseCompressedOops &amp;lt;pid&amp;gt;&lt;/code&gt;查看是否开启了指针压缩&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;padding&quot;&gt; 关于对齐 &lt;/h2&gt;
-
-&lt;p&gt;CPU从内存中读取数据是以word为基本单位, 32位的系统中word宽度为32bits, 64位的系统中word宽度为64bits,
-将整个Java对象占用内存补长为word的整倍数大大提高了CPU存取数据的性能。&lt;br&gt;
-但是在Hotspot虚拟机中，不管是32位系统还是64位系统，都是8字节对齐。&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;header&quot;&gt; 对象头部的大小 &lt;/h2&gt;
-
-&lt;p&gt;对象头的结构如下(&lt;a href=&quot;http://mail.openjdk.java.net/pipermail/hotspot-runtime-dev/2008-May/000147.html&quot;&gt;来源&lt;/a&gt;):&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;+------------------+------------------+------------------ +---------------+
-|    mark word     |   klass pointer  |  array size (opt) |    padding    |
-+------------------+------------------+-------------------+---------------+
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id=&quot;mark-word&quot;&gt;mark word&lt;/h3&gt;
-
-&lt;p&gt;用于存储对象自身的运行时数据，如哈希码(HashCode)、GC分代年龄(Generational GCAge)等。&lt;br&gt;
-在32位机中占4B，在64位机中占8B。&lt;br&gt;
-它是非固定的数据结构以便在极小的空间内存储尽量多的信息，它会根据对象的状态复用自己的存储空间。&lt;/p&gt;
-
-&lt;h3 id=&quot;klass-pointer&quot;&gt;klass pointer&lt;/h3&gt;
-
-&lt;p&gt;用于存储指向方法区对象类型数据的指针。&lt;br&gt;
-在32位JVM上为4B，在未开启&lt;code class=&quot;prettyprint&quot;&gt;UseCompressedOops&lt;/code&gt;的64位JVM上为8B，在开启&lt;code class=&quot;prettyprint&quot;&gt;UseCompressedOops&lt;/code&gt;的64位机上为4B。&lt;/p&gt;
-
-&lt;h3 id=&quot;array-size&quot;&gt;array size&lt;/h3&gt;
-
-&lt;p&gt;如果该对象是数组对象的话，还会有一个额外的部分用于存储数组长度&lt;/p&gt;
-
-&lt;h3 id=&quot;padding&quot;&gt;padding&lt;/h3&gt;
-
-&lt;p&gt;8字节对齐的填充(这个部分可被称为gap，开启压缩的时候，这个gap会尽量用一个int或者float填充)&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;alloc&quot;&gt; java对象的内存分配 &lt;/h2&gt;
-
-&lt;p&gt;一个对象在内存中存储的布局可以分为三块区域：对象头(Header)、实例数据(Instance Data)、对齐填充(Padding)。&lt;br&gt;
-按照64位JVM默认的开启&lt;code class=&quot;prettyprint&quot;&gt;UseCompressedOops&lt;/code&gt;的情况说明普通对象、数组对象、字符串对象的内存分配&lt;/p&gt;
-
-&lt;h3 id=&quot;普通对象&quot;&gt;普通对象&lt;/h3&gt;
-
-&lt;p&gt;普通对象的对象头中，无array size，有或者无padding，紧跟着就是对象的成员变量&lt;br&gt;
-网上找了个例子来说明:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Demo&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;L&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mh&quot;&gt;0x7EFFFFFFFF&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;L&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;I&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mh&quot;&gt;0x7FFFFF&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;J&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mh&quot;&gt;0x7EFFFF&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// Demo的地址分配&lt;/span&gt;
-&lt;span class=&quot;mh&quot;&gt;0x00000007d569f1c8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mh&quot;&gt;0x0000000000000001&lt;/span&gt;
-&lt;span class=&quot;mh&quot;&gt;0x00000007d569f1d0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mh&quot;&gt;0x007fffffef650cc4&lt;/span&gt;
-&lt;span class=&quot;mh&quot;&gt;0x00000007d569f1d8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mh&quot;&gt;0x0000007effffffff&lt;/span&gt;
-&lt;span class=&quot;mh&quot;&gt;0x00000007d569f1e0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mh&quot;&gt;0x00000000007effff&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// 对于Demo地址分配的解释(x86是小端模式)&lt;/span&gt;
-&lt;span class=&quot;nl&quot;&gt;_mark:&lt;/span&gt;             &lt;span class=&quot;mh&quot;&gt;0x00000007d569f1c8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mh&quot;&gt;0x0000000000000001&lt;/span&gt;
-&lt;span class=&quot;nl&quot;&gt;I:&lt;/span&gt;                 &lt;span class=&quot;mh&quot;&gt;0x00000007d569f1d4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mh&quot;&gt;0x007fffff&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;// gap填充&lt;/span&gt;
-&lt;span class=&quot;nl&quot;&gt;_compressed_klass:&lt;/span&gt; &lt;span class=&quot;mh&quot;&gt;0x00000007d569f1d0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mh&quot;&gt;0xef650cc4&lt;/span&gt;
-&lt;span class=&quot;nl&quot;&gt;L:&lt;/span&gt;                 &lt;span class=&quot;mh&quot;&gt;0x00000007d569f1d8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mh&quot;&gt;0x0000007effffffff&lt;/span&gt;
-&lt;span class=&quot;nl&quot;&gt;J:&lt;/span&gt;                 &lt;span class=&quot;mh&quot;&gt;0x00000007d569f1e0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mh&quot;&gt;0x007effff&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;padding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;):&lt;/span&gt;         &lt;span class=&quot;mh&quot;&gt;0x00000007d569f1e4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mh&quot;&gt;0x00000000&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h4 id=&quot;说明&quot;&gt;说明&lt;/h4&gt;
-
-&lt;ol&gt;
-&lt;li&gt;JDK7默认开了&lt;a href=&quot;http://rednaxelafx.iteye.com/blog/1010079&quot;&gt;压缩指针&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;无论开不开&lt;code class=&quot;prettyprint&quot;&gt;UseCompressedOops&lt;/code&gt;， 64位&lt;code class=&quot;prettyprint&quot;&gt;HotSpot VM&lt;/code&gt;的&lt;code class=&quot;prettyprint&quot;&gt;mark word&lt;/code&gt;都是8字节。&lt;/li&gt;
-&lt;li&gt;如果开启&lt;code class=&quot;prettyprint&quot;&gt;UseCompressedOops&lt;/code&gt;的话，&lt;code class=&quot;prettyprint&quot;&gt;_compressed_klass&lt;/code&gt;占4字节；反之则&lt;code class=&quot;prettyprint&quot;&gt;_klass&lt;/code&gt;占8字节。&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;_compressed_klass&lt;/code&gt;要转换回到正常oop需要做一定运算，具体是什么运算取决于当前的压缩模式&lt;/li&gt;
-&lt;li&gt;这个对象头只需要8+4=12B，而long/double必须在8B对齐的地址上分配，所以中间有4字节的空隙(gap)。&lt;/li&gt;
-&lt;li&gt;这个gap可以尽可能的填充1个int/float，或者2个short/char，或者4个byte/boolean。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&quot;数组对象&quot;&gt;数组对象&lt;/h3&gt;
-
-&lt;p&gt;数组对象的对象头中，array size将占用4B，紧跟着就是数组对象的数组元素&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 16(header) = 8(_mark) + 4(_compressed_klass) + 4(size)&lt;/span&gt;
-&lt;span class=&quot;kt&quot;&gt;byte&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;};&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;// 24 = 16 + 1*5 + 3(padding)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()};&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;// 24 = 16 + 4*1 + 4(padding)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id=&quot;字符串对象&quot;&gt;字符串对象&lt;/h3&gt;
-
-&lt;p&gt;把字符串对象当成一个普通的对象来看，它有3个实例成员(可能不同版本jdk，String的成员不太一样，但是算法是一样的):&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;char&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[];&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;// 一个数组的引用，4B&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;                  &lt;span class=&quot;c1&quot;&gt;// int 4B&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;transient&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hash32&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// int 4B&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;因此一个String对象的大小为:&lt;code class=&quot;prettyprint&quot;&gt;24 = 8(_mark) + 4(_compressed_klass) + 4 + 4 + 4&lt;/code&gt;(gap部分被填充)&lt;br&gt;
-&lt;code class=&quot;prettyprint&quot;&gt;String s = &amp;quot;abc&amp;quot;&lt;/code&gt;是String的成员变量value数组指向&lt;code class=&quot;prettyprint&quot;&gt;&amp;quot;abc&amp;quot;&lt;/code&gt;&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;calculate&quot;&gt; 对象大小的计算 &lt;/h2&gt;
-
-&lt;p&gt;原始类型的大小是固定的，不需要计算；对象的大小可用&lt;code class=&quot;prettyprint&quot;&gt;java.lang.instrument.Instrumentation&lt;/code&gt;计算(后面再说)；
-但是&lt;code class=&quot;prettyprint&quot;&gt;Instrumentation#getObjectSize&lt;/code&gt;方法返回的大小不包括对象的成员变量所引用的对象。&lt;br&gt;
-我们可以遍历对象的成员变量进行递归计算，在计算时需要考虑到：&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;对象的static成员不需要计算(类成员在静态区)&lt;/li&gt;
-&lt;li&gt;如果两个成员变量引用的是同一个对象，则这个对象不能重复计算，即算过的不能再算&lt;/li&gt;
-&lt;li&gt;原生类型的成员变量不需要计算，如Person类有个成员变量&lt;code class=&quot;prettyprint&quot;&gt;int age&lt;/code&gt;, 计算Person的实例大小的时候已经算上int的大小了，
-变量age不能再计算了，也没办法再计算，因为age不是引用。&lt;/li&gt;
-&lt;li&gt;享元模式的成员变量不需要计算，如&lt;code class=&quot;prettyprint&quot;&gt;Integer#valueOf()&lt;/code&gt;值在&lt;code class=&quot;prettyprint&quot;&gt;-128~127&lt;/code&gt;之间的都是享元，&lt;code class=&quot;prettyprint&quot;&gt;Enum&lt;/code&gt;对象都是享元。&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;intern string&lt;/code&gt;不需要计算,&lt;code class=&quot;prettyprint&quot;&gt;intern string&lt;/code&gt;在java8之前存在于字符串常量池，位于永生代(非堆)&lt;/li&gt;
-&lt;li&gt;数组对象需要遍历每个对象进行计算&lt;/li&gt;
-&lt;li&gt;对于普通对象，如果该对象有父类，则需要计算继承自父类的成员变量&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;也就是说计算对象大小的时候可以分为三类: 直接跳过计算的对象(1、2、3、4、5)、数组对象(6)、普通对象(7)&lt;br&gt;
-我们用&lt;code class=&quot;prettyprint&quot;&gt;Stack&amp;lt;Object&amp;gt; stack&lt;/code&gt;来存放待计算对象(初始只有一个元素), 用&lt;code class=&quot;prettyprint&quot;&gt;IdentityHashMap&lt;/code&gt;记录&lt;code class=&quot;prettyprint&quot;&gt;visited&lt;/code&gt;的对象&lt;br&gt;
-完整项目代码在&lt;a href=&quot;https://github.com/rgkjhshi/sizeof&quot;&gt;我的github&lt;/a&gt;上,这里给出代码片段:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;    &lt;span class=&quot;cm&quot;&gt;/**&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     * 判断该对象是否需要跳过计算&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     *&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     * @param obj&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     * @param visited&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     * @return&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;skipObject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;visited&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt;               &lt;span class=&quot;c1&quot;&gt;// null 直接跳过&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;isSharedFlyweight&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;// 享元对象 跳过&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;visited&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;containsKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;// 计算过的对象 跳过&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;cm&quot;&gt;/**&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     * 计算栈顶元素大小&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     *&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     * @param stack   待计算对象栈&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     * @param visited 已经计算过的对象&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     * @return&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;doSizeOf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Stack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;visited&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 获取栈顶元素&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;pop&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 如果该对象需要跳过计算，直接返回0&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;skipObject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;visited&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 先把该对象放到已经访问过的集合中&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;visited&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 计算这个对象的大小 (object header + primitive variables + member pointers)&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SizeOf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sizeOf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 获取对象类型&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Class&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;clazz&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 如果该对象是数组类型，则还需要把数组元素压栈待计算, 然后返回&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;clazz&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isArray&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// 如果该数组的元素的类型是原生类型，就不用压栈了(即使压栈，也因是skipObject而被忽略)&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;clazz&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getComponentType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isPrimitive&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Array&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getLength&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;stack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Array&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 数组元素压栈&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 即不是skipObject，也不是数组，那只能是普通对象了，则对该对象的成员变量进行处理&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;clazz&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;Field&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fields&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;clazz&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getDeclaredFields&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 获取所有成员&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Field&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;field&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fields&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                    &lt;span class=&quot;c1&quot;&gt;// 只将非static成员和非primitive成员压栈&lt;/span&gt;
-                    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Modifier&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isStatic&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;field&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getModifiers&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;field&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isPrimitive&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                        &lt;span class=&quot;n&quot;&gt;field&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setAccessible&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-                        &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                            &lt;span class=&quot;n&quot;&gt;stack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;field&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
-                        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IllegalAccessException&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ex&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                            &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;RuntimeException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ex&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-                        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-                    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;clazz&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;clazz&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getSuperclass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 继续处理父类的成员&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-
-&lt;h2 id=&quot;program&quot;&gt; 编程计算对象的大小 &lt;/h2&gt;
-
-&lt;p&gt;JDK7的&lt;code class=&quot;prettyprint&quot;&gt;java.lang.instrument&lt;/code&gt;包中有个&lt;code class=&quot;prettyprint&quot;&gt;Instrumentation API&lt;/code&gt;提供了&lt;code class=&quot;prettyprint&quot;&gt;getObjectSize&lt;/code&gt;方法来计算对象的大小,
-这个方法返回的是对象的大小，不包括其成员变量所引用的对象(&lt;code class=&quot;prettyprint&quot;&gt;sun.instrumentInstrumentationImpl&lt;/code&gt;实现了该接口)。
-而且，这个方法不能直接使用，必须实现一个&lt;code class=&quot;prettyprint&quot;&gt;instrumentation&lt;/code&gt;代理类并且打包进JAR文件。&lt;/p&gt;
-
-&lt;h3 id=&quot;定义代理类&quot;&gt;定义代理类&lt;/h3&gt;
-
-&lt;p&gt;我们这样定义代理类:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SizeOf&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;cm&quot;&gt;/**&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     * JVM将在启动时通过{@link #premain}初始化此成员变量.&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Instrumentation&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;instrumentation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;cm&quot;&gt;/**&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     * JVM会调用该函数来初始化代理类&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     *&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     * @param agentArgs premain 函数得到的程序参数，随同 “–javaagent:”一起传入。&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     *                  eg:java -javaagent:jar 文件的位置 [= 传入 premain 的参数 ]&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     * @param inst      java.lang.instrument.Instrumentation 的实例，由 JVM 自动传入&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;premain&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;agentArgs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Instrumentation&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;inst&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;instrumentation&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;inst&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;cm&quot;&gt;/**&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     * 返回对象大小，不包括其成员变量所引用的对象&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     *&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     * @param object 需要计算大小的对象&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     * @return 对象的大小&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     * @see java.lang.instrument.Instrumentation#getObjectSize(Object objectToSize)&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;sizeOf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;instrumentation&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;IllegalStateException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Instrumentation is null&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;instrumentation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getObjectSize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 通过Instrumentation的实现类计算&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;cm&quot;&gt;/**&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     * 返回包含引用对象在内的大小(需要我们自己计算)&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     *&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     * @param obj 需要计算大小的对象&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     * @return 对象的全部大小&lt;/span&gt;
-&lt;span class=&quot;cm&quot;&gt;     */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;fullSizeOf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id=&quot;将代理类打成jar包&quot;&gt;将代理类打成jar包&lt;/h3&gt;
-
-&lt;p&gt;为了让JVM知道instrumentation代理类的存在，必须将其打包进JAR文件并且设定manifest.mf文件中的属性。
-在我们的例子中，需要设定如下属性：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-properties&quot; data-lang=&quot;properties&quot;&gt;&lt;span class=&quot;na&quot;&gt;Premain-Class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;代理类SizeOf的全类名  &lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Can-Redefine-Classes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;true&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;我们可以通过maven工具进行打包，打包的时候可以指定生成&lt;code class=&quot;prettyprint&quot;&gt;manifest.mf&lt;/code&gt;的属性，
-在&lt;code class=&quot;prettyprint&quot;&gt;pom.xml&lt;/code&gt;文件中可以在&lt;code class=&quot;prettyprint&quot;&gt;&amp;lt;build&amp;gt;&lt;/code&gt;元素中添加&lt;code class=&quot;prettyprint&quot;&gt;&amp;lt;plugins&amp;gt;&lt;/code&gt;元素，添加maven打包插件，就像这样:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;    &lt;span class=&quot;nt&quot;&gt;&amp;lt;build&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;plugins&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- maven 打包插件, 可指定生成的 META-INF/manifest.mf 文件中的属性 --&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;plugin&amp;gt;&lt;/span&gt;
-                &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.apache.maven.plugins&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-                &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;maven-jar-plugin&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-                &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;2.1&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
-                &lt;span class=&quot;nt&quot;&gt;&amp;lt;configuration&amp;gt;&lt;/span&gt;
-                    &lt;span class=&quot;nt&quot;&gt;&amp;lt;archive&amp;gt;&lt;/span&gt;
-                        &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 生成 manifest.mf 时添加的属性 --&amp;gt;&lt;/span&gt;
-                        &lt;span class=&quot;nt&quot;&gt;&amp;lt;manifestEntries&amp;gt;&lt;/span&gt;
-                            &lt;span class=&quot;nt&quot;&gt;&amp;lt;Premain-Class&amp;gt;&lt;/span&gt;cn.loveshisong.sizeof.SizeOf&lt;span class=&quot;nt&quot;&gt;&amp;lt;/Premain-Class&amp;gt;&lt;/span&gt;
-                            &lt;span class=&quot;nt&quot;&gt;&amp;lt;Can-Redefine-Classes&amp;gt;&lt;/span&gt;true&lt;span class=&quot;nt&quot;&gt;&amp;lt;/Can-Redefine-Classes&amp;gt;&lt;/span&gt;
-                        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/manifestEntries&amp;gt;&lt;/span&gt;
-                    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/archive&amp;gt;&lt;/span&gt;
-                &lt;span class=&quot;nt&quot;&gt;&amp;lt;/configuration&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;/plugin&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/plugins&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/build&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id=&quot;配置虚拟机参数，使用代理&quot;&gt;配置虚拟机参数，使用代理&lt;/h3&gt;
-
-&lt;p&gt;另外，Java程序必须使用 -javaagent 参数指向该jar文件来启动。我们的例子中形如：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-properties&quot; data-lang=&quot;properties&quot;&gt;&lt;span class=&quot;na&quot;&gt;java -javaagent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;代理类jar包的位置  &lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;java -javaagent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;sizeofag.jar (jar包在classpath中可以这么写)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;我们可以在进行测试的时候，通过maven的插件来指定JVM运行参数:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;build&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;plugins&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 上面那个plugin不要忘了加上 --&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 测试运行器(Test Runner), 执行到特定生命周期阶段的时候，通过该插件来执行JUnit或者TestNG的测试用例 --&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- maven-surefire-plugin 在test时默认执行 src/test/java/ 下所有名为*Test.java和*TestCase.java的测试类 --&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;plugin&amp;gt;&lt;/span&gt;
-                &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.apache.maven.plugins&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-                &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;maven-surefire-plugin&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-                &lt;span class=&quot;nt&quot;&gt;&amp;lt;configuration&amp;gt;&lt;/span&gt;
-                    &lt;span class=&quot;nt&quot;&gt;&amp;lt;forkMode&amp;gt;&lt;/span&gt;pertest&lt;span class=&quot;nt&quot;&gt;&amp;lt;/forkMode&amp;gt;&lt;/span&gt;
-                    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- argLine指定了VM运行参数 --&amp;gt;&lt;/span&gt;
-                    &lt;span class=&quot;nt&quot;&gt;&amp;lt;argLine&amp;gt;&lt;/span&gt;-javaagent:${basedir}/target/sizeof-${project.version}.jar&lt;span class=&quot;nt&quot;&gt;&amp;lt;/argLine&amp;gt;&lt;/span&gt;
-                    &lt;span class=&quot;nt&quot;&gt;&amp;lt;workingDirectory&amp;gt;&lt;/span&gt;${basedir}/target&lt;span class=&quot;nt&quot;&gt;&amp;lt;/workingDirectory&amp;gt;&lt;/span&gt;
-                    &lt;span class=&quot;nt&quot;&gt;&amp;lt;useSystemClassLoader&amp;gt;&lt;/span&gt;true&lt;span class=&quot;nt&quot;&gt;&amp;lt;/useSystemClassLoader&amp;gt;&lt;/span&gt;
-                &lt;span class=&quot;nt&quot;&gt;&amp;lt;/configuration&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;/plugin&amp;gt;&lt;/span&gt;
-
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/plugins&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/build&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;这样我们在使用&lt;code class=&quot;prettyprint&quot;&gt;junit&lt;/code&gt;进行单元测试的时候，就已经给JVM传递了参数。&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;use&quot;&gt; 在程序中使用例子中的jar包 &lt;/h2&gt;
-
-&lt;p&gt;只有一点，在其它项目中使用这个打包好的jar包时，记得给JVM传递代理类参数。&lt;br&gt;
-另外，不同机器可能junit的测试会有问题，最好把源码下载下来，自己打包，必要时删掉测试代码。&lt;/p&gt;
-
-&lt;hr&gt;
-</description>
-        <pubDate>Thu, 11 Jun 2015 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-06-11-java%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-06-11-java%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%86%85%E5%AD%98%E5%A4%A7%E5%B0%8F.html</guid>
-        
-        <category>JVM</category>
-        
-        
-        <category>编程技术</category>
         
       </item>
     

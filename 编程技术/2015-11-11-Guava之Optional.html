@@ -5,15 +5,15 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="keywords" content="git常用命令, 点滴积累, Git, 逆水行舟" />
-    <meta name="description" content="git常用命令, 点滴积累, Git, git 的常用命令" />
+    <meta name="keywords" content="Guava之Optional, 编程技术, Guava, 逆水行舟" />
+    <meta name="description" content="Guava之Optional, 编程技术, Guava, Optional用于处理有可能为null的情况,在Guava的com.google.common.base包中Optional是一个抽象类，有两个final的子类:Present和Absent使用的时候直接用Optional即可, 不用关心Present和Absent" />
 
     <title>逆水行舟</title>
 
     <!-- ico图标 -->
     <link rel="shortcut icon" type="image/x-icon" media="screen" href="http://loveshisong.cn/static/favicon.ico" />
     <!-- 搜索引擎收入相关 -->
-    <link rel="canonical" href="http://loveshisong.cn/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-05-12-git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4.html" />
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-11-Guava%E4%B9%8BOptional.html" />
     <!-- rss输出源 -->
     <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
     <!-- jquery -->
@@ -87,94 +87,52 @@ jQuery(function(){
 	jQuery('#qrcode').qrcode({
         width: 150,
         height: 150,
-        text: "http://loveshisong.cn/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-05-12-git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4.html"
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-11-Guava%E4%B9%8BOptional.html"
     });
 })
 </script>
 <!-- 日志默认模板 -->
 <div class="uk-container content">
     <div class="page-title">
-        <h1>git常用命令</h1>
+        <h1>Guava之Optional</h1>
     </div>
     <div class="uk-grid">
         <div  class="uk-width-4-4">
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
-            <p>git 的常用命令</p>
+            <p><code class="prettyprint">Optional</code>用于处理有可能为<code class="prettyprint">null</code>的情况,在Guava的<code class="prettyprint">com.google.common.base</code>包中<br>
+<code class="prettyprint">Optional</code>是一个抽象类，有两个<code class="prettyprint">final</code>的子类:<code class="prettyprint">Present</code>和<code class="prettyprint">Absent</code><br>
+使用的时候直接用<code class="prettyprint">Optional</code>即可, 不用关心<code class="prettyprint">Present</code>和<code class="prettyprint">Absent</code></p>
 
 <hr>
 
-<h2 id="本文结构">本文结构</h2>
+<h2 id="静态方法">静态方法</h2>
 
-<ul>
-<li><a href="#branch">分支操作</a></li>
-<li><a href="#reset">撤销操作</a></li>
-<li><a href="#log">log显示</a></li>
-<li><a href="#remote">显示远程仓库信息</a></li>
-</ul>
+<p><code class="prettyprint">Optional</code>有三个常用的静态方法:  </p>
 
-<hr>
-
-<h2 id="branch"> 分支操作 </h2>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">git</span> <span class="n">branch</span>             <span class="o">:</span>    <span class="n">查看本地分支</span>
-<span class="n">git</span> <span class="n">branch</span> <span class="o">-</span><span class="n">a</span>          <span class="o">:</span>    <span class="n">查看所有分支</span><span class="o">(</span><span class="n">包括远程</span><span class="o">)</span>
-<span class="n">git</span> <span class="n">branch</span> <span class="n">name</span>        <span class="o">:</span>    <span class="n">创建分支</span>
-<span class="n">git</span> <span class="n">branch</span> <span class="o">-</span><span class="n">d</span> <span class="n">name</span>     <span class="o">:</span>    <span class="n">删除分支</span>
-<span class="n">git</span> <span class="n">checkout</span> <span class="n">name</span>      <span class="o">:</span>    <span class="n">切换分支</span>
-<span class="n">git</span> <span class="n">checkout</span> <span class="o">-</span><span class="n">b</span> <span class="n">name</span>   <span class="o">:</span>    <span class="n">创建</span><span class="o">+</span><span class="n">切换分支</span>
-<span class="n">git</span> <span class="n">merge</span> <span class="n">name</span>         <span class="o">:</span>    <span class="n">合并某分支到当前分支</span>
-<span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="o">-</span><span class="n">delete</span> <span class="o">&lt;</span><span class="n">branchname</span><span class="o">&gt;</span>     <span class="o">:</span>    <span class="n">删除远程分支</span>
-</code></pre></div>
 <ol>
-<li>合并分支一般使用 <code class="prettyprint">git merge --no-ff -m &quot;merge with no-ff&quot; branchName</code> 表示禁用“Fast forward”，合并就跟一次提交一样</li>
-<li>语法: <code class="prettyprint">git push [远程名] [本地分支]:[远程分支]</code> 如果省略 <code class="prettyprint">[本地分支]</code> 表示将空白分支提到远程分支，也能够删除远程分支</li>
+<li>Optional.of(T reference): 返回的是一个<code class="prettyprint">Present</code>对象, 表示不能为<code class="prettyprint">null</code>, 当<code class="prettyprint">reference</code>为<code class="prettyprint">null</code>时直接抛<code class="prettyprint">NullPointerException</code><br></li>
+<li>Optional.absent(): 返回的是一个<code class="prettyprint">final</code>的<code class="prettyprint">Absent</code>对象, 表示<code class="prettyprint">null</code></li>
+<li>Optional.fromNullable(T nullableReference): 返回的可能是<code class="prettyprint">Present</code>或者<code class="prettyprint">Absent</code>, 表示对象肯能为<code class="prettyprint">null</code>, 即参数为<code class="prettyprint">null</code>时等同于<code class="prettyprint">absent()</code><br></li>
 </ol>
 
 <hr>
 
-<h2 id="reset"> 撤销操作 </h2>
+<h2 id="实例方法">实例方法</h2>
 
-<p><strong>重新提交</strong>: 若暂存区没有新的修改，相当于重写了提交信息</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">$ git commit --amend -m &quot;message&quot;
-</code></pre></div>
-<p><strong>丢弃工作区的修改</strong>: 若有add则从暂存区恢复，若无add则从仓库恢复。</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">$ git checkout -- filename
-</code></pre></div>
-<p>注：<code class="prettyprint">git checkout -- file</code>命令中的“--”很重要，没有“--”，就变成了“创建一个新分支”的命令  </p>
-
-<p><strong>撤销暂存区修改</strong>: 把暂存区的修改回退到工作区。</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">$ git reset HEAD readme.txt
-</code></pre></div>
-<p><strong>回退版本</strong>: <code class="prettyprint">HEAD</code>表示当前版本，上一个版本就是<code class="prettyprint">HEAD^</code>，上上一个版本就是<code class="prettyprint">HEAD^^</code>，上100个版本可写成<code class="prettyprint">HEAD~100</code>。用上hard参数后，文件会回到原来的commit状态，不用hard参数，工作目录的文件修改会保留，状态为未提交。</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">git reset --hard HEAD^
-</code></pre></div>
-<hr>
-
-<h2 id="log"> log显示 </h2>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">$</span> <span class="n">git</span> <span class="n">log</span> <span class="o">--</span><span class="n">graph</span> <span class="o">--</span><span class="n">pretty</span><span class="o">=</span><span class="n">oneline</span> <span class="o">--</span><span class="n">abbrev</span><span class="o">-</span><span class="n">commit</span>
-</code></pre></div>
 <ol>
-<li><code class="prettyprint">--graph</code>可以看到分支合并图</li>
-<li><code class="prettyprint">--pretty=oneline</code>Log会显示在一行</li>
-<li><code class="prettyprint">--abbrev-commit</code> 会显示版本号的缩写形式</li>
+<li>boolean isPresent( ): Optional包含的T实例不为<code class="prettyprint">null</code>，则返回true</li>
+<li>T get( ): 返回包含实例, 若包含的实例为<code class="prettyprint">null</code>则抛出<code class="prettyprint">IllegalStateException</code>异常</li>
+<li>T or(T defaultValue): <code class="prettyprint">a.or(b)</code>a不为null返回a, 否则返回b, b为<code class="prettyprint">null</code>时抛出<code class="prettyprint">NullPointerException</code></li>
+<li>T orNull( ): <code class="prettyprint">a.orNull()</code>a不为null返回a, 否则返回null, 逆操作是<code class="prettyprint">fromNullable()</code></li>
 </ol>
 
-<p>如果之前有过版本回退操作，则<code class="prettyprint">git log</code>只能显示当前版本之前的记录，如果想看所有的记录(包括当前版本之后的版本)，可以使用：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">$ git reflog
-</code></pre></div>
-<hr>
-
-<h2 id="remote"> 显示远程仓库信息 </h2>
-<div class="highlight"><pre><code class="language-text" data-lang="text">$ git remote -v
-origin  git@github.com:rgkjhshi/blog.git (fetch)
-origin  git@github.com:rgkjhshi/blog.git (push)
-</code></pre></div>
 <hr>
 
         </div>
     </div>
 
     <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-    <div class="ds-thread" data-thread-key="/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/git常用命令" data-title="git常用命令" data-url="/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-05-12-git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4.html"></div>
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/Guava之Optional" data-title="Guava之Optional" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-11-Guava%E4%B9%8BOptional.html"></div>
     <!-- 多说评论框 end -->
 </div>
 
