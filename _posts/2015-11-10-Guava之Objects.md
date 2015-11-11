@@ -5,8 +5,8 @@ date: 2015-11-10
 category: 编程技术
 tag: Guava
 ---
-Guava在com.google.common.base包中提供了一个好用的工具类:Objects, 里面有一些好用的静态方法  
-JDK7已经把Objects收录在了`java.util.Objects`里
+`Objects`在Guava的`com.google.common.base`包中  
+JDK7已经把Objects收录在了`java.util.Objects`里, 现在可以直接用啦
 
 
 

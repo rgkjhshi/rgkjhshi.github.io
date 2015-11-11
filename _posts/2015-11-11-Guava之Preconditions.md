@@ -5,7 +5,7 @@ date: 2015-11-11
 category: 编程技术
 tag: Guava
 ---
-Guava在com.google.common.base包中提供了个检查各种条件的类:`Preconditions`  
+`Preconditions`用于各种条件检查, 在Guava的`com.google.common.base`包中  
 它提供了几个静态方法, 不满足条件时会抛出异常
 
 
