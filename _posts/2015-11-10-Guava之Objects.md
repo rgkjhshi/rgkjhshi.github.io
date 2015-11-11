@@ -5,7 +5,7 @@ date: 2015-11-10
 category: 编程技术
 tag: Guava
 ---
-JDK中Object类的某些方法，Guava提供了一个好用的工具类:Objects, 里面有一些好用的静态方法  
+Guava在com.google.common.base包中提供了一个好用的工具类:Objects, 里面有一些好用的静态方法  
 JDK7已经把Objects收录在了`java.util.Objects`里
 
 
