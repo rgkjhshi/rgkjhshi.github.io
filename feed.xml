@@ -5,9 +5,120 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 11 Nov 2015 18:13:28 +0800</pubDate>
-    <lastBuildDate>Wed, 11 Nov 2015 18:13:28 +0800</lastBuildDate>
+    <pubDate>Thu, 12 Nov 2015 13:58:44 +0800</pubDate>
+    <lastBuildDate>Thu, 12 Nov 2015 13:58:44 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>Map整理</title>
+        <description>&lt;p&gt;整理了下Java中Map的结构画了个图, 绿色虚线表示接口, 实现表示类, 蓝色表示抽象类&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;map继承关系图&quot;&gt;Map继承关系图&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/map.png&quot; alt=&quot;Map继承关系图&quot; title=&quot;Map结构图&quot;&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;map基本操作&quot;&gt;Map基本操作&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;int size()&lt;/code&gt;: 返回map大小&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean isEmpty()&lt;/code&gt;: 是否为空Map&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean containsKey(Object key)&lt;/code&gt;: 是否包含key&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean containsValue(Object value)&lt;/code&gt;: 是否包含value&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;V get(Object key)&lt;/code&gt;: 返回key对应的value, 没有则返回&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;V put(K key, V value)&lt;/code&gt;: key和value都可为null, key重复则替换旧的value&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;void putAll(Map&amp;lt;? extends K, ? extends V&amp;gt; m)&lt;/code&gt;:&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;V remove(Object key)&lt;/code&gt;: 移除并返回, 若不包含key返回null&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;void clear()&lt;/code&gt;: 清空map&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Set&amp;lt;K&amp;gt; keySet()&lt;/code&gt;: 返回key的集合&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Collection&amp;lt;V&amp;gt; values()&lt;/code&gt;: 返回value的集合&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Set&amp;lt;Map.Entry&amp;lt;K, V&amp;gt;&amp;gt; entrySet()&lt;/code&gt;: 返回Entry集合&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;hashmap与hashtable&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;HashMap&lt;/code&gt;与&lt;code class=&quot;prettyprint&quot;&gt;HashTable&lt;/code&gt;&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Hashtable是线程安全的，而HashMap不是线程安全的&lt;/li&gt;
+&lt;li&gt;Hashtable不允许null作为key和value，而HashMap则可以使用null作为key和value&lt;/li&gt;
+&lt;li&gt;Hashtable很古老, 从JDK1.0就有了, 不建议使用&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;hashmap与identityhashmap&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;HashMap&lt;/code&gt;与&lt;code class=&quot;prettyprint&quot;&gt;IdentityHashMap&lt;/code&gt;&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;IdentityHashMap&lt;/code&gt;认为两个key相等: 两个key严格相等(&lt;code class=&quot;prettyprint&quot;&gt;key1 == key2&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;HashMap&lt;/code&gt;则认为两个key相等: &lt;code class=&quot;prettyprint&quot;&gt;key1.equals(key2)&lt;/code&gt;且&lt;code class=&quot;prettyprint&quot;&gt;hashCode&lt;/code&gt;相同&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;linkedhashmap&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;LinkedHashMap&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;LinkedHashMap&lt;/code&gt;可以记住key-value对的添加时的顺序&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;sortedmap接口和treemap&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;SortedMap&lt;/code&gt;接口和&lt;code class=&quot;prettyprint&quot;&gt;TreeMap&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;内置比较器(&lt;code class=&quot;prettyprint&quot;&gt;Comparator&lt;/code&gt;),可比较前后顺序, &lt;code class=&quot;prettyprint&quot;&gt;TreeMap&lt;/code&gt;默认按照自然顺序排序, 不允许null作为key&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;enummap&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;EnumMap&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;EnumMap&lt;/code&gt;只接受枚举类作为key, 不允许null作为key&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;properties&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;Properties&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;Properties&lt;/code&gt;继承&lt;code class=&quot;prettyprint&quot;&gt;HashTable&lt;/code&gt;, 还有几个其他常用方法:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;String getProperty(String key)&lt;/code&gt;: 获取指定key对应的value值&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;String getProperty(String key, String defaultValue)&lt;/code&gt;: 有默认值&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Object setProperty(String key, String value)&lt;/code&gt;: 调用&lt;code class=&quot;prettyprint&quot;&gt;Hashtable&lt;/code&gt;的put方法.&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;void load(InputStream inStream)&lt;/code&gt;: 从属性文件加载key-value对&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;void store(OutputStream out, String comments)&lt;/code&gt;: 将当前的所有key-value对输出到指定属性文件,小心乱码&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;map的选择&quot;&gt;Map的选择&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;若要保留插入时的顺序, 可用&lt;code class=&quot;prettyprint&quot;&gt;LinkedHashMap&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;若要求key完全匹配(同一对象)，可用&lt;code class=&quot;prettyprint&quot;&gt;IdentityHashMap&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;若要排序,可用&lt;code class=&quot;prettyprint&quot;&gt;TreeMap&lt;/code&gt;, 它在底层采用红黑树来管理key-value对&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;关于null&quot;&gt;关于&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Hashtable&lt;/code&gt;的key、value均不能为null&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;TreeMap&lt;/code&gt;与&lt;code class=&quot;prettyprint&quot;&gt;EnumMap&lt;/code&gt;不允许key为null&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;HashMap&lt;/code&gt;、&lt;code class=&quot;prettyprint&quot;&gt;IdentityHashMap&lt;/code&gt;key可以为null, 但不建议这样做&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+</description>
+        <pubDate>Thu, 12 Nov 2015 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-12-Map%E6%95%B4%E7%90%86.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-12-Map%E6%95%B4%E7%90%86.html</guid>
+        
+        <category>Java</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
     
       <item>
         <title>Guava之Preconditions</title>
@@ -1389,122 +1500,6 @@ www.A.com站在用户登录后，会将登陆凭证保存在本地cookie中，A�
         <guid isPermaLink="true">http://loveshisong.cn/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-06-24-CSRF.html</guid>
         
         <category>CSRF</category>
-        
-        
-        <category>点滴积累</category>
-        
-      </item>
-    
-      <item>
-        <title>MySQL加锁</title>
-        <description>&lt;p&gt;最近碰到了MySQL中的&lt;code class=&quot;prettyprint&quot;&gt;for update&lt;/code&gt;语法，这是用来加锁的，将学习的过程记录下来&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;目录&quot;&gt;目录&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#pessimistic&quot;&gt;悲观锁&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#optimistic&quot;&gt;乐观锁&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#use&quot;&gt;for update用法&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#test&quot;&gt;测试记录&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;pessimistic&quot;&gt; 悲观锁 &lt;/h2&gt;
-
-&lt;p&gt;悲观锁(Pessimistic Lock)认为每次读取数据都是不安全的，所以每次读取数据的时候都会加锁。&lt;br&gt;
-比如mysql里的&lt;code class=&quot;prettyprint&quot;&gt;for update&lt;/code&gt;就属于这类，可以锁一行，也可锁住整个表，加锁之后别人就无法同时进行操作了。&lt;br&gt;
-悲观锁一般用于写操作比较多的地方。&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;optimistic&quot;&gt; 乐观锁 &lt;/h2&gt;
-
-&lt;p&gt;乐观锁(Optimistic Lock)认为每次读取数据的时候是安全的，只有在更新操作的时候才会判断是否有别人修改过数据。&lt;br&gt;
-这种锁一般通过其它方式来控制，比如通过版本号机制等。&lt;br&gt;
-乐观锁一般用于读操作比较多的地方，这样可以提高吞吐量。&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;use&quot;&gt; for update用法 &lt;/h2&gt;
-
-&lt;p&gt;先来一个测试用的表:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;`&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;`&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;bigint&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NOT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AUTO_INCREMENT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;COMMENT&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;自增主键&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;`&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;varchar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NOT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;COMMENT&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;用户名&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;remark&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;`&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;varchar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NOT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;COMMENT&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;备注&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;PRIMARY&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;KEY&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;UNIQUE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;KEY&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;uniq_user_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;`&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;user_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ENGINE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;InnoDB&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AUTO_INCREMENT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DEFAULT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CHARSET&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;utf8&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;COMMENT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;用户表&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;表中数据:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;+----+-----------+---------+
-| id | user_name | remark  |
-+----+-----------+---------+
-|  1 | user1     | remark1 |
-|  2 | user2     | remark2 |
-|  3 | user3     | remark3 |
-+----+-----------+---------+
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;这样来使用for update&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;k&quot;&gt;BEGIN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FORM&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WHERE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;COMMIT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;注意:  &lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;for update&lt;/code&gt;必须在&lt;code class=&quot;prettyprint&quot;&gt;BEGIN/COMMIT&lt;/code&gt;块中才会起作用&lt;/li&gt;
-&lt;li&gt;明确使用索引的，会使用行锁(Row Lock)，不使用索引或索引不明确(如id&amp;gt;2)，会使用表锁(Table Lock)&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;我们来测试一下,通过两个终端分别进行操作，如图:&lt;br&gt;
-&lt;img src=&quot;/static/images/lock1.png&quot; alt=&quot;测试图片1&quot;&gt;
-&lt;img src=&quot;/static/images/lock2.png&quot; alt=&quot;测试图片2&quot;&gt;&lt;/p&gt;
-
-&lt;p&gt;我们在第一个终端中开启事务使用了行锁，但未&lt;code class=&quot;prettyprint&quot;&gt;commit&lt;/code&gt;，第二个终端中再查询该行则会被阻塞，处于等待状态。
-直到第一个终端&lt;code class=&quot;prettyprint&quot;&gt;commit&lt;/code&gt;之后，第二个终端才会读取到被锁住的那一行的数据。
-若等待时间过长(终端1迟迟未commit)，则终端2会产生超时错误。&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;test&quot;&gt; 测试记录 &lt;/h2&gt;
-
-&lt;p&gt;主要是测试下，什么情况下是 Row Lock，什么情况下是 Table Lock。  &lt;/p&gt;
-
-&lt;h3 id=&quot;以下情况是-row-lock&quot;&gt;以下情况是 Row Lock&lt;/h3&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;c1&quot;&gt;-- 使用了主键索引&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;-- 使用了其它索引&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;user1&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;-- 使用 like 但是可以唯一确定一行&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_name&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;like&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;user1%&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id=&quot;以下情况是-table-lock&quot;&gt;以下情况是 Table Lock&lt;/h3&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;c1&quot;&gt;-- 主键不明确&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;-- 没有用上任何索引&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;remark&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;remark1&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_name&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;like&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;%user1&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;-- 虽然能确定一行，但是没用上索引&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;-- 使用了 like 不能唯一确定一行&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_name&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;like&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;user%&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;-- 这条用上了索引&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_name&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;like&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;%user%&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;-- 这条没有用上索引&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;-- 未查到数据，但是未使用任何索引&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;remark&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;test&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id=&quot;以下情况-无-lock&quot;&gt;以下情况 无 Lock&lt;/h3&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sql&quot; data-lang=&quot;sql&quot;&gt;&lt;span class=&quot;c1&quot;&gt;-- 未查到数据，但是使用了索引&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;user9&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-</description>
-        <pubDate>Wed, 17 Jun 2015 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-06-17-MySQL%E5%8A%A0%E9%94%81.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-06-17-MySQL%E5%8A%A0%E9%94%81.html</guid>
-        
-        <category>MySQL</category>
         
         
         <category>点滴积累</category>

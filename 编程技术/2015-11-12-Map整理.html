@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="Map整理, 编程技术, Java, 逆水行舟" />
+    <meta name="description" content="Map整理, 编程技术, Java, 整理了下Java中Map的结构画了个图, 绿色虚线表示接口, 实现表示类, 蓝色表示抽象类" />
+
+    <title>逆水行舟</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="http://loveshisong.cn/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-12-Map%E6%95%B4%E7%90%86.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/jquery.qrcode.min.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/uikit.min.js"></script>
+    <!-- quietflow -->
+    <!-- <script type="text/javascript" src="http://loveshisong.cn/static/js/quietflow.min.js"></script> -->
+    <!-- UK sticky -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "shisong"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" data-uk-sticky>
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="http://loveshisong.cn/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <script type="text/javascript">
+jQuery(function(){
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-12-Map%E6%95%B4%E7%90%86.html"
+    });
+})
+</script>
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>Map整理</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <p>整理了下Java中Map的结构画了个图, 绿色虚线表示接口, 实现表示类, 蓝色表示抽象类</p>
+
+<hr>
+
+<h2 id="map继承关系图">Map继承关系图</h2>
+
+<p><img src="/static/images/map.png" alt="Map继承关系图" title="Map结构图"></p>
+
+<hr>
+
+<h2 id="map基本操作">Map基本操作</h2>
+
+<ul>
+<li><code class="prettyprint">int size()</code>: 返回map大小</li>
+<li><code class="prettyprint">boolean isEmpty()</code>: 是否为空Map</li>
+<li><code class="prettyprint">boolean containsKey(Object key)</code>: 是否包含key</li>
+<li><code class="prettyprint">boolean containsValue(Object value)</code>: 是否包含value</li>
+<li><code class="prettyprint">V get(Object key)</code>: 返回key对应的value, 没有则返回<code class="prettyprint">null</code></li>
+<li><code class="prettyprint">V put(K key, V value)</code>: key和value都可为null, key重复则替换旧的value</li>
+<li><code class="prettyprint">void putAll(Map&lt;? extends K, ? extends V&gt; m)</code>:</li>
+<li><code class="prettyprint">V remove(Object key)</code>: 移除并返回, 若不包含key返回null</li>
+<li><code class="prettyprint">void clear()</code>: 清空map</li>
+<li><code class="prettyprint">Set&lt;K&gt; keySet()</code>: 返回key的集合</li>
+<li><code class="prettyprint">Collection&lt;V&gt; values()</code>: 返回value的集合</li>
+<li><code class="prettyprint">Set&lt;Map.Entry&lt;K, V&gt;&gt; entrySet()</code>: 返回Entry集合</li>
+</ul>
+
+<hr>
+
+<h2 id="hashmap与hashtable"><code class="prettyprint">HashMap</code>与<code class="prettyprint">HashTable</code></h2>
+
+<ul>
+<li>Hashtable是线程安全的，而HashMap不是线程安全的</li>
+<li>Hashtable不允许null作为key和value，而HashMap则可以使用null作为key和value</li>
+<li>Hashtable很古老, 从JDK1.0就有了, 不建议使用</li>
+</ul>
+
+<hr>
+
+<h2 id="hashmap与identityhashmap"><code class="prettyprint">HashMap</code>与<code class="prettyprint">IdentityHashMap</code></h2>
+
+<ul>
+<li><code class="prettyprint">IdentityHashMap</code>认为两个key相等: 两个key严格相等(<code class="prettyprint">key1 == key2</code>)</li>
+<li><code class="prettyprint">HashMap</code>则认为两个key相等: <code class="prettyprint">key1.equals(key2)</code>且<code class="prettyprint">hashCode</code>相同</li>
+</ul>
+
+<hr>
+
+<h2 id="linkedhashmap"><code class="prettyprint">LinkedHashMap</code></h2>
+
+<p><code class="prettyprint">LinkedHashMap</code>可以记住key-value对的添加时的顺序</p>
+
+<hr>
+
+<h2 id="sortedmap接口和treemap"><code class="prettyprint">SortedMap</code>接口和<code class="prettyprint">TreeMap</code></h2>
+
+<p>内置比较器(<code class="prettyprint">Comparator</code>),可比较前后顺序, <code class="prettyprint">TreeMap</code>默认按照自然顺序排序, 不允许null作为key</p>
+
+<hr>
+
+<h2 id="enummap"><code class="prettyprint">EnumMap</code></h2>
+
+<p><code class="prettyprint">EnumMap</code>只接受枚举类作为key, 不允许null作为key</p>
+
+<hr>
+
+<h2 id="properties"><code class="prettyprint">Properties</code></h2>
+
+<p><code class="prettyprint">Properties</code>继承<code class="prettyprint">HashTable</code>, 还有几个其他常用方法:</p>
+
+<ul>
+<li><code class="prettyprint">String getProperty(String key)</code>: 获取指定key对应的value值</li>
+<li><code class="prettyprint">String getProperty(String key, String defaultValue)</code>: 有默认值</li>
+<li><code class="prettyprint">Object setProperty(String key, String value)</code>: 调用<code class="prettyprint">Hashtable</code>的put方法.</li>
+<li><code class="prettyprint">void load(InputStream inStream)</code>: 从属性文件加载key-value对</li>
+<li><code class="prettyprint">void store(OutputStream out, String comments)</code>: 将当前的所有key-value对输出到指定属性文件,小心乱码</li>
+</ul>
+
+<h2 id="map的选择">Map的选择</h2>
+
+<ul>
+<li>若要保留插入时的顺序, 可用<code class="prettyprint">LinkedHashMap</code></li>
+<li>若要求key完全匹配(同一对象)，可用<code class="prettyprint">IdentityHashMap</code></li>
+<li>若要排序,可用<code class="prettyprint">TreeMap</code>, 它在底层采用红黑树来管理key-value对</li>
+</ul>
+
+<hr>
+
+<h2 id="关于null">关于<code class="prettyprint">null</code></h2>
+
+<ul>
+<li><code class="prettyprint">Hashtable</code>的key、value均不能为null</li>
+<li><code class="prettyprint">TreeMap</code>与<code class="prettyprint">EnumMap</code>不允许key为null</li>
+<li><code class="prettyprint">HashMap</code>、<code class="prettyprint">IdentityHashMap</code>key可以为null, 但不建议这样做</li>
+</ul>
+
+<hr>
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/Map整理" data-title="Map整理" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-12-Map%E6%95%B4%E7%90%86.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
+
+</body>
+
+</html>
