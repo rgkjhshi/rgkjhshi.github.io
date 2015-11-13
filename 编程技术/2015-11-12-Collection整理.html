@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="Collection整理, 编程技术, Java, 逆水行舟" />
+    <meta name="description" content="Collection整理, 编程技术, Java, Java中Collection的继承关系图, 虚线表示接口, 实线表示类" />
+
+    <title>逆水行舟</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="http://loveshisong.cn/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-12-Collection%E6%95%B4%E7%90%86.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/jquery.qrcode.min.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/uikit.min.js"></script>
+    <!-- quietflow -->
+    <!-- <script type="text/javascript" src="http://loveshisong.cn/static/js/quietflow.min.js"></script> -->
+    <!-- UK sticky -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "shisong"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" data-uk-sticky>
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="http://loveshisong.cn/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <script type="text/javascript">
+jQuery(function(){
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-12-Collection%E6%95%B4%E7%90%86.html"
+    });
+})
+</script>
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>Collection整理</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <p>Java中Collection的继承关系图, 虚线表示接口, 实线表示类</p>
+
+<hr>
+
+<h2 id="collection继承关系图">Collection继承关系图</h2>
+
+<p><img src="/static/images/collection.png" alt="Collection继承关系图" title="Collection结构图"></p>
+
+<hr>
+
+<h2 id="collection基本操作">Collection基本操作</h2>
+
+<ul>
+<li><code class="prettyprint">int size()</code>: 返回集合大小</li>
+<li><code class="prettyprint">boolean isEmpty()</code>: 是否为空</li>
+<li><code class="prettyprint">Iterator&lt;E&gt; iterator()</code>: 返回迭代器</li>
+<li><code class="prettyprint">Object[] toArray()</code>: 把集合转成数组</li>
+<li><code class="prettyprint">&lt;T&gt; T[] toArray(T[] a)</code>: 这个腹黑的方法详细说明看<a href="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-12-Collection%E7%9A%84toArray%E6%96%B9%E6%B3%95.html">这里</a></li>
+<li><code class="prettyprint">boolean contains(Object o)</code>: 是否包含该对象</li>
+<li><code class="prettyprint">boolean containsAll(Collection&lt;?&gt; c)</code>: 包含c里的全部元素则返回true</li>
+<li><code class="prettyprint">boolean add(E e)</code>: 添加成功改变了集合则返回true</li>
+<li><code class="prettyprint">boolean addAll(Collection&lt;? extends E&gt; c)</code>: 全部添加</li>
+<li><code class="prettyprint">boolean remove(E e)</code>: 移除</li>
+<li><code class="prettyprint">boolean removeAll(Collection&lt;?&gt; c)</code>: 移除与c的交集元素</li>
+<li><code class="prettyprint">void clear()</code>: 清空集合</li>
+</ul>
+
+<h2 id="set接口">Set接口</h2>
+
+<ul>
+<li>Set不允许包含相同的元素, 而判断两个对象是否相同则是根据<code class="prettyprint">equals</code>方法</li>
+<li><code class="prettyprint">HashSet</code>不是同步的, 不能保证元素的排列顺序, 注意<code class="prettyprint">hashCode</code>方法的实现</li>
+<li><code class="prettyprint">LinkedHashSet</code>根据元素的<code class="prettyprint">hashCode</code>值来决定元素的存储位置，但它同时使用链表维护元素的次序</li>
+<li><code class="prettyprint">TreeSet</code>是<code class="prettyprint">SortedSet</code>接口的实现类, 有顺序, 可自定义比较器(<code class="prettyprint">Comparator</code>),有<code class="prettyprint">first、last、lower、higher</code>等方法</li>
+</ul>
+
+<h2 id="list接口">List接口</h2>
+
+<p><code class="prettyprint">List</code>是经常用到的工具, 是有序集合, 增加了与索引位置相关的操作:</p>
+
+<ul>
+<li><code class="prettyprint">E get(int index)</code>: 获取指定位置的元素</li>
+<li><code class="prettyprint">E set(int index, E element)</code>: 替换指定位置的元素</li>
+<li><code class="prettyprint">void add(int index, E element)</code>: 将元素添加到指定位置</li>
+<li><code class="prettyprint">boolean addAll(int index, Collection&lt;? extends E&gt; c)</code>: 将c里的元素添加到指定位置</li>
+<li><code class="prettyprint">E remove(int index)</code>: 移除指定位置的元素</li>
+<li><code class="prettyprint">int indexOf(Object o)</code>: o在list中第一次出现的位置</li>
+<li><code class="prettyprint">int lastIndexOf(Object o)</code>: o在list中最后一次出现的位置</li>
+<li><code class="prettyprint">List&lt;E&gt; subList(int fromIndex, int toIndex)</code>: 子list</li>
+</ul>
+
+<h3 id="arraylist和vector">ArrayList和Vector</h3>
+
+<p><code class="prettyprint">ArrayList</code>是线程不安全的,而<code class="prettyprint">Vector</code>是线程安全的  </p>
+
+<h3 id="stack">Stack</h3>
+
+<p><code class="prettyprint">Stack</code>是<code class="prettyprint">Vector</code>的子类,模拟数据结构中的栈,有下面几个操作:</p>
+
+<ul>
+<li><code class="prettyprint">E push(E item)</code>: 压栈</li>
+<li><code class="prettyprint">E pop()</code>: 出栈</li>
+<li><code class="prettyprint">E peek()</code>: 查看栈顶元素, 不出栈</li>
+<li><code class="prettyprint">boolean empty()</code>: 判断栈空</li>
+<li><code class="prettyprint">int search(Object o)</code>: 返回元素位置, 栈顶元素是1, －1表示栈里没有</li>
+</ul>
+
+<h2 id="queue接口">Queue接口</h2>
+
+<p><code class="prettyprint">Queue</code>用于模拟队列这种数据结构，实现先进先出<q>FIFO</q>等数据结构,常用如下操作:</p>
+
+<ul>
+<li><code class="prettyprint">boolean add(E e)</code>: 不建议使用</li>
+<li><code class="prettyprint">boolean offer(E e)</code>: 将指定元素插入队尾列,当使用有容量限制的队列时,此方法通常要优于<code class="prettyprint">add(E)</code>,
+后者可能无法插入元素，而只是抛出一个异常。<strong>推荐使用此方法取代add</strong></li>
+<li><code class="prettyprint">boolean remove()</code>: 不建议使用</li>
+<li><code class="prettyprint">boolean poll()</code>: 获取头部元素并且删除元素，队列为空返回null;<strong>推荐使用此方法取代remove</strong></li>
+<li><code class="prettyprint">boolean element()</code>: 返回队首元素, 队空抛<code class="prettyprint">NoSuchElementException</code></li>
+<li><code class="prettyprint">boolean peek()</code>: 返回队首元素, 队空返回<code class="prettyprint">null</code></li>
+</ul>
+
+<h3 id="priorityqueue类">PriorityQueue类</h3>
+
+<p><code class="prettyprint">PriorityQueue</code>类中元素的顺序不是按照加入的顺序排列的, 而是按队列元素的优先级重新排序,
+调用<code class="prettyprint">peek()</code>或者是<code class="prettyprint">poll()</code>方法时，返回的是队列中优先级最小的元素, 可以自定义排序.</p>
+
+<h3 id="deque接口与arraydeque类">Deque接口与ArrayDeque类</h3>
+
+<p><code class="prettyprint">Deque</code>代表一个双端队列，可以当作一个双端队列使用，也可以当作“栈”来使用，因为它包含出栈<code class="prettyprint">pop()</code>与入栈<code class="prettyprint">push()</code>方法</p>
+
+<ul>
+<li><code class="prettyprint">void addFirst(E e)</code>: 元素增加至队头, 超容量抛异常</li>
+<li><code class="prettyprint">void addLast(E e)</code>: 元素增加至队尾, 超容量抛异常</li>
+<li><code class="prettyprint">boolean offerFirst(E e)</code>: 元素增加至队头, 比add安全</li>
+<li><code class="prettyprint">boolean offerLast(E e)</code>: 元素增加至队尾, 比add安全</li>
+<li><code class="prettyprint">E removeFirst()</code>: 获取并删除队头元素, 队空抛<code class="prettyprint">NoSuchElementException</code></li>
+<li><code class="prettyprint">E removeLast()</code>: 获取并删除队尾元素, 队空抛<code class="prettyprint">NoSuchElementException</code></li>
+<li><code class="prettyprint">E pollFirst()</code>: 获取并删除队头元素, 队空返回<code class="prettyprint">null</code></li>
+<li><code class="prettyprint">E pollLast()</code>: 获取并删除队尾元素, 队空返回<code class="prettyprint">null</code></li>
+<li><code class="prettyprint">E getFirst()</code>: 获取队头元素, 但不删除, 队空抛<code class="prettyprint">NoSuchElementException</code></li>
+<li><code class="prettyprint">E getLast()</code>: 获取队头元素, 但不删除, 队空抛<code class="prettyprint">NoSuchElementException</code></li>
+<li><code class="prettyprint">E peekFirst()</code>: 获取队头元素, 但不删除, 队空返回<code class="prettyprint">null</code></li>
+<li><code class="prettyprint">E peekLast()</code>: 获取队头元素, 但不删除, 队空返回<code class="prettyprint">null</code></li>
+<li><code class="prettyprint">void push(E e)</code>: 元素增加至队头, 类似<code class="prettyprint">offerFirst</code></li>
+<li><code class="prettyprint">E pop()</code>: 元素增加至队头, 类似<code class="prettyprint">pollFirst</code></li>
+</ul>
+
+<h3 id="linkedlist">LinkedList</h3>
+
+<p><code class="prettyprint">LinkedList</code>类同时实现了<code class="prettyprint">List</code>接口和<code class="prettyprint">Deque</code>接口, 因此它也可以当做一个双端队列来用, 也可以当作“栈”来使用.<br>
+它基于链表实现, 随机访问性能较差, 但插入与删除操作性能很好</p>
+
+<hr>
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/Collection整理" data-title="Collection整理" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-12-Collection%E6%95%B4%E7%90%86.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
+
+</body>
+
+</html>

@@ -5,8 +5,8 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 12 Nov 2015 14:34:56 +0800</pubDate>
-    <lastBuildDate>Thu, 12 Nov 2015 14:34:56 +0800</lastBuildDate>
+    <pubDate>Fri, 13 Nov 2015 11:46:45 +0800</pubDate>
+    <lastBuildDate>Fri, 13 Nov 2015 11:46:45 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -115,6 +115,194 @@
         <pubDate>Thu, 12 Nov 2015 00:00:00 +0800</pubDate>
         <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-12-Map%E6%95%B4%E7%90%86.html</link>
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-12-Map%E6%95%B4%E7%90%86.html</guid>
+        
+        <category>Java</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
+    
+      <item>
+        <title>Collection的toArray方法</title>
+        <description>&lt;p&gt;Java中Collection的有两个toArray方法:&lt;code class=&quot;prettyprint&quot;&gt;Object[] toArray()&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;&amp;lt;T&amp;gt; T[] toArray(T[] a)&lt;/code&gt;&lt;br&gt;
+后面那个范型方法略难懂, 整理时发现些比较屌的地方,记录下来&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;&amp;lt;T&amp;gt; T[] toArray(T[] a)&lt;/code&gt;方法在抽象类&lt;code class=&quot;prettyprint&quot;&gt;AbstractCollection&lt;/code&gt;中有个实现&lt;br&gt;
+该方法也是把集合转成数组, 你可以指定转成什么类型的数组,若转换的类型与集合中元素类型不一样,会抛&lt;code class=&quot;prettyprint&quot;&gt;ArrayStoreException&lt;/code&gt;.&lt;br&gt;
+关于参数的写法上, 这个数组a可以是空的, 也可以不空, 会有不同的效果, 看下面代码:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// 先创建一个集合&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HashSet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 可以这么写, 长度为0, 只表示转成什么类型, 在内部还会创建一个长度为5的数组&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;array&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toArray&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]);&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 也可以这么写, 长度是集合的size, 在内部会把集合里的元素放到这个传参时创建的数组&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;array&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toArray&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()]);&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 还可以这么写, 长度大于集合的size, 在内部会把集合里的元素放到这个传参时创建的数组, 后面多出来的3(8-5)个位置填充null&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;array&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toArray&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]);&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 无论哪种方式, 如果传入的类型与即集合里元素的类型不匹配, 就会抛出ArrayStoreException&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;仔细看下JDK1.7的源码, 发现也很腹黑:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;toArray&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[])&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;java&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;lang&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;reflect&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Array&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;newInstance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getComponentType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Iterator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;E&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;iterator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(!&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;hasNext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;           &lt;span class=&quot;c1&quot;&gt;// 仔细想了下, 貌似这俩else分支根本不会被执行&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Arrays&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;copyOf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;                             &lt;span class=&quot;c1&quot;&gt;// 但人家可是JDK里的源码呀, 不可能出错吧!&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;arraycopy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;hasNext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;finishToArray&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;代码里注释中提的问题我想了好久, 我考虑的情况都是正常情况, 在并发环境中, 集合里的元素有可能会被其他线程remove掉,
+这就造成了iterator迭代出的元素个数小于size的情况, 注释里的那俩else就会被执行到了!&lt;br&gt;
+ JDK源码写的还真是考虑周到啊...&lt;/p&gt;
+
+&lt;hr&gt;
+</description>
+        <pubDate>Thu, 12 Nov 2015 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-12-Collection%E7%9A%84toArray%E6%96%B9%E6%B3%95.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-12-Collection%E7%9A%84toArray%E6%96%B9%E6%B3%95.html</guid>
+        
+        <category>Java</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
+    
+      <item>
+        <title>Collection整理</title>
+        <description>&lt;p&gt;Java中Collection的继承关系图, 虚线表示接口, 实线表示类&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;collection继承关系图&quot;&gt;Collection继承关系图&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/collection.png&quot; alt=&quot;Collection继承关系图&quot; title=&quot;Collection结构图&quot;&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;collection基本操作&quot;&gt;Collection基本操作&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;int size()&lt;/code&gt;: 返回集合大小&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean isEmpty()&lt;/code&gt;: 是否为空&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Iterator&amp;lt;E&amp;gt; iterator()&lt;/code&gt;: 返回迭代器&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Object[] toArray()&lt;/code&gt;: 把集合转成数组&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;&amp;lt;T&amp;gt; T[] toArray(T[] a)&lt;/code&gt;: 这个腹黑的方法详细说明看&lt;a href=&quot;/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-12-Collection%E7%9A%84toArray%E6%96%B9%E6%B3%95.html&quot;&gt;这里&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean contains(Object o)&lt;/code&gt;: 是否包含该对象&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean containsAll(Collection&amp;lt;?&amp;gt; c)&lt;/code&gt;: 包含c里的全部元素则返回true&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean add(E e)&lt;/code&gt;: 添加成功改变了集合则返回true&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean addAll(Collection&amp;lt;? extends E&amp;gt; c)&lt;/code&gt;: 全部添加&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean remove(E e)&lt;/code&gt;: 移除&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean removeAll(Collection&amp;lt;?&amp;gt; c)&lt;/code&gt;: 移除与c的交集元素&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;void clear()&lt;/code&gt;: 清空集合&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;set接口&quot;&gt;Set接口&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Set不允许包含相同的元素, 而判断两个对象是否相同则是根据&lt;code class=&quot;prettyprint&quot;&gt;equals&lt;/code&gt;方法&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;HashSet&lt;/code&gt;不是同步的, 不能保证元素的排列顺序, 注意&lt;code class=&quot;prettyprint&quot;&gt;hashCode&lt;/code&gt;方法的实现&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;LinkedHashSet&lt;/code&gt;根据元素的&lt;code class=&quot;prettyprint&quot;&gt;hashCode&lt;/code&gt;值来决定元素的存储位置，但它同时使用链表维护元素的次序&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;TreeSet&lt;/code&gt;是&lt;code class=&quot;prettyprint&quot;&gt;SortedSet&lt;/code&gt;接口的实现类, 有顺序, 可自定义比较器(&lt;code class=&quot;prettyprint&quot;&gt;Comparator&lt;/code&gt;),有&lt;code class=&quot;prettyprint&quot;&gt;first、last、lower、higher&lt;/code&gt;等方法&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;list接口&quot;&gt;List接口&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;List&lt;/code&gt;是经常用到的工具, 是有序集合, 增加了与索引位置相关的操作:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E get(int index)&lt;/code&gt;: 获取指定位置的元素&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E set(int index, E element)&lt;/code&gt;: 替换指定位置的元素&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;void add(int index, E element)&lt;/code&gt;: 将元素添加到指定位置&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean addAll(int index, Collection&amp;lt;? extends E&amp;gt; c)&lt;/code&gt;: 将c里的元素添加到指定位置&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E remove(int index)&lt;/code&gt;: 移除指定位置的元素&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;int indexOf(Object o)&lt;/code&gt;: o在list中第一次出现的位置&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;int lastIndexOf(Object o)&lt;/code&gt;: o在list中最后一次出现的位置&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;List&amp;lt;E&amp;gt; subList(int fromIndex, int toIndex)&lt;/code&gt;: 子list&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;arraylist和vector&quot;&gt;ArrayList和Vector&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;ArrayList&lt;/code&gt;是线程不安全的,而&lt;code class=&quot;prettyprint&quot;&gt;Vector&lt;/code&gt;是线程安全的  &lt;/p&gt;
+
+&lt;h3 id=&quot;stack&quot;&gt;Stack&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;Stack&lt;/code&gt;是&lt;code class=&quot;prettyprint&quot;&gt;Vector&lt;/code&gt;的子类,模拟数据结构中的栈,有下面几个操作:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E push(E item)&lt;/code&gt;: 压栈&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E pop()&lt;/code&gt;: 出栈&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E peek()&lt;/code&gt;: 查看栈顶元素, 不出栈&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean empty()&lt;/code&gt;: 判断栈空&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;int search(Object o)&lt;/code&gt;: 返回元素位置, 栈顶元素是1, －1表示栈里没有&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;queue接口&quot;&gt;Queue接口&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;Queue&lt;/code&gt;用于模拟队列这种数据结构，实现先进先出&lt;q&gt;FIFO&lt;/q&gt;等数据结构,常用如下操作:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean add(E e)&lt;/code&gt;: 不建议使用&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean offer(E e)&lt;/code&gt;: 将指定元素插入队尾列,当使用有容量限制的队列时,此方法通常要优于&lt;code class=&quot;prettyprint&quot;&gt;add(E)&lt;/code&gt;,
+后者可能无法插入元素，而只是抛出一个异常。&lt;strong&gt;推荐使用此方法取代add&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean remove()&lt;/code&gt;: 不建议使用&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean poll()&lt;/code&gt;: 获取头部元素并且删除元素，队列为空返回null;&lt;strong&gt;推荐使用此方法取代remove&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean element()&lt;/code&gt;: 返回队首元素, 队空抛&lt;code class=&quot;prettyprint&quot;&gt;NoSuchElementException&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean peek()&lt;/code&gt;: 返回队首元素, 队空返回&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;priorityqueue类&quot;&gt;PriorityQueue类&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;PriorityQueue&lt;/code&gt;类中元素的顺序不是按照加入的顺序排列的, 而是按队列元素的优先级重新排序,
+调用&lt;code class=&quot;prettyprint&quot;&gt;peek()&lt;/code&gt;或者是&lt;code class=&quot;prettyprint&quot;&gt;poll()&lt;/code&gt;方法时，返回的是队列中优先级最小的元素, 可以自定义排序.&lt;/p&gt;
+
+&lt;h3 id=&quot;deque接口与arraydeque类&quot;&gt;Deque接口与ArrayDeque类&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;Deque&lt;/code&gt;代表一个双端队列，可以当作一个双端队列使用，也可以当作“栈”来使用，因为它包含出栈&lt;code class=&quot;prettyprint&quot;&gt;pop()&lt;/code&gt;与入栈&lt;code class=&quot;prettyprint&quot;&gt;push()&lt;/code&gt;方法&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;void addFirst(E e)&lt;/code&gt;: 元素增加至队头, 超容量抛异常&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;void addLast(E e)&lt;/code&gt;: 元素增加至队尾, 超容量抛异常&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean offerFirst(E e)&lt;/code&gt;: 元素增加至队头, 比add安全&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean offerLast(E e)&lt;/code&gt;: 元素增加至队尾, 比add安全&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E removeFirst()&lt;/code&gt;: 获取并删除队头元素, 队空抛&lt;code class=&quot;prettyprint&quot;&gt;NoSuchElementException&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E removeLast()&lt;/code&gt;: 获取并删除队尾元素, 队空抛&lt;code class=&quot;prettyprint&quot;&gt;NoSuchElementException&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E pollFirst()&lt;/code&gt;: 获取并删除队头元素, 队空返回&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E pollLast()&lt;/code&gt;: 获取并删除队尾元素, 队空返回&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E getFirst()&lt;/code&gt;: 获取队头元素, 但不删除, 队空抛&lt;code class=&quot;prettyprint&quot;&gt;NoSuchElementException&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E getLast()&lt;/code&gt;: 获取队头元素, 但不删除, 队空抛&lt;code class=&quot;prettyprint&quot;&gt;NoSuchElementException&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E peekFirst()&lt;/code&gt;: 获取队头元素, 但不删除, 队空返回&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E peekLast()&lt;/code&gt;: 获取队头元素, 但不删除, 队空返回&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;void push(E e)&lt;/code&gt;: 元素增加至队头, 类似&lt;code class=&quot;prettyprint&quot;&gt;offerFirst&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E pop()&lt;/code&gt;: 元素增加至队头, 类似&lt;code class=&quot;prettyprint&quot;&gt;pollFirst&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;linkedlist&quot;&gt;LinkedList&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;LinkedList&lt;/code&gt;类同时实现了&lt;code class=&quot;prettyprint&quot;&gt;List&lt;/code&gt;接口和&lt;code class=&quot;prettyprint&quot;&gt;Deque&lt;/code&gt;接口, 因此它也可以当做一个双端队列来用, 也可以当作“栈”来使用.&lt;br&gt;
+它基于链表实现, 随机访问性能较差, 但插入与删除操作性能很好&lt;/p&gt;
+
+&lt;hr&gt;
+</description>
+        <pubDate>Thu, 12 Nov 2015 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-12-Collection%E6%95%B4%E7%90%86.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-12-Collection%E6%95%B4%E7%90%86.html</guid>
         
         <category>Java</category>
         
@@ -1038,474 +1226,6 @@ JDK7已经把Objects收录在了&lt;code class=&quot;prettyprint&quot;&gt;java.u
         
         
         <category>求知感悟</category>
-        
-      </item>
-    
-      <item>
-        <title>java日志(三):logback配置文件</title>
-        <description>&lt;p&gt;logback配置文件的简单介绍，主要内容均来自&lt;a href=&quot;http://logback.qos.ch/manual/&quot;&gt;logback官方文档&lt;/a&gt;&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;本文结构&quot;&gt;本文结构&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#structure&quot;&gt;logback配置文件的结构&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#configuration&quot;&gt;configuration元素&lt;/a&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#debug&quot;&gt;debug属性&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#scan&quot;&gt;scan属性&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#logger&quot;&gt;logger元素&lt;/a&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#name&quot;&gt;name属性&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#level&quot;&gt;level属性&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#additivity&quot;&gt;additivity属性&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#appender&quot;&gt;appender元素&lt;/a&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#encoder&quot;&gt;encoder子元素&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#layout&quot;&gt;layout子元素&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#pattern&quot;&gt;日志格式的详细说明(pattern元素)&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;structure&quot;&gt; logback配置文件的结构 &lt;/h2&gt;
-
-&lt;p&gt;logback配置文件的跟节点为&lt;code class=&quot;prettyprint&quot;&gt;&amp;lt;configuration&amp;gt;&lt;/code&gt;,它的子节点有3个:&lt;code class=&quot;prettyprint&quot;&gt;root、logger、appender&lt;/code&gt;，除了&lt;code class=&quot;prettyprint&quot;&gt;root&lt;/code&gt;之外，每个都可以多次出现。&lt;br&gt;
-下面是我画的一个结构图，实线表示节点，虚线表示属性&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/static/images/logbak_config.png&quot; alt=&quot;logback配置文件结构图&quot; title=&quot;结构图&quot;&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;appender&lt;/code&gt;:用于描述日志的输出格式，是输出到控制台还是输出到文件，日志滚动打包策略等。&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;logger&lt;/code&gt;:用来制定把什么内容用哪个&lt;code class=&quot;prettyprint&quot;&gt;appender&lt;/code&gt;输出。&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;root&lt;/code&gt;:默认的&lt;code class=&quot;prettyprint&quot;&gt;logger&lt;/code&gt;。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;configuration&quot;&gt; configuration元素 &lt;/h2&gt;
-
-&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;configuration&lt;/code&gt;元素是logback配置文件的根元素，它也有许多可选属性，如: &lt;code class=&quot;prettyprint&quot;&gt;debug、scan、scanPeriod&lt;/code&gt;等&lt;/p&gt;
-
-&lt;h3 id=&quot;debug&quot;&gt; debug 属性 &lt;/h3&gt;
-
-&lt;p&gt;如果logback的配置文件加载过程中出现了warning或error，则logback会把自身状态的日志打印出来，如下:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;00:16:31,885 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.test.log] to INFO
-00:16:31,885 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting additivity of logger [com.test.log] to false
-00:16:31,885 |-ERROR in ch.qos.logback.core.joran.action.AppenderRefAction - Could not find an appender named [STDOUT]....
-00:16:31,885 |-ERROR in ch.qos.logback.core.joran.action.AppenderRefAction - See ... for more details.
-00:16:31,885 |-INFO in ch.qos.logback.classic.joran.action.RootLoggerAction - Setting level of ROOT logger to DEBUG
-00:16:31,885 |-ERROR in ch.qos.logback.core.joran.action.AppenderRefAction - Could not find an appender named [STDOUT]....
-00:16:31,885 |-ERROR in ch.qos.logback.core.joran.action.AppenderRefAction - See ... for more details.
-00:16:31,885 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - End of configuration.
-00:16:31,888 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@36577c06 - Registering current configuration as...
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;如果加载过程未出现警告或者错误，就不会打印出来了。&lt;br&gt;
-若指定了&lt;code class=&quot;prettyprint&quot;&gt;debug=&amp;quot;true&amp;quot;&lt;/code&gt;，即使不出现警告和错误，也会打印出logback内部的状态日志。&lt;/p&gt;
-
-&lt;h3 id=&quot;scan&quot;&gt; scan 属性 &lt;/h3&gt;
-
-&lt;p&gt;可通过属性设置&lt;code class=&quot;prettyprint&quot;&gt;scan=&amp;quot;true&amp;quot;&lt;/code&gt;，在配置文件发生改变时自动重新加载配置文件，默认1分钟重新扫描一次。&lt;br&gt;
-可通过属性设置&lt;code class=&quot;prettyprint&quot;&gt;scanPeriod=&amp;quot;30 seconds&amp;quot;&lt;/code&gt;，指定30秒扫描一次。&lt;br&gt;
-扫描间隔的单位可以是&lt;code class=&quot;prettyprint&quot;&gt;milliseconds, seconds, minutes 或 hours&lt;/code&gt;，若不指定单位，默认为&lt;code class=&quot;prettyprint&quot;&gt;milliseconds&lt;/code&gt;。&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;p&gt;&lt;h2 id=&quot;logger&quot;&gt; logger元素 &lt;/h3&gt;
-&lt;code class=&quot;prettyprint&quot;&gt;logger&lt;/code&gt;元素用于配置代码中的logger，它有属性如: &lt;code class=&quot;prettyprint&quot;&gt;name、level、additivity&lt;/code&gt;，其中&lt;code class=&quot;prettyprint&quot;&gt;name&lt;/code&gt;属性是必须的，其他2个可选。
-有0个或多个子元素&lt;code class=&quot;prettyprint&quot;&gt;&amp;lt;appender-ref ref=&amp;quot;STDOUT&amp;quot; /&amp;gt;&lt;/code&gt;来指定日志输出的格式。若0个，则不指定输出格式，就不会输出了。&lt;br&gt;
-&lt;strong&gt;注意&lt;/strong&gt;&lt;code class=&quot;prettyprint&quot;&gt;root&lt;/code&gt;是最顶级的logger，它只有个可选属性level。&lt;/p&gt;
-
-&lt;h3 id=&quot;name&quot;&gt; name 属性 &lt;/h3&gt;
-
-&lt;p&gt;在java代码中，getLogger(String className)的参数一样获取到的logger是同一个，如下面的&lt;code class=&quot;prettyprint&quot;&gt;logger1&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;logger2&lt;/code&gt;就是同一个对象:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;Logger&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;logger1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LoggerFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;org.slf4j.Logger&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Logger&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;logger2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LoggerFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;org.slf4j.Logger&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;日志&lt;code class=&quot;prettyprint&quot;&gt;logger&lt;/code&gt;有个&lt;code class=&quot;prettyprint&quot;&gt;name&lt;/code&gt;属性，跟代码中传的参数有一定的关系，举个例子:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;    &lt;span class=&quot;o&quot;&gt;&amp;lt;!--&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;配置文件中&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;--&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;A.B&amp;quot;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;level&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;debug&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// java 代码中&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;Logger&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LoggerFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;A.B.C&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;输出的日志会先在配置文件中匹配名字为&lt;q&gt;A.B.C&lt;/q&gt;的logger，未找到，匹配到了&lt;q&gt;A.B&lt;/q&gt;的logger，则按照其指定的&lt;code class=&quot;prettyprint&quot;&gt;appender&lt;/code&gt;格式进行输出。&lt;/p&gt;
-
-&lt;h3 id=&quot;level&quot;&gt; level属性 &lt;/h3&gt;
-
-&lt;p&gt;日志的级别有: &lt;code class=&quot;prettyprint&quot;&gt;TRACE &amp;lt; DEBUG &amp;lt; INFO &amp;lt;  WARN &amp;lt; ERROR (ALL、OFF)&lt;/code&gt;&lt;br&gt;
-日志级别是可以继承的，root不用指定级别，默认就是&lt;q&gt;DEBUG&lt;/q&gt;. 举个继承的例子:&lt;/p&gt;
-
-&lt;table&gt;
-    &lt;tr&gt;
-        &lt;th&gt;Logger name&lt;/th&gt;
-        &lt;th&gt;Assigned level&lt;/th&gt;
-        &lt;th&gt;Effective level&lt;/th&gt;
-    &lt;/tr&gt;
-    &lt;tr class=&quot;alt&quot; align=&quot;left&quot;&gt;
-        &lt;td&gt;root&lt;/td&gt;
-        &lt;td&gt;DEBUG&lt;/td&gt;
-        &lt;td&gt;DEBUG&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr align=&quot;left&quot;&gt;
-        &lt;td&gt;X&lt;/td&gt;
-        &lt;td&gt;INFO&lt;/td&gt;
-        &lt;td&gt;INFO&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr class=&quot;alt&quot; align=&quot;left&quot;&gt;
-        &lt;td&gt;X.Y&lt;/td&gt;
-        &lt;td&gt;未指定&lt;/td&gt;
-        &lt;td&gt;INFO(继承来的)&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr align=&quot;left&quot;&gt;
-        &lt;td&gt;X.Y.Z&lt;/td&gt;
-        &lt;td&gt;ERROR&lt;/td&gt;
-        &lt;td&gt;ERROR(自己有)&lt;/td&gt;
-    &lt;/tr&gt;
-&lt;/table&gt;
-
-&lt;h3 id=&quot;additivity&quot;&gt; additivity属性 &lt;/h3&gt;
-
-&lt;p&gt;该属性表示日志的可叠加性，默认为true,表示到达本logger的日志通过本日志的appender指定格式输出之后，仍会将日志扩散给父logger。&lt;br&gt;
-弄个表格就容易看清楚了:&lt;/p&gt;
-
-&lt;table class=&quot;bodyTable&quot;&gt;
-    &lt;tr&gt;
-        &lt;th&gt;Logger Name&lt;/th&gt;
-        &lt;th&gt;Attached Appenders&lt;/th&gt;
-        &lt;th&gt;Additivity Flag&lt;/th&gt;
-        &lt;th&gt;Output Targets&lt;/th&gt;
-        &lt;th&gt;Comment&lt;/th&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;td&gt;root&lt;/td&gt;
-        &lt;td&gt;A1&lt;/td&gt;
-        &lt;td&gt;not applicable&lt;/td&gt;
-        &lt;td&gt;A1&lt;/td&gt;
-        &lt;td&gt;root没有父logger，&lt;br&gt;所以additivity属性对root不适用
-        &lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr class=&quot;alt&quot;&gt;
-        &lt;td&gt;x&lt;/td&gt;
-        &lt;td&gt;A-x1, A-x2&lt;/td&gt;
-        &lt;td&gt;true&lt;/td&gt;
-        &lt;td&gt;A1, &lt;br&gt;A-x1, A-x2&lt;/td&gt;
-        &lt;td&gt;&quot;x&quot;(自己)的appender&lt;br&gt;扩散到root的appender&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;td&gt;x.y&lt;/td&gt;
-        &lt;td&gt;none&lt;/td&gt;
-        &lt;td&gt;true&lt;/td&gt;
-        &lt;td&gt;A1, &lt;br&gt;A-x1, A-x2&lt;/td&gt;
-        &lt;td&gt;扩散到&quot;x&quot;和root的appender.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr class=&quot;alt&quot;&gt;
-        &lt;td&gt;x.y.z&lt;/td&gt;
-        &lt;td&gt;A-xyz1&lt;/td&gt;
-        &lt;td&gt;true&lt;/td&gt;
-        &lt;td&gt;A1, &lt;br&gt;A-x1, A-x2, &lt;br&gt;A-xyz1&lt;/td&gt;
-        &lt;td&gt;&quot;x.y.z&quot;的appender&lt;br&gt;扩散到&quot;x&quot;和root的appender.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;td&gt;security&lt;/td&gt;
-        &lt;td&gt;A-sec&lt;/td&gt;
-        &lt;td class=&quot;blue&quot;&gt;&lt;span class=&quot;blue&quot;&gt;false&lt;/span&gt;&lt;/td&gt;
-        &lt;td&gt;A-sec&lt;/td&gt;
-        &lt;td&gt;
-            additivity=&lt;code&gt;false&lt;/code&gt;.&lt;br&gt;
-            只用到 appender A-sec.
-        &lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr class=&quot;alt&quot;&gt;
-        &lt;td&gt;security.access&lt;/td&gt;
-        &lt;td&gt;none&lt;/td&gt;
-        &lt;td&gt;true&lt;/td&gt;
-        &lt;td&gt;A-sec&lt;/td&gt;
-        &lt;td&gt;
-            &quot;security&quot;中的additivity＝&lt;code&gt;false&lt;/code&gt;.&lt;br&gt;
-            只扩散到了&quot;security&quot; 的appender.
-        &lt;/td&gt;
-    &lt;/tr&gt;
-&lt;/table&gt;
-
-&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;&lt;br&gt;
-最后一个小例子:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;    &lt;span class=&quot;c1&quot;&gt;// java代码,A.B.C包中的类&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;debug&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;debug&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;info&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// logger配置: 无additivity,默认true会扩散，无appender-ref,不会打印&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;A.B.C&amp;quot;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;level&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;info&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// root配置: 级别为最高的OFF&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;level&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;OFF&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;appender&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ref&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ref&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;STDOUT&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;&amp;lt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;运行的结果是会打印&lt;q&gt;info&lt;/q&gt;.&lt;br&gt;
-因为logger配置了级别为info，但是并不打印，扩散到了root;&lt;br&gt;
-root级别为OFF，但是logger扩散过来的日志级别仍为继承的info.&lt;br&gt;
-所以只有A.B.C包中级别大于等于info的日志会被打印。&lt;/p&gt;
-
-&lt;p&gt;&lt;h2 id=&quot;appender&quot;&gt; appender元素 &lt;/h3&gt;
-&lt;code class=&quot;prettyprint&quot;&gt;appender&lt;/code&gt;元素内容稍微多点，它有2个必需属性:&lt;code class=&quot;prettyprint&quot;&gt;name&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;class&lt;/code&gt;。&lt;br&gt;
-有3个可选的子元素&lt;code class=&quot;prettyprint&quot;&gt;&amp;lt;encoder&amp;gt;、&amp;lt;layout&amp;gt;、&amp;lt;filter&amp;gt;&lt;/code&gt;，这3个子元素可有0个或者多个。&lt;br&gt;
-一般只用&lt;code class=&quot;prettyprint&quot;&gt;&amp;lt;encoder&amp;gt;&lt;/code&gt;，它包装了&lt;code class=&quot;prettyprint&quot;&gt;&amp;lt;layout&amp;gt;&lt;/code&gt;。&lt;/p&gt;
-
-&lt;h3 id=&quot;encoder&quot;&gt; encoder 子元素 &lt;/h3&gt;
-
-&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;encoder&lt;/code&gt;的作用是把消息转化成输出流，可以控制消息怎么转化，何时输出等。&lt;br&gt;
-而&lt;code class=&quot;prettyprint&quot;&gt;layout&lt;/code&gt;仅指定消息输出的格式，不能控制消息什么时候输出，不能控制消息暂存到flush然后一下子批量输出。&lt;br&gt;
-实际上&lt;code class=&quot;prettyprint&quot;&gt;encoder&lt;/code&gt;内部包装了&lt;code class=&quot;prettyprint&quot;&gt;PatternLayout&lt;/code&gt;，然后又多了一些控制功能。
-来个例子:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 一般这样写 --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;appender&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;FILE&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;ch.qos.logback.core.FileAppender&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;file&amp;gt;&lt;/span&gt;testFile.log&lt;span class=&quot;nt&quot;&gt;&amp;lt;/file&amp;gt;&lt;/span&gt;
-  ...
-  &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 默认的class就是这个最常用的Encoder类型，所以class可以不指定 --&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;encoder&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;ch.qos.logback.classic.encoder.PatternLayoutEncoder&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-     &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- encoder 包装了ch.qos.logback.classic.PatternLayout --&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;pattern&amp;gt;&lt;/span&gt;%msg%n&lt;span class=&quot;nt&quot;&gt;&amp;lt;/pattern&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 是否立刻输出，默认为true,为false表示先存到缓冲区，然后一起输出，速度是true的4倍，但是appender不正常关闭可能导致丢失缓冲区里的log --&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;immediateFlush&amp;gt;&lt;/span&gt;false&lt;span class=&quot;nt&quot;&gt;&amp;lt;/immediateFlush&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/encoder&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/appender&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 这种写法基本不推荐 --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;appender&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;FILE&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;ch.qos.logback.core.FileAppender&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;file&amp;gt;&lt;/span&gt;testFile.log&lt;span class=&quot;nt&quot;&gt;&amp;lt;/file&amp;gt;&lt;/span&gt;
-  ...
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;layout&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;ch.qos.logback.classic.PatternLayout&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;pattern&amp;gt;&lt;/span&gt;%msg%n&lt;span class=&quot;nt&quot;&gt;&amp;lt;/pattern&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/layout&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/appender&amp;gt;&lt;/span&gt;  
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id=&quot;layout&quot;&gt; layout 子元素 &lt;/h3&gt;
-
-&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;layout&lt;/code&gt;用于指定输出格式,有个class属性，不写默认是&lt;code class=&quot;prettyprint&quot;&gt;ch.qos.logback.classic.PatternLayout&lt;/code&gt;。&lt;br&gt;
-也可以自己定义layout，然后像下面这样使用(一般也不自己定义):&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;  &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;STDOUT&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;ch.qos.logback.core.ConsoleAppender&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;encoder&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;ch.qos.logback.core.encoder.LayoutWrappingEncoder&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;layout&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;chapters.layouts.MySampleLayout&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/encoder&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/appender&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;我们一般使用的方式是上一小结那样，仅自己指定输出格式,输出格式很有必要说明,先来个简单的介绍,下一小节详细介绍pattern&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;appender&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;STDOUT&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;ch.qos.logback.core.ConsoleAppender&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- class默认就是这个类，可不写 --&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;layout&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;ch.qos.logback.classic.PatternLayout&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- %d表示日期，&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;             %thread表示线程名，&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;             %-5level：级别左对齐显示最少5个字符宽度(不足则补空格),&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;             %msg：日志消息，&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;             %n是换行符&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;        --&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;pattern&amp;gt;&lt;/span&gt;%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n&lt;span class=&quot;nt&quot;&gt;&amp;lt;/pattern&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/layout&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/appender&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;h3 id=&quot;pattern&quot;&gt; 日志格式的详细说明(pattern元素) &lt;/h3&gt;
-
-&lt;p&gt;不管是&lt;code class=&quot;prettyprint&quot;&gt;encoder&lt;/code&gt;元素中还是&lt;code class=&quot;prettyprint&quot;&gt;layout&lt;/code&gt;元素中，都少不了&lt;code class=&quot;prettyprint&quot;&gt;pattern&lt;/code&gt;，它是用来描述日志输出格式的。&lt;br&gt;
-下面就是格式的详细介绍&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;长度限定 : {length}&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;像&lt;code class=&quot;prettyprint&quot;&gt;%logger, %class&lt;/code&gt;等都可以通过&lt;code class=&quot;prettyprint&quot;&gt;length&lt;/code&gt;来限定长度，对其进行缩写，不过这个长度有点特殊，举个例子说明会更明白:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;nl&quot;&gt;有个logger这样定义:&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Logger&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LoggerFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Aaaaa.Bbbbb.TestLength&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-   &lt;span class=&quot;n&quot;&gt;格式&lt;/span&gt;       &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;       &lt;span class=&quot;n&quot;&gt;结果&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;    &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;TestLength&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;    &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;TestLength&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;17&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;TestLength&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;18&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Bbbbb&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;TestLength&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;21&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Bbbbb&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;TestLength&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;22&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;Aaaaa&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Bbbbb&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;TestLength&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;最右边的那个类名总是显示的;&lt;br&gt;
-由于&lt;code class=&quot;prettyprint&quot;&gt;A.Bbbbb.TestLength&lt;/code&gt;长度为18，所以&lt;code class=&quot;prettyprint&quot;&gt;0&amp;lt;lenght&amp;lt;18&lt;/code&gt;时会被缩写成&lt;code class=&quot;prettyprint&quot;&gt;A.B.TestLength&lt;/code&gt;;&lt;br&gt;
-由于&lt;code class=&quot;prettyprint&quot;&gt;Aaaaa.Bbbbb.TestLength&lt;/code&gt;长度为22，所以&lt;code class=&quot;prettyprint&quot;&gt;18&amp;lt;lenght&amp;lt;22&lt;/code&gt;时会被缩写成&lt;code class=&quot;prettyprint&quot;&gt;A.Bbbbb.TestLength&lt;/code&gt;;&lt;br&gt;
-&lt;code class=&quot;prettyprint&quot;&gt;lenght&amp;gt;=22&lt;/code&gt;时不缩写;&lt;br&gt;
-&lt;strong&gt;length总结&lt;/strong&gt; :&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;0只显示短类名(最右边的); 非0显示全类名，但是包名可能会被缩写，缩写成只有一个首字母&lt;/li&gt;
-&lt;li&gt;缩写时最外层包最先被缩写，右边的包名最先不被缩写&lt;/li&gt;
-&lt;li&gt;不缩写的前提是: &lt;code class=&quot;prettyprint&quot;&gt;总长度&amp;lt;=lenght&lt;/code&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;日志名 : %c{length} / %lo{length} / %logger{length}&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;产生日志的Logger的全名，可通过length缩写， &lt;code class=&quot;prettyprint&quot;&gt;%logger{36}、%c{36}&lt;/code&gt;效果是一样的。  &lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;类名 : %C{length} / %class{length}&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;产生日志的类的全名， 如类&lt;q&gt;A.B.MyClass&lt;/q&gt;中有个Logger名字为&lt;q&gt;A.B.MyLogger&lt;/q&gt;，前者是类名，后者是日志名。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;方法名 : %M / %method&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;产生日志的方法名。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;文件名 : %F / %file&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;产生日志的java源文件名， 如&lt;q&gt;LogbackTest.java&lt;/q&gt;。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;行号 : %L / %line&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;日志行产生的行号。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;行号 : %m / %msg / %message&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;日志中输出的信息&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;行号 : %d{pattern} / %date{pattern} / %message&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;产生日志的时间。日志的格式如下:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;                     &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2015&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;07&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;07&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;22&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;45&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;25&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;665&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;date&lt;/span&gt;                  &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2015&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;07&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;07&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;22&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;45&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;25&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;665&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;HH:mm:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ss&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;SSS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;    &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;22&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;45&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;25.665&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;yyyy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MM&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dd&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;HH:mm:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ss&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;SSS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;  &lt;span class=&quot;mi&quot;&gt;2015&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;07&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;07&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;22&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;45&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;25.665&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;注意那个毫秒前一定要写成点&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(.)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;格式控制&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;&amp;quot;.&amp;quot;&lt;/code&gt;前面是最短长度，不够则补白；&lt;code class=&quot;prettyprint&quot;&gt;&amp;quot;.&amp;quot;&lt;/code&gt;后面是最大长度。直接来个例子:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;   &lt;span class=&quot;n&quot;&gt;格式化串&lt;/span&gt;         &lt;span class=&quot;n&quot;&gt;logger名&lt;/span&gt;                &lt;span class=&quot;n&quot;&gt;结果&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;[%&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;20.20&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Name&lt;/span&gt;             &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;           &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;[%-&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;20.20&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Name&lt;/span&gt;             &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Name&lt;/span&gt;           &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;[%&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;10.10&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;bar&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;bar&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;[%&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;bar&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-</description>
-        <pubDate>Fri, 03 Jul 2015 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-07-03-java%E6%97%A5%E5%BF%97(%E4%B8%89)logback%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-07-03-java%E6%97%A5%E5%BF%97(%E4%B8%89)logback%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.html</guid>
-        
-        <category>Java日志</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>CSRF</title>
-        <description>&lt;p&gt;CSRF算是比较简单的Web攻击方式了吧，我们来看看它到底是什么。&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;目录&quot;&gt;目录&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;#introduction&quot;&gt;CSRF简介&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#attact&quot;&gt;攻击原理&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;#use&quot;&gt;防范方法&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;introduction&quot;&gt; CSRF简介 &lt;/h2&gt;
-
-&lt;p&gt;CSRF(Cross-site request forgery)学名叫跨站请求伪造。从名字上可看出来，跨站，至少涉及两个站点。&lt;br&gt;
-CSRF的流程是这样的:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;用户登录正常网站A&lt;/li&gt;
-&lt;li&gt;用户的登陆凭证被保存在了本地cookie中&lt;/li&gt;
-&lt;li&gt;用户未登出的情况下，同时又浏览了网站B(恶意网站)&lt;/li&gt;
-&lt;li&gt;B站私自访问了A站的某些操作(比如删除信息等)&lt;/li&gt;
-&lt;li&gt;A站检查到用户的登陆凭证，认为用户合法(删除信息这个操作就执行了)&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;attact&quot;&gt; 攻击原理 &lt;/h2&gt;
-
-&lt;p&gt;浏览器访问某站时，会携带该站保存在本地的cookie去请求该站的服务器。&lt;br&gt;
-比如访问A站，就会携带A的cookie去请求A站的服务器。访问A站时，不会携带另一个站点的cookie信息。&lt;br&gt;
-而CSRF攻击就是利用了这点，访问B站时，B站在用户不知情的情况下悄悄访问了A，这时就携带了A站的cookie，&lt;br&gt;
-A站检查cookie中的登陆凭证，认为正确，结果恶意操作就被当成正确操作执行了。  &lt;/p&gt;
-
-&lt;p&gt;举个例子:&lt;br&gt;
-www.A.com站在用户登录后，会将登陆凭证保存在本地cookie中，A站有个删除个人信息的操作www.A.com/user/，
-但需要一个参数:type(type=delete表示删除个人信息，type=modify表示修改个人信息等)。&lt;br&gt;
-用户登录A站之后又访问了B站(恶意网站),B站中有这样一段代码:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;form&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;action=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;www.A.com/user/&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;method=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;POST&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;input&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;text&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;type&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;delete&amp;quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/form&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;script&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;document&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;forms&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;submit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;用户访问了B结果B站悄悄向A提交了删除信息的操作(访问A会携带A的cookie)，这样就是CSRF攻击了。&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;use&quot;&gt; 防范方法 &lt;/h2&gt;
-
-&lt;p&gt;防范的方法有许多，Token方式是最主流的。&lt;/p&gt;
-
-&lt;h3 id=&quot;token&quot;&gt;Token&lt;/h3&gt;
-
-&lt;p&gt;CSRF能攻击成功，根本原因是：操作所带的参数均被攻击者猜测到了。&lt;br&gt;
-根据这个原因，我们就可以添加一个Token参数，其值是随机的，使攻击者不知道无法猜到。&lt;br&gt;
-通过Token方式防范CSRF，实施起来可以有两种方式吧，一是通过session，二是通过cookie。  &lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;通过session的方式&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;服务端生成token，并保存在session中，然后拍给前端，放到hiddin域里。
-下次请求时就会把token提交到服务端，服务端从session中取出token和hiddin域提交过来的token对比。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;通过cookie的方式&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;服务端生成token，拍给前端放到hiddin域里，然后经过加密把密文放在cookie里。
-下次请求时会把hiddin域中的token和cookie里的加密token都提交给服务器，服务器得到cookie里的加密token进行解密，
-然后跟hiddin域提交过来的token进行对比。&lt;/p&gt;
-
-&lt;h3 id=&quot;验证码&quot;&gt;验证码&lt;/h3&gt;
-
-&lt;p&gt;验证码不仅可用来防止暴力破解，还可以有效防止CSRF的攻击。
-但问题在于，不可能在用户的所有操作上都需要输入验证码。只有一些关键的操作，才能要求输入验证码。&lt;/p&gt;
-
-&lt;h3 id=&quot;referer字段检查&quot;&gt;Referer字段检查&lt;/h3&gt;
-
-&lt;p&gt;当浏览器向web服务器发出请求的时候，在HTTP的请求头(Request Headers)中一般会带上Referer，告诉服务器用户从哪个站点链接过来的。
-服务器通过判断请求头中的referer，也能避免CSRF的攻击。&lt;/p&gt;
-
-&lt;hr&gt;
-</description>
-        <pubDate>Wed, 24 Jun 2015 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-06-24-CSRF.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-06-24-CSRF.html</guid>
-        
-        <category>CSRF</category>
-        
-        
-        <category>点滴积累</category>
         
       </item>
     

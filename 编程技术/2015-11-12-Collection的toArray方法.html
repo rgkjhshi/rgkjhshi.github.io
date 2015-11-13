@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="Collection的toArray方法, 编程技术, Java, 逆水行舟" />
+    <meta name="description" content="Collection的toArray方法, 编程技术, Java, Java中Collection的有两个toArray方法:Object[] toArray()和&lt;T&gt; T[] toArray(T[] a)后面那个范型方法略难懂, 整理时发现些比较屌的地方,记录下来" />
+
+    <title>逆水行舟</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="http://loveshisong.cn/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-12-Collection%E7%9A%84toArray%E6%96%B9%E6%B3%95.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/jquery.qrcode.min.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/uikit.min.js"></script>
+    <!-- quietflow -->
+    <!-- <script type="text/javascript" src="http://loveshisong.cn/static/js/quietflow.min.js"></script> -->
+    <!-- UK sticky -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "shisong"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" data-uk-sticky>
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="http://loveshisong.cn/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <script type="text/javascript">
+jQuery(function(){
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-12-Collection%E7%9A%84toArray%E6%96%B9%E6%B3%95.html"
+    });
+})
+</script>
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>Collection的toArray方法</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <p>Java中Collection的有两个toArray方法:<code class="prettyprint">Object[] toArray()</code>和<code class="prettyprint">&lt;T&gt; T[] toArray(T[] a)</code><br>
+后面那个范型方法略难懂, 整理时发现些比较屌的地方,记录下来</p>
+
+<hr>
+
+<p><code class="prettyprint">&lt;T&gt; T[] toArray(T[] a)</code>方法在抽象类<code class="prettyprint">AbstractCollection</code>中有个实现<br>
+该方法也是把集合转成数组, 你可以指定转成什么类型的数组,若转换的类型与集合中元素类型不一样,会抛<code class="prettyprint">ArrayStoreException</code>.<br>
+关于参数的写法上, 这个数组a可以是空的, 也可以不空, 会有不同的效果, 看下面代码:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// 先创建一个集合</span>
+<span class="n">Set</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">set</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;(</span><span class="mi">5</span><span class="o">);</span>
+<span class="c1">// 可以这么写, 长度为0, 只表示转成什么类型, 在内部还会创建一个长度为5的数组</span>
+<span class="n">String</span><span class="o">[]</span> <span class="n">array</span> <span class="o">=</span> <span class="n">set</span><span class="o">.</span><span class="na">toArray</span><span class="o">(</span><span class="k">new</span> <span class="n">String</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+<span class="c1">// 也可以这么写, 长度是集合的size, 在内部会把集合里的元素放到这个传参时创建的数组</span>
+<span class="n">String</span><span class="o">[]</span> <span class="n">array</span> <span class="o">=</span> <span class="n">set</span><span class="o">.</span><span class="na">toArray</span><span class="o">(</span><span class="k">new</span> <span class="n">String</span><span class="o">[</span><span class="n">set</span><span class="o">.</span><span class="na">size</span><span class="o">()]);</span>
+<span class="c1">// 还可以这么写, 长度大于集合的size, 在内部会把集合里的元素放到这个传参时创建的数组, 后面多出来的3(8-5)个位置填充null</span>
+<span class="n">String</span><span class="o">[]</span> <span class="n">array</span> <span class="o">=</span> <span class="n">set</span><span class="o">.</span><span class="na">toArray</span><span class="o">(</span><span class="k">new</span> <span class="n">String</span><span class="o">[</span><span class="mi">8</span><span class="o">]);</span>
+<span class="c1">// 无论哪种方式, 如果传入的类型与即集合里元素的类型不匹配, 就会抛出ArrayStoreException</span>
+</code></pre></div>
+<p>仔细看下JDK1.7的源码, 发现也很腹黑:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">T</span><span class="o">[]</span> <span class="nf">toArray</span><span class="o">(</span><span class="n">T</span><span class="o">[]</span> <span class="n">a</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="n">size</span><span class="o">();</span>
+    <span class="n">T</span><span class="o">[]</span> <span class="n">r</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="na">length</span> <span class="o">&gt;=</span> <span class="n">size</span> <span class="o">?</span> <span class="n">a</span> <span class="o">:</span> <span class="o">(</span><span class="n">T</span><span class="o">[])</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">reflect</span><span class="o">.</span><span class="na">Array</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getComponentType</span><span class="o">(),</span> <span class="n">size</span><span class="o">);</span>
+    <span class="n">Iterator</span><span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span> <span class="n">it</span> <span class="o">=</span> <span class="n">iterator</span><span class="o">();</span>
+    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">r</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span> <span class="n">it</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">r</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">r</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="na">length</span> <span class="o">&lt;</span> <span class="n">i</span><span class="o">)</span> <span class="o">{</span>           <span class="c1">// 仔细想了下, 貌似这俩else分支根本不会被执行</span>
+                <span class="k">return</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">copyOf</span><span class="o">(</span><span class="n">r</span><span class="o">,</span> <span class="n">i</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>                             <span class="c1">// 但人家可是JDK里的源码呀, 不可能出错吧!</span>
+                <span class="n">System</span><span class="o">.</span><span class="na">arraycopy</span><span class="o">(</span><span class="n">r</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">a</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">i</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="na">length</span> <span class="o">&gt;</span> <span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">a</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="n">a</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">r</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="n">T</span><span class="o">)</span><span class="n">it</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="n">it</span><span class="o">.</span><span class="na">hasNext</span><span class="o">()</span> <span class="o">?</span> <span class="n">finishToArray</span><span class="o">(</span><span class="n">r</span><span class="o">,</span> <span class="n">it</span><span class="o">)</span> <span class="o">:</span> <span class="n">r</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>代码里注释中提的问题我想了好久, 我考虑的情况都是正常情况, 在并发环境中, 集合里的元素有可能会被其他线程remove掉,
+这就造成了iterator迭代出的元素个数小于size的情况, 注释里的那俩else就会被执行到了!<br>
+ JDK源码写的还真是考虑周到啊...</p>
+
+<hr>
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/Collection的toArray方法" data-title="Collection的toArray方法" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-12-Collection%E7%9A%84toArray%E6%96%B9%E6%B3%95.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
+
+</body>
+
+</html>
