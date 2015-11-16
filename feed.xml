@@ -5,9 +5,113 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 16 Nov 2015 20:41:33 +0800</pubDate>
-    <lastBuildDate>Mon, 16 Nov 2015 20:41:33 +0800</lastBuildDate>
+    <pubDate>Mon, 16 Nov 2015 23:19:08 +0800</pubDate>
+    <lastBuildDate>Mon, 16 Nov 2015 23:19:08 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>Guava之Ordering</title>
+        <description>&lt;p&gt;guava的collection包里有个&lt;code class=&quot;prettyprint&quot;&gt;Ordering&lt;/code&gt;抽象类实现了&lt;code class=&quot;prettyprint&quot;&gt;java.util.Comparator&lt;/code&gt;接口&lt;br&gt;
+&lt;code class=&quot;prettyprint&quot;&gt;Comparator&lt;/code&gt;就俩方法&lt;code class=&quot;prettyprint&quot;&gt;int compare(T o1, T o2);&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;boolean equals(Object obj);&lt;/code&gt;&lt;br&gt;
+&lt;code class=&quot;prettyprint&quot;&gt;Ordering&lt;/code&gt;提供了更多的方法来完成集合排序的功能&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;静态方法&quot;&gt;静态方法&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Ordering&amp;lt;C&amp;gt; natural()&lt;/code&gt;: 返回自然顺序的比较器, 如数字按大小，日期按先后&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Ordering&amp;lt;T&amp;gt; from(Comparator&amp;lt;T&amp;gt; comparator)&lt;/code&gt;: 把给定的Comparator转化为排序器&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Ordering&amp;lt;Object&amp;gt; usingToString()&lt;/code&gt;: 按对象的字符串形式做字典排序&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Ordering&amp;lt;T&amp;gt; compound(Iterable comparators)&lt;/code&gt;: 合成多个比较器, 类似于实例方法的那个&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Ordering&amp;lt;Object&amp;gt; allEqual()&lt;/code&gt;: 返回一个认为全都相等的比较器, 相当于没有排序.
+它的意义在于返回一个比较器, 这样就可以使用一些实例方法了, 从而进行链式比较,
+比如:&lt;code class=&quot;prettyprint&quot;&gt;Ordering.allEqual().nullsLast().sortedCopy(asList(t, null, e, s, null, t, null))}&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;实例方法:链式调用&quot;&gt;实例方法:链式调用&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Ordering&amp;lt;S&amp;gt; reverse()&lt;/code&gt;: 返回反序比较器&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Ordering&amp;lt;S&amp;gt; nullsFirst()&lt;/code&gt;: 使用当前排序器, 但额外把&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;放到最前面&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Ordering&amp;lt;S&amp;gt; nullsLast()&lt;/code&gt;: 使用当前排序器, 但额外把&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;放到最后面&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Ordering&amp;lt;U&amp;gt; compound(Comparator second)&lt;/code&gt;: 合成比较器, 先按原来排序，然后按second排序&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Ordering&amp;lt;F&amp;gt; onResultOf(Function&amp;lt;F, T&amp;gt; function)&lt;/code&gt;: 对集合中元素调用Function，再按返回值用当前排序器排序.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;看下面这个链式调用的例子, 应该从后往前读, 先调用apply方法获取Foo的name值, 在把null放前面, 再对剩下的按照name的自然顺序进行排序&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;Ordering&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Foo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ordering&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Ordering&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;natural&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;nullsFirst&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;onResultOf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Function&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Foo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;apply&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Foo&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+
+&lt;h2 id=&quot;实例方法:操作集合元素的方法&quot;&gt;实例方法:操作集合元素的方法&lt;/h2&gt;
+
+&lt;p&gt;注:后面说的大小是指排序的前后&lt;/p&gt;
+
+&lt;h3 id=&quot;min():-返回最小的那个元素,-重载方法有&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;min()&lt;/code&gt;: 返回最小的那个元素, 重载方法有&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E min(Iterator&amp;lt;E&amp;gt; iterator)&lt;/code&gt;: 迭代器空则抛出&lt;code class=&quot;prettyprint&quot;&gt;NoSuchElementException&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E min(Iterable&amp;lt;E&amp;gt; iterable)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E min(E a, E b)&lt;/code&gt;: 相等则返回第一个&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E min(E a,  E b, E c, E... rest)&lt;/code&gt;: 多个最小则返回第一个最小的&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;max():-返回最大的那个元素,-重载方法有&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;max()&lt;/code&gt;: 返回最大的那个元素, 重载方法有&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E max(Iterator&amp;lt;E&amp;gt; iterator)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E max(Iterable&amp;lt;E&amp;gt; iterable)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E max(E a, E b)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E max(E a,  E b, E c, E... rest)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;leastof():-返回最小的k个元素的列表,-不足k个则都返回&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;leastOf()&lt;/code&gt;: 返回最小的k个元素的列表, 不足k个则都返回&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;List&amp;lt;E&amp;gt; leastOf(Iterable&amp;lt;E&amp;gt; iterable, int k)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;List&amp;lt;E&amp;gt; leastOf(Iterator&amp;lt;E&amp;gt; elements, int k)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;greatestof():-返回最大的k个元素的列表,-不足k个则都返回&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;greatestOf()&lt;/code&gt;: 返回最大的k个元素的列表, 不足k个则都返回&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;List&amp;lt;E&amp;gt; greatestOf(Iterable&amp;lt;E&amp;gt; iterable, int k)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;List&amp;lt;E&amp;gt; greatestOf(Iterator&amp;lt;E&amp;gt; elements, int k)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;判断是否已经按照排序器排过序&quot;&gt;判断是否已经按照排序器排过序&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean isOrdered(Iterable iterable)&lt;/code&gt;: 允许有排序值相等的元素&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean isStrictlyOrdered(Iterable iterable)&lt;/code&gt;: 严格递增, 不允许有相等的&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;返回排序好的list&quot;&gt;返回排序好的list&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;List&amp;lt;E&amp;gt; sortedCopy(Iterable&amp;lt;E&amp;gt; elements)&lt;/code&gt;: 返回可变的已经排好序的list&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;ImmutableList&amp;lt;E&amp;gt; immutableSortedCopy(Iterable&amp;lt;E&amp;gt; elements)&lt;/code&gt;: 返回不可变的已经排好序的list&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+</description>
+        <pubDate>Mon, 16 Nov 2015 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-16-Guava%E4%B9%8BOrdering.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-16-Guava%E4%B9%8BOrdering.html</guid>
+        
+        <category>Guava</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
     
       <item>
         <title>Collections工具类</title>
@@ -1033,82 +1137,6 @@ JDK7已经把Objects收录在了&lt;code class=&quot;prettyprint&quot;&gt;java.u
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-10-22-CSS%E9%80%89%E6%8B%A9%E5%99%A8.html</guid>
         
         <category>CSS</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>HttpServletRequest的请求路径</title>
-        <description>&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;HttpServletRequest&lt;/code&gt;中方法&lt;code class=&quot;prettyprint&quot;&gt;getRequestURI&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;getRequestURI&lt;/code&gt;等的区别&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;p&gt;项目在tomcat中的目录结构是这样子的: &lt;code class=&quot;prettyprint&quot;&gt;webapps/testApp/项目内容&lt;/code&gt;&lt;br&gt;
-&lt;code class=&quot;prettyprint&quot;&gt;webapps&lt;/code&gt;为tomcat容器的目录&lt;br&gt;
-&lt;code class=&quot;prettyprint&quot;&gt;testApp&lt;/code&gt;即为项目部署的名称&lt;br&gt;
-项目的代码片段是这样子的:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;nd&quot;&gt;@RestController&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@RequestMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/testController&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TestController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@RequestMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/testAPI.htm&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ModelAndView&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HttpServletRequest&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HttpServletResponse&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Maps&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;newHashMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;getContextPath&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getContextPath&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;getServletPath&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getServletPath&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;getRequestURL&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getRequestURL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;getRequestURI&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getRequestURI&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;getQueryString&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getQueryString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ModelAndView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;MappingJackson2JsonView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;请求的URL为: &lt;code class=&quot;prettyprint&quot;&gt;http://localhost:8080/testApp/testController/testAPI.htm?a=1&amp;amp;b=2&lt;/code&gt;&lt;br&gt;
-得到的结果是:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;s2&quot;&gt;&amp;quot;getContextPath&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;/testApp&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;s2&quot;&gt;&amp;quot;getServletPath&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;/testController/testAPI.htm&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;s2&quot;&gt;&amp;quot;getRequestURL&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;http://localhost:8080/testApp/testController/testAPI.htm&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;s2&quot;&gt;&amp;quot;getRequestURI&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;/testApp/testController/testAPI.htm&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-    &lt;span class=&quot;s2&quot;&gt;&amp;quot;getQueryString&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;a=1&amp;amp;b=2&amp;quot;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;table&gt;&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;变量名称&lt;/th&gt;
-&lt;th&gt;变量值&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;ContextPath&lt;/td&gt;
-&lt;td&gt;项目部署路径，没有名称(如直接部署在在ROOT里)则为空串&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;ServletPath&lt;/td&gt;
-&lt;td&gt;请求地址(不包括项目名称)&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;RequestURL&lt;/td&gt;
-&lt;td&gt;整个URL(不包括查询参数)&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;RequestURI&lt;/td&gt;
-&lt;td&gt;请求地址(包括项目名称)&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;QueryString&lt;/td&gt;
-&lt;td&gt;?后面的那一堆查询串&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-
-&lt;hr&gt;
-</description>
-        <pubDate>Tue, 20 Oct 2015 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-10-20-javaWeb%E9%A1%B9%E7%9B%AE%E7%9A%84%E8%AF%B7%E6%B1%82%E8%B7%AF%E5%BE%840.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-10-20-javaWeb%E9%A1%B9%E7%9B%AE%E7%9A%84%E8%AF%B7%E6%B1%82%E8%B7%AF%E5%BE%840.html</guid>
-        
-        <category>Java</category>
         
         
         <category>编程技术</category>
