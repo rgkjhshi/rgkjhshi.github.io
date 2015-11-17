@@ -28,8 +28,9 @@ Java中Collection的继承关系图, 虚线表示接口, 实线表示类
 * `boolean containsAll(Collection<?> c)`: 包含c里的全部元素则返回true
 * `boolean add(E e)`: 添加成功改变了集合则返回true
 * `boolean addAll(Collection<? extends E> c)`: 全部添加
-* `boolean remove(E e)`: 移除
-* `boolean removeAll(Collection<?> c)`: 移除与c的交集元素
+* `boolean remove(E e)`: 移除元素
+* `boolean removeAll(Collection<?> c)`: 相当于减集合c
+* `boolean retainAll(Collection<?> c)`: 相当于求与c的交集
 * `void clear()`: 清空集合
 
 ## Set接口
