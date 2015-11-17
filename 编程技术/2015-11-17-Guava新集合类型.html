@@ -5,15 +5,15 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="keywords" content="Guava新集合之MultiSet, 编程技术, Guava, 逆水行舟" />
-    <meta name="description" content="Guava新集合之MultiSet, 编程技术, Guava, guava的collection包里新增加了几个集合类型非常实用  " />
+    <meta name="keywords" content="Guava新集合类型, 编程技术, Guava, 逆水行舟" />
+    <meta name="description" content="Guava新集合类型, 编程技术, Guava, guava的collection包里新增加了几个集合类型非常实用  " />
 
     <title>逆水行舟</title>
 
     <!-- ico图标 -->
     <link rel="shortcut icon" type="image/x-icon" media="screen" href="http://loveshisong.cn/static/favicon.ico" />
     <!-- 搜索引擎收入相关 -->
-    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-17-Guava%E6%96%B0%E9%9B%86%E5%90%88%E4%B9%8BMultiSet.html" />
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-17-Guava%E6%96%B0%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B.html" />
     <!-- rss输出源 -->
     <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
     <!-- jquery -->
@@ -87,14 +87,14 @@ jQuery(function(){
 	jQuery('#qrcode').qrcode({
         width: 150,
         height: 150,
-        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-17-Guava%E6%96%B0%E9%9B%86%E5%90%88%E4%B9%8BMultiSet.html"
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-17-Guava%E6%96%B0%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B.html"
     });
 })
 </script>
 <!-- 日志默认模板 -->
 <div class="uk-container content">
     <div class="page-title">
-        <h1>Guava新集合之MultiSet</h1>
+        <h1>Guava新集合类型</h1>
     </div>
     <div class="uk-grid">
         <div  class="uk-width-4-4">
@@ -122,12 +122,155 @@ Multiset {a, a, b}和{a, b, a}是相等的, <code class="prettyprint">Multiset</
 
 <hr>
 
-<h3 id="返回排序好的list">返回排序好的list</h3>
+<h2 id="multiset的各种实现">Multiset的各种实现</h2>
+
+<p>Multiset的实现类, 可以通过构造方法new出来, 也可以调用<code class="prettyprint">XXXMultiset.create()</code>静态函数来创建<br>
+它们都直接继承了Multiset接口:</p>
+
+<table><thead>
+<tr>
+<th>Guava实现</th>
+<th>对比JDK的Map</th>
+<th style="text-align: center">是否支持null</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>HashMultiset</td>
+<td>HashMap</td>
+<td style="text-align: center">Y</td>
+</tr>
+<tr>
+<td>LinkedHashSet</td>
+<td>LinkedHashMap</td>
+<td style="text-align: center">Y</td>
+</tr>
+<tr>
+<td>TreeMultiset</td>
+<td>TreeMap</td>
+<td style="text-align: center">Y</td>
+</tr>
+<tr>
+<td>EnumMultiset</td>
+<td>EnumMap</td>
+<td style="text-align: center">N</td>
+</tr>
+<tr>
+<td>ImmutableMultiset</td>
+<td>ImmutableMap</td>
+<td style="text-align: center">N</td>
+</tr>
+<tr>
+<td>ConcurrentHashMultiset</td>
+<td>ConcurrentHashMap</td>
+<td style="text-align: center">N</td>
+</tr>
+<tr>
+<td>ForwardingMultiset</td>
+<td></td>
+<td style="text-align: center"></td>
+</tr>
+</tbody></table>
+
+<hr>
+
+<h2 id="multimap">Multimap</h2>
+
+<p><code class="prettyprint">Multimap</code>把一个键映射到多个值, 类似于但不等同于<code class="prettyprint">Map&lt;K, Collection&lt;V&gt;&gt;</code>.<br>
+<code class="prettyprint">Multimap</code>跟JDK中的<code class="prettyprint">Map</code>并没有什么关系, 但<a href="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-12-Map%E6%95%B4%E7%90%86.html">Map中的方法</a>在<code class="prettyprint">Multimap</code>也有对应的<br>
+ <code class="prettyprint">Multimap</code>接口定义的方法有:</p>
 
 <ul>
-<li><code class="prettyprint">List&lt;E&gt; sortedCopy(Iterable&lt;E&gt; elements)</code>: 返回可变的已经排好序的list</li>
-<li><code class="prettyprint">ImmutableList&lt;E&gt; immutableSortedCopy(Iterable&lt;E&gt; elements)</code>: 返回不可变的已经排好序的list</li>
+<li><code class="prettyprint">int size()</code>: 返回键值对的个数 <code class="prettyprint">a-&gt;1, a-&gt;2</code>算两个</li>
+<li><code class="prettyprint">boolean isEmpty()</code>: 是否为空</li>
+<li><code class="prettyprint">boolean containsKey(Object key)</code>: 是否包含key</li>
+<li><code class="prettyprint">boolean containsValue(Object value)</code>: 是否包含value</li>
+<li><code class="prettyprint">boolean containsEntry(Object key, Object value)</code>: 是否包含key-value对</li>
+<li><code class="prettyprint">boolean put(K key, V value)</code>: 如果map元素增加了则返回true, 对于允许存在重复键值对的实现类总是返回<code class="prettyprint">true</code>,
+不允许重复键值对存在的实现类才有可能返回<code class="prettyprint">false</code></li>
+<li><code class="prettyprint">boolean putAll(K key, Iterable values)</code>: map改变则返回true</li>
+<li><code class="prettyprint">boolean putAll(Multimap multimap)</code>: map改变则返回true</li>
+<li><code class="prettyprint">boolean remove(Object key, Object value)</code>: 移除键值对, map变了返回true</li>
+<li><code class="prettyprint">Collection&lt;V&gt; removeAll(Object key)</code>: 移除与key相关的所有values(key也没了), 并返回values组成的集合(可能为空)</li>
+<li><code class="prettyprint">Collection&lt;V&gt; replaceValues(K key, Iterable values)</code>: 把与key相关的value全替换掉, 如果values为空,
+则等同于<code class="prettyprint">removeAll(key)</code>, 如果原来不包含key,则相当于<code class="prettyprint">putAll(key, values)</code>; 返回被替换掉的value集合(可能为空)</li>
+<li><code class="prettyprint">void clear()</code>: 清空map</li>
+<li><code class="prettyprint">Collection&lt;V&gt; get(K key)</code>: 返回key对应的value, 没有key则返回空集合(不是<code class="prettyprint">null</code>)</li>
 </ul>
+
+<h3 id="视图操作">视图操作</h3>
+
+<p>对这些返回结果的所有操作都会反映到原来的Multimap上</p>
+
+<ul>
+<li><code class="prettyprint">Set&lt;K&gt; keySet()</code>: 返回不重复的key集合</li>
+<li><code class="prettyprint">Multiset&lt;K&gt; keys()</code>: 返回可重复的key集合</li>
+<li><code class="prettyprint">Collection&lt;V&gt; values()</code>: 返回value的集合, 包含重复值</li>
+<li><code class="prettyprint">Collection&lt;Map.Entry&lt;K, V&gt;&gt; entries()</code>: 返回所有键值对,包括重复键</li>
+<li><code class="prettyprint">Map&lt;K, Collection&lt;V&gt;&gt; asMap()</code>: 返回<code class="prettyprint">Map&lt;K,Collection&lt;V&gt;&gt;</code>形式的视图, 返回的Map支持remove操作, 并且会反映到Multimap,
+但它不支持put或putAll操作; ListMultimap的<code class="prettyprint">asMap.get(key)</code>不能直接返回List,
+可以使用<code class="prettyprint">Multimaps.asMap.get(key)</code>来返回具体的集合类型</li>
+</ul>
+
+<hr>
+
+<h2 id="multimap的各种实现">Multimap的各种实现</h2>
+
+<p>Multimap有许多实现类:</p>
+
+<table><thead>
+<tr>
+<th>实现类</th>
+<th>键行为类似</th>
+<th>值行为类似</th>
+<th style="text-align: center">是否支持null</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>LinkedListMultimap</td>
+<td>LinkedHashMap</td>
+<td>LinkedList</td>
+<td style="text-align: center">Y</td>
+</tr>
+<tr>
+<td>ArrayListMultimap</td>
+<td>HashMap</td>
+<td>ArrayList</td>
+<td style="text-align: center">Y</td>
+</tr>
+<tr>
+<td>ImmutableListMultimap</td>
+<td>ImmutableMap</td>
+<td>ImmutableList</td>
+<td style="text-align: center">N</td>
+</tr>
+<tr>
+<td>HashMultimap</td>
+<td>HashMap</td>
+<td>HashSet</td>
+<td style="text-align: center">Y</td>
+</tr>
+<tr>
+<td>LinkedHashMultimap</td>
+<td>LinkedHashMap</td>
+<td>LinkedHashSet</td>
+<td style="text-align: center">Y</td>
+</tr>
+<tr>
+<td>ImmutableSetMultimap</td>
+<td>ImmutableMap</td>
+<td>ImmutableSet</td>
+<td style="text-align: center">N</td>
+</tr>
+<tr>
+<td>TreeMultimap</td>
+<td>TreeMap</td>
+<td>TreeSet</td>
+<td style="text-align: center">Y</td>
+</tr>
+</tbody></table>
+
+<p>其实现类的继承关系图如下:
+<img src="/static/images/multimap.png" alt="Multimap继承关系图" title="Multimap继承关系图"></p>
 
 <hr>
 
@@ -135,7 +278,7 @@ Multiset {a, a, b}和{a, b, a}是相等的, <code class="prettyprint">Multiset</
     </div>
 
     <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/Guava新集合之MultiSet" data-title="Guava新集合之MultiSet" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-17-Guava%E6%96%B0%E9%9B%86%E5%90%88%E4%B9%8BMultiSet.html"></div>
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/Guava新集合类型" data-title="Guava新集合类型" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-17-Guava%E6%96%B0%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B.html"></div>
     <!-- 多说评论框 end -->
 </div>
 

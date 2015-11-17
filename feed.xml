@@ -5,12 +5,12 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 17 Nov 2015 16:18:06 +0800</pubDate>
-    <lastBuildDate>Tue, 17 Nov 2015 16:18:06 +0800</lastBuildDate>
+    <pubDate>Tue, 17 Nov 2015 22:58:26 +0800</pubDate>
+    <lastBuildDate>Tue, 17 Nov 2015 22:58:26 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
-        <title>Guava新集合之MultiSet</title>
+        <title>Guava新集合类型</title>
         <description>&lt;p&gt;guava的collection包里新增加了几个集合类型非常实用  &lt;/p&gt;
 
 &lt;hr&gt;
@@ -34,18 +34,161 @@ Multiset {a, a, b}和{a, b, a}是相等的, &lt;code class=&quot;prettyprint&quo
 
 &lt;hr&gt;
 
-&lt;h3 id=&quot;返回排序好的list&quot;&gt;返回排序好的list&lt;/h3&gt;
+&lt;h2 id=&quot;multiset的各种实现&quot;&gt;Multiset的各种实现&lt;/h2&gt;
+
+&lt;p&gt;Multiset的实现类, 可以通过构造方法new出来, 也可以调用&lt;code class=&quot;prettyprint&quot;&gt;XXXMultiset.create()&lt;/code&gt;静态函数来创建&lt;br&gt;
+它们都直接继承了Multiset接口:&lt;/p&gt;
+
+&lt;table&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Guava实现&lt;/th&gt;
+&lt;th&gt;对比JDK的Map&lt;/th&gt;
+&lt;th style=&quot;text-align: center&quot;&gt;是否支持null&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;HashMultiset&lt;/td&gt;
+&lt;td&gt;HashMap&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;Y&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;LinkedHashSet&lt;/td&gt;
+&lt;td&gt;LinkedHashMap&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;Y&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;TreeMultiset&lt;/td&gt;
+&lt;td&gt;TreeMap&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;Y&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;EnumMultiset&lt;/td&gt;
+&lt;td&gt;EnumMap&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;N&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ImmutableMultiset&lt;/td&gt;
+&lt;td&gt;ImmutableMap&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;N&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ConcurrentHashMultiset&lt;/td&gt;
+&lt;td&gt;ConcurrentHashMap&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;N&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ForwardingMultiset&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;multimap&quot;&gt;Multimap&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;Multimap&lt;/code&gt;把一个键映射到多个值, 类似于但不等同于&lt;code class=&quot;prettyprint&quot;&gt;Map&amp;lt;K, Collection&amp;lt;V&amp;gt;&amp;gt;&lt;/code&gt;.&lt;br&gt;
+&lt;code class=&quot;prettyprint&quot;&gt;Multimap&lt;/code&gt;跟JDK中的&lt;code class=&quot;prettyprint&quot;&gt;Map&lt;/code&gt;并没有什么关系, 但&lt;a href=&quot;/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-12-Map%E6%95%B4%E7%90%86.html&quot;&gt;Map中的方法&lt;/a&gt;在&lt;code class=&quot;prettyprint&quot;&gt;Multimap&lt;/code&gt;也有对应的&lt;br&gt;
+ &lt;code class=&quot;prettyprint&quot;&gt;Multimap&lt;/code&gt;接口定义的方法有:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;List&amp;lt;E&amp;gt; sortedCopy(Iterable&amp;lt;E&amp;gt; elements)&lt;/code&gt;: 返回可变的已经排好序的list&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;ImmutableList&amp;lt;E&amp;gt; immutableSortedCopy(Iterable&amp;lt;E&amp;gt; elements)&lt;/code&gt;: 返回不可变的已经排好序的list&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;int size()&lt;/code&gt;: 返回键值对的个数 &lt;code class=&quot;prettyprint&quot;&gt;a-&amp;gt;1, a-&amp;gt;2&lt;/code&gt;算两个&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean isEmpty()&lt;/code&gt;: 是否为空&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean containsKey(Object key)&lt;/code&gt;: 是否包含key&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean containsValue(Object value)&lt;/code&gt;: 是否包含value&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean containsEntry(Object key, Object value)&lt;/code&gt;: 是否包含key-value对&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean put(K key, V value)&lt;/code&gt;: 如果map元素增加了则返回true, 对于允许存在重复键值对的实现类总是返回&lt;code class=&quot;prettyprint&quot;&gt;true&lt;/code&gt;,
+不允许重复键值对存在的实现类才有可能返回&lt;code class=&quot;prettyprint&quot;&gt;false&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean putAll(K key, Iterable values)&lt;/code&gt;: map改变则返回true&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean putAll(Multimap multimap)&lt;/code&gt;: map改变则返回true&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean remove(Object key, Object value)&lt;/code&gt;: 移除键值对, map变了返回true&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Collection&amp;lt;V&amp;gt; removeAll(Object key)&lt;/code&gt;: 移除与key相关的所有values(key也没了), 并返回values组成的集合(可能为空)&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Collection&amp;lt;V&amp;gt; replaceValues(K key, Iterable values)&lt;/code&gt;: 把与key相关的value全替换掉, 如果values为空,
+则等同于&lt;code class=&quot;prettyprint&quot;&gt;removeAll(key)&lt;/code&gt;, 如果原来不包含key,则相当于&lt;code class=&quot;prettyprint&quot;&gt;putAll(key, values)&lt;/code&gt;; 返回被替换掉的value集合(可能为空)&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;void clear()&lt;/code&gt;: 清空map&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Collection&amp;lt;V&amp;gt; get(K key)&lt;/code&gt;: 返回key对应的value, 没有key则返回空集合(不是&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;)&lt;/li&gt;
 &lt;/ul&gt;
+
+&lt;h3 id=&quot;视图操作&quot;&gt;视图操作&lt;/h3&gt;
+
+&lt;p&gt;对这些返回结果的所有操作都会反映到原来的Multimap上&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Set&amp;lt;K&amp;gt; keySet()&lt;/code&gt;: 返回不重复的key集合&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Multiset&amp;lt;K&amp;gt; keys()&lt;/code&gt;: 返回可重复的key集合&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Collection&amp;lt;V&amp;gt; values()&lt;/code&gt;: 返回value的集合, 包含重复值&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Collection&amp;lt;Map.Entry&amp;lt;K, V&amp;gt;&amp;gt; entries()&lt;/code&gt;: 返回所有键值对,包括重复键&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Map&amp;lt;K, Collection&amp;lt;V&amp;gt;&amp;gt; asMap()&lt;/code&gt;: 返回&lt;code class=&quot;prettyprint&quot;&gt;Map&amp;lt;K,Collection&amp;lt;V&amp;gt;&amp;gt;&lt;/code&gt;形式的视图, 返回的Map支持remove操作, 并且会反映到Multimap,
+但它不支持put或putAll操作; ListMultimap的&lt;code class=&quot;prettyprint&quot;&gt;asMap.get(key)&lt;/code&gt;不能直接返回List,
+可以使用&lt;code class=&quot;prettyprint&quot;&gt;Multimaps.asMap.get(key)&lt;/code&gt;来返回具体的集合类型&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;multimap的各种实现&quot;&gt;Multimap的各种实现&lt;/h2&gt;
+
+&lt;p&gt;Multimap有许多实现类:&lt;/p&gt;
+
+&lt;table&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;实现类&lt;/th&gt;
+&lt;th&gt;键行为类似&lt;/th&gt;
+&lt;th&gt;值行为类似&lt;/th&gt;
+&lt;th style=&quot;text-align: center&quot;&gt;是否支持null&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;LinkedListMultimap&lt;/td&gt;
+&lt;td&gt;LinkedHashMap&lt;/td&gt;
+&lt;td&gt;LinkedList&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;Y&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ArrayListMultimap&lt;/td&gt;
+&lt;td&gt;HashMap&lt;/td&gt;
+&lt;td&gt;ArrayList&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;Y&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ImmutableListMultimap&lt;/td&gt;
+&lt;td&gt;ImmutableMap&lt;/td&gt;
+&lt;td&gt;ImmutableList&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;N&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;HashMultimap&lt;/td&gt;
+&lt;td&gt;HashMap&lt;/td&gt;
+&lt;td&gt;HashSet&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;Y&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;LinkedHashMultimap&lt;/td&gt;
+&lt;td&gt;LinkedHashMap&lt;/td&gt;
+&lt;td&gt;LinkedHashSet&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;Y&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ImmutableSetMultimap&lt;/td&gt;
+&lt;td&gt;ImmutableMap&lt;/td&gt;
+&lt;td&gt;ImmutableSet&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;N&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;TreeMultimap&lt;/td&gt;
+&lt;td&gt;TreeMap&lt;/td&gt;
+&lt;td&gt;TreeSet&lt;/td&gt;
+&lt;td style=&quot;text-align: center&quot;&gt;Y&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+
+&lt;p&gt;其实现类的继承关系图如下:
+&lt;img src=&quot;/static/images/multimap.png&quot; alt=&quot;Multimap继承关系图&quot; title=&quot;Multimap继承关系图&quot;&gt;&lt;/p&gt;
 
 &lt;hr&gt;
 </description>
         <pubDate>Tue, 17 Nov 2015 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-17-Guava%E6%96%B0%E9%9B%86%E5%90%88%E4%B9%8BMultiSet.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-17-Guava%E6%96%B0%E9%9B%86%E5%90%88%E4%B9%8BMultiSet.html</guid>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-17-Guava%E6%96%B0%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-17-Guava%E6%96%B0%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B.html</guid>
         
         <category>Guava</category>
         
