@@ -5,9 +5,54 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 16 Nov 2015 23:19:08 +0800</pubDate>
-    <lastBuildDate>Mon, 16 Nov 2015 23:19:08 +0800</lastBuildDate>
+    <pubDate>Tue, 17 Nov 2015 16:18:06 +0800</pubDate>
+    <lastBuildDate>Tue, 17 Nov 2015 16:18:06 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>Guava新集合之MultiSet</title>
+        <description>&lt;p&gt;guava的collection包里新增加了几个集合类型非常实用  &lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;multiset&quot;&gt;Multiset&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;Multiset&lt;/code&gt;继承自&lt;code class=&quot;prettyprint&quot;&gt;Collection&lt;/code&gt;, 类似于&lt;code class=&quot;prettyprint&quot;&gt;Set&lt;/code&gt;, 里面的元素是无顺序的, 但不同的是它可以多次添加相等的元素, 并能记录每个元素的个数.
+Multiset {a, a, b}和{a, b, a}是相等的, &lt;code class=&quot;prettyprint&quot;&gt;Multiset&lt;/code&gt;类似于但绝不等同于&lt;code class=&quot;prettyprint&quot;&gt;Map&amp;lt;E, Integer&amp;gt;&lt;/code&gt;.&lt;br&gt;
+&lt;a href=&quot;/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-12-Collection%E6%95%B4%E7%90%86.html&quot;&gt;Collection中的方法&lt;/a&gt;&lt;code class=&quot;prettyprint&quot;&gt;Multiset&lt;/code&gt;都有, 注意&lt;code class=&quot;prettyprint&quot;&gt;size()&lt;/code&gt;方法, 重复的元素也会算个数(类似的其它方法也会包含重复元素)&lt;br&gt;
+除此之外&lt;code class=&quot;prettyprint&quot;&gt;Multiset&lt;/code&gt;接口中定义的方法有:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;int count(Object element)&lt;/code&gt;: 返回给定元素的计数&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;int add(E element, int occurrences)&lt;/code&gt;: 添加元素并指定元素个数; 返回添加之前该元素的个数, 一般为0&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;int remove(Object element, int occurrences)&lt;/code&gt;: 移除元素, 若该元素个数小于指定个数,则全移除; 返回操作之前该元素的个数&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;int setCount(E element, int count)&lt;/code&gt;: 设定某一个元素的重复次数, 相当于add和remove的组合体; 返回操作之前该元素的个数&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean setCount(E element, int oldCount, int newCount)&lt;/code&gt;: 将符合原有重复个数的元素修改为新的重复次数, 原来个数不为oldCount不会修改&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Set&amp;lt;E&amp;gt; elementSet()&lt;/code&gt;: 返回仅包含不同元素的set&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Set&amp;lt;Entry&amp;lt;E&amp;gt;&amp;gt; entrySet()&lt;/code&gt;: 返回Set&lt;Multiset.Entry&gt;, 包含的Entry支持使用&lt;code class=&quot;prettyprint&quot;&gt;getElement()&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;getCount()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h3 id=&quot;返回排序好的list&quot;&gt;返回排序好的list&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;List&amp;lt;E&amp;gt; sortedCopy(Iterable&amp;lt;E&amp;gt; elements)&lt;/code&gt;: 返回可变的已经排好序的list&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;ImmutableList&amp;lt;E&amp;gt; immutableSortedCopy(Iterable&amp;lt;E&amp;gt; elements)&lt;/code&gt;: 返回不可变的已经排好序的list&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+</description>
+        <pubDate>Tue, 17 Nov 2015 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-17-Guava%E6%96%B0%E9%9B%86%E5%90%88%E4%B9%8BMultiSet.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-17-Guava%E6%96%B0%E9%9B%86%E5%90%88%E4%B9%8BMultiSet.html</guid>
+        
+        <category>Guava</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
     
       <item>
         <title>Guava之Ordering</title>
@@ -368,8 +413,9 @@
 &lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean containsAll(Collection&amp;lt;?&amp;gt; c)&lt;/code&gt;: 包含c里的全部元素则返回true&lt;/li&gt;
 &lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean add(E e)&lt;/code&gt;: 添加成功改变了集合则返回true&lt;/li&gt;
 &lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean addAll(Collection&amp;lt;? extends E&amp;gt; c)&lt;/code&gt;: 全部添加&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean remove(E e)&lt;/code&gt;: 移除&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean removeAll(Collection&amp;lt;?&amp;gt; c)&lt;/code&gt;: 移除与c的交集元素&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean remove(E e)&lt;/code&gt;: 移除元素&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean removeAll(Collection&amp;lt;?&amp;gt; c)&lt;/code&gt;: 相当于减集合c&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean retainAll(Collection&amp;lt;?&amp;gt; c)&lt;/code&gt;: 相当于求与c的交集&lt;/li&gt;
 &lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;void clear()&lt;/code&gt;: 清空集合&lt;/li&gt;
 &lt;/ul&gt;
 
@@ -863,283 +909,6 @@ JDK7已经把Objects收录在了&lt;code class=&quot;prettyprint&quot;&gt;java.u
         
         
         <category>快捷速查</category>
-        
-      </item>
-    
-      <item>
-        <title>CSS选择器</title>
-        <description>&lt;p&gt;CSS 选择器用法收集整理, 参考&lt;a href=&quot;http://www.w3.org/TR/css3-selectors/#selectors&quot;&gt;官方文档&lt;/a&gt;&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;常见的选择器&quot;&gt;常见的选择器&lt;/h2&gt;
-
-&lt;table&gt;&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;选择器&lt;/th&gt;
-&lt;th&gt;说明&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;*&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;用于所有元素, 少用, 很慢&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;.X&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;class选择器, &lt;code class=&quot;prettyprint&quot;&gt;class=&amp;quot;X&amp;quot;&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;#X&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;id选择器, &lt;code class=&quot;prettyprint&quot;&gt;id=&amp;quot;X&amp;quot;&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;标签选择器, 用语渲染html标签&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;xy&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;XY&lt;/code&gt;&lt;/h2&gt;
-
-&lt;p&gt;组合选择器, 会有下面这几种:&lt;/p&gt;
-
-&lt;table&gt;&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;选择器&lt;/th&gt;
-&lt;th&gt;说明&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;X.Y&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;class=&amp;quot;Y&amp;quot;&lt;/code&gt;的元素&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;X#Y&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;id=&amp;quot;Y&amp;quot;&lt;/code&gt;的元素&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;#X.Y&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;id=&amp;quot;X&amp;quot; class=&amp;quot;Y&amp;quot;&lt;/code&gt;的元素&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;.X#Y&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;class=&amp;quot;X&amp;quot; id=&amp;quot;Y&amp;quot;&lt;/code&gt;的元素, 跟上面一样&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;x,-y,-z&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X, Y, Z&lt;/code&gt;&lt;/h2&gt;
-
-&lt;p&gt;批量选择器, 即多个选择器用 &lt;code class=&quot;prettyprint&quot;&gt;,&lt;/code&gt; 隔开，中间有无空格都可以，表示适用于每个被隔开的选择器&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;x-y&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X Y&lt;/code&gt;&lt;/h2&gt;
-
-&lt;p&gt;后代选择器(中间用空格隔开), 选取 &lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt; 元素内的所有 &lt;code class=&quot;prettyprint&quot;&gt;Y&lt;/code&gt; 元素  &lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;x-&amp;gt;-y&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X &amp;gt; Y&lt;/code&gt;&lt;/h2&gt;
-
-&lt;p&gt;子元素选择器(直接后代选择器), 选取 &lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt; 元素内的所有 &lt;strong&gt;直接出现&lt;/strong&gt; 的&lt;code class=&quot;prettyprint&quot;&gt;Y&lt;/code&gt; 元素
-相当于所有第一代子元素，而第二代子元素不会选中&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;x-+-y&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X + Y&lt;/code&gt;&lt;/h2&gt;
-
-&lt;p&gt;临近选择器, 选取&lt;strong&gt;紧邻&lt;/strong&gt;着 &lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt; 元素后面出现的&lt;strong&gt;第一个&lt;/strong&gt; &lt;code class=&quot;prettyprint&quot;&gt;Y&lt;/code&gt; 元素&lt;br&gt;
-&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;Y&lt;/code&gt;必须是同级且中间不隔着其他元素，否则不会选中&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;x-~-y&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X ~ Y&lt;/code&gt;&lt;/h2&gt;
-
-&lt;p&gt;也是临近选择器, 选取 &lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt; 元素后面出现的&lt;strong&gt;所有与&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;同级&lt;/strong&gt;的 &lt;code class=&quot;prettyprint&quot;&gt;Y&lt;/code&gt; 元素  &lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;属性选择器&quot;&gt;属性选择器&lt;/h2&gt;
-
-&lt;table&gt;&lt;thead&gt;
-&lt;tr&gt;
-&lt;th style=&quot;text-align: left&quot;&gt;选择器&lt;/th&gt;
-&lt;th style=&quot;text-align: left&quot;&gt;说明&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X[foo]&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;选取具有属性&lt;code class=&quot;prettyprint&quot;&gt;foo&lt;/code&gt;的&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X[foo=&amp;quot;bar&amp;quot;]&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;选取具有属性&lt;code class=&quot;prettyprint&quot;&gt;foo&lt;/code&gt;且属性值为&lt;code class=&quot;prettyprint&quot;&gt;bar&lt;/code&gt;的&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X[foo*=&amp;quot;bar&amp;quot;]&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素的&amp;#39;foo&amp;#39;属性值中包含子串&amp;#39;bar&amp;#39;即可&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X[foo^=&amp;quot;bar&amp;quot;]&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素的&amp;#39;foo&amp;#39;属性值必须以&lt;code class=&quot;prettyprint&quot;&gt;bar&lt;/code&gt;开头&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X[foo$=&amp;quot;bar&amp;quot;]&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素的&amp;#39;foo&amp;#39;属性值必须以&lt;code class=&quot;prettyprint&quot;&gt;bar&lt;/code&gt;结尾&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X[foo~=&amp;quot;bar&amp;quot;]&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素的有个&amp;#39;foo&amp;#39;属性, 属性值是空白隔开的值列表, 值列表中有一个是&lt;code class=&quot;prettyprint&quot;&gt;bar&lt;/code&gt;即可&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;伪类选择器&quot;&gt;伪类选择器&lt;/h2&gt;
-
-&lt;table&gt;&lt;thead&gt;
-&lt;tr&gt;
-&lt;th style=&quot;text-align: left&quot;&gt;选择器&lt;/th&gt;
-&lt;th style=&quot;text-align: left&quot;&gt;示例&lt;/th&gt;
-&lt;th style=&quot;text-align: left&quot;&gt;说明&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:link&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;a:link&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;未点击过的链接&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:visited&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;a:visited&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;已访问过的链接&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:active&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;button:active&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;获取到用户焦点时&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:hover&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;div:hover&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;鼠标移到元素上面时&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:checked&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;input[type=radio]:checked&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;被选中的元素单选框、复选框等&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:not(Y)&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;div:not(#container)&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;除 &lt;code class=&quot;prettyprint&quot;&gt;#contaienr&lt;/code&gt; 外的所有 &lt;code class=&quot;prettyprint&quot;&gt;div&lt;/code&gt; 元素&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;结构伪类选择器&quot;&gt;结构伪类选择器&lt;/h2&gt;
-
-&lt;table&gt;&lt;thead&gt;
-&lt;tr&gt;
-&lt;th style=&quot;text-align: left&quot;&gt;选择器&lt;/th&gt;
-&lt;th style=&quot;text-align: left&quot;&gt;说明&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:nth-child(n)&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素且是父元素的第n个子元素&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:nth-last-child(n)&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素且是父元素的倒数第n个子元素&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:nth-of-type(n)&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;第n个兄弟&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:nth-last-of-type(n)&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;倒数第n个兄弟&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:first-child&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素且是父元素的第1个子元素&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:last-child&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素且是父元素的倒数第1个子元素&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:first-of-type&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;兄弟元素中的第1个&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:last-of-type&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;兄弟元素中的倒数第1个&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:only-child&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素且是父元素的唯一一个子元素&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X:only-of-type&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;兄弟元素中的唯一一个(即同级别中就一个&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;)&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-
-&lt;p&gt;最常用的方式是这样的:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-css&quot; data-lang=&quot;css&quot;&gt;&lt;span class=&quot;nt&quot;&gt;tbody&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;:nth-of-type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;odd&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;c&quot;&gt;/* 奇数行 */&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;tbody&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;tr&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;:nth-of-type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;even&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;/* 偶数行 */&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-
-&lt;h2 id=&quot;伪元素选择器&quot;&gt;伪元素选择器&lt;/h2&gt;
-
-&lt;p&gt;只对块级元素生效  &lt;/p&gt;
-
-&lt;table&gt;&lt;thead&gt;
-&lt;tr&gt;
-&lt;th style=&quot;text-align: left&quot;&gt;选择器&lt;/th&gt;
-&lt;th style=&quot;text-align: left&quot;&gt;示例&lt;/th&gt;
-&lt;th style=&quot;text-align: left&quot;&gt;说明&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X::first-line&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;p::first-line&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;第一行&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X::first-letter&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;p::first-letter&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;第一个字母&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X::before&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;在&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素之前声称某些内容&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;X::after&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: left&quot;&gt;在&lt;code class=&quot;prettyprint&quot;&gt;X&lt;/code&gt;元素之后声称某些内容&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-
-&lt;hr&gt;
-</description>
-        <pubDate>Thu, 22 Oct 2015 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-10-22-CSS%E9%80%89%E6%8B%A9%E5%99%A8.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-10-22-CSS%E9%80%89%E6%8B%A9%E5%99%A8.html</guid>
-        
-        <category>CSS</category>
-        
-        
-        <category>编程技术</category>
         
       </item>
     
