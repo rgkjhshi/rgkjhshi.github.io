@@ -6,14 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="keywords" content="Guava新集合类型, 编程技术, Guava, 逆水行舟" />
-    <meta name="description" content="Guava新集合类型, 编程技术, Guava, guava的collection包里新增加了几个集合类型非常实用新增类型有:Multiset、Multimap、BiMap" />
+    <meta name="description" content="Guava新集合类型, 编程技术, Guava, guava的collection包里新增加了几个集合类型非常实用新增类型有:Multiset、Multimap、BiMap、Table、" />
 
     <title>逆水行舟</title>
 
     <!-- ico图标 -->
     <link rel="shortcut icon" type="image/x-icon" media="screen" href="http://loveshisong.cn/static/favicon.ico" />
     <!-- 搜索引擎收入相关 -->
-    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-17-Guava%E6%96%B0%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B.html" />
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-18-Guava%E6%96%B0%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B.html" />
     <!-- rss输出源 -->
     <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
     <!-- jquery -->
@@ -87,7 +87,7 @@ jQuery(function(){
 	jQuery('#qrcode').qrcode({
         width: 150,
         height: 150,
-        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-17-Guava%E6%96%B0%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B.html"
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-18-Guava%E6%96%B0%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B.html"
     });
 })
 </script>
@@ -100,7 +100,7 @@ jQuery(function(){
         <div  class="uk-width-4-4">
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
             <p>guava的collection包里新增加了几个集合类型非常实用<br>
-新增类型有:Multiset、Multimap、BiMap</p>
+新增类型有:Multiset、Multimap、BiMap、Table、</p>
 
 <hr>
 
@@ -117,13 +117,18 @@ Multiset {a, a, b}和{a, b, a}是相等的, <code class="prettyprint">Multiset</
 <li><code class="prettyprint">int remove(Object element, int occurrences)</code>: 移除元素, 若该元素个数小于指定个数,则全移除; 返回操作之前该元素的个数</li>
 <li><code class="prettyprint">int setCount(E element, int count)</code>: 设定某一个元素的重复次数, 相当于add和remove的组合体; 返回操作之前该元素的个数</li>
 <li><code class="prettyprint">boolean setCount(E element, int oldCount, int newCount)</code>: 将符合原有重复个数的元素修改为新的重复次数, 原来个数不为oldCount不会修改</li>
-<li><code class="prettyprint">Set&lt;E&gt; elementSet()</code>: 返回仅包含不同元素的set</li>
+</ul>
+
+<h3 id="视图操作">视图操作</h3>
+
+<p>对视图的所有操作都会反映到原来的Multiset上</p>
+
+<ul>
+<li><code class="prettyprint">Set&lt;E&gt; elementSet()</code>: 返回仅包含不同元素的set, 对set进行移除, 会反映到multiset上(若multi中有<code class="prettyprint">keyX2</code>, 则会全被移除)</li>
 <li><code class="prettyprint">Set&lt;Entry&lt;E&gt;&gt; entrySet()</code>: 返回Set<Multiset.Entry>, 包含的Entry支持使用<code class="prettyprint">getElement()</code>和<code class="prettyprint">getCount()</code></li>
 </ul>
 
-<hr>
-
-<h2 id="multiset的各种实现">Multiset的各种实现</h2>
+<h3 id="multiset的各种实现">Multiset的各种实现</h3>
 
 <p>Multiset的实现类, 可以通过构造方法new出来, 也可以调用<code class="prettyprint">XXXMultiset.create()</code>静态函数来创建<br>
 它们都直接继承了Multiset接口:</p>
@@ -177,8 +182,9 @@ Multiset {a, a, b}和{a, b, a}是相等的, <code class="prettyprint">Multiset</
 <h2 id="multimap">Multimap</h2>
 
 <p><code class="prettyprint">Multimap</code>把一个键映射到多个值, 类似于但不等同于<code class="prettyprint">Map&lt;K, Collection&lt;V&gt;&gt;</code>.<br>
-<code class="prettyprint">Multimap</code>跟JDK中的<code class="prettyprint">Map</code>并没有什么关系, 但<a href="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-12-Map%E6%95%B4%E7%90%86.html">Map中的方法</a>在<code class="prettyprint">Multimap</code>也有对应的<br>
- <code class="prettyprint">Multimap</code>接口定义的方法有:</p>
+<code class="prettyprint">Multimap</code>跟JDK中的<code class="prettyprint">Map</code>并没有什么关系, 但<a href="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-12-Map%E6%95%B4%E7%90%86.html">Map中的方法</a>在<code class="prettyprint">Multimap</code>也有对应的  </p>
+
+<p><code class="prettyprint">Multimap</code>接口定义的普通方法有:</p>
 
 <ul>
 <li><code class="prettyprint">int size()</code>: 返回键值对的个数 <code class="prettyprint">a-&gt;1, a-&gt;2</code>算两个</li>
@@ -212,9 +218,7 @@ Multiset {a, a, b}和{a, b, a}是相等的, <code class="prettyprint">Multiset</
 可以使用<code class="prettyprint">Multimaps.asMap.get(key)</code>来返回具体的集合类型</li>
 </ul>
 
-<hr>
-
-<h2 id="multimap的各种实现">Multimap的各种实现</h2>
+<h3 id="multimap的各种实现">Multimap的各种实现</h3>
 
 <p>Multimap有许多实现类:</p>
 
@@ -286,7 +290,7 @@ K不在V在, Map可以直接put进去, 但BiMap则不可以<br>
 <ul>
 <li><code class="prettyprint">V put(K key, V value)</code>: K不在V在时, 抛出<code class="prettyprint">IllegalArgumentException</code></li>
 <li><code class="prettyprint">void putAll(Map map)</code>: 同样可能抛异常, 但有可能只加了部分元素进去, 这取决于迭代顺序, 在发生异常之前迭代到的元素可能已经添加进去了</li>
-<li><code class="prettyprint">Set&lt;V&gt; values()</code>: 由于BiMap里的value是唯一的, 因次返回的是Set而不是Collection</li>
+<li><code class="prettyprint">Set&lt;V&gt; values()</code>: 视图操作, 由于BiMap里的value是唯一的, 因此返回的是Set而不是Collection</li>
 <li><code class="prettyprint">boolean containsValue(Object value)</code>: 是否包含value</li>
 </ul>
 
@@ -294,12 +298,12 @@ K不在V在, Map可以直接put进去, 但BiMap则不可以<br>
 
 <ul>
 <li><code class="prettyprint">V forcePut(K key, V value)</code>: K不在V在时, 则<code class="prettyprint">KV</code>替换<code class="prettyprint">K&#39;V</code>; 返回先前与key关联的value, 若先前没有相同的key则返回null</li>
-<li><code class="prettyprint">BiMap&lt;V, K&gt; inverse()</code>: 返回value到key的映射Map, 两个map里的数据是公用的, 即删除<code class="prettyprint">V1-&gt;K1</code>时, <code class="prettyprint">K1-&gt;V1</code>也没了</li>
+<li><code class="prettyprint">BiMap&lt;V, K&gt; inverse()</code>: 视图操作, 返回value到key的映射Map, 两个map里的数据是公用的, 即删除<code class="prettyprint">V1-&gt;K1</code>时, <code class="prettyprint">K1-&gt;V1</code>也没了</li>
 </ul>
 
 <hr>
 
-<h2 id="bimap接口的实现类">BiMap接口的实现类</h2>
+<h3 id="bimap接口的实现类">BiMap接口的实现类</h3>
 
 <table><thead>
 <tr>
@@ -332,11 +336,93 @@ K不在V在, Map可以直接put进去, 但BiMap则不可以<br>
 
 <hr>
 
+<h2 id="table">Table</h2>
+
+<p>Table支持两个键进行, 就像名字一样, 可以通过行和列确定一个元素<br>
+Table是这样定义的<code class="prettyprint">Table&lt;R, C, V&gt;</code>, 它提供了多种视图:</p>
+
+<ul>
+<li><code class="prettyprint">Map&lt;R, Map&lt;C, V&gt;&gt; rowMap()</code>: 用<code class="prettyprint">Map&lt;R, Map&lt;C, V&gt;&gt;</code>表现<code class="prettyprint">Table&lt;R, C, V&gt;</code></li>
+<li><code class="prettyprint">Set&lt;R&gt; rowKeySet()</code>: 返回行的集合<code class="prettyprint">Set&lt;R&gt;</code></li>
+<li><code class="prettyprint">Map&lt;C, V&gt; row(R rowKey)</code>: 用<code class="prettyprint">Map&lt;C, V&gt;</code>返回给定行的所有列，对这个map进行的写操作也将写入Table中</li>
+<li><code class="prettyprint">Map&lt;C, Map&lt;R, V&gt;&gt; columnMap()</code></li>
+<li><code class="prettyprint">Set&lt;C&gt; columnKeySet()</code></li>
+<li><code class="prettyprint">Map&lt;R, V&gt; column(C columnKey)</code></li>
+<li><code class="prettyprint">Set&lt;Cell&lt;R, C, V&gt;&gt; cellSet()</code>: 用元素类型为<code class="prettyprint">Table.Cell&lt;R, C, V&gt;</code>的Set表现<code class="prettyprint">Table&lt;R, C, V&gt;</code>.
+<code class="prettyprint">Cell</code>类似于<code class="prettyprint">Map.Entry</code>,但它是用行和列两个键区分的</li>
+<li><code class="prettyprint">Collection&lt;V&gt; values()</code>: 返回V的集合</li>
+</ul>
+
+<h3 id="table接口的实现类">Table接口的实现类</h3>
+
+<table><thead>
+<tr>
+<th>实现类</th>
+<th>本质</th>
+<th>说明</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>HashBasedTable</td>
+<td><code class="prettyprint">HashMap&lt;R, HashMap&lt;C, V&gt;&gt;</code></td>
+<td></td>
+</tr>
+<tr>
+<td>TreeBasedTable</td>
+<td><code class="prettyprint">TreeMap&lt;R, TreeMap&lt;C,V&gt;&gt;</code></td>
+<td></td>
+</tr>
+<tr>
+<td>ArrayTable</td>
+<td>二维数组</td>
+<td>要求在构造时就指定行和列的大小</td>
+</tr>
+<tr>
+<td>ImmutableTable</td>
+<td><code class="prettyprint">ImmutableMap&lt;R, ImmutableMap&lt;C, V&gt;&gt;</code></td>
+<td>这是个抽象类,对稀疏或密集的数据集都有优化</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+<h2 id="rangeset">RangeSet</h2>
+
+<p>RangeSet描述了一组不相连的、非空的区间。当把一个区间添加到可变的RangeSet时，所有相连的区间会被合并，空区间会被忽略  </p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">RangeSet</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">rangeSet</span> <span class="o">=</span> <span class="n">TreeRangeSet</span><span class="o">.</span><span class="na">create</span><span class="o">();</span>
+<span class="n">rangeSet</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">Range</span><span class="o">.</span><span class="na">closed</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">10</span><span class="o">));</span>       <span class="c1">// {[1,10]}</span>
+<span class="n">rangeSet</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">Range</span><span class="o">.</span><span class="na">closedOpen</span><span class="o">(</span><span class="mi">11</span><span class="o">,</span> <span class="mi">15</span><span class="o">));</span>  <span class="c1">// 不相连区间:{[1,10], [11,15)}</span>
+<span class="n">rangeSet</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">Range</span><span class="o">.</span><span class="na">closedOpen</span><span class="o">(</span><span class="mi">15</span><span class="o">,</span> <span class="mi">20</span><span class="o">));</span>  <span class="c1">// 相连区间; {[1,10], [11,20)}</span>
+<span class="n">rangeSet</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">Range</span><span class="o">.</span><span class="na">openClosed</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">));</span>    <span class="c1">// 空区间; {[1,10], [11,20)}</span>
+<span class="n">rangeSet</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">Range</span><span class="o">.</span><span class="na">open</span><span class="o">(</span><span class="mi">5</span><span class="o">,</span> <span class="mi">10</span><span class="o">));</span>      <span class="c1">// 分割[1, 10]; {[1,5], [10,10], [11,20)}</span>
+</code></pre></div>
+<p><strong>注意</strong>:</p>
+
+<ul>
+<li>要合并<code class="prettyprint">Range.closed(1, 10)</code>和<code class="prettyprint">Range.closedOpen(11,15)</code>这样的区间,
+你需要首先用<code class="prettyprint">Range.canonical(DiscreteDomain)</code>对区间进行预处理，例如<code class="prettyprint">DiscreteDomain.integers()</code></li>
+<li>RangeSet不支持GWT，也不支持JDK5和更早版本；因为，RangeSet需要充分利用JDK6中NavigableMap的特性</li>
+</ul>
+
+<hr>
+
+<h2 id="rangemap">RangeMap</h2>
+
+<p>RangeMap描述了不相交的、非空的区间到特定值的映射。
+和RangeSet不同，RangeMap不会合并相邻的映射，即便相邻的区间映射到相同的值。例如：</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">RangeMap</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">rangeMap</span> <span class="o">=</span> <span class="n">TreeRangeMap</span><span class="o">.</span><span class="na">create</span><span class="o">();</span>
+<span class="n">rangeMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Range</span><span class="o">.</span><span class="na">closed</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">10</span><span class="o">),</span> <span class="s">&quot;foo&quot;</span><span class="o">);</span>  <span class="c1">// {[1,10] =&gt; &quot;foo&quot;}</span>
+<span class="n">rangeMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Range</span><span class="o">.</span><span class="na">open</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="mi">6</span><span class="o">),</span> <span class="s">&quot;bar&quot;</span><span class="o">);</span>     <span class="c1">// {[1,3] =&gt; &quot;foo&quot;, (3,6) =&gt; &quot;bar&quot;, [6,10] =&gt; &quot;foo&quot;}</span>
+<span class="n">rangeMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Range</span><span class="o">.</span><span class="na">open</span><span class="o">(</span><span class="mi">10</span><span class="o">,</span> <span class="mi">20</span><span class="o">),</span> <span class="s">&quot;foo&quot;</span><span class="o">);</span>   <span class="c1">// {[1,3] =&gt; &quot;foo&quot;, (3,6) =&gt; &quot;bar&quot;, [6,10] =&gt; &quot;foo&quot;, (10,20) =&gt; &quot;foo&quot;}</span>
+<span class="n">rangeMap</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">Range</span><span class="o">.</span><span class="na">closed</span><span class="o">(</span><span class="mi">5</span><span class="o">,</span> <span class="mi">11</span><span class="o">));</span>      <span class="c1">// {[1,3] =&gt; &quot;foo&quot;, (3,5) =&gt; &quot;bar&quot;, (11,20) =&gt; &quot;foo&quot;}</span>
+</code></pre></div>
+<hr>
+
         </div>
     </div>
 
     <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/Guava新集合类型" data-title="Guava新集合类型" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-17-Guava%E6%96%B0%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B.html"></div>
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/Guava新集合类型" data-title="Guava新集合类型" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-18-Guava%E6%96%B0%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B.html"></div>
     <!-- 多说评论框 end -->
 </div>
 
