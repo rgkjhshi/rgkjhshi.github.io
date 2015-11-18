@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="keywords" content="Guava新集合类型, 编程技术, Guava, 逆水行舟" />
-    <meta name="description" content="Guava新集合类型, 编程技术, Guava, guava的collection包里新增加了几个集合类型非常实用  " />
+    <meta name="description" content="Guava新集合类型, 编程技术, Guava, guava的collection包里新增加了几个集合类型非常实用新增类型有:Multiset、Multimap、BiMap" />
 
     <title>逆水行舟</title>
 
@@ -99,7 +99,8 @@ jQuery(function(){
     <div class="uk-grid">
         <div  class="uk-width-4-4">
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
-            <p>guava的collection包里新增加了几个集合类型非常实用  </p>
+            <p>guava的collection包里新增加了几个集合类型非常实用<br>
+新增类型有:Multiset、Multimap、BiMap</p>
 
 <hr>
 
@@ -271,6 +272,63 @@ Multiset {a, a, b}和{a, b, a}是相等的, <code class="prettyprint">Multiset</
 
 <p>其实现类的继承关系图如下:
 <img src="/static/images/multimap.png" alt="Multimap继承关系图" title="Multimap继承关系图"></p>
+
+<hr>
+
+<h2 id="bimap">BiMap</h2>
+
+<p>BiMap是个特殊的Map(继承自JDK的Map), 它可以很方便地实现key-value的双向映射, 所以它要求value也必须是唯一的<br>
+BiMap的put方法与Map不太一样, put键值对KV时:<br>
+若先前KV都不存在,直接put; KV都已存在,则相当于没改变; K在V不在, 则<code class="prettyprint">KV</code>替换<code class="prettyprint">KV&#39;</code>;(至此与Map都一样)<br>
+K不在V在, Map可以直接put进去, 但BiMap则不可以<br>
+与Map意义不一样的方法:</p>
+
+<ul>
+<li><code class="prettyprint">V put(K key, V value)</code>: K不在V在时, 抛出<code class="prettyprint">IllegalArgumentException</code></li>
+<li><code class="prettyprint">void putAll(Map map)</code>: 同样可能抛异常, 但有可能只加了部分元素进去, 这取决于迭代顺序, 在发生异常之前迭代到的元素可能已经添加进去了</li>
+<li><code class="prettyprint">Set&lt;V&gt; values()</code>: 由于BiMap里的value是唯一的, 因次返回的是Set而不是Collection</li>
+<li><code class="prettyprint">boolean containsValue(Object value)</code>: 是否包含value</li>
+</ul>
+
+<p>BiMap比Map新增的方法:</p>
+
+<ul>
+<li><code class="prettyprint">V forcePut(K key, V value)</code>: K不在V在时, 则<code class="prettyprint">KV</code>替换<code class="prettyprint">K&#39;V</code>; 返回先前与key关联的value, 若先前没有相同的key则返回null</li>
+<li><code class="prettyprint">BiMap&lt;V, K&gt; inverse()</code>: 返回value到key的映射Map, 两个map里的数据是公用的, 即删除<code class="prettyprint">V1-&gt;K1</code>时, <code class="prettyprint">K1-&gt;V1</code>也没了</li>
+</ul>
+
+<hr>
+
+<h2 id="bimap接口的实现类">BiMap接口的实现类</h2>
+
+<table><thead>
+<tr>
+<th>实现类</th>
+<th>key-value</th>
+<th>value-&gt;key</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>HashBiMap</td>
+<td>HashMap</td>
+<td>HashMap</td>
+</tr>
+<tr>
+<td>EnumBiMap</td>
+<td>EnumMap</td>
+<td>EnumMap</td>
+</tr>
+<tr>
+<td>EnumHashBiMap</td>
+<td>EnumMap</td>
+<td>HashMap</td>
+</tr>
+<tr>
+<td>ImmutableBiMap</td>
+<td>ImmutableMap</td>
+<td>ImmutableMap</td>
+</tr>
+</tbody></table>
 
 <hr>
 

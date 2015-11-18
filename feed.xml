@@ -5,13 +5,14 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 18 Nov 2015 10:42:00 +0800</pubDate>
-    <lastBuildDate>Wed, 18 Nov 2015 10:42:00 +0800</lastBuildDate>
+    <pubDate>Wed, 18 Nov 2015 15:35:17 +0800</pubDate>
+    <lastBuildDate>Wed, 18 Nov 2015 15:35:17 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
         <title>Guava新集合类型</title>
-        <description>&lt;p&gt;guava的collection包里新增加了几个集合类型非常实用  &lt;/p&gt;
+        <description>&lt;p&gt;guava的collection包里新增加了几个集合类型非常实用&lt;br&gt;
+新增类型有:Multiset、Multimap、BiMap&lt;/p&gt;
 
 &lt;hr&gt;
 
@@ -183,6 +184,63 @@ Multiset {a, a, b}和{a, b, a}是相等的, &lt;code class=&quot;prettyprint&quo
 
 &lt;p&gt;其实现类的继承关系图如下:
 &lt;img src=&quot;/static/images/multimap.png&quot; alt=&quot;Multimap继承关系图&quot; title=&quot;Multimap继承关系图&quot;&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;bimap&quot;&gt;BiMap&lt;/h2&gt;
+
+&lt;p&gt;BiMap是个特殊的Map(继承自JDK的Map), 它可以很方便地实现key-value的双向映射, 所以它要求value也必须是唯一的&lt;br&gt;
+BiMap的put方法与Map不太一样, put键值对KV时:&lt;br&gt;
+若先前KV都不存在,直接put; KV都已存在,则相当于没改变; K在V不在, 则&lt;code class=&quot;prettyprint&quot;&gt;KV&lt;/code&gt;替换&lt;code class=&quot;prettyprint&quot;&gt;KV&amp;#39;&lt;/code&gt;;(至此与Map都一样)&lt;br&gt;
+K不在V在, Map可以直接put进去, 但BiMap则不可以&lt;br&gt;
+与Map意义不一样的方法:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;V put(K key, V value)&lt;/code&gt;: K不在V在时, 抛出&lt;code class=&quot;prettyprint&quot;&gt;IllegalArgumentException&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;void putAll(Map map)&lt;/code&gt;: 同样可能抛异常, 但有可能只加了部分元素进去, 这取决于迭代顺序, 在发生异常之前迭代到的元素可能已经添加进去了&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Set&amp;lt;V&amp;gt; values()&lt;/code&gt;: 由于BiMap里的value是唯一的, 因次返回的是Set而不是Collection&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean containsValue(Object value)&lt;/code&gt;: 是否包含value&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;BiMap比Map新增的方法:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;V forcePut(K key, V value)&lt;/code&gt;: K不在V在时, 则&lt;code class=&quot;prettyprint&quot;&gt;KV&lt;/code&gt;替换&lt;code class=&quot;prettyprint&quot;&gt;K&amp;#39;V&lt;/code&gt;; 返回先前与key关联的value, 若先前没有相同的key则返回null&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;BiMap&amp;lt;V, K&amp;gt; inverse()&lt;/code&gt;: 返回value到key的映射Map, 两个map里的数据是公用的, 即删除&lt;code class=&quot;prettyprint&quot;&gt;V1-&amp;gt;K1&lt;/code&gt;时, &lt;code class=&quot;prettyprint&quot;&gt;K1-&amp;gt;V1&lt;/code&gt;也没了&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;bimap接口的实现类&quot;&gt;BiMap接口的实现类&lt;/h2&gt;
+
+&lt;table&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;实现类&lt;/th&gt;
+&lt;th&gt;key-value&lt;/th&gt;
+&lt;th&gt;value-&amp;gt;key&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;HashBiMap&lt;/td&gt;
+&lt;td&gt;HashMap&lt;/td&gt;
+&lt;td&gt;HashMap&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;EnumBiMap&lt;/td&gt;
+&lt;td&gt;EnumMap&lt;/td&gt;
+&lt;td&gt;EnumMap&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;EnumHashBiMap&lt;/td&gt;
+&lt;td&gt;EnumMap&lt;/td&gt;
+&lt;td&gt;HashMap&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ImmutableBiMap&lt;/td&gt;
+&lt;td&gt;ImmutableMap&lt;/td&gt;
+&lt;td&gt;ImmutableMap&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
 
 &lt;hr&gt;
 </description>
