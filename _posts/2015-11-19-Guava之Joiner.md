@@ -22,7 +22,7 @@ Joiner.on("; ").skipNulls().join("Harry", null, "Ron", "Hermione"); // Harry; Ro
 ```
 
 **注意**: Joiner类是不可变的, 即它是线程安全的, 可以将其定义为`static final`常量  
-像下面这样使用是错误的:
+像下面这样使用是 **错误** 的:
 
 ```java
 Joiner joiner = Joiner.on(',');   // joiner 是不可变的
