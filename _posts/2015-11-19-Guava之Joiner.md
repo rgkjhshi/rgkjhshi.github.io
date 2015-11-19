@@ -17,13 +17,19 @@ tag: Guava
 * 静态方法: `Joiner on(String separator)` `Joiner on(char separator)`:
 * 实例方法: `Joiner useForNull(final String nullText)` `Joiner skipNulls()`
 
-**注意**:joiner实例总是不可变的,这些方法总会返回一个新的joiner实例,
-这使得joiner实例都是线程安全的,你可以将其定义为`static final`常量  
-可以这么使用:
-
 ```java
 Joiner.on("; ").skipNulls().join("Harry", null, "Ron", "Hermione"); // Harry; Ron; Hermione
 ```
+
+**注意**: Joiner类是不可变的, 即它是线程安全的, 可以将其定义为`static final`常量  
+像下面这样使用是错误的:
+
+```java
+Joiner joiner = Joiner.on(',');   // joiner 是不可变的
+joiner.skipNulls();   // 这里返回了个新的Joiner, 原来的joiner并没变
+joiner.join("wrong", null, "wrong"); // 这就直接报NullPointerException了, 原来的joiner没有skipNull功能
+```
+
 *****
 
 ## join 系列方法
