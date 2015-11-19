@@ -109,11 +109,13 @@ jQuery(function(){
 <li>静态方法: <code class="prettyprint">Joiner on(String separator)</code> <code class="prettyprint">Joiner on(char separator)</code>:</li>
 <li>实例方法: <code class="prettyprint">Joiner useForNull(final String nullText)</code> <code class="prettyprint">Joiner skipNulls()</code></li>
 </ul>
-
-<p><strong>注意</strong>:joiner实例总是不可变的,这些方法总会返回一个新的joiner实例,
-这使得joiner实例都是线程安全的,你可以将其定义为<code class="prettyprint">static final</code>常量<br>
-可以这么使用:</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Joiner</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="s">&quot;; &quot;</span><span class="o">).</span><span class="na">skipNulls</span><span class="o">().</span><span class="na">join</span><span class="o">(</span><span class="s">&quot;Harry&quot;</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="s">&quot;Ron&quot;</span><span class="o">,</span> <span class="s">&quot;Hermione&quot;</span><span class="o">);</span> <span class="c1">// Harry; Ron; Hermione</span>
+</code></pre></div>
+<p><strong>注意</strong>: Joiner类是不可变的, 即它是线程安全的, 可以将其定义为<code class="prettyprint">static final</code>常量<br>
+像下面这样使用是错误的:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Joiner</span> <span class="n">joiner</span> <span class="o">=</span> <span class="n">Joiner</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="sc">&#39;,&#39;</span><span class="o">);</span>   <span class="c1">// joiner 是不可变的</span>
+<span class="n">joiner</span><span class="o">.</span><span class="na">skipNulls</span><span class="o">();</span>   <span class="c1">// 这里返回了个新的Joiner, 原来的joiner并没变</span>
+<span class="n">joiner</span><span class="o">.</span><span class="na">join</span><span class="o">(</span><span class="s">&quot;wrong&quot;</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="s">&quot;wrong&quot;</span><span class="o">);</span> <span class="c1">// 这就直接报NullPointerException了, 原来的joiner没有skipNull功能</span>
 </code></pre></div>
 <hr>
 

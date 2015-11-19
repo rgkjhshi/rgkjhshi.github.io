@@ -5,8 +5,8 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 19 Nov 2015 23:08:58 +0800</pubDate>
-    <lastBuildDate>Thu, 19 Nov 2015 23:08:58 +0800</lastBuildDate>
+    <pubDate>Thu, 19 Nov 2015 23:19:15 +0800</pubDate>
+    <lastBuildDate>Thu, 19 Nov 2015 23:19:15 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -21,11 +21,13 @@
 &lt;li&gt;静态方法: &lt;code class=&quot;prettyprint&quot;&gt;Joiner on(String separator)&lt;/code&gt; &lt;code class=&quot;prettyprint&quot;&gt;Joiner on(char separator)&lt;/code&gt;:&lt;/li&gt;
 &lt;li&gt;实例方法: &lt;code class=&quot;prettyprint&quot;&gt;Joiner useForNull(final String nullText)&lt;/code&gt; &lt;code class=&quot;prettyprint&quot;&gt;Joiner skipNulls()&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;:joiner实例总是不可变的,这些方法总会返回一个新的joiner实例,
-这使得joiner实例都是线程安全的,你可以将其定义为&lt;code class=&quot;prettyprint&quot;&gt;static final&lt;/code&gt;常量&lt;br&gt;
-可以这么使用:&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;Joiner&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;; &amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;skipNulls&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Harry&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Ron&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Hermione&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// Harry; Ron; Hermione&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;: Joiner类是不可变的, 即它是线程安全的, 可以将其定义为&lt;code class=&quot;prettyprint&quot;&gt;static final&lt;/code&gt;常量&lt;br&gt;
+像下面这样使用是错误的:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;Joiner&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;joiner&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Joiner&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;&amp;#39;,&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;// joiner 是不可变的&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;joiner&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;skipNulls&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;// 这里返回了个新的Joiner, 原来的joiner并没变&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;joiner&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;wrong&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;wrong&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 这就直接报NullPointerException了, 原来的joiner没有skipNull功能&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;hr&gt;
 
