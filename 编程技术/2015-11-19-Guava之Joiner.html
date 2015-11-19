@@ -112,7 +112,7 @@ jQuery(function(){
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Joiner</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="s">&quot;; &quot;</span><span class="o">).</span><span class="na">skipNulls</span><span class="o">().</span><span class="na">join</span><span class="o">(</span><span class="s">&quot;Harry&quot;</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="s">&quot;Ron&quot;</span><span class="o">,</span> <span class="s">&quot;Hermione&quot;</span><span class="o">);</span> <span class="c1">// Harry; Ron; Hermione</span>
 </code></pre></div>
 <p><strong>注意</strong>: Joiner类是不可变的, 即它是线程安全的, 可以将其定义为<code class="prettyprint">static final</code>常量<br>
-像下面这样使用是错误的:</p>
+像下面这样使用是 <strong>错误</strong> 的:</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Joiner</span> <span class="n">joiner</span> <span class="o">=</span> <span class="n">Joiner</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="sc">&#39;,&#39;</span><span class="o">);</span>   <span class="c1">// joiner 是不可变的</span>
 <span class="n">joiner</span><span class="o">.</span><span class="na">skipNulls</span><span class="o">();</span>   <span class="c1">// 这里返回了个新的Joiner, 原来的joiner并没变</span>
 <span class="n">joiner</span><span class="o">.</span><span class="na">join</span><span class="o">(</span><span class="s">&quot;wrong&quot;</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="s">&quot;wrong&quot;</span><span class="o">);</span> <span class="c1">// 这就直接报NullPointerException了, 原来的joiner没有skipNull功能</span>
