@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="Guava之Joiner, 编程技术, Guava, 逆水行舟" />
+    <meta name="description" content="Guava之Joiner, 编程技术, Guava, Joiner在Guava的com.google.common.base包中, 算是字符处理工具, 其作用是连接多个元素, 可当作连接器来使用  " />
+
+    <title>逆水行舟</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="http://loveshisong.cn/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-19-Guava%E4%B9%8BJoiner.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/jquery.qrcode.min.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/uikit.min.js"></script>
+    <!-- quietflow -->
+    <!-- <script type="text/javascript" src="http://loveshisong.cn/static/js/quietflow.min.js"></script> -->
+    <!-- UK sticky -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "shisong"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" data-uk-sticky>
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="http://loveshisong.cn/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <script type="text/javascript">
+jQuery(function(){
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-19-Guava%E4%B9%8BJoiner.html"
+    });
+})
+</script>
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>Guava之Joiner</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <p><code class="prettyprint">Joiner</code>在Guava的<code class="prettyprint">com.google.common.base</code>包中, 算是字符处理工具, 其作用是连接多个元素, 可当作连接器来使用  </p>
+
+<hr>
+
+<h2 id="生成joiner的方法">生成<code class="prettyprint">Joiner</code>的方法</h2>
+
+<ul>
+<li>静态方法: <code class="prettyprint">Joiner on(String separator)</code> <code class="prettyprint">Joiner on(char separator)</code>:</li>
+<li>实例方法: <code class="prettyprint">Joiner useForNull(final String nullText)</code> <code class="prettyprint">Joiner skipNulls()</code></li>
+</ul>
+
+<p><strong>注意</strong>:joiner实例总是不可变的,这些方法总会返回一个新的joiner实例,
+这使得joiner实例都是线程安全的,你可以将其定义为<code class="prettyprint">static final</code>常量<br>
+可以这么使用:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Joiner</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="s">&quot;; &quot;</span><span class="o">).</span><span class="na">skipNulls</span><span class="o">().</span><span class="na">join</span><span class="o">(</span><span class="s">&quot;Harry&quot;</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="s">&quot;Ron&quot;</span><span class="o">,</span> <span class="s">&quot;Hermione&quot;</span><span class="o">);</span> <span class="c1">// Harry; Ron; Hermione</span>
+</code></pre></div>
+<hr>
+
+<h2 id="join-系列方法">join 系列方法</h2>
+
+<p>返回连接之后的字符串, 返回的字符串都是<code class="prettyprint">final</code>的:</p>
+
+<ul>
+<li><code class="prettyprint">public final String join(Iterable&lt;?&gt; parts)</code></li>
+<li><code class="prettyprint">public final String join(Iterator&lt;?&gt; parts)</code></li>
+<li><code class="prettyprint">public final String join(Object[] parts)</code></li>
+<li><code class="prettyprint">public final String join(Object first, Object second, Object... rest)</code></li>
+</ul>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Joiner</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="s">&quot;,&quot;</span><span class="o">).</span><span class="na">join</span><span class="o">(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">7</span><span class="o">));</span> <span class="c1">// returns &quot;1,5,7&quot;</span>
+</code></pre></div>
+<hr>
+
+<h2 id="appendto-系列方法">appendTo 系列方法</h2>
+
+<p>把后面的参数以字符串的方式添加到第一个参数后面<br>
+<code class="prettyprint">java.lang.Appendable</code>接口的子类(如<code class="prettyprint">StringBuilder</code> <code class="prettyprint">BufferedWriter</code>等), 都可以作为第一个参数</p>
+
+<ul>
+<li><code class="prettyprint">StringBuilder appendTo(StringBuilder builder, Iterable&lt;?&gt; parts)</code></li>
+<li><code class="prettyprint">StringBuilder appendTo(StringBuilder builder, Iterable&lt;?&gt; parts)</code></li>
+<li><code class="prettyprint">StringBuilder appendTo(StringBuilder builder, Object[] parts)</code></li>
+<li><code class="prettyprint">StringBuilder appendTo(StringBuilder builder, Object first, Object second, Object... rest)</code></li>
+<li><code class="prettyprint">&lt;A extends Appendable&gt; A appendTo(A appendable, Iterable&lt;?&gt; parts)</code></li>
+<li><code class="prettyprint">&lt;A extends Appendable&gt; A appendTo(A appendable, Iterator&lt;?&gt; parts)</code></li>
+<li><code class="prettyprint">&lt;A extends Appendable&gt; A appendTo(A appendable, Object[] parts)</code></li>
+<li><code class="prettyprint">&lt;A extends Appendable&gt; A appendTo(A appendable, Object first, Object second, Object... rest)</code></li>
+</ul>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Joiner</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="s">&quot;,&quot;</span><span class="o">).</span><span class="na">appendTo</span><span class="o">(</span><span class="k">new</span> <span class="nf">StringBuilder</span><span class="o">(</span><span class="s">&quot;list:&quot;</span><span class="o">),</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)).</span><span class="na">toString</span><span class="o">();</span> <span class="c1">// list:1,2,3</span>
+</code></pre></div>
+<hr>
+
+<h2 id="mapjoiner">MapJoiner</h2>
+
+<p>Joiner提供了个方法返回内部类<code class="prettyprint">Joiner.MapJoiner</code>专门用于处理map  </p>
+
+<ul>
+<li><code class="prettyprint">MapJoiner withKeyValueSeparator(String keyValueSeparator)</code></li>
+</ul>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="n">Maps</span><span class="o">.</span><span class="na">newHashMap</span><span class="o">();</span>
+<span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;a&quot;</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+<span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;b&quot;</span><span class="o">,</span> <span class="mi">2</span><span class="o">);</span>
+<span class="n">Joiner</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="s">&quot;;&quot;</span><span class="o">).</span><span class="na">withKeyValueSeparator</span><span class="o">(</span><span class="s">&quot;-&gt;&quot;</span><span class="o">).</span><span class="na">join</span><span class="o">(</span><span class="n">map</span><span class="o">);</span> <span class="c1">// b-&gt;2;a-&gt;1</span>
+</code></pre></div>
+<hr>
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/Guava之Joiner" data-title="Guava之Joiner" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-19-Guava%E4%B9%8BJoiner.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
+
+</body>
+
+</html>
