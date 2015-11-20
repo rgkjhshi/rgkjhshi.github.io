@@ -105,9 +105,18 @@ jQuery(function(){
 
 <h2 id="生成joiner的方法">生成<code class="prettyprint">Joiner</code>的方法</h2>
 
+<p>工厂方法:</p>
+
 <ul>
-<li>静态方法: <code class="prettyprint">Joiner on(String separator)</code> <code class="prettyprint">Joiner on(char separator)</code>:</li>
-<li>实例方法: <code class="prettyprint">Joiner useForNull(final String nullText)</code> <code class="prettyprint">Joiner skipNulls()</code></li>
+<li><code class="prettyprint">Joiner on(String separator)</code></li>
+<li><code class="prettyprint">Joiner on(char separator)</code></li>
+</ul>
+
+<p>修饰方法:</p>
+
+<ul>
+<li><code class="prettyprint">Joiner useForNull(final String nullText)</code></li>
+<li><code class="prettyprint">Joiner skipNulls()</code></li>
 </ul>
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Joiner</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="s">&quot;; &quot;</span><span class="o">).</span><span class="na">skipNulls</span><span class="o">().</span><span class="na">join</span><span class="o">(</span><span class="s">&quot;Harry&quot;</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="s">&quot;Ron&quot;</span><span class="o">,</span> <span class="s">&quot;Hermione&quot;</span><span class="o">);</span> <span class="c1">// Harry; Ron; Hermione</span>
 </code></pre></div>
@@ -119,7 +128,7 @@ jQuery(function(){
 </code></pre></div>
 <hr>
 
-<h2 id="join-系列方法">join 系列方法</h2>
+<h2 id="join-方法">join 方法</h2>
 
 <p>返回连接之后的字符串, 返回的字符串都是<code class="prettyprint">final</code>的:</p>
 
@@ -133,7 +142,7 @@ jQuery(function(){
 </code></pre></div>
 <hr>
 
-<h2 id="appendto-系列方法">appendTo 系列方法</h2>
+<h2 id="appendto-方法">appendTo 方法</h2>
 
 <p>把后面的参数以字符串的方式添加到第一个参数后面<br>
 <code class="prettyprint">java.lang.Appendable</code>接口的子类(如<code class="prettyprint">StringBuilder</code> <code class="prettyprint">BufferedWriter</code>等), 都可以作为第一个参数</p>

@@ -5,9 +5,238 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 19 Nov 2015 23:20:25 +0800</pubDate>
-    <lastBuildDate>Thu, 19 Nov 2015 23:20:25 +0800</lastBuildDate>
+    <pubDate>Fri, 20 Nov 2015 23:14:58 +0800</pubDate>
+    <lastBuildDate>Fri, 20 Nov 2015 23:14:58 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>Guava之CharMatcher</title>
+        <description>&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;CharMatcher&lt;/code&gt;是字符匹配器, 代表着某一类字符, &lt;code class=&quot;prettyprint&quot;&gt;CharMatcher&lt;/code&gt;实现了&lt;code class=&quot;prettyprint&quot;&gt;Predicate&amp;lt;Character&amp;gt;&lt;/code&gt;接口&lt;br&gt;
+&lt;code class=&quot;prettyprint&quot;&gt;CharMatcher&lt;/code&gt;提供了一系列方法，让你对字符作特定类型的操作：修剪[trim]、折叠[collapse]、移除[remove]、保留[retain]等&lt;br&gt;
+&lt;code class=&quot;prettyprint&quot;&gt;CharMatcher&lt;/code&gt;只处理&lt;code class=&quot;prettyprint&quot;&gt;char&lt;/code&gt;类型代表的字符即&lt;code class=&quot;prettyprint&quot;&gt;0x0000&lt;/code&gt;~&lt;code class=&quot;prettyprint&quot;&gt;0xFFFF&lt;/code&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;获取charmatcher&quot;&gt;获取CharMatcher&lt;/h2&gt;
+
+&lt;p&gt;CharMatcher中的常量可以满足大多数字符匹配需求&lt;/p&gt;
+
+&lt;table&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;内置CharMatcher&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;ANY&lt;/td&gt;
+&lt;td&gt;任何字符都匹配&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NONE&lt;/td&gt;
+&lt;td&gt;不匹配任何字符&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;WHITESPACE&lt;/td&gt;
+&lt;td&gt;空白字符(Unicode标准)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;BREAKING_WHITESPACE&lt;/td&gt;
+&lt;td&gt;被空白隔开的两个词之间的那个空白, 比如两个单词之间的空白间隔&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;INVISIBLE&lt;/td&gt;
+&lt;td&gt;不可见字符, 如LINE_SEPARATOR&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;DIGIT&lt;/td&gt;
+&lt;td&gt;Unicode数字,比JAVA_DIGIT范围大,如果要表示0～9请用&lt;code class=&quot;prettyprint&quot;&gt;inRange(&amp;#39;0&amp;#39;, &amp;#39;9&amp;#39;)&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;JAVA_LETTER&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;JAVA_DIGIT&lt;/td&gt;
+&lt;td&gt;Java定义的数字,范围超过0~9,如果要表示0～9请用&lt;code class=&quot;prettyprint&quot;&gt;inRange(&amp;#39;0&amp;#39;, &amp;#39;9&amp;#39;)&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;JAVA_LETTER_OR_DIGIT&lt;/td&gt;
+&lt;td&gt;JAVA_LETTER 或 JAVA_DIGIT&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;JAVA_UPPER_CASE&lt;/td&gt;
+&lt;td&gt;范围比a~z大&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;JAVA_LOWER_CASE&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;JAVA_ISO_CONTROL&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ASCII&lt;/td&gt;
+&lt;td&gt;ASCII码,这意味着它的代码点低于128&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SINGLE_WIDTH&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ZEROES&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;NINES&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+
+&lt;p&gt;获取字符匹配器的常见方法&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;is(final char match)&lt;/code&gt;: 给定单一字符匹配&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;isNot(final char match)&lt;/code&gt;: 不是某字符&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;anyOf(final CharSequence sequence)&lt;/code&gt;: 枚举匹配字符,如&lt;code class=&quot;prettyprint&quot;&gt;CharMatcher.anyOf(“aeiou”)&lt;/code&gt;匹配小写英语元音&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;noneOf(CharSequence sequence)&lt;/code&gt;: 不是sequence里的任意一个,anyOf的相反方法, 等同于&lt;code class=&quot;prettyprint&quot;&gt;anyOf(sequence).negate()&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;inRange(final char startInclusive, final char endInclusive)&lt;/code&gt;: 给定字符范围匹配，如&lt;code class=&quot;prettyprint&quot;&gt;CharMatcher.inRange(‘a’, ‘z’)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;or(CharMatcher other)&lt;/code&gt;: 取并集&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;and(CharMatcher other)&lt;/code&gt;: 取交集&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;negate(CharMatcher other)&lt;/code&gt;: 取反&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;使用字符匹配器&quot;&gt;使用字符匹配器&lt;/h2&gt;
+
+&lt;p&gt;返回是否匹配(&lt;code class=&quot;prettyprint&quot;&gt;boolean&lt;/code&gt;)的方法:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean matchesAnyOf(CharSequence sequence)&lt;/code&gt; : 是否sequence中有匹配的字符&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean matchesAllOf(CharSequence sequence)&lt;/code&gt; : 是否sequence中的所有字符都匹配&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean matchesNoneOf(CharSequence sequence)&lt;/code&gt; : sequence中不包含能够匹配的字符&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;返回&lt;code class=&quot;prettyprint&quot;&gt;int&lt;/code&gt;的方法:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;int indexIn(CharSequence sequence)&lt;/code&gt; : 返回第一次匹配上的下标, -1表示没有匹配的&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;int indexIn(CharSequence sequence, int start)&lt;/code&gt; : &amp;gt;=start或-1&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;int lastIndexIn(CharSequence sequence)&lt;/code&gt; : 最后一次匹配的下标, -1表示没有匹配的&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;返回匹配的内容(&lt;code class=&quot;prettyprint&quot;&gt;String&lt;/code&gt;)的方法:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;String removeFrom(CharSequence sequence)&lt;/code&gt; : 移除匹配字符,返回的是移除匹配字符之后剩下的&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;String retainFrom(CharSequence sequence)&lt;/code&gt; : 保留匹配字符&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;String replaceFrom(CharSequence sequence, char replacement)&lt;/code&gt; : 替代匹配字符&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;String replaceFrom(CharSequence sequence, CharSequence replacement)&lt;/code&gt; :替代匹配字符&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;String trimFrom(CharSequence sequence)&lt;/code&gt; : 移除前导和尾部的匹配字符&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;String trimLeadingFrom(CharSequence sequence)&lt;/code&gt;: 只移除前导匹配的&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;String trimTrailingFrom(CharSequence sequence)&lt;/code&gt;: 只移除尾部匹配的&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;String collapseFrom(CharSequence sequence, char replacement)&lt;/code&gt;: 替换,但连续的匹配字符只替换一次&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;String trimAndCollapseFrom(CharSequence sequence, char replacement)&lt;/code&gt;: 中间连续的只替换一次,开头和结尾的直接去掉&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;示例:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;CharMatcher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;is&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;&amp;#39;a&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;removeFrom&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;bazaar&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// &amp;quot;bzr&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;CharMatcher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;is&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;&amp;#39;a&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;retainFrom&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;bazaar&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// &amp;quot;aaa&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;CharMatcher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;is&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;&amp;#39;a&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;replaceFrom&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;radar&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&amp;#39;o&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// &amp;quot;rodor&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;CharMatcher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;is&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;&amp;#39;a&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;replaceFrom&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;yaha&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;oo&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// &amp;quot;yoohoo&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;CharMatcher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;anyOf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;ab&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;trimFrom&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;abacatbab&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// &amp;quot;cat&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;CharMatcher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;inRange&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;&amp;#39;\0&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&amp;#39; &amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;trimFrom&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 等同于 str.trim()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;CharMatcher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;anyOf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;eko&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;collapseFrom&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;bookkeeper&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&amp;#39;-&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// &amp;quot;b-p-r&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+</description>
+        <pubDate>Sat, 21 Nov 2015 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-21-Guava%E4%B9%8BCharMatcher.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-21-Guava%E4%B9%8BCharMatcher.html</guid>
+        
+        <category>Guava</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
+    
+      <item>
+        <title>Guava之Splitter</title>
+        <description>&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;Splitter&lt;/code&gt;相当于拆分器,跟&lt;a href=&quot;/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-19-Guava%E4%B9%8BJoiner.html&quot;&gt;Joiner&lt;/a&gt;正好是相反的操作&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;生成splitter的方法&quot;&gt;生成&lt;code class=&quot;prettyprint&quot;&gt;Splitter&lt;/code&gt;的方法&lt;/h2&gt;
+
+&lt;p&gt;工厂方法:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Splitter on(char separator)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Splitter on(final CharMatcher separatorMatcher)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Splitter on(final String separator)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Splitter on(final Pattern separatorPattern)&lt;/code&gt;: 支持正则&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Splitter onPattern(String separatorPattern)&lt;/code&gt;: 等效于&lt;code class=&quot;prettyprint&quot;&gt;Splitter.on(Pattern.compile(pattern))&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Splitter fixedLength(final int length)&lt;/code&gt;: 每length个元素分成一组&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;修饰方法:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Splitter omitEmptyStrings()&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Splitter limit(int limit)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Splitter trimResults()&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Splitter trimResults(CharMatcher trimmer)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;示例:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;Splitter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;&amp;#39;,&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;foo,,bar&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// [&amp;quot;foo&amp;quot;, &amp;quot;&amp;quot;, &amp;quot;bar&amp;quot;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Splitter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CharMatcher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;anyOf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;;,&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;foo,;bar,quux&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// [&amp;quot;foo&amp;quot;, &amp;quot;&amp;quot;, &amp;quot;bar&amp;quot;, &amp;quot;quux&amp;quot;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Splitter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;, &amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;foo, bar,baz&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// [&amp;quot;foo&amp;quot;, &amp;quot;bar,baz&amp;quot;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Splitter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Pattern&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;compile&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;\\d+&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;a12b3c&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// [a, b, c]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Splitter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;fixedLength&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;abcde&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// [&amp;quot;ab&amp;quot;, &amp;quot;cd&amp;quot;, &amp;quot;e&amp;quot;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Splitter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;&amp;#39;,&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;limit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;a,b,c,d&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// [&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;, &amp;quot;c,d&amp;quot;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Splitter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;&amp;#39;,&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;limit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;omitEmptyStrings&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;a,,,b,,,c,d&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// [&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;, &amp;quot;c,d&amp;quot;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Splitter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;&amp;#39;,&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;limit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;trimResults&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot; a , b , c , d &amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// [&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;, &amp;quot;c , d&amp;quot;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Splitter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;&amp;#39;,&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;trimResults&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CharMatcher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;is&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;&amp;#39;_&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;_a ,_b_ ,c__&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// [&amp;quot;a &amp;quot;, &amp;quot;b_ &amp;quot;, &amp;quot;c&amp;quot;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+
+&lt;h2 id=&quot;split-方法&quot;&gt;split 方法&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Iterable&amp;lt;String&amp;gt; split(final CharSequence sequence)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;List&amp;lt;String&amp;gt; splitToList(CharSequence sequence)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;mapsplitter&quot;&gt;MapSplitter&lt;/h2&gt;
+
+&lt;p&gt;Splitter提供了个方法返回内部类&lt;code class=&quot;prettyprint&quot;&gt;Splitter.MapSplitter&lt;/code&gt;专门分割成map  &lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;MapSplitter withKeyValueSeparator(String separator)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;MapSplitter withKeyValueSeparator(char separator)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;MapSplitter withKeyValueSeparator(Splitter keyValueSplitter)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;注意: &lt;code class=&quot;prettyprint&quot;&gt;MapSplitter&lt;/code&gt;的&lt;code class=&quot;prettyprint&quot;&gt;split&lt;/code&gt;方法返回的是&lt;code class=&quot;prettyprint&quot;&gt;Map&amp;lt;String, String&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Splitter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;&amp;amp;&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;withKeyValueSeparator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;=&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;a=1&amp;amp;b=2&amp;amp;c=3&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+</description>
+        <pubDate>Fri, 20 Nov 2015 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-20-Guava%E4%B9%8BSplitter.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-20-Guava%E4%B9%8BSplitter.html</guid>
+        
+        <category>Guava</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
     
       <item>
         <title>Guava之Joiner</title>
@@ -17,9 +246,18 @@
 
 &lt;h2 id=&quot;生成joiner的方法&quot;&gt;生成&lt;code class=&quot;prettyprint&quot;&gt;Joiner&lt;/code&gt;的方法&lt;/h2&gt;
 
+&lt;p&gt;工厂方法:&lt;/p&gt;
+
 &lt;ul&gt;
-&lt;li&gt;静态方法: &lt;code class=&quot;prettyprint&quot;&gt;Joiner on(String separator)&lt;/code&gt; &lt;code class=&quot;prettyprint&quot;&gt;Joiner on(char separator)&lt;/code&gt;:&lt;/li&gt;
-&lt;li&gt;实例方法: &lt;code class=&quot;prettyprint&quot;&gt;Joiner useForNull(final String nullText)&lt;/code&gt; &lt;code class=&quot;prettyprint&quot;&gt;Joiner skipNulls()&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Joiner on(String separator)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Joiner on(char separator)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;修饰方法:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Joiner useForNull(final String nullText)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Joiner skipNulls()&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;Joiner&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;; &amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;skipNulls&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Harry&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Ron&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Hermione&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// Harry; Ron; Hermione&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
@@ -31,7 +269,7 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;hr&gt;
 
-&lt;h2 id=&quot;join-系列方法&quot;&gt;join 系列方法&lt;/h2&gt;
+&lt;h2 id=&quot;join-方法&quot;&gt;join 方法&lt;/h2&gt;
 
 &lt;p&gt;返回连接之后的字符串, 返回的字符串都是&lt;code class=&quot;prettyprint&quot;&gt;final&lt;/code&gt;的:&lt;/p&gt;
 
@@ -45,7 +283,7 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;hr&gt;
 
-&lt;h2 id=&quot;appendto-系列方法&quot;&gt;appendTo 系列方法&lt;/h2&gt;
+&lt;h2 id=&quot;appendto-方法&quot;&gt;appendTo 方法&lt;/h2&gt;
 
 &lt;p&gt;把后面的参数以字符串的方式添加到第一个参数后面&lt;br&gt;
 &lt;code class=&quot;prettyprint&quot;&gt;java.lang.Appendable&lt;/code&gt;接口的子类(如&lt;code class=&quot;prettyprint&quot;&gt;StringBuilder&lt;/code&gt; &lt;code class=&quot;prettyprint&quot;&gt;BufferedWriter&lt;/code&gt;等), 都可以作为第一个参数&lt;/p&gt;
@@ -962,122 +1200,6 @@ Table是这样定义的&lt;code class=&quot;prettyprint&quot;&gt;Table&amp;lt;R,
         <pubDate>Wed, 11 Nov 2015 00:00:00 +0800</pubDate>
         <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-11-Guava%E4%B9%8BPreconditions.html</link>
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-11-Guava%E4%B9%8BPreconditions.html</guid>
-        
-        <category>Guava</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>Guava之Optional</title>
-        <description>&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;Optional&lt;/code&gt;用于处理有可能为&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;的情况,在Guava的&lt;code class=&quot;prettyprint&quot;&gt;com.google.common.base&lt;/code&gt;包中&lt;br&gt;
-&lt;code class=&quot;prettyprint&quot;&gt;Optional&lt;/code&gt;是一个抽象类，有两个&lt;code class=&quot;prettyprint&quot;&gt;final&lt;/code&gt;的子类:&lt;code class=&quot;prettyprint&quot;&gt;Present&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;Absent&lt;/code&gt;&lt;br&gt;
-使用的时候直接用&lt;code class=&quot;prettyprint&quot;&gt;Optional&lt;/code&gt;即可, 不用关心&lt;code class=&quot;prettyprint&quot;&gt;Present&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;Absent&lt;/code&gt;&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;静态方法&quot;&gt;静态方法&lt;/h2&gt;
-
-&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;Optional&lt;/code&gt;有三个常用的静态方法:  &lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Optional.of(T reference): 返回的是一个&lt;code class=&quot;prettyprint&quot;&gt;Present&lt;/code&gt;对象, 表示不能为&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;, 当&lt;code class=&quot;prettyprint&quot;&gt;reference&lt;/code&gt;为&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;时直接抛&lt;code class=&quot;prettyprint&quot;&gt;NullPointerException&lt;/code&gt;&lt;br&gt;&lt;/li&gt;
-&lt;li&gt;Optional.absent(): 返回的是一个&lt;code class=&quot;prettyprint&quot;&gt;final&lt;/code&gt;的&lt;code class=&quot;prettyprint&quot;&gt;Absent&lt;/code&gt;对象, 表示&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Optional.fromNullable(T nullableReference): 返回的可能是&lt;code class=&quot;prettyprint&quot;&gt;Present&lt;/code&gt;或者&lt;code class=&quot;prettyprint&quot;&gt;Absent&lt;/code&gt;, 表示对象肯能为&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;, 即参数为&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;时等同于&lt;code class=&quot;prettyprint&quot;&gt;absent()&lt;/code&gt;&lt;br&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;实例方法&quot;&gt;实例方法&lt;/h2&gt;
-
-&lt;ol&gt;
-&lt;li&gt;boolean isPresent( ): Optional包含的T实例不为&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;，则返回true&lt;/li&gt;
-&lt;li&gt;T get( ): 返回包含实例, 若包含的实例为&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;则抛出&lt;code class=&quot;prettyprint&quot;&gt;IllegalStateException&lt;/code&gt;异常&lt;/li&gt;
-&lt;li&gt;T or(T defaultValue): &lt;code class=&quot;prettyprint&quot;&gt;a.or(b)&lt;/code&gt;a不为null返回a, 否则返回b, b为&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;时抛出&lt;code class=&quot;prettyprint&quot;&gt;NullPointerException&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;T orNull( ): &lt;code class=&quot;prettyprint&quot;&gt;a.orNull()&lt;/code&gt;a不为null返回a, 否则返回null, 逆操作是&lt;code class=&quot;prettyprint&quot;&gt;fromNullable()&lt;/code&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;hr&gt;
-</description>
-        <pubDate>Wed, 11 Nov 2015 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-11-Guava%E4%B9%8BOptional.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-11-Guava%E4%B9%8BOptional.html</guid>
-        
-        <category>Guava</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>Guava之Objects</title>
-        <description>&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;Objects&lt;/code&gt;在Guava的&lt;code class=&quot;prettyprint&quot;&gt;com.google.common.base&lt;/code&gt;包中&lt;br&gt;
-JDK7已经把Objects收录在了&lt;code class=&quot;prettyprint&quot;&gt;java.util.Objects&lt;/code&gt;里, 现在可以直接用啦&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;equals&quot;&gt;equals&lt;/h2&gt;
-
-&lt;p&gt;看实现代码， 不用担心空指针了&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;equals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;equals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-
-&lt;h2 id=&quot;hashcode和hash&quot;&gt;hashCode和hash&lt;/h2&gt;
-
-&lt;p&gt;首先&lt;code class=&quot;prettyprint&quot;&gt;hashCode(Object o)&lt;/code&gt;不用担心空指针&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;hashCode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;hashCode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;另外还有个&lt;code class=&quot;prettyprint&quot;&gt;hash(Object... values)&lt;/code&gt;方法非常好用，可以传多个对象进去得到hash值, 比如可以这样用:&lt;br&gt;
-&lt;code class=&quot;prettyprint&quot;&gt;Objects.hashCode(field1, field2, ..., fieldn)&lt;/code&gt;&lt;br&gt;
-来个例子:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;    &lt;span class=&quot;n&quot;&gt;Objects&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;a&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;b&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 4066&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;Objects&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;b&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;a&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 4096&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-
-&lt;h2 id=&quot;tostring&quot;&gt;toString&lt;/h2&gt;
-
-&lt;p&gt;有两个方法&lt;code class=&quot;prettyprint&quot;&gt;toString(Object o)&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;toString(Object o, String nullDefault)&lt;/code&gt;, 代码如下:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// 如果传null则返回字符串&amp;quot;null&amp;quot;&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;valueOf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// 这个可以自己指定为null时返回什么&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nullDefault&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;o&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nullDefault&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-
-&lt;h2 id=&quot;requirenonnull&quot;&gt;requireNonNull&lt;/h2&gt;
-
-&lt;p&gt;还有两个判空方法&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// 直接抛空指针异常&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;requireNonNull&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;NullPointerException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// 可以自定义异常描述&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;requireNonNull&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;message&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;NullPointerException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;message&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-</description>
-        <pubDate>Tue, 10 Nov 2015 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-10-Guava%E4%B9%8BObjects.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-10-Guava%E4%B9%8BObjects.html</guid>
         
         <category>Guava</category>
         

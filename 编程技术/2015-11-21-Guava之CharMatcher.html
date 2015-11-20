@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="Guava之CharMatcher, 编程技术, Guava, 逆水行舟" />
+    <meta name="description" content="Guava之CharMatcher, 编程技术, Guava, CharMatcher是字符匹配器, 代表着某一类字符, CharMatcher实现了Predicate&lt;Character&gt;接口CharMatcher提供了一系列方法，让你对字符作特定类型的操作：修剪[trim]、折叠[collapse]、移除[remove]、保留[retain]等CharMatc..." />
+
+    <title>逆水行舟</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="http://loveshisong.cn/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-21-Guava%E4%B9%8BCharMatcher.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/jquery.qrcode.min.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/uikit.min.js"></script>
+    <!-- quietflow -->
+    <!-- <script type="text/javascript" src="http://loveshisong.cn/static/js/quietflow.min.js"></script> -->
+    <!-- UK sticky -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "shisong"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" data-uk-sticky>
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="http://loveshisong.cn/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <script type="text/javascript">
+jQuery(function(){
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-21-Guava%E4%B9%8BCharMatcher.html"
+    });
+})
+</script>
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>Guava之CharMatcher</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <p><code class="prettyprint">CharMatcher</code>是字符匹配器, 代表着某一类字符, <code class="prettyprint">CharMatcher</code>实现了<code class="prettyprint">Predicate&lt;Character&gt;</code>接口<br>
+<code class="prettyprint">CharMatcher</code>提供了一系列方法，让你对字符作特定类型的操作：修剪[trim]、折叠[collapse]、移除[remove]、保留[retain]等<br>
+<code class="prettyprint">CharMatcher</code>只处理<code class="prettyprint">char</code>类型代表的字符即<code class="prettyprint">0x0000</code>~<code class="prettyprint">0xFFFF</code></p>
+
+<hr>
+
+<h2 id="获取charmatcher">获取CharMatcher</h2>
+
+<p>CharMatcher中的常量可以满足大多数字符匹配需求</p>
+
+<table><thead>
+<tr>
+<th>内置CharMatcher</th>
+<th>说明</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>ANY</td>
+<td>任何字符都匹配</td>
+</tr>
+<tr>
+<td>NONE</td>
+<td>不匹配任何字符</td>
+</tr>
+<tr>
+<td>WHITESPACE</td>
+<td>空白字符(Unicode标准)</td>
+</tr>
+<tr>
+<td>BREAKING_WHITESPACE</td>
+<td>被空白隔开的两个词之间的那个空白, 比如两个单词之间的空白间隔</td>
+</tr>
+<tr>
+<td>INVISIBLE</td>
+<td>不可见字符, 如LINE_SEPARATOR</td>
+</tr>
+<tr>
+<td>DIGIT</td>
+<td>Unicode数字,比JAVA_DIGIT范围大,如果要表示0～9请用<code class="prettyprint">inRange(&#39;0&#39;, &#39;9&#39;)</code></td>
+</tr>
+<tr>
+<td>JAVA_LETTER</td>
+<td></td>
+</tr>
+<tr>
+<td>JAVA_DIGIT</td>
+<td>Java定义的数字,范围超过0~9,如果要表示0～9请用<code class="prettyprint">inRange(&#39;0&#39;, &#39;9&#39;)</code></td>
+</tr>
+<tr>
+<td>JAVA_LETTER_OR_DIGIT</td>
+<td>JAVA_LETTER 或 JAVA_DIGIT</td>
+</tr>
+<tr>
+<td>JAVA_UPPER_CASE</td>
+<td>范围比a~z大</td>
+</tr>
+<tr>
+<td>JAVA_LOWER_CASE</td>
+<td></td>
+</tr>
+<tr>
+<td>JAVA_ISO_CONTROL</td>
+<td></td>
+</tr>
+<tr>
+<td>ASCII</td>
+<td>ASCII码,这意味着它的代码点低于128</td>
+</tr>
+<tr>
+<td>SINGLE_WIDTH</td>
+<td></td>
+</tr>
+<tr>
+<td>ZEROES</td>
+<td></td>
+</tr>
+<tr>
+<td>NINES</td>
+<td></td>
+</tr>
+</tbody></table>
+
+<p>获取字符匹配器的常见方法</p>
+
+<ul>
+<li><code class="prettyprint">is(final char match)</code>: 给定单一字符匹配</li>
+<li><code class="prettyprint">isNot(final char match)</code>: 不是某字符</li>
+<li><code class="prettyprint">anyOf(final CharSequence sequence)</code>: 枚举匹配字符,如<code class="prettyprint">CharMatcher.anyOf(“aeiou”)</code>匹配小写英语元音</li>
+<li><code class="prettyprint">noneOf(CharSequence sequence)</code>: 不是sequence里的任意一个,anyOf的相反方法, 等同于<code class="prettyprint">anyOf(sequence).negate()</code></li>
+<li><code class="prettyprint">inRange(final char startInclusive, final char endInclusive)</code>: 给定字符范围匹配，如<code class="prettyprint">CharMatcher.inRange(‘a’, ‘z’)</code></li>
+<li><code class="prettyprint">or(CharMatcher other)</code>: 取并集</li>
+<li><code class="prettyprint">and(CharMatcher other)</code>: 取交集</li>
+<li><code class="prettyprint">negate(CharMatcher other)</code>: 取反</li>
+</ul>
+
+<hr>
+
+<h2 id="使用字符匹配器">使用字符匹配器</h2>
+
+<p>返回是否匹配(<code class="prettyprint">boolean</code>)的方法:</p>
+
+<ul>
+<li><code class="prettyprint">boolean matchesAnyOf(CharSequence sequence)</code> : 是否sequence中有匹配的字符</li>
+<li><code class="prettyprint">boolean matchesAllOf(CharSequence sequence)</code> : 是否sequence中的所有字符都匹配</li>
+<li><code class="prettyprint">boolean matchesNoneOf(CharSequence sequence)</code> : sequence中不包含能够匹配的字符</li>
+</ul>
+
+<p>返回<code class="prettyprint">int</code>的方法:</p>
+
+<ul>
+<li><code class="prettyprint">int indexIn(CharSequence sequence)</code> : 返回第一次匹配上的下标, -1表示没有匹配的</li>
+<li><code class="prettyprint">int indexIn(CharSequence sequence, int start)</code> : &gt;=start或-1</li>
+<li><code class="prettyprint">int lastIndexIn(CharSequence sequence)</code> : 最后一次匹配的下标, -1表示没有匹配的</li>
+</ul>
+
+<p>返回匹配的内容(<code class="prettyprint">String</code>)的方法:</p>
+
+<ul>
+<li><code class="prettyprint">String removeFrom(CharSequence sequence)</code> : 移除匹配字符,返回的是移除匹配字符之后剩下的</li>
+<li><code class="prettyprint">String retainFrom(CharSequence sequence)</code> : 保留匹配字符</li>
+<li><code class="prettyprint">String replaceFrom(CharSequence sequence, char replacement)</code> : 替代匹配字符</li>
+<li><code class="prettyprint">String replaceFrom(CharSequence sequence, CharSequence replacement)</code> :替代匹配字符</li>
+<li><code class="prettyprint">String trimFrom(CharSequence sequence)</code> : 移除前导和尾部的匹配字符</li>
+<li><code class="prettyprint">String trimLeadingFrom(CharSequence sequence)</code>: 只移除前导匹配的</li>
+<li><code class="prettyprint">String trimTrailingFrom(CharSequence sequence)</code>: 只移除尾部匹配的</li>
+<li><code class="prettyprint">String collapseFrom(CharSequence sequence, char replacement)</code>: 替换,但连续的匹配字符只替换一次</li>
+<li><code class="prettyprint">String trimAndCollapseFrom(CharSequence sequence, char replacement)</code>: 中间连续的只替换一次,开头和结尾的直接去掉</li>
+</ul>
+
+<p>示例:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">CharMatcher</span><span class="o">.</span><span class="na">is</span><span class="o">(</span><span class="sc">&#39;a&#39;</span><span class="o">).</span><span class="na">removeFrom</span><span class="o">(</span><span class="s">&quot;bazaar&quot;</span><span class="o">);</span>  <span class="c1">// &quot;bzr&quot;</span>
+<span class="n">CharMatcher</span><span class="o">.</span><span class="na">is</span><span class="o">(</span><span class="sc">&#39;a&#39;</span><span class="o">).</span><span class="na">retainFrom</span><span class="o">(</span><span class="s">&quot;bazaar&quot;</span><span class="o">);</span>  <span class="c1">// &quot;aaa&quot;</span>
+<span class="n">CharMatcher</span><span class="o">.</span><span class="na">is</span><span class="o">(</span><span class="sc">&#39;a&#39;</span><span class="o">).</span><span class="na">replaceFrom</span><span class="o">(</span><span class="s">&quot;radar&quot;</span><span class="o">,</span> <span class="sc">&#39;o&#39;</span><span class="o">);</span> <span class="c1">// &quot;rodor&quot;</span>
+<span class="n">CharMatcher</span><span class="o">.</span><span class="na">is</span><span class="o">(</span><span class="sc">&#39;a&#39;</span><span class="o">).</span><span class="na">replaceFrom</span><span class="o">(</span><span class="s">&quot;yaha&quot;</span><span class="o">,</span> <span class="s">&quot;oo&quot;</span><span class="o">);</span> <span class="c1">// &quot;yoohoo&quot;</span>
+<span class="n">CharMatcher</span><span class="o">.</span><span class="na">anyOf</span><span class="o">(</span><span class="s">&quot;ab&quot;</span><span class="o">).</span><span class="na">trimFrom</span><span class="o">(</span><span class="s">&quot;abacatbab&quot;</span><span class="o">);</span> <span class="c1">// &quot;cat&quot;</span>
+<span class="n">CharMatcher</span><span class="o">.</span><span class="na">inRange</span><span class="o">(</span><span class="sc">&#39;\0&#39;</span><span class="o">,</span> <span class="sc">&#39; &#39;</span><span class="o">).</span><span class="na">trimFrom</span><span class="o">(</span><span class="n">str</span><span class="o">);</span> <span class="c1">// 等同于 str.trim()</span>
+<span class="n">CharMatcher</span><span class="o">.</span><span class="na">anyOf</span><span class="o">(</span><span class="s">&quot;eko&quot;</span><span class="o">).</span><span class="na">collapseFrom</span><span class="o">(</span><span class="s">&quot;bookkeeper&quot;</span><span class="o">,</span> <span class="sc">&#39;-&#39;</span><span class="o">)</span> <span class="c1">// &quot;b-p-r&quot;</span>
+</code></pre></div>
+<hr>
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/Guava之CharMatcher" data-title="Guava之CharMatcher" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-21-Guava%E4%B9%8BCharMatcher.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
+
+</body>
+
+</html>
