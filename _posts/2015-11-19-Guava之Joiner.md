@@ -13,9 +13,13 @@ tag: Guava
 
 *****
 ## 生成`Joiner`的方法
+工厂方法:
+* `Joiner on(String separator)`
+* `Joiner on(char separator)`
 
-* 静态方法: `Joiner on(String separator)` `Joiner on(char separator)`:
-* 实例方法: `Joiner useForNull(final String nullText)` `Joiner skipNulls()`
+修饰方法:
+* `Joiner useForNull(final String nullText)`
+* `Joiner skipNulls()`
 
 ```java
 Joiner.on("; ").skipNulls().join("Harry", null, "Ron", "Hermione"); // Harry; Ron; Hermione
@@ -32,7 +36,7 @@ joiner.join("wrong", null, "wrong"); // 这就直接报NullPointerException了, 
 
 *****
 
-## join 系列方法
+## join 方法
 返回连接之后的字符串, 返回的字符串都是`final`的:
 * `public final String join(Iterable<?> parts)`
 * `public final String join(Iterator<?> parts)`
@@ -44,7 +48,7 @@ Joiner.on(",").join(Arrays.asList(1, 5, 7)); // returns "1,5,7"
 ```
 *****
 
-## appendTo 系列方法
+## appendTo 方法
 把后面的参数以字符串的方式添加到第一个参数后面  
 `java.lang.Appendable`接口的子类(如`StringBuilder` `BufferedWriter`等), 都可以作为第一个参数
 
