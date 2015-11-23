@@ -5,9 +5,51 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 20 Nov 2015 23:14:58 +0800</pubDate>
-    <lastBuildDate>Fri, 20 Nov 2015 23:14:58 +0800</lastBuildDate>
-    <generator>Jekyll v2.5.3</generator>
+    <pubDate>Mon, 23 Nov 2015 17:05:56 +0800</pubDate>
+    <lastBuildDate>Mon, 23 Nov 2015 17:05:56 +0800</lastBuildDate>
+    <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>Guava不可变集合</title>
+        <description>&lt;p&gt;JDK中也提供了&lt;code class=&quot;prettyprint&quot;&gt;Collections.unmodifiableXXX&lt;/code&gt;方法把普通集合包装为不可变形式&lt;br&gt;
+Guava直接提供了不可变集合类型&lt;code class=&quot;prettyprint&quot;&gt;ImmutableXXX&lt;/code&gt;, 所有不可变集合都不接受&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;值  &lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;怎么使用不可变集合&quot;&gt;怎么使用不可变集合&lt;/h2&gt;
+
+&lt;p&gt;不可变集合可以用如下多种方式创建&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;copyOf方法: 如&lt;code class=&quot;prettyprint&quot;&gt;ImmutableSet.copyOf(set)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;of方法: 如&lt;code class=&quot;prettyprint&quot;&gt;ImmutableSet.of(&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;, &amp;quot;c&amp;quot;)&lt;/code&gt;或&lt;code class=&quot;prettyprint&quot;&gt;ImmutableMap.of(&amp;quot;a&amp;quot;, 1, &amp;quot;b&amp;quot;, 2)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Builder工具: 如下&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ImmutableSet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Color&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GOOGLE_COLORS&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ImmutableSet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Builder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Color&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;()&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addAll&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;WEBSAFE_COLORS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Color&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;191&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;255&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+
+&lt;h2 id=&quot;aslist视图&quot;&gt;asList视图&lt;/h2&gt;
+
+&lt;p&gt;所有不可变集合都有一个asList()方法提供ImmutableList视图，来帮助你用列表形式方便地读取集合元素&lt;br&gt;
+例如，你可以使用&lt;code class=&quot;prettyprint&quot;&gt;sortedSet.asList().get(k)&lt;/code&gt;从&lt;code class=&quot;prettyprint&quot;&gt;ImmutableSortedSet&lt;/code&gt;中读取第k个最小元素&lt;/p&gt;
+
+&lt;hr&gt;
+</description>
+        <pubDate>Mon, 23 Nov 2015 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-23-Guava%E4%B8%8D%E5%8F%AF%E5%8F%98%E9%9B%86%E5%90%88.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-23-Guava%E4%B8%8D%E5%8F%AF%E5%8F%98%E9%9B%86%E5%90%88.html</guid>
+        
+        <category>Guava</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
     
       <item>
         <title>Guava之CharMatcher</title>
@@ -1116,92 +1158,6 @@ Table是这样定义的&lt;code class=&quot;prettyprint&quot;&gt;Table&amp;lt;R,
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-12-Collection%E6%95%B4%E7%90%86.html</guid>
         
         <category>Java</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>Guava之Preconditions</title>
-        <description>&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;Preconditions&lt;/code&gt;用于各种条件检查, 在Guava的&lt;code class=&quot;prettyprint&quot;&gt;com.google.common.base&lt;/code&gt;包中&lt;br&gt;
-它提供了几个静态方法, 不满足条件时会抛出异常&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;checknotnull&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;checkNotNull&lt;/code&gt;&lt;/h2&gt;
-
-&lt;p&gt;函数声明: &lt;code class=&quot;prettyprint&quot;&gt;public static &amp;lt;T&amp;gt; T checkNotNull(T reference)&lt;/code&gt;&lt;br&gt;
-函数功能: 检查参数不为空, 否则抛出&lt;code class=&quot;prettyprint&quot;&gt;NullPointerException&lt;/code&gt;&lt;br&gt;
-应用场景: 判断对象不为null&lt;br&gt;
-有三个重载函数&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;checkNotNull(T reference)&lt;/li&gt;
-&lt;li&gt;checkNotNull(T reference, Object errorMessage)&lt;/li&gt;
-&lt;li&gt;checkNotNull(T reference, String errorMessageTemplate, Object... errorMessageArgs)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;第二个可自定义错误描述，第三个可以使用模板,如&lt;code class=&quot;prettyprint&quot;&gt;(&amp;quot;Age is %s&amp;quot;, 18)&lt;/code&gt;等&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;checkargument&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;checkArgument&lt;/code&gt;&lt;/h2&gt;
-
-&lt;p&gt;函数声明: &lt;code class=&quot;prettyprint&quot;&gt;public static void checkArgument(boolean expression)&lt;/code&gt;&lt;br&gt;
-函数功能: 检查参数表达式是否为true, 为false时抛出&lt;code class=&quot;prettyprint&quot;&gt;IllegalArgumentException&lt;/code&gt;&lt;br&gt;
-应用场景: 判断表达式真假, 如&lt;code class=&quot;prettyprint&quot;&gt;age &amp;gt; 18&lt;/code&gt;&lt;br&gt;
-同样有三个重载函数&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;checkstate&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;checkState&lt;/code&gt;&lt;/h2&gt;
-
-&lt;p&gt;函数声明: &lt;code class=&quot;prettyprint&quot;&gt;public static void checkState(boolean expression)&lt;/code&gt;&lt;br&gt;
-函数功能: 检查参数不为空, 否则抛出&lt;code class=&quot;prettyprint&quot;&gt;IllegalStateException&lt;/code&gt;&lt;br&gt;
-应用场景: 判断表达式真假, 常用于不依赖参数的判断, 如&lt;code class=&quot;prettyprint&quot;&gt;Iterator.next()&lt;/code&gt;&lt;br&gt;
-同样有三个重载函数&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;checkelementindex&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;checkElementIndex&lt;/code&gt;&lt;/h2&gt;
-
-&lt;p&gt;函数声明: &lt;code class=&quot;prettyprint&quot;&gt;public static int checkElementIndex(int index, int size)&lt;/code&gt;&lt;br&gt;
-函数功能: 检查index范围属于[0, size), 否则抛出&lt;code class=&quot;prettyprint&quot;&gt;IndexOutOfBoundsException&lt;/code&gt;&lt;br&gt;
-应用场景: 一个List只传入&lt;code class=&quot;prettyprint&quot;&gt;list.size()&lt;/code&gt;和要判断的下标即可&lt;br&gt;
-有两个重载函数:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;checkElementIndex(int index, int size)&lt;/li&gt;
-&lt;li&gt;checkElementIndex(int index, int size, String desc)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;第二个可以自己写描述, 如传入的是(5, 3, &lt;q&gt;index&lt;/q&gt;)描述将是&lt;q&gt;index (4) must not be greater than size (3)&lt;/q&gt;&lt;br&gt;
-第一个默认是&lt;q&gt;index&lt;/q&gt;的描述&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;checkpositionindex&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;checkPositionIndex&lt;/code&gt;&lt;/h2&gt;
-
-&lt;p&gt;函数声明: &lt;code class=&quot;prettyprint&quot;&gt;public static int checkPositionIndex(int index, int size)&lt;/code&gt;&lt;br&gt;
-函数功能: 检查index范围属于[0, size], 否则抛出&lt;code class=&quot;prettyprint&quot;&gt;IndexOutOfBoundsException&lt;/code&gt;&lt;br&gt;
-应用场景: 我还在想&lt;br&gt;
-也有有两个重载函数同上&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;checkpositionindexes&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;checkPositionIndexes&lt;/code&gt;&lt;/h2&gt;
-
-&lt;p&gt;函数声明: &lt;code class=&quot;prettyprint&quot;&gt;public static void checkPositionIndexes(int start, int end, int size)&lt;/code&gt;&lt;br&gt;
-函数功能: 检查 start和end属于[0, size]且start&amp;lt;=end, 否则抛出&lt;code class=&quot;prettyprint&quot;&gt;IndexOutOfBoundsException&lt;/code&gt;  &lt;/p&gt;
-
-&lt;hr&gt;
-</description>
-        <pubDate>Wed, 11 Nov 2015 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-11-Guava%E4%B9%8BPreconditions.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-11-Guava%E4%B9%8BPreconditions.html</guid>
-        
-        <category>Guava</category>
         
         
         <category>编程技术</category>

@@ -5,15 +5,15 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="keywords" content="Mac OS X 快捷键, 快捷速查, 快捷键, 逆水行舟" />
-    <meta name="description" content="Mac OS X 快捷键, 快捷速查, 快捷键, vim 的常用快捷键" />
+    <meta name="keywords" content="Guava不可变集合, 编程技术, Guava, 逆水行舟" />
+    <meta name="description" content="Guava不可变集合, 编程技术, Guava, JDK中也提供了Collections.unmodifiableXXX方法把普通集合包装为不可变形式Guava直接提供了不可变集合类型ImmutableXXX, 所有不可变集合都不接受null值  " />
 
     <title>逆水行舟</title>
 
     <!-- ico图标 -->
     <link rel="shortcut icon" type="image/x-icon" media="screen" href="http://loveshisong.cn/static/favicon.ico" />
     <!-- 搜索引擎收入相关 -->
-    <link rel="canonical" href="http://loveshisong.cn/%E5%BF%AB%E6%8D%B7%E9%80%9F%E6%9F%A5/2015-05-04-Mac%20OS%20X%20%E5%BF%AB%E6%8D%B7%E9%94%AE.html" />
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-23-Guava%E4%B8%8D%E5%8F%AF%E5%8F%98%E9%9B%86%E5%90%88.html" />
     <!-- rss输出源 -->
     <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
     <!-- jquery -->
@@ -87,66 +87,52 @@ jQuery(function(){
 	jQuery('#qrcode').qrcode({
         width: 150,
         height: 150,
-        text: "http://loveshisong.cn/%E5%BF%AB%E6%8D%B7%E9%80%9F%E6%9F%A5/2015-05-04-Mac%20OS%20X%20%E5%BF%AB%E6%8D%B7%E9%94%AE.html"
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-23-Guava%E4%B8%8D%E5%8F%AF%E5%8F%98%E9%9B%86%E5%90%88.html"
     });
 })
 </script>
 <!-- 日志默认模板 -->
 <div class="uk-container content">
     <div class="page-title">
-        <h1>Mac OS X 快捷键</h1>
+        <h1>Guava不可变集合</h1>
     </div>
     <div class="uk-grid">
         <div  class="uk-width-4-4">
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
-            <p>vim 的常用快捷键</p>
+            <p>JDK中也提供了<code class="prettyprint">Collections.unmodifiableXXX</code>方法把普通集合包装为不可变形式<br>
+Guava直接提供了不可变集合类型<code class="prettyprint">ImmutableXXX</code>, 所有不可变集合都不接受<code class="prettyprint">null</code>值  </p>
 
 <hr>
 
-<h2 id="本文结构">本文结构</h2>
+<h2 id="怎么使用不可变集合">怎么使用不可变集合</h2>
+
+<p>不可变集合可以用如下多种方式创建</p>
 
 <ul>
-<li><a href="#picture">系统截图工具</a></li>
-<li><a href="#finder">Finder 快捷键</a></li>
-<li><a href="#other">其他快捷键</a></li>
-<li><a href="#window">窗口操作</a></li>
+<li>copyOf方法: 如<code class="prettyprint">ImmutableSet.copyOf(set)</code></li>
+<li>of方法: 如<code class="prettyprint">ImmutableSet.of(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;)</code>或<code class="prettyprint">ImmutableMap.of(&quot;a&quot;, 1, &quot;b&quot;, 2)</code></li>
+<li>Builder工具: 如下</li>
 </ul>
-
-<hr>
-
-<h2 id="picture"> 系统截图工具 </h2>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Commond</span> <span class="o">+</span> <span class="n">Shift</span> <span class="o">+</span> <span class="mi">3</span>                <span class="o">:</span>    <span class="n">全屏截图并保存到桌面</span>
-<span class="n">Command</span> <span class="o">+</span> <span class="n">Shift</span> <span class="o">+</span> <span class="mi">4</span>                <span class="o">:</span>    <span class="n">部分截图并保存到桌面</span>
-<span class="n">Command</span> <span class="o">+</span> <span class="n">Shift</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">+</span> <span class="n">Space</span>        <span class="o">:</span>    <span class="n">截取窗口并保存到桌面</span>
-<span class="n">Ctrl</span> <span class="o">+</span> <span class="n">Command</span> <span class="o">+</span> <span class="n">Shift</span> <span class="o">+</span> <span class="mi">3</span>         <span class="o">:</span>    <span class="n">全屏截图并保存到剪切板</span>
-<span class="n">Ctrl</span> <span class="o">+</span> <span class="n">Command</span> <span class="o">+</span> <span class="n">Shift</span> <span class="o">+</span> <span class="mi">4</span>         <span class="o">:</span>    <span class="n">部分截图并保存到剪切板</span>
-<span class="n">Ctrl</span> <span class="o">+</span> <span class="n">Command</span> <span class="o">+</span> <span class="n">Shift</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">+</span> <span class="n">Space</span> <span class="o">:</span>    <span class="n">截图窗口并保存到剪切板</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">ImmutableSet</span><span class="o">&lt;</span><span class="n">Color</span><span class="o">&gt;</span> <span class="n">GOOGLE_COLORS</span> <span class="o">=</span>
+    <span class="k">new</span> <span class="n">ImmutableSet</span><span class="o">.</span><span class="na">Builder</span><span class="o">&lt;</span><span class="n">Color</span><span class="o">&gt;()</span>
+        <span class="o">.</span><span class="na">addAll</span><span class="o">(</span><span class="n">WEBSAFE_COLORS</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nf">Color</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">191</span><span class="o">,</span> <span class="mi">255</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">build</span><span class="o">();</span>
 </code></pre></div>
 <hr>
 
-<h2 id="finder"> Finder 快捷键 </h2>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Command</span> <span class="o">+</span> <span class="n">Shift</span> <span class="o">+</span> <span class="n">G</span>                <span class="o">:</span>    <span class="n">前往文件夹</span>
-<span class="n">Command</span> <span class="o">+</span> <span class="n">up</span><span class="o">(</span><span class="n">向上箭头</span><span class="o">)</span>              <span class="o">:</span>    <span class="n">前往上层文件夹</span>
-<span class="n">Command</span> <span class="o">+</span> <span class="n">H</span>                        <span class="o">:</span>    <span class="n">隐藏</span> <span class="n">Finder</span>
-<span class="n">Command</span> <span class="o">+</span> <span class="n">Option</span> <span class="o">+</span> <span class="n">H</span>               <span class="o">:</span>    <span class="n">隐藏其它程序</span>
-<span class="n">Command</span> <span class="o">+</span> <span class="n">Shift</span> <span class="o">+</span> <span class="n">Delete</span>           <span class="o">:</span>    <span class="n">清空废纸篓</span>
-<span class="n">Command</span> <span class="o">+</span> <span class="n">Option</span> <span class="o">+</span> <span class="n">Shift</span> <span class="o">+</span> <span class="n">Delete</span>  <span class="o">:</span>    <span class="n">强制清空废纸篓</span><span class="o">(</span><span class="n">不提示</span><span class="o">)</span>
-</code></pre></div>
-<hr>
+<h2 id="aslist视图">asList视图</h2>
 
-<h2 id="other"> 其他快捷键 </h2>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Command</span> <span class="o">+</span> <span class="n">option</span> <span class="o">+</span> <span class="n">esc</span>             <span class="o">:</span>    <span class="n">选择退出程序</span>
-<span class="n">Command</span> <span class="o">+</span> <span class="n">option</span> <span class="o">+</span> <span class="n">Control</span> <span class="o">+</span> <span class="n">Eject</span> <span class="o">:</span>    <span class="n">直接关机</span>
-<span class="n">Command</span> <span class="o">+</span> <span class="n">Control</span> <span class="o">+</span> <span class="n">Eject</span>          <span class="o">:</span>    <span class="n">直接重启</span>
-<span class="n">Command</span> <span class="o">+</span> <span class="n">option</span> <span class="o">+</span> <span class="n">Eject</span>           <span class="o">:</span>    <span class="n">直接睡眠</span>
-</code></pre></div>
+<p>所有不可变集合都有一个asList()方法提供ImmutableList视图，来帮助你用列表形式方便地读取集合元素<br>
+例如，你可以使用<code class="prettyprint">sortedSet.asList().get(k)</code>从<code class="prettyprint">ImmutableSortedSet</code>中读取第k个最小元素</p>
+
 <hr>
 
         </div>
     </div>
 
     <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-    <div class="ds-thread" data-thread-key="/%E5%BF%AB%E6%8D%B7%E9%80%9F%E6%9F%A5/Mac OS X 快捷键" data-title="Mac OS X 快捷键" data-url="/%E5%BF%AB%E6%8D%B7%E9%80%9F%E6%9F%A5/2015-05-04-Mac%20OS%20X%20%E5%BF%AB%E6%8D%B7%E9%94%AE.html"></div>
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/Guava不可变集合" data-title="Guava不可变集合" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-23-Guava%E4%B8%8D%E5%8F%AF%E5%8F%98%E9%9B%86%E5%90%88.html"></div>
     <!-- 多说评论框 end -->
 </div>
 
