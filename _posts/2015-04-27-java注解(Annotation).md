@@ -32,13 +32,14 @@ tag: Java
 `@Target`用于说明Annotation所修饰的对象范围，比如用于修饰类、接口、构造方法、成员方法、成员变量等，它作用范围的取值有:  
 
 ```
-ElementType.CONSTRUCTOR     : 用于描述构造器  
-ElementType.FIELD           : 用于描述字段  
-ElementType.LOCAL_VARIABLE  : 用于描述局部变量  
-ElementType.METHOD          : 用于描述方法  
-ElementType.PACKAGE         : 用于描述包  
-ElementType.PARAMETER       : 用于描述参数  
-ElementType.TYPE            : 用于描述类、接口(包括注解类型) 或enum声明  
+ElementType.TYPE            : 用于描述类、接口(包括注解类型) 或enum声明
+ElementType.FIELD           : 用于描述字段
+ElementType.METHOD          : 用于描述方法
+ElementType.PARAMETER       : 用于描述参数
+ElementType.CONSTRUCTOR     : 用于描述构造器
+ElementType.LOCAL_VARIABLE  : 用于描述局部变量
+ElementType.ANNOTATION_TYPE : 用于注解类型
+ElementType.PACKAGE         : 用于描述包
 ```
 
 * @Retention
