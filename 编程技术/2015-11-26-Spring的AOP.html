@@ -222,7 +222,7 @@ jQuery(function(){
 <p><code class="prettyprint">JoinPoint</code>的声明如下:</p>
 <div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">ProceedingJoinPoint</span> <span class="kd">extends</span> <span class="n">JoinPoint</span> <span class="o">{</span>  
     <span class="kd">public</span> <span class="n">Object</span> <span class="nf">proceed</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Throwable</span><span class="o">;</span>    <span class="c1">// 执行连接点的方法</span>
-    <span class="kd">public</span> <span class="n">Object</span> <span class="nf">proceed</span><span class="o">(</span><span class="n">Object</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Throwable</span><span class="o">;</span>   <span class="c1">// 执行连接点的方法, 可以传参</span>
+    <span class="kd">public</span> <span class="n">Object</span> <span class="nf">proceed</span><span class="o">(</span><span class="n">Object</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Throwable</span><span class="o">;</span>   <span class="c1">// 执行连接点的方法, 可以把原来的参数用新的args替换掉</span>
 <span class="o">}</span>
 <span class="kd">public</span> <span class="kd">interface</span> <span class="nc">JoinPoint</span> <span class="o">{</span>  
     <span class="n">String</span> <span class="nf">toString</span><span class="o">();</span>          <span class="c1">//连接点所在位置的相关信息  </span>
