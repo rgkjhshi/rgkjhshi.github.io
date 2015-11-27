@@ -111,7 +111,7 @@ public class BeforeExample {
 ```java
 public interface ProceedingJoinPoint extends JoinPoint {  
     public Object proceed() throws Throwable;    // 执行连接点的方法
-    public Object proceed(Object[] args) throws Throwable;   // 执行连接点的方法, 可以传参
+    public Object proceed(Object[] args) throws Throwable;   // 执行连接点的方法, 可以把原来的参数用新的args替换掉
 }
 public interface JoinPoint {  
     String toString();          //连接点所在位置的相关信息  
