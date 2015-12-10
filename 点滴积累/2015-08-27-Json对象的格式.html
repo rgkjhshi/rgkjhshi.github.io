@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="Json对象的格式, 点滴积累, Json, 逆水行舟" />
+    <meta name="description" content="Json对象的格式, 点滴积累, Json, 某天聊天时听到有人说，json应该以 { 开头，以 }结尾，顿时发觉Json的标准格式是什么样子的很有必要记录下。另外附上一个很不错的在线验证及格式化Json的网站:Json.cn  " />
+
+    <title>逆水行舟</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="http://loveshisong.cn/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://loveshisong.cn/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-08-27-Json%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%A0%BC%E5%BC%8F.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/jquery.qrcode.min.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/uikit.min.js"></script>
+    <!-- quietflow -->
+    <!-- <script type="text/javascript" src="http://loveshisong.cn/static/js/quietflow.min.js"></script> -->
+    <!-- UK sticky -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="http://loveshisong.cn/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="http://loveshisong.cn/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "shisong"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" data-uk-sticky>
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="http://loveshisong.cn/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="http://loveshisong.cn/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <script type="text/javascript">
+jQuery(function(){
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "http://loveshisong.cn/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-08-27-Json%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%A0%BC%E5%BC%8F.html"
+    });
+})
+</script>
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>Json对象的格式</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <p>某天聊天时听到有人说，json应该以 <code class="prettyprint">{</code> 开头，以 <code class="prettyprint">}</code>结尾，顿时发觉Json的标准格式是什么样子的很有必要记录下。<br>
+另外附上一个很不错的在线验证及格式化Json的网站:<a href="http://json.cn">Json.cn</a>  </p>
+
+<hr>
+
+<h2 id="本文结构">本文结构</h2>
+
+<ul>
+<li><a href="#introduce">Json简介</a></li>
+<li><a href="#JavaScriptObject">JavaScript中的对象</a></li>
+<li><a href="#JSONObject">JSON中的对象</a></li>
+</ul>
+
+<hr>
+
+<h2 id="introduce"> Json简介 </h2>
+
+<p>JSON是 <code class="prettyprint">JavaScript Object Notation</code> 的缩写，它是一种数据交换格式，2002年由道格拉斯·克罗克福特（Douglas Crockford）发明的。<br>
+在它之前，大家都用<code class="prettyprint">XML</code>来交换数据，XML是纯文本格式，本身不难，但是加上 <code class="prettyprint">DTD、XSD、XSLT</code> 等一堆规范后就相当复杂了。  </p>
+
+<hr>
+
+<h2 id="JavaScriptObject"> JavaScript中的对象 </h2>
+
+<p>既然JSON是<code class="prettyprint">JavaScript Object Notation</code>，我们就看看JavaScript中都有什么对象。<br>
+JavaScript的对象是一种无序的集合数据类型，它由若干键值对组成,
+一个普通的js对象用一个<code class="prettyprint">{...}</code>表示，键值对以<code class="prettyprint">key : value</code>形式声明。<br>
+除此之外还有 <code class="prettyprint">number、string、boolean</code>等对象，可以通过 <code class="prettyprint">typeof obj</code>来获取对象的类型，如下：</p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// 普通对象</span>
+<span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">name</span>   <span class="o">:</span> <span class="s2">&quot;小明&quot;</span><span class="p">,</span>
+    <span class="nx">gender</span> <span class="o">:</span> <span class="s2">&quot;男&quot;</span><span class="p">,</span>
+    <span class="nx">age</span>    <span class="o">:</span> <span class="mi">28</span>
+<span class="p">};</span>
+<span class="c1">// 空对象</span>
+<span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="c1">// 数组对象</span>
+<span class="kd">var</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
+<span class="c1">// 数字对象</span>
+<span class="kd">var</span> <span class="nx">num1</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">num2</span> <span class="o">=</span> <span class="mf">123.456</span><span class="p">;</span>
+<span class="c1">// 字符串</span>
+<span class="kd">var</span> <span class="nx">str</span> <span class="o">=</span> <span class="s2">&quot;abcde&quot;</span><span class="p">;</span>
+<span class="c1">// 布尔</span>
+<span class="kd">var</span> <span class="nx">bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+
+<span class="k">typeof</span> <span class="nx">obj</span><span class="p">;</span> <span class="c1">// object</span>
+<span class="k">typeof</span> <span class="nx">o</span><span class="p">;</span>   <span class="c1">// object</span>
+<span class="k">typeof</span> <span class="nx">arr</span><span class="p">;</span> <span class="c1">// object</span>
+
+<span class="k">typeof</span> <span class="nx">num1</span><span class="p">;</span> <span class="c1">// number</span>
+<span class="k">typeof</span> <span class="nx">num2</span><span class="p">;</span> <span class="c1">// number</span>
+<span class="k">typeof</span> <span class="nx">str</span><span class="p">;</span>  <span class="c1">// string</span>
+<span class="k">typeof</span> <span class="nx">bool</span><span class="p">;</span> <span class="c1">// boolean</span>
+</code></pre></div>
+<p>上面例子中，虽然<code class="prettyprint">{}, null, []</code>都是<code class="prettyprint">object</code>，但是他们的形式不太一样。</p>
+
+<hr>
+
+<h2 id="JSONObject"> JSON中的对象 </h2>
+
+<p>JSON中的对象来自于JavaScript中，总共以下这几种数据类型:</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">number</span>  <span class="o">:</span> <span class="n">js中的number</span><span class="o">;</span>
+<span class="kt">boolean</span> <span class="o">:</span> <span class="n">js中的boolean</span><span class="o">,</span> <span class="n">即true或false</span><span class="o">;</span>
+<span class="n">string</span>  <span class="o">:</span> <span class="n">js中的string</span><span class="o">;</span>
+<span class="kc">null</span>    <span class="o">:</span> <span class="n">js中的null</span><span class="o">;</span>
+<span class="n">array</span>   <span class="o">:</span> <span class="n">js中的的Array</span><span class="o">,</span> <span class="n">即</span><span class="o">[]</span><span class="n">形式的对象</span><span class="o">;</span>
+<span class="n">object</span>  <span class="o">:</span> <span class="n">js中的普通对象</span><span class="o">,</span> <span class="n">即</span><span class="o">{</span> <span class="o">...</span> <span class="o">}</span><span class="n">形式的对象</span><span class="o">.</span>
+</code></pre></div>
+<p>另外JSON还规定了字符集必须用UTF-8, 字符串必须用双引号<code class="prettyprint">&quot;&quot;</code>, 对象中的key也必须用双引号<code class="prettyprint">&quot;&quot;</code><br>
+所以，以下的json都是正确的:</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="kc">null</span>
+<span class="s2">&quot;一个字符串&quot;</span>
+<span class="mf">3.14</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;asdf&quot;</span><span class="p">]</span>
+<span class="p">{</span><span class="nt">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;Rose&quot;</span><span class="p">,</span> <span class="nt">&quot;age&quot;</span><span class="p">:</span> <span class="mi">18</span><span class="p">}</span>
+</code></pre></div>
+<p><strong>注意:</strong></p>
+
+<ul>
+<li><code class="prettyprint">{&quot;name&quot; : &quot;Rose&quot;, &quot;age&quot;: 18}</code>是普通对象, <code class="prettyprint">3.14</code>也是一个对象，两者都是合法的json串</li>
+<li><q>`null, 3.14`</q>这样不是合法的json串，要表示多个对象，必须放到普通对象中以键值对的形式出现</li>
+</ul>
+
+<hr>
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/Json对象的格式" data-title="Json对象的格式" data-url="/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-08-27-Json%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%A0%BC%E5%BC%8F.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
+
+</body>
+
+</html>
