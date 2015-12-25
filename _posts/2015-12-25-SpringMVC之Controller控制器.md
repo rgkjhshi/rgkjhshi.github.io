@@ -1,7 +1,7 @@
 ---
 layout: blog
-title:  SpringMVC之请求控制器
-date:   2015-12-23
+title:  SpringMVC之Controller控制器
+date:   2015-12-25
 category: 编程技术  
 tag: Spring
 ---
