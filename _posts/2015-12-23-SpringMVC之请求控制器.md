@@ -1,6 +1,6 @@
 ---
 layout: blog
-title:  SpringMVC之请求映射
+title:  SpringMVC之请求控制器
 date:   2015-12-23
 category: 编程技术  
 tag: Spring
@@ -21,7 +21,7 @@ SpringMVC中,每一个URL请求是通过`DispatcherServlet`负责转发给相应
 public class TestController {
     @RequestMapping("/index1")  // index后面加不加.do都可以,即这里写`/index1`等同于`/index1.do`
     @ResponseBody               // 这个注解是为了不经过`ModelAndView`直接返回字符串
-    public String index1(Map<String, Object> map) {  // 这些参数后面说
+    public String index1(Map<String, Object> map) {  // 这些参数在返回篇里面说
         return "index1";
     }
     @RequestMapping("/*/index2")  // 支持通配符, 如`/test/abc/index2.do`,但`/test/index2.do`不能访问
@@ -235,34 +235,6 @@ session:s1
 session:string
 ```
 第一遍请求时session中还没有属性，请求完建立session之后才有值
-*****
-## 控制器方法支持的方法参数
-`@RequestMapping`标记的控制器方法,传入spring会自动帮我们赋值，我们直接在方法上声明参数即可。  
-方法的传入参数归纳如下:
-
-* HttpServlet对象: 包括`HttpServletRequest`, `HttpServletResponse`和`HttpSession`对象.  使用`HttpSession`时如果此时session还没建立起来就会有问题
-* Spring自己的`WebRequest`对象: 该对象可以访问到存放在HttpServletRequest和HttpSession中的属性值
-* 流对象: 包括`InputStream`, `OutputStream`, `Reader`和`Writer`.`InputStream`和`Reader`是针对HttpServletRequest 而言的,可以从里面取数据; `OutputStream`和`Writer`是针对HttpServletResponse而言的,可以往里面写数据,如下列子:
-
-```java
-@Controller
-public class TestController {
-    @RequestMapping("/index")  //  直接向客户端输出内容
-    public void index(Writer writer) throws IOException{
-        writer.write("Hello World");
-        writer.write( "\r" );
-        writer.write( "哈哈" );
-        writer.write( "\r" );
-    }
-}
-```
-
-* 使用`@PathVariable`, `@RequestParam`, `@CookieValue`和`@RequestHeader`标记的参数
-* 使用`@ModelAttribute`标记的参数: 取模型属性相当于`request.getAttribute("key")`;  使用`@SessionAttributes`注解控制器之后,从session中取数据相当于`session.getAttribute("key")`
-* `Map`, `Model`和`ModelMap`: 这些都可以用来封装模型数据,用来给视图做展示.
-* 实体类: 可以用来接收上传的参数
-* Spring封装的`MultipartFile`: 用来接收上传文件
-* Spring封装的`Errors`和`BindingResult`对象: 这两个对象参数必须紧接在需要验证的实体对象参数之后，它里面包含了实体对象的验证结果
 
 *****
 ## 自定义参数类型转换
@@ -336,4 +308,47 @@ public class TestController {
         return adapter;
     }
 ```
+
+*****
+## 控制器方法支持的方法参数
+`@RequestMapping`标记的控制器方法,传入spring会自动帮我们赋值，我们直接在方法上声明参数即可。  
+方法的传入参数归纳如下:
+
+* HttpServlet对象: 包括`HttpServletRequest`, `HttpServletResponse`和`HttpSession`对象.  使用`HttpSession`时如果此时session还没建立起来就会有问题
+* Spring自己的`WebRequest`对象: 该对象可以访问到存放在HttpServletRequest和HttpSession中的属性值
+* 流对象: 包括`InputStream`, `OutputStream`, `Reader`和`Writer`.`InputStream`和`Reader`是针对HttpServletRequest 而言的,可以从里面取数据; `OutputStream`和`Writer`是针对HttpServletResponse而言的,可以往里面写数据,如下列子:
+
+```java
+@Controller
+public class TestController {
+    @RequestMapping("/index")  //  直接向客户端输出内容
+    public void index(Writer writer) throws IOException{
+        writer.write("Hello World");
+        writer.write( "\r" );
+        writer.write( "哈哈" );
+        writer.write( "\r" );
+    }
+}
+```
+
+* 使用`@PathVariable`, `@RequestParam`, `@CookieValue`和`@RequestHeader`标记的参数
+* 使用`@ModelAttribute`标记的参数: 取模型属性相当于`request.getAttribute("key")`;  使用`@SessionAttributes`注解控制器之后,从session中取数据相当于`session.getAttribute("key")`
+* `Map`, `Model`和`ModelMap`: 这些都可以用来封装模型数据,用来给视图做展示.
+* 实体类: 可以用来接收上传的参数
+* Spring封装的`MultipartFile`: 用来接收上传文件
+* Spring封装的`Errors`和`BindingResult`对象: 这两个对象参数必须紧接在需要验证的实体对象参数之后，它里面包含了实体对象的验证结果
+
+*****
+## 返回值的类型
+处理器中`@RequestMapping`标记的处理器方法的返回值也有不同情况，大部分情况是返回一个`ModelAndView`, 这个过程中发挥作用的就是`ViewResolver`和`View`.
+有下面这些情况:
+
+* 返回`ModelAndView`对象: 包含模型和视图,模型是map的形式,可以通过`request.getAttribute("key")`取值;视图是字符串形式,表示视图的名字
+* 返回模型: 包括`Map`, Spring的`Model`和`ModelMap`, 视图名称将由`RequestToViewNameTranslator`决定
+* 返回视图对象`View`: 这种情况可以给处理器方法传入一个模型参数,比如上面传入的那个Map,可在方法体里面往模型中添加值,相当于`setAttribute`
+* 返回字符串`String`: 这往往代表的是一个视图名称, 如果需要模型的话,跟上面一样,传入一个模型参数即可
+* 返回`void`: 这种情况一般是我们直接把返回结果写到`HttpServletResponse`中了,比如上面的`Writer`那样;  如果没有写,则会利用`RequestToViewNameTranslator`来返回一个对应的视图名称
+* 处理器方法被`@ResponseBody`标记: 被标记的方法任何返回值都不会像上面那样当作视图或模型来处理, 而是通过`HttpMessageConverters`转换之后写到`HttpServletResponse`中
+* 除了上面情况之外的其它任何返回类型都会被当做模型中的一个属性来处理,属性名称可在该方法上用`@ModelAttribute("attributeName")` 来定义, 否则将使用返回类型的类名称的首字母小写形式来表示; 返回的视图还是由`RequestToViewNameTranslator`来决定.
+
 *****
