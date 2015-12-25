@@ -5,12 +5,12 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 24 Dec 2015 19:01:38 +0800</pubDate>
-    <lastBuildDate>Thu, 24 Dec 2015 19:01:38 +0800</lastBuildDate>
+    <pubDate>Fri, 25 Dec 2015 14:35:46 +0800</pubDate>
+    <lastBuildDate>Fri, 25 Dec 2015 14:35:46 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
-        <title>SpringMVC之请求映射</title>
+        <title>SpringMVC之请求控制器</title>
         <description>&lt;p&gt;SpringMVC中,每一个URL请求是通过&lt;code class=&quot;prettyprint&quot;&gt;DispatcherServlet&lt;/code&gt;负责转发给相应的&lt;code class=&quot;prettyprint&quot;&gt;Handler&lt;/code&gt;的,
 处理器&lt;code class=&quot;prettyprint&quot;&gt;Handler&lt;/code&gt;是基于&lt;code class=&quot;prettyprint&quot;&gt;@Controller&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;@RequestMapping&lt;/code&gt;这两个注解的,
 &lt;code class=&quot;prettyprint&quot;&gt;@Controller&lt;/code&gt;声明一个处理器类，&lt;code class=&quot;prettyprint&quot;&gt;@RequestMapping&lt;/code&gt;声明对应请求的映射关系&lt;/p&gt;
@@ -25,7 +25,7 @@
 &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TestController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;nd&quot;&gt;@RequestMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/index1&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// index后面加不加.do都可以,即这里写`/index1`等同于`/index1.do`&lt;/span&gt;
     &lt;span class=&quot;nd&quot;&gt;@ResponseBody&lt;/span&gt;               &lt;span class=&quot;c1&quot;&gt;// 这个注解是为了不经过`ModelAndView`直接返回字符串&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 这些参数后面说&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 这些参数在返回篇里面说&lt;/span&gt;
         &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;index1&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
     &lt;span class=&quot;nd&quot;&gt;@RequestMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/*/index2&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 支持通配符, 如`/test/abc/index2.do`,但`/test/index2.do`不能访问&lt;/span&gt;
@@ -248,38 +248,6 @@ URI模板就是在URI中给定一个变量, 然后在映射的时候动态的给
 
 &lt;hr&gt;
 
-&lt;h2 id=&quot;控制器方法支持的方法参数&quot;&gt;控制器方法支持的方法参数&lt;/h2&gt;
-
-&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;@RequestMapping&lt;/code&gt;标记的控制器方法,传入spring会自动帮我们赋值，我们直接在方法上声明参数即可。&lt;br&gt;
-方法的传入参数归纳如下:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;HttpServlet对象: 包括&lt;code class=&quot;prettyprint&quot;&gt;HttpServletRequest&lt;/code&gt;, &lt;code class=&quot;prettyprint&quot;&gt;HttpServletResponse&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;HttpSession&lt;/code&gt;对象.  使用&lt;code class=&quot;prettyprint&quot;&gt;HttpSession&lt;/code&gt;时如果此时session还没建立起来就会有问题&lt;/li&gt;
-&lt;li&gt;Spring自己的&lt;code class=&quot;prettyprint&quot;&gt;WebRequest&lt;/code&gt;对象: 该对象可以访问到存放在HttpServletRequest和HttpSession中的属性值&lt;/li&gt;
-&lt;li&gt;流对象: 包括&lt;code class=&quot;prettyprint&quot;&gt;InputStream&lt;/code&gt;, &lt;code class=&quot;prettyprint&quot;&gt;OutputStream&lt;/code&gt;, &lt;code class=&quot;prettyprint&quot;&gt;Reader&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;Writer&lt;/code&gt;.&lt;code class=&quot;prettyprint&quot;&gt;InputStream&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;Reader&lt;/code&gt;是针对HttpServletRequest 而言的,可以从里面取数据; &lt;code class=&quot;prettyprint&quot;&gt;OutputStream&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;Writer&lt;/code&gt;是针对HttpServletResponse而言的,可以往里面写数据,如下列子:&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;nd&quot;&gt;@Controller&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TestController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@RequestMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/index&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;//  直接向客户端输出内容&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Writer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;writer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;writer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Hello World&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;writer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;\r&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;writer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;哈哈&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;writer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;\r&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;ul&gt;
-&lt;li&gt;使用&lt;code class=&quot;prettyprint&quot;&gt;@PathVariable&lt;/code&gt;, &lt;code class=&quot;prettyprint&quot;&gt;@RequestParam&lt;/code&gt;, &lt;code class=&quot;prettyprint&quot;&gt;@CookieValue&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;@RequestHeader&lt;/code&gt;标记的参数&lt;/li&gt;
-&lt;li&gt;使用&lt;code class=&quot;prettyprint&quot;&gt;@ModelAttribute&lt;/code&gt;标记的参数: 取模型属性相当于&lt;code class=&quot;prettyprint&quot;&gt;request.getAttribute(&amp;quot;key&amp;quot;)&lt;/code&gt;;  使用&lt;code class=&quot;prettyprint&quot;&gt;@SessionAttributes&lt;/code&gt;注解控制器之后,从session中取数据相当于&lt;code class=&quot;prettyprint&quot;&gt;session.getAttribute(&amp;quot;key&amp;quot;)&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Map&lt;/code&gt;, &lt;code class=&quot;prettyprint&quot;&gt;Model&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;ModelMap&lt;/code&gt;: 这些都可以用来封装模型数据,用来给视图做展示.&lt;/li&gt;
-&lt;li&gt;实体类: 可以用来接收上传的参数&lt;/li&gt;
-&lt;li&gt;Spring封装的&lt;code class=&quot;prettyprint&quot;&gt;MultipartFile&lt;/code&gt;: 用来接收上传文件&lt;/li&gt;
-&lt;li&gt;Spring封装的&lt;code class=&quot;prettyprint&quot;&gt;Errors&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;BindingResult&lt;/code&gt;对象: 这两个对象参数必须紧接在需要验证的实体对象参数之后，它里面包含了实体对象的验证结果&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
 &lt;h2 id=&quot;自定义参数类型转换&quot;&gt;自定义参数类型转换&lt;/h2&gt;
 
 &lt;p&gt;处理器方法参数接收请求参数绑定数据的时候,对于一些简单的数据类型Spring会帮我们自动进行类型转换,而对于一些复杂的类型想要在接受参数时自动转换就必须向Spring注册一个对特定类型的识别转换器&lt;br&gt;
@@ -351,10 +319,59 @@ Spring允许我们提供两种类型的识别转换器，一种是注册在Contr
     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;hr&gt;
+
+&lt;h2 id=&quot;控制器方法支持的方法参数&quot;&gt;控制器方法支持的方法参数&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;@RequestMapping&lt;/code&gt;标记的控制器方法,传入spring会自动帮我们赋值，我们直接在方法上声明参数即可。&lt;br&gt;
+方法的传入参数归纳如下:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;HttpServlet对象: 包括&lt;code class=&quot;prettyprint&quot;&gt;HttpServletRequest&lt;/code&gt;, &lt;code class=&quot;prettyprint&quot;&gt;HttpServletResponse&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;HttpSession&lt;/code&gt;对象.  使用&lt;code class=&quot;prettyprint&quot;&gt;HttpSession&lt;/code&gt;时如果此时session还没建立起来就会有问题&lt;/li&gt;
+&lt;li&gt;Spring自己的&lt;code class=&quot;prettyprint&quot;&gt;WebRequest&lt;/code&gt;对象: 该对象可以访问到存放在HttpServletRequest和HttpSession中的属性值&lt;/li&gt;
+&lt;li&gt;流对象: 包括&lt;code class=&quot;prettyprint&quot;&gt;InputStream&lt;/code&gt;, &lt;code class=&quot;prettyprint&quot;&gt;OutputStream&lt;/code&gt;, &lt;code class=&quot;prettyprint&quot;&gt;Reader&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;Writer&lt;/code&gt;.&lt;code class=&quot;prettyprint&quot;&gt;InputStream&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;Reader&lt;/code&gt;是针对HttpServletRequest 而言的,可以从里面取数据; &lt;code class=&quot;prettyprint&quot;&gt;OutputStream&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;Writer&lt;/code&gt;是针对HttpServletResponse而言的,可以往里面写数据,如下列子:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;nd&quot;&gt;@Controller&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TestController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@RequestMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/index&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;//  直接向客户端输出内容&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Writer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;writer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;writer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Hello World&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;writer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;\r&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;writer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;哈哈&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;writer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;\r&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;使用&lt;code class=&quot;prettyprint&quot;&gt;@PathVariable&lt;/code&gt;, &lt;code class=&quot;prettyprint&quot;&gt;@RequestParam&lt;/code&gt;, &lt;code class=&quot;prettyprint&quot;&gt;@CookieValue&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;@RequestHeader&lt;/code&gt;标记的参数&lt;/li&gt;
+&lt;li&gt;使用&lt;code class=&quot;prettyprint&quot;&gt;@ModelAttribute&lt;/code&gt;标记的参数: 取模型属性相当于&lt;code class=&quot;prettyprint&quot;&gt;request.getAttribute(&amp;quot;key&amp;quot;)&lt;/code&gt;;  使用&lt;code class=&quot;prettyprint&quot;&gt;@SessionAttributes&lt;/code&gt;注解控制器之后,从session中取数据相当于&lt;code class=&quot;prettyprint&quot;&gt;session.getAttribute(&amp;quot;key&amp;quot;)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Map&lt;/code&gt;, &lt;code class=&quot;prettyprint&quot;&gt;Model&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;ModelMap&lt;/code&gt;: 这些都可以用来封装模型数据,用来给视图做展示.&lt;/li&gt;
+&lt;li&gt;实体类: 可以用来接收上传的参数&lt;/li&gt;
+&lt;li&gt;Spring封装的&lt;code class=&quot;prettyprint&quot;&gt;MultipartFile&lt;/code&gt;: 用来接收上传文件&lt;/li&gt;
+&lt;li&gt;Spring封装的&lt;code class=&quot;prettyprint&quot;&gt;Errors&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;BindingResult&lt;/code&gt;对象: 这两个对象参数必须紧接在需要验证的实体对象参数之后，它里面包含了实体对象的验证结果&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;返回值的类型&quot;&gt;返回值的类型&lt;/h2&gt;
+
+&lt;p&gt;处理器中&lt;code class=&quot;prettyprint&quot;&gt;@RequestMapping&lt;/code&gt;标记的处理器方法的返回值也有不同情况，大部分情况是返回一个&lt;code class=&quot;prettyprint&quot;&gt;ModelAndView&lt;/code&gt;, 这个过程中发挥作用的就是&lt;code class=&quot;prettyprint&quot;&gt;ViewResolver&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;View&lt;/code&gt;.
+有下面这些情况:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;返回&lt;code class=&quot;prettyprint&quot;&gt;ModelAndView&lt;/code&gt;对象: 包含模型和视图,模型是map的形式,可以通过&lt;code class=&quot;prettyprint&quot;&gt;request.getAttribute(&amp;quot;key&amp;quot;)&lt;/code&gt;取值;视图是字符串形式,表示视图的名字&lt;/li&gt;
+&lt;li&gt;返回模型: 包括&lt;code class=&quot;prettyprint&quot;&gt;Map&lt;/code&gt;, Spring的&lt;code class=&quot;prettyprint&quot;&gt;Model&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;ModelMap&lt;/code&gt;, 视图名称将由&lt;code class=&quot;prettyprint&quot;&gt;RequestToViewNameTranslator&lt;/code&gt;决定&lt;/li&gt;
+&lt;li&gt;返回视图对象&lt;code class=&quot;prettyprint&quot;&gt;View&lt;/code&gt;: 这种情况可以给处理器方法传入一个模型参数,比如上面传入的那个Map,可在方法体里面往模型中添加值,相当于&lt;code class=&quot;prettyprint&quot;&gt;setAttribute&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;返回字符串&lt;code class=&quot;prettyprint&quot;&gt;String&lt;/code&gt;: 这往往代表的是一个视图名称, 如果需要模型的话,跟上面一样,传入一个模型参数即可&lt;/li&gt;
+&lt;li&gt;返回&lt;code class=&quot;prettyprint&quot;&gt;void&lt;/code&gt;: 这种情况一般是我们直接把返回结果写到&lt;code class=&quot;prettyprint&quot;&gt;HttpServletResponse&lt;/code&gt;中了,比如上面的&lt;code class=&quot;prettyprint&quot;&gt;Writer&lt;/code&gt;那样;  如果没有写,则会利用&lt;code class=&quot;prettyprint&quot;&gt;RequestToViewNameTranslator&lt;/code&gt;来返回一个对应的视图名称&lt;/li&gt;
+&lt;li&gt;处理器方法被&lt;code class=&quot;prettyprint&quot;&gt;@ResponseBody&lt;/code&gt;标记: 被标记的方法任何返回值都不会像上面那样当作视图或模型来处理, 而是通过&lt;code class=&quot;prettyprint&quot;&gt;HttpMessageConverters&lt;/code&gt;转换之后写到&lt;code class=&quot;prettyprint&quot;&gt;HttpServletResponse&lt;/code&gt;中&lt;/li&gt;
+&lt;li&gt;除了上面情况之外的其它任何返回类型都会被当做模型中的一个属性来处理,属性名称可在该方法上用&lt;code class=&quot;prettyprint&quot;&gt;@ModelAttribute(&amp;quot;attributeName&amp;quot;)&lt;/code&gt; 来定义, 否则将使用返回类型的类名称的首字母小写形式来表示; 返回的视图还是由&lt;code class=&quot;prettyprint&quot;&gt;RequestToViewNameTranslator&lt;/code&gt;来决定.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
 </description>
         <pubDate>Wed, 23 Dec 2015 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-12-23-SpringMVC%E4%B9%8B%E8%AF%B7%E6%B1%82%E6%98%A0%E5%B0%84.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-12-23-SpringMVC%E4%B9%8B%E8%AF%B7%E6%B1%82%E6%98%A0%E5%B0%84.html</guid>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-12-23-SpringMVC%E4%B9%8B%E8%AF%B7%E6%B1%82%E6%8E%A7%E5%88%B6%E5%99%A8.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-12-23-SpringMVC%E4%B9%8B%E8%AF%B7%E6%B1%82%E6%8E%A7%E5%88%B6%E5%99%A8.html</guid>
         
         <category>Spring</category>
         
