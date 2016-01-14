@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="java中的反射, 编程技术, Java, 逆水行舟" />
+    <meta name="description" content="java中的反射, 编程技术, Java, java反射总结" />
+
+    <title>逆水行舟</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-01-14-java%E4%B8%AD%E7%9A%84%E5%8F%8D%E5%B0%84.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="/static/js/jquery.qrcode.min.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="/static/js/uikit.min.js"></script>
+    <!-- quietflow -->
+    <!-- <script type="text/javascript" src="http://loveshisong.cn/static/js/quietflow.min.js"></script> -->
+    <!-- UK sticky -->
+    <script type="text/javascript" src="/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "shisong"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" data-uk-sticky>
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <script type="text/javascript">
+jQuery(function(){
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-01-14-java%E4%B8%AD%E7%9A%84%E5%8F%8D%E5%B0%84.html"
+    });
+})
+</script>
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>java中的反射</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <p>java反射总结</p>
+
+<hr>
+
+<h2 id="反射相关的类和接口简介">反射相关的类和接口简介</h2>
+
+<p>在<code class="prettyprint">java.lang.reflect</code>包中定义了一些接口和类,简单记录下他们的作用</p>
+
+<h3 id="相关类说明">相关类说明</h3>
+
+<table><thead>
+<tr>
+<th>类</th>
+<th>说明</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>AccessibleObject</td>
+<td><code class="prettyprint">Field、Method</code>和<code class="prettyprint">Constructor</code>对象的基类</td>
+</tr>
+<tr>
+<td>Field</td>
+<td>final类, 对应类或接口的单个字段</td>
+</tr>
+<tr>
+<td>Method</td>
+<td>final类, 对应类或接口的单独某个方法</td>
+</tr>
+<tr>
+<td><code class="prettyprint">Constructor&lt;T&gt;</code></td>
+<td>final类, 对应类的单个构造方法</td>
+</tr>
+<tr>
+<td>Modifier</td>
+<td>对应类和成员访问修饰符, 如<code class="prettyprint">public,static,final,native,synchronized</code>等</td>
+</tr>
+<tr>
+<td>Array</td>
+<td>final类, 对应数组</td>
+</tr>
+<tr>
+<td>Proxy</td>
+<td>提供用于创建动态代理类和实例的静态方法，它还是由这些方法创建的所有动态代理类的超类</td>
+</tr>
+<tr>
+<td>ReflectPermission</td>
+<td>final类, 反射操作的<code class="prettyprint">Permission</code>类</td>
+</tr>
+</tbody></table>
+
+<p>另外反射机制还经常用到<code class="prettyprint">java.lang</code>中的类, 如<code class="prettyprint">Class</code>、<code class="prettyprint">Packate</code>还有各种原始类型等</p>
+
+<h3 id="相关接口继承关系图">相关接口继承关系图</h3>
+
+<p><img src="/static/images/reflect_interface.png" alt="反射相关接口继承关系图" title="反射相关接口继承关系图"></p>
+
+<h3 id="相关接口说明">相关接口说明</h3>
+
+<table><thead>
+<tr>
+<th>接口</th>
+<th>说明</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>AnnotatedElement</td>
+<td>被注解标注的元素都实现的接口<br> 实现类有<code class="prettyprint">AccessibleObject</code>及其子类,<code class="prettyprint">Class</code><code class="prettyprint">Package</code><br> 有<code class="prettyprint">是否有注解</code>,<code class="prettyprint">获取所有注解</code>等方法</td>
+</tr>
+<tr>
+<td>Member</td>
+<td>成员接口, 反映字段、方法、构造函数的信息<br> 实现类有<code class="prettyprint">AccessibleObject</code>的子类</td>
+</tr>
+<tr>
+<td>Type</td>
+<td>所有类型的父接口, 如原始类型、参数化类型、数组类型、类型变量和基本(原生)类型</td>
+</tr>
+<tr>
+<td>GenericDeclaration</td>
+<td>各种声明类型的父接口, 如<code class="prettyprint">Class,Constructor,Method</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">TypeVariable&lt;D extends GenericDeclaration&gt;</code></td>
+<td>各种类型变量的父接口</td>
+</tr>
+<tr>
+<td>ParameterizedType</td>
+<td>参数化类型, 如<code class="prettyprint">Collection&lt;String&gt;</code></td>
+</tr>
+<tr>
+<td>GenericArrayType</td>
+<td>数组类型, 它里面的元素为参数化类型或类型变量(上面那俩)</td>
+</tr>
+<tr>
+<td>WildcardType</td>
+<td>通配符类型, 如<code class="prettyprint">&lt;?&gt;, &lt;? extends Number&gt;, &lt;? super Integer&gt;</code></td>
+</tr>
+<tr>
+<td>InvocationHandler</td>
+<td>代理实例的调用处理程序需要实现该接口<br> <code class="prettyprint">Proxy</code>是代理实例,它的处理程序需要实现该接口的<code class="prettyprint">invoke</code>方法</td>
+</tr>
+</tbody></table>
+
+<hr>
+
+<h2 id="object,-class和type的关系和区别"><code class="prettyprint">Object</code>, <code class="prettyprint">Class</code>和<code class="prettyprint">Type</code>的关系和区别</h2>
+
+<p>所有的类都继承<code class="prettyprint">Object</code>是毫无疑问的, <code class="prettyprint">Class</code>也是类，也继承<code class="prettyprint">Object</code><br>
+<code class="prettyprint">Class</code>类特殊的地方是它在运行时用来描述类的各种元信息,对象是类的实例,而类在运行时的描述就是<code class="prettyprint">Class</code><br>
+<code class="prettyprint">Type</code>是个接口,用来表示某个对象是什么类型的,<code class="prettyprint">Class</code>类实现了好几个接口,其中一个就是<code class="prettyprint">Type</code></p>
+
+<hr>
+
+<h2 id="反射的具体功能">反射的具体功能</h2>
+
+<p>反射作用挺多, 比如反编译, 通过反射机制访问对象的属性、方法、构造方法等</p>
+
+<h3 id="获取类">获取类</h3>
+
+<p>有如下三种方法:</p>
+
+<ol>
+<li>通过<code class="prettyprint">Class.forName()</code>, 如:<code class="prettyprint">Class clazz = Class.forName(&quot;java.lang.String&quot;);</code></li>
+<li>通过类的<code class="prettyprint">class</code>属性, 如:<code class="prettyprint">Class clazz = String.class;</code></li>
+<li>通过实例对象的<code class="prettyprint">getClass</code>方法, 如: <code class="prettyprint">Class clazz = user.getClass();</code></li>
+</ol>
+
+<h3 id="获取对象实例">获取对象实例</h3>
+
+<ol>
+<li>通过<code class="prettyprint">Class</code>实例的<code class="prettyprint">newInstance()</code>, 如:<code class="prettyprint">String str = (String)clazz.newInstance();</code></li>
+</ol>
+
+<h3 id="获取构造方法">获取构造方法</h3>
+
+<ol>
+<li><code class="prettyprint">Constructor&lt;?&gt;[] getConstructors()</code>: 获取本类中所有public构造器</li>
+<li><code class="prettyprint">Constructor&lt;T&gt; getConstructor(Class&lt;?&gt;... parameterTypes)</code>: 获取本类中特定参数的public构造器</li>
+<li><code class="prettyprint">Constructor&lt;?&gt;[] getDeclaredConstructors()</code>: 获取本类中所有构造器</li>
+<li><code class="prettyprint">Constructor&lt;T&gt; getDeclaredConstructor(Class&lt;?&gt;... parameterTypes)</code>: 获取本类中指定参数的构造器</li>
+</ol>
+
+<h3 id="获取类方法">获取类方法</h3>
+
+<ol>
+<li><code class="prettyprint">Method[] getMethods()</code>: 获取本类或父类中所有public方法(包括构造器方法)</li>
+<li><code class="prettyprint">Method getMethod(String name, Class&lt;?&gt;... parameterTypes)</code>: 获取本类或父类中特定名字和参数的public方法</li>
+<li><code class="prettyprint">Method[] getDeclaredMethods()</code>: 获取本类中声明的所有方法(包括非public但不包括继承来的)</li>
+<li><code class="prettyprint">Method getDeclaredMethod(String name, Class&lt;?&gt;... parameterTypes)</code>: 获取本类中声明的特定名字和参数的方法(最常用)</li>
+</ol>
+
+<h3 id="获取类属性">获取类属性</h3>
+
+<ol>
+<li><code class="prettyprint">Field[] getFields()</code>: 获取本类或父类中所有public属性</li>
+<li><code class="prettyprint">Field getField(String name)</code>: 获取本类或父类中特定名字的public属性</li>
+<li><code class="prettyprint">Field[] getDeclaredFields()</code>: 获取本类中声明的所有属性</li>
+<li><code class="prettyprint">Field getDeclaredField(String name)</code>: 获取本类中声明的特定名字的属性</li>
+</ol>
+
+<hr>
+
+<h2 id="通过反射实现方法动态调用的例子">通过反射实现方法动态调用的例子</h2>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="n">name</span><span class="o">;</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">Object</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">Test</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">newInstance</span><span class="o">();</span>
+        <span class="n">Test</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getDeclaredMethod</span><span class="o">(</span><span class="s">&quot;setName&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">invoke</span><span class="o">(</span><span class="n">obj</span><span class="o">,</span> <span class="s">&quot;Tom&quot;</span><span class="o">);</span>
+        <span class="n">Method</span> <span class="n">getNameMethod</span> <span class="o">=</span> <span class="n">Test</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getDeclaredMethod</span><span class="o">(</span><span class="s">&quot;getName&quot;</span><span class="o">);</span>
+        <span class="n">String</span> <span class="n">name</span> <span class="o">=</span> <span class="o">(</span><span class="n">String</span><span class="o">)</span> <span class="n">getNameMethod</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<hr>
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/java中的反射" data-title="java中的反射" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-01-14-java%E4%B8%AD%E7%9A%84%E5%8F%8D%E5%B0%84.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
+
+</body>
+
+</html>

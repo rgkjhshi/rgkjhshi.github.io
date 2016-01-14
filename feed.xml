@@ -5,9 +5,199 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 25 Dec 2015 15:13:29 +0800</pubDate>
-    <lastBuildDate>Fri, 25 Dec 2015 15:13:29 +0800</lastBuildDate>
+    <pubDate>Thu, 14 Jan 2016 11:57:40 +0800</pubDate>
+    <lastBuildDate>Thu, 14 Jan 2016 11:57:40 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>java中的反射</title>
+        <description>&lt;p&gt;java反射总结&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;反射相关的类和接口简介&quot;&gt;反射相关的类和接口简介&lt;/h2&gt;
+
+&lt;p&gt;在&lt;code class=&quot;prettyprint&quot;&gt;java.lang.reflect&lt;/code&gt;包中定义了一些接口和类,简单记录下他们的作用&lt;/p&gt;
+
+&lt;h3 id=&quot;相关类说明&quot;&gt;相关类说明&lt;/h3&gt;
+
+&lt;table&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;类&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;AccessibleObject&lt;/td&gt;
+&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;Field、Method&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;Constructor&lt;/code&gt;对象的基类&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Field&lt;/td&gt;
+&lt;td&gt;final类, 对应类或接口的单个字段&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Method&lt;/td&gt;
+&lt;td&gt;final类, 对应类或接口的单独某个方法&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;Constructor&amp;lt;T&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;final类, 对应类的单个构造方法&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Modifier&lt;/td&gt;
+&lt;td&gt;对应类和成员访问修饰符, 如&lt;code class=&quot;prettyprint&quot;&gt;public,static,final,native,synchronized&lt;/code&gt;等&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Array&lt;/td&gt;
+&lt;td&gt;final类, 对应数组&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Proxy&lt;/td&gt;
+&lt;td&gt;提供用于创建动态代理类和实例的静态方法，它还是由这些方法创建的所有动态代理类的超类&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ReflectPermission&lt;/td&gt;
+&lt;td&gt;final类, 反射操作的&lt;code class=&quot;prettyprint&quot;&gt;Permission&lt;/code&gt;类&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+
+&lt;p&gt;另外反射机制还经常用到&lt;code class=&quot;prettyprint&quot;&gt;java.lang&lt;/code&gt;中的类, 如&lt;code class=&quot;prettyprint&quot;&gt;Class&lt;/code&gt;、&lt;code class=&quot;prettyprint&quot;&gt;Packate&lt;/code&gt;还有各种原始类型等&lt;/p&gt;
+
+&lt;h3 id=&quot;相关接口继承关系图&quot;&gt;相关接口继承关系图&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/reflect_interface.png&quot; alt=&quot;反射相关接口继承关系图&quot; title=&quot;反射相关接口继承关系图&quot;&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;相关接口说明&quot;&gt;相关接口说明&lt;/h3&gt;
+
+&lt;table&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;接口&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;AnnotatedElement&lt;/td&gt;
+&lt;td&gt;被注解标注的元素都实现的接口&lt;br&gt; 实现类有&lt;code class=&quot;prettyprint&quot;&gt;AccessibleObject&lt;/code&gt;及其子类,&lt;code class=&quot;prettyprint&quot;&gt;Class&lt;/code&gt;&lt;code class=&quot;prettyprint&quot;&gt;Package&lt;/code&gt;&lt;br&gt; 有&lt;code class=&quot;prettyprint&quot;&gt;是否有注解&lt;/code&gt;,&lt;code class=&quot;prettyprint&quot;&gt;获取所有注解&lt;/code&gt;等方法&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Member&lt;/td&gt;
+&lt;td&gt;成员接口, 反映字段、方法、构造函数的信息&lt;br&gt; 实现类有&lt;code class=&quot;prettyprint&quot;&gt;AccessibleObject&lt;/code&gt;的子类&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Type&lt;/td&gt;
+&lt;td&gt;所有类型的父接口, 如原始类型、参数化类型、数组类型、类型变量和基本(原生)类型&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;GenericDeclaration&lt;/td&gt;
+&lt;td&gt;各种声明类型的父接口, 如&lt;code class=&quot;prettyprint&quot;&gt;Class,Constructor,Method&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;TypeVariable&amp;lt;D extends GenericDeclaration&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;各种类型变量的父接口&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ParameterizedType&lt;/td&gt;
+&lt;td&gt;参数化类型, 如&lt;code class=&quot;prettyprint&quot;&gt;Collection&amp;lt;String&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;GenericArrayType&lt;/td&gt;
+&lt;td&gt;数组类型, 它里面的元素为参数化类型或类型变量(上面那俩)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;WildcardType&lt;/td&gt;
+&lt;td&gt;通配符类型, 如&lt;code class=&quot;prettyprint&quot;&gt;&amp;lt;?&amp;gt;, &amp;lt;? extends Number&amp;gt;, &amp;lt;? super Integer&amp;gt;&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;InvocationHandler&lt;/td&gt;
+&lt;td&gt;代理实例的调用处理程序需要实现该接口&lt;br&gt; &lt;code class=&quot;prettyprint&quot;&gt;Proxy&lt;/code&gt;是代理实例,它的处理程序需要实现该接口的&lt;code class=&quot;prettyprint&quot;&gt;invoke&lt;/code&gt;方法&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;object,-class和type的关系和区别&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;Object&lt;/code&gt;, &lt;code class=&quot;prettyprint&quot;&gt;Class&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;Type&lt;/code&gt;的关系和区别&lt;/h2&gt;
+
+&lt;p&gt;所有的类都继承&lt;code class=&quot;prettyprint&quot;&gt;Object&lt;/code&gt;是毫无疑问的, &lt;code class=&quot;prettyprint&quot;&gt;Class&lt;/code&gt;也是类，也继承&lt;code class=&quot;prettyprint&quot;&gt;Object&lt;/code&gt;&lt;br&gt;
+&lt;code class=&quot;prettyprint&quot;&gt;Class&lt;/code&gt;类特殊的地方是它在运行时用来描述类的各种元信息,对象是类的实例,而类在运行时的描述就是&lt;code class=&quot;prettyprint&quot;&gt;Class&lt;/code&gt;&lt;br&gt;
+&lt;code class=&quot;prettyprint&quot;&gt;Type&lt;/code&gt;是个接口,用来表示某个对象是什么类型的,&lt;code class=&quot;prettyprint&quot;&gt;Class&lt;/code&gt;类实现了好几个接口,其中一个就是&lt;code class=&quot;prettyprint&quot;&gt;Type&lt;/code&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;反射的具体功能&quot;&gt;反射的具体功能&lt;/h2&gt;
+
+&lt;p&gt;反射作用挺多, 比如反编译, 通过反射机制访问对象的属性、方法、构造方法等&lt;/p&gt;
+
+&lt;h3 id=&quot;获取类&quot;&gt;获取类&lt;/h3&gt;
+
+&lt;p&gt;有如下三种方法:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;通过&lt;code class=&quot;prettyprint&quot;&gt;Class.forName()&lt;/code&gt;, 如:&lt;code class=&quot;prettyprint&quot;&gt;Class clazz = Class.forName(&amp;quot;java.lang.String&amp;quot;);&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;通过类的&lt;code class=&quot;prettyprint&quot;&gt;class&lt;/code&gt;属性, 如:&lt;code class=&quot;prettyprint&quot;&gt;Class clazz = String.class;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;通过实例对象的&lt;code class=&quot;prettyprint&quot;&gt;getClass&lt;/code&gt;方法, 如: &lt;code class=&quot;prettyprint&quot;&gt;Class clazz = user.getClass();&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;获取对象实例&quot;&gt;获取对象实例&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;通过&lt;code class=&quot;prettyprint&quot;&gt;Class&lt;/code&gt;实例的&lt;code class=&quot;prettyprint&quot;&gt;newInstance()&lt;/code&gt;, 如:&lt;code class=&quot;prettyprint&quot;&gt;String str = (String)clazz.newInstance();&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;获取构造方法&quot;&gt;获取构造方法&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Constructor&amp;lt;?&amp;gt;[] getConstructors()&lt;/code&gt;: 获取本类中所有public构造器&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Constructor&amp;lt;T&amp;gt; getConstructor(Class&amp;lt;?&amp;gt;... parameterTypes)&lt;/code&gt;: 获取本类中特定参数的public构造器&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Constructor&amp;lt;?&amp;gt;[] getDeclaredConstructors()&lt;/code&gt;: 获取本类中所有构造器&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Constructor&amp;lt;T&amp;gt; getDeclaredConstructor(Class&amp;lt;?&amp;gt;... parameterTypes)&lt;/code&gt;: 获取本类中指定参数的构造器&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;获取类方法&quot;&gt;获取类方法&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Method[] getMethods()&lt;/code&gt;: 获取本类或父类中所有public方法(包括构造器方法)&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Method getMethod(String name, Class&amp;lt;?&amp;gt;... parameterTypes)&lt;/code&gt;: 获取本类或父类中特定名字和参数的public方法&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Method[] getDeclaredMethods()&lt;/code&gt;: 获取本类中声明的所有方法(包括非public但不包括继承来的)&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Method getDeclaredMethod(String name, Class&amp;lt;?&amp;gt;... parameterTypes)&lt;/code&gt;: 获取本类中声明的特定名字和参数的方法(最常用)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;获取类属性&quot;&gt;获取类属性&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Field[] getFields()&lt;/code&gt;: 获取本类或父类中所有public属性&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Field getField(String name)&lt;/code&gt;: 获取本类或父类中特定名字的public属性&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Field[] getDeclaredFields()&lt;/code&gt;: 获取本类中声明的所有属性&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Field getDeclaredField(String name)&lt;/code&gt;: 获取本类中声明的特定名字的属性&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;通过反射实现方法动态调用的例子&quot;&gt;通过反射实现方法动态调用的例子&lt;/h2&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Test&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;setName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;newInstance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getDeclaredMethod&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;setName&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;invoke&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Tom&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Method&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getNameMethod&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getDeclaredMethod&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;getName&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getNameMethod&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;invoke&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;hr&gt;
+</description>
+        <pubDate>Thu, 14 Jan 2016 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-01-14-java%E4%B8%AD%E7%9A%84%E5%8F%8D%E5%B0%84.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-01-14-java%E4%B8%AD%E7%9A%84%E5%8F%8D%E5%B0%84.html</guid>
+        
+        <category>Java</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
     
       <item>
         <title>SpringMVC之Controller控制器</title>
@@ -1636,62 +1826,6 @@ Table是这样定义的&lt;code class=&quot;prettyprint&quot;&gt;Table&amp;lt;R,
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-16-Guava%E4%B9%8BOrdering.html</guid>
         
         <category>Guava</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>Collections工具类</title>
-        <description>&lt;p&gt;JDK的Collections类中提供了大量对Collection和Map的操作,网上资料整理记录下来&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;排序操作(主要对list)&quot;&gt;排序操作(主要对List)&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;void sort(List list)&lt;/code&gt;: 对List里的元素根据自然升序排序&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;void sort(List list, Comparator c)&lt;/code&gt;: 自定义比较器排序&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;void reverse(List list)&lt;/code&gt;: 反转指定List集合中元素的顺序&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;void shuffle(List list)&lt;/code&gt;: 打乱List中元素的顺序(重新洗牌)&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;void swap(List list, int i, int j)&lt;/code&gt;: 交换list中的两个元素&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;void swap(Object[] arr, int i, int j)&lt;/code&gt;: 交换数组中的两个元素&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;void rotate(List list, int distance)&lt;/code&gt;: 所有元素循环右移distance位, distance=size则相当于没变&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;查找和替换(主要对collection接口)&quot;&gt;查找和替换(主要对Collection接口)&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;int binarySearch(List list, T key)&lt;/code&gt;: 二分搜索法, 返回对象在List中的索引, 前提是集合已经排序&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;void fill(List list, T obj)&lt;/code&gt;: 填充对象&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean replaceAll(List list, T oldVal, T newVal)&lt;/code&gt;: 替换, 返回是否含有要替换的元素&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;T min(Collection coll)&lt;/code&gt;: 返回最小元素&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;T min(Collection coll, Comparator comp)&lt;/code&gt;: 根据自定义比较器，返回最小元素&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;T max(Collection coll)&lt;/code&gt;: 返回最大元素&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;T max(Collection coll, Comparator comp)&lt;/code&gt;: 根据自定义比较器，返回最大元素&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;int frequency(Collection c, Object o)&lt;/code&gt;: 返回指定对象在集合中出现的次数&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;其他操作&quot;&gt;其他操作&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean addAll(Collection c, T... elements)&lt;/code&gt;: 把elements添加到集合里&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Comparator reverseOrder()&lt;/code&gt;: 返回自然顺序的反序比较器&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Comparator reverseOrder(Comparator cmp)&lt;/code&gt;: 返回cmp的逆序比较器, 若cmp为null则等同于&lt;code class=&quot;prettyprint&quot;&gt;reverseOrder()&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-</description>
-        <pubDate>Fri, 13 Nov 2015 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-13-Collections%E5%B7%A5%E5%85%B7%E7%B1%BB.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-13-Collections%E5%B7%A5%E5%85%B7%E7%B1%BB.html</guid>
-        
-        <category>Java</category>
         
         
         <category>编程技术</category>
