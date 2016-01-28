@@ -305,11 +305,11 @@ private static final Logger logger = LoggerFactory.getLogger("Aaaaa.Bbbbb.TestLe
 
 日志行产生的行号。
 
-* **行号 : %m / %msg / %message**
+* **日志内容 : %m / %msg / %message**
 
 日志中输出的信息
 
-* **行号 : %d{pattern} / %date{pattern} / %message**
+* **时间 : %d{pattern} / %date{pattern} / %message**
 
 产生日志的时间。日志的格式如下:
 
