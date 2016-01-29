@@ -5,9 +5,99 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 28 Jan 2016 17:01:14 +0800</pubDate>
-    <lastBuildDate>Thu, 28 Jan 2016 17:01:14 +0800</lastBuildDate>
+    <pubDate>Fri, 29 Jan 2016 17:00:49 +0800</pubDate>
+    <lastBuildDate>Fri, 29 Jan 2016 17:00:49 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>Hadoop项目框架</title>
+        <description>&lt;p&gt;Hadoop相关项目的介绍&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/hadoop.png&quot; alt=&quot;Hadoop框架图&quot; title=&quot;Hadoop框架图&quot;&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;hadoop&quot;&gt;Hadoop&lt;/h2&gt;
+
+&lt;p&gt;Hadoop是大数据的基础,它有4个模块 &lt;code class=&quot;prettyprint&quot;&gt;Hadoop Common&lt;/code&gt;, &lt;code class=&quot;prettyprint&quot;&gt;Hadoop Distributed File System (HDFS)&lt;/code&gt;, &lt;code class=&quot;prettyprint&quot;&gt;Hadoop YARN&lt;/code&gt;和 &lt;code class=&quot;prettyprint&quot;&gt;Hadoop MapReduce&lt;/code&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;HDFS&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;分布式文件系统, 适合存储大文件, 不适合小文件, 它的原理 &lt;a href=&quot;http://www.weixuehao.com/archives/596&quot;&gt;这篇文章&lt;/a&gt; 讲的比较详细&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;YARN&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;YARN(Yet Another Resource Negotiator), 任务调度和集群的资源管理, Hadoop2.0提供的革命性功能, 可参考&lt;a href=&quot;http://www.ibm.com/developerworks/cn/data/library/bd-yarn-intro/index.html&quot;&gt;这篇文章&lt;/a&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;MapReduce&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;MapReduce本身是谷歌推出的一个编程模型, 包括Map和Reduce两个过程.&lt;br&gt;
+比如要计算1到10的平方和, 耗时较多的是计算平方, 加和耗时较少, 那么可以把整个过程这么拆分:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Map, 即把计算平方的任务分给10台机器,每台机器分别计算平方, 然后Map的结果就是一个可迭代的集合, 就是这10个数的平方;&lt;/li&gt;
+&lt;li&gt;Reduce, 即把Map的结果迭代加和, 得到最终结果&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;Hadoop MapReduce&lt;/code&gt;是&lt;code class=&quot;prettyprint&quot;&gt;MapReduce&lt;/code&gt;的一个实现, 2.0之后推出了基于&lt;code class=&quot;prettyprint&quot;&gt;YARN&lt;/code&gt;的&lt;code class=&quot;prettyprint&quot;&gt;Hadoop MapReduce&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;hbase&quot;&gt;HBase&lt;/h2&gt;
+
+&lt;p&gt;非关系型数据库, 面向列存储, 理解成 Key-&amp;gt;Value 的存储更形象, 有行键(&lt;code class=&quot;prettyprint&quot;&gt;RowKey&lt;/code&gt;), 列族(&lt;code class=&quot;prettyprint&quot;&gt;Colum Family&lt;/code&gt;), 限定符(&lt;code class=&quot;prettyprint&quot;&gt;qualifier&lt;/code&gt;)等概念&lt;br&gt;
+列名(Column)是由列族前缀和限定符(qualifier)连接而成, 如列族d有两个列(限定符):title和content, 则列名分别为&lt;code class=&quot;prettyprint&quot;&gt;d:title&lt;/code&gt;、&lt;code class=&quot;prettyprint&quot;&gt;d:content&lt;/code&gt;;&lt;br&gt;
+&lt;code class=&quot;prettyprint&quot;&gt;(row, column, version)&lt;/code&gt;唯一确定一个&lt;code class=&quot;prettyprint&quot;&gt;cell&lt;/code&gt;, 里面放着Value;&lt;br&gt;
+更多内容参考&lt;a href=&quot;http://abloz.com/hbase/book.html#conceptual.view&quot;&gt;这里&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;hive&quot;&gt;Hive&lt;/h2&gt;
+
+&lt;p&gt;是一个数据仓库工具, 可以将结构化的数据文件(hive文件,hbase)映射为一张数据库表, 然后通过SQL查询, 背后还是变成了MapReduce程序执行. 这种查询是秒级或分钟级的, 比较慢.&lt;/p&gt;
+
+&lt;h2 id=&quot;pig&quot;&gt;Pig&lt;/h2&gt;
+
+&lt;p&gt;和Hive类似, 有自己的查询语法&lt;/p&gt;
+
+&lt;h2 id=&quot;sqoop&quot;&gt;Sqoop&lt;/h2&gt;
+
+&lt;p&gt;一个ETL工具,可以进行数据同步, 比如把Oracle、Mysql等关系型数据库中的数据导入到HBase中、HDFS上, 也可把数据从HDFS或HBase导入到Mysql中&lt;/p&gt;
+
+&lt;h2 id=&quot;flume&quot;&gt;Flume&lt;/h2&gt;
+
+&lt;p&gt;日志收集工具&lt;/p&gt;
+
+&lt;h2 id=&quot;zookeeper&quot;&gt;ZooKeeper&lt;/h2&gt;
+
+&lt;p&gt;分布式协作服务, 好多地方都会用到, 比如写了个dubbo服务部署到5台机器上, 统一交给ZK进行管理, 使用者就不用关心到底调用哪台机器上的服务了&lt;/p&gt;
+
+&lt;h2 id=&quot;spark&quot;&gt;Spark&lt;/h2&gt;
+
+&lt;p&gt;这东西很火, 是一个内存计算的框架, 目前一个大的趋势. MapReduce会有很大的IO操作, 而Spark是在内存中计算, 所以很快&lt;/p&gt;
+
+&lt;h2 id=&quot;mahout&quot;&gt;Mahout&lt;/h2&gt;
+
+&lt;p&gt;一个数据挖掘和机器学习的库, 搞数据挖掘的用的比较多&lt;/p&gt;
+
+&lt;h2 id=&quot;ambari&quot;&gt;Ambari&lt;/h2&gt;
+
+&lt;p&gt;一个基于Web的管理平台,可以对集群进行统一的部署&lt;/p&gt;
+
+&lt;hr&gt;
+</description>
+        <pubDate>Thu, 14 Jan 2016 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2016-01-14-Hadoop%E9%A1%B9%E7%9B%AE%E6%A1%86%E6%9E%B6.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2016-01-14-Hadoop%E9%A1%B9%E7%9B%AE%E6%A1%86%E6%9E%B6.html</guid>
+        
+        <category>Java</category>
+        
+        
+        <category>点滴积累</category>
+        
+      </item>
     
       <item>
         <title>java中的反射</title>
@@ -1720,110 +1810,6 @@ Table是这样定义的&lt;code class=&quot;prettyprint&quot;&gt;Table&amp;lt;R,
         <pubDate>Wed, 18 Nov 2015 00:00:00 +0800</pubDate>
         <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-18-Guava%E6%96%B0%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B.html</link>
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-18-Guava%E6%96%B0%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B.html</guid>
-        
-        <category>Guava</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>Guava之Ordering</title>
-        <description>&lt;p&gt;guava的collection包里有个&lt;code class=&quot;prettyprint&quot;&gt;Ordering&lt;/code&gt;抽象类实现了&lt;code class=&quot;prettyprint&quot;&gt;java.util.Comparator&lt;/code&gt;接口&lt;br&gt;
-&lt;code class=&quot;prettyprint&quot;&gt;Comparator&lt;/code&gt;就俩方法&lt;code class=&quot;prettyprint&quot;&gt;int compare(T o1, T o2);&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;boolean equals(Object obj);&lt;/code&gt;&lt;br&gt;
-&lt;code class=&quot;prettyprint&quot;&gt;Ordering&lt;/code&gt;提供了更多的方法来完成集合排序的功能&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;静态方法&quot;&gt;静态方法&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Ordering&amp;lt;C&amp;gt; natural()&lt;/code&gt;: 返回自然顺序的比较器, 如数字按大小，日期按先后&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Ordering&amp;lt;T&amp;gt; from(Comparator&amp;lt;T&amp;gt; comparator)&lt;/code&gt;: 把给定的Comparator转化为排序器&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Ordering&amp;lt;Object&amp;gt; usingToString()&lt;/code&gt;: 按对象的字符串形式做字典排序&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Ordering&amp;lt;T&amp;gt; compound(Iterable comparators)&lt;/code&gt;: 合成多个比较器, 类似于实例方法的那个&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Ordering&amp;lt;Object&amp;gt; allEqual()&lt;/code&gt;: 返回一个认为全都相等的比较器, 相当于没有排序.
-它的意义在于返回一个比较器, 这样就可以使用一些实例方法了, 从而进行链式比较,
-比如:&lt;code class=&quot;prettyprint&quot;&gt;Ordering.allEqual().nullsLast().sortedCopy(asList(t, null, e, s, null, t, null))}&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;实例方法:链式调用&quot;&gt;实例方法:链式调用&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Ordering&amp;lt;S&amp;gt; reverse()&lt;/code&gt;: 返回反序比较器&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Ordering&amp;lt;S&amp;gt; nullsFirst()&lt;/code&gt;: 使用当前排序器, 但额外把&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;放到最前面&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Ordering&amp;lt;S&amp;gt; nullsLast()&lt;/code&gt;: 使用当前排序器, 但额外把&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;放到最后面&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Ordering&amp;lt;U&amp;gt; compound(Comparator second)&lt;/code&gt;: 合成比较器, 先按原来排序，然后按second排序&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Ordering&amp;lt;F&amp;gt; onResultOf(Function&amp;lt;F, T&amp;gt; function)&lt;/code&gt;: 对集合中元素调用Function，再按返回值用当前排序器排序.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;看下面这个链式调用的例子, 应该从后往前读, 先调用apply方法获取Foo的name值, 在把null放前面, 再对剩下的按照name的自然顺序进行排序&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;Ordering&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Foo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ordering&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Ordering&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;natural&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;nullsFirst&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;onResultOf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Function&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Foo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;apply&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Foo&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-
-&lt;h2 id=&quot;实例方法:操作集合元素的方法&quot;&gt;实例方法:操作集合元素的方法&lt;/h2&gt;
-
-&lt;p&gt;注:后面说的大小是指排序的前后&lt;/p&gt;
-
-&lt;h3 id=&quot;min():-返回最小的那个元素,-重载方法有&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;min()&lt;/code&gt;: 返回最小的那个元素, 重载方法有&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E min(Iterator&amp;lt;E&amp;gt; iterator)&lt;/code&gt;: 迭代器空则抛出&lt;code class=&quot;prettyprint&quot;&gt;NoSuchElementException&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E min(Iterable&amp;lt;E&amp;gt; iterable)&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E min(E a, E b)&lt;/code&gt;: 相等则返回第一个&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E min(E a,  E b, E c, E... rest)&lt;/code&gt;: 多个最小则返回第一个最小的&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;max():-返回最大的那个元素,-重载方法有&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;max()&lt;/code&gt;: 返回最大的那个元素, 重载方法有&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E max(Iterator&amp;lt;E&amp;gt; iterator)&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E max(Iterable&amp;lt;E&amp;gt; iterable)&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E max(E a, E b)&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;E max(E a,  E b, E c, E... rest)&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;leastof():-返回最小的k个元素的列表,-不足k个则都返回&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;leastOf()&lt;/code&gt;: 返回最小的k个元素的列表, 不足k个则都返回&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;List&amp;lt;E&amp;gt; leastOf(Iterable&amp;lt;E&amp;gt; iterable, int k)&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;List&amp;lt;E&amp;gt; leastOf(Iterator&amp;lt;E&amp;gt; elements, int k)&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;greatestof():-返回最大的k个元素的列表,-不足k个则都返回&quot;&gt;&lt;code class=&quot;prettyprint&quot;&gt;greatestOf()&lt;/code&gt;: 返回最大的k个元素的列表, 不足k个则都返回&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;List&amp;lt;E&amp;gt; greatestOf(Iterable&amp;lt;E&amp;gt; iterable, int k)&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;List&amp;lt;E&amp;gt; greatestOf(Iterator&amp;lt;E&amp;gt; elements, int k)&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;判断是否已经按照排序器排过序&quot;&gt;判断是否已经按照排序器排过序&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean isOrdered(Iterable iterable)&lt;/code&gt;: 允许有排序值相等的元素&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean isStrictlyOrdered(Iterable iterable)&lt;/code&gt;: 严格递增, 不允许有相等的&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;返回排序好的list&quot;&gt;返回排序好的list&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;List&amp;lt;E&amp;gt; sortedCopy(Iterable&amp;lt;E&amp;gt; elements)&lt;/code&gt;: 返回可变的已经排好序的list&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;ImmutableList&amp;lt;E&amp;gt; immutableSortedCopy(Iterable&amp;lt;E&amp;gt; elements)&lt;/code&gt;: 返回不可变的已经排好序的list&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-</description>
-        <pubDate>Mon, 16 Nov 2015 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-16-Guava%E4%B9%8BOrdering.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-16-Guava%E4%B9%8BOrdering.html</guid>
         
         <category>Guava</category>
         

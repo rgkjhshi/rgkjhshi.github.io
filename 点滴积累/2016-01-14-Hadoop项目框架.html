@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="Hadoop项目框架, 点滴积累, Java, 逆水行舟" />
+    <meta name="description" content="Hadoop项目框架, 点滴积累, Java, Hadoop相关项目的介绍" />
+
+    <title>逆水行舟</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://loveshisong.cn/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2016-01-14-Hadoop%E9%A1%B9%E7%9B%AE%E6%A1%86%E6%9E%B6.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="/static/js/jquery.qrcode.min.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="/static/js/uikit.min.js"></script>
+    <!-- quietflow -->
+    <!-- <script type="text/javascript" src="http://loveshisong.cn/static/js/quietflow.min.js"></script> -->
+    <!-- UK sticky -->
+    <script type="text/javascript" src="/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "shisong"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" data-uk-sticky>
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <script type="text/javascript">
+jQuery(function(){
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "http://loveshisong.cn/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2016-01-14-Hadoop%E9%A1%B9%E7%9B%AE%E6%A1%86%E6%9E%B6.html"
+    });
+})
+</script>
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>Hadoop项目框架</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <p>Hadoop相关项目的介绍</p>
+
+<p><img src="/static/images/hadoop.png" alt="Hadoop框架图" title="Hadoop框架图"></p>
+
+<hr>
+
+<h2 id="hadoop">Hadoop</h2>
+
+<p>Hadoop是大数据的基础,它有4个模块 <code class="prettyprint">Hadoop Common</code>, <code class="prettyprint">Hadoop Distributed File System (HDFS)</code>, <code class="prettyprint">Hadoop YARN</code>和 <code class="prettyprint">Hadoop MapReduce</code></p>
+
+<ul>
+<li>HDFS</li>
+</ul>
+
+<p>分布式文件系统, 适合存储大文件, 不适合小文件, 它的原理 <a href="http://www.weixuehao.com/archives/596">这篇文章</a> 讲的比较详细</p>
+
+<ul>
+<li>YARN</li>
+</ul>
+
+<p>YARN(Yet Another Resource Negotiator), 任务调度和集群的资源管理, Hadoop2.0提供的革命性功能, 可参考<a href="http://www.ibm.com/developerworks/cn/data/library/bd-yarn-intro/index.html">这篇文章</a></p>
+
+<ul>
+<li>MapReduce</li>
+</ul>
+
+<p>MapReduce本身是谷歌推出的一个编程模型, 包括Map和Reduce两个过程.<br>
+比如要计算1到10的平方和, 耗时较多的是计算平方, 加和耗时较少, 那么可以把整个过程这么拆分:</p>
+
+<ol>
+<li>Map, 即把计算平方的任务分给10台机器,每台机器分别计算平方, 然后Map的结果就是一个可迭代的集合, 就是这10个数的平方;</li>
+<li>Reduce, 即把Map的结果迭代加和, 得到最终结果</li>
+</ol>
+
+<p><code class="prettyprint">Hadoop MapReduce</code>是<code class="prettyprint">MapReduce</code>的一个实现, 2.0之后推出了基于<code class="prettyprint">YARN</code>的<code class="prettyprint">Hadoop MapReduce</code></p>
+
+<h2 id="hbase">HBase</h2>
+
+<p>非关系型数据库, 面向列存储, 理解成 Key-&gt;Value 的存储更形象, 有行键(<code class="prettyprint">RowKey</code>), 列族(<code class="prettyprint">Colum Family</code>), 限定符(<code class="prettyprint">qualifier</code>)等概念<br>
+列名(Column)是由列族前缀和限定符(qualifier)连接而成, 如列族d有两个列(限定符):title和content, 则列名分别为<code class="prettyprint">d:title</code>、<code class="prettyprint">d:content</code>;<br>
+<code class="prettyprint">(row, column, version)</code>唯一确定一个<code class="prettyprint">cell</code>, 里面放着Value;<br>
+更多内容参考<a href="http://abloz.com/hbase/book.html#conceptual.view">这里</a></p>
+
+<h2 id="hive">Hive</h2>
+
+<p>是一个数据仓库工具, 可以将结构化的数据文件(hive文件,hbase)映射为一张数据库表, 然后通过SQL查询, 背后还是变成了MapReduce程序执行. 这种查询是秒级或分钟级的, 比较慢.</p>
+
+<h2 id="pig">Pig</h2>
+
+<p>和Hive类似, 有自己的查询语法</p>
+
+<h2 id="sqoop">Sqoop</h2>
+
+<p>一个ETL工具,可以进行数据同步, 比如把Oracle、Mysql等关系型数据库中的数据导入到HBase中、HDFS上, 也可把数据从HDFS或HBase导入到Mysql中</p>
+
+<h2 id="flume">Flume</h2>
+
+<p>日志收集工具</p>
+
+<h2 id="zookeeper">ZooKeeper</h2>
+
+<p>分布式协作服务, 好多地方都会用到, 比如写了个dubbo服务部署到5台机器上, 统一交给ZK进行管理, 使用者就不用关心到底调用哪台机器上的服务了</p>
+
+<h2 id="spark">Spark</h2>
+
+<p>这东西很火, 是一个内存计算的框架, 目前一个大的趋势. MapReduce会有很大的IO操作, 而Spark是在内存中计算, 所以很快</p>
+
+<h2 id="mahout">Mahout</h2>
+
+<p>一个数据挖掘和机器学习的库, 搞数据挖掘的用的比较多</p>
+
+<h2 id="ambari">Ambari</h2>
+
+<p>一个基于Web的管理平台,可以对集群进行统一的部署</p>
+
+<hr>
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/Hadoop项目框架" data-title="Hadoop项目框架" data-url="/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2016-01-14-Hadoop%E9%A1%B9%E7%9B%AE%E6%A1%86%E6%9E%B6.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
+
+</body>
+
+</html>
