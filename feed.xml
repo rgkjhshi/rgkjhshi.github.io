@@ -5,9 +5,171 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 29 Jan 2016 22:39:47 +0800</pubDate>
-    <lastBuildDate>Fri, 29 Jan 2016 22:39:47 +0800</lastBuildDate>
+    <pubDate>Fri, 29 Jan 2016 22:50:10 +0800</pubDate>
+    <lastBuildDate>Fri, 29 Jan 2016 22:50:10 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>个人所得税计算方法</title>
+        <description>&lt;p&gt;个人所得税计算方法&lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;现行税表(工资、薪金所得适用)&quot;&gt;现行税表(工资、薪金所得适用)&lt;/h2&gt;
+
+&lt;p&gt;个税的免征额是3500元, 超过3500元的部分分级计税&lt;/p&gt;
+
+&lt;table&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;级数&lt;/th&gt;
+&lt;th&gt;应纳税所得额&lt;/th&gt;
+&lt;th&gt;税率(%)&lt;/th&gt;
+&lt;th&gt;速算扣除数&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;不超过1500元的&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;超过1500元至4500元的部分&lt;/td&gt;
+&lt;td&gt;10&lt;/td&gt;
+&lt;td&gt;105&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;超过4500元至9000元的部分&lt;/td&gt;
+&lt;td&gt;20&lt;/td&gt;
+&lt;td&gt;555&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;超过9000元至35000元的部分&lt;/td&gt;
+&lt;td&gt;25&lt;/td&gt;
+&lt;td&gt;1005&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;5&lt;/td&gt;
+&lt;td&gt;超过35000元至55000元的部分&lt;/td&gt;
+&lt;td&gt;30&lt;/td&gt;
+&lt;td&gt;2755&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;6&lt;/td&gt;
+&lt;td&gt;超过55000元至80000元的部分&lt;/td&gt;
+&lt;td&gt;35&lt;/td&gt;
+&lt;td&gt;5505&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;7&lt;/td&gt;
+&lt;td&gt;超过80000元的部分&lt;/td&gt;
+&lt;td&gt;45&lt;/td&gt;
+&lt;td&gt;13505&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+
+&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;个税税额&lt;/code&gt; ＝ &lt;code class=&quot;prettyprint&quot;&gt;应纳税所得额&lt;/code&gt; X &lt;code class=&quot;prettyprint&quot;&gt;适用税率&lt;/code&gt; － &lt;code class=&quot;prettyprint&quot;&gt;速算扣除数&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;生活中我们计算工资缴多少税的公式:&lt;br&gt;
+&lt;code class=&quot;prettyprint&quot;&gt;个税税额&lt;/code&gt; ＝ (&lt;code class=&quot;prettyprint&quot;&gt;工资全额&lt;/code&gt; － &lt;code class=&quot;prettyprint&quot;&gt;五险一金&lt;/code&gt; － &lt;code class=&quot;prettyprint&quot;&gt;3500&lt;/code&gt;) X &lt;code class=&quot;prettyprint&quot;&gt;适用税率&lt;/code&gt;－ &lt;code class=&quot;prettyprint&quot;&gt;速算扣除数&lt;/code&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;速算扣除数的来历
+若我们应上税的钱是6000块,则&lt;br&gt;
+第一阶梯缴满, 应缴纳: (1500 - 0) X 3% = 45&lt;br&gt;
+第二阶梯缴满, 应缴纳: (4500 - 1500) X 10% = 3000  X 10% = 300&lt;br&gt;
+第三阶梯缴部分, 应缴纳: (6000 - 4500) = 1500 X 20% = 300&lt;br&gt;
+一共缴纳: 45 + 300 + 300 = 645&lt;br&gt;
+为了算的更快, 每一阶梯缴满应该缴的钱是一样的, 我们直接用6000全部适用第三阶梯的税率, 即6000 X 20% = 1200&lt;br&gt;
+这样前两阶梯缴满总共多算了555元, 即如果直接用6000乘以第三阶梯的税率,应该扣除555元&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr&gt;
+
+&lt;h2 id=&quot;年终奖计税方法&quot;&gt;年终奖计税方法&lt;/h2&gt;
+
+&lt;p&gt;如果得了10万年终奖, 难道要适用第七级45%的税率吗? 当然不是了!&lt;/p&gt;
+
+&lt;p&gt;年终奖的计税办法是:  &lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;年终奖/12个月, 确定对应的适用税率和速算扣除数。&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;个人所得税&lt;/code&gt; = &lt;code class=&quot;prettyprint&quot;&gt;年终奖应纳税所得额&lt;/code&gt; X &lt;code class=&quot;prettyprint&quot;&gt;适用税率&lt;/code&gt; - &lt;code class=&quot;prettyprint&quot;&gt;速算扣除数&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;如果发年终奖的当月工资不够3500, 则先用年终奖补足3500, 剩下的为应纳税所得额&lt;/p&gt;
+
+&lt;h2 id=&quot;年终奖雷区&quot;&gt;年终奖雷区&lt;/h2&gt;
+
+&lt;p&gt;工资是按照超额累积计税的,没啥坑, 但是年终奖会存在一些雷区&lt;/p&gt;
+
+&lt;p&gt;假设某人月收入在3500以上;&lt;br&gt;
+若年终奖为18000, 找税率和速扣数: &lt;code class=&quot;prettyprint&quot;&gt;18000/12=1500&lt;/code&gt;, 对应的是&lt;code class=&quot;prettyprint&quot;&gt;3%&lt;/code&gt;, 应交个税&lt;code class=&quot;prettyprint&quot;&gt;18000*3%＝540&lt;/code&gt;,&lt;br&gt;
+税后收入为&lt;code class=&quot;prettyprint&quot;&gt;18000－540＝17460&lt;/code&gt;元;&lt;br&gt;
+若年终奖为18001, 找税率和速扣数: &lt;code class=&quot;prettyprint&quot;&gt;18001/12=1500.08&lt;/code&gt;, 对应的是&lt;code class=&quot;prettyprint&quot;&gt;10%&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;速扣105&lt;/code&gt;, 应交个税&lt;code class=&quot;prettyprint&quot;&gt;18001*10%－105＝1695.1&lt;/code&gt;,&lt;br&gt;
+税后收入为&lt;code class=&quot;prettyprint&quot;&gt;18001－1695.1＝16305.9&lt;/code&gt;元;&lt;br&gt;
+收入多1元，税后收入就少了1154.1元的现象出现了&lt;/p&gt;
+
+&lt;h3 id=&quot;为什么会出现这种坑?&quot;&gt;为什么会出现这种坑?&lt;/h3&gt;
+
+&lt;p&gt;因为年终奖再找税率的时候是平均到每个月找的, 但是找到之后算税是直接用总额算的&lt;br&gt;
+还是上面那个18001,如果不是直接用总额算,而是分摊到每个月算,应该这样算:&lt;br&gt;
+&lt;code class=&quot;prettyprint&quot;&gt;(18001 / 12 * 10%－105) * 12&lt;/code&gt; ＝ &lt;code class=&quot;prettyprint&quot;&gt;18001 * 10% －105 * 12&lt;/code&gt;＝ 540.1&lt;br&gt;
+而国税总局的公式是: &lt;code class=&quot;prettyprint&quot;&gt;18001 * 10% －105&lt;/code&gt; ＝ 1695.1&lt;br&gt;
+这没办法，规定的，只能算下别掉到类似的坑里，合理避税了&lt;br&gt;
+下面就是这些雷区:&lt;/p&gt;
+
+&lt;table&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;下限&lt;/th&gt;
+&lt;th&gt;上限&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;18,000&lt;/td&gt;
+&lt;td&gt;19,283.33&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;54,000&lt;/td&gt;
+&lt;td&gt;60,187.50&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;108,000&lt;/td&gt;
+&lt;td&gt;114,600.00&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;420,000&lt;/td&gt;
+&lt;td&gt;447,500.00&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;660,000&lt;/td&gt;
+&lt;td&gt;706,538.46&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;960,000&lt;/td&gt;
+&lt;td&gt;1,120,000.00&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+
+&lt;p&gt;如果你的收入不幸在这些坑里，就拿这个区间的下限数字作为你的奖金吧&lt;/p&gt;
+
+&lt;p&gt;如上关于计税的知识,来自知乎&lt;a href=&quot;https://www.zhihu.com/question/22524442/answer/33016908&quot;&gt;程天蓝的回答&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr&gt;
+</description>
+        <pubDate>Fri, 29 Jan 2016 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E6%B1%82%E7%9F%A5%E6%84%9F%E6%82%9F/2016-01-29-%E4%B8%AA%E4%BA%BA%E6%89%80%E5%BE%97%E7%A8%8E%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E6%B1%82%E7%9F%A5%E6%84%9F%E6%82%9F/2016-01-29-%E4%B8%AA%E4%BA%BA%E6%89%80%E5%BE%97%E7%A8%8E%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95.html</guid>
+        
+        <category>个人所得税</category>
+        
+        
+        <category>求知感悟</category>
+        
+      </item>
     
       <item>
         <title>Hadoop项目框架</title>
@@ -1478,338 +1640,6 @@ Guava直接提供了不可变集合类型&lt;code class=&quot;prettyprint&quot;&
         <pubDate>Thu, 19 Nov 2015 00:00:00 +0800</pubDate>
         <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-19-Guava%E4%B9%8BJoiner.html</link>
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-19-Guava%E4%B9%8BJoiner.html</guid>
-        
-        <category>Guava</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>Guava新集合类型</title>
-        <description>&lt;p&gt;guava的collection包里新增加了几个集合类型非常实用&lt;br&gt;
-新增类型有:Multiset、Multimap、BiMap、Table、&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;multiset&quot;&gt;Multiset&lt;/h2&gt;
-
-&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;Multiset&lt;/code&gt;继承自&lt;code class=&quot;prettyprint&quot;&gt;Collection&lt;/code&gt;, 类似于&lt;code class=&quot;prettyprint&quot;&gt;Set&lt;/code&gt;, 里面的元素是无顺序的, 但不同的是它可以多次添加相等的元素, 并能记录每个元素的个数.
-Multiset {a, a, b}和{a, b, a}是相等的, &lt;code class=&quot;prettyprint&quot;&gt;Multiset&lt;/code&gt;类似于但绝不等同于&lt;code class=&quot;prettyprint&quot;&gt;Map&amp;lt;E, Integer&amp;gt;&lt;/code&gt;.&lt;br&gt;
-&lt;a href=&quot;/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-12-Collection%E6%95%B4%E7%90%86.html&quot;&gt;Collection中的方法&lt;/a&gt;&lt;code class=&quot;prettyprint&quot;&gt;Multiset&lt;/code&gt;都有, 注意&lt;code class=&quot;prettyprint&quot;&gt;size()&lt;/code&gt;方法, 重复的元素也会算个数(类似的其它方法也会包含重复元素)&lt;br&gt;
-除此之外&lt;code class=&quot;prettyprint&quot;&gt;Multiset&lt;/code&gt;接口中定义的方法有:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;int count(Object element)&lt;/code&gt;: 返回给定元素的计数&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;int add(E element, int occurrences)&lt;/code&gt;: 添加元素并指定元素个数; 返回添加之前该元素的个数, 一般为0&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;int remove(Object element, int occurrences)&lt;/code&gt;: 移除元素, 若该元素个数小于指定个数,则全移除; 返回操作之前该元素的个数&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;int setCount(E element, int count)&lt;/code&gt;: 设定某一个元素的重复次数, 相当于add和remove的组合体; 返回操作之前该元素的个数&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean setCount(E element, int oldCount, int newCount)&lt;/code&gt;: 将符合原有重复个数的元素修改为新的重复次数, 原来个数不为oldCount不会修改&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;视图操作&quot;&gt;视图操作&lt;/h3&gt;
-
-&lt;p&gt;对视图的所有操作都会反映到原来的Multiset上&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Set&amp;lt;E&amp;gt; elementSet()&lt;/code&gt;: 返回仅包含不同元素的set, 对set进行移除, 会反映到multiset上(若multi中有&lt;code class=&quot;prettyprint&quot;&gt;keyX2&lt;/code&gt;, 则会全被移除)&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Set&amp;lt;Entry&amp;lt;E&amp;gt;&amp;gt; entrySet()&lt;/code&gt;: 返回Set&lt;Multiset.Entry&gt;, 包含的Entry支持使用&lt;code class=&quot;prettyprint&quot;&gt;getElement()&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;getCount()&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;multiset的各种实现&quot;&gt;Multiset的各种实现&lt;/h3&gt;
-
-&lt;p&gt;Multiset的实现类, 可以通过构造方法new出来, 也可以调用&lt;code class=&quot;prettyprint&quot;&gt;XXXMultiset.create()&lt;/code&gt;静态函数来创建&lt;br&gt;
-它们都直接继承了Multiset接口:&lt;/p&gt;
-
-&lt;table&gt;&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Guava实现&lt;/th&gt;
-&lt;th&gt;对比JDK的Map&lt;/th&gt;
-&lt;th style=&quot;text-align: center&quot;&gt;是否支持null&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;HashMultiset&lt;/td&gt;
-&lt;td&gt;HashMap&lt;/td&gt;
-&lt;td style=&quot;text-align: center&quot;&gt;Y&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;LinkedHashSet&lt;/td&gt;
-&lt;td&gt;LinkedHashMap&lt;/td&gt;
-&lt;td style=&quot;text-align: center&quot;&gt;Y&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;TreeMultiset&lt;/td&gt;
-&lt;td&gt;TreeMap&lt;/td&gt;
-&lt;td style=&quot;text-align: center&quot;&gt;Y&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;EnumMultiset&lt;/td&gt;
-&lt;td&gt;EnumMap&lt;/td&gt;
-&lt;td style=&quot;text-align: center&quot;&gt;N&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;ImmutableMultiset&lt;/td&gt;
-&lt;td&gt;ImmutableMap&lt;/td&gt;
-&lt;td style=&quot;text-align: center&quot;&gt;N&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;ConcurrentHashMultiset&lt;/td&gt;
-&lt;td&gt;ConcurrentHashMap&lt;/td&gt;
-&lt;td style=&quot;text-align: center&quot;&gt;N&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;ForwardingMultiset&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align: center&quot;&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;multimap&quot;&gt;Multimap&lt;/h2&gt;
-
-&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;Multimap&lt;/code&gt;把一个键映射到多个值, 类似于但不等同于&lt;code class=&quot;prettyprint&quot;&gt;Map&amp;lt;K, Collection&amp;lt;V&amp;gt;&amp;gt;&lt;/code&gt;.&lt;br&gt;
-&lt;code class=&quot;prettyprint&quot;&gt;Multimap&lt;/code&gt;跟JDK中的&lt;code class=&quot;prettyprint&quot;&gt;Map&lt;/code&gt;并没有什么关系, 但&lt;a href=&quot;/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-12-Map%E6%95%B4%E7%90%86.html&quot;&gt;Map中的方法&lt;/a&gt;在&lt;code class=&quot;prettyprint&quot;&gt;Multimap&lt;/code&gt;也有对应的  &lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;prettyprint&quot;&gt;Multimap&lt;/code&gt;接口定义的普通方法有:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;int size()&lt;/code&gt;: 返回键值对的个数 &lt;code class=&quot;prettyprint&quot;&gt;a-&amp;gt;1, a-&amp;gt;2&lt;/code&gt;算两个&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean isEmpty()&lt;/code&gt;: 是否为空&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean containsKey(Object key)&lt;/code&gt;: 是否包含key&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean containsValue(Object value)&lt;/code&gt;: 是否包含value&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean containsEntry(Object key, Object value)&lt;/code&gt;: 是否包含key-value对&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean put(K key, V value)&lt;/code&gt;: 如果map元素增加了则返回true, 对于允许存在重复键值对的实现类总是返回&lt;code class=&quot;prettyprint&quot;&gt;true&lt;/code&gt;,
-不允许重复键值对存在的实现类才有可能返回&lt;code class=&quot;prettyprint&quot;&gt;false&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean putAll(K key, Iterable values)&lt;/code&gt;: map改变则返回true&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean putAll(Multimap multimap)&lt;/code&gt;: map改变则返回true&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean remove(Object key, Object value)&lt;/code&gt;: 移除键值对, map变了返回true&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Collection&amp;lt;V&amp;gt; removeAll(Object key)&lt;/code&gt;: 移除与key相关的所有values(key也没了), 并返回values组成的集合(可能为空)&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Collection&amp;lt;V&amp;gt; replaceValues(K key, Iterable values)&lt;/code&gt;: 把与key相关的value全替换掉, 如果values为空,
-则等同于&lt;code class=&quot;prettyprint&quot;&gt;removeAll(key)&lt;/code&gt;, 如果原来不包含key,则相当于&lt;code class=&quot;prettyprint&quot;&gt;putAll(key, values)&lt;/code&gt;; 返回被替换掉的value集合(可能为空)&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;void clear()&lt;/code&gt;: 清空map&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Collection&amp;lt;V&amp;gt; get(K key)&lt;/code&gt;: 返回key对应的value, 没有key则返回空集合(不是&lt;code class=&quot;prettyprint&quot;&gt;null&lt;/code&gt;)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;视图操作&quot;&gt;视图操作&lt;/h3&gt;
-
-&lt;p&gt;对这些返回结果的所有操作都会反映到原来的Multimap上&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Set&amp;lt;K&amp;gt; keySet()&lt;/code&gt;: 返回不重复的key集合&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Multiset&amp;lt;K&amp;gt; keys()&lt;/code&gt;: 返回可重复的key集合&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Collection&amp;lt;V&amp;gt; values()&lt;/code&gt;: 返回value的集合, 包含重复值&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Collection&amp;lt;Map.Entry&amp;lt;K, V&amp;gt;&amp;gt; entries()&lt;/code&gt;: 返回所有键值对,包括重复键&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Map&amp;lt;K, Collection&amp;lt;V&amp;gt;&amp;gt; asMap()&lt;/code&gt;: 返回&lt;code class=&quot;prettyprint&quot;&gt;Map&amp;lt;K,Collection&amp;lt;V&amp;gt;&amp;gt;&lt;/code&gt;形式的视图, 返回的Map支持remove操作, 并且会反映到Multimap,
-但它不支持put或putAll操作; ListMultimap的&lt;code class=&quot;prettyprint&quot;&gt;asMap.get(key)&lt;/code&gt;不能直接返回List,
-可以使用&lt;code class=&quot;prettyprint&quot;&gt;Multimaps.asMap.get(key)&lt;/code&gt;来返回具体的集合类型&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;multimap的各种实现&quot;&gt;Multimap的各种实现&lt;/h3&gt;
-
-&lt;p&gt;Multimap有许多实现类:&lt;/p&gt;
-
-&lt;table&gt;&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;实现类&lt;/th&gt;
-&lt;th&gt;键行为类似&lt;/th&gt;
-&lt;th&gt;值行为类似&lt;/th&gt;
-&lt;th style=&quot;text-align: center&quot;&gt;是否支持null&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;LinkedListMultimap&lt;/td&gt;
-&lt;td&gt;LinkedHashMap&lt;/td&gt;
-&lt;td&gt;LinkedList&lt;/td&gt;
-&lt;td style=&quot;text-align: center&quot;&gt;Y&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;ArrayListMultimap&lt;/td&gt;
-&lt;td&gt;HashMap&lt;/td&gt;
-&lt;td&gt;ArrayList&lt;/td&gt;
-&lt;td style=&quot;text-align: center&quot;&gt;Y&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;ImmutableListMultimap&lt;/td&gt;
-&lt;td&gt;ImmutableMap&lt;/td&gt;
-&lt;td&gt;ImmutableList&lt;/td&gt;
-&lt;td style=&quot;text-align: center&quot;&gt;N&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;HashMultimap&lt;/td&gt;
-&lt;td&gt;HashMap&lt;/td&gt;
-&lt;td&gt;HashSet&lt;/td&gt;
-&lt;td style=&quot;text-align: center&quot;&gt;Y&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;LinkedHashMultimap&lt;/td&gt;
-&lt;td&gt;LinkedHashMap&lt;/td&gt;
-&lt;td&gt;LinkedHashSet&lt;/td&gt;
-&lt;td style=&quot;text-align: center&quot;&gt;Y&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;ImmutableSetMultimap&lt;/td&gt;
-&lt;td&gt;ImmutableMap&lt;/td&gt;
-&lt;td&gt;ImmutableSet&lt;/td&gt;
-&lt;td style=&quot;text-align: center&quot;&gt;N&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;TreeMultimap&lt;/td&gt;
-&lt;td&gt;TreeMap&lt;/td&gt;
-&lt;td&gt;TreeSet&lt;/td&gt;
-&lt;td style=&quot;text-align: center&quot;&gt;Y&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-
-&lt;p&gt;其实现类的继承关系图如下:
-&lt;img src=&quot;/static/images/multimap.png&quot; alt=&quot;Multimap继承关系图&quot; title=&quot;Multimap继承关系图&quot;&gt;&lt;/p&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;bimap&quot;&gt;BiMap&lt;/h2&gt;
-
-&lt;p&gt;BiMap是个特殊的Map(继承自JDK的Map), 它可以很方便地实现key-value的双向映射, 所以它要求value也必须是唯一的&lt;br&gt;
-BiMap的put方法与Map不太一样, put键值对KV时:&lt;br&gt;
-若先前KV都不存在,直接put; KV都已存在,则相当于没改变; K在V不在, 则&lt;code class=&quot;prettyprint&quot;&gt;KV&lt;/code&gt;替换&lt;code class=&quot;prettyprint&quot;&gt;KV&amp;#39;&lt;/code&gt;;(至此与Map都一样)&lt;br&gt;
-K不在V在, Map可以直接put进去, 但BiMap则不可以&lt;br&gt;
-与Map意义不一样的方法:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;V put(K key, V value)&lt;/code&gt;: K不在V在时, 抛出&lt;code class=&quot;prettyprint&quot;&gt;IllegalArgumentException&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;void putAll(Map map)&lt;/code&gt;: 同样可能抛异常, 但有可能只加了部分元素进去, 这取决于迭代顺序, 在发生异常之前迭代到的元素可能已经添加进去了&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Set&amp;lt;V&amp;gt; values()&lt;/code&gt;: 视图操作, 由于BiMap里的value是唯一的, 因此返回的是Set而不是Collection&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;boolean containsValue(Object value)&lt;/code&gt;: 是否包含value&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;BiMap比Map新增的方法:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;V forcePut(K key, V value)&lt;/code&gt;: K不在V在时, 则&lt;code class=&quot;prettyprint&quot;&gt;KV&lt;/code&gt;替换&lt;code class=&quot;prettyprint&quot;&gt;K&amp;#39;V&lt;/code&gt;; 返回先前与key关联的value, 若先前没有相同的key则返回null&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;BiMap&amp;lt;V, K&amp;gt; inverse()&lt;/code&gt;: 视图操作, 返回value到key的映射Map, 两个map里的数据是公用的, 即删除&lt;code class=&quot;prettyprint&quot;&gt;V1-&amp;gt;K1&lt;/code&gt;时, &lt;code class=&quot;prettyprint&quot;&gt;K1-&amp;gt;V1&lt;/code&gt;也没了&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h3 id=&quot;bimap接口的实现类&quot;&gt;BiMap接口的实现类&lt;/h3&gt;
-
-&lt;table&gt;&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;实现类&lt;/th&gt;
-&lt;th&gt;key-value&lt;/th&gt;
-&lt;th&gt;value-&amp;gt;key&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;HashBiMap&lt;/td&gt;
-&lt;td&gt;HashMap&lt;/td&gt;
-&lt;td&gt;HashMap&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;EnumBiMap&lt;/td&gt;
-&lt;td&gt;EnumMap&lt;/td&gt;
-&lt;td&gt;EnumMap&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;EnumHashBiMap&lt;/td&gt;
-&lt;td&gt;EnumMap&lt;/td&gt;
-&lt;td&gt;HashMap&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;ImmutableBiMap&lt;/td&gt;
-&lt;td&gt;ImmutableMap&lt;/td&gt;
-&lt;td&gt;ImmutableMap&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;table&quot;&gt;Table&lt;/h2&gt;
-
-&lt;p&gt;Table支持两个键进行, 就像名字一样, 可以通过行和列确定一个元素&lt;br&gt;
-Table是这样定义的&lt;code class=&quot;prettyprint&quot;&gt;Table&amp;lt;R, C, V&amp;gt;&lt;/code&gt;, 它提供了多种视图:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Map&amp;lt;R, Map&amp;lt;C, V&amp;gt;&amp;gt; rowMap()&lt;/code&gt;: 用&lt;code class=&quot;prettyprint&quot;&gt;Map&amp;lt;R, Map&amp;lt;C, V&amp;gt;&amp;gt;&lt;/code&gt;表现&lt;code class=&quot;prettyprint&quot;&gt;Table&amp;lt;R, C, V&amp;gt;&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Set&amp;lt;R&amp;gt; rowKeySet()&lt;/code&gt;: 返回行的集合&lt;code class=&quot;prettyprint&quot;&gt;Set&amp;lt;R&amp;gt;&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Map&amp;lt;C, V&amp;gt; row(R rowKey)&lt;/code&gt;: 用&lt;code class=&quot;prettyprint&quot;&gt;Map&amp;lt;C, V&amp;gt;&lt;/code&gt;返回给定行的所有列，对这个map进行的写操作也将写入Table中&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Map&amp;lt;C, Map&amp;lt;R, V&amp;gt;&amp;gt; columnMap()&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Set&amp;lt;C&amp;gt; columnKeySet()&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Map&amp;lt;R, V&amp;gt; column(C columnKey)&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Set&amp;lt;Cell&amp;lt;R, C, V&amp;gt;&amp;gt; cellSet()&lt;/code&gt;: 用元素类型为&lt;code class=&quot;prettyprint&quot;&gt;Table.Cell&amp;lt;R, C, V&amp;gt;&lt;/code&gt;的Set表现&lt;code class=&quot;prettyprint&quot;&gt;Table&amp;lt;R, C, V&amp;gt;&lt;/code&gt;.
-&lt;code class=&quot;prettyprint&quot;&gt;Cell&lt;/code&gt;类似于&lt;code class=&quot;prettyprint&quot;&gt;Map.Entry&lt;/code&gt;,但它是用行和列两个键区分的&lt;/li&gt;
-&lt;li&gt;&lt;code class=&quot;prettyprint&quot;&gt;Collection&amp;lt;V&amp;gt; values()&lt;/code&gt;: 返回V的集合&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;table接口的实现类&quot;&gt;Table接口的实现类&lt;/h3&gt;
-
-&lt;table&gt;&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;实现类&lt;/th&gt;
-&lt;th&gt;本质&lt;/th&gt;
-&lt;th&gt;说明&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;HashBasedTable&lt;/td&gt;
-&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;HashMap&amp;lt;R, HashMap&amp;lt;C, V&amp;gt;&amp;gt;&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;TreeBasedTable&lt;/td&gt;
-&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;TreeMap&amp;lt;R, TreeMap&amp;lt;C,V&amp;gt;&amp;gt;&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;ArrayTable&lt;/td&gt;
-&lt;td&gt;二维数组&lt;/td&gt;
-&lt;td&gt;要求在构造时就指定行和列的大小&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;ImmutableTable&lt;/td&gt;
-&lt;td&gt;&lt;code class=&quot;prettyprint&quot;&gt;ImmutableMap&amp;lt;R, ImmutableMap&amp;lt;C, V&amp;gt;&amp;gt;&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;这是个抽象类,对稀疏或密集的数据集都有优化&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;&lt;/table&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;rangeset&quot;&gt;RangeSet&lt;/h2&gt;
-
-&lt;p&gt;RangeSet描述了一组不相连的、非空的区间。当把一个区间添加到可变的RangeSet时，所有相连的区间会被合并，空区间会被忽略  &lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;RangeSet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rangeSet&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TreeRangeSet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;rangeSet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Range&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;closed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;       &lt;span class=&quot;c1&quot;&gt;// {[1,10]}&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;rangeSet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Range&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;closedOpen&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;15&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 不相连区间:{[1,10], [11,15)}&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;rangeSet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Range&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;closedOpen&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;15&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 相连区间; {[1,10], [11,20)}&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;rangeSet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Range&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;openClosed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;// 空区间; {[1,10], [11,20)}&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;rangeSet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;remove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Range&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;      &lt;span class=&quot;c1&quot;&gt;// 分割[1, 10]; {[1,5], [10,10], [11,20)}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;要合并&lt;code class=&quot;prettyprint&quot;&gt;Range.closed(1, 10)&lt;/code&gt;和&lt;code class=&quot;prettyprint&quot;&gt;Range.closedOpen(11,15)&lt;/code&gt;这样的区间,
-你需要首先用&lt;code class=&quot;prettyprint&quot;&gt;Range.canonical(DiscreteDomain)&lt;/code&gt;对区间进行预处理，例如&lt;code class=&quot;prettyprint&quot;&gt;DiscreteDomain.integers()&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;RangeSet不支持GWT，也不支持JDK5和更早版本；因为，RangeSet需要充分利用JDK6中NavigableMap的特性&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr&gt;
-
-&lt;h2 id=&quot;rangemap&quot;&gt;RangeMap&lt;/h2&gt;
-
-&lt;p&gt;RangeMap描述了不相交的、非空的区间到特定值的映射。
-和RangeSet不同，RangeMap不会合并相邻的映射，即便相邻的区间映射到相同的值。例如：&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;RangeMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rangeMap&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TreeRangeMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;rangeMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Range&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;closed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;foo&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// {[1,10] =&amp;gt; &amp;quot;foo&amp;quot;}&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;rangeMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Range&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;bar&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;     &lt;span class=&quot;c1&quot;&gt;// {[1,3] =&amp;gt; &amp;quot;foo&amp;quot;, (3,6) =&amp;gt; &amp;quot;bar&amp;quot;, [6,10] =&amp;gt; &amp;quot;foo&amp;quot;}&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;rangeMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Range&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;foo&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;// {[1,3] =&amp;gt; &amp;quot;foo&amp;quot;, (3,6) =&amp;gt; &amp;quot;bar&amp;quot;, [6,10] =&amp;gt; &amp;quot;foo&amp;quot;, (10,20) =&amp;gt; &amp;quot;foo&amp;quot;}&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;rangeMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;remove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Range&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;closed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;      &lt;span class=&quot;c1&quot;&gt;// {[1,3] =&amp;gt; &amp;quot;foo&amp;quot;, (3,5) =&amp;gt; &amp;quot;bar&amp;quot;, (11,20) =&amp;gt; &amp;quot;foo&amp;quot;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;hr&gt;
-</description>
-        <pubDate>Wed, 18 Nov 2015 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-18-Guava%E6%96%B0%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-18-Guava%E6%96%B0%E9%9B%86%E5%90%88%E7%B1%BB%E5%9E%8B.html</guid>
         
         <category>Guava</category>
         
