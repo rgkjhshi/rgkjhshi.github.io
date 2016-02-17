@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="keywords" content="java中的反射, 编程技术, Java, 逆水行舟" />
-    <meta name="description" content="java中的反射, 编程技术, Java, java反射总结" />
+    <meta name="description" content="java中的反射, 编程技术, Java, java反射涉及到的内容有点多，但不难，主要是一些之前没见过的类型，本文先简单介绍一部分" />
 
     <title>逆水行舟</title>
 
@@ -99,7 +99,7 @@ jQuery(function(){
     <div class="uk-grid">
         <div  class="uk-width-4-4">
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
-            <p>java反射总结</p>
+            <p>java反射涉及到的内容有点多，但不难，主要是一些之前没见过的类型，本文先简单介绍一部分</p>
 
 <hr>
 
@@ -108,6 +108,8 @@ jQuery(function(){
 <p>在<code class="prettyprint">java.lang.reflect</code>包中定义了一些接口和类,简单记录下他们的作用</p>
 
 <h3 id="相关类说明">相关类说明</h3>
+
+<p>这些类都比较简单，对照API一看就懂，主要是平时用到的比较少，这里先简单说明下，不在此展开</p>
 
 <table><thead>
 <tr>
@@ -157,6 +159,8 @@ jQuery(function(){
 
 <h3 id="相关接口说明">相关接口说明</h3>
 
+<p>这里先简单介绍下，后文还会详细说明这些接口</p>
+
 <table><thead>
 <tr>
 <th>接口</th>
@@ -165,15 +169,15 @@ jQuery(function(){
 </thead><tbody>
 <tr>
 <td>AnnotatedElement</td>
-<td>被注解标注的元素都实现的接口<br> 实现类有<code class="prettyprint">AccessibleObject</code>及其子类,<code class="prettyprint">Class</code><code class="prettyprint">Package</code><br> 有<code class="prettyprint">是否有注解</code>,<code class="prettyprint">获取所有注解</code>等方法</td>
+<td>被注解标注的元素都实现的接口<br> 实现类有<code class="prettyprint">AccessibleObject</code>及其子类,<code class="prettyprint">Class</code><code class="prettyprint">Package</code></td>
 </tr>
 <tr>
 <td>Member</td>
-<td>成员接口, 反映字段、方法、构造函数的信息<br> 实现类有<code class="prettyprint">AccessibleObject</code>的子类</td>
+<td>成员接口, 反映字段、方法、构造函数的信息<br></td>
 </tr>
 <tr>
 <td>Type</td>
-<td>所有类型的父接口, 如原始类型、参数化类型、数组类型、类型变量和基本(原生)类型</td>
+<td>所有类型的父接口, 之后的文章会详细介绍</td>
 </tr>
 <tr>
 <td>GenericDeclaration</td>
@@ -181,7 +185,7 @@ jQuery(function(){
 </tr>
 <tr>
 <td><code class="prettyprint">TypeVariable&lt;D extends GenericDeclaration&gt;</code></td>
-<td>各种类型变量的父接口</td>
+<td>类型变量类型</td>
 </tr>
 <tr>
 <td>ParameterizedType</td>
@@ -197,7 +201,7 @@ jQuery(function(){
 </tr>
 <tr>
 <td>InvocationHandler</td>
-<td>代理实例的调用处理程序需要实现该接口<br> <code class="prettyprint">Proxy</code>是代理实例,它的处理程序需要实现该接口的<code class="prettyprint">invoke</code>方法</td>
+<td>代理处理器接口</td>
 </tr>
 </tbody></table>
 
@@ -207,13 +211,14 @@ jQuery(function(){
 
 <p>所有的类都继承<code class="prettyprint">Object</code>是毫无疑问的, <code class="prettyprint">Class</code>也是类，也继承<code class="prettyprint">Object</code><br>
 <code class="prettyprint">Class</code>类特殊的地方是它在运行时用来描述类的各种元信息,对象是类的实例,而类在运行时的描述就是<code class="prettyprint">Class</code><br>
-<code class="prettyprint">Type</code>是个接口,用来表示某个对象是什么类型的,<code class="prettyprint">Class</code>类实现了好几个接口,其中一个就是<code class="prettyprint">Type</code></p>
+<code class="prettyprint">Type</code>是个接口,用来表示某个对象是什么类型的,<code class="prettyprint">Class</code>类实现了好几个接口,其中一个就是<code class="prettyprint">Type</code><br>
+后面的文章内容更能体现出区别来</p>
 
 <hr>
 
 <h2 id="反射的具体功能">反射的具体功能</h2>
 
-<p>反射作用挺多, 比如反编译, 通过反射机制访问对象的属性、方法、构造方法等</p>
+<p>反射作用挺多, 比如反编译, 通过反射机制访问对象的属性、方法、构造方法等, 先简单给出一些示例</p>
 
 <h3 id="获取类">获取类</h3>
 
@@ -231,49 +236,103 @@ jQuery(function(){
 <li>通过<code class="prettyprint">Class</code>实例的<code class="prettyprint">newInstance()</code>, 如:<code class="prettyprint">String str = (String)clazz.newInstance();</code></li>
 </ol>
 
-<h3 id="获取构造方法">获取构造方法</h3>
+<h2 id="反射相关接口的详细说明">反射相关接口的详细说明</h2>
+
+<p>这些接口的关系可参考上面那幅图, 这里只详细说明<code class="prettyprint">AnnotatedElement、Member、InvocationHandler、GenericDeclaration</code>这几个接口<br>
+<code class="prettyprint">Type</code>接口及其字类在<a href="%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-02-16-Type%E8%AF%A6%E8%A7%A3.html">Type详解</a>中详细说明</p>
+
+<h3 id="annotatedelement">AnnotatedElement</h3>
+
+<p>这个接口最简单, 实现了该接口的类都能添加注解, 其实现类有: <code class="prettyprint">AccessibleObject, Class, Constructor, Field, Method, Package</code><br>
+它有如下方法:</p>
 
 <ol>
-<li><code class="prettyprint">Constructor&lt;?&gt;[] getConstructors()</code>: 获取本类中所有public构造器</li>
-<li><code class="prettyprint">Constructor&lt;T&gt; getConstructor(Class&lt;?&gt;... parameterTypes)</code>: 获取本类中特定参数的public构造器</li>
-<li><code class="prettyprint">Constructor&lt;?&gt;[] getDeclaredConstructors()</code>: 获取本类中所有构造器</li>
-<li><code class="prettyprint">Constructor&lt;T&gt; getDeclaredConstructor(Class&lt;?&gt;... parameterTypes)</code>: 获取本类中指定参数的构造器</li>
+<li><code class="prettyprint">boolean isAnnotationPresent(Class&lt;? extends Annotation&gt; annotationClass)</code>: 该类上是否存在<code class="prettyprint">annotationClass</code>这个注解</li>
+<li><code class="prettyprint">Annotation[] getAnnotations()</code>: 获取这个元素上的所有注解(包括父类上被<code class="prettyprint">@Inherited</code>标记的注解)</li>
+<li><code class="prettyprint">&lt;A extends Annotation&gt; A getAnnotation(Class&lt;A&gt; annotationClass)</code>: 获取这个元素上指定类型的注解, 没有返回null</li>
+<li><code class="prettyprint">Annotation[] getDeclaredAnnotations()</code>: 获取直接标注在这个元素上的注解</li>
 </ol>
 
-<h3 id="获取类方法">获取类方法</h3>
+<h3 id="member">Member</h3>
+
+<p>表示组成类的成员, 其实现类有: <code class="prettyprint">Constructor, Field, Method</code>
+它有如下方法:</p>
 
 <ol>
-<li><code class="prettyprint">Method[] getMethods()</code>: 获取本类或父类中所有public方法(包括构造器方法)</li>
-<li><code class="prettyprint">Method getMethod(String name, Class&lt;?&gt;... parameterTypes)</code>: 获取本类或父类中特定名字和参数的public方法</li>
-<li><code class="prettyprint">Method[] getDeclaredMethods()</code>: 获取本类中声明的所有方法(包括非public但不包括继承来的)</li>
-<li><code class="prettyprint">Method getDeclaredMethod(String name, Class&lt;?&gt;... parameterTypes)</code>: 获取本类中声明的特定名字和参数的方法(最常用)</li>
+<li><code class="prettyprint">boolean isSynthetic()</code>: 是否是复合类</li>
+<li><code class="prettyprint">int getModifiers()</code>: 以数字形式返回修饰符</li>
+<li><code class="prettyprint">String getName()</code>: 返回成员的简单名, 如: 属性名字, 方法名字(只有名字,不包括参数), 构造器名字</li>
+<li><code class="prettyprint">Class&lt;?&gt; getDeclaringClass()</code>: 返回声明该成员的声明类</li>
 </ol>
-
-<h3 id="获取类属性">获取类属性</h3>
-
-<ol>
-<li><code class="prettyprint">Field[] getFields()</code>: 获取本类或父类中所有public属性</li>
-<li><code class="prettyprint">Field getField(String name)</code>: 获取本类或父类中特定名字的public属性</li>
-<li><code class="prettyprint">Field[] getDeclaredFields()</code>: 获取本类中声明的所有属性</li>
-<li><code class="prettyprint">Field getDeclaredField(String name)</code>: 获取本类中声明的特定名字的属性</li>
-</ol>
-
-<hr>
-
-<h2 id="通过反射实现方法动态调用的例子">通过反射实现方法动态调用的例子</h2>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="n">name</span><span class="o">;</span> <span class="o">}</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span> <span class="o">}</span>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// getName方法的测试</span>
+<span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">test</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestMember</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>              <span class="c1">// 属性名为: name</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">hello</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{}</span> <span class="c1">// 方法名(不包括参数)为: hello</span>
+    <span class="kd">public</span> <span class="nf">TestMember</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{}</span> <span class="c1">// 构造器名为: com.test.TestMember</span>
     <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-        <span class="n">Object</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">Test</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">newInstance</span><span class="o">();</span>
-        <span class="n">Test</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getDeclaredMethod</span><span class="o">(</span><span class="s">&quot;setName&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">invoke</span><span class="o">(</span><span class="n">obj</span><span class="o">,</span> <span class="s">&quot;Tom&quot;</span><span class="o">);</span>
-        <span class="n">Method</span> <span class="n">getNameMethod</span> <span class="o">=</span> <span class="n">Test</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getDeclaredMethod</span><span class="o">(</span><span class="s">&quot;getName&quot;</span><span class="o">);</span>
-        <span class="n">String</span> <span class="n">name</span> <span class="o">=</span> <span class="o">(</span><span class="n">String</span><span class="o">)</span> <span class="n">getNameMethod</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">TestMember</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">&quot;name&quot;</span><span class="o">).</span><span class="na">getName</span><span class="o">());</span>                    <span class="c1">// name</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">TestMember</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getDeclaredMethod</span><span class="o">(</span><span class="s">&quot;hello&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">getName</span><span class="o">());</span>    <span class="c1">// hello</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">TestMember</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getDeclaredConstructor</span><span class="o">(</span><span class="n">String</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">getName</span><span class="o">());</span>        <span class="c1">//com.test.TestMember</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">TestMember</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">&quot;name&quot;</span><span class="o">).</span><span class="na">getDeclaringClass</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span><span class="c1">//com.test.TestMember</span>
     <span class="o">}</span>
 <span class="o">}</span>
 </code></pre></div>
+<h3 id="invocationhandler">InvocationHandler</h3>
+
+<p>代理处理器类的实例需要实现的接口, 只有一个方法:</p>
+
+<ol>
+<li><code class="prettyprint">Object invoke(Object proxy, Method method, Object[] args)</code>: 代理对象执行方法时真正调用的函数</li>
+</ol>
+
+<p>其中:</p>
+
+<ul>
+<li><code class="prettyprint">Object proxy</code>: 表示代理对象(比如通过<code class="prettyprint">Proxy.newProxyInstance()</code>得到的对象), 不是实现了该接口的代理处理器对象</li>
+<li><code class="prettyprint">Method method</code>: 被代理对象的方法, 就是接口原来实现类里的方法, 代理对象执行的时候会调用被代理对象的方法(取决于代码怎么写)</li>
+<li><code class="prettyprint">Object[] args</code>: 上面那个方法需要的参数</li>
+</ul>
+
+<p>通常代理处理器类的实例<code class="prettyprint">handler</code>会作为参数传到java代理类<code class="prettyprint">Proxy</code>的<code class="prettyprint">newProxyInstance</code>方法中来产生一个代理对象(与被代理对象实现了同一接口)<br>
+调用代理对象的方法时, 真正调用的就是上面的invoke函数.<br>
+还是来个例子吧(<code class="prettyprint">HelloImpl</code>实现了<code class="prettyprint">Hello</code>接口, 并实现了<code class="prettyprint">sayHello()</code>方法)  </p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// 代理处理器类</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AOPHandler</span> <span class="kd">implements</span> <span class="n">InvocationHandler</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">Object</span> <span class="n">target</span><span class="o">;</span>  <span class="c1">// 这个用来表示被代理的对象</span>
+    <span class="kd">public</span> <span class="nf">AOPHandler</span><span class="o">(</span><span class="n">Object</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">target</span> <span class="o">=</span> <span class="n">target</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="n">Object</span> <span class="nf">invoke</span><span class="o">(</span><span class="n">Object</span> <span class="n">proxy</span><span class="o">,</span> <span class="n">Method</span> <span class="n">method</span><span class="o">,</span> <span class="n">Object</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Throwable</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;proxy:&quot;</span> <span class="o">+</span> <span class="n">proxy</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>   <span class="c1">// proxy:com.sun.proxy.$Proxy0</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;method:&quot;</span> <span class="o">+</span> <span class="n">method</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span> <span class="c1">// proxy:java.lang.reflect.Method</span>
+        <span class="k">return</span> <span class="n">method</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="n">target</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>  <span class="c1">// 调用被代理对象的的方法, 即 target 的 method</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="c1">// 测试类</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProxyTest</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">Object</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">&quot;com.test.HelloImpl&quot;</span><span class="o">).</span><span class="na">newInstance</span><span class="o">();</span>
+        <span class="n">InvocationHandler</span> <span class="n">handler</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">AOPHandler</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>  <span class="c1">// 创建代理处理器对象的时候把被代理的对象传进去</span>
+        <span class="c1">// 这里生成代理类对象, 参数依次为: 被代理对象的ClassLoader, 被代理对象实现的所有接口, 代理处理器</span>
+        <span class="n">Hello</span> <span class="n">proxy</span> <span class="o">=</span> <span class="o">(</span><span class="n">Hello</span><span class="o">)</span> <span class="n">Proxy</span><span class="o">.</span><span class="na">newProxyInstance</span><span class="o">(</span><span class="n">obj</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getClassLoader</span><span class="o">(),</span> <span class="n">obj</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getInterfaces</span><span class="o">(),</span> <span class="n">handler</span><span class="o">);</span>
+        <span class="n">proxy</span><span class="o">.</span><span class="na">sayHello</span><span class="o">();</span>  <span class="c1">// 这就调用了那个invoke方法</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<h3 id="genericdeclaration">GenericDeclaration</h3>
+
+<p>可以声明类型变量的实体的公共接口, 就是那些能够声明范型类型<T>的地方, 注意是声明而不是使用. 其实现类有: <code class="prettyprint">Class, Constructor, Method</code><br>
+就一个方法:</p>
+
+<ol>
+<li><code class="prettyprint">TypeVariable&lt;?&gt;[] getTypeParameters()</code>: 按照声明顺序返回声明的类型变量</li>
+</ol>
+
+<p>对它可以这么理解:<br>
+在定义类或方法时, 我们一般可以声明范型, 如<code class="prettyprint">&lt;T&gt; T getData()</code>, 因此可以声明这些<code class="prettyprint">&lt;T&gt;、&lt;F&gt;</code>的实体, 都实现了该接口;<br>
+而那些声明出来的<code class="prettyprint">T、F</code>叫类型变量(<code class="prettyprint">TypeVariable</code>), 后面会说到.</p>
+
 <hr>
 
         </div>
