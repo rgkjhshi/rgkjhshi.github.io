@@ -12,7 +12,7 @@ Java中Collection的继承关系图, 虚线表示接口, 实线表示类
 
 *****
 
-* any list
+* TOC
 {:toc}
 
 *****

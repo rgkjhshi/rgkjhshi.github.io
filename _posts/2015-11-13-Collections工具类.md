@@ -13,7 +13,7 @@ JDK的Collections类中提供了大量对Collection和Map的操作,网上资料�
 
 *****
 
-* any list
+* TOC
 {:toc}
 
 *****

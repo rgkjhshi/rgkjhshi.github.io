@@ -14,7 +14,7 @@ guava的collection包里有个`Ordering`抽象类实现了`java.util.Comparator`
 
 *****
 
-* any list
+* TOC
 {:toc}
 
 *****

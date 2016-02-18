@@ -14,7 +14,7 @@ Intellij Idea 的常用快捷键
 
 *****
 
-* any list
+* TOC
 {:toc}
 
 *****
