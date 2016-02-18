@@ -103,32 +103,30 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="section">目录</h2>
-
-<ul>
-  <li><a href="#pessimistic">悲观锁</a></li>
-  <li><a href="#optimistic">乐观锁</a></li>
-  <li><a href="#use">for update用法</a></li>
-  <li><a href="#test">测试记录</a></li>
+<ul id="markdown-toc">
+  <li><a href="#section">悲观锁</a></li>
+  <li><a href="#section-1">乐观锁</a></li>
+  <li><a href="#for-update">for update用法</a></li>
+  <li><a href="#section-2">测试记录</a></li>
 </ul>
 
 <hr />
 
-<h2 id="pessimistic"> 悲观锁 </h2>
+<h2 id="section">悲观锁</h2>
 <p>悲观锁(Pessimistic Lock)认为每次读取数据都是不安全的，所以每次读取数据的时候都会加锁。<br />
 比如mysql里的<code class="highlighter-rouge">for update</code>就属于这类，可以锁一行，也可锁住整个表，加锁之后别人就无法同时进行操作了。<br />
 悲观锁一般用于写操作比较多的地方。</p>
 
 <hr />
 
-<h2 id="optimistic"> 乐观锁 </h2>
+<h2 id="section-1">乐观锁</h2>
 <p>乐观锁(Optimistic Lock)认为每次读取数据的时候是安全的，只有在更新操作的时候才会判断是否有别人修改过数据。<br />
 这种锁一般通过其它方式来控制，比如通过版本号机制等。<br />
 乐观锁一般用于读操作比较多的地方，这样可以提高吞吐量。</p>
 
 <hr />
 
-<h2 id="use"> for update用法 </h2>
+<h2 id="for-update">for update用法</h2>
 <p>先来一个测试用的表:</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="nv">`user`</span> <span class="p">(</span>
@@ -175,10 +173,10 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="test"> 测试记录 </h2>
+<h2 id="section-2">测试记录</h2>
 <p>主要是测试下，什么情况下是 Row Lock，什么情况下是 Table Lock。  </p>
 
-<h3 id="row-lock">以下情况是 Row Lock</h3>
+<p>以下情况是 Row Lock</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">-- 使用了主键索引
 </span><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">user</span> <span class="k">where</span> <span class="n">id</span><span class="o">=</span><span class="mi">1</span> <span class="k">for</span> <span class="k">update</span><span class="p">;</span>
@@ -189,7 +187,7 @@ jQuery(function(){
 </code></pre>
 </div>
 
-<h3 id="table-lock">以下情况是 Table Lock</h3>
+<p>以下情况是 Table Lock</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">-- 主键不明确
 </span><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">user</span> <span class="k">where</span> <span class="n">id</span> <span class="o">!=</span> <span class="mi">1</span> <span class="k">for</span> <span class="k">update</span><span class="p">;</span>
@@ -204,7 +202,7 @@ jQuery(function(){
 </code></pre>
 </div>
 
-<h3 id="lock">以下情况 无 Lock</h3>
+<p>以下情况 无 Lock</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">-- 未查到数据，但是使用了索引
 </span><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="k">user</span> <span class="k">where</span> <span class="n">user_name</span><span class="o">=</span><span class="s1">'user9'</span> <span class="k">for</span> <span class="k">update</span><span class="p">;</span>

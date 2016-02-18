@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="keywords" content="Java类加载器, 编程技术, Java, 逆水行舟" />
-    <meta name="description" content="Java类加载器, 编程技术, Java, java.lang.Class.forName(…)和java.lang.ClassNotFoundExcetpion是我们经常遇到的，藏在他们身后的，是Java的类加载器。" />
+    <meta name="description" content="Java类加载器, 编程技术, Java, java.lang.Class.forName(…)和java.lang.ClassNotFoundExcetpion是我们经常遇到的， 藏在他们身后的，是Java的类加载器。" />
 
     <title>逆水行舟</title>
 
@@ -99,44 +99,40 @@ jQuery(function(){
     <div class="uk-grid">
         <div  class="uk-width-4-4">
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
-            <p><code class="highlighter-rouge">java.lang.Class.forName(…)</code>和<code class="highlighter-rouge">java.lang.ClassNotFoundExcetpion</code>是我们经常遇到的，藏在他们身后的，是Java的类加载器。</p>
+            <p><code class="highlighter-rouge">java.lang.Class.forName(…)</code>和<code class="highlighter-rouge">java.lang.ClassNotFoundExcetpion</code>是我们经常遇到的， 藏在他们身后的，是Java的类加载器。</p>
 
 <hr />
 
-<h2 id="section">本文结构</h2>
-
-<ul>
-  <li><a href="#ClassLoader">JVM预定义的三种类加载器</a>
-    <ul>
-      <li><a href="#Bootstrap">启动(Bootstrap)类加载器</a></li>
-      <li><a href="#Extension">标准扩展(Extension)类加载器</a></li>
-      <li><a href="#System">系统(System)类加载器</a></li>
+<ul id="markdown-toc">
+  <li><a href="#jvm">JVM预定义的三种类加载器</a>    <ul>
+      <li><a href="#bootstrap">启动(Bootstrap)类加载器</a></li>
+      <li><a href="#extension">标准扩展(Extension)类加载器</a></li>
+      <li><a href="#system">系统(System)类加载器</a></li>
     </ul>
   </li>
-  <li><a href="#parent">双亲委派机制</a></li>
-  <li><a href="#check">程序验证</a>
-    <ul>
-      <li><a href="#check1">parent的验证</a></li>
-      <li><a href="#check2">默认的类加载器</a></li>
-      <li><a href="#check3">双亲委派以及类加载器的加载位置</a></li>
+  <li><a href="#x">双亲委派机制x</a></li>
+  <li><a href="#section">程序验证</a>    <ul>
+      <li><a href="#parent">验证一: parent的验证</a></li>
+      <li><a href="#section-1">验证二: 默认的类加载器</a></li>
+      <li><a href="#section-2">验证三: 双亲委派以及类加载器的加载位置</a></li>
     </ul>
   </li>
-  <li><a href="#notice">注意</a></li>
+  <li><a href="#section-3">注意</a></li>
 </ul>
 
 <hr />
 
-<h2 id="ClassLoader"> JVM预定义的三种类加载器 </h2>
+<h2 id="jvm">JVM预定义的三种类加载器</h2>
 <p>JVM预定义的三种类加载器有：启动(Bootstrap)类加载器、标准扩展(Extension)类加载器和系统(System)类加载器，当一个JVM启动的时候，Java缺省开始使用这些类装入器。<br />
 除了以上三种类加载器，还有一种比较特殊的类型就是线程上下文类加载器，这个暂不介绍。</p>
 
-<h3 id="Bootstrap"> 启动(Bootstrap)类加载器 </h3>
+<h3 id="bootstrap">启动(Bootstrap)类加载器</h3>
 <p>启动类加载器是通过<code class="highlighter-rouge">java.lang.ClassLoader</code>中的<code class="highlighter-rouge">private native final Class findLoadedClass0(String name);</code>这一本地方法实现的类装入器，它负责将<code class="highlighter-rouge">&lt;Java_Runtime_Home&gt;/lib</code>下面的类库加载到内存中。</p>
 
-<h3 id="Extension"> 标准扩展(Extension)类加载器 </h3>
+<h3 id="extension">标准扩展(Extension)类加载器</h3>
 <p>扩展类加载器是由Sun的<code class="highlighter-rouge">ExtClassLoader(sun.misc.Launcher$ExtClassLoader)</code>实现，它负责将<code class="highlighter-rouge">&lt;Java_Runtime_Home &gt;/lib/ext</code>或者由系统变量 <code class="highlighter-rouge">java.ext.dir</code>指定位置中的类库加载到内存中。</p>
 
-<h3 id="System"> 系统(System)类加载器 </h3>
+<h3 id="system">系统(System)类加载器</h3>
 <p>系统类加载器是由Sun的<code class="highlighter-rouge">AppClassLoader(sun.misc.Launcher$AppClassLoader)</code>实现，它负责将系统类路径<code class="highlighter-rouge">CLASSPATH</code>中指定的类库加载到内存中。</p>
 
 <p>上面三种类型的类加载器中，启动(Bootstrap)类加载器是通过本地方法实现的，无法直接获取到启动类加载器的引用；而标准扩展(Extension)类加载器和系统(System)类加载器均为<code class="highlighter-rouge">sun.misc.Launcher</code>的内部类，分别对应<code class="highlighter-rouge">ExtClassLoader</code>和<code class="highlighter-rouge">AppClassLoader</code>，这两个内部类均继承自<code class="highlighter-rouge">URLClassLoader</code>，其继承关系为：</p>
@@ -149,7 +145,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="parent"> 双亲委派机制 </h2>
+<h2 id="x">双亲委派机制x</h2>
 
 <p>JVM在加载类时默认采用的是双亲委派机制，就是某个特定的类加载器在接到加载类的请求时，首先将加载任务委托给双亲加载器，依次递归，如果双亲加载器可以完成类加载任务，就成功返回；只有双亲类加载器无法完成此加载任务时，才自己去加载。<br />
 注意这里的双亲并不是继承上的关系，而是指的<code class="highlighter-rouge">ClassLoader</code>中的一个字段。在源码中更容易描述双亲委派机制：</p>
@@ -284,9 +280,9 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="check"> 程序验证 </h2>
+<h2 id="section">程序验证</h2>
 
-<h4 id="check1"> 验证一: parent的验证 </h4>
+<h3 id="parent">验证一: parent的验证</h3>
 <p>程序源码:</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestClassLoader</span> <span class="o">{</span>
@@ -311,7 +307,7 @@ null
 </div>
 <p>这说明<code class="highlighter-rouge">AppClassLoader</code>的双亲为<code class="highlighter-rouge">ExtClassLoader</code>，<code class="highlighter-rouge">ExtClassLoader</code>的双亲为<code class="highlighter-rouge">null</code>，这跟分析源码得出的结论一致。</p>
 
-<h4 id="check2"> 验证二: 默认的类加载器 </h4>
+<h3 id="section-1">验证二: 默认的类加载器</h3>
 
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestClassLoader</span> <span class="o">{</span>
     <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
@@ -334,7 +330,7 @@ null
 </div>
 <p>这说明系统默认的类加载器为<code class="highlighter-rouge">AppClassLoader</code>。</p>
 
-<h4 id="check3"> 验证三: 双亲委派以及类加载器的加载位置 </h4>
+<h3 id="section-2">验证三: 双亲委派以及类加载器的加载位置</h3>
 <p>将上面编译好的class文件打包成<code class="highlighter-rouge">classloader.jar</code>(最好使用集成工具进行打包)，将<code class="highlighter-rouge">classloader.jar</code>放到<code class="highlighter-rouge">&lt;Java_Runtime_Home &gt;/lib/ext</code>目录下，再次运行，结果成了  </p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>sun.misc.Launcher$ExtClassLoader@2e5f8245
@@ -348,7 +344,7 @@ null
 
 <hr />
 
-<h2 id="notice"> 注意 </h2>
+<h2 id="section-3">注意</h2>
 
 <ol>
   <li>在JVM中一个类用其全名和一个加载类<code class="highlighter-rouge">ClassLoader</code>的实例作为唯一标识，不同类加载器加载的类将被置于不同的命名空间， 所以<strong>不同类加载器加载的相同类，其类型也是不一样的</strong>。</li>

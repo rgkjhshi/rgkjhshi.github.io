@@ -101,19 +101,17 @@ jQuery(function(){
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
             <hr />
 
-<h2 id="section">本文结构</h2>
-
-<ul>
-  <li><a href="#id1">整合的方法</a></li>
-  <li><a href="#SqlSessionFactoryBean">SqlSessionFactoryBean的注入</a></li>
-  <li><a href="#MapperFactoryBean">MapperFactoryBean</a></li>
-  <li><a href="#MapperScannerConfigurer">使用MapperScannerConfigurer自动注册Mapper</a></li>
-  <li><a href="#transactionManager">事务管理</a></li>
+<ul id="markdown-toc">
+  <li><a href="#section">整合的方法</a></li>
+  <li><a href="#sqlsessionfactorybean">SqlSessionFactoryBean的注入</a></li>
+  <li><a href="#mapperfactorybean">MapperFactoryBean</a></li>
+  <li><a href="#mapperscannerconfigurermapper">使用MapperScannerConfigurer自动注册Mapper</a></li>
+  <li><a href="#section-1">事务管理</a></li>
 </ul>
 
 <hr />
 
-<h2 id="id1"> 整合的方法 </h2>
+<h2 id="section">整合的方法</h2>
 
 <p>MyBatis 是以<code class="highlighter-rouge">SqlSessionFactory</code>为核心的，Spring是以<code class="highlighter-rouge">BeanFactory</code>或<code class="highlighter-rouge">ApplicationContext</code>为核心的。把两者整合在一起，<code class="highlighter-rouge">Mybatis-Spring</code>封装了一个<code class="highlighter-rouge">SqlSessionFactoryBean</code>，在这个<code class="highlighter-rouge">Bean</code>里可以产生<code class="highlighter-rouge">SqlSessionFactory</code>。所以通过Spring的IoC实现<code class="highlighter-rouge">SqlSessionFactoryBean</code>的注入即可将二者整合。</p>
 
@@ -129,7 +127,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="SqlSessionFactoryBean"> SqlSessionFactoryBean的注入 </h2>
+<h2 id="sqlsessionfactorybean">SqlSessionFactoryBean的注入</h2>
 
 <p>在<code class="highlighter-rouge">MyBatis</code>中,<code class="highlighter-rouge">session</code>工厂可以使用<code class="highlighter-rouge">SqlSessionFactoryBuilder</code>来创建。而在<code class="highlighter-rouge">MyBatis-Spring</code>中,则使用<code class="highlighter-rouge">SqlSessionFactoryBean</code>来替代。
 要想实现对<code class="highlighter-rouge">SqlSessionFactoryBean</code>的注入，需要在spring的配置文件中添加这样的一个bean元素：</p>
@@ -181,7 +179,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="MapperFactoryBean"> MapperFactoryBean </h2>
+<h2 id="mapperfactorybean">MapperFactoryBean</h2>
 
 <p>通过<code class="highlighter-rouge">SqlSessionFactoryBean</code>可以产生<code class="highlighter-rouge">SqlSessionFactory</code>，在MyBatis中，通过<code class="highlighter-rouge">sqlSessionFactory.openSession()</code>得到<code class="highlighter-rouge">sqlSession</code>，然后通过<code class="highlighter-rouge">session.getMapper(xxx.class)</code>得到对应的<code class="highlighter-rouge">Mapper</code>。在Spring中，通过<code class="highlighter-rouge">MapperFactoryBean</code>可以获取到我们想要的<code class="highlighter-rouge">Mapper</code>对象。</p>
 
@@ -211,7 +209,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="MapperScannerConfigurer"> 使用MapperScannerConfigurer自动注册Mapper </h2>
+<h2 id="mapperscannerconfigurermapper">使用MapperScannerConfigurer自动注册Mapper</h2>
 
 <p>像上面一个<code class="highlighter-rouge">Mapper</code>就需要定义一个对应的<code class="highlighter-rouge">MapperFactoryBean</code>。<code class="highlighter-rouge">Mybatis-Spring</code>提供了一个叫<code class="highlighter-rouge">MapperScannerConfigurer</code>的类，可以自动注册<code class="highlighter-rouge">Mapper</code>对应的<code class="highlighter-rouge">MapperFactoryBean</code>对象。我们只需要在配置文件中添加这样的内容：</p>
 
@@ -232,7 +230,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="transactionManager"> 事务管理 </h2>
+<h2 id="section-1">事务管理</h2>
 
 <p><code class="highlighter-rouge">MyBatis-Spring</code>利用了存在于<code class="highlighter-rouge">Spring</code>中的<code class="highlighter-rouge">DataSourceTransactionManager</code>进行事务管理。一旦<code class="highlighter-rouge">Spring</code>的<code class="highlighter-rouge">PlatformTransactionManager</code>配置好了,就可以在<code class="highlighter-rouge">Spring</code>中以你通常的做法<code class="highlighter-rouge">(@Transactional注解)</code>来配置事务。在事务处理期间,会创建一个单独的<code class="highlighter-rouge">SqlSession</code>对象，当事务完成时,这个<code class="highlighter-rouge">session</code>会以合适的方式提交或回滚。</p>
 

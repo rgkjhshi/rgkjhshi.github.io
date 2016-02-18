@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="keywords" content="Java中的异常, 编程技术, Java, 逆水行舟" />
-    <meta name="description" content="Java中的异常, 编程技术, Java, Java中的异常类都继承自Throwable类，Throwable有两个子类：Exception(异常)和Error(错误)，二者都各自包含大量子类。" />
+    <meta name="description" content="Java中的异常, 编程技术, Java, Java中的异常类都继承自Throwable类，Throwable有两个子类：Exception(异常)和Error(错误)， 二者都各自包含大量子类。" />
 
     <title>逆水行舟</title>
 
@@ -99,28 +99,26 @@ jQuery(function(){
     <div class="uk-grid">
         <div  class="uk-width-4-4">
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
-            <p>Java中的异常类都继承自<code class="highlighter-rouge">Throwable</code>类，<code class="highlighter-rouge">Throwable</code>有两个子类：<code class="highlighter-rouge">Exception(异常)</code>和<code class="highlighter-rouge">Error(错误)</code>，二者都各自包含大量子类。</p>
+            <p>Java中的异常类都继承自<code class="highlighter-rouge">Throwable</code>类，<code class="highlighter-rouge">Throwable</code>有两个子类：<code class="highlighter-rouge">Exception(异常)</code>和<code class="highlighter-rouge">Error(错误)</code>， 二者都各自包含大量子类。</p>
 
 <hr />
 
-<h2 id="section">本文结构</h2>
-
-<ul>
-  <li><a href="#structure">异常的结构关系图</a></li>
-  <li><a href="#exception">异常的分类</a></li>
-  <li><a href="#return">finally里的return</a></li>
+<ul id="markdown-toc">
+  <li><a href="#section">异常的结构关系图</a></li>
+  <li><a href="#section-1">异常的分类</a></li>
+  <li><a href="#finallyreturn">finally中的return</a></li>
   <li><a href="#finally">在finally中修改返回值</a></li>
 </ul>
 
 <hr />
 
-<h2 id="structure"> 异常的结构关系图 </h2>
+<h2 id="section">异常的结构关系图</h2>
 
 <p><img src="/static/images/java_exception.jpg" alt="异常的继承结构关系图" title="异常的继承结构关系图" /></p>
 
 <hr />
 
-<h2 id="exception"> 异常的分类 </h2>
+<h2 id="section-1">异常的分类</h2>
 
 <p>Java的异常可分为：错误、不受检查异常、受检查异常。</p>
 
@@ -136,7 +134,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="return"> finally中的return </h2>
+<h2 id="finallyreturn">finally中的return</h2>
 
 <p>一般情况下<code class="highlighter-rouge">finally</code>总会被执行，即使前面执行到了<code class="highlighter-rouge">return</code>语句，在执行完之前也会执行<code class="highlighter-rouge">finally</code>，在<code class="highlighter-rouge">finally</code>中使用<code class="highlighter-rouge">return</code>语句是非常不好的习惯。</p>
 
@@ -183,7 +181,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="finally"> 在finally中修改返回值 </h2>
+<h2 id="finally">在finally中修改返回值</h2>
 
 <p>另外，由于<code class="highlighter-rouge">finally</code>块一定会执行，所以可以在函数返回结果之前修改返回值，但一定要小心，有些情况下能够修改返回值，有些情况下是无法修改的。</p>
 

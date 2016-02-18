@@ -103,24 +103,21 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="section">本文结构</h2>
-
-<ul>
-  <li><a href="#properties">properties 属性</a></li>
-  <li><a href="#typeAliases">typeAliases 类型别名</a></li>
-  <li><a href="#typeHandlers">typeHandlers 类型转换处理器</a>
-    <ul>
-      <li><a href="#TypeHandler1">自定义TypeHandler</a></li>
-      <li><a href="#TypeHandler2">注册TypeHandler</a></li>
-      <li><a href="#TypeHandler3">自动获取TypeHandler</a></li>
+<ul id="markdown-toc">
+  <li><a href="#properties-">properties 属性</a></li>
+  <li><a href="#typealiases-">typeAliases 类型别名</a></li>
+  <li><a href="#typehandlers-">typeHandlers 类型转换处理器</a>    <ul>
+      <li><a href="#typehandler">自定义TypeHandler</a></li>
+      <li><a href="#typehandler-1">注册TypeHandler</a></li>
+      <li><a href="#typehandler-2">自动获取TypeHandler</a></li>
     </ul>
   </li>
-  <li><a href="#mappers">mappers 映射器</a></li>
+  <li><a href="#mappers-">mappers 映射器</a></li>
 </ul>
 
 <hr />
 
-<h2 id="properties"> properties 属性 </h2>
+<h2 id="properties-">properties 属性</h2>
 
 <p>properties 属性可以从properties文件中获得，也可以直接写到配置文件中。 <br />
 属性文件里<code class="highlighter-rouge">config.properties</code>中内容为</p>
@@ -168,7 +165,7 @@ password=root
 
 <hr />
 
-<h2 id="typeAliases"> typeAliases 类型别名 </h2>
+<h2 id="typealiases-">typeAliases 类型别名</h2>
 <p>类型别名是为<code class="highlighter-rouge">Java</code>类型命名的一个短的名字,意义仅在于用来减少类完全限定名的冗余。<br />
 可以像下面这样起别名:</p>
 
@@ -229,13 +226,12 @@ iterator    Iterator
 
 <hr />
 
-<h2 id="typeHandlers"> typeHandlers 类型转换处理器 </h2>
+<h2 id="typehandlers-">typeHandlers 类型转换处理器</h2>
 <p>数据库中的类型和<code class="highlighter-rouge">Java</code>的类型是不一样的，但是有一定的对应关系。<br />
 无论是 MyBatis 在预处理语句（PreparedStatement）中设置参数时，还是从结果集中取出值时，都会用类型处理器以合适的方式进行转换。
 <code class="highlighter-rouge">typeHandler</code>就是进行<code class="highlighter-rouge">jdbcType</code>和<code class="highlighter-rouge">javaType</code>之间的转换的。</p>
 
-<p><a id="TypeHandler1"></a>
-### 自定义TypeHandler</p>
+<h3 id="typehandler">自定义TypeHandler</h3>
 
 <p>MyBatis已经自动注册了一些TypeHandler，我们仍然可以写自己的TypeHandler，具体方法是：实现<code class="highlighter-rouge">org.apache.ibatis.type.TypeHandler</code>接口，或继承<code class="highlighter-rouge">org.apache.ibatis.type.BaseTypeHandler</code>抽象类并实现其中的抽象方法，然后指明自己的TypeHandler是哪个<code class="highlighter-rouge">jdbcType</code>和<code class="highlighter-rouge">javaType</code>之间的转换。<br />
 推荐使用BaseTypeHandler，因为它对<code class="highlighter-rouge">null</code>值进行了过滤，而且它继承了<code class="highlighter-rouge">TypeReference</code>抽象类，通过<code class="highlighter-rouge">TypeReference</code>的<code class="highlighter-rouge">getRawType()</code>方法可以获取到当前TypeHandler所使用泛型的原始类型。这对Mybatis在注册TypeHandler的时候是非常有好处的。在没有指定javaType的情况下，Mybatis在注册TypeHandler时可以通过它来获取当前TypeHandler所使用泛型的原始类型作为要注册的TypeHandler的javaType类型。<br />
@@ -320,8 +316,8 @@ iterator    Iterator
 <span class="o">}</span>
 </code></pre>
 </div>
-<p><a id="TypeHandler2"></a>
-### 注册TypeHandler</p>
+
+<h3 id="typehandler-1">注册TypeHandler</h3>
 
 <p>MyBatis 在<code class="highlighter-rouge">TypeHandlerRegistry</code>类中已经注册了许多TypeHandler。<br />
 我们建立了自己的TypeHandler之后就需要把它注册到Mybatis的配置文件中，让Mybatis能够识别并使用它。注册TypeHandler主要有两种方式:</p>
@@ -374,8 +370,7 @@ MyBatis会通过窥探属性的原始类型来推断由类型处理器处理的 
   <li>无<code class="highlighter-rouge">javaType</code>无<code class="highlighter-rouge">jdbcType</code>，且当前的<code class="highlighter-rouge">TypeHandler</code>未继承<code class="highlighter-rouge">TypeReference</code>抽象类，那么Mybatis会注册对应<code class="highlighter-rouge">null</code>和<code class="highlighter-rouge">null</code>的<code class="highlighter-rouge">TypeHandler</code>。</li>
 </ol>
 
-<p><a id="TypeHandler3"></a>
-### 自动获取TypeHandler</p>
+<h3 id="typehandler-2">自动获取TypeHandler</h3>
 
 <p>上面是讲 MyBatis 是如何注册TypeHandler，下面讲 Mybatis 是如何获取对应的TypeHandler进行类型转换的。</p>
 
@@ -419,7 +414,7 @@ MyBatis会通过窥探属性的原始类型来推断由类型处理器处理的 
 
 <hr />
 
-<h2 id="mappers"> mappers 映射器 </h2>
+<h2 id="mappers-">mappers 映射器</h2>
 <p>MyBatis的配置文件<code class="highlighter-rouge">mybtis-config.xml</code>中有<code class="highlighter-rouge">mappers</code>元素，其作用是告诉MyBatis去哪里找SQL映射语句。<br />
 一般情况会有一个<code class="highlighter-rouge">Maper接口</code>和一个<code class="highlighter-rouge">Mapper.xml</code>对应(这里指xml文件的<code class="highlighter-rouge">namespace</code>与接口对应)，注册<code class="highlighter-rouge">Mapper</code>的方法归纳如下：</p>
 

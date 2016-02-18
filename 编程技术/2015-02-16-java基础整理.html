@@ -103,16 +103,18 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="section">本文结构</h2>
-
-<ul>
-  <li><a href="#keywords">Java中的关键字</a></li>
-  <li><a href="#identifier">标识符</a></li>
+<ul id="markdown-toc">
+  <li><a href="#java">Java中的关键字</a></li>
+  <li><a href="#section">标识符</a></li>
   <li><a href="#static">static关键字</a></li>
   <li><a href="#final">final关键字</a></li>
-  <li><a href="#extends">继承相关</a></li>
-  <li><a href="#public">访问权限</a></li>
-  <li><a href="#abstract">抽象类和接口</a></li>
+  <li><a href="#section-1">继承相关</a></li>
+  <li><a href="#section-2">访问权限</a></li>
+  <li><a href="#section-3">抽象类和接口</a>    <ul>
+      <li><a href="#section-4">抽象类</a></li>
+      <li><a href="#section-5">接口</a></li>
+    </ul>
+  </li>
   <li><a href="#instanceof">instanceof操作符</a></li>
   <li><a href="#native">native关键字</a></li>
   <li><a href="#transient">transient关键字</a></li>
@@ -122,7 +124,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="keywords"> Java中的关键字 </h2>
+<h2 id="java">Java中的关键字</h2>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>1. 包引入和包声明: import, package
 2. 用于类和接口的声明: class, extends, implements, interface
@@ -141,12 +143,12 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="identifier"> 标识符 </h2>
+<h2 id="section">标识符</h2>
 <p>自定义标识符可以由大小写字母、数字、下划线(<code class="highlighter-rouge">_</code>)、美元符号(<code class="highlighter-rouge">$</code>)组成，但不能以数字开头，不能是Java中的保留字或关键字。</p>
 
 <hr />
 
-<h2 id="static"> static关键字 </h2>
+<h2 id="static">static关键字</h2>
 
 <ol>
   <li>静态变量: 类被加在时创建，访问静态变量不需要产生类的实例对象，不能把方法体内的变量声明为静态。</li>
@@ -163,7 +165,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="final"> final关键字 </h2>
+<h2 id="final">final关键字</h2>
 <p><code class="highlighter-rouge">final</code>关键字可以修饰类、方法和属性</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>修饰类   : 该类不能被继承
@@ -181,7 +183,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="extends"> 继承相关 </h2>
+<h2 id="section-1">继承相关</h2>
 
 <ol>
   <li>只能单继承，不能多继承，但可以多层继承(<code class="highlighter-rouge">extends、class</code>)</li>
@@ -194,7 +196,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="public"> 访问权限 </h2>
+<h2 id="section-2">访问权限</h2>
 <p>访问控制修饰符共有四个: <code class="highlighter-rouge">public、protected、(default)、private</code>, <code class="highlighter-rouge">default</code>即为不写时的修饰。</p>
 
 <p>修饰成员:</p>
@@ -215,9 +217,9 @@ default   : 只能被同一包中所有的类访问
 
 <hr />
 
-<h2 id="abstract"> 抽象类和接口 </h2>
+<h2 id="section-3">抽象类和接口</h2>
 
-<h3 id="section-1">抽象类</h3>
+<h3 id="section-4">抽象类</h3>
 
 <ol>
   <li>抽象方法的写法为<code class="highlighter-rouge">"abstract 返回值类型 抽象方法名 (参数列表);"</code>，只声明不实现</li>
@@ -226,7 +228,7 @@ default   : 只能被同一包中所有的类访问
   <li><code class="highlighter-rouge">abstract</code>不能与<code class="highlighter-rouge">private、static、final、native</code>并列修饰同一个方法</li>
 </ol>
 
-<h3 id="section-2">接口</h3>
+<h3 id="section-5">接口</h3>
 
 <ol>
   <li>接口用<code class="highlighter-rouge">interface</code>声明，是一种特殊的抽象类，只包含<strong>常量</strong>和方法的定义，而没方法的实现</li>
@@ -237,13 +239,13 @@ default   : 只能被同一包中所有的类访问
 
 <hr />
 
-<h2 id="instanceof"> instanceof操作符 </h2>
+<h2 id="instanceof">instanceof操作符</h2>
 
 <p>可以使用<code class="highlighter-rouge">instanceof</code>操作符判断一个类是否实现了某个接口，或用来判断一个实例对象是否属于某个类。其语法格式为：对象 instanceof 类（或接口）</p>
 
 <hr />
 
-<h2 id="native"> native关键字 </h2>
+<h2 id="native">native关键字</h2>
 
 <p>在<code class="highlighter-rouge">JKD</code>源码中总会看到<code class="highlighter-rouge">native</code>的方法，如:</p>
 
@@ -260,20 +262,20 @@ Java语言本身不能对操作系统底层进行访问和操作，但是可以�
 
 <hr />
 
-<h2 id="transient"> transient关键字 </h2>
+<h2 id="transient">transient关键字</h2>
 
 <p><code class="highlighter-rouge">Java</code>的序列化机制可以把实现了<code class="highlighter-rouge">Serializable</code>接口的对象进行持久存储，而被<code class="highlighter-rouge">transient</code>关键字修饰的字段，在序列化时就会被忽略。</p>
 
 <hr />
 
-<h2 id="volatitle"> volatitle关键字 </h2>
+<h2 id="volatitle">volatitle关键字</h2>
 
 <p><code class="highlighter-rouge">volatitle</code>关键字用于多线程的环境中，用<code class="highlighter-rouge">volatitle</code>修饰的变量，每次取值时都会取修改后的值，即该变量不会装入寄存器，每次改变都写入内存，每次读取都到内存中去取。<br />
 两个线程同时对<code class="highlighter-rouge">int a = 0;</code>定义好的<code class="highlighter-rouge">a</code>进行<code class="highlighter-rouge">a++</code>操作时，线程1对a自增之后未写回，线程2又对a进行了自增，就会导致与预期结果不一样。</p>
 
 <hr />
 
-<h2 id="synchronilzed"> synchronilzed关键字 </h2>
+<h2 id="synchronilzed">synchronilzed关键字</h2>
 
 <p><code class="highlighter-rouge">synchronized</code>关键字用于实现多线程的同步，在多线程访问的时候，所有加上<code class="highlighter-rouge">synchronized</code>的方法或块语句，同一时刻只能有一个线程能够用访问。</p>
 

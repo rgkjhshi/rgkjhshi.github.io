@@ -101,24 +101,23 @@ jQuery(function(){
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
             <hr />
 
-<h2 id="section">本文结构</h2>
-
-<ul>
-  <li><a href="#instruction">Spring框架简介</a>
-    <ul>
-      <li><a href="#core">Core Container</a></li>
-      <li><a href="#aop">AOP</a></li>
-      <li><a href="#data">Data Access/Integration</a></li>
+<ul id="markdown-toc">
+  <li><a href="#spring">Spring框架简介</a>    <ul>
+      <li><a href="#core-container">Core Container</a></li>
+      <li><a href="#aopaspectsinstrumentationmessaging">AOP、Aspects、Instrumentation、Messaging</a></li>
+      <li><a href="#data-accessintegration-">Data Access/Integration 数据访问/集成</a></li>
       <li><a href="#web">Web</a></li>
       <li><a href="#test">Test</a></li>
+      <li><a href="#ioc">控制反转(IoC)和依赖注入</a></li>
+      <li><a href="#aop">面向方面编程(AOP)</a></li>
     </ul>
   </li>
-  <li><a href="#example">Spring简单项目示例</a></li>
+  <li><a href="#spring-1">Spring简单项目示例</a></li>
 </ul>
 
 <hr />
 
-<h2 id="instruction"> Spring框架简介 </h2>
+<h2 id="spring">Spring框架简介</h2>
 <p>Spring 的源码及文档下载，点击<a href="http://repo.spring.io/libs-release-local/org/springframework/spring/">这里</a><br />
 Spring 框架第一个版本发布于 2004 年，自发布以来已历经三个主要版本更新: <br />
 Spring 2.0 提供了 XML 命名空间和 AspectJ 支持;<br />
@@ -134,7 +133,7 @@ Spring Framework 的功能被组织成了20来个模块。<br />
 
 <p><img src="/static/images/spring_framework_jar.png" alt="Spring模块" title="Spring模块" /></p>
 
-<h3 id="instruction"> Core Container </h3>
+<h3 id="core-container">Core Container</h3>
 
 <p><code class="highlighter-rouge">Core Container</code> 由 <code class="highlighter-rouge">spring-core, spring-beans, spring-context, spring-context-support</code> 和 <code class="highlighter-rouge">spring-expression (Spring Expression Language)</code> 模块组成</p>
 
@@ -144,7 +143,7 @@ Spring Framework 的功能被组织成了20来个模块。<br />
   <li><code class="highlighter-rouge">SpEL(spring-expression)</code> 模块提供了一个强大的 <code class="highlighter-rouge">Expression Language</code>(表达式语言)用来在运行时查询和操作对象映射。这是JSP2.1规范所指定的统一表达式语言(unified EL)的一种延续。</li>
 </ul>
 
-<h3 id="aop"> AOP、Aspects、Instrumentation、Messaging </h3>
+<h3 id="aopaspectsinstrumentationmessaging">AOP、Aspects、Instrumentation、Messaging</h3>
 
 <ul>
   <li><code class="highlighter-rouge">spring-aop</code> 模块提供 <code class="highlighter-rouge">AOP Alliance-compliant</code>(AOP联盟)的面向切面编程实现，允许你自定义，比如，方法拦截器和切入点完全分离代码。</li>
@@ -153,7 +152,7 @@ Spring Framework 的功能被组织成了20来个模块。<br />
   <li><code class="highlighter-rouge">spring-messaging</code> 模块从 Spring 集成项目中抽象出来，比如 Message, MessageChannel, MessageHandler 及其他用来提供基于消息的基础服务。该模块还包括一组消息映射方法的注解。</li>
 </ul>
 
-<h3 id="data"> Data Access/Integration 数据访问/集成 </h3>
+<h3 id="data-accessintegration-">Data Access/Integration 数据访问/集成</h3>
 
 <p><code class="highlighter-rouge">Data Access/Integration</code> 层由 <code class="highlighter-rouge">JDBC, ORM, OXM, JMS</code> 和 <code class="highlighter-rouge">Transaction</code> 模块组成。</p>
 
@@ -165,7 +164,7 @@ Spring Framework 的功能被组织成了20来个模块。<br />
   <li><code class="highlighter-rouge">spring-jms</code> 模块(<code class="highlighter-rouge">Java Messaging Service</code>)包含生产和消费信息的功能。 从 Spring Framework 4.1 开始提供集成 spring-messaging 模块。</li>
 </ul>
 
-<h3 id="web"> Web </h3>
+<h3 id="web">Web</h3>
 <p><code class="highlighter-rouge">Web</code> 层由 <code class="highlighter-rouge">spring-web, spring-webmvc, spring-websocket</code>和<code class="highlighter-rouge">spring-webmvc-portlet</code>组成。</p>
 
 <ul>
@@ -174,7 +173,7 @@ Spring Framework 的功能被组织成了20来个模块。<br />
   <li><code class="highlighter-rouge">spring-webmvc-portlet</code> 模块(也被称为<code class="highlighter-rouge">Web-Portlet</code>模块)使用一个Portlet的环境和spring-webmvc模块功能的镜像提供了MVC模式的实现。</li>
 </ul>
 
-<h3 id="test"> Test </h3>
+<h3 id="test">Test</h3>
 
 <ul>
   <li><code class="highlighter-rouge">spring-test</code> 模块支持通过组合JUnit或TestNG来进行单元测试和集成测试。它提供了连续加载的ApplicationContext并且缓存这些上下文。它还提供了<code class="highlighter-rouge">mock object</code>(模仿对象)，可以隔离测试代码。</li>
@@ -191,7 +190,7 @@ AOP 的功能完全集成到了 Spring 事务管理、日志和其他各种特�
 
 <hr />
 
-<h2 id="example"> Spring简单项目示例 </h2>
+<h2 id="spring-1">Spring简单项目示例</h2>
 
 <p><code class="highlighter-rouge">BeanFactory</code>是 Spring 作为 IOC 容器核心接口，<code class="highlighter-rouge">ApplicationContext</code>是<code class="highlighter-rouge">BeanFactory</code>的扩展，功能得到了进一步增强。<br />
 下面是一个简单的Spring的例子

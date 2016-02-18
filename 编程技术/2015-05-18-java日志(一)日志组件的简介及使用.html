@@ -104,35 +104,31 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="section">本文结构</h2>
-
-<ul>
-  <li><a href="#what">日志都做什么</a></li>
-  <li><a href="#introduction">日志组件的介绍</a>
-    <ul>
-      <li><a href="#JUL">JUL</a></li>
+<ul id="markdown-toc">
+  <li><a href="#section">日志都做什么</a></li>
+  <li><a href="#section-1">各个日志组件的介绍</a>    <ul>
+      <li><a href="#jul">JUL</a></li>
       <li><a href="#common-logging">common-logging</a></li>
       <li><a href="#slf4j">slf4j</a></li>
-      <li><a href="#Log4j">Log4j</a></li>
-      <li><a href="#LogBack">LogBack</a></li>
+      <li><a href="#log4j">Log4j</a></li>
+      <li><a href="#logback">LogBack</a></li>
     </ul>
   </li>
-  <li><a href="#many">为什么有这么多不同日志组件</a></li>
-  <li><a href="#use">各日志组件的用法</a>
-    <ul>
-      <li><a href="#JUL_use">JUL</a></li>
-      <li><a href="#Log4j1_use">Log4j1</a></li>
-      <li><a href="#Log4j2_use">Log4j2</a></li>
-      <li><a href="#LogBack_use">LogBack</a></li>
-      <li><a href="#JCL_use">JCL</a></li>
-      <li><a href="#slf4j_use">slf4j</a></li>
+  <li><a href="#section-2">为什么有这么多不同日志组件</a></li>
+  <li><a href="#section-3">各日志组件的用法</a>    <ul>
+      <li><a href="#jul-1">JUL</a></li>
+      <li><a href="#log4j1">Log4j1</a></li>
+      <li><a href="#log4j2">Log4j2</a></li>
+      <li><a href="#logback-1">LogBack</a></li>
+      <li><a href="#jclcommon-logging">JCL(common-logging)</a></li>
+      <li><a href="#slf4j-1">slf4j</a></li>
     </ul>
   </li>
 </ul>
 
 <hr />
 
-<h2 id="what"> 日志都做什么 </h2>
+<h2 id="section">日志都做什么</h2>
 
 <p>平时写代码想看看输出结果的时候一般直接用<code class="highlighter-rouge">System.out</code>来输出了，感觉也挺好用的，为什么还要有专门的组件记录日志？
 下面给出了几条日志组件应该具有的功能:</p>
@@ -146,45 +142,47 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="introduction"> 各个日志组件的介绍 </h2>
+<h2 id="section-1">各个日志组件的介绍</h2>
 <p>日志框架(实现): JUL、 Log4j、 LogBack<br />
 日志门面(接口): JCL(common-logging)、 SLF4J</p>
 
-<h3 id="JUL"> JUL </h3>
+<h3 id="jul">JUL</h3>
 <p>JUL即<code class="highlighter-rouge">Java Util Logging</code>, 是JVM提供的日志组件，在<code class="highlighter-rouge">rt.jar</code>的<code class="highlighter-rouge">java.util.logging</code>包里</p>
 
-<h3 id="common-logging"> common-logging </h3>
+<h3 id="common-logging">common-logging</h3>
 <p><code class="highlighter-rouge">common-logging</code>即<code class="highlighter-rouge">Apache Commons Logging</code>,之前叫<code class="highlighter-rouge">Jakarta Commons Logging, JCL</code>，是apache提供的一个通用的日志接口。
 内部有个<code class="highlighter-rouge">Simple logger</code>的简单实现，但很弱，一般配合log4j等第三方实现使用。</p>
 
-<h3 id="slf4j"> slf4j </h3>
+<h3 id="slf4j">slf4j</h3>
 <p><code class="highlighter-rouge">slf4j</code>即<code class="highlighter-rouge">Simple Logging Facade for JAVA</code>，java简单日志门面。类似于<code class="highlighter-rouge">Apache Common-Logging</code>，也是一个日志接口。
 SLF4J一般配合第三方实现通过slf4j的桥接包来使用。</p>
 
-<h3 id="Log4j"> Log4j </h3>
+<h3 id="log4j">Log4j</h3>
 <p>Apache的一个开放源代码项目，日志的实现，比较好用，得到了广泛使用。<br />
 Log4j有两个版本，一个是log4j1，它使用properties文件进行配置；<br />
 另一个是log4j2，跟log4j1不兼容，它使用xml文件进行配置；Log4j2包括两个部分：
 <code class="highlighter-rouge">log4j-api</code>日志接口，<code class="highlighter-rouge">log4j-core</code>日志实现。它这么分，有点也想作为日志门面的意思。</p>
 
-<h3 id="LogBack"> LogBack </h3>
+<h3 id="logback">LogBack</h3>
 <p>Logback是由log4j创始人设计的又一个开源日志组件。<br />
 分为三个模块：<code class="highlighter-rouge">logback-core,logback-classic</code>和<code class="highlighter-rouge">logback-access</code>。<br />
 <code class="highlighter-rouge">logback-core</code>是其它两个模块的基础模块。<code class="highlighter-rouge">logback-classic</code>是log4j的一个改良版本，并且完整实现了<code class="highlighter-rouge">SLF4J API</code>。<br />
 <code class="highlighter-rouge">logback-access</code>访问模块与Servlet容器集成提供通过Http来访问日记的功能。</p>
 
 <hr />
-<h2 id="many"> 为什么有这么多不同日志组件 </h2>
+
+<h2 id="section-2">为什么有这么多不同日志组件</h2>
 <p>反正有很多，各有各的用法。JDK里的JUL好像不太好用，后来Log4j得到了广泛应用。
 日志组件越来越多，如果一个应用程序中有两个组件，而这两个组件恰好用了不同的日志工具，那这个应用不就有两个日志输出了。<br />
 这时候出现了<code class="highlighter-rouge">Apache Commons Logging(JCL)</code>，它只提供log接口，具体的实现则是在<strong>运行时动态查找</strong>。只要遵守JCL借口的日志工具，都可以通过JCL来使用。<br />
 JCL是在运行时动态查找具体的日志实现，当项目很大时，JCL的动态绑定并不是总能成功，解决办法是在项目部署时提前指定绑定哪个日志工具，这就出现了SLF4J。</p>
 
 <hr />
-<h2 id="use"> 各日志组件的用法 </h2>
+
+<h2 id="section-3">各日志组件的用法</h2>
 <p>常用的日志组件有 <code class="highlighter-rouge">JUL, Log4j(Log4j1、 Log4j2), Logback</code>，下面是他们的用法</p>
 
-<h3 id="JUL_use"> JUL </h3>
+<h3 id="jul-1">JUL</h3>
 <p>依赖jdk，无需额外jar包<br />
 代码示例:</p>
 
@@ -203,7 +201,8 @@ JCL是在运行时动态查找具体的日志实现，当项目很大时，JCL�
 信息: java.util.logging.Logger
 </code></pre>
 </div>
-<h3 id="Log4j1_use"> Log4j1 </h3>
+
+<h3 id="log4j1">Log4j1</h3>
 <p>需要<code class="highlighter-rouge">log4j</code>版本<code class="highlighter-rouge">1.2.**</code>的<code class="highlighter-rouge">jar</code>包<br />
 需要properties配置文件(名为<code class="highlighter-rouge">log4j.properties</code>放在classpath下)； 无配置文件无法输出日志。<br />
 jar包的maven依赖:</p>
@@ -240,7 +239,7 @@ jar包的maven依赖:</p>
 </code></pre>
 </div>
 
-<h3 id="Log4j2_use"> Log4j2 </h3>
+<h3 id="log4j2">Log4j2</h3>
 <p>Log4j2需要<code class="highlighter-rouge">log4j-api、log4j-core</code>版本<code class="highlighter-rouge">2.*</code>的<code class="highlighter-rouge">jar</code>包<br />
 需要xml配置文件(名为<code class="highlighter-rouge">log4j2.xml</code>放在classpath下)； 不支持properties文件； 无配置文件无法输出日志。<br />
 jar包的maven依赖:</p>
@@ -292,7 +291,7 @@ jar包的maven依赖:</p>
 </code></pre>
 </div>
 
-<h3 id="LogBack_use"> LogBack </h3>
+<h3 id="logback-1">LogBack</h3>
 <p>Logback需要<code class="highlighter-rouge">logback-core、logback-classic[、slf4j-api]</code>的<code class="highlighter-rouge">jar</code>包(<code class="highlighter-rouge">logback-classic</code>实现了<code class="highlighter-rouge">slf4j-api</code>)<br />
 配置文件:</p>
 
@@ -351,7 +350,7 @@ jar包的maven依赖:</p>
 </code></pre>
 </div>
 
-<h3 id="JCL_use"> JCL(common-logging) </h3>
+<h3 id="jclcommon-logging">JCL(common-logging)</h3>
 <p>JCL需要<code class="highlighter-rouge">commons-logging</code>的<code class="highlighter-rouge">jar</code>包<br />
 本文只演示使用方法，对输出结果暂不解释，后面的文章会解释原理</p>
 
@@ -383,7 +382,7 @@ jar包的maven依赖:</p>
 </code></pre>
 </div>
 
-<h3 id="slf4j_use"> slf4j </h3>
+<h3 id="slf4j-1">slf4j</h3>
 <p>slf4j只有接口没有实现，必须结合其他日志的实现一起使用</p>
 
 <hr />

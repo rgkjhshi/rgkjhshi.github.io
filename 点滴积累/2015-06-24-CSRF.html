@@ -103,17 +103,20 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="section">目录</h2>
-
-<ul>
-  <li><a href="#introduction">CSRF简介</a></li>
-  <li><a href="#attact">攻击原理</a></li>
-  <li><a href="#use">防范方法</a></li>
+<ul id="markdown-toc">
+  <li><a href="#csrf">CSRF简介</a></li>
+  <li><a href="#section">攻击原理</a></li>
+  <li><a href="#section-1">防范方法</a>    <ul>
+      <li><a href="#token">Token</a></li>
+      <li><a href="#section-2">验证码</a></li>
+      <li><a href="#referer">Referer字段检查</a></li>
+    </ul>
+  </li>
 </ul>
 
 <hr />
 
-<h2 id="introduction"> CSRF简介 </h2>
+<h2 id="csrf">CSRF简介</h2>
 <p>CSRF(Cross-site request forgery)学名叫跨站请求伪造。从名字上可看出来，跨站，至少涉及两个站点。<br />
 CSRF的流程是这样的:</p>
 
@@ -127,7 +130,7 @@ CSRF的流程是这样的:</p>
 
 <hr />
 
-<h2 id="attact"> 攻击原理 </h2>
+<h2 id="section">攻击原理</h2>
 <p>浏览器访问某站时，会携带该站保存在本地的cookie去请求该站的服务器。<br />
 比如访问A站，就会携带A的cookie去请求A站的服务器。访问A站时，不会携带另一个站点的cookie信息。<br />
 而CSRF攻击就是利用了这点，访问B站时，B站在用户不知情的情况下悄悄访问了A，这时就携带了A站的cookie，<br />
@@ -148,7 +151,7 @@ www.A.com站在用户登录后，会将登陆凭证保存在本地cookie中，A�
 
 <hr />
 
-<h2 id="use"> 防范方法 </h2>
+<h2 id="section-1">防范方法</h2>
 <p>防范的方法有许多，Token方式是最主流的。</p>
 
 <h3 id="token">Token</h3>
@@ -171,7 +174,7 @@ www.A.com站在用户登录后，会将登陆凭证保存在本地cookie中，A�
 下次请求时会把hiddin域中的token和cookie里的加密token都提交给服务器，服务器得到cookie里的加密token进行解密，
 然后跟hiddin域提交过来的token进行对比。</p>
 
-<h3 id="section-1">验证码</h3>
+<h3 id="section-2">验证码</h3>
 <p>验证码不仅可用来防止暴力破解，还可以有效防止CSRF的攻击。
 但问题在于，不可能在用户的所有操作上都需要输入验证码。只有一些关键的操作，才能要求输入验证码。</p>
 

@@ -101,17 +101,15 @@ jQuery(function(){
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
             <hr />
 
-<h2 id="section">本文结构</h2>
-
-<ul>
-  <li><a href="#id1">Spring容器</a></li>
-  <li><a href="#id2">依赖注入的方式</a></li>
-  <li><a href="#id3">Bean的scope属性</a></li>
+<ul id="markdown-toc">
+  <li><a href="#spring">Spring容器</a></li>
+  <li><a href="#section">依赖注入的方式</a></li>
+  <li><a href="#beanscope">Bean的scope属性</a></li>
 </ul>
 
 <hr />
 
-<h2 id="id1"> Spring容器 </h2>
+<h2 id="spring">Spring容器</h2>
 
 <p>Spring容器是Spring的核心，是生成<code class="highlighter-rouge">Bean</code>的工厂。Spring有两个核心接口：<code class="highlighter-rouge">BeanFactory</code>和<code class="highlighter-rouge">ApplicationContext</code>，后者是前者的子接口，二者都可以代表Spring容器。<br />
 <code class="highlighter-rouge">ApplictionContext</code>的实现类有：</p>
@@ -131,7 +129,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="id2"> 依赖注入的方式 </h2>
+<h2 id="section">依赖注入的方式</h2>
 
 <p>依赖注入的方式主要有2种：</p>
 
@@ -159,7 +157,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="id3"> Bean的scope属性 </h2>
+<h2 id="beanscope">Bean的scope属性</h2>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"hello"</span> <span class="na">class=</span><span class="s">"com.test.spring.dao.impl.HelloImpl"</span> <span class="na">scope=</span><span class="s">"singleton"</span><span class="nt">&gt;&lt;/bean&gt;</span>
 </code></pre>

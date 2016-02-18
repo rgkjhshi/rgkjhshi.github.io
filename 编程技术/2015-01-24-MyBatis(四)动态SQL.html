@@ -103,19 +103,17 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="section">本文结构</h2>
-
-<ul>
+<ul id="markdown-toc">
   <li><a href="#if">if</a></li>
   <li><a href="#where">where</a></li>
   <li><a href="#set">set</a></li>
   <li><a href="#foreach">foreach</a></li>
-  <li><a href="#choose">choose (when, otherwise)</a></li>
+  <li><a href="#choose-when-otherwise">choose (when, otherwise)</a></li>
 </ul>
 
 <hr />
 
-<h2 id="if"> if </h2>
+<h2 id="if">if</h2>
 
 <p>if一般是where的一部分，如</p>
 
@@ -134,7 +132,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="where"> where </h2>
+<h2 id="where">where</h2>
 <p>像上面的例子，为了拼接sql，专门写了个 WHERE 1 = 1，<code class="highlighter-rouge">where</code>标签就能避免这样的问题，它会自动去除不该有的<code class="highlighter-rouge">AND</code>或<code class="highlighter-rouge">OR</code></p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">"findBlog"</span> <span class="na">resultType=</span><span class="s">"Blog"</span><span class="nt">&gt;</span>
@@ -156,7 +154,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="set"> set </h2>
+<h2 id="set">set</h2>
 <p>set元素主要是用在更新操作的时候，它会智能去掉最后的逗号。如果set中一个条件都不满足，则会报错。</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;update</span> <span class="na">id=</span><span class="s">"updateBlog"</span> <span class="na">parameterType=</span><span class="s">"Blog"</span><span class="nt">&gt;</span>  
@@ -179,7 +177,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="foreach"> foreach </h2>
+<h2 id="foreach">foreach</h2>
 <p>foreach主要用在in语句中，它可以在SQL语句中遍历一个集合。</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">"foreachTest"</span> <span class="na">parameterType=</span><span class="s">"java.util.List"</span> <span class="na">resultType=</span><span class="s">"Blog"</span><span class="nt">&gt;</span>  
@@ -210,7 +208,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="choose"> choose (when, otherwise) </h2>
+<h2 id="choose-when-otherwise">choose (when, otherwise)</h2>
 <p>choose元素的作用就相当于JAVA中的switch语句</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">"chooseTest"</span> <span class="na">parameterType=</span><span class="s">"Blog"</span> <span class="na">resultType=</span><span class="s">"Blog"</span><span class="nt">&gt;</span>  

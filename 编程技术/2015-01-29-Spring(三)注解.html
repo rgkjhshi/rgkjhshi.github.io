@@ -101,19 +101,17 @@ jQuery(function(){
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
             <hr />
 
-<h2 id="section">本文结构</h2>
-
-<ul>
+<ul id="markdown-toc">
   <li><a href="#bean">Bean的注解</a></li>
-  <li><a href="#scope">@Scope作用域</a></li>
-  <li><a href="#resource">@Resource依赖配置</a></li>
-  <li><a href="#autowired">@Autowired自动装配</a></li>
-  <li><a href="#qualifier">@Qualifier精装配</a></li>
+  <li><a href="#scope">Scope作用域</a></li>
+  <li><a href="#resource">Resource依赖配置</a></li>
+  <li><a href="#autowired">Autowired自动装配</a></li>
+  <li><a href="#qualifier">Qualifier精装配</a></li>
 </ul>
 
 <hr />
 
-<h2 id="bean"> Bean的注解 </h2>
+<h2 id="bean">Bean的注解</h2>
 
 <p>Spring提供了如下几个<code class="highlighter-rouge">Annotation</code>来标注<code class="highlighter-rouge">Spring Bean</code>:</p>
 
@@ -150,19 +148,19 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="scope"> Scope作用域 </h2>
+<h2 id="scope">Scope作用域</h2>
 
 <p><code class="highlighter-rouge">@Scope</code>用于指定一个<code class="highlighter-rouge">Bean</code>产生的方式，默认为’singleton’，可以通过注解直接指定<code class="highlighter-rouge">Bean</code>的<code class="highlighter-rouge">scope</code>，例如:</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Scope</span><span class="o">(</span><span class="s">"prototype"</span><span class="o">)</span>
 <span class="nd">@Component</span><span class="o">(</span><span class="s">"helloService"</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloServiceImpl</span> <span class="kd">implements</span> <span class="n">HelloService</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloServiceImpl</span> <span class="kd">implements</span> <span class="n">HelloService</span> <span class="o">{}</span>
 </code></pre>
 </div>
 
 <hr />
 
-<h2 id="resource"> Resource依赖配置 </h2>
+<h2 id="resource">Resource依赖配置</h2>
 
 <p>像上面例子中的<code class="highlighter-rouge">private Hello hello;</code>加上了<code class="highlighter-rouge">@Resource</code>注解，这样就可以将相应的<code class="highlighter-rouge">Bean</code>注入到该属性中。<br />
 <code class="highlighter-rouge">@Resource</code>有一个name属性，用于指定需要被注入的Bean的实例的标识(id)，也就是说，使用<code class="highlighter-rouge">@Resource</code>的<code class="highlighter-rouge">name属性</code>与<code class="highlighter-rouge">&lt;property../&gt;</code>元素的<code class="highlighter-rouge">ref属性</code>具有相同的效果。</p>
@@ -182,7 +180,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="autowired"> Autowired自动装配 </h2>
+<h2 id="autowired">Autowired自动装配</h2>
 
 <p>像上面的<code class="highlighter-rouge">@Resource</code>是通过<code class="highlighter-rouge">byName</code>方式（通过id）进行注入，而<code class="highlighter-rouge">@Autowired</code>是通过<code class="highlighter-rouge">byType</code>策略进行注入，所以若有多个同类型的<code class="highlighter-rouge">Bean</code>就容易出问题，为了避免这种问题，一般与<code class="highlighter-rouge">Qualifier</code>精装配联合使用。</p>
 
@@ -197,7 +195,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="qualifier"> Qualifier精装配 </h2>
+<h2 id="qualifier">Qualifier精装配</h2>
 
 <p>为了避免自动装配的问题，实现精确的配置，Spring提供<code class="highlighter-rouge">@Qualifier</code>，可以根据Bean标识(id)来指定自动装配。</p>
 
