@@ -99,42 +99,40 @@ jQuery(function(){
     <div class="uk-grid">
         <div  class="uk-width-4-4">
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
-            <p>某天聊天时听到有人说，json必须以 <code class="prettyprint">{</code> 开头，以 <code class="prettyprint">}</code>结尾，顿时很无语。<br>
-Json到底该是什么样子，<a href="http://www.json.org/json-zh.html">官方网站</a>上说的很明白.<br>
-另外附上一个很不错的在线验证及格式化Json的网站:<a href="http://json.cn">Json.cn</a><br>
+            <p>某天聊天时听到有人说，json必须以 <code class="highlighter-rouge"><span class="p">{</span></code> 开头，以 <code class="highlighter-rouge">}</code>结尾，顿时很无语。<br />
+Json到底该是什么样子，<a href="http://www.json.org/json-zh.html">官方网站</a>上说的很明白.<br />
+另外附上一个很不错的在线验证及格式化Json的网站:<a href="http://json.cn">Json.cn</a><br />
 本文对Json的格式简单说下</p>
 
-<hr>
+<hr />
 
-<h2 id="本文结构">本文结构</h2>
+<h2 id="section">本文结构</h2>
 
 <ul>
-<li><a href="#introduce">Json简介</a></li>
-<li><a href="#JavaScriptObject">JavaScript中的对象</a></li>
-<li><a href="#JsonObject">Json中的对象</a></li>
-<li><a href="#Json">Json的格式</a></li>
+  <li><a href="#introduce">Json简介</a></li>
+  <li><a href="#JavaScriptObject">JavaScript中的对象</a></li>
+  <li><a href="#JsonObject">Json中的对象</a></li>
+  <li><a href="#Json">Json的格式</a></li>
 </ul>
 
-<hr>
-
+<hr />
 <h2 id="introduce"> Json简介 </h2>
 
-<p>JSON是 <code class="prettyprint">JavaScript Object Notation</code> 的缩写，它是一种数据交换格式，2002年由道格拉斯·克罗克福特（Douglas Crockford）发明的。<br>
-在它之前，大家都用<code class="prettyprint">XML</code>来交换数据，XML是纯文本格式，本身不难，但是加上 <code class="prettyprint">DTD、XSD、XSLT</code> 等一堆规范后就相当复杂了。  </p>
+<p>JSON是 <code class="highlighter-rouge">JavaScript Object Notation</code> 的缩写，它是一种数据交换格式，2002年由道格拉斯·克罗克福特（Douglas Crockford）发明的。<br />
+在它之前，大家都用<code class="highlighter-rouge">XML</code>来交换数据，XML是纯文本格式，本身不难，但是加上 <code class="highlighter-rouge">DTD、XSD、XSLT</code> 等一堆规范后就相当复杂了。  </p>
 
-<hr>
-
+<hr />
 <h2 id="JavaScriptObject"> JavaScript中的对象 </h2>
-
-<p>既然JSON是<code class="prettyprint">JavaScript Object Notation</code>，我们就看看JavaScript中都有什么对象。<br>
+<p>既然JSON是<code class="highlighter-rouge">JavaScript Object Notation</code>，我们就看看JavaScript中都有什么对象。<br />
 JavaScript的对象是一种无序的集合数据类型，它由若干键值对组成,
-一个普通的js对象用一个<code class="prettyprint">{...}</code>表示，键值对以<code class="prettyprint">key : value</code>形式声明。<br>
-除此之外还有 <code class="prettyprint">number、string、boolean</code>等对象，可以通过 <code class="prettyprint">typeof obj</code>来获取对象的类型，如下：</p>
-<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="c1">// 普通对象</span>
+一个普通的js对象用一个<code class="highlighter-rouge"><span class="p">{</span><span class="err">...</span><span class="p">}</span></code>表示，键值对以<code class="highlighter-rouge">key : value</code>形式声明。<br />
+除此之外还有 <code class="highlighter-rouge">number、string、boolean</code>等对象，可以通过 <code class="highlighter-rouge">typeof obj</code>来获取对象的类型，如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 普通对象</span>
 <span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="nx">name</span>   <span class="o">:</span> <span class="s2">&quot;小明&quot;</span><span class="p">,</span>
-    <span class="nx">gender</span> <span class="o">:</span> <span class="s2">&quot;男&quot;</span><span class="p">,</span>
-    <span class="nx">age</span>    <span class="o">:</span> <span class="mi">28</span>
+    <span class="na">name</span>   <span class="p">:</span> <span class="s2">"小明"</span><span class="p">,</span>
+    <span class="na">gender</span> <span class="p">:</span> <span class="s2">"男"</span><span class="p">,</span>
+    <span class="na">age</span>    <span class="p">:</span> <span class="mi">28</span>
 <span class="p">};</span>
 <span class="c1">// 空对象</span>
 <span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
@@ -144,7 +142,7 @@ JavaScript的对象是一种无序的集合数据类型，它由若干键值对�
 <span class="kd">var</span> <span class="nx">num1</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 <span class="kd">var</span> <span class="nx">num2</span> <span class="o">=</span> <span class="mf">123.456</span><span class="p">;</span>
 <span class="c1">// 字符串</span>
-<span class="kd">var</span> <span class="nx">str</span> <span class="o">=</span> <span class="s2">&quot;abcde&quot;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">str</span> <span class="o">=</span> <span class="s2">"abcde"</span><span class="p">;</span>
 <span class="c1">// 布尔</span>
 <span class="kd">var</span> <span class="nx">bool</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
 
@@ -156,52 +154,76 @@ JavaScript的对象是一种无序的集合数据类型，它由若干键值对�
 <span class="k">typeof</span> <span class="nx">num2</span><span class="p">;</span> <span class="c1">// number</span>
 <span class="k">typeof</span> <span class="nx">str</span><span class="p">;</span>  <span class="c1">// string</span>
 <span class="k">typeof</span> <span class="nx">bool</span><span class="p">;</span> <span class="c1">// boolean</span>
-</code></pre></div>
-<p>上面例子中，虽然<code class="prettyprint">{}, null, []</code>都是<code class="prettyprint">object</code>，但是他们的形式不太一样。</p>
+</code></pre>
+</div>
+<p>上面例子中，虽然<code class="highlighter-rouge"><span class="p">{}</span><span class="err">,</span><span class="w"> </span><span class="kc">null</span><span class="err">,</span><span class="w"> </span><span class="p">[]</span></code>都是<code class="highlighter-rouge">object</code>，但是他们的形式不太一样。</p>
 
-<hr>
-
+<hr />
 <h2 id="JsonObject"> Json中的对象 </h2>
-
 <p>JSON中的对象来自于JavaScript中，总共以下这几种数据类型:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">number</span>  <span class="o">:</span> <span class="n">js中的number</span><span class="o">;</span>
-<span class="kt">boolean</span> <span class="o">:</span> <span class="n">js中的boolean</span><span class="o">,</span> <span class="n">即true或false</span><span class="o">;</span>
-<span class="n">string</span>  <span class="o">:</span> <span class="n">js中的string</span><span class="o">;</span>
-<span class="kc">null</span>    <span class="o">:</span> <span class="n">js中的null</span><span class="o">;</span>
-<span class="n">array</span>   <span class="o">:</span> <span class="n">js中的的Array</span><span class="o">,</span> <span class="n">即</span><span class="o">[]</span><span class="n">形式的对象</span><span class="o">;</span>
-<span class="n">object</span>  <span class="o">:</span> <span class="n">js中的普通对象</span><span class="o">,</span> <span class="n">即</span><span class="o">{</span> <span class="o">...</span> <span class="o">}</span><span class="n">形式的对象</span><span class="o">.</span>
-</code></pre></div>
-<p>另外JSON还规定了字符集必须用UTF-8, 字符串必须用双引号<code class="prettyprint">&quot;&quot;</code>, 对象中的key也必须用双引号<code class="prettyprint">&quot;&quot;</code><br>
+
+<table>
+  <tbody>
+    <tr>
+      <td>number</td>
+      <td>js中的number</td>
+    </tr>
+    <tr>
+      <td>boolean</td>
+      <td>js中的boolean, 即true或false</td>
+    </tr>
+    <tr>
+      <td>string</td>
+      <td>js中的string</td>
+    </tr>
+    <tr>
+      <td>null</td>
+      <td>js中的null</td>
+    </tr>
+    <tr>
+      <td>array</td>
+      <td>js中的的Array, 即[]形式的对象</td>
+    </tr>
+    <tr>
+      <td>object</td>
+      <td>js中的普通对象, 即{ … }形式的对象.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>另外JSON还规定了字符集必须用UTF-8, 字符串必须用双引号<code class="highlighter-rouge">""</code>, 对象中的key也必须用双引号<code class="highlighter-rouge">""</code><br />
 所以，以下的json都是正确的:</p>
-<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="kc">null</span>
-<span class="s2">&quot;一个字符串&quot;</span>
-<span class="mf">3.14</span>
-<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;asdf&quot;</span><span class="p">]</span>
-<span class="p">{</span><span class="nt">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;Rose&quot;</span><span class="p">,</span> <span class="nt">&quot;age&quot;</span><span class="p">:</span> <span class="mi">18</span><span class="p">}</span>
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kc">null</span><span class="w">
+</span><span class="s2">"一个字符串"</span><span class="w">
+</span><span class="mf">3.14</span><span class="w">
+</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s2">"asdf"</span><span class="p">]</span><span class="w">
+</span><span class="p">{</span><span class="nt">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Rose"</span><span class="p">,</span><span class="w"> </span><span class="nt">"age"</span><span class="p">:</span><span class="w"> </span><span class="mi">18</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+
 <p><strong>注意:</strong></p>
 
 <ul>
-<li><code class="prettyprint">{&quot;name&quot; : &quot;Rose&quot;, &quot;age&quot;: 18}</code>是普通对象, <code class="prettyprint">3.14</code>也是一个对象，两者都是合法的json串</li>
-<li><code class="prettyprint">null, 3.14</code>这样不是合法的json串，要表示多个对象，必须放到普通对象中以键值对的形式出现</li>
+  <li><code class="highlighter-rouge"><span class="p">{</span><span class="nt">"name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"Rose"</span><span class="p">,</span><span class="w"> </span><span class="nt">"age"</span><span class="p">:</span><span class="w"> </span><span class="mi">18</span><span class="p">}</span></code>是普通对象, <code class="highlighter-rouge">3.14</code>也是一个对象，两者都是合法的json串</li>
+  <li><code class="highlighter-rouge">null, 3.14</code>这样不是合法的json串，要表示多个对象，必须放到普通对象中以键值对的形式出现</li>
 </ul>
 
-<hr>
+<hr />
 
 <h2 id="Json"> Json的格式 </h2>
+<p>像上面的说的，Json的值有一定的格式，应该是下面图中的样子:<br />
+<img src="/static/images/json_value.gif" alt="Json值" title="Json值" /></p>
 
-<p>像上面的说的，Json的值有一定的格式，应该是下面图中的样子:<br>
-<img src="/static/images/json_value.gif" alt="Json值" title="Json值"></p>
+<p>其中的<code class="highlighter-rouge">string</code>就是正常的字符串, <code class="highlighter-rouge">number</code>就是数字，如整数、小数、负数等;</p>
 
-<p>其中的<code class="prettyprint">string</code>就是正常的字符串, <code class="prettyprint">number</code>就是数字，如整数、小数、负数等;</p>
+<p>其中的<code class="highlighter-rouge">object</code>应是下图描述的样子:<br />
+<img src="/static/images/json_object.gif" alt="Json的object" title="Json的object" /></p>
 
-<p>其中的<code class="prettyprint">object</code>应是下图描述的样子:<br>
-<img src="/static/images/json_object.gif" alt="Json的object" title="Json的object"></p>
+<p>其中的<code class="highlighter-rouge">array</code>应是下图描述的样子:<br />
+<img src="/static/images/json_array.gif" alt="Json的array" title="Json的array" /></p>
 
-<p>其中的<code class="prettyprint">array</code>应是下图描述的样子:<br>
-<img src="/static/images/json_array.gif" alt="Json的array" title="Json的array"></p>
-
-<hr>
+<hr />
 
         </div>
     </div>

@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="keywords" content="java注解(Annotation), 编程技术, Java, 逆水行舟" />
-    <meta name="description" content="java注解(Annotation), 编程技术, Java, 刚用到Spring中的注解时，感觉真是太方便了，其实在JDK1.5就已经支持注解了，1.5以后默认内置了三个注解@Override:只能用在方法之上的，表示重写父类的方法。@Deprecated:可用在任何元素上，表示API已过时，编译时会产生警告。@SuppressWarnings: 可以关闭警告信息。  " />
+    <meta name="description" content="java注解(Annotation), 编程技术, Java, 刚用到Spring中的注解时，感觉真是太方便了，其实在JDK1.5就已经支持注解了，1.5以后默认内置了三个注解@Override:只能用在方法之上的，表示重写父类的方法。 @Deprecated:可用在任何元素上，表示API已过时，编译时会产生警告。@SuppressWarnings: 可以关闭警告信息。  " />
 
     <title>逆水行舟</title>
 
@@ -99,64 +99,96 @@ jQuery(function(){
     <div class="uk-grid">
         <div  class="uk-width-4-4">
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
-            <p>刚用到Spring中的注解时，感觉真是太方便了，其实在JDK1.5就已经支持注解了，1.5以后默认内置了三个注解<br>
-@Override:只能用在方法之上的，表示重写父类的方法。<br>
-@Deprecated:可用在任何元素上，表示API已过时，编译时会产生警告。<br>
+            <p>刚用到Spring中的注解时，感觉真是太方便了，其实在JDK1.5就已经支持注解了，1.5以后默认内置了三个注解<br />
+@Override:只能用在方法之上的，表示重写父类的方法。 <br />
+@Deprecated:可用在任何元素上，表示API已过时，编译时会产生警告。<br />
 @SuppressWarnings: 可以关闭警告信息。  </p>
 
-<hr>
+<hr />
 
-<h2 id="本文结构">本文结构</h2>
+<h2 id="section">本文结构</h2>
 
 <ul>
-<li><a href="#define">如何定义注解</a></li>
-<li><a href="#rule">注解的使用规则</a></li>
+  <li><a href="#define">如何定义注解</a></li>
+  <li><a href="#rule">注解的使用规则</a></li>
 </ul>
 
-<hr>
+<hr />
 
 <h2 id="define"> 如何定义注解 </h2>
-
-<p>我们可以通过关键字<code class="prettyprint">class</code>来声明一个类，类似的我们可以用某东西来声明注解，用来声明注解的这东西叫做<q>元注解</q>。<br>
-在<code class="prettyprint">java.lang.annotation</code>包中定义了4个元注解，分别是: <code class="prettyprint">@Target、 @Retention、 @Documented、 @Inherited</code>  </p>
+<p>我们可以通过关键字<code class="highlighter-rouge">class</code>来声明一个类，类似的我们可以用某东西来声明注解，用来声明注解的这东西叫做”元注解”。<br />
+在<code class="highlighter-rouge">java.lang.annotation</code>包中定义了4个元注解，分别是: <code class="highlighter-rouge">@Target、 @Retention、 @Documented、 @Inherited</code>  </p>
 
 <ul>
-<li>@Target</li>
+  <li>@Target</li>
 </ul>
 
-<p><code class="prettyprint">@Target</code>用于说明Annotation所修饰的对象范围，比如用于修饰类、接口、构造方法、成员方法、成员变量等，它作用范围的取值有:  </p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">ElementType.TYPE            : 用于描述类、接口(包括注解类型) 或enum声明
-ElementType.FIELD           : 用于描述字段
-ElementType.METHOD          : 用于描述方法
-ElementType.PARAMETER       : 用于描述参数
-ElementType.CONSTRUCTOR     : 用于描述构造器
-ElementType.LOCAL_VARIABLE  : 用于描述局部变量
-ElementType.ANNOTATION_TYPE : 用于注解类型
-ElementType.PACKAGE         : 用于描述包
-</code></pre></div>
+<p><code class="highlighter-rouge">@Target</code>用于说明Annotation所修饰的对象范围，比如用于修饰类、接口、构造方法、成员方法、成员变量等，它作用范围的取值有:  </p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>ElementType.TYPE</td>
+      <td>用于描述类、接口(包括注解类型) 或enum声明</td>
+    </tr>
+    <tr>
+      <td>ElementType.FIELD</td>
+      <td>用于描述字段</td>
+    </tr>
+    <tr>
+      <td>ElementType.METHOD</td>
+      <td>用于描述方法</td>
+    </tr>
+    <tr>
+      <td>ElementType.PARAMETER</td>
+      <td>用于描述参数</td>
+    </tr>
+    <tr>
+      <td>ElementType.CONSTRUCTOR</td>
+      <td>用于描述构造器</td>
+    </tr>
+    <tr>
+      <td>ElementType.LOCAL_VARIABLE</td>
+      <td>用于描述局部变量</td>
+    </tr>
+    <tr>
+      <td>ElementType.ANNOTATION_TYPE</td>
+      <td>用于注解类型</td>
+    </tr>
+    <tr>
+      <td>ElementType.PACKAGE</td>
+      <td>用于描述包</td>
+    </tr>
+  </tbody>
+</table>
+
 <ul>
-<li>@Retention</li>
+  <li>@Retention</li>
 </ul>
 
-<p><code class="prettyprint">@Retention</code>定义Annotation的有效期，即生命周期，如是源码级还是class级还是可以被加载到虚拟机，它的取值有:   </p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">RetentionPoicy.SOURCE       : 在源文件中有效（即源文件保留）
+<p><code class="highlighter-rouge">@Retention</code>定义Annotation的有效期，即生命周期，如是源码级还是class级还是可以被加载到虚拟机，它的取值有:   </p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>RetentionPoicy.SOURCE       : 在源文件中有效（即源文件保留）
 RetentionPoicy.CLASS        : 在class文件中有效（即class保留）
 RetentionPoicy.RUNTIME      : 在运行时有效（即运行时保留）
-</code></pre></div>
-<ul>
-<li>@Documented</li>
-</ul>
-
-<p><code class="prettyprint">@Documented</code>是一个标记注解，没有成员，表示可以被javadoc文档化</p>
+</code></pre>
+</div>
 
 <ul>
-<li>@Inherited</li>
+  <li>@Documented</li>
 </ul>
 
-<p><code class="prettyprint">@Inherited</code>是一个标记注解，允许子类继承父类中的注解  </p>
+<p><code class="highlighter-rouge">@Documented</code>是一个标记注解，没有成员，表示可以被javadoc文档化</p>
+
+<ul>
+  <li>@Inherited</li>
+</ul>
+
+<p><code class="highlighter-rouge">@Inherited</code>是一个标记注解，允许子类继承父类中的注解  </p>
 
 <p>下面是定义注解的例子:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.lang.annotation.ElementType</span><span class="o">;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.lang.annotation.ElementType</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">java.lang.annotation.Retention</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">java.lang.annotation.RetentionPolicy</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">java.lang.annotation.Target</span><span class="o">;</span>
@@ -165,16 +197,16 @@ RetentionPoicy.RUNTIME      : 在运行时有效（即运行时保留）
 <span class="nd">@Target</span><span class="o">({</span><span class="n">ElementType</span><span class="o">.</span><span class="na">METHOD</span><span class="o">,</span> <span class="n">ElementType</span><span class="o">.</span><span class="na">TYPE</span><span class="o">})</span>  <span class="c1">// MyAnnotation 可修饰方法和类等</span>
 <span class="kd">public</span> <span class="nd">@interface</span> <span class="n">MyAnnotation</span> <span class="o">{</span>       <span class="c1">// @interface 即为定义注解的“关键字”</span>
     <span class="c1">//为注解添加属性</span>
-    <span class="n">String</span> <span class="nf">color</span><span class="o">();</span>
-    <span class="n">String</span> <span class="nf">value</span><span class="o">()</span> <span class="k">default</span> <span class="s">&quot;default&quot;</span><span class="o">;</span> <span class="c1">//为属性提供默认值</span>
-    <span class="kt">int</span><span class="o">[]</span> <span class="nf">array</span><span class="o">()</span> <span class="k">default</span> <span class="o">{</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">};</span>
+    <span class="n">String</span> <span class="n">color</span><span class="o">();</span>
+    <span class="n">String</span> <span class="n">value</span><span class="o">()</span> <span class="k">default</span> <span class="s">"default"</span><span class="o">;</span> <span class="c1">//为属性提供默认值</span>
+    <span class="kt">int</span><span class="o">[]</span> <span class="n">array</span><span class="o">()</span> <span class="k">default</span> <span class="o">{</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">};</span>
 <span class="o">}</span>
 
 <span class="c1">// 测试文件</span>
-<span class="c1">// (value=&quot;not default&quot;)则可以写成(&quot;not default&quot;)value比较特殊，其他不可以省略写</span>
-<span class="nd">@MyAnnotation</span><span class="o">(</span><span class="n">color</span> <span class="o">=</span> <span class="s">&quot;red&quot;</span><span class="o">)</span>  <span class="c1">// 注解中没有默认值的必须赋值；</span>
+<span class="c1">// (value="not default")则可以写成("not default")value比较特殊，其他不可以省略写</span>
+<span class="nd">@MyAnnotation</span><span class="o">(</span><span class="n">color</span> <span class="o">=</span> <span class="s">"red"</span><span class="o">)</span>  <span class="c1">// 注解中没有默认值的必须赋值；</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">AnnotationTest</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
         <span class="c1">//检查类AnnotationTest是否含有@MyAnnotation注解</span>
         <span class="k">if</span> <span class="o">(</span><span class="n">AnnotationTest</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">isAnnotationPresent</span><span class="o">(</span><span class="n">MyAnnotation</span><span class="o">.</span><span class="na">class</span><span class="o">))</span> <span class="o">{</span>
             <span class="c1">//若存在就提取注解的值</span>
@@ -184,23 +216,25 @@ RetentionPoicy.RUNTIME      : 在运行时有效（即运行时保留）
         <span class="o">}</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre></div>
-<hr>
+</code></pre>
+</div>
+
+<hr />
 
 <h2 id="rule"> 注解的使用规则 </h2>
 
 <ol>
-<li>使用<code class="prettyprint">@interface</code>定义注解时，自动继承了<code class="prettyprint">java.lang.annotation.Annotation</code>接口，由编译程序自动完成其他细节。<br></li>
-<li>定义注解时，不能继承其他的注解或接口。<br></li>
-<li><code class="prettyprint">@interface</code>用来声明一个注解，其中的每一个方法实际上是声明了一个配置参数。方法的名称就是参数的名称，返回值类型就是参数的类型。</li>
-<li>参数类型只能是基本类型、String、Class、enum、Annotation或这些类型的数组。</li>
-<li>可以通过default来声明参数的默认值。</li>
-<li>参数只能用public或默认(default)这两个访问权修饰.例如,String value();这里把方法设为defaul默认类型；</li>
-<li>如果只有一个参数成员,最好把参数名称设为<q>value</q>,后加小括号，指定其值时可以是(value=<q>abc</q>)或简写成(<q>abc</q>)，其他名字的成员不能简写。</li>
-<li>注解元素必须有确定的值，要么在定义注解的默认值中指定，要么在使用注解时指定，非基本类型的注解元素的值不可为null。</li>
+  <li>使用<code class="highlighter-rouge">@interface</code>定义注解时，自动继承了<code class="highlighter-rouge">java.lang.annotation.Annotation</code>接口，由编译程序自动完成其他细节。  </li>
+  <li>定义注解时，不能继承其他的注解或接口。  </li>
+  <li><code class="highlighter-rouge">@interface</code>用来声明一个注解，其中的每一个方法实际上是声明了一个配置参数。方法的名称就是参数的名称，返回值类型就是参数的类型。</li>
+  <li>参数类型只能是基本类型、String、Class、enum、Annotation或这些类型的数组。</li>
+  <li>可以通过default来声明参数的默认值。</li>
+  <li>参数只能用public或默认(default)这两个访问权修饰.例如,String value();这里把方法设为defaul默认类型；</li>
+  <li>如果只有一个参数成员,最好把参数名称设为”value”,后加小括号，指定其值时可以是(value=”abc”)或简写成(“abc”)，其他名字的成员不能简写。</li>
+  <li>注解元素必须有确定的值，要么在定义注解的默认值中指定，要么在使用注解时指定，非基本类型的注解元素的值不可为null。</li>
 </ol>
 
-<hr>
+<hr />
 
         </div>
     </div>

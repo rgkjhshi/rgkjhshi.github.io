@@ -99,100 +99,108 @@ jQuery(function(){
     <div class="uk-grid">
         <div  class="uk-width-4-4">
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
-            <hr>
+            <hr />
 
-<h2 id="本文结构">本文结构</h2>
+<h2 id="section">本文结构</h2>
 
 <ul>
-<li><a href="#id1">Spring容器</a></li>
-<li><a href="#id2">依赖注入的方式</a></li>
-<li><a href="#id3">Bean的scope属性</a></li>
+  <li><a href="#id1">Spring容器</a></li>
+  <li><a href="#id2">依赖注入的方式</a></li>
+  <li><a href="#id3">Bean的scope属性</a></li>
 </ul>
 
-<hr>
+<hr />
 
 <h2 id="id1"> Spring容器 </h2>
 
-<p>Spring容器是Spring的核心，是生成<code class="prettyprint">Bean</code>的工厂。Spring有两个核心接口：<code class="prettyprint">BeanFactory</code>和<code class="prettyprint">ApplicationContext</code>，后者是前者的子接口，二者都可以代表Spring容器。<br>
-<code class="prettyprint">ApplictionContext</code>的实现类有：</p>
+<p>Spring容器是Spring的核心，是生成<code class="highlighter-rouge">Bean</code>的工厂。Spring有两个核心接口：<code class="highlighter-rouge">BeanFactory</code>和<code class="highlighter-rouge">ApplicationContext</code>，后者是前者的子接口，二者都可以代表Spring容器。<br />
+<code class="highlighter-rouge">ApplictionContext</code>的实现类有：</p>
 
 <ul>
-<li><code class="prettyprint">FileSystemXmlApplicationContext</code>: 基于文件系统的XML配置文件创建<code class="prettyprint">ApplicationContext</code></li>
-<li><code class="prettyprint">ClassPathXmlApplicationContext</code>: 基于类加载路径下的xml配置文件创建<code class="prettyprint">ApplicationContext</code></li>
+  <li><code class="highlighter-rouge">FileSystemXmlApplicationContext</code>: 基于文件系统的XML配置文件创建<code class="highlighter-rouge">ApplicationContext</code></li>
+  <li><code class="highlighter-rouge">ClassPathXmlApplicationContext</code>: 基于类加载路径下的xml配置文件创建<code class="highlighter-rouge">ApplicationContext</code></li>
 </ul>
 
 <p>所以一般可以这样创建Spring容器：</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">ApplicationContext</span> <span class="n">context</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ClassPathXmlApplicationContext</span><span class="o">(</span><span class="s">&quot;classpath:spring.xml&quot;</span><span class="o">);</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">ApplicationContext</span> <span class="n">context</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ClassPathXmlApplicationContext</span><span class="o">(</span><span class="s">"classpath:spring.xml"</span><span class="o">);</span>
 <span class="c1">//或者</span>
-<span class="n">ApplicationContext</span> <span class="n">context</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">FileSystemXmlApplicationContext</span><span class="o">(</span><span class="s">&quot;file:绝对路径/spring.xml&quot;</span><span class="o">);</span>
-</code></pre></div>
-<hr>
+<span class="n">ApplicationContext</span> <span class="n">context</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileSystemXmlApplicationContext</span><span class="o">(</span><span class="s">"file:绝对路径/spring.xml"</span><span class="o">);</span>
+</code></pre>
+</div>
+
+<hr />
 
 <h2 id="id2"> 依赖注入的方式 </h2>
 
 <p>依赖注入的方式主要有2种：</p>
 
 <ul>
-<li>通过<code class="prettyprint">Bean</code>属性的<code class="prettyprint">setter</code>方法注入(前提是有setter方法)</li>
-<li>通过<code class="prettyprint">Bean</code>的构造方法注入(前提是有构造方法)</li>
+  <li>通过<code class="highlighter-rouge">Bean</code>属性的<code class="highlighter-rouge">setter</code>方法注入(前提是有setter方法)</li>
+  <li>通过<code class="highlighter-rouge">Bean</code>的构造方法注入(前提是有构造方法)</li>
 </ul>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="c">&lt;!-- 通过 setter 方法注入 --&gt;</span>
-    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;helloService&quot;</span> <span class="na">class=</span><span class="s">&quot;com.test.spring.service.impl.HelloServiceImpl&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;hello&quot;</span> <span class="na">ref=</span><span class="s">&quot;hello&quot;</span><span class="nt">/&gt;</span>  <span class="c">&lt;!-- 若参数不是自定义类型，则使用value=&quot;**&quot;的方式 --&gt;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c">&lt;!-- 通过 setter 方法注入 --&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"helloService"</span> <span class="na">class=</span><span class="s">"com.test.spring.service.impl.HelloServiceImpl"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"hello"</span> <span class="na">ref=</span><span class="s">"hello"</span><span class="nt">/&gt;</span>  <span class="c">&lt;!-- 若参数不是自定义类型，则使用value="**"的方式 --&gt;</span>
     <span class="nt">&lt;/bean&gt;</span>
     <span class="c">&lt;!-- 通过构造方法注入 --&gt;</span>
-    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;helloService&quot;</span> <span class="na">class=</span><span class="s">&quot;com.test.spring.service.impl.HelloServiceImpl&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"helloService"</span> <span class="na">class=</span><span class="s">"com.test.spring.service.impl.HelloServiceImpl"</span><span class="nt">&gt;</span>
         <span class="c">&lt;!-- 下面着四种注入方式，只要一种就可以，最好通过name或者index来注入 --&gt;</span>
-        <span class="nt">&lt;constructor-arg</span> <span class="na">ref=</span><span class="s">&quot;hello&quot;</span> <span class="nt">/&gt;</span>  <span class="c">&lt;!-- 当构造方法有多个参数时，这样会有问题 --&gt;</span>
-        <span class="nt">&lt;constructor-arg</span> <span class="na">name=</span><span class="s">&quot;hello&quot;</span> <span class="na">ref=</span><span class="s">&quot;hello&quot;</span> <span class="nt">/&gt;</span> <span class="c">&lt;!-- 通过参数名称注入 --&gt;</span>
-        <span class="nt">&lt;constructor-arg</span> <span class="na">index=</span><span class="s">&quot;0&quot;</span> <span class="na">ref=</span><span class="s">&quot;hello&quot;</span> <span class="nt">/&gt;</span>    <span class="c">&lt;!-- 通过参数索引注入 --&gt;</span>
-        <span class="nt">&lt;constructor-arg</span> <span class="na">type=</span><span class="s">&quot;com.test.spring.dao.Hello&quot;</span> <span class="na">ref=</span><span class="s">&quot;hello&quot;</span> <span class="nt">/&gt;</span> <span class="c">&lt;!-- 通过参数类型注入 --&gt;</span>
+        <span class="nt">&lt;constructor-arg</span> <span class="na">ref=</span><span class="s">"hello"</span> <span class="nt">/&gt;</span>  <span class="c">&lt;!-- 当构造方法有多个参数时，这样会有问题 --&gt;</span>
+        <span class="nt">&lt;constructor-arg</span> <span class="na">name=</span><span class="s">"hello"</span> <span class="na">ref=</span><span class="s">"hello"</span> <span class="nt">/&gt;</span> <span class="c">&lt;!-- 通过参数名称注入 --&gt;</span>
+        <span class="nt">&lt;constructor-arg</span> <span class="na">index=</span><span class="s">"0"</span> <span class="na">ref=</span><span class="s">"hello"</span> <span class="nt">/&gt;</span>    <span class="c">&lt;!-- 通过参数索引注入 --&gt;</span>
+        <span class="nt">&lt;constructor-arg</span> <span class="na">type=</span><span class="s">"com.test.spring.dao.Hello"</span> <span class="na">ref=</span><span class="s">"hello"</span> <span class="nt">/&gt;</span> <span class="c">&lt;!-- 通过参数类型注入 --&gt;</span>
         <span class="c">&lt;!-- 通过参数类型注入的其他例子 --&gt;</span>
-        <span class="c">&lt;!--&lt;constructor-arg type=&quot;java.lang.Double&quot; value=&quot;100.00&quot; /&gt;--&gt;</span>
+        <span class="c">&lt;!--&lt;constructor-arg type="java.lang.Double" value="100.00" /&gt;--&gt;</span>
     <span class="nt">&lt;/bean&gt;</span>
-</code></pre></div>
-<hr>
+</code></pre>
+</div>
+
+<hr />
 
 <h2 id="id3"> Bean的scope属性 </h2>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;hello&quot;</span> <span class="na">class=</span><span class="s">&quot;com.test.spring.dao.impl.HelloImpl&quot;</span> <span class="na">scope=</span><span class="s">&quot;singleton&quot;</span><span class="nt">&gt;&lt;/bean&gt;</span>
-</code></pre></div>
-<p><code class="prettyprint">bean</code>元素的<code class="prettyprint">scope</code>属性主要是用来指定如何创建<code class="prettyprint">bean</code>对象的，系统已经实现的主要有五中类型，分别是：<code class="prettyprint">singleton</code>、<code class="prettyprint">prototype</code>、<code class="prettyprint">request</code>、<code class="prettyprint">session</code>和<code class="prettyprint">globalSession</code>。
-其中<code class="prettyprint">request</code>、<code class="prettyprint">session</code>和<code class="prettyprint">globalSession</code>只能在web环境中使用，当在非web环境中使用它们时，系统会抛出<code class="prettyprint">IllegalStateException</code>异常。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"hello"</span> <span class="na">class=</span><span class="s">"com.test.spring.dao.impl.HelloImpl"</span> <span class="na">scope=</span><span class="s">"singleton"</span><span class="nt">&gt;&lt;/bean&gt;</span>
+</code></pre>
+</div>
+<p><code class="highlighter-rouge">bean</code>元素的<code class="highlighter-rouge">scope</code>属性主要是用来指定如何创建<code class="highlighter-rouge">bean</code>对象的，系统已经实现的主要有五中类型，分别是：<code class="highlighter-rouge">singleton</code>、<code class="highlighter-rouge">prototype</code>、<code class="highlighter-rouge">request</code>、<code class="highlighter-rouge">session</code>和<code class="highlighter-rouge">globalSession</code>。
+其中<code class="highlighter-rouge">request</code>、<code class="highlighter-rouge">session</code>和<code class="highlighter-rouge">globalSession</code>只能在web环境中使用，当在非web环境中使用它们时，系统会抛出<code class="highlighter-rouge">IllegalStateException</code>异常。</p>
 
 <ul>
-<li><code class="prettyprint">singleton</code>: 默认值，单例模式。在整个Spring IoC容器中只会创建一个对象，该对象创建以后是保存在<code class="prettyprint">singleton beans</code>的缓存中的，每次都取得同一个<code class="prettyprint">bean</code>对象。</li>
-<li><code class="prettyprint">prototype</code>: 原型模式。每次通过容器的<code class="prettyprint">getBean</code>方法获取<code class="prettyprint">prototype</code>定义的<code class="prettyprint">Bean</code>时，都将产生一个新实例。</li>
-<li><code class="prettyprint">request</code>: 对每次<code class="prettyprint">HTTP request</code>都将产生一个新实例。</li>
-<li><code class="prettyprint">session</code>: 对每个处于活跃状态的<code class="prettyprint">HttpSession</code>都将创建一个对象。</li>
-<li><code class="prettyprint">globalSession</code>: 一个全局的<code class="prettyprint">HttpSession</code>下会拥有一个单独的实例，通常用于Portlet环境下。</li>
+  <li><code class="highlighter-rouge">singleton</code>: 默认值，单例模式。在整个Spring IoC容器中只会创建一个对象，该对象创建以后是保存在<code class="highlighter-rouge">singleton beans</code>的缓存中的，每次都取得同一个<code class="highlighter-rouge">bean</code>对象。</li>
+  <li><code class="highlighter-rouge">prototype</code>: 原型模式。每次通过容器的<code class="highlighter-rouge">getBean</code>方法获取<code class="highlighter-rouge">prototype</code>定义的<code class="highlighter-rouge">Bean</code>时，都将产生一个新实例。</li>
+  <li><code class="highlighter-rouge">request</code>: 对每次<code class="highlighter-rouge">HTTP request</code>都将产生一个新实例。</li>
+  <li><code class="highlighter-rouge">session</code>: 对每个处于活跃状态的<code class="highlighter-rouge">HttpSession</code>都将创建一个对象。</li>
+  <li><code class="highlighter-rouge">globalSession</code>: 一个全局的<code class="highlighter-rouge">HttpSession</code>下会拥有一个单独的实例，通常用于Portlet环境下。</li>
 </ul>
 
 <p><strong>注意</strong>:</p>
 
 <ul>
-<li>当一个<code class="prettyprint">singleton</code>的<code class="prettyprint">bean A</code>依赖于一个<code class="prettyprint">prototype</code>的<code class="prettyprint">bean B</code>时，A拥有的B就只会在A初始化时初始化一次，每次在A使用B的时候都是用的同一个对象B，这与B为<code class="prettyprint">prototype</code>有点违背，不是我们想要的结果，其解决办法是，使<code class="prettyprint">bean A</code>实现一个<code class="prettyprint">ApplicationContextAware</code>接口，在每次A需要使用B的时候都从<code class="prettyprint">ApplicationContext</code>里面取一个B对象，这个时候取的B对象每次都会是不一样的。</li>
-<li>当需要把一个<code class="prettyprint">http</code>级别的<code class="prettyprint">scope</code>的对象注入到其他<code class="prettyprint">bean</code>中时，需要在声明的<code class="prettyprint">http</code>级别的<code class="prettyprint">scope</code>的对象中加入<code class="prettyprint">&lt;aop:scoped-proxy/&gt;</code>如下面的userPreferences对象</li>
+  <li>当一个<code class="highlighter-rouge">singleton</code>的<code class="highlighter-rouge">bean A</code>依赖于一个<code class="highlighter-rouge">prototype</code>的<code class="highlighter-rouge">bean B</code>时，A拥有的B就只会在A初始化时初始化一次，每次在A使用B的时候都是用的同一个对象B，这与B为<code class="highlighter-rouge">prototype</code>有点违背，不是我们想要的结果，其解决办法是，使<code class="highlighter-rouge">bean A</code>实现一个<code class="highlighter-rouge">ApplicationContextAware</code>接口，在每次A需要使用B的时候都从<code class="highlighter-rouge">ApplicationContext</code>里面取一个B对象，这个时候取的B对象每次都会是不一样的。</li>
+  <li>当需要把一个<code class="highlighter-rouge">http</code>级别的<code class="highlighter-rouge">scope</code>的对象注入到其他<code class="highlighter-rouge">bean</code>中时，需要在声明的<code class="highlighter-rouge">http</code>级别的<code class="highlighter-rouge">scope</code>的对象中加入<code class="highlighter-rouge">&lt;aop:scoped-proxy/&gt;</code>如下面的userPreferences对象</li>
 </ul>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml">    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;userPreferences&quot;</span> <span class="na">class=</span><span class="s">&quot;com.foo.UserPreferences&quot;</span> <span class="na">scope=</span><span class="s">&quot;session&quot;</span><span class="nt">&gt;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"userPreferences"</span> <span class="na">class=</span><span class="s">"com.foo.UserPreferences"</span> <span class="na">scope=</span><span class="s">"session"</span><span class="nt">&gt;</span>
         <span class="c">&lt;!-- &lt;aop:scoped-proxy/&gt; --&gt;</span>
-        <span class="nt">&lt;aop:scoped-proxy</span> <span class="na">proxy-target-class=</span><span class="s">&quot;false&quot;</span><span class="nt">/&gt;</span><span class="c">&lt;!-- 为true则为开启对CGLIB的支持  --&gt;</span>
+        <span class="nt">&lt;aop:scoped-proxy</span> <span class="na">proxy-target-class=</span><span class="s">"false"</span><span class="nt">/&gt;</span><span class="c">&lt;!-- 为true则为开启对CGLIB的支持  --&gt;</span>
     <span class="nt">&lt;/bean&gt;</span>  
-    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;userService&quot;</span> <span class="na">class=</span><span class="s">&quot;com.foo.SimpleUserService&quot;</span><span class="nt">&gt;</span>  
-        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;userPreferences&quot;</span> <span class="na">ref=</span><span class="s">&quot;userPreferences&quot;</span><span class="nt">/&gt;</span>  
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"userService"</span> <span class="na">class=</span><span class="s">"com.foo.SimpleUserService"</span><span class="nt">&gt;</span>  
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"userPreferences"</span> <span class="na">ref=</span><span class="s">"userPreferences"</span><span class="nt">/&gt;</span>  
     <span class="nt">&lt;/bean&gt;</span>
-</code></pre></div>
-<p>这样做的<strong>原因</strong>就像在<code class="prettyprint">singleton</code>的<code class="prettyprint">Bean</code>中引用了<code class="prettyprint">prototype</code>的<code class="prettyprint">Bean</code>一样，而使用<code class="prettyprint">&lt;aop:scoped-proxy/&gt;</code>就会在实际调用的时候每次使用代理去代理<code class="prettyprint">userPreferences</code>调用其对应的方法，代理访问的是对应的<code class="prettyprint">session</code>中的对象，这样就可以实现每个<code class="prettyprint">session</code>对应一个对象。而在代理的时候有两种方式，一种是基于JDK的interface的，一种是CGLIB形式的，如果要代理的类是面向对象的，就可以直接使用JDK的代理，否则就需要开启对CGLIB代理的支持，同时要引入CGLIB的jar包。</p>
+</code></pre>
+</div>
+<p>这样做的<strong>原因</strong>就像在<code class="highlighter-rouge">singleton</code>的<code class="highlighter-rouge">Bean</code>中引用了<code class="highlighter-rouge">prototype</code>的<code class="highlighter-rouge">Bean</code>一样，而使用<code class="highlighter-rouge">&lt;aop:scoped-proxy/&gt;</code>就会在实际调用的时候每次使用代理去代理<code class="highlighter-rouge">userPreferences</code>调用其对应的方法，代理访问的是对应的<code class="highlighter-rouge">session</code>中的对象，这样就可以实现每个<code class="highlighter-rouge">session</code>对应一个对象。而在代理的时候有两种方式，一种是基于JDK的interface的，一种是CGLIB形式的，如果要代理的类是面向对象的，就可以直接使用JDK的代理，否则就需要开启对CGLIB代理的支持，同时要引入CGLIB的jar包。</p>
 
 <ul>
-<li><code class="prettyprint">request</code>、<code class="prettyprint">session</code>和<code class="prettyprint">globalSession</code>只在Web环境中，并且在Web应用中增加了额外的配置（将HTTP请求对象绑定到为该请求提供服务的线程上）才会生效。具体做法是：<br>
-
-<ul>
-<li>若使用支持<code class="prettyprint">servlet2.4+</code>的容器，则需要在<code class="prettyprint">web.xml</code>中加入一个<code class="prettyprint">RequestContextListener</code>监听器</li>
-<li>若使用只支持<code class="prettyprint">servlet2.4</code>之前规范的容器，则该容器不支持<code class="prettyprint">Listener</code>规范，故无法使用这种配置，需要在<code class="prettyprint">web.xml</code>中加入一个<code class="prettyprint">RequestContextFilter</code></li>
-<li>若Web应用直接使用<code class="prettyprint">Spring MVC</code>作为MVC框架，则无需这些额外的配置，因为<code class="prettyprint">SpringDispatchServlet</code>或<code class="prettyprint">DispatchPortlet</code>已经处理了所有和请求有关的状态处理。</li>
-</ul></li>
+  <li><code class="highlighter-rouge">request</code>、<code class="highlighter-rouge">session</code>和<code class="highlighter-rouge">globalSession</code>只在Web环境中， 并且在Web应用中增加了额外的配置（将HTTP请求对象绑定到为该请求提供服务的线程上）才会生效。具体做法是：  </li>
+  <li>若使用支持<code class="highlighter-rouge">servlet2.4+</code>的容器，则需要在<code class="highlighter-rouge">web.xml</code>中加入一个<code class="highlighter-rouge">RequestContextListener</code>监听器</li>
+  <li>若使用只支持<code class="highlighter-rouge">servlet2.4</code>之前规范的容器，则该容器不支持<code class="highlighter-rouge">Listener</code>规范，故无法使用这种配置， 需要在<code class="highlighter-rouge">web.xml</code>中加入一个<code class="highlighter-rouge">RequestContextFilter</code></li>
+  <li>若Web应用直接使用<code class="highlighter-rouge">Spring MVC</code>作为MVC框架，则无需这些额外的配置，因为<code class="highlighter-rouge">SpringDispatchServlet</code>或<code class="highlighter-rouge">DispatchPortlet</code> 已经处理了所有和请求有关的状态处理。</li>
 </ul>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;web-app&gt;</span>  
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;web-app&gt;</span>  
     ...  
     <span class="c">&lt;!-- 支持servlet2.4及以上 RequestContextListener --&gt;</span>
     <span class="nt">&lt;listener&gt;</span>  
@@ -211,8 +219,10 @@ jQuery(function(){
     <span class="nt">&lt;/filter-mapping&gt;</span>
     ...  
 <span class="nt">&lt;/web-app&gt;</span>
-</code></pre></div>
-<hr>
+</code></pre>
+</div>
+
+<hr />
 
         </div>
     </div>

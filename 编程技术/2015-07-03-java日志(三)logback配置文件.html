@@ -101,59 +101,60 @@ jQuery(function(){
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
             <p>logback配置文件的简单介绍，主要内容均来自<a href="http://logback.qos.ch/manual/">logback官方文档</a></p>
 
-<hr>
+<hr />
 
-<h2 id="本文结构">本文结构</h2>
-
-<ul>
-<li><a href="#structure">logback配置文件的结构</a></li>
-<li><a href="#configuration">configuration元素</a>
+<h2 id="section">本文结构</h2>
 
 <ul>
-<li><a href="#debug">debug属性</a></li>
-<li><a href="#scan">scan属性</a></li>
-</ul></li>
-<li><a href="#logger">logger元素</a>
-
-<ul>
-<li><a href="#name">name属性</a></li>
-<li><a href="#level">level属性</a></li>
-<li><a href="#additivity">additivity属性</a></li>
-</ul></li>
-<li><a href="#appender">appender元素</a>
-
-<ul>
-<li><a href="#encoder">encoder子元素</a></li>
-<li><a href="#layout">layout子元素</a></li>
-<li><a href="#pattern">日志格式的详细说明(pattern元素)</a></li>
-</ul></li>
+  <li><a href="#structure">logback配置文件的结构</a></li>
+  <li><a href="#configuration">configuration元素</a>
+    <ul>
+      <li><a href="#debug">debug属性</a></li>
+      <li><a href="#scan">scan属性</a></li>
+    </ul>
+  </li>
+  <li><a href="#logger">logger元素</a>
+    <ul>
+      <li><a href="#name">name属性</a></li>
+      <li><a href="#level">level属性</a></li>
+      <li><a href="#additivity">additivity属性</a></li>
+    </ul>
+  </li>
+  <li><a href="#appender">appender元素</a>
+    <ul>
+      <li><a href="#encoder">encoder子元素</a></li>
+      <li><a href="#layout">layout子元素</a>
+        <ul>
+          <li><a href="#pattern">日志格式的详细说明(pattern元素)</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
 </ul>
 
-<hr>
+<hr />
 
 <h2 id="structure"> logback配置文件的结构 </h2>
 
-<p>logback配置文件的跟节点为<code class="prettyprint">&lt;configuration&gt;</code>,它的子节点有3个:<code class="prettyprint">root、logger、appender</code>，除了<code class="prettyprint">root</code>之外，每个都可以多次出现。<br>
+<p>logback配置文件的跟节点为<code class="highlighter-rouge">&lt;configuration&gt;</code>,它的子节点有3个:<code class="highlighter-rouge">root、logger、appender</code>，除了<code class="highlighter-rouge">root</code>之外，每个都可以多次出现。<br />
 下面是我画的一个结构图，实线表示节点，虚线表示属性</p>
 
-<p><img src="/static/images/logbak_config.png" alt="logback配置文件结构图" title="结构图"></p>
+<p><img src="/static/images/logbak_config.png" alt="logback配置文件结构图" title="结构图" /></p>
 
 <ul>
-<li><code class="prettyprint">appender</code>:用于描述日志的输出格式，是输出到控制台还是输出到文件，日志滚动打包策略等。</li>
-<li><code class="prettyprint">logger</code>:用来制定把什么内容用哪个<code class="prettyprint">appender</code>输出。</li>
-<li><code class="prettyprint">root</code>:默认的<code class="prettyprint">logger</code>。</li>
+  <li><code class="highlighter-rouge">appender</code>:用于描述日志的输出格式，是输出到控制台还是输出到文件，日志滚动打包策略等。</li>
+  <li><code class="highlighter-rouge">logger</code>:用来制定把什么内容用哪个<code class="highlighter-rouge">appender</code>输出。</li>
+  <li><code class="highlighter-rouge">root</code>:默认的<code class="highlighter-rouge">logger</code>。</li>
 </ul>
 
-<hr>
+<hr />
 
 <h2 id="configuration"> configuration元素 </h2>
+<p><code class="highlighter-rouge">configuration</code>元素是logback配置文件的根元素，它也有许多可选属性，如: <code class="highlighter-rouge">debug、scan、scanPeriod</code>等
+&lt;h3 id="debug"&gt; debug 属性 &lt;/h3&gt;
+如果logback的配置文件加载过程中出现了warning或error，则logback会把自身状态的日志打印出来，如下:</p>
 
-<p><code class="prettyprint">configuration</code>元素是logback配置文件的根元素，它也有许多可选属性，如: <code class="prettyprint">debug、scan、scanPeriod</code>等</p>
-
-<h3 id="debug"> debug 属性 </h3>
-
-<p>如果logback的配置文件加载过程中出现了warning或error，则logback会把自身状态的日志打印出来，如下:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">00:16:31,885 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.test.log] to INFO
+<div class="highlighter-rouge"><pre class="highlight"><code>00:16:31,885 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.test.log] to INFO
 00:16:31,885 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting additivity of logger [com.test.log] to false
 00:16:31,885 |-ERROR in ch.qos.logback.core.joran.action.AppenderRefAction - Could not find an appender named [STDOUT]....
 00:16:31,885 |-ERROR in ch.qos.logback.core.joran.action.AppenderRefAction - See ... for more details.
@@ -162,168 +163,172 @@ jQuery(function(){
 00:16:31,885 |-ERROR in ch.qos.logback.core.joran.action.AppenderRefAction - See ... for more details.
 00:16:31,885 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - End of configuration.
 00:16:31,888 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@36577c06 - Registering current configuration as...
-</code></pre></div>
-<p>如果加载过程未出现警告或者错误，就不会打印出来了。<br>
-若指定了<code class="prettyprint">debug=&quot;true&quot;</code>，即使不出现警告和错误，也会打印出logback内部的状态日志。</p>
+</code></pre>
+</div>
+<p>如果加载过程未出现警告或者错误，就不会打印出来了。<br />
+若指定了<code class="highlighter-rouge">debug="true"</code>，即使不出现警告和错误，也会打印出logback内部的状态日志。</p>
 
 <h3 id="scan"> scan 属性 </h3>
+<p>可通过属性设置<code class="highlighter-rouge">scan="true"</code>，在配置文件发生改变时自动重新加载配置文件，默认1分钟重新扫描一次。<br />
+可通过属性设置<code class="highlighter-rouge">scanPeriod="30 seconds"</code>，指定30秒扫描一次。<br />
+扫描间隔的单位可以是<code class="highlighter-rouge">milliseconds, seconds, minutes 或 hours</code>，若不指定单位，默认为<code class="highlighter-rouge">milliseconds</code>。</p>
 
-<p>可通过属性设置<code class="prettyprint">scan=&quot;true&quot;</code>，在配置文件发生改变时自动重新加载配置文件，默认1分钟重新扫描一次。<br>
-可通过属性设置<code class="prettyprint">scanPeriod=&quot;30 seconds&quot;</code>，指定30秒扫描一次。<br>
-扫描间隔的单位可以是<code class="prettyprint">milliseconds, seconds, minutes 或 hours</code>，若不指定单位，默认为<code class="prettyprint">milliseconds</code>。</p>
+<hr />
 
-<hr>
-
-<p><h2 id="logger"> logger元素 </h3>
-<code class="prettyprint">logger</code>元素用于配置代码中的logger，它有属性如: <code class="prettyprint">name、level、additivity</code>，其中<code class="prettyprint">name</code>属性是必须的，其他2个可选。
-有0个或多个子元素<code class="prettyprint">&lt;appender-ref ref=&quot;STDOUT&quot; /&gt;</code>来指定日志输出的格式。若0个，则不指定输出格式，就不会输出了。<br>
-<strong>注意</strong><code class="prettyprint">root</code>是最顶级的logger，它只有个可选属性level。</p>
+<h2 id="logger"> logger元素 </h2>
+<p><code class="highlighter-rouge">logger</code>元素用于配置代码中的logger，它有属性如: <code class="highlighter-rouge">name、level、additivity</code>，其中<code class="highlighter-rouge">name</code>属性是必须的，其他2个可选。
+有0个或多个子元素<code class="highlighter-rouge">&lt;appender-ref ref="STDOUT" /&gt;</code>来指定日志输出的格式。若0个，则不指定输出格式，就不会输出了。<br />
+<strong>注意</strong><code class="highlighter-rouge">root</code>是最顶级的logger，它只有个可选属性level。</p>
 
 <h3 id="name"> name 属性 </h3>
+<p>在java代码中，getLogger(String className)的参数一样获取到的logger是同一个，如下面的<code class="highlighter-rouge">logger1</code>和<code class="highlighter-rouge">logger2</code>就是同一个对象:</p>
 
-<p>在java代码中，getLogger(String className)的参数一样获取到的logger是同一个，如下面的<code class="prettyprint">logger1</code>和<code class="prettyprint">logger2</code>就是同一个对象:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Logger</span> <span class="n">logger1</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="s">&quot;org.slf4j.Logger&quot;</span><span class="o">);</span>
-<span class="n">Logger</span> <span class="n">logger2</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="s">&quot;org.slf4j.Logger&quot;</span><span class="o">);</span>
-</code></pre></div>
-<p>日志<code class="prettyprint">logger</code>有个<code class="prettyprint">name</code>属性，跟代码中传的参数有一定的关系，举个例子:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="o">&lt;!--</span> <span class="n">配置文件中</span> <span class="o">--&gt;</span>
-    <span class="o">&lt;</span><span class="n">logger</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;A.B&quot;</span> <span class="n">level</span><span class="o">=</span><span class="s">&quot;debug&quot;</span> <span class="o">&gt;</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Logger</span> <span class="n">logger1</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="s">"org.slf4j.Logger"</span><span class="o">);</span>
+<span class="n">Logger</span> <span class="n">logger2</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="s">"org.slf4j.Logger"</span><span class="o">);</span>
+</code></pre>
+</div>
+<p>日志<code class="highlighter-rouge">logger</code>有个<code class="highlighter-rouge">name</code>属性，跟代码中传的参数有一定的关系，举个例子:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="o">&lt;!--</span> <span class="err">配置文件中</span> <span class="o">--&gt;</span>
+    <span class="o">&lt;</span><span class="n">logger</span> <span class="n">name</span><span class="o">=</span><span class="s">"A.B"</span> <span class="n">level</span><span class="o">=</span><span class="s">"debug"</span> <span class="o">&gt;</span>
     <span class="c1">// java 代码中</span>
-    <span class="n">Logger</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="s">&quot;A.B.C&quot;</span><span class="o">);</span>
-</code></pre></div>
-<p>输出的日志会先在配置文件中匹配名字为<q>A.B.C</q>的logger，未找到，匹配到了<q>A.B</q>的logger，则按照其指定的<code class="prettyprint">appender</code>格式进行输出。</p>
+    <span class="n">Logger</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="s">"A.B.C"</span><span class="o">);</span>
+</code></pre>
+</div>
+<p>输出的日志会先在配置文件中匹配名字为”A.B.C”的logger，未找到，匹配到了”A.B”的logger，则按照其指定的<code class="highlighter-rouge">appender</code>格式进行输出。</p>
 
 <h3 id="level"> level属性 </h3>
-
-<p>日志的级别有: <code class="prettyprint">TRACE &lt; DEBUG &lt; INFO &lt;  WARN &lt; ERROR (ALL、OFF)</code><br>
-日志级别是可以继承的，root不用指定级别，默认就是<q>DEBUG</q>. 举个继承的例子:</p>
+<p>日志的级别有: <code class="highlighter-rouge">TRACE &lt; DEBUG &lt; INFO &lt;  WARN &lt; ERROR (ALL、OFF)</code><br />
+日志级别是可以继承的，root不用指定级别，默认就是”DEBUG”. 举个继承的例子:</p>
 
 <table>
+  <thead>
     <tr>
-        <th>Logger name</th>
-        <th>Assigned level</th>
-        <th>Effective level</th>
+      <th>Logger name</th>
+      <th>Assigned level</th>
+      <th>Effective level</th>
     </tr>
-    <tr class="alt" align="left">
-        <td>root</td>
-        <td>DEBUG</td>
-        <td>DEBUG</td>
+  </thead>
+  <tbody>
+    <tr>
+      <td>root</td>
+      <td>DEBUG</td>
+      <td>DEBUG</td>
     </tr>
-    <tr align="left">
-        <td>X</td>
-        <td>INFO</td>
-        <td>INFO</td>
+    <tr>
+      <td>X</td>
+      <td>INFO</td>
+      <td>INFO</td>
     </tr>
-    <tr class="alt" align="left">
-        <td>X.Y</td>
-        <td>未指定</td>
-        <td>INFO(继承来的)</td>
+    <tr>
+      <td>X.Y</td>
+      <td>未指定</td>
+      <td>INFO(继承来的)</td>
     </tr>
-    <tr align="left">
-        <td>X.Y.Z</td>
-        <td>ERROR</td>
-        <td>ERROR(自己有)</td>
+    <tr>
+      <td>X.Y.Z</td>
+      <td>ERROR</td>
+      <td>ERROR(自己有)</td>
     </tr>
+  </tbody>
 </table>
 
 <h3 id="additivity"> additivity属性 </h3>
-
-<p>该属性表示日志的可叠加性，默认为true,表示到达本logger的日志通过本日志的appender指定格式输出之后，仍会将日志扩散给父logger。<br>
+<p>该属性表示日志的可叠加性，默认为true,表示到达本logger的日志通过本日志的appender指定格式输出之后， 仍会将日志扩散给父logger。<br />
 弄个表格就容易看清楚了:</p>
 
-<table class="bodyTable">
+<table>
+  <thead>
     <tr>
-        <th>Logger Name</th>
-        <th>Attached Appenders</th>
-        <th>Additivity Flag</th>
-        <th>Output Targets</th>
-        <th>Comment</th>
+      <th>Logger Name</th>
+      <th>Attached Appenders</th>
+      <th>Additivity Flag</th>
+      <th>Output Targets</th>
+      <th>Comment</th>
     </tr>
+  </thead>
+  <tbody>
     <tr>
-        <td>root</td>
-        <td>A1</td>
-        <td>not applicable</td>
-        <td>A1</td>
-        <td>root没有父logger，<br>所以additivity属性对root不适用
-        </td>
-    </tr>
-    <tr class="alt">
-        <td>x</td>
-        <td>A-x1, A-x2</td>
-        <td>true</td>
-        <td>A1, <br>A-x1, A-x2</td>
-        <td>"x"(自己)的appender<br>扩散到root的appender</td>
+      <td>root</td>
+      <td>A1</td>
+      <td>not applicable</td>
+      <td>A1</td>
+      <td>root没有父logger,所以additivity属性对root不适用</td>
     </tr>
     <tr>
-        <td>x.y</td>
-        <td>none</td>
-        <td>true</td>
-        <td>A1, <br>A-x1, A-x2</td>
-        <td>扩散到"x"和root的appender.</td>
-    </tr>
-    <tr class="alt">
-        <td>x.y.z</td>
-        <td>A-xyz1</td>
-        <td>true</td>
-        <td>A1, <br>A-x1, A-x2, <br>A-xyz1</td>
-        <td>"x.y.z"的appender<br>扩散到"x"和root的appender.</td>
+      <td>x</td>
+      <td>A-x1, A-x2</td>
+      <td>true</td>
+      <td>A1,<br /> A-x1, A-x2</td>
+      <td>“x”(自己)的appender,<br /> 扩散到root的appender</td>
     </tr>
     <tr>
-        <td>security</td>
-        <td>A-sec</td>
-        <td class="blue"><span class="blue">false</span></td>
-        <td>A-sec</td>
-        <td>
-            additivity=<code>false</code>.<br>
-            只用到 appender A-sec.
-        </td>
+      <td>x.y</td>
+      <td>none</td>
+      <td>true</td>
+      <td>A1,<br /> A-x1, A-x2</td>
+      <td>扩散到”x”和root的appender</td>
     </tr>
-    <tr class="alt">
-        <td>security.access</td>
-        <td>none</td>
-        <td>true</td>
-        <td>A-sec</td>
-        <td>
-            "security"中的additivity＝<code>false</code>.<br>
-            只扩散到了"security" 的appender.
-        </td>
+    <tr>
+      <td>x.y.z</td>
+      <td>A-xyz1</td>
+      <td>true</td>
+      <td>A1,<br /> A-x1, A-x2<br /> A-xyz1</td>
+      <td>“x.y.z”的appender<br /> 扩散到”x”和root的appender</td>
     </tr>
+    <tr>
+      <td>security</td>
+      <td>A-sec</td>
+      <td>false</td>
+      <td>A-sec</td>
+      <td>additivity=false, 只用到 appender A-sec</td>
+    </tr>
+    <tr>
+      <td>security.access</td>
+      <td>none</td>
+      <td>true</td>
+      <td>A-sec</td>
+      <td>“security”中的additivity＝false. 只扩散到了”security” 的appender</td>
+    </tr>
+  </tbody>
 </table>
 
-<p><strong>注意</strong><br>
+<p><strong>注意</strong><br />
 最后一个小例子:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="c1">// java代码,A.B.C包中的类</span>
-    <span class="n">logger</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">&quot;debug&quot;</span><span class="o">);</span>
-    <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">&quot;info&quot;</span><span class="o">);</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// java代码,A.B.C包中的类</span>
+    <span class="n">logger</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"debug"</span><span class="o">);</span>
+    <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"info"</span><span class="o">);</span>
     <span class="c1">// logger配置: 无additivity,默认true会扩散，无appender-ref,不会打印</span>
-    <span class="o">&lt;</span><span class="n">logger</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;A.B.C&quot;</span> <span class="n">level</span><span class="o">=</span><span class="s">&quot;info&quot;</span> <span class="o">/&gt;</span>
+    <span class="o">&lt;</span><span class="n">logger</span> <span class="n">name</span><span class="o">=</span><span class="s">"A.B.C"</span> <span class="n">level</span><span class="o">=</span><span class="s">"info"</span> <span class="o">/&gt;</span>
     <span class="c1">// root配置: 级别为最高的OFF</span>
-    <span class="o">&lt;</span><span class="n">root</span> <span class="n">level</span><span class="o">=</span><span class="s">&quot;OFF&quot;</span><span class="o">&gt;</span>
-        <span class="o">&lt;</span><span class="n">appender</span><span class="o">-</span><span class="n">ref</span> <span class="n">ref</span><span class="o">=</span><span class="s">&quot;STDOUT&quot;</span><span class="o">/&gt;</span>
+    <span class="o">&lt;</span><span class="n">root</span> <span class="n">level</span><span class="o">=</span><span class="s">"OFF"</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="n">appender</span><span class="o">-</span><span class="n">ref</span> <span class="n">ref</span><span class="o">=</span><span class="s">"STDOUT"</span><span class="o">/&gt;</span>
     <span class="o">&lt;/</span><span class="n">root</span><span class="o">&gt;</span>
-</code></pre></div>
-<p>运行的结果是会打印<q>info</q>.<br>
-因为logger配置了级别为info，但是并不打印，扩散到了root;<br>
-root级别为OFF，但是logger扩散过来的日志级别仍为继承的info.<br>
+</code></pre>
+</div>
+<p>运行的结果是会打印”info”.<br />
+因为logger配置了级别为info，但是并不打印，扩散到了root;<br />
+root级别为OFF，但是logger扩散过来的日志级别仍为继承的info.<br />
 所以只有A.B.C包中级别大于等于info的日志会被打印。</p>
 
-<p><h2 id="appender"> appender元素 </h3>
-<code class="prettyprint">appender</code>元素内容稍微多点，它有2个必需属性:<code class="prettyprint">name</code>和<code class="prettyprint">class</code>。<br>
-有3个可选的子元素<code class="prettyprint">&lt;encoder&gt;、&lt;layout&gt;、&lt;filter&gt;</code>，这3个子元素可有0个或者多个。<br>
-一般只用<code class="prettyprint">&lt;encoder&gt;</code>，它包装了<code class="prettyprint">&lt;layout&gt;</code>。</p>
+<h2 id="appender"> appender元素 </h2>
+<p><code class="highlighter-rouge">appender</code>元素内容稍微多点，它有2个必需属性:<code class="highlighter-rouge">name</code>和<code class="highlighter-rouge">class</code>。<br />
+有3个可选的子元素<code class="highlighter-rouge">&lt;encoder&gt;、&lt;layout&gt;、&lt;filter&gt;</code>，这3个子元素可有0个或者多个。<br />
+一般只用<code class="highlighter-rouge">&lt;encoder&gt;</code>，它包装了<code class="highlighter-rouge">&lt;layout&gt;</code>。</p>
 
 <h3 id="encoder"> encoder 子元素 </h3>
-
-<p><code class="prettyprint">encoder</code>的作用是把消息转化成输出流，可以控制消息怎么转化，何时输出等。<br>
-而<code class="prettyprint">layout</code>仅指定消息输出的格式，不能控制消息什么时候输出，不能控制消息暂存到flush然后一下子批量输出。<br>
-实际上<code class="prettyprint">encoder</code>内部包装了<code class="prettyprint">PatternLayout</code>，然后又多了一些控制功能。
+<p><code class="highlighter-rouge">encoder</code>的作用是把消息转化成输出流，可以控制消息怎么转化，何时输出等。<br />
+而<code class="highlighter-rouge">layout</code>仅指定消息输出的格式，不能控制消息什么时候输出，不能控制消息暂存到flush然后一下子批量输出。<br />
+实际上<code class="highlighter-rouge">encoder</code>内部包装了<code class="highlighter-rouge">PatternLayout</code>，然后又多了一些控制功能。
 来个例子:</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- 一般这样写 --&gt;</span>
-<span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">&quot;FILE&quot;</span> <span class="na">class=</span><span class="s">&quot;ch.qos.logback.core.FileAppender&quot;</span><span class="nt">&gt;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">&lt;!-- 一般这样写 --&gt;</span>
+<span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">"FILE"</span> <span class="na">class=</span><span class="s">"ch.qos.logback.core.FileAppender"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;file&gt;</span>testFile.log<span class="nt">&lt;/file&gt;</span>
   ...
   <span class="c">&lt;!-- 默认的class就是这个最常用的Encoder类型，所以class可以不指定 --&gt;</span>
-  <span class="nt">&lt;encoder</span> <span class="na">class=</span><span class="s">&quot;ch.qos.logback.classic.encoder.PatternLayoutEncoder&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;encoder</span> <span class="na">class=</span><span class="s">"ch.qos.logback.classic.encoder.PatternLayoutEncoder"</span><span class="nt">&gt;</span>
      <span class="c">&lt;!-- encoder 包装了ch.qos.logback.classic.PatternLayout --&gt;</span>
     <span class="nt">&lt;pattern&gt;</span>%msg%n<span class="nt">&lt;/pattern&gt;</span>
     <span class="c">&lt;!-- 是否立刻输出，默认为true,为false表示先存到缓冲区，然后一起输出，速度是true的4倍，但是appender不正常关闭可能导致丢失缓冲区里的log --&gt;</span>
@@ -331,129 +336,142 @@ root级别为OFF，但是logger扩散过来的日志级别仍为继承的info.<b
   <span class="nt">&lt;/encoder&gt;</span>
 <span class="nt">&lt;/appender&gt;</span>
 <span class="c">&lt;!-- 这种写法基本不推荐 --&gt;</span>
-<span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">&quot;FILE&quot;</span> <span class="na">class=</span><span class="s">&quot;ch.qos.logback.core.FileAppender&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">"FILE"</span> <span class="na">class=</span><span class="s">"ch.qos.logback.core.FileAppender"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;file&gt;</span>testFile.log<span class="nt">&lt;/file&gt;</span>
   ...
-  <span class="nt">&lt;layout</span> <span class="na">class=</span><span class="s">&quot;ch.qos.logback.classic.PatternLayout&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;layout</span> <span class="na">class=</span><span class="s">"ch.qos.logback.classic.PatternLayout"</span><span class="nt">&gt;</span>
     <span class="nt">&lt;pattern&gt;</span>%msg%n<span class="nt">&lt;/pattern&gt;</span>
   <span class="nt">&lt;/layout&gt;</span>
 <span class="nt">&lt;/appender&gt;</span>  
-</code></pre></div>
+</code></pre>
+</div>
 <h3 id="layout"> layout 子元素 </h3>
-
-<p><code class="prettyprint">layout</code>用于指定输出格式,有个class属性，不写默认是<code class="prettyprint">ch.qos.logback.classic.PatternLayout</code>。<br>
+<p><code class="highlighter-rouge">layout</code>用于指定输出格式,有个class属性，不写默认是<code class="highlighter-rouge">ch.qos.logback.classic.PatternLayout</code>。<br />
 也可以自己定义layout，然后像下面这样使用(一般也不自己定义):</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml">  <span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">&quot;STDOUT&quot;</span> <span class="na">class=</span><span class="s">&quot;ch.qos.logback.core.ConsoleAppender&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;encoder</span> <span class="na">class=</span><span class="s">&quot;ch.qos.logback.core.encoder.LayoutWrappingEncoder&quot;</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;layout</span> <span class="na">class=</span><span class="s">&quot;chapters.layouts.MySampleLayout&quot;</span> <span class="nt">/&gt;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">"STDOUT"</span> <span class="na">class=</span><span class="s">"ch.qos.logback.core.ConsoleAppender"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;encoder</span> <span class="na">class=</span><span class="s">"ch.qos.logback.core.encoder.LayoutWrappingEncoder"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;layout</span> <span class="na">class=</span><span class="s">"chapters.layouts.MySampleLayout"</span> <span class="nt">/&gt;</span>
     <span class="nt">&lt;/encoder&gt;</span>
   <span class="nt">&lt;/appender&gt;</span>
-</code></pre></div>
+</code></pre>
+</div>
 <p>我们一般使用的方式是上一小结那样，仅自己指定输出格式,输出格式很有必要说明,先来个简单的介绍,下一小节详细介绍pattern</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">&quot;STDOUT&quot;</span> <span class="na">class=</span><span class="s">&quot;ch.qos.logback.core.ConsoleAppender&quot;</span><span class="nt">&gt;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">"STDOUT"</span> <span class="na">class=</span><span class="s">"ch.qos.logback.core.ConsoleAppender"</span><span class="nt">&gt;</span>
     <span class="c">&lt;!-- class默认就是这个类，可不写 --&gt;</span>
-    <span class="nt">&lt;layout</span> <span class="na">class=</span><span class="s">&quot;ch.qos.logback.classic.PatternLayout&quot;</span><span class="nt">&gt;</span>
-        <span class="c">&lt;!-- %d表示日期，</span>
-<span class="c">             %thread表示线程名，</span>
-<span class="c">             %-5level：级别左对齐显示最少5个字符宽度(不足则补空格),</span>
-<span class="c">             %msg：日志消息，</span>
-<span class="c">             %n是换行符</span>
-<span class="c">        --&gt;</span>
+    <span class="nt">&lt;layout</span> <span class="na">class=</span><span class="s">"ch.qos.logback.classic.PatternLayout"</span><span class="nt">&gt;</span>
+        <span class="c">&lt;!-- %d表示日期，
+             %thread表示线程名，
+             %-5level：级别左对齐显示最少5个字符宽度(不足则补空格),
+             %msg：日志消息，
+             %n是换行符
+        --&gt;</span>
         <span class="nt">&lt;pattern&gt;</span>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n<span class="nt">&lt;/pattern&gt;</span>
     <span class="nt">&lt;/layout&gt;</span>
 <span class="nt">&lt;/appender&gt;</span>
-</code></pre></div>
-<h3 id="pattern"> 日志格式的详细说明(pattern元素) </h3>
+</code></pre>
+</div>
 
-<p>不管是<code class="prettyprint">encoder</code>元素中还是<code class="prettyprint">layout</code>元素中，都少不了<code class="prettyprint">pattern</code>，它是用来描述日志输出格式的。<br>
+<h3 id="pattern"> 日志格式的详细说明(pattern元素) </h3>
+<p>不管是<code class="highlighter-rouge">encoder</code>元素中还是<code class="highlighter-rouge">layout</code>元素中，都少不了<code class="highlighter-rouge">pattern</code>，它是用来描述日志输出格式的。<br />
 下面就是格式的详细介绍</p>
 
 <ul>
-<li><strong>长度限定 : {length}</strong></li>
+  <li><strong>长度限定 : {length}</strong></li>
 </ul>
 
-<p>像<code class="prettyprint">%logger, %class</code>等都可以通过<code class="prettyprint">length</code>来限定长度，对其进行缩写，不过这个长度有点特殊，举个例子说明会更明白:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nl">有个logger这样定义:</span>
-<span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="s">&quot;Aaaaa.Bbbbb.TestLength&quot;</span><span class="o">);</span>
-   <span class="n">格式</span>       <span class="o">|</span>       <span class="n">结果</span>
+<p>像<code class="highlighter-rouge">%logger, %class</code>等都可以通过<code class="highlighter-rouge">length</code>来限定长度，对其进行缩写，不过这个长度有点特殊，举个例子说明会更明白:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="err">有个</span><span class="n">logger</span><span class="err">这样定义</span><span class="o">:</span>
+<span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="s">"Aaaaa.Bbbbb.TestLength"</span><span class="o">);</span>
+   <span class="err">格式</span>       <span class="o">|</span>       <span class="err">结果</span>
 <span class="o">%</span><span class="n">logger</span><span class="o">{</span><span class="mi">0</span><span class="o">}</span>    <span class="o">:</span>   <span class="n">TestLength</span>
 <span class="o">%</span><span class="n">logger</span><span class="o">{</span><span class="mi">1</span><span class="o">}</span>    <span class="o">:</span>   <span class="n">A</span><span class="o">.</span><span class="na">B</span><span class="o">.</span><span class="na">TestLength</span>
 <span class="o">%</span><span class="n">logger</span><span class="o">{</span><span class="mi">17</span><span class="o">}</span>   <span class="o">:</span>   <span class="n">A</span><span class="o">.</span><span class="na">B</span><span class="o">.</span><span class="na">TestLength</span>
 <span class="o">%</span><span class="n">logger</span><span class="o">{</span><span class="mi">18</span><span class="o">}</span>   <span class="o">:</span>   <span class="n">A</span><span class="o">.</span><span class="na">Bbbbb</span><span class="o">.</span><span class="na">TestLength</span>
 <span class="o">%</span><span class="n">logger</span><span class="o">{</span><span class="mi">21</span><span class="o">}</span>   <span class="o">:</span>   <span class="n">A</span><span class="o">.</span><span class="na">Bbbbb</span><span class="o">.</span><span class="na">TestLength</span>
 <span class="o">%</span><span class="n">logger</span><span class="o">{</span><span class="mi">22</span><span class="o">}</span>   <span class="o">:</span>   <span class="n">Aaaaa</span><span class="o">.</span><span class="na">Bbbbb</span><span class="o">.</span><span class="na">TestLength</span>
-</code></pre></div>
-<p>最右边的那个类名总是显示的;<br>
-由于<code class="prettyprint">A.Bbbbb.TestLength</code>长度为18，所以<code class="prettyprint">0&lt;lenght&lt;18</code>时会被缩写成<code class="prettyprint">A.B.TestLength</code>;<br>
-由于<code class="prettyprint">Aaaaa.Bbbbb.TestLength</code>长度为22，所以<code class="prettyprint">18&lt;lenght&lt;22</code>时会被缩写成<code class="prettyprint">A.Bbbbb.TestLength</code>;<br>
-<code class="prettyprint">lenght&gt;=22</code>时不缩写;<br>
-<strong>length总结</strong> :</p>
+</code></pre>
+</div>
+<p>最右边的那个类名总是显示的;<br />
+由于<code class="highlighter-rouge">A.Bbbbb.TestLength</code>长度为18，所以<code class="highlighter-rouge">0&lt;lenght&lt;18</code>时会被缩写成<code class="highlighter-rouge">A.B.TestLength</code>;<br />
+由于<code class="highlighter-rouge">Aaaaa.Bbbbb.TestLength</code>长度为22，所以<code class="highlighter-rouge">18&lt;lenght&lt;22</code>时会被缩写成<code class="highlighter-rouge">A.Bbbbb.TestLength</code>;<br />
+<code class="highlighter-rouge">lenght&gt;=22</code>时不缩写;  </p>
+
+<p><strong>length总结</strong> :</p>
 
 <ol>
-<li>0只显示短类名(最右边的); 非0显示全类名，但是包名可能会被缩写，缩写成只有一个首字母</li>
-<li>缩写时最外层包最先被缩写，右边的包名最先不被缩写</li>
-<li>不缩写的前提是: <code class="prettyprint">总长度&lt;=lenght</code></li>
+  <li>0只显示短类名(最右边的); 非0显示全类名，但是包名可能会被缩写，缩写成只有一个首字母</li>
+  <li>缩写时最外层包最先被缩写，右边的包名最先不被缩写</li>
+  <li>不缩写的前提是: <code class="highlighter-rouge">总长度&lt;=lenght</code></li>
 </ol>
 
 <ul>
-<li><strong>日志名 : %c{length} / %lo{length} / %logger{length}</strong></li>
+  <li><strong>日志名 : %c{length} / %lo{length} / %logger{length}</strong></li>
 </ul>
 
-<p>产生日志的Logger的全名，可通过length缩写， <code class="prettyprint">%logger{36}、%c{36}</code>效果是一样的。  </p>
+<p>产生日志的Logger的全名，可通过length缩写， <code class="highlighter-rouge">%logger{36}、%c{36}</code>效果是一样的。  </p>
 
 <ul>
-<li><strong>类名 : %C{length} / %class{length}</strong></li>
+  <li><strong>类名 : %C{length} / %class{length}</strong></li>
 </ul>
 
-<p>产生日志的类的全名， 如类<q>A.B.MyClass</q>中有个Logger名字为<q>A.B.MyLogger</q>，前者是类名，后者是日志名。</p>
+<p>产生日志的类的全名， 如类”A.B.MyClass”中有个Logger名字为”A.B.MyLogger”，前者是类名，后者是日志名。</p>
 
 <ul>
-<li><strong>方法名 : %M / %method</strong></li>
+  <li><strong>方法名 : %M / %method</strong></li>
 </ul>
 
 <p>产生日志的方法名。</p>
 
 <ul>
-<li><strong>文件名 : %F / %file</strong></li>
+  <li><strong>文件名 : %F / %file</strong></li>
 </ul>
 
-<p>产生日志的java源文件名， 如<q>LogbackTest.java</q>。</p>
+<p>产生日志的java源文件名， 如”LogbackTest.java”。</p>
 
 <ul>
-<li><strong>行号 : %L / %line</strong></li>
+  <li><strong>行号 : %L / %line</strong></li>
 </ul>
 
 <p>日志行产生的行号。</p>
 
 <ul>
-<li><strong>日志内容 : %m / %msg / %message</strong></li>
+  <li><strong>日志内容 : %m / %msg / %message</strong></li>
 </ul>
 
 <p>日志中输出的信息</p>
 
 <ul>
-<li><strong>时间 : %d{pattern} / %date{pattern} / %message</strong></li>
+  <li><strong>时间 : %d{pattern} / %date{pattern} / %message</strong></li>
 </ul>
 
 <p>产生日志的时间。日志的格式如下:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="o">%</span><span class="n">d</span>                     <span class="o">:</span> <span class="mi">2015</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">07</span> <span class="mi">22</span><span class="o">:</span><span class="mi">45</span><span class="o">:</span><span class="mi">25</span><span class="o">,</span><span class="mi">665</span>
-<span class="o">%</span><span class="n">date</span>                  <span class="o">:</span> <span class="mi">2015</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">07</span> <span class="mi">22</span><span class="o">:</span><span class="mi">45</span><span class="o">:</span><span class="mi">25</span><span class="o">,</span><span class="mi">665</span>
-<span class="o">%</span><span class="n">date</span><span class="o">{</span><span class="nl">HH:mm:</span><span class="n">ss</span><span class="o">.</span><span class="na">SSS</span><span class="o">}</span>    <span class="o">:</span> <span class="mi">22</span><span class="o">:</span><span class="mi">45</span><span class="o">:</span><span class="mf">25.665</span>
-<span class="o">%</span><span class="n">date</span><span class="o">{</span><span class="n">yyyy</span><span class="o">-</span><span class="n">MM</span><span class="o">-</span><span class="n">dd</span> <span class="nl">HH:mm:</span><span class="n">ss</span><span class="o">.</span><span class="na">SSS</span><span class="o">}</span>  <span class="mi">2015</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">07</span> <span class="mi">22</span><span class="o">:</span><span class="mi">45</span><span class="o">:</span><span class="mf">25.665</span>
-<span class="n">注意那个毫秒前一定要写成点</span><span class="o">(.)</span>
-</code></pre></div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">%</span><span class="n">d</span>	                   <span class="o">:</span> <span class="mi">2015</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">07</span> <span class="mi">22</span><span class="o">:</span><span class="mi">45</span><span class="o">:</span><span class="mi">25</span><span class="o">,</span><span class="mi">665</span>
+<span class="o">%</span><span class="n">date</span>	               <span class="o">:</span> <span class="mi">2015</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">07</span> <span class="mi">22</span><span class="o">:</span><span class="mi">45</span><span class="o">:</span><span class="mi">25</span><span class="o">,</span><span class="mi">665</span>
+<span class="o">%</span><span class="n">date</span><span class="o">{</span><span class="nl">HH:mm:</span><span class="n">ss</span><span class="o">.</span><span class="na">SSS</span><span class="o">}</span>	   <span class="o">:</span> <span class="mi">22</span><span class="o">:</span><span class="mi">45</span><span class="o">:</span><span class="mf">25.665</span>
+<span class="o">%</span><span class="n">date</span><span class="o">{</span><span class="n">yyyy</span><span class="o">-</span><span class="n">MM</span><span class="o">-</span><span class="n">dd</span> <span class="nl">HH:mm:</span><span class="n">ss</span><span class="o">.</span><span class="na">SSS</span><span class="o">}</span>	<span class="mi">2015</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">07</span> <span class="mi">22</span><span class="o">:</span><span class="mi">45</span><span class="o">:</span><span class="mf">25.665</span>
+<span class="err">注意那个毫秒前一定要写成点</span><span class="o">(.)</span>
+</code></pre>
+</div>
+
 <ul>
-<li><strong>格式控制</strong></li>
+  <li><strong>格式控制</strong></li>
 </ul>
 
-<p><code class="prettyprint">&quot;.&quot;</code>前面是最短长度，不够则补白；<code class="prettyprint">&quot;.&quot;</code>后面是最大长度。直接来个例子:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">   <span class="n">格式化串</span>         <span class="n">logger名</span>                <span class="n">结果</span>
-<span class="o">[%</span><span class="mf">20.20</span><span class="n">logger</span><span class="o">]</span>    <span class="n">main</span><span class="o">.</span><span class="na">Name</span>             <span class="o">[</span>           <span class="n">main</span><span class="o">.</span><span class="na">Name</span><span class="o">]</span>
+<p><code class="highlighter-rouge">"."</code>前面是最短长度，不够则补白；<code class="highlighter-rouge">"."</code>后面是最大长度。直接来个例子:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>   <span class="err">格式化串</span>         <span class="n">logger</span><span class="err">名</span>                <span class="err">结果</span>
+<span class="o">[%</span><span class="mf">20.20</span><span class="n">logger</span><span class="o">]</span>	  <span class="n">main</span><span class="o">.</span><span class="na">Name</span>             <span class="o">[</span>           <span class="n">main</span><span class="o">.</span><span class="na">Name</span><span class="o">]</span>
 <span class="o">[%-</span><span class="mf">20.20</span><span class="n">logger</span><span class="o">]</span>   <span class="n">main</span><span class="o">.</span><span class="na">Name</span>             <span class="o">[</span><span class="n">main</span><span class="o">.</span><span class="na">Name</span>           <span class="o">]</span>
-<span class="o">[%</span><span class="mf">10.10</span><span class="n">logger</span><span class="o">]</span>    <span class="n">main</span><span class="o">.</span><span class="na">foo</span><span class="o">.</span><span class="na">foo</span><span class="o">.</span><span class="na">bar</span><span class="o">.</span><span class="na">Name</span> <span class="o">[</span><span class="n">o</span><span class="o">.</span><span class="na">bar</span><span class="o">.</span><span class="na">Name</span><span class="o">]</span>
-<span class="o">[%</span><span class="mi">10</span><span class="o">.-</span><span class="mi">10</span><span class="n">logger</span><span class="o">]</span>   <span class="n">main</span><span class="o">.</span><span class="na">foo</span><span class="o">.</span><span class="na">foo</span><span class="o">.</span><span class="na">bar</span><span class="o">.</span><span class="na">Name</span> <span class="o">[</span><span class="n">main</span><span class="o">.</span><span class="na">foo</span><span class="o">.</span><span class="na">f</span><span class="o">]</span>
-</code></pre></div>
-<hr>
+<span class="o">[%</span><span class="mf">10.10</span><span class="n">logger</span><span class="o">]</span>	  <span class="n">main</span><span class="o">.</span><span class="na">foo</span><span class="o">.</span><span class="na">foo</span><span class="o">.</span><span class="na">bar</span><span class="o">.</span><span class="na">Name</span> <span class="o">[</span><span class="n">o</span><span class="o">.</span><span class="na">bar</span><span class="o">.</span><span class="na">Name</span><span class="o">]</span>
+<span class="o">[%</span><span class="mi">10</span><span class="o">.-</span><span class="mi">10</span><span class="n">logger</span><span class="o">]</span>	  <span class="n">main</span><span class="o">.</span><span class="na">foo</span><span class="o">.</span><span class="na">foo</span><span class="o">.</span><span class="na">bar</span><span class="o">.</span><span class="na">Name</span> <span class="o">[</span><span class="n">main</span><span class="o">.</span><span class="na">foo</span><span class="o">.</span><span class="na">f</span><span class="o">]</span>
+</code></pre>
+</div>
+
+<hr />
 
         </div>
     </div>

@@ -99,108 +99,105 @@ jQuery(function(){
     <div class="uk-grid">
         <div  class="uk-width-4-4">
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
-            <hr>
+            <hr />
 
-<h2 id="本文结构">本文结构</h2>
-
-<ul>
-<li><a href="#instruction">Spring框架简介</a>
+<h2 id="section">本文结构</h2>
 
 <ul>
-<li><a href="#core">Core Container</a></li>
-<li><a href="#aop">AOP</a></li>
-<li><a href="#data">Data Access/Integration</a></li>
-<li><a href="#web">Web</a></li>
-<li><a href="#test">Test</a></li>
-</ul></li>
-<li><a href="#example">Spring简单项目示例</a></li>
+  <li><a href="#instruction">Spring框架简介</a>
+    <ul>
+      <li><a href="#core">Core Container</a></li>
+      <li><a href="#aop">AOP</a></li>
+      <li><a href="#data">Data Access/Integration</a></li>
+      <li><a href="#web">Web</a></li>
+      <li><a href="#test">Test</a></li>
+    </ul>
+  </li>
+  <li><a href="#example">Spring简单项目示例</a></li>
 </ul>
 
-<hr>
+<hr />
 
 <h2 id="instruction"> Spring框架简介 </h2>
-
-<p>Spring 的源码及文档下载，点击<a href="http://repo.spring.io/libs-release-local/org/springframework/spring/">这里</a><br>
-Spring 框架第一个版本发布于 2004 年，自发布以来已历经三个主要版本更新:<br>
-Spring 2.0 提供了 XML 命名空间和 AspectJ 支持;<br>
-Spring 2.5 增加了注释驱动（annotation-driven）的配置支持;<br>
-Spring 3.0增加了对 Java 5+ 版本的支持和 @Configuration 模型;<br>
-Spring 4.0 是最新的主要版本，并且首次完全支持 Java 8 的特性。 你仍然可以使用老版本的 Java，但是最低版本的要求已经提高到 Java SE 6<br>
-Spring Framework 的功能被组织成了20来个模块。<br>
+<p>Spring 的源码及文档下载，点击<a href="http://repo.spring.io/libs-release-local/org/springframework/spring/">这里</a><br />
+Spring 框架第一个版本发布于 2004 年，自发布以来已历经三个主要版本更新: <br />
+Spring 2.0 提供了 XML 命名空间和 AspectJ 支持;<br />
+Spring 2.5 增加了注释驱动（annotation-driven）的配置支持;<br />
+Spring 3.0增加了对 Java 5+ 版本的支持和 @Configuration 模型;<br />
+Spring 4.0 是最新的主要版本，并且首次完全支持 Java 8 的特性。 你仍然可以使用老版本的 Java，但是最低版本的要求已经提高到 Java SE 6<br />
+Spring Framework 的功能被组织成了20来个模块。<br />
 以Spring4.x为例，官方的框架图如下:</p>
 
-<p><img src="/static/images/spring_framework.png" alt="Spring框架" title="Spring框架"></p>
+<p><img src="/static/images/spring_framework.png" alt="Spring框架" title="Spring框架" /></p>
 
 <p>我画的模块之间的依赖关系如下(绿色为springframework的模块):</p>
 
-<p><img src="/static/images/spring_framework_jar.png" alt="Spring模块" title="Spring模块"></p>
+<p><img src="/static/images/spring_framework_jar.png" alt="Spring模块" title="Spring模块" /></p>
 
 <h3 id="instruction"> Core Container </h3>
 
-<p><code class="prettyprint">Core Container</code> 由 <code class="prettyprint">spring-core, spring-beans, spring-context, spring-context-support</code> 和 <code class="prettyprint">spring-expression (Spring Expression Language)</code> 模块组成</p>
+<p><code class="highlighter-rouge">Core Container</code> 由 <code class="highlighter-rouge">spring-core, spring-beans, spring-context, spring-context-support</code> 和 <code class="highlighter-rouge">spring-expression (Spring Expression Language)</code> 模块组成</p>
 
 <ul>
-<li><code class="prettyprint">spring-core</code> 和 <code class="prettyprint">spring-beans</code> 提供框架的基础部分，包括 <code class="prettyprint">IoC</code> 和 <code class="prettyprint">Dependency Injection</code> 主要组件是<code class="prettyprint">BeanFactory</code>,它 是一个复杂的工厂模式的实现。</li>
-<li><code class="prettyprint">Context(spring-context)</code> 模块建立在<code class="prettyprint">Core</code> 和 <code class="prettyprint">Beans</code> 模块的基础上，向 Spring 框架提供上下文信息。 <code class="prettyprint">ApplicationContext</code> 是 Context 模块的焦点。<code class="prettyprint">spring-context-support</code> 对常见第三方库集成进Spring应用上下文提供支持。</li>
-<li><code class="prettyprint">SpEL(spring-expression)</code> 模块提供了一个强大的 <code class="prettyprint">Expression Language</code>(表达式语言)用来在运行时查询和操作对象映射。这是JSP2.1规范所指定的统一表达式语言(unified EL)的一种延续。</li>
+  <li><code class="highlighter-rouge">spring-core</code> 和 <code class="highlighter-rouge">spring-beans</code> 提供框架的基础部分，包括 <code class="highlighter-rouge">IoC</code> 和 <code class="highlighter-rouge">Dependency Injection</code> 主要组件是<code class="highlighter-rouge">BeanFactory</code>,它 是一个复杂的工厂模式的实现。</li>
+  <li><code class="highlighter-rouge">Context(spring-context)</code> 模块建立在<code class="highlighter-rouge">Core</code> 和 <code class="highlighter-rouge">Beans</code> 模块的基础上，向 Spring 框架提供上下文信息。 <code class="highlighter-rouge">ApplicationContext</code> 是 Context 模块的焦点。<code class="highlighter-rouge">spring-context-support</code> 对常见第三方库集成进Spring应用上下文提供支持。</li>
+  <li><code class="highlighter-rouge">SpEL(spring-expression)</code> 模块提供了一个强大的 <code class="highlighter-rouge">Expression Language</code>(表达式语言)用来在运行时查询和操作对象映射。这是JSP2.1规范所指定的统一表达式语言(unified EL)的一种延续。</li>
 </ul>
 
 <h3 id="aop"> AOP、Aspects、Instrumentation、Messaging </h3>
 
 <ul>
-<li><code class="prettyprint">spring-aop</code> 模块提供 <code class="prettyprint">AOP Alliance-compliant</code>(AOP联盟)的面向切面编程实现，允许你自定义，比如，方法拦截器和切入点完全分离代码。</li>
-<li><code class="prettyprint">spring-aspects</code> 模块提供了集成使用 AspectJ。</li>
-<li><code class="prettyprint">spring-instrument</code> 模块提供了对某些应用程序服务器的代理接口。</li>
-<li><code class="prettyprint">spring-messaging</code> 模块从 Spring 集成项目中抽象出来，比如 Message, MessageChannel, MessageHandler 及其他用来提供基于消息的基础服务。该模块还包括一组消息映射方法的注解。</li>
+  <li><code class="highlighter-rouge">spring-aop</code> 模块提供 <code class="highlighter-rouge">AOP Alliance-compliant</code>(AOP联盟)的面向切面编程实现，允许你自定义，比如，方法拦截器和切入点完全分离代码。</li>
+  <li><code class="highlighter-rouge">spring-aspects</code> 模块提供了集成使用 AspectJ。</li>
+  <li><code class="highlighter-rouge">spring-instrument</code> 模块提供了对某些应用程序服务器的代理接口。</li>
+  <li><code class="highlighter-rouge">spring-messaging</code> 模块从 Spring 集成项目中抽象出来，比如 Message, MessageChannel, MessageHandler 及其他用来提供基于消息的基础服务。该模块还包括一组消息映射方法的注解。</li>
 </ul>
 
 <h3 id="data"> Data Access/Integration 数据访问/集成 </h3>
 
-<p><code class="prettyprint">Data Access/Integration</code> 层由 <code class="prettyprint">JDBC, ORM, OXM, JMS</code> 和 <code class="prettyprint">Transaction</code> 模块组成。</p>
+<p><code class="highlighter-rouge">Data Access/Integration</code> 层由 <code class="highlighter-rouge">JDBC, ORM, OXM, JMS</code> 和 <code class="highlighter-rouge">Transaction</code> 模块组成。</p>
 
 <ul>
-<li><code class="prettyprint">spring-jdbc</code> 模块提供了不需要编写冗长的JDBC代码和解析数据库厂商特有的错误代码的JDBC抽象层。</li>
-<li><code class="prettyprint">spring-tx</code> 模块支持可编程和声明式事务管理，用于实现特殊的接口和你所有的POJO类（Plain Old Java Objects）。</li>
-<li><code class="prettyprint">spring-orm</code> 模块提供了流行的 <code class="prettyprint">object-relational mapping</code>(对象-关系映射)API，其包含<code class="prettyprint">JPA，JDO，Hibernate</code>。</li>
-<li><code class="prettyprint">spring-oxm</code> 模块提供了抽象层用于支持<code class="prettyprint">Object/XML mapping</code>(对象/XML映射)的实现,如<code class="prettyprint">JAXB、Castor、XMLBeans、JiBX</code>和<code class="prettyprint">XStream</code>等。</li>
-<li><code class="prettyprint">spring-jms</code> 模块(<code class="prettyprint">Java Messaging Service</code>)包含生产和消费信息的功能。 从 Spring Framework 4.1 开始提供集成 spring-messaging 模块。</li>
+  <li><code class="highlighter-rouge">spring-jdbc</code> 模块提供了不需要编写冗长的JDBC代码和解析数据库厂商特有的错误代码的JDBC抽象层。</li>
+  <li><code class="highlighter-rouge">spring-tx</code> 模块支持可编程和声明式事务管理，用于实现特殊的接口和你所有的POJO类（Plain Old Java Objects）。</li>
+  <li><code class="highlighter-rouge">spring-orm</code> 模块提供了流行的 <code class="highlighter-rouge">object-relational mapping</code>(对象-关系映射)API，其包含<code class="highlighter-rouge">JPA，JDO，Hibernate</code>。</li>
+  <li><code class="highlighter-rouge">spring-oxm</code> 模块提供了抽象层用于支持<code class="highlighter-rouge">Object/XML mapping</code>(对象/XML映射)的实现,如<code class="highlighter-rouge">JAXB、Castor、XMLBeans、JiBX</code>和<code class="highlighter-rouge">XStream</code>等。</li>
+  <li><code class="highlighter-rouge">spring-jms</code> 模块(<code class="highlighter-rouge">Java Messaging Service</code>)包含生产和消费信息的功能。 从 Spring Framework 4.1 开始提供集成 spring-messaging 模块。</li>
 </ul>
 
 <h3 id="web"> Web </h3>
-
-<p><code class="prettyprint">Web</code> 层由 <code class="prettyprint">spring-web, spring-webmvc, spring-websocket</code>和<code class="prettyprint">spring-webmvc-portlet</code>组成。</p>
+<p><code class="highlighter-rouge">Web</code> 层由 <code class="highlighter-rouge">spring-web, spring-webmvc, spring-websocket</code>和<code class="highlighter-rouge">spring-webmvc-portlet</code>组成。</p>
 
 <ul>
-<li><code class="prettyprint">spring-web</code> 模块提供了基本的面向web开发的集成功能，例如多方文件上传、使用<code class="prettyprint">Servlet listeners</code>以及Web开发应用程序上下文初始化IoC容器等，也包含HTTP客户端以及Spring远程访问的web相关部分。</li>
-<li><code class="prettyprint">spring-webmvc</code> 模块(也被称为<code class="prettyprint">Web Servlet</code>模块)包含Spring的<code class="prettyprint">model-view-controller</code>(模型-视图-控制器(MVC))和<code class="prettyprint">REST Web Services</code>实现的Web应用程序，并且集成了Spring Framework所有的其他功能。</li>
-<li><code class="prettyprint">spring-webmvc-portlet</code> 模块(也被称为<code class="prettyprint">Web-Portlet</code>模块)使用一个Portlet的环境和spring-webmvc模块功能的镜像提供了MVC模式的实现。</li>
+  <li><code class="highlighter-rouge">spring-web</code> 模块提供了基本的面向web开发的集成功能，例如多方文件上传、使用<code class="highlighter-rouge">Servlet listeners</code>以及Web开发应用程序上下文初始化IoC容器等，也包含HTTP客户端以及Spring远程访问的web相关部分。</li>
+  <li><code class="highlighter-rouge">spring-webmvc</code> 模块(也被称为<code class="highlighter-rouge">Web Servlet</code>模块)包含Spring的<code class="highlighter-rouge">model-view-controller</code>(模型-视图-控制器(MVC))和<code class="highlighter-rouge">REST Web Services</code>实现的Web应用程序，并且集成了Spring Framework所有的其他功能。</li>
+  <li><code class="highlighter-rouge">spring-webmvc-portlet</code> 模块(也被称为<code class="highlighter-rouge">Web-Portlet</code>模块)使用一个Portlet的环境和spring-webmvc模块功能的镜像提供了MVC模式的实现。</li>
 </ul>
 
 <h3 id="test"> Test </h3>
 
 <ul>
-<li><code class="prettyprint">spring-test</code> 模块支持通过组合JUnit或TestNG来进行单元测试和集成测试。它提供了连续加载的ApplicationContext并且缓存这些上下文。它还提供了<code class="prettyprint">mock object</code>(模仿对象)，可以隔离测试代码。</li>
+  <li><code class="highlighter-rouge">spring-test</code> 模块支持通过组合JUnit或TestNG来进行单元测试和集成测试。它提供了连续加载的ApplicationContext并且缓存这些上下文。它还提供了<code class="highlighter-rouge">mock object</code>(模仿对象)，可以隔离测试代码。</li>
 </ul>
 
-<h3 id="控制反转(ioc)和依赖注入">控制反转(IoC)和依赖注入</h3>
-
+<h3 id="ioc">控制反转(IoC)和依赖注入</h3>
 <p><strong>控制反转</strong>(Inversion of Control)和<strong>依赖注入</strong>(Dependency Injection)意思差不多。当某个实例(调用者)需要调用另一个实例(被调用者)时，之前是通过调用者来创建被调用者的实例(new一个实例)，现在创建被调用者的工作交给Spring的容器来完成，称为“控制反转”。
-我们描述创建被调用者的方式，由IoC容器来创建管理对象，然后注入到调用者中去，这就是“依赖注入“。注入的方式有通过<code class="prettyprint">JavaBean</code>属性(setter方法)注入和通过构造方法注入。</p>
+我们描述创建被调用者的方式，由IoC容器来创建管理对象，然后注入到调用者中去，这就是“依赖注入“。注入的方式有通过<code class="highlighter-rouge">JavaBean</code>属性(setter方法)注入和通过构造方法注入。</p>
 
-<h3 id="面向方面编程(aop)">面向方面编程(AOP)</h3>
-
+<h3 id="aop">面向方面编程(AOP)</h3>
 <p>面向方面的编程，即 AOP(Aspect Oriented Programming)，是一种编程技术，它允许程序员对横切关注点或横切典型的职责分界线的行为进行模块化（例如日志和事务管理）。AOP 的核心构造是方面，它将那些影响多个类的行为封装到可重用的模块中。
 AOP 和 IOC 是补充性的技术，它们都运用模块化方式解决企业应用程序开发中的复杂问题。在典型的面向对象开发方式中，可能要将日志记录语句放在所有方法和 Java 类中才能实现日志功能。在 AOP 方式中，可以反过来将日志服务模块化，并以声明的方式将它们应用到需要日志的组件上。当然，优势就是 Java 类不需要知道日志服务的存在，也不需要考虑相关的代码。所以，用 Spring AOP 编写的应用程序代码是松散耦合的。
 AOP 的功能完全集成到了 Spring 事务管理、日志和其他各种特性的上下文中。</p>
 
-<hr>
+<hr />
 
 <h2 id="example"> Spring简单项目示例 </h2>
 
-<p><code class="prettyprint">BeanFactory</code>是 Spring 作为 IOC 容器核心接口，<code class="prettyprint">ApplicationContext</code>是<code class="prettyprint">BeanFactory</code>的扩展，功能得到了进一步增强。<br>
+<p><code class="highlighter-rouge">BeanFactory</code>是 Spring 作为 IOC 容器核心接口，<code class="highlighter-rouge">ApplicationContext</code>是<code class="highlighter-rouge">BeanFactory</code>的扩展，功能得到了进一步增强。<br />
 下面是一个简单的Spring的例子
 目录结构如下:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">    src
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    src
     |--com.test.spring
     |  |--dao
     |  |  |--impl
@@ -213,78 +210,84 @@ AOP 的功能完全集成到了 Spring 事务管理、日志和其他各种特�
     |  |--TestSpring.java
     resources
     |--spring.xml
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>源文件内容如下:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// Hello.java</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// Hello.java</span>
 <span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Hello</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">sayHello</span><span class="o">();</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">sayHello</span><span class="o">();</span>
 <span class="o">}</span>
 
 <span class="c1">// HelloImpl.java</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloImpl</span> <span class="kd">implements</span> <span class="n">Hello</span><span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">sayHello</span><span class="o">(){</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Hello!&quot;</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">sayHello</span><span class="o">(){</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Hello!"</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
 
 <span class="c1">// HelloService.java</span>
 <span class="kd">public</span> <span class="kd">interface</span> <span class="nc">HelloService</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testHello</span><span class="o">();</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">testHello</span><span class="o">();</span>
 <span class="o">}</span>
 
 <span class="c1">// HelloServiceImpl.java</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloServiceImpl</span> <span class="kd">implements</span> <span class="n">HelloService</span><span class="o">{</span>
     <span class="kd">private</span> <span class="n">Hello</span> <span class="n">hello</span><span class="o">;</span>
     <span class="c1">// setter 方法必须写，否则无法注入</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setHello</span><span class="o">(</span><span class="n">Hello</span> <span class="n">hello</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">setHello</span><span class="o">(</span><span class="n">Hello</span> <span class="n">hello</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="na">hello</span> <span class="o">=</span> <span class="n">hello</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testHello</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">testHello</span><span class="o">()</span> <span class="o">{</span>
         <span class="n">hello</span><span class="o">.</span><span class="na">sayHello</span><span class="o">();</span>
     <span class="o">}</span>
 <span class="o">}</span>
 
 <span class="c1">//TestSpring.java</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestSpring</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
         <span class="c1">// 读取 classpath 下面的配置文件，实例化容器</span>
-        <span class="n">ApplicationContext</span> <span class="n">context</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ClassPathXmlApplicationContext</span><span class="o">(</span><span class="s">&quot;spring.xml&quot;</span><span class="o">);</span>
+        <span class="n">ApplicationContext</span> <span class="n">context</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ClassPathXmlApplicationContext</span><span class="o">(</span><span class="s">"spring.xml"</span><span class="o">);</span>
 
         <span class="c1">// 这里的字符串是配置文件中通过id指定的</span>
-        <span class="n">Hello</span> <span class="n">hello</span> <span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">&quot;hello&quot;</span><span class="o">,</span> <span class="n">HelloImpl</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-<span class="c1">//        Hello hello = (Hello) context.getBean(&quot;helloImpl&quot;);</span>
+        <span class="n">Hello</span> <span class="n">hello</span> <span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"hello"</span><span class="o">,</span> <span class="n">HelloImpl</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+<span class="c1">//        Hello hello = (Hello) context.getBean("helloImpl");</span>
         <span class="n">hello</span><span class="o">.</span><span class="na">sayHello</span><span class="o">();</span>
 
         <span class="c1">// 注入到HelloServiceImpl 中的 hello 属性中</span>
-        <span class="n">HelloService</span> <span class="n">helloService</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">&quot;helloService&quot;</span><span class="o">,</span> <span class="n">HelloService</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">HelloService</span> <span class="n">helloService</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"helloService"</span><span class="o">,</span> <span class="n">HelloService</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
         <span class="n">helloService</span><span class="o">.</span><span class="na">testHello</span><span class="o">();</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre></div>
-<p>配置文件<code class="prettyprint">spring.xml</code>内容如下</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
-<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.springframework.org/schema/beans&quot;</span>
-       <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
-       <span class="na">xmlns:tx=</span><span class="s">&quot;http://www.springframework.org/schema/tx&quot;</span>
-       <span class="na">xmlns:context=</span><span class="s">&quot;http://www.springframework.org/schema/context&quot;</span>
-       <span class="na">xsi:schemaLocation=</span><span class="s">&quot;</span>
-<span class="s">            http://www.springframework.org/schema/beans</span>
-<span class="s">            http://www.springframework.org/schema/beans/spring-beans.xsd</span>
-<span class="s">            http://www.springframework.org/schema/tx</span>
-<span class="s">            http://www.springframework.org/schema/tx/spring-tx.xsd</span>
-<span class="s">            http://www.springframework.org/schema/context</span>
-<span class="s">            http://www.springframework.org/schema/context/spring-context-3.0.xsd&quot;</span><span class="nt">&gt;</span>
+</code></pre>
+</div>
 
-    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;hello&quot;</span> <span class="na">class=</span><span class="s">&quot;com.test.spring.dao.impl.HelloImpl&quot;</span><span class="nt">&gt;&lt;/bean&gt;</span>
+<p>配置文件<code class="highlighter-rouge">spring.xml</code>内容如下</p>
 
-    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;helloService&quot;</span> <span class="na">class=</span><span class="s">&quot;com.test.spring.service.impl.HelloServiceImpl&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;hello&quot;</span> <span class="na">ref=</span><span class="s">&quot;hello&quot;</span><span class="nt">/&gt;</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+       <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+       <span class="na">xmlns:tx=</span><span class="s">"http://www.springframework.org/schema/tx"</span>
+       <span class="na">xmlns:context=</span><span class="s">"http://www.springframework.org/schema/context"</span>
+       <span class="na">xsi:schemaLocation=</span><span class="s">"</span>
+            <span class="err">http://www.springframework.org/schema/beans</span>
+            <span class="err">http://www.springframework.org/schema/beans/spring-beans.xsd</span>
+            <span class="err">http://www.springframework.org/schema/tx</span>
+            <span class="err">http://www.springframework.org/schema/tx/spring-tx.xsd</span>
+            <span class="err">http://www.springframework.org/schema/context</span>
+            <span class="err">http://www.springframework.org/schema/context/spring-context-3.0.xsd"</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"hello"</span> <span class="na">class=</span><span class="s">"com.test.spring.dao.impl.HelloImpl"</span><span class="nt">&gt;&lt;/bean&gt;</span>
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"helloService"</span> <span class="na">class=</span><span class="s">"com.test.spring.service.impl.HelloServiceImpl"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"hello"</span> <span class="na">ref=</span><span class="s">"hello"</span><span class="nt">/&gt;</span>
     <span class="nt">&lt;/bean&gt;</span>
-
 <span class="nt">&lt;/beans&gt;</span>
-</code></pre></div>
-<hr>
+</code></pre>
+</div>
+
+<hr />
 
         </div>
     </div>

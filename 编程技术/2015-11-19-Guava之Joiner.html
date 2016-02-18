@@ -99,81 +99,92 @@ jQuery(function(){
     <div class="uk-grid">
         <div  class="uk-width-4-4">
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
-            <p><code class="prettyprint">Joiner</code>在Guava的<code class="prettyprint">com.google.common.base</code>包中, 算是字符处理工具, 其作用是连接多个元素, 可当作连接器来使用  </p>
+            <p><code class="highlighter-rouge">Joiner</code>在Guava的<code class="highlighter-rouge">com.google.common.base</code>包中, 算是字符处理工具, 其作用是连接多个元素, 可当作连接器来使用  </p>
 
-<hr>
+<hr />
 
-<h2 id="生成joiner的方法">生成<code class="prettyprint">Joiner</code>的方法</h2>
-
+<h2 id="joiner-">生成 Joiner 的方法</h2>
 <p>工厂方法:</p>
 
 <ul>
-<li><code class="prettyprint">Joiner on(String separator)</code></li>
-<li><code class="prettyprint">Joiner on(char separator)</code></li>
+  <li><code class="highlighter-rouge">Joiner on(String separator)</code></li>
+  <li><code class="highlighter-rouge">Joiner on(char separator)</code></li>
 </ul>
 
 <p>修饰方法:</p>
 
 <ul>
-<li><code class="prettyprint">Joiner useForNull(final String nullText)</code></li>
-<li><code class="prettyprint">Joiner skipNulls()</code></li>
+  <li><code class="highlighter-rouge">Joiner useForNull(final String nullText)</code></li>
+  <li><code class="highlighter-rouge">Joiner skipNulls()</code></li>
 </ul>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Joiner</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="s">&quot;; &quot;</span><span class="o">).</span><span class="na">skipNulls</span><span class="o">().</span><span class="na">join</span><span class="o">(</span><span class="s">&quot;Harry&quot;</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="s">&quot;Ron&quot;</span><span class="o">,</span> <span class="s">&quot;Hermione&quot;</span><span class="o">);</span> <span class="c1">// Harry; Ron; Hermione</span>
-</code></pre></div>
-<p><strong>注意</strong>: Joiner类是不可变的, 即它是线程安全的, 可以将其定义为<code class="prettyprint">static final</code>常量<br>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Joiner</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="s">"; "</span><span class="o">).</span><span class="na">skipNulls</span><span class="o">().</span><span class="na">join</span><span class="o">(</span><span class="s">"Harry"</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="s">"Ron"</span><span class="o">,</span> <span class="s">"Hermione"</span><span class="o">);</span> <span class="c1">// Harry; Ron; Hermione</span>
+</code></pre>
+</div>
+
+<p><strong>注意</strong>: Joiner类是不可变的, 即它是线程安全的, 可以将其定义为<code class="highlighter-rouge">static final</code>常量<br />
 像下面这样使用是 <strong>错误</strong> 的:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Joiner</span> <span class="n">joiner</span> <span class="o">=</span> <span class="n">Joiner</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="sc">&#39;,&#39;</span><span class="o">);</span>   <span class="c1">// joiner 是不可变的</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Joiner</span> <span class="n">joiner</span> <span class="o">=</span> <span class="n">Joiner</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="sc">','</span><span class="o">);</span>   <span class="c1">// joiner 是不可变的</span>
 <span class="n">joiner</span><span class="o">.</span><span class="na">skipNulls</span><span class="o">();</span>   <span class="c1">// 这里返回了个新的Joiner, 原来的joiner并没变</span>
-<span class="n">joiner</span><span class="o">.</span><span class="na">join</span><span class="o">(</span><span class="s">&quot;wrong&quot;</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="s">&quot;wrong&quot;</span><span class="o">);</span> <span class="c1">// 这就直接报NullPointerException了, 原来的joiner没有skipNull功能</span>
-</code></pre></div>
-<hr>
+<span class="n">joiner</span><span class="o">.</span><span class="na">join</span><span class="o">(</span><span class="s">"wrong"</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="s">"wrong"</span><span class="o">);</span> <span class="c1">// 这就直接报NullPointerException了, 原来的joiner没有skipNull功能</span>
+</code></pre>
+</div>
 
-<h2 id="join-方法">join 方法</h2>
+<hr />
 
-<p>返回连接之后的字符串, 返回的字符串都是<code class="prettyprint">final</code>的:</p>
-
-<ul>
-<li><code class="prettyprint">public final String join(Iterable&lt;?&gt; parts)</code></li>
-<li><code class="prettyprint">public final String join(Iterator&lt;?&gt; parts)</code></li>
-<li><code class="prettyprint">public final String join(Object[] parts)</code></li>
-<li><code class="prettyprint">public final String join(Object first, Object second, Object... rest)</code></li>
-</ul>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Joiner</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="s">&quot;,&quot;</span><span class="o">).</span><span class="na">join</span><span class="o">(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">7</span><span class="o">));</span> <span class="c1">// returns &quot;1,5,7&quot;</span>
-</code></pre></div>
-<hr>
-
-<h2 id="appendto-方法">appendTo 方法</h2>
-
-<p>把后面的参数以字符串的方式添加到第一个参数后面<br>
-<code class="prettyprint">java.lang.Appendable</code>接口的子类(如<code class="prettyprint">StringBuilder</code> <code class="prettyprint">BufferedWriter</code>等), 都可以作为第一个参数</p>
+<h2 id="join-">join 方法</h2>
+<p>返回连接之后的字符串, 返回的字符串都是<code class="highlighter-rouge">final</code>的:</p>
 
 <ul>
-<li><code class="prettyprint">StringBuilder appendTo(StringBuilder builder, Iterable&lt;?&gt; parts)</code></li>
-<li><code class="prettyprint">StringBuilder appendTo(StringBuilder builder, Iterable&lt;?&gt; parts)</code></li>
-<li><code class="prettyprint">StringBuilder appendTo(StringBuilder builder, Object[] parts)</code></li>
-<li><code class="prettyprint">StringBuilder appendTo(StringBuilder builder, Object first, Object second, Object... rest)</code></li>
-<li><code class="prettyprint">&lt;A extends Appendable&gt; A appendTo(A appendable, Iterable&lt;?&gt; parts)</code></li>
-<li><code class="prettyprint">&lt;A extends Appendable&gt; A appendTo(A appendable, Iterator&lt;?&gt; parts)</code></li>
-<li><code class="prettyprint">&lt;A extends Appendable&gt; A appendTo(A appendable, Object[] parts)</code></li>
-<li><code class="prettyprint">&lt;A extends Appendable&gt; A appendTo(A appendable, Object first, Object second, Object... rest)</code></li>
+  <li><code class="highlighter-rouge">public final String join(Iterable&lt;?&gt; parts)</code></li>
+  <li><code class="highlighter-rouge">public final String join(Iterator&lt;?&gt; parts)</code></li>
+  <li><code class="highlighter-rouge">public final String join(Object[] parts)</code></li>
+  <li><code class="highlighter-rouge">public final String join(Object first, Object second, Object... rest)</code></li>
 </ul>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Joiner</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="s">&quot;,&quot;</span><span class="o">).</span><span class="na">appendTo</span><span class="o">(</span><span class="k">new</span> <span class="nf">StringBuilder</span><span class="o">(</span><span class="s">&quot;list:&quot;</span><span class="o">),</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)).</span><span class="na">toString</span><span class="o">();</span> <span class="c1">// list:1,2,3</span>
-</code></pre></div>
-<hr>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Joiner</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="s">","</span><span class="o">).</span><span class="na">join</span><span class="o">(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">7</span><span class="o">));</span> <span class="c1">// returns "1,5,7"</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="appendto-">appendTo 方法</h2>
+<p>把后面的参数以字符串的方式添加到第一个参数后面<br />
+<code class="highlighter-rouge">java.lang.Appendable</code>接口的子类(如<code class="highlighter-rouge">StringBuilder</code> <code class="highlighter-rouge">BufferedWriter</code>等), 都可以作为第一个参数</p>
+
+<ul>
+  <li><code class="highlighter-rouge">StringBuilder appendTo(StringBuilder builder, Iterable&lt;?&gt; parts)</code></li>
+  <li><code class="highlighter-rouge">StringBuilder appendTo(StringBuilder builder, Iterable&lt;?&gt; parts)</code></li>
+  <li><code class="highlighter-rouge">StringBuilder appendTo(StringBuilder builder, Object[] parts)</code></li>
+  <li><code class="highlighter-rouge">StringBuilder appendTo(StringBuilder builder, Object first, Object second, Object... rest)</code></li>
+  <li><code class="highlighter-rouge">&lt;A extends Appendable&gt; A appendTo(A appendable, Iterable&lt;?&gt; parts)</code></li>
+  <li><code class="highlighter-rouge">&lt;A extends Appendable&gt; A appendTo(A appendable, Iterator&lt;?&gt; parts)</code></li>
+  <li><code class="highlighter-rouge">&lt;A extends Appendable&gt; A appendTo(A appendable, Object[] parts)</code></li>
+  <li><code class="highlighter-rouge">&lt;A extends Appendable&gt; A appendTo(A appendable, Object first, Object second, Object... rest)</code></li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Joiner</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="s">","</span><span class="o">).</span><span class="na">appendTo</span><span class="o">(</span><span class="k">new</span> <span class="n">StringBuilder</span><span class="o">(</span><span class="s">"list:"</span><span class="o">),</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)).</span><span class="na">toString</span><span class="o">();</span> <span class="c1">// list:1,2,3</span>
+</code></pre>
+</div>
+
+<hr />
 
 <h2 id="mapjoiner">MapJoiner</h2>
-
-<p>Joiner提供了个方法返回内部类<code class="prettyprint">Joiner.MapJoiner</code>专门用于处理map  </p>
+<p>Joiner提供了个方法返回内部类<code class="highlighter-rouge">Joiner.MapJoiner</code>专门用于处理map</p>
 
 <ul>
-<li><code class="prettyprint">MapJoiner withKeyValueSeparator(String keyValueSeparator)</code></li>
+  <li><code class="highlighter-rouge">MapJoiner withKeyValueSeparator(String keyValueSeparator)</code></li>
 </ul>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="n">Maps</span><span class="o">.</span><span class="na">newHashMap</span><span class="o">();</span>
-<span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;a&quot;</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
-<span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;b&quot;</span><span class="o">,</span> <span class="mi">2</span><span class="o">);</span>
-<span class="n">Joiner</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="s">&quot;;&quot;</span><span class="o">).</span><span class="na">withKeyValueSeparator</span><span class="o">(</span><span class="s">&quot;-&gt;&quot;</span><span class="o">).</span><span class="na">join</span><span class="o">(</span><span class="n">map</span><span class="o">);</span> <span class="c1">// b-&gt;2;a-&gt;1</span>
-</code></pre></div>
-<hr>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="n">Maps</span><span class="o">.</span><span class="na">newHashMap</span><span class="o">();</span>
+<span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"a"</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+<span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"b"</span><span class="o">,</span> <span class="mi">2</span><span class="o">);</span>
+<span class="n">Joiner</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="s">";"</span><span class="o">).</span><span class="na">withKeyValueSeparator</span><span class="o">(</span><span class="s">"-&gt;"</span><span class="o">).</span><span class="na">join</span><span class="o">(</span><span class="n">map</span><span class="o">);</span> <span class="c1">// b-&gt;2;a-&gt;1</span>
+</code></pre>
+</div>
+
+<hr />
 
         </div>
     </div>

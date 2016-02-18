@@ -101,104 +101,95 @@ jQuery(function(){
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
             <p>整理了下Java中Map的结构画了个图, 虚线表示接口, 实线表示类</p>
 
-<hr>
+<hr />
 
-<h2 id="map继承关系图">Map继承关系图</h2>
+<h2 id="map">Map继承关系图</h2>
 
-<p><img src="/static/images/map.png" alt="Map继承关系图" title="Map结构图"></p>
+<p><img src="/static/images/map.png" alt="Map继承关系图" title="Map结构图" /></p>
 
-<hr>
+<hr />
 
-<h2 id="map基本操作">Map基本操作</h2>
-
-<ul>
-<li><code class="prettyprint">int size()</code>: 返回map大小</li>
-<li><code class="prettyprint">boolean isEmpty()</code>: 是否为空Map</li>
-<li><code class="prettyprint">boolean containsKey(Object key)</code>: 是否包含key</li>
-<li><code class="prettyprint">boolean containsValue(Object value)</code>: 是否包含value</li>
-<li><code class="prettyprint">V get(Object key)</code>: 返回key对应的value, 没有则返回<code class="prettyprint">null</code></li>
-<li><code class="prettyprint">V put(K key, V value)</code>: key和value都可为null, key重复则替换旧的value</li>
-<li><code class="prettyprint">void putAll(Map&lt;? extends K, ? extends V&gt; m)</code>:</li>
-<li><code class="prettyprint">V remove(Object key)</code>: 移除并返回, 若不包含key返回null</li>
-<li><code class="prettyprint">void clear()</code>: 清空map</li>
-<li><code class="prettyprint">Set&lt;K&gt; keySet()</code>: 返回key的集合</li>
-<li><code class="prettyprint">Collection&lt;V&gt; values()</code>: 返回value的集合</li>
-<li><code class="prettyprint">Set&lt;Map.Entry&lt;K, V&gt;&gt; entrySet()</code>: 返回Entry集合</li>
-</ul>
-
-<hr>
-
-<h2 id="hashmap与hashtable"><code class="prettyprint">HashMap</code>与<code class="prettyprint">HashTable</code></h2>
+<h2 id="map-1">Map基本操作</h2>
 
 <ul>
-<li>Hashtable是线程安全的，而HashMap不是线程安全的</li>
-<li>Hashtable不允许null作为key和value，而HashMap则可以使用null作为key和value</li>
-<li>Hashtable很古老, 从JDK1.0就有了, 不建议使用</li>
+  <li><code class="highlighter-rouge">int size()</code>: 返回map大小</li>
+  <li><code class="highlighter-rouge">boolean isEmpty()</code>: 是否为空Map</li>
+  <li><code class="highlighter-rouge">boolean containsKey(Object key)</code>: 是否包含key</li>
+  <li><code class="highlighter-rouge">boolean containsValue(Object value)</code>: 是否包含value</li>
+  <li><code class="highlighter-rouge">V get(Object key)</code>: 返回key对应的value, 没有则返回<code class="highlighter-rouge">null</code></li>
+  <li><code class="highlighter-rouge">V put(K key, V value)</code>: key和value都可为null, key重复则替换旧的value</li>
+  <li><code class="highlighter-rouge">void putAll(Map&lt;? extends K, ? extends V&gt; m)</code>:</li>
+  <li><code class="highlighter-rouge">V remove(Object key)</code>: 移除并返回, 若不包含key返回null</li>
+  <li><code class="highlighter-rouge">void clear()</code>: 清空map</li>
+  <li><code class="highlighter-rouge">Set&lt;K&gt; keySet()</code>: 返回key的集合</li>
+  <li><code class="highlighter-rouge">Collection&lt;V&gt; values()</code>: 返回value的集合</li>
+  <li><code class="highlighter-rouge">Set&lt;Map.Entry&lt;K, V&gt;&gt; entrySet()</code>: 返回Entry集合</li>
 </ul>
 
-<hr>
+<hr />
 
-<h2 id="hashmap与identityhashmap"><code class="prettyprint">HashMap</code>与<code class="prettyprint">IdentityHashMap</code></h2>
+<h2 id="hashmaphashtable">HashMap与HashTable</h2>
+<ul>
+  <li>Hashtable是线程安全的，而HashMap不是线程安全的</li>
+  <li>Hashtable不允许null作为key和value，而HashMap则可以使用null作为key和value</li>
+  <li>Hashtable很古老, 从JDK1.0就有了, 不建议使用</li>
+</ul>
+
+<hr />
+
+<h2 id="hashmapidentityhashmap">HashMap与IdentityHashMap</h2>
+<ul>
+  <li><code class="highlighter-rouge">IdentityHashMap</code>认为两个key相等: 两个key严格相等(<code class="highlighter-rouge">key1 == key2</code>)</li>
+  <li><code class="highlighter-rouge">HashMap</code>则认为两个key相等: <code class="highlighter-rouge">key1.equals(key2)</code>且<code class="highlighter-rouge">hashCode</code>相同</li>
+</ul>
+
+<hr />
+<p>## LinkedHashMap
+<code class="highlighter-rouge">LinkedHashMap</code>可以记住key-value对的添加时的顺序</p>
+
+<hr />
+
+<h2 id="sortedmaptreemap">SortedMap接口和TreeMap</h2>
+<p>内置比较器(<code class="highlighter-rouge">Comparator</code>),可比较前后顺序, <code class="highlighter-rouge">TreeMap</code>默认按照自然顺序排序, 不允许null作为key</p>
+
+<hr />
+
+<h2 id="enummap">EnumMap</h2>
+<p><code class="highlighter-rouge">EnumMap</code>只接受枚举类作为key, 不允许null作为key</p>
+
+<hr />
+
+<h2 id="properties">Properties</h2>
+<p><code class="highlighter-rouge">Properties</code>继承<code class="highlighter-rouge">HashTable</code>, 还有几个其他常用方法:</p>
 
 <ul>
-<li><code class="prettyprint">IdentityHashMap</code>认为两个key相等: 两个key严格相等(<code class="prettyprint">key1 == key2</code>)</li>
-<li><code class="prettyprint">HashMap</code>则认为两个key相等: <code class="prettyprint">key1.equals(key2)</code>且<code class="prettyprint">hashCode</code>相同</li>
+  <li><code class="highlighter-rouge">String getProperty(String key)</code>: 获取指定key对应的value值</li>
+  <li><code class="highlighter-rouge">String getProperty(String key, String defaultValue)</code>: 有默认值</li>
+  <li><code class="highlighter-rouge">Object setProperty(String key, String value)</code>: 调用<code class="highlighter-rouge">Hashtable</code>的put方法.</li>
+  <li><code class="highlighter-rouge">void load(InputStream inStream)</code>: 从属性文件加载key-value对</li>
+  <li><code class="highlighter-rouge">void store(OutputStream out, String comments)</code>: 将当前的所有key-value对输出到指定属性文件,小心乱码</li>
+  <li><code class="highlighter-rouge">loadFromXML(InputStream in)</code>: 从XML中加载配置</li>
+  <li><code class="highlighter-rouge">storeToXML(OutputStream os, String comment)</code>: 写到XML文件中</li>
+  <li><code class="highlighter-rouge">storeToXML(OutputStream os, String comment, String encoding)</code>: 写到XML中, 可以指定编码</li>
 </ul>
 
-<hr>
-
-<h2 id="linkedhashmap"><code class="prettyprint">LinkedHashMap</code></h2>
-
-<p><code class="prettyprint">LinkedHashMap</code>可以记住key-value对的添加时的顺序</p>
-
-<hr>
-
-<h2 id="sortedmap接口和treemap"><code class="prettyprint">SortedMap</code>接口和<code class="prettyprint">TreeMap</code></h2>
-
-<p>内置比较器(<code class="prettyprint">Comparator</code>),可比较前后顺序, <code class="prettyprint">TreeMap</code>默认按照自然顺序排序, 不允许null作为key</p>
-
-<hr>
-
-<h2 id="enummap"><code class="prettyprint">EnumMap</code></h2>
-
-<p><code class="prettyprint">EnumMap</code>只接受枚举类作为key, 不允许null作为key</p>
-
-<hr>
-
-<h2 id="properties"><code class="prettyprint">Properties</code></h2>
-
-<p><code class="prettyprint">Properties</code>继承<code class="prettyprint">HashTable</code>, 还有几个其他常用方法:</p>
-
+<h2 id="map-2">Map的选择</h2>
 <ul>
-<li><code class="prettyprint">String getProperty(String key)</code>: 获取指定key对应的value值</li>
-<li><code class="prettyprint">String getProperty(String key, String defaultValue)</code>: 有默认值</li>
-<li><code class="prettyprint">Object setProperty(String key, String value)</code>: 调用<code class="prettyprint">Hashtable</code>的put方法.</li>
-<li><code class="prettyprint">void load(InputStream inStream)</code>: 从属性文件加载key-value对</li>
-<li><code class="prettyprint">void store(OutputStream out, String comments)</code>: 将当前的所有key-value对输出到指定属性文件,小心乱码</li>
-<li><code class="prettyprint">loadFromXML(InputStream in)</code>: 从XML中加载配置</li>
-<li><code class="prettyprint">storeToXML(OutputStream os, String comment)</code>: 写到XML文件中</li>
-<li><code class="prettyprint">storeToXML(OutputStream os, String comment, String encoding)</code>: 写到XML中, 可以指定编码</li>
+  <li>若要保留插入时的顺序, 可用<code class="highlighter-rouge">LinkedHashMap</code></li>
+  <li>若要求key完全匹配(同一对象)，可用<code class="highlighter-rouge">IdentityHashMap</code></li>
+  <li>若要排序,可用<code class="highlighter-rouge">TreeMap</code>, 它在底层采用红黑树来管理key-value对</li>
 </ul>
 
-<h2 id="map的选择">Map的选择</h2>
+<hr />
 
+<h2 id="null">关于null</h2>
 <ul>
-<li>若要保留插入时的顺序, 可用<code class="prettyprint">LinkedHashMap</code></li>
-<li>若要求key完全匹配(同一对象)，可用<code class="prettyprint">IdentityHashMap</code></li>
-<li>若要排序,可用<code class="prettyprint">TreeMap</code>, 它在底层采用红黑树来管理key-value对</li>
+  <li><code class="highlighter-rouge">Hashtable</code>的key、value均不能为null</li>
+  <li><code class="highlighter-rouge">TreeMap</code>与<code class="highlighter-rouge">EnumMap</code>不允许key为null</li>
+  <li><code class="highlighter-rouge">HashMap</code>、<code class="highlighter-rouge">IdentityHashMap</code>key可以为null, 但不建议这样做</li>
 </ul>
 
-<hr>
-
-<h2 id="关于null">关于<code class="prettyprint">null</code></h2>
-
-<ul>
-<li><code class="prettyprint">Hashtable</code>的key、value均不能为null</li>
-<li><code class="prettyprint">TreeMap</code>与<code class="prettyprint">EnumMap</code>不允许key为null</li>
-<li><code class="prettyprint">HashMap</code>、<code class="prettyprint">IdentityHashMap</code>key可以为null, 但不建议这样做</li>
-</ul>
-
-<hr>
+<hr />
 
         </div>
     </div>

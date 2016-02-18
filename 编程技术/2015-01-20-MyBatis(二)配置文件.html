@@ -99,92 +99,104 @@ jQuery(function(){
     <div class="uk-grid">
         <div  class="uk-width-4-4">
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
-            <p>MyBatis 的配置文件即<code class="prettyprint">mybatis-config.xml</code>中的<code class="prettyprint">configuration</code>标签下有<code class="prettyprint">settings、properties</code>等属性。本文对其中常用属性的配置做简单介绍</p>
+            <p>MyBatis 的配置文件即<code class="highlighter-rouge">mybatis-config.xml</code>中的<code class="highlighter-rouge">configuration</code>标签下有<code class="highlighter-rouge">settings、properties</code>等属性。本文对其中常用属性的配置做简单介绍</p>
 
-<hr>
+<hr />
 
-<h2 id="本文结构">本文结构</h2>
-
-<ul>
-<li><a href="#properties">properties 属性</a></li>
-<li><a href="#typeAliases">typeAliases 类型别名</a></li>
-<li><a href="#typeHandlers">typeHandlers 类型转换处理器</a>
+<h2 id="section">本文结构</h2>
 
 <ul>
-<li> <a href="#TypeHandler1">自定义TypeHandler</a></li>
-<li> <a href="#TypeHandler2">注册TypeHandler</a></li>
-<li> <a href="#TypeHandler3">自动获取TypeHandler</a></li>
-</ul></li>
-<li><a href="#mappers">mappers 映射器</a></li>
+  <li><a href="#properties">properties 属性</a></li>
+  <li><a href="#typeAliases">typeAliases 类型别名</a></li>
+  <li><a href="#typeHandlers">typeHandlers 类型转换处理器</a>
+    <ul>
+      <li><a href="#TypeHandler1">自定义TypeHandler</a></li>
+      <li><a href="#TypeHandler2">注册TypeHandler</a></li>
+      <li><a href="#TypeHandler3">自动获取TypeHandler</a></li>
+    </ul>
+  </li>
+  <li><a href="#mappers">mappers 映射器</a></li>
 </ul>
 
-<hr>
+<hr />
 
 <h2 id="properties"> properties 属性 </h2>
 
-<p>properties 属性可以从properties文件中获得，也可以直接写到配置文件中。<br>
-属性文件里<code class="prettyprint">config.properties</code>中内容为</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml">driver=com.mysql.jdbc.Driver
+<p>properties 属性可以从properties文件中获得，也可以直接写到配置文件中。 <br />
+属性文件里<code class="highlighter-rouge">config.properties</code>中内容为</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>driver=com.mysql.jdbc.Driver
 url=jdbc:mysql://127.0.0.1:3306/test
 username=root
 password=root
-</code></pre></div>
-<p>配置文件<code class="prettyprint">mybatis-config.xml</code>中有这样的内容</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- properties配置 --&gt;</span>
-<span class="nt">&lt;properties</span> <span class="na">resource=</span><span class="s">&quot;config.properties&quot;</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;username&quot;</span> <span class="na">value=</span><span class="s">&quot;shisong&quot;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;password&quot;</span> <span class="na">value=</span><span class="s">&quot;123456&quot;</span><span class="nt">/&gt;</span>
+</code></pre>
+</div>
+<p>配置文件<code class="highlighter-rouge">mybatis-config.xml</code>中有这样的内容</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">&lt;!-- properties配置 --&gt;</span>
+<span class="nt">&lt;properties</span> <span class="na">resource=</span><span class="s">"config.properties"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"username"</span> <span class="na">value=</span><span class="s">"shisong"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"password"</span> <span class="na">value=</span><span class="s">"123456"</span><span class="nt">/&gt;</span>
 <span class="nt">&lt;/properties&gt;</span>
 
 <span class="c">&lt;!-- properties使用 --&gt;</span>
-<span class="nt">&lt;dataSource</span> <span class="na">type=</span><span class="s">&quot;POOLED&quot;</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;driver&quot;</span> <span class="na">value=</span><span class="s">&quot;${driver}&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;url&quot;</span> <span class="na">value=</span><span class="s">&quot;${url}&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;username&quot;</span> <span class="na">value=</span><span class="s">&quot;${username}&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;password&quot;</span> <span class="na">value=</span><span class="s">&quot;${password}&quot;</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;dataSource</span> <span class="na">type=</span><span class="s">"POOLED"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"driver"</span> <span class="na">value=</span><span class="s">"${driver}"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"url"</span> <span class="na">value=</span><span class="s">"${url}"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"username"</span> <span class="na">value=</span><span class="s">"${username}"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"password"</span> <span class="na">value=</span><span class="s">"${password}"</span><span class="nt">/&gt;</span>
 <span class="nt">&lt;/dataSource&gt;</span>
-</code></pre></div>
-<p>上面例子中的<code class="prettyprint">password</code>重复指定了且不一样，而数据库的正确密码是<code class="prettyprint">root</code>,上面的例子是能够成功的；
-当把配置中的<code class="prettyprint">password</code>改为<code class="prettyprint">root</code>,而把porperties中<code class="prettyprint">password</code>改为<code class="prettyprint">123456</code>时则会失败；
-所以当属性在不只一个地方进行了配置时，要有一个加载顺序，后加载的会覆盖先加载的。<br>
-另外属性加载的时候，还可以通过<code class="prettyprint">SqlSessionBuilder.build()</code>方法来加载</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">SqlSessionFactory</span> <span class="n">factory</span> <span class="o">=</span> <span class="n">sqlSessionFactoryBuilder</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="n">reader</span><span class="o">,</span> <span class="n">props</span><span class="o">);</span>
+</code></pre>
+</div>
+<p>上面例子中的<code class="highlighter-rouge">password</code>重复指定了且不一样，而数据库的正确密码是<code class="highlighter-rouge">root</code>,上面的例子是能够成功的；
+当把配置中的<code class="highlighter-rouge">password</code>改为<code class="highlighter-rouge">root</code>,而把porperties中<code class="highlighter-rouge">password</code>改为<code class="highlighter-rouge">123456</code>时则会失败；
+所以当属性在不只一个地方进行了配置时，要有一个加载顺序，后加载的会覆盖先加载的。<br />
+另外属性加载的时候，还可以通过<code class="highlighter-rouge">SqlSessionBuilder.build()</code>方法来加载</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">SqlSessionFactory</span> <span class="n">factory</span> <span class="o">=</span> <span class="n">sqlSessionFactoryBuilder</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="n">reader</span><span class="o">,</span> <span class="n">props</span><span class="o">);</span>
 <span class="c1">// ... or ...</span>
 <span class="n">SqlSessionFactory</span> <span class="n">factory</span> <span class="o">=</span> <span class="n">sqlSessionFactoryBuilder</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="n">reader</span><span class="o">,</span> <span class="n">environment</span><span class="o">,</span> <span class="n">props</span><span class="o">);</span>
-</code></pre></div>
+</code></pre>
+</div>
 <p>当属性在不只一个地方进行了配置时，加载顺序是这样的</p>
 
 <ol>
-<li> 先加载<code class="prettyprint">XML</code>文件中在<code class="prettyprint">properties</code>元素体内<code class="prettyprint">property</code>标签指定的属性</li>
-<li> 然后加<code class="prettyprint">resource</code>或<code class="prettyprint">url</code>指定的资源文件中的属性，并覆盖已读取的同名属性</li>
-<li> 最后读取作为方法参数传递的属性，并覆盖已读取的同名属性</li>
+  <li>先加载<code class="highlighter-rouge">XML</code>文件中在<code class="highlighter-rouge">properties</code>元素体内<code class="highlighter-rouge">property</code>标签指定的属性</li>
+  <li>然后加<code class="highlighter-rouge">resource</code>或<code class="highlighter-rouge">url</code>指定的资源文件中的属性，并覆盖已读取的同名属性</li>
+  <li>最后读取作为方法参数传递的属性，并覆盖已读取的同名属性</li>
 </ol>
 
-<hr>
+<hr />
 
 <h2 id="typeAliases"> typeAliases 类型别名 </h2>
-
-<p>类型别名是为<code class="prettyprint">Java</code>类型命名的一个短的名字,意义仅在于用来减少类完全限定名的冗余。<br>
+<p>类型别名是为<code class="highlighter-rouge">Java</code>类型命名的一个短的名字,意义仅在于用来减少类完全限定名的冗余。<br />
 可以像下面这样起别名:</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;typeAliases&gt;</span>
-  <span class="nt">&lt;typeAlias</span> <span class="na">alias=</span><span class="s">&quot;Author&quot;</span> <span class="na">type=</span><span class="s">&quot;domain.blog.Author&quot;</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;typeAlias</span> <span class="na">alias=</span><span class="s">&quot;Blog&quot;</span> <span class="na">type=</span><span class="s">&quot;domain.blog.Blog&quot;</span><span class="nt">/&gt;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;typeAliases&gt;</span>
+  <span class="nt">&lt;typeAlias</span> <span class="na">alias=</span><span class="s">"Author"</span> <span class="na">type=</span><span class="s">"domain.blog.Author"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;typeAlias</span> <span class="na">alias=</span><span class="s">"Blog"</span> <span class="na">type=</span><span class="s">"domain.blog.Blog"</span><span class="nt">/&gt;</span>
 <span class="nt">&lt;/typeAliases&gt;</span>
-</code></pre></div>
+</code></pre>
+</div>
 <p>也可以指定一个包名, MyBatis 会在包名下搜索需要的 Java Bean，比如：</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;typeAliases&gt;</span>
-  <span class="nt">&lt;package</span> <span class="na">name=</span><span class="s">&quot;domain.blog&quot;</span><span class="nt">/&gt;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;typeAliases&gt;</span>
+  <span class="nt">&lt;package</span> <span class="na">name=</span><span class="s">"domain.blog"</span><span class="nt">/&gt;</span>
 <span class="nt">&lt;/typeAliases&gt;</span>
-</code></pre></div>
+</code></pre>
+</div>
 <p>包 domain.blog 中所有的的 Java Bean，在没有注解的情况下，会使用 Bean 的类名来作为它的别名。
 比如 domain.blog.Author 的别名为 Author(大小写不敏感)；若有注解，则别名为其注解值。如下：</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Alias</span><span class="o">(</span><span class="s">&quot;author&quot;</span><span class="o">)</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Alias</span><span class="o">(</span><span class="s">"author"</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Author</span> <span class="o">{</span>
     <span class="o">...</span>
 <span class="o">}</span>
-</code></pre></div>
+</code></pre>
+</div>
 <p>MyBatis 已经为普通的 Java 类型内建了许多相应的类型别名，它们都是大小写不敏感的。</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">别名         映射的类型
+
+<div class="highlighter-rouge"><pre class="highlight"><code>别名         映射的类型
 _byte       byte
 _long       long
 _short      short
@@ -212,23 +224,24 @@ list        List
 arraylist   ArrayList
 collection  Collection
 iterator    Iterator
-</code></pre></div>
-<hr>
+</code></pre>
+</div>
+
+<hr />
 
 <h2 id="typeHandlers"> typeHandlers 类型转换处理器 </h2>
-
-<p>数据库中的类型和<code class="prettyprint">Java</code>的类型是不一样的，但是有一定的对应关系。<br>
+<p>数据库中的类型和<code class="highlighter-rouge">Java</code>的类型是不一样的，但是有一定的对应关系。<br />
 无论是 MyBatis 在预处理语句（PreparedStatement）中设置参数时，还是从结果集中取出值时，都会用类型处理器以合适的方式进行转换。
-<code class="prettyprint">typeHandler</code>就是进行<code class="prettyprint">jdbcType</code>和<code class="prettyprint">javaType</code>之间的转换的。</p>
+<code class="highlighter-rouge">typeHandler</code>就是进行<code class="highlighter-rouge">jdbcType</code>和<code class="highlighter-rouge">javaType</code>之间的转换的。</p>
 
-<p><a id="TypeHandler1"></a></p>
+<p><a id="TypeHandler1"></a>
+### 自定义TypeHandler</p>
 
-<h3 id="自定义typehandler">自定义TypeHandler</h3>
-
-<p>MyBatis已经自动注册了一些TypeHandler，我们仍然可以写自己的TypeHandler，具体方法是：实现<code class="prettyprint">org.apache.ibatis.type.TypeHandler</code>接口，或继承<code class="prettyprint">org.apache.ibatis.type.BaseTypeHandler</code>抽象类并实现其中的抽象方法，然后指明自己的TypeHandler是哪个<code class="prettyprint">jdbcType</code>和<code class="prettyprint">javaType</code>之间的转换。<br>
-推荐使用BaseTypeHandler，因为它对<code class="prettyprint">null</code>值进行了过滤，而且它继承了<code class="prettyprint">TypeReference</code>抽象类，通过<code class="prettyprint">TypeReference</code>的<code class="prettyprint">getRawType()</code>方法可以获取到当前TypeHandler所使用泛型的原始类型。这对Mybatis在注册TypeHandler的时候是非常有好处的。在没有指定javaType的情况下，Mybatis在注册TypeHandler时可以通过它来获取当前TypeHandler所使用泛型的原始类型作为要注册的TypeHandler的javaType类型。<br>
+<p>MyBatis已经自动注册了一些TypeHandler，我们仍然可以写自己的TypeHandler，具体方法是：实现<code class="highlighter-rouge">org.apache.ibatis.type.TypeHandler</code>接口，或继承<code class="highlighter-rouge">org.apache.ibatis.type.BaseTypeHandler</code>抽象类并实现其中的抽象方法，然后指明自己的TypeHandler是哪个<code class="highlighter-rouge">jdbcType</code>和<code class="highlighter-rouge">javaType</code>之间的转换。<br />
+推荐使用BaseTypeHandler，因为它对<code class="highlighter-rouge">null</code>值进行了过滤，而且它继承了<code class="highlighter-rouge">TypeReference</code>抽象类，通过<code class="highlighter-rouge">TypeReference</code>的<code class="highlighter-rouge">getRawType()</code>方法可以获取到当前TypeHandler所使用泛型的原始类型。这对Mybatis在注册TypeHandler的时候是非常有好处的。在没有指定javaType的情况下，Mybatis在注册TypeHandler时可以通过它来获取当前TypeHandler所使用泛型的原始类型作为要注册的TypeHandler的javaType类型。<br />
 假设有一个User类，其中有一个属性interests是String数组类型</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>  
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>  
 
     <span class="kd">private</span> <span class="kt">int</span> <span class="n">id</span><span class="o">;</span>  
     <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>  
@@ -236,62 +249,64 @@ iterator    Iterator
     <span class="kd">private</span> <span class="n">String</span><span class="o">[</span> <span class="o">]</span> <span class="n">interests</span><span class="o">;</span>  
     <span class="o">...</span>
 <span class="o">}</span>
-</code></pre></div>
-<p>要为String 数组定义一个转换类<code class="prettyprint">StringArrayTypeHandler</code></p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// StringArrayTypeHandler.java</span>
+</code></pre>
+</div>
+<p>要为String 数组定义一个转换类<code class="highlighter-rouge">StringArrayTypeHandler</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// StringArrayTypeHandler.java</span>
 <span class="nd">@MappedJdbcTypes</span><span class="o">(</span><span class="n">JdbcType</span><span class="o">.</span><span class="na">VARCHAR</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">StringArrayTypeHandler</span> <span class="kd">extends</span> <span class="n">BaseTypeHandler</span><span class="o">&lt;</span><span class="n">String</span><span class="o">[</span> <span class="o">]&gt;</span> <span class="o">{</span>
-    <span class="cm">/**</span>
-<span class="cm">     * 用于定义在Mybatis设置参数时该如何把Java类型的参数转换为对应的数据库类型</span>
-<span class="cm">     * @param ps 当前的PreparedStatement对象</span>
-<span class="cm">     * @param i 当前参数的位置</span>
-<span class="cm">     * @param parameter 当前参数的Java对象</span>
-<span class="cm">     * @param jdbcType 当前参数的数据库类型</span>
-<span class="cm">     * @throws SQLException</span>
-<span class="cm">     */</span>
+    <span class="cm">/**
+     * 用于定义在Mybatis设置参数时该如何把Java类型的参数转换为对应的数据库类型
+     * @param ps 当前的PreparedStatement对象
+     * @param i 当前参数的位置
+     * @param parameter 当前参数的Java对象
+     * @param jdbcType 当前参数的数据库类型
+     * @throws SQLException
+     */</span>
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setNonNullParameter</span><span class="o">(</span><span class="n">PreparedStatement</span> <span class="n">ps</span><span class="o">,</span> <span class="kt">int</span> <span class="n">i</span><span class="o">,</span> <span class="n">String</span><span class="o">[</span> <span class="o">]</span> <span class="n">parameter</span><span class="o">,</span> <span class="n">JdbcType</span> <span class="n">jdbcType</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">setNonNullParameter</span><span class="o">(</span><span class="n">PreparedStatement</span> <span class="n">ps</span><span class="o">,</span> <span class="kt">int</span> <span class="n">i</span><span class="o">,</span> <span class="n">String</span><span class="o">[</span> <span class="o">]</span> <span class="n">parameter</span><span class="o">,</span> <span class="n">JdbcType</span> <span class="n">jdbcType</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
         <span class="c1">//由于BaseTypeHandler中已经把parameter为null的情况做了处理，所以这里我们就不用再判断parameter是否为空了，直接用就可以了  </span>
-       <span class="n">StringBuffer</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">StringBuffer</span><span class="o">();</span>  
+       <span class="n">StringBuffer</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuffer</span><span class="o">();</span>  
        <span class="k">for</span> <span class="o">(</span><span class="n">String</span> <span class="n">value</span> <span class="o">:</span> <span class="n">parameter</span><span class="o">)</span>  
-           <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">value</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;,&quot;</span><span class="o">);</span>  
+           <span class="n">result</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">value</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="s">","</span><span class="o">);</span>  
        <span class="n">result</span><span class="o">.</span><span class="na">deleteCharAt</span><span class="o">(</span><span class="n">result</span><span class="o">.</span><span class="na">length</span><span class="o">()-</span><span class="mi">1</span><span class="o">);</span>  
        <span class="n">ps</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">result</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>  
     <span class="o">}</span>  
     <span class="o">}</span>
 
 
-    <span class="cm">/**</span>
-<span class="cm">     * 用于在Mybatis获取数据结果集时如何把数据库类型转换为对应的Java类型</span>
-<span class="cm">     * @param rs 当前的结果集</span>
-<span class="cm">     * @param columnName 当前的字段名称</span>
-<span class="cm">     * @return 转换后的Java对象</span>
-<span class="cm">     * @throws SQLException</span>
-<span class="cm">     */</span>
+    <span class="cm">/**
+     * 用于在Mybatis获取数据结果集时如何把数据库类型转换为对应的Java类型
+     * @param rs 当前的结果集
+     * @param columnName 当前的字段名称
+     * @return 转换后的Java对象
+     * @throws SQLException
+     */</span>
     <span class="nd">@Override</span>
     <span class="kd">public</span> <span class="n">String</span><span class="o">[</span> <span class="o">]</span> <span class="n">getNullableResult</span><span class="o">(</span><span class="n">ResultSet</span> <span class="n">rs</span><span class="o">,</span> <span class="n">String</span> <span class="n">columnName</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
         <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">getStringArray</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="n">columnName</span><span class="o">));</span>
     <span class="o">}</span>
 
-    <span class="cm">/**</span>
-<span class="cm">     * 用于在Mybatis通过字段位置获取字段数据时把数据库类型转换为对应的Java类型</span>
-<span class="cm">     * @param rs 当前的结果集</span>
-<span class="cm">     * @param columnIndex 当前字段的位置</span>
-<span class="cm">     * @return 转换后的Java对象</span>
-<span class="cm">     * @throws SQLException</span>
-<span class="cm">     */</span>
+    <span class="cm">/**
+     * 用于在Mybatis通过字段位置获取字段数据时把数据库类型转换为对应的Java类型
+     * @param rs 当前的结果集
+     * @param columnIndex 当前字段的位置
+     * @return 转换后的Java对象
+     * @throws SQLException
+     */</span>
     <span class="nd">@Override</span>
     <span class="kd">public</span> <span class="n">String</span><span class="o">[</span> <span class="o">]</span> <span class="n">getNullableResult</span><span class="o">(</span><span class="n">ResultSet</span> <span class="n">rs</span><span class="o">,</span> <span class="kt">int</span> <span class="n">columnIndex</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
         <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">getStringArray</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="n">columnIndex</span><span class="o">));</span>
     <span class="o">}</span>
 
-    <span class="cm">/**</span>
-<span class="cm">     * 用于Mybatis在调用存储过程后把数据库类型的数据转换为对应的Java类型</span>
-<span class="cm">     * @param cs 当前的CallableStatement执行后的CallableStatement</span>
-<span class="cm">     * @param columnIndex 当前输出参数的位置</span>
-<span class="cm">     * @return</span>
-<span class="cm">     * @throws SQLException</span>
-<span class="cm">     */</span>
+    <span class="cm">/**
+     * 用于Mybatis在调用存储过程后把数据库类型的数据转换为对应的Java类型
+     * @param cs 当前的CallableStatement执行后的CallableStatement
+     * @param columnIndex 当前输出参数的位置
+     * @return
+     * @throws SQLException
+     */</span>
     <span class="nd">@Override</span>
     <span class="kd">public</span> <span class="n">String</span><span class="o">[</span> <span class="o">]</span> <span class="n">getNullableResult</span><span class="o">(</span><span class="n">CallableStatement</span> <span class="n">cs</span><span class="o">,</span> <span class="kt">int</span> <span class="n">columnIndex</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
         <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">getStringArray</span><span class="o">(</span><span class="n">cs</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="n">columnIndex</span><span class="o">));</span>
@@ -300,145 +315,157 @@ iterator    Iterator
     <span class="kd">private</span> <span class="n">String</span><span class="o">[</span> <span class="o">]</span> <span class="n">getStringArray</span><span class="o">(</span><span class="n">String</span> <span class="n">columnValue</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">if</span> <span class="o">(</span><span class="n">columnValue</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
             <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
-        <span class="k">return</span> <span class="n">columnValue</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">&quot;,&quot;</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">columnValue</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">","</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre></div>
-<p><a id="TypeHandler2"></a></p>
+</code></pre>
+</div>
+<p><a id="TypeHandler2"></a>
+### 注册TypeHandler</p>
 
-<h3 id="注册typehandler">注册TypeHandler</h3>
-
-<p>MyBatis 在<code class="prettyprint">TypeHandlerRegistry</code>类中已经注册了许多TypeHandler。<br>
+<p>MyBatis 在<code class="highlighter-rouge">TypeHandlerRegistry</code>类中已经注册了许多TypeHandler。<br />
 我们建立了自己的TypeHandler之后就需要把它注册到Mybatis的配置文件中，让Mybatis能够识别并使用它。注册TypeHandler主要有两种方式:</p>
 
 <ul>
-<li> 一种是通过typeHandler来注册，这样一次只能注册一个TypeHandler。<br>
-它有一个必须的属性<code class="prettyprint">handler</code>来指明当前要注册的TypeHandler的全名称。另外还有两个可选属性，一个是javaType，用以指定对应的java类型；另一个是jdbcType，用以指定对应的jdbc类型。</li>
+  <li>一种是通过typeHandler来注册，这样一次只能注册一个TypeHandler。<br />
+它有一个必须的属性<code class="highlighter-rouge">handler</code>来指明当前要注册的TypeHandler的全名称。另外还有两个可选属性，一个是javaType，用以指定对应的java类型；另一个是jdbcType，用以指定对应的jdbc类型。</li>
 </ul>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- mybatis-config.xml --&gt;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">&lt;!-- mybatis-config.xml --&gt;</span>
 <span class="nt">&lt;typeHandlers&gt;</span>
-  <span class="nt">&lt;typeHandler</span> <span class="na">handler=</span><span class="s">&quot;org.mybatis.example.StringArrayTypeHandler&quot;</span> <span class="na">javaType=</span><span class="s">&quot;[Ljava.lang.String;&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;typeHandler</span> <span class="na">handler=</span><span class="s">"org.mybatis.example.StringArrayTypeHandler"</span> <span class="na">javaType=</span><span class="s">"[Ljava.lang.String;"</span> <span class="na">jdbcType=</span><span class="s">"VARCHAR"</span><span class="nt">/&gt;</span>
 <span class="nt">&lt;/typeHandlers&gt;</span>
-</code></pre></div>
-<p><strong>注意</strong>上面的<code class="prettyprint">javaType</code>要写全类名，<code class="prettyprint">String[]</code>的全类名为<code class="prettyprint">&quot;[Ljava.lang.String;&quot;</code>，所以上面注册的<code class="prettyprint">javaType</code>属性为<code class="prettyprint">javaType=&quot;[Ljava.lang.String;&quot;</code></p>
+</code></pre>
+</div>
+<p><strong>注意</strong>上面的<code class="highlighter-rouge">javaType</code>要写全类名，<code class="highlighter-rouge">String[]</code>的全类名为<code class="highlighter-rouge">"[Ljava.lang.String;"</code>，所以上面注册的<code class="highlighter-rouge">javaType</code>属性为<code class="highlighter-rouge">javaType="[Ljava.lang.String;"</code></p>
 
 <ul>
-<li> 另一种是通过package来注册，MyBatis将会自动检索该包下所有的<code class="prettyprint">TypeHandler</code>。<br>
+  <li>另一种是通过package来注册，MyBatis将会自动检索该包下所有的<code class="highlighter-rouge">TypeHandler</code>。<br />
 <strong>注意</strong>:这种方式只能通过<strong>注解方式</strong>来指定 JDBC 的类型</li>
 </ul>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- mybatis-config.xml --&gt;</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">&lt;!-- mybatis-config.xml --&gt;</span>
 <span class="nt">&lt;typeHandlers&gt;</span>
-  <span class="nt">&lt;package</span> <span class="na">name=</span><span class="s">&quot;org.mybatis.example&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;package</span> <span class="na">name=</span><span class="s">"org.mybatis.example"</span><span class="nt">/&gt;</span>
 <span class="nt">&lt;/typeHandlers&gt;</span>
-</code></pre></div>
-<p><strong>总结</strong><br>
-MyBatis会通过窥探属性的原始类型来推断由类型处理器处理的 Java 类型(前面说的<code class="prettyprint">getRawType()</code>方法)，可以通过两种方式显式指定被关联的 Java 类型：</p>
+</code></pre>
+</div>
+<p><strong>总结</strong><br />
+MyBatis会通过窥探属性的原始类型来推断由类型处理器处理的 Java 类型(前面说的<code class="highlighter-rouge">getRawType()</code>方法)，可以通过两种方式显式指定被关联的 Java 类型：</p>
 
 <ul>
-<li> 在类型处理器的配置元素（typeHandler element）上增加一个<code class="prettyprint">javaType</code>属性（比如：<code class="prettyprint">javaType=&quot;String&quot;</code>）；</li>
-<li> 在类型处理器的类上（TypeHandler class）增加一个<code class="prettyprint">@MappedTypes</code>注解来指定与其关联的Java类型列表。如果在 <code class="prettyprint">javaType</code>属性中也同时指定，则注解方式将被忽略。</li>
+  <li>在类型处理器的配置元素（typeHandler element）上增加一个<code class="highlighter-rouge">javaType</code>属性（比如：<code class="highlighter-rouge">javaType="String"</code>）；</li>
+  <li>在类型处理器的类上（TypeHandler class）增加一个<code class="highlighter-rouge">@MappedTypes</code>注解来指定与其关联的Java类型列表。如果在 <code class="highlighter-rouge">javaType</code>属性中也同时指定，则注解方式将被忽略。</li>
 </ul>
 
 <p>可以通过两种方式来指定被关联的 JDBC 类型：</p>
 
 <ul>
-<li> 在类型处理器的配置元素上增加一个<code class="prettyprint">jdbcType</code>属性（比如：<code class="prettyprint">jdbcType=&quot;VARCHAR&quot;</code>）；</li>
-<li> 在类型处理器的类上（TypeHandler class）增加一个<code class="prettyprint">@MappedJdbcTypes</code>注解来指定与其关联的 JDBC 类型列表。 如果在<code class="prettyprint">javaType</code>属性中也同时指定，则注解方式将被忽略。</li>
+  <li>在类型处理器的配置元素上增加一个<code class="highlighter-rouge">jdbcType</code>属性（比如：<code class="highlighter-rouge">jdbcType="VARCHAR"</code>）；</li>
+  <li>在类型处理器的类上（TypeHandler class）增加一个<code class="highlighter-rouge">@MappedJdbcTypes</code>注解来指定与其关联的 JDBC 类型列表。 如果在<code class="highlighter-rouge">javaType</code>属性中也同时指定，则注解方式将被忽略。</li>
 </ul>
 
-<p>Mybatis注册TypeHandler就是建立一个<code class="prettyprint">javaType</code>、<code class="prettyprint">jdbcType</code>和<code class="prettyprint">TypeHandler</code>的对应关系。根据上面所讲的情况，MyBatis注册我们写的TypeHandler时可分为下面这几种情况：</p>
+<p>Mybatis注册TypeHandler就是建立一个<code class="highlighter-rouge">javaType</code>、<code class="highlighter-rouge">jdbcType</code>和<code class="highlighter-rouge">TypeHandler</code>的对应关系。根据上面所讲的情况，MyBatis注册我们写的TypeHandler时可分为下面这几种情况：</p>
 
 <ol>
-<li> 有<code class="prettyprint">javaType</code>和<code class="prettyprint">jdbcType</code>，那么Mybatis会注册对应<code class="prettyprint">javaType</code>和<code class="prettyprint">dbcType</code>的<code class="prettyprint">TypeHandler</code>。</li>
-<li> 有<code class="prettyprint">javaType</code>无<code class="prettyprint">jdbcType</code>，那么Mybatis会注册对应<code class="prettyprint">javaType</code>和<code class="prettyprint">null</code>的<code class="prettyprint">TypeHandler</code>。</li>
-<li> 无<code class="prettyprint">javaType</code>有<code class="prettyprint">jdbcType</code>，若当前的<code class="prettyprint">TypeHandler</code>继承了<code class="prettyprint">TypeReference</code>抽象类，Mybatis会利用<code class="prettyprint">TypeReference</code>的<code class="prettyprint">getRawType()</code>方法取到当前<code class="prettyprint">TypeHandler</code>泛型对应的<code class="prettyprint">javaType</code>类型以方式1注册。</li>
-<li> 无<code class="prettyprint">javaType</code>无<code class="prettyprint">jdbcType</code>，且当前的<code class="prettyprint">TypeHandler</code>未继承<code class="prettyprint">TypeReference</code>抽象类，那么Mybatis会注册对应<code class="prettyprint">null</code>和<code class="prettyprint">null</code>的<code class="prettyprint">TypeHandler</code>。</li>
+  <li>有<code class="highlighter-rouge">javaType</code>和<code class="highlighter-rouge">jdbcType</code>，那么Mybatis会注册对应<code class="highlighter-rouge">javaType</code>和<code class="highlighter-rouge">dbcType</code>的<code class="highlighter-rouge">TypeHandler</code>。</li>
+  <li>有<code class="highlighter-rouge">javaType</code>无<code class="highlighter-rouge">jdbcType</code>，那么Mybatis会注册对应<code class="highlighter-rouge">javaType</code>和<code class="highlighter-rouge">null</code>的<code class="highlighter-rouge">TypeHandler</code>。</li>
+  <li>无<code class="highlighter-rouge">javaType</code>有<code class="highlighter-rouge">jdbcType</code>，若当前的<code class="highlighter-rouge">TypeHandler</code>继承了<code class="highlighter-rouge">TypeReference</code>抽象类，Mybatis会利用<code class="highlighter-rouge">TypeReference</code>的<code class="highlighter-rouge">getRawType()</code>方法取到当前<code class="highlighter-rouge">TypeHandler</code>泛型对应的<code class="highlighter-rouge">javaType</code>类型以方式1注册。</li>
+  <li>无<code class="highlighter-rouge">javaType</code>无<code class="highlighter-rouge">jdbcType</code>，且当前的<code class="highlighter-rouge">TypeHandler</code>未继承<code class="highlighter-rouge">TypeReference</code>抽象类，那么Mybatis会注册对应<code class="highlighter-rouge">null</code>和<code class="highlighter-rouge">null</code>的<code class="highlighter-rouge">TypeHandler</code>。</li>
 </ol>
 
-<p><a id="TypeHandler3"></a></p>
-
-<h3 id="自动获取typehandler">自动获取TypeHandler</h3>
+<p><a id="TypeHandler3"></a>
+### 自动获取TypeHandler</p>
 
 <p>上面是讲 MyBatis 是如何注册TypeHandler，下面讲 Mybatis 是如何获取对应的TypeHandler进行类型转换的。</p>
 
-<p>我们这样定义<code class="prettyprint">UserMapper.xml</code>文件</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span>  
-<span class="cp">&lt;!DOCTYPE mapper PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;  &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;</span>  
+<p>我们这样定义<code class="highlighter-rouge">UserMapper.xml</code>文件</p>
 
-<span class="nt">&lt;mapper</span> <span class="na">namespace=</span><span class="s">&quot;com.mybatis.example.mapper.UserMapper&quot;</span><span class="nt">&gt;</span>  
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span>  
+<span class="cp">&lt;!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd"&gt;</span>  
 
-    <span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">&quot;UserResult&quot;</span> <span class="na">type=</span><span class="s">&quot;User&quot;</span><span class="nt">&gt;</span>  
-       <span class="nt">&lt;id</span> <span class="na">column=</span><span class="s">&quot;id&quot;</span> <span class="na">property=</span><span class="s">&quot;id&quot;</span><span class="nt">/&gt;</span>  
-       <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;interests&quot;</span> <span class="na">property=</span><span class="s">&quot;interests&quot;</span> <span class="na">javaType=</span><span class="s">&quot;[Ljava.lang.String;&quot;</span> <span class="na">jdbcType=</span><span class="s">&quot;VARCHAR&quot;</span><span class="nt">/&gt;</span>  
+<span class="nt">&lt;mapper</span> <span class="na">namespace=</span><span class="s">"com.mybatis.example.mapper.UserMapper"</span><span class="nt">&gt;</span>  
+
+    <span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">"UserResult"</span> <span class="na">type=</span><span class="s">"User"</span><span class="nt">&gt;</span>  
+       <span class="nt">&lt;id</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">property=</span><span class="s">"id"</span><span class="nt">/&gt;</span>  
+       <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">"interests"</span> <span class="na">property=</span><span class="s">"interests"</span> <span class="na">javaType=</span><span class="s">"[Ljava.lang.String;"</span> <span class="na">jdbcType=</span><span class="s">"VARCHAR"</span><span class="nt">/&gt;</span>  
     <span class="nt">&lt;/resultMap&gt;</span>  
 
-    <span class="nt">&lt;insert</span> <span class="na">id=</span><span class="s">&quot;insertUser&quot;</span> <span class="na">parameterType=</span><span class="s">&quot;User&quot;</span> <span class="na">useGeneratedKeys=</span><span class="s">&quot;true&quot;</span> <span class="na">keyColumn=</span><span class="s">&quot;id&quot;</span><span class="nt">&gt;</span>  
+    <span class="nt">&lt;insert</span> <span class="na">id=</span><span class="s">"insertUser"</span> <span class="na">parameterType=</span><span class="s">"User"</span> <span class="na">useGeneratedKeys=</span><span class="s">"true"</span> <span class="na">keyColumn=</span><span class="s">"id"</span><span class="nt">&gt;</span>  
        insert into t_user(name, age, interests) values(#{name}, #{age}, #{interests, javaType=[Ljava.lang.String;, jdbcType=VARCHAR})  
     <span class="nt">&lt;/insert&gt;</span>  
 
-    <span class="nt">&lt;update</span> <span class="na">id=</span><span class="s">&quot;updateUser&quot;</span> <span class="na">parameterType=</span><span class="s">&quot;User&quot;</span><span class="nt">&gt;</span>  
+    <span class="nt">&lt;update</span> <span class="na">id=</span><span class="s">"updateUser"</span> <span class="na">parameterType=</span><span class="s">"User"</span><span class="nt">&gt;</span>  
        update t_user set name=#{name}, age=#{age}, interests=#{interests} where id=#{id}  
     <span class="nt">&lt;/update&gt;</span>  
 
-    <span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&quot;findById&quot;</span> <span class="na">parameterType=</span><span class="s">&quot;int&quot;</span> <span class="na">resultMap=</span><span class="s">&quot;UserResult&quot;</span><span class="nt">&gt;</span>  
+    <span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">"findById"</span> <span class="na">parameterType=</span><span class="s">"int"</span> <span class="na">resultMap=</span><span class="s">"UserResult"</span><span class="nt">&gt;</span>  
        select * from t_user where id=#{id}  
     <span class="nt">&lt;/select&gt;</span>  
 
-    <span class="nt">&lt;delete</span> <span class="na">id=</span><span class="s">&quot;deleteUser&quot;</span> <span class="na">parameterType=</span><span class="s">&quot;int&quot;</span><span class="nt">&gt;</span>  
+    <span class="nt">&lt;delete</span> <span class="na">id=</span><span class="s">"deleteUser"</span> <span class="na">parameterType=</span><span class="s">"int"</span><span class="nt">&gt;</span>  
        delete from t_user where id=#{id}  
     <span class="nt">&lt;/delete&gt;</span>  
 <span class="nt">&lt;/mapper&gt;</span>
-</code></pre></div>
-<p>注意到<code class="prettyprint">UserResult</code>中我们指定了<code class="prettyprint">javaType</code>和<code class="prettyprint">jdbcType</code>。获取TypeHandler的方式与注册TypeHandler中的总结完全一样。<br>
-或者我们可以通过<code class="prettyprint">typeHandler</code>属性指定到底使用哪个<code class="prettyprint">TypeHandler</code>，这样不指定<code class="prettyprint">javaType</code>和<code class="prettyprint">jdbcType</code>也可以达到同样效果。</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">&quot;interests&quot;</span> <span class="na">property=</span><span class="s">&quot;interests&quot;</span> <span class="na">typeHandler=</span><span class="s">&quot;org.mybatis.example.StringArrayTypeHandler&quot;</span><span class="nt">/&gt;</span>
-</code></pre></div>
-<p><em><code class="prettyprint">mapper.xml</code>文件的内容请参考后续文章中的动态SQL</em></p>
+</code></pre>
+</div>
+<p>注意到<code class="highlighter-rouge">UserResult</code>中我们指定了<code class="highlighter-rouge">javaType</code>和<code class="highlighter-rouge">jdbcType</code>。获取TypeHandler的方式与注册TypeHandler中的总结完全一样。<br />
+或者我们可以通过<code class="highlighter-rouge">typeHandler</code>属性指定到底使用哪个<code class="highlighter-rouge">TypeHandler</code>，这样不指定<code class="highlighter-rouge">javaType</code>和<code class="highlighter-rouge">jdbcType</code>也可以达到同样效果。</p>
 
-<hr>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">"interests"</span> <span class="na">property=</span><span class="s">"interests"</span> <span class="na">typeHandler=</span><span class="s">"org.mybatis.example.StringArrayTypeHandler"</span><span class="nt">/&gt;</span>
+</code></pre>
+</div>
+<p><em><code class="highlighter-rouge">mapper.xml</code>文件的内容请参考后续文章中的动态SQL</em></p>
+
+<hr />
 
 <h2 id="mappers"> mappers 映射器 </h2>
+<p>MyBatis的配置文件<code class="highlighter-rouge">mybtis-config.xml</code>中有<code class="highlighter-rouge">mappers</code>元素，其作用是告诉MyBatis去哪里找SQL映射语句。<br />
+一般情况会有一个<code class="highlighter-rouge">Maper接口</code>和一个<code class="highlighter-rouge">Mapper.xml</code>对应(这里指xml文件的<code class="highlighter-rouge">namespace</code>与接口对应)，注册<code class="highlighter-rouge">Mapper</code>的方法归纳如下：</p>
 
-<p>MyBatis的配置文件<code class="prettyprint">mybtis-config.xml</code>中有<code class="prettyprint">mappers</code>元素，其作用是告诉MyBatis去哪里找SQL映射语句。<br>
-一般情况会有一个<code class="prettyprint">Maper接口</code>和一个<code class="prettyprint">Mapper.xml</code>对应(这里指xml文件的<code class="prettyprint">namespace</code>与接口对应)，注册<code class="prettyprint">Mapper</code>的方法归纳如下：</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;mappers&gt;</span>  
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;mappers&gt;</span>  
    <span class="c">&lt;!-- 通过mapper元素的resource属性可以指定资源中的Mapper.xml文件 --&gt;</span>  
-   <span class="nt">&lt;mapper</span> <span class="na">resource=</span><span class="s">&quot;mapper/UserMapper.xml&quot;</span><span class="nt">/&gt;</span>  
+   <span class="nt">&lt;mapper</span> <span class="na">resource=</span><span class="s">"mapper/UserMapper.xml"</span><span class="nt">/&gt;</span>  
    <span class="c">&lt;!-- 通过mapper元素的url属性可以指定一个通过URL请求道的Mapper.xml文件 --&gt;</span>  
-   <span class="nt">&lt;mapper</span> <span class="na">url=</span><span class="s">&quot;file:///var/mappers/UserMapper.xml&quot;</span><span class="nt">/&gt;</span>  
+   <span class="nt">&lt;mapper</span> <span class="na">url=</span><span class="s">"file:///var/mappers/UserMapper.xml"</span><span class="nt">/&gt;</span>  
    <span class="c">&lt;!-- 通过mapper元素的class属性可以指定一个Mapper接口进行注册 --&gt;</span>  
-   <span class="nt">&lt;mapper</span> <span class="na">class=</span><span class="s">&quot;com.test.mybatis.mapper.UserMapper&quot;</span><span class="nt">/&gt;</span>  
+   <span class="nt">&lt;mapper</span> <span class="na">class=</span><span class="s">"com.test.mybatis.mapper.UserMapper"</span><span class="nt">/&gt;</span>  
    <span class="c">&lt;!-- 通过package元素将会把指定包下面的所有Mapper接口进行注册 --&gt;</span>  
-   <span class="nt">&lt;package</span> <span class="na">name=</span><span class="s">&quot;com.test.mybatis.bean&quot;</span><span class="nt">/&gt;</span>  
+   <span class="nt">&lt;package</span> <span class="na">name=</span><span class="s">"com.test.mybatis.bean"</span><span class="nt">/&gt;</span>  
 <span class="nt">&lt;/mappers&gt;</span>
-</code></pre></div>
+</code></pre>
+</div>
 <p><strong>注意</strong></p>
 
 <ol>
-<li>根据mybatis3的DTD,package元素必须在mapper元素之后</li>
-<li><code class="prettyprint">xml</code>文件的<code class="prettyprint">namespace</code>如果与接口不对应，则相当于一个只有接口另一个只有xml文件，两者之间没有任何关联</li>
+  <li>根据mybatis3的DTD,package元素必须在mapper元素之后</li>
+  <li><code class="highlighter-rouge">xml</code>文件的<code class="highlighter-rouge">namespace</code>如果与接口不对应，则相当于一个只有接口另一个只有xml文件，两者之间没有任何关联</li>
 </ol>
 
 <ul>
-<li>如果只有<code class="prettyprint">Mapper接口</code>而无<code class="prettyprint">Mapper.xml</code>，则接口中必须通过注解来实现，注册时只能通过<code class="prettyprint">package</code>或者<code class="prettyprint">class</code>方式注册，调用方式如下</li>
+  <li>如果只有<code class="highlighter-rouge">Mapper接口</code>而无<code class="highlighter-rouge">Mapper.xml</code>，则接口中必须通过注解来实现，注册时只能通过<code class="highlighter-rouge">package</code>或者<code class="highlighter-rouge">class</code>方式注册，调用方式如下</li>
 </ul>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">//获取注解后接口对应的对象</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">//获取注解后接口对应的对象</span>
 <span class="n">UserMapper</span> <span class="n">userMapper</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="na">getMapper</span><span class="o">(</span><span class="n">UserMapper</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
 <span class="c1">//调用接口中的方法</span>
 <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">userMapper</span><span class="o">.</span><span class="na">findById</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
-</code></pre></div>
+</code></pre>
+</div>
 <ul>
-<li>如果只有<code class="prettyprint">Mapper.xml</code>文件而无<code class="prettyprint">Mapper接口</code>，则只能通过<code class="prettyprint">resource</code>或<code class="prettyprint">url</code>来注册，调用方式也将变成：</li>
-</ul>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">//参数中的com.mybatis.example.mapper.UserMapper是xml文件中的namespace指定的类名</span>
-<span class="c1">//参数中的findById为指定的类中的方法</span>
-<span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">sqlSession</span><span class="o">.</span><span class="na">selectOne</span><span class="o">(</span><span class="s">&quot;com.mybatis.example.mapper.UserMapper.findById&quot;</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
-</code></pre></div>
-<ul>
-<li>如果既有<code class="prettyprint">Mapper接口</code>又<code class="prettyprint">Mapper.xml</code>(<code class="prettyprint">namespace</code>对应才算是都有)则接口中注解不能与xml文件重复，注册最好通过<code class="prettyprint">resource</code>(通过<code class="prettyprint">class</code>或<code class="prettyprint">package</code>注册只会注册接口而不会关联xml文件，通过<code class="prettyprint">resource</code>注册不仅会注册xml文件，还会关联对应的接口)，调用方式可以采取上面两种的任意一种。<br></li>
+  <li>如果只有<code class="highlighter-rouge">Mapper.xml</code>文件而无<code class="highlighter-rouge">Mapper接口</code>，则只能通过<code class="highlighter-rouge">resource</code>或<code class="highlighter-rouge">url</code>来注册，调用方式也将变成：</li>
 </ul>
 
-<hr>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">//参数中的com.mybatis.example.mapper.UserMapper是xml文件中的namespace指定的类名</span>
+<span class="c1">//参数中的findById为指定的类中的方法</span>
+<span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">sqlSession</span><span class="o">.</span><span class="na">selectOne</span><span class="o">(</span><span class="s">"com.mybatis.example.mapper.UserMapper.findById"</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+</code></pre>
+</div>
+<ul>
+  <li>如果既有<code class="highlighter-rouge">Mapper接口</code>又<code class="highlighter-rouge">Mapper.xml</code>(<code class="highlighter-rouge">namespace</code>对应才算是都有)则接口中注解不能与xml文件重复，注册最好通过<code class="highlighter-rouge">resource</code>(通过<code class="highlighter-rouge">class</code>或<code class="highlighter-rouge">package</code>注册只会注册接口而不会关联xml文件，通过<code class="highlighter-rouge">resource</code>注册不仅会注册xml文件，还会关联对应的接口)，调用方式可以采取上面两种的任意一种。  </li>
+</ul>
+
+<hr />
 
         </div>
     </div>

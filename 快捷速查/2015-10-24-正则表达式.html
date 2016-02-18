@@ -101,183 +101,186 @@ jQuery(function(){
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
             <p>正则表达式收集整理</p>
 
-<hr>
+<hr />
 
-<table><thead>
-<tr>
-<th style="text-align: left">字符</th>
-<th style="text-align: left">说明</th>
-<th style="text-align: left">示例</th>
-</tr>
-</thead><tbody>
-<tr>
-<td style="text-align: left"><code class="prettyprint">\</code></td>
-<td style="text-align: left">转义符</td>
-<td style="text-align: left"><code class="prettyprint">\n</code>匹配换行符。<code class="prettyprint">\\</code>匹配<code class="prettyprint">\</code>，<code class="prettyprint">\(</code>匹配<code class="prettyprint">(</code></td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">^</code></td>
-<td style="text-align: left">匹配输入字符串开始的位置</td>
-<td style="text-align: left"></td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">$</code></td>
-<td style="text-align: left">匹配输入字符串结尾的位置</td>
-<td style="text-align: left"></td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">*</code></td>
-<td style="text-align: left">零次或多次匹配前面的字符或子表达式</td>
-<td style="text-align: left"><code class="prettyprint">zo*</code> 匹配<code class="prettyprint">z</code>和<code class="prettyprint">zoo</code>; <br><code class="prettyprint">*</code> 等效于 <code class="prettyprint">{0,}</code></td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">+</code></td>
-<td style="text-align: left">一次或多次匹配前面的字符或子表达式</td>
-<td style="text-align: left"><code class="prettyprint">zo+</code> 匹配<code class="prettyprint">zo</code>和<code class="prettyprint">zoo</code>,但与<code class="prettyprint">z</code>不匹配; <br><code class="prettyprint">+</code> 等效于 <code class="prettyprint">{1,}</code></td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">?</code></td>
-<td style="text-align: left">零次或一次匹配前面的字符或子表达式</td>
-<td style="text-align: left"><code class="prettyprint">do(es)?</code>匹配<code class="prettyprint">do</code>或<code class="prettyprint">does</code>; <br><code class="prettyprint">?</code> 等效于 <code class="prettyprint">{0,1}</code></td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">{n}</code></td>
-<td style="text-align: left">n 是非负整数, 正好匹配 n 次</td>
-<td style="text-align: left"><code class="prettyprint">o{2}</code>与<code class="prettyprint">Bob</code>中的<code class="prettyprint">o</code>不匹配，但与<code class="prettyprint">food</code>中的两个<code class="prettyprint">o</code>匹配</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">{n,}</code></td>
-<td style="text-align: left">至少匹配 n 次</td>
-<td style="text-align: left"><code class="prettyprint">o{2,}</code>不匹配<code class="prettyprint">Bob</code>中的<code class="prettyprint">o</code>, 但匹配<code class="prettyprint">foooood</code>中的所有<code class="prettyprint">o</code>; <br><code class="prettyprint">o{1,}</code>等效于<code class="prettyprint">o+</code>; <code class="prettyprint">o{0,}</code>等效于<code class="prettyprint">o*</code></td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">{n,m}</code></td>
-<td style="text-align: left">n &lt;= m, 匹配至少 n 次，至多 m 次</td>
-<td style="text-align: left"><code class="prettyprint">o{1,3}</code>匹配<code class="prettyprint">fooooood</code>中的头三个 <code class="prettyprint">o</code>; <br><code class="prettyprint">o{0,1}</code> 等效于 <code class="prettyprint">o?</code>; <br>注意:不能将空格插入逗号和数字之间</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">?</code></td>
-<td style="text-align: left">非贪心匹配, 匹配尽可能短的字符串;<br>常跟在<code class="prettyprint">*、+、?、{n}、{n,}、{n,m}</code>等之后<br>默认是“贪心的”, 匹配可能长的字符串</td>
-<td style="text-align: left">在字符串<code class="prettyprint">oooo</code>中，<code class="prettyprint">o+?</code>只匹配单个<code class="prettyprint">o</code>,而<code class="prettyprint">o+</code>匹配所有<code class="prettyprint">o</code></td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">.</code></td>
-<td style="text-align: left">匹配除<q>\n</q>之外的任何单个字符</td>
-<td style="text-align: left">若要匹配包括<q>\n</q>在内的任意字符，请使用<code class="prettyprint">[\s\S]</code>之类的模式</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">(pattern)</code></td>
-<td style="text-align: left">匹配<code class="prettyprint">pattern</code>并捕获该匹配的子表达式 <br>可以使用 <code class="prettyprint">$0</code>…<code class="prettyprint">$9</code> 获取匹配结果</td>
-<td style="text-align: left">若要匹配括号字符 <code class="prettyprint">(</code><code class="prettyprint">)</code>, 请使用<code class="prettyprint">\(</code><code class="prettyprint">\)</code></td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">x｜y</code></td>
-<td style="text-align: left">匹配 <code class="prettyprint">x</code> 或 <code class="prettyprint">y</code></td>
-<td style="text-align: left"><code class="prettyprint">z｜food</code> 匹配<code class="prettyprint">z</code>或<code class="prettyprint">food</code>。<code class="prettyprint">(z｜f)ood</code> 匹配<code class="prettyprint">zood</code>或<code class="prettyprint">food</code></td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">[xyz]</code></td>
-<td style="text-align: left">字符集. 匹配包含的任一字符</td>
-<td style="text-align: left"><code class="prettyprint">[abc]</code>匹配<code class="prettyprint">plain</code>中的<code class="prettyprint">a</code></td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">[^xyz]</code></td>
-<td style="text-align: left">反向字符集. 匹配未包含的任何单个字符</td>
-<td style="text-align: left"><code class="prettyprint">[^abc]</code>匹配<code class="prettyprint">plain</code>中的<code class="prettyprint">p</code></td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">[a-z]</code></td>
-<td style="text-align: left">字符范围. 匹配指定范围内的任何字符</td>
-<td style="text-align: left"><code class="prettyprint">[a-z]</code>匹配<code class="prettyprint">a</code>到<code class="prettyprint">z</code>范围内的任何小写字母</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">[^a-z]</code></td>
-<td style="text-align: left">反向字符范围. 匹配不在指定范围内的任何字符</td>
-<td style="text-align: left"><code class="prettyprint">[^a-z]</code>匹配不在<code class="prettyprint">a</code>到<code class="prettyprint">z</code>范围内的任何字符</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">[\b]</code></td>
-<td style="text-align: left">匹配一个字边界, 即字与空格间的位置</td>
-<td style="text-align: left"><code class="prettyprint">er\b</code>匹配<code class="prettyprint">never</code>中的<code class="prettyprint">er</code>, 但不匹配<code class="prettyprint">verb</code>中的<code class="prettyprint">er</code></td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">[\B]</code></td>
-<td style="text-align: left">匹配非字边界</td>
-<td style="text-align: left"></td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">[\d]</code></td>
-<td style="text-align: left">数字字符</td>
-<td style="text-align: left">等效于 <code class="prettyprint">[0-9]</code></td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">[\D]</code></td>
-<td style="text-align: left">非数字字符</td>
-<td style="text-align: left">等效于 <code class="prettyprint">[^0-9]</code></td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">[\f]</code></td>
-<td style="text-align: left">换页符</td>
-<td style="text-align: left">等效于 <code class="prettyprint">\x0c</code> 和 <code class="prettyprint">\cL</code></td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">[\n]</code></td>
-<td style="text-align: left">换行符</td>
-<td style="text-align: left">等效于 <code class="prettyprint">\x0a</code> 和 <code class="prettyprint">\cJ</code></td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">[\r]</code></td>
-<td style="text-align: left">回车符</td>
-<td style="text-align: left">等效于 <code class="prettyprint">\x0d</code> 和 <code class="prettyprint">\cM</code></td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">[\s]</code></td>
-<td style="text-align: left">匹配任何空白字符,包括空格、制表符、换页符等</td>
-<td style="text-align: left">等效于 <code class="prettyprint">[ \f\n\r\t\v]</code></td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">[\S]</code></td>
-<td style="text-align: left">非空白字符</td>
-<td style="text-align: left">等效于 <code class="prettyprint">[^ \f\n\r\t\v]</code></td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">[\t]</code></td>
-<td style="text-align: left">制表符(TAB)</td>
-<td style="text-align: left">等效于 <code class="prettyprint">\x09</code> 和 <code class="prettyprint">\cI</code></td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">[\v]</code></td>
-<td style="text-align: left">垂直制表符</td>
-<td style="text-align: left">等效于 <code class="prettyprint">\x09</code> 和 <code class="prettyprint">\cI</code></td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">[\w]</code></td>
-<td style="text-align: left">普通字符</td>
-<td style="text-align: left">等效于 <code class="prettyprint">[A-Za-z0-9_]</code>(注意有个<code class="prettyprint">_</code>)</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">[\W]</code></td>
-<td style="text-align: left">非普通字符</td>
-<td style="text-align: left">等效于 <code class="prettyprint">[^A-Za-z0-9_]</code></td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">[\cx]</code></td>
-<td style="text-align: left">匹配 <code class="prettyprint">x</code> 表示的控制字符</td>
-<td style="text-align: left"><code class="prettyprint">\cM</code> 匹配 <code class="prettyprint">Control-M</code> 或<code class="prettyprint">回车符</code><br><code class="prettyprint">x</code> 的值必须在 <code class="prettyprint">A-Z</code> 或 <code class="prettyprint">a-z</code> 之间, 否则认为 <code class="prettyprint">c</code> 就是<code class="prettyprint">c</code>字符本身</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">[\xn]</code></td>
-<td style="text-align: left">匹配 <code class="prettyprint">n</code>,此处的 n 是一个十六进制转义码 <br>十六进制转义码必须正好是两位数长</td>
-<td style="text-align: left"><code class="prettyprint">\x41</code>匹配字母<code class="prettyprint">A</code>, <code class="prettyprint">\x041</code>与<code class="prettyprint">\x04</code>&amp;<code class="prettyprint">1</code>等效</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">[\un]</code></td>
-<td style="text-align: left">匹配 <code class="prettyprint">n</code>,此处的 n 以四位十六进制数表示的 Unicode 字符</td>
-<td style="text-align: left"><code class="prettyprint">\u00A9</code>匹配版权符号 (©)</td>
-</tr>
-</tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">字符</th>
+      <th style="text-align: left">说明</th>
+      <th style="text-align: left">示例</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">\</code></td>
+      <td style="text-align: left">转义符</td>
+      <td style="text-align: left"><code class="highlighter-rouge">\n</code>匹配换行符。<code class="highlighter-rouge">\\</code>匹配<code class="highlighter-rouge">\</code>，<code class="highlighter-rouge">\(</code>匹配<code class="highlighter-rouge">(</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">^</code></td>
+      <td style="text-align: left">匹配输入字符串开始的位置</td>
+      <td style="text-align: left"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">$</code></td>
+      <td style="text-align: left">匹配输入字符串结尾的位置</td>
+      <td style="text-align: left"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">*</code></td>
+      <td style="text-align: left">零次或多次匹配前面的字符或子表达式</td>
+      <td style="text-align: left"><code class="highlighter-rouge">zo*</code> 匹配<code class="highlighter-rouge">z</code>和<code class="highlighter-rouge">zoo</code>; <br /><code class="highlighter-rouge">*</code> 等效于 <code class="highlighter-rouge"><span class="p">{</span><span class="err">0,</span><span class="p">}</span></code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">+</code></td>
+      <td style="text-align: left">一次或多次匹配前面的字符或子表达式</td>
+      <td style="text-align: left"><code class="highlighter-rouge">zo+</code> 匹配<code class="highlighter-rouge">zo</code>和<code class="highlighter-rouge">zoo</code>,但与<code class="highlighter-rouge">z</code>不匹配; <br /><code class="highlighter-rouge">+</code> 等效于 <code class="highlighter-rouge"><span class="p">{</span><span class="err">1,</span><span class="p">}</span></code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">?</code></td>
+      <td style="text-align: left">零次或一次匹配前面的字符或子表达式</td>
+      <td style="text-align: left"><code class="highlighter-rouge">do(es)?</code>匹配<code class="highlighter-rouge">do</code>或<code class="highlighter-rouge">does</code>; <br /><code class="highlighter-rouge">?</code> 等效于 <code class="highlighter-rouge"><span class="p">{</span><span class="err">0,1</span><span class="p">}</span></code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge"><span class="p">{</span><span class="err">n</span><span class="p">}</span></code></td>
+      <td style="text-align: left">n 是非负整数, 正好匹配 n 次</td>
+      <td style="text-align: left"><code class="highlighter-rouge">o{2}</code>与<code class="highlighter-rouge">Bob</code>中的<code class="highlighter-rouge">o</code>不匹配，但与<code class="highlighter-rouge">food</code>中的两个<code class="highlighter-rouge">o</code>匹配</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge"><span class="p">{</span><span class="err">n,</span><span class="p">}</span></code></td>
+      <td style="text-align: left">至少匹配 n 次</td>
+      <td style="text-align: left"><code class="highlighter-rouge">o{2,}</code>不匹配<code class="highlighter-rouge">Bob</code>中的<code class="highlighter-rouge">o</code>, 但匹配<code class="highlighter-rouge">foooood</code>中的所有<code class="highlighter-rouge">o</code>; <br /><code class="highlighter-rouge">o{1,}</code>等效于<code class="highlighter-rouge">o+</code>; <code class="highlighter-rouge">o{0,}</code>等效于<code class="highlighter-rouge">o*</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge"><span class="p">{</span><span class="err">n,m</span><span class="p">}</span></code></td>
+      <td style="text-align: left">n &lt;= m, 匹配至少 n 次，至多 m 次</td>
+      <td style="text-align: left"><code class="highlighter-rouge">o{1,3}</code>匹配<code class="highlighter-rouge">fooooood</code>中的头三个 <code class="highlighter-rouge">o</code>; <br /><code class="highlighter-rouge">o{0,1}</code> 等效于 <code class="highlighter-rouge">o?</code>; <br />注意:不能将空格插入逗号和数字之间</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">?</code></td>
+      <td style="text-align: left">非贪心匹配, 匹配尽可能短的字符串;<br />常跟在<code class="highlighter-rouge">*、+、?、{n}、{n,}、{n,m}</code>等之后<br />默认是“贪心的”, 匹配可能长的字符串</td>
+      <td style="text-align: left">在字符串<code class="highlighter-rouge">oooo</code>中，<code class="highlighter-rouge">o+?</code>只匹配单个<code class="highlighter-rouge">o</code>,而<code class="highlighter-rouge">o+</code>匹配所有<code class="highlighter-rouge">o</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">.</code></td>
+      <td style="text-align: left">匹配除”\n”之外的任何单个字符</td>
+      <td style="text-align: left">若要匹配包括”\n”在内的任意字符，请使用<code class="highlighter-rouge">[\s\S]</code>之类的模式</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">(pattern)</code></td>
+      <td style="text-align: left">匹配<code class="highlighter-rouge">pattern</code>并捕获该匹配的子表达式 <br />可以使用 <code class="highlighter-rouge">$0</code>…<code class="highlighter-rouge">$9</code> 获取匹配结果</td>
+      <td style="text-align: left">若要匹配括号字符 <code class="highlighter-rouge">(</code><code class="highlighter-rouge">)</code>, 请使用<code class="highlighter-rouge">\(</code><code class="highlighter-rouge">\)</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">x｜y</code></td>
+      <td style="text-align: left">匹配 <code class="highlighter-rouge">x</code> 或 <code class="highlighter-rouge">y</code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">z｜food</code> 匹配<code class="highlighter-rouge">z</code>或<code class="highlighter-rouge">food</code>。<code class="highlighter-rouge">(z｜f)ood</code> 匹配<code class="highlighter-rouge">zood</code>或<code class="highlighter-rouge">food</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">[xyz]</code></td>
+      <td style="text-align: left">字符集. 匹配包含的任一字符</td>
+      <td style="text-align: left"><code class="highlighter-rouge">[abc]</code>匹配<code class="highlighter-rouge">plain</code>中的<code class="highlighter-rouge">a</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">[^xyz]</code></td>
+      <td style="text-align: left">反向字符集. 匹配未包含的任何单个字符</td>
+      <td style="text-align: left"><code class="highlighter-rouge">[^abc]</code>匹配<code class="highlighter-rouge">plain</code>中的<code class="highlighter-rouge">p</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">[a-z]</code></td>
+      <td style="text-align: left">字符范围. 匹配指定范围内的任何字符</td>
+      <td style="text-align: left"><code class="highlighter-rouge">[a-z]</code>匹配<code class="highlighter-rouge">a</code>到<code class="highlighter-rouge">z</code>范围内的任何小写字母</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">[^a-z]</code></td>
+      <td style="text-align: left">反向字符范围. 匹配不在指定范围内的任何字符</td>
+      <td style="text-align: left"><code class="highlighter-rouge">[^a-z]</code>匹配不在<code class="highlighter-rouge">a</code>到<code class="highlighter-rouge">z</code>范围内的任何字符</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">[\b]</code></td>
+      <td style="text-align: left">匹配一个字边界, 即字与空格间的位置</td>
+      <td style="text-align: left"><code class="highlighter-rouge">er\b</code>匹配<code class="highlighter-rouge">never</code>中的<code class="highlighter-rouge">er</code>, 但不匹配<code class="highlighter-rouge">verb</code>中的<code class="highlighter-rouge">er</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">[\B]</code></td>
+      <td style="text-align: left">匹配非字边界</td>
+      <td style="text-align: left"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">[\d]</code></td>
+      <td style="text-align: left">数字字符</td>
+      <td style="text-align: left">等效于 <code class="highlighter-rouge">[0-9]</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">[\D]</code></td>
+      <td style="text-align: left">非数字字符</td>
+      <td style="text-align: left">等效于 <code class="highlighter-rouge">[^0-9]</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">[\f]</code></td>
+      <td style="text-align: left">换页符</td>
+      <td style="text-align: left">等效于 <code class="highlighter-rouge">\x0c</code> 和 <code class="highlighter-rouge">\cL</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">[\n]</code></td>
+      <td style="text-align: left">换行符</td>
+      <td style="text-align: left">等效于 <code class="highlighter-rouge">\x0a</code> 和 <code class="highlighter-rouge">\cJ</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">[\r]</code></td>
+      <td style="text-align: left">回车符</td>
+      <td style="text-align: left">等效于 <code class="highlighter-rouge">\x0d</code> 和 <code class="highlighter-rouge">\cM</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">[\s]</code></td>
+      <td style="text-align: left">匹配任何空白字符,包括空格、制表符、换页符等</td>
+      <td style="text-align: left">等效于 <code class="highlighter-rouge">[ \f\n\r\t\v]</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">[\S]</code></td>
+      <td style="text-align: left">非空白字符</td>
+      <td style="text-align: left">等效于 <code class="highlighter-rouge">[^ \f\n\r\t\v]</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">[\t]</code></td>
+      <td style="text-align: left">制表符(TAB)</td>
+      <td style="text-align: left">等效于 <code class="highlighter-rouge">\x09</code> 和 <code class="highlighter-rouge">\cI</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">[\v]</code></td>
+      <td style="text-align: left">垂直制表符</td>
+      <td style="text-align: left">等效于 <code class="highlighter-rouge">\x09</code> 和 <code class="highlighter-rouge">\cI</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">[\w]</code></td>
+      <td style="text-align: left">普通字符</td>
+      <td style="text-align: left">等效于 <code class="highlighter-rouge">[A-Za-z0-9_]</code>(注意有个<code class="highlighter-rouge">_</code>)</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">[\W]</code></td>
+      <td style="text-align: left">非普通字符</td>
+      <td style="text-align: left">等效于 <code class="highlighter-rouge">[^A-Za-z0-9_]</code></td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">[\cx]</code></td>
+      <td style="text-align: left">匹配 <code class="highlighter-rouge">x</code> 表示的控制字符</td>
+      <td style="text-align: left"><code class="highlighter-rouge">\cM</code> 匹配 <code class="highlighter-rouge">Control-M</code> 或<code class="highlighter-rouge">回车符</code><br /><code class="highlighter-rouge">x</code> 的值必须在 <code class="highlighter-rouge">A-Z</code> 或 <code class="highlighter-rouge">a-z</code> 之间, 否则认为 <code class="highlighter-rouge">c</code> 就是<code class="highlighter-rouge">c</code>字符本身</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">[\xn]</code></td>
+      <td style="text-align: left">匹配 <code class="highlighter-rouge">n</code>,此处的 n 是一个十六进制转义码 <br />十六进制转义码必须正好是两位数长</td>
+      <td style="text-align: left"><code class="highlighter-rouge">\x41</code>匹配字母<code class="highlighter-rouge">A</code>, <code class="highlighter-rouge">\x041</code>与<code class="highlighter-rouge">\x04</code>&amp;<code class="highlighter-rouge">1</code>等效</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">[\un]</code></td>
+      <td style="text-align: left">匹配 <code class="highlighter-rouge">n</code>,此处的 n 以四位十六进制数表示的 Unicode 字符</td>
+      <td style="text-align: left"><code class="highlighter-rouge">\u00A9</code>匹配版权符号 (©)</td>
+    </tr>
+  </tbody>
+</table>
 
-<hr>
+<hr />
 
         </div>
     </div>

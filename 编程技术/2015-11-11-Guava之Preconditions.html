@@ -99,78 +99,66 @@ jQuery(function(){
     <div class="uk-grid">
         <div  class="uk-width-4-4">
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
-            <p><code class="prettyprint">Preconditions</code>用于各种条件检查, 在Guava的<code class="prettyprint">com.google.common.base</code>包中<br>
+            <p><code class="highlighter-rouge">Preconditions</code>用于各种条件检查, 在Guava的<code class="highlighter-rouge">com.google.common.base</code>包中<br />
 它提供了几个静态方法, 不满足条件时会抛出异常</p>
 
-<hr>
+<hr />
 
-<h2 id="checknotnull"><code class="prettyprint">checkNotNull</code></h2>
+<h2 id="checknotnull">checkNotNull</h2>
+<p>函数声明: <code class="highlighter-rouge">public static &lt;T&gt; T checkNotNull(T reference)</code><br />
+函数功能: 检查参数不为空, 否则抛出<code class="highlighter-rouge">NullPointerException</code><br />
+应用场景: 判断对象不为null<br />
+有三个重载函数
+* checkNotNull(T reference)
+* checkNotNull(T reference, Object errorMessage)
+* checkNotNull(T reference, String errorMessageTemplate, Object… errorMessageArgs)</p>
 
-<p>函数声明: <code class="prettyprint">public static &lt;T&gt; T checkNotNull(T reference)</code><br>
-函数功能: 检查参数不为空, 否则抛出<code class="prettyprint">NullPointerException</code><br>
-应用场景: 判断对象不为null<br>
-有三个重载函数</p>
+<p>第二个可自定义错误描述，第三个可以使用模板,如<code class="highlighter-rouge">("Age is %s", 18)</code>等</p>
 
-<ul>
-<li>checkNotNull(T reference)</li>
-<li>checkNotNull(T reference, Object errorMessage)</li>
-<li>checkNotNull(T reference, String errorMessageTemplate, Object... errorMessageArgs)</li>
-</ul>
+<hr />
 
-<p>第二个可自定义错误描述，第三个可以使用模板,如<code class="prettyprint">(&quot;Age is %s&quot;, 18)</code>等</p>
-
-<hr>
-
-<h2 id="checkargument"><code class="prettyprint">checkArgument</code></h2>
-
-<p>函数声明: <code class="prettyprint">public static void checkArgument(boolean expression)</code><br>
-函数功能: 检查参数表达式是否为true, 为false时抛出<code class="prettyprint">IllegalArgumentException</code><br>
-应用场景: 判断表达式真假, 如<code class="prettyprint">age &gt; 18</code><br>
+<h2 id="checkargument">checkArgument</h2>
+<p>函数声明: <code class="highlighter-rouge">public static void checkArgument(boolean expression)</code><br />
+函数功能: 检查参数表达式是否为true, 为false时抛出<code class="highlighter-rouge">IllegalArgumentException</code><br />
+应用场景: 判断表达式真假, 如<code class="highlighter-rouge">age &gt; 18</code><br />
 同样有三个重载函数</p>
 
-<hr>
+<hr />
 
-<h2 id="checkstate"><code class="prettyprint">checkState</code></h2>
-
-<p>函数声明: <code class="prettyprint">public static void checkState(boolean expression)</code><br>
-函数功能: 检查参数不为空, 否则抛出<code class="prettyprint">IllegalStateException</code><br>
-应用场景: 判断表达式真假, 常用于不依赖参数的判断, 如<code class="prettyprint">Iterator.next()</code><br>
+<h2 id="checkstate">checkState</h2>
+<p>函数声明: <code class="highlighter-rouge">public static void checkState(boolean expression)</code><br />
+函数功能: 检查参数不为空, 否则抛出<code class="highlighter-rouge">IllegalStateException</code><br />
+应用场景: 判断表达式真假, 常用于不依赖参数的判断, 如<code class="highlighter-rouge">Iterator.next()</code><br />
 同样有三个重载函数</p>
 
-<hr>
+<hr />
 
-<h2 id="checkelementindex"><code class="prettyprint">checkElementIndex</code></h2>
+<h2 id="checkelementindex">checkElementIndex</h2>
+<p>函数声明: <code class="highlighter-rouge">public static int checkElementIndex(int index, int size)</code><br />
+函数功能: 检查index范围属于[0, size), 否则抛出<code class="highlighter-rouge">IndexOutOfBoundsException</code><br />
+应用场景: 一个List只传入<code class="highlighter-rouge">list.size()</code>和要判断的下标即可<br />
+有两个重载函数:
+* checkElementIndex(int index, int size)
+* checkElementIndex(int index, int size, String desc)</p>
 
-<p>函数声明: <code class="prettyprint">public static int checkElementIndex(int index, int size)</code><br>
-函数功能: 检查index范围属于[0, size), 否则抛出<code class="prettyprint">IndexOutOfBoundsException</code><br>
-应用场景: 一个List只传入<code class="prettyprint">list.size()</code>和要判断的下标即可<br>
-有两个重载函数:</p>
+<p>第二个可以自己写描述, 如传入的是(5, 3, “index”)描述将是”index (4) must not be greater than size (3)”<br />
+第一个默认是”index”的描述</p>
 
-<ul>
-<li>checkElementIndex(int index, int size)</li>
-<li>checkElementIndex(int index, int size, String desc)</li>
-</ul>
+<hr />
 
-<p>第二个可以自己写描述, 如传入的是(5, 3, <q>index</q>)描述将是<q>index (4) must not be greater than size (3)</q><br>
-第一个默认是<q>index</q>的描述</p>
-
-<hr>
-
-<h2 id="checkpositionindex"><code class="prettyprint">checkPositionIndex</code></h2>
-
-<p>函数声明: <code class="prettyprint">public static int checkPositionIndex(int index, int size)</code><br>
-函数功能: 检查index范围属于[0, size], 否则抛出<code class="prettyprint">IndexOutOfBoundsException</code><br>
-应用场景: 我还在想<br>
+<h2 id="checkpositionindex">checkPositionIndex</h2>
+<p>函数声明: <code class="highlighter-rouge">public static int checkPositionIndex(int index, int size)</code><br />
+函数功能: 检查index范围属于[0, size], 否则抛出<code class="highlighter-rouge">IndexOutOfBoundsException</code><br />
+应用场景: 我还在想<br />
 也有有两个重载函数同上</p>
 
-<hr>
+<hr />
 
-<h2 id="checkpositionindexes"><code class="prettyprint">checkPositionIndexes</code></h2>
+<h2 id="checkpositionindexes">checkPositionIndexes</h2>
+<p>函数声明: <code class="highlighter-rouge">public static void checkPositionIndexes(int start, int end, int size)</code><br />
+函数功能: 检查 start和end属于[0, size]且start&lt;=end, 否则抛出<code class="highlighter-rouge">IndexOutOfBoundsException</code>  </p>
 
-<p>函数声明: <code class="prettyprint">public static void checkPositionIndexes(int start, int end, int size)</code><br>
-函数功能: 检查 start和end属于[0, size]且start&lt;=end, 否则抛出<code class="prettyprint">IndexOutOfBoundsException</code>  </p>
-
-<hr>
+<hr />
 
         </div>
     </div>

@@ -99,34 +99,35 @@ jQuery(function(){
     <div class="uk-grid">
         <div  class="uk-width-4-4">
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
-            <p>JDK中也提供了<code class="prettyprint">Collections.unmodifiableXXX</code>方法把普通集合包装为不可变形式<br>
-Guava直接提供了不可变集合类型<code class="prettyprint">ImmutableXXX</code>, 所有不可变集合都不接受<code class="prettyprint">null</code>值  </p>
+            <p>JDK中也提供了<code class="highlighter-rouge">Collections.unmodifiableXXX</code>方法把普通集合包装为不可变形式<br />
+Guava直接提供了不可变集合类型<code class="highlighter-rouge">ImmutableXXX</code>, 所有不可变集合都不接受<code class="highlighter-rouge">null</code>值  </p>
 
-<hr>
+<hr />
 
-<h2 id="怎么使用不可变集合">怎么使用不可变集合</h2>
-
+<h2 id="section">怎么使用不可变集合</h2>
 <p>不可变集合可以用如下多种方式创建</p>
 
 <ul>
-<li>copyOf方法: 如<code class="prettyprint">ImmutableSet.copyOf(set)</code></li>
-<li>of方法: 如<code class="prettyprint">ImmutableSet.of(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;)</code>或<code class="prettyprint">ImmutableMap.of(&quot;a&quot;, 1, &quot;b&quot;, 2)</code></li>
-<li>Builder工具: 如下</li>
+  <li>copyOf方法: 如<code class="highlighter-rouge">ImmutableSet.copyOf(set)</code></li>
+  <li>of方法: 如<code class="highlighter-rouge">ImmutableSet.of("a", "b", "c")</code>或<code class="highlighter-rouge">ImmutableMap.of("a", 1, "b", 2)</code></li>
+  <li>Builder工具: 如下</li>
 </ul>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">ImmutableSet</span><span class="o">&lt;</span><span class="n">Color</span><span class="o">&gt;</span> <span class="n">GOOGLE_COLORS</span> <span class="o">=</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">ImmutableSet</span><span class="o">&lt;</span><span class="n">Color</span><span class="o">&gt;</span> <span class="n">GOOGLE_COLORS</span> <span class="o">=</span>
     <span class="k">new</span> <span class="n">ImmutableSet</span><span class="o">.</span><span class="na">Builder</span><span class="o">&lt;</span><span class="n">Color</span><span class="o">&gt;()</span>
         <span class="o">.</span><span class="na">addAll</span><span class="o">(</span><span class="n">WEBSAFE_COLORS</span><span class="o">)</span>
-        <span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nf">Color</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">191</span><span class="o">,</span> <span class="mi">255</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">Color</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">191</span><span class="o">,</span> <span class="mi">255</span><span class="o">))</span>
         <span class="o">.</span><span class="na">build</span><span class="o">();</span>
-</code></pre></div>
-<hr>
+</code></pre>
+</div>
 
-<h2 id="aslist视图">asList视图</h2>
+<hr />
 
-<p>所有不可变集合都有一个asList()方法提供ImmutableList视图，来帮助你用列表形式方便地读取集合元素<br>
-例如，你可以使用<code class="prettyprint">sortedSet.asList().get(k)</code>从<code class="prettyprint">ImmutableSortedSet</code>中读取第k个最小元素</p>
+<h2 id="aslist">asList视图</h2>
+<p>所有不可变集合都有一个asList()方法提供ImmutableList视图，来帮助你用列表形式方便地读取集合元素<br />
+例如，你可以使用<code class="highlighter-rouge">sortedSet.asList().get(k)</code>从<code class="highlighter-rouge">ImmutableSortedSet</code>中读取第k个最小元素</p>
 
-<hr>
+<hr />
 
         </div>
     </div>

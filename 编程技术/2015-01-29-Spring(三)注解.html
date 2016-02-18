@@ -99,102 +99,111 @@ jQuery(function(){
     <div class="uk-grid">
         <div  class="uk-width-4-4">
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
-            <hr>
+            <hr />
 
-<h2 id="本文结构">本文结构</h2>
+<h2 id="section">本文结构</h2>
 
 <ul>
-<li><a href="#bean">Bean的注解</a></li>
-<li><a href="#scope">@Scope作用域</a></li>
-<li><a href="#resource">@Resource依赖配置</a></li>
-<li><a href="#autowired">@Autowired自动装配</a></li>
-<li><a href="#qualifier">@Qualifier精装配</a></li>
+  <li><a href="#bean">Bean的注解</a></li>
+  <li><a href="#scope">@Scope作用域</a></li>
+  <li><a href="#resource">@Resource依赖配置</a></li>
+  <li><a href="#autowired">@Autowired自动装配</a></li>
+  <li><a href="#qualifier">@Qualifier精装配</a></li>
 </ul>
 
-<hr>
+<hr />
 
 <h2 id="bean"> Bean的注解 </h2>
 
-<p>Spring提供了如下几个<code class="prettyprint">Annotation</code>来标注<code class="prettyprint">Spring Bean</code>:</p>
+<p>Spring提供了如下几个<code class="highlighter-rouge">Annotation</code>来标注<code class="highlighter-rouge">Spring Bean</code>:</p>
 
 <ul>
-<li><code class="prettyprint">@Component</code>: 标注一个普通的<code class="prettyprint">Spring Bean</code>；</li>
-<li><code class="prettyprint">@Controller</code>: 标注一个控制器组件类(控制层)；</li>
-<li><code class="prettyprint">@Service</code>: 标注一个业务逻辑组件类(业务层)；</li>
-<li><code class="prettyprint">@Repository</code>: 标注一个Dao组件(持久层)；</li>
+  <li><code class="highlighter-rouge">@Component</code>: 标注一个普通的<code class="highlighter-rouge">Spring Bean</code>；</li>
+  <li><code class="highlighter-rouge">@Controller</code>: 标注一个控制器组件类(控制层)；</li>
+  <li><code class="highlighter-rouge">@Service</code>: 标注一个业务逻辑组件类(业务层)；</li>
+  <li><code class="highlighter-rouge">@Repository</code>: 标注一个Dao组件(持久层)；</li>
 </ul>
 
-<p>然后在spring的配置文件中添加<code class="prettyprint">&lt;context:component-scan base-package=&quot;&quot; /&gt;</code>，会自动搜索包下所有以<code class="prettyprint">@Component</code>、<code class="prettyprint">@Controller</code>、<code class="prettyprint">@Service</code>、<code class="prettyprint">@Repository</code>注释的java类，当作<code class="prettyprint">Spring Bean</code>处理。</p>
+<p>然后在spring的配置文件中添加<code class="highlighter-rouge">&lt;context:component-scan base-package="" /&gt;</code>，会自动搜索包下所有以<code class="highlighter-rouge">@Component</code>、<code class="highlighter-rouge">@Controller</code>、<code class="highlighter-rouge">@Service</code>、<code class="highlighter-rouge">@Repository</code>注释的java类，当作<code class="highlighter-rouge">Spring Bean</code>处理。</p>
 
-<p><strong>注意</strong>添加注解时如果不指定名字，则会默认生成一个与类同名但是第一个字母小写的名字，如<code class="prettyprint">HelloServiceImpl</code>会自动生成<code class="prettyprint">helloServiceImpl</code>。<br>
+<p><strong>注意</strong> 添加注解时如果不指定名字，则会默认生成一个与类同名但是第一个字母小写的名字， 如<code class="highlighter-rouge">HelloServiceImpl</code>会自动生成<code class="highlighter-rouge">helloServiceImpl</code>。<br />
 当然可以自己指定名字，像下面这样：</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Component</span><span class="o">(</span><span class="s">&quot;helloService&quot;</span><span class="o">)</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Component</span><span class="o">(</span><span class="s">"helloService"</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloServiceImpl</span> <span class="kd">implements</span> <span class="n">HelloService</span><span class="o">{</span>
 
     <span class="nd">@Resource</span>
     <span class="kd">private</span> <span class="n">Hello</span> <span class="n">hello</span><span class="o">;</span>
 
     <span class="c1">// 如果有&lt;bean&gt;元素且使用了&lt;property&gt;子标签，setter必须有</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setHello</span><span class="o">(</span><span class="n">Hello</span> <span class="n">hello</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">setHello</span><span class="o">(</span><span class="n">Hello</span> <span class="n">hello</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="na">hello</span> <span class="o">=</span> <span class="n">hello</span><span class="o">;</span>
     <span class="o">}</span>
 
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testHello</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">testHello</span><span class="o">()</span> <span class="o">{</span>
         <span class="n">hello</span><span class="o">.</span><span class="na">sayHello</span><span class="o">();</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre></div>
-<hr>
+</code></pre>
+</div>
+
+<hr />
 
 <h2 id="scope"> Scope作用域 </h2>
 
-<p><code class="prettyprint">@Scope</code>用于指定一个<code class="prettyprint">Bean</code>产生的方式，默认为&#39;singleton&#39;，可以通过注解直接指定<code class="prettyprint">Bean</code>的<code class="prettyprint">scope</code>，例如:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Scope</span><span class="o">(</span><span class="s">&quot;prototype&quot;</span><span class="o">)</span>
-<span class="nd">@Component</span><span class="o">(</span><span class="s">&quot;helloService&quot;</span><span class="o">)</span>
+<p><code class="highlighter-rouge">@Scope</code>用于指定一个<code class="highlighter-rouge">Bean</code>产生的方式，默认为’singleton’，可以通过注解直接指定<code class="highlighter-rouge">Bean</code>的<code class="highlighter-rouge">scope</code>，例如:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Scope</span><span class="o">(</span><span class="s">"prototype"</span><span class="o">)</span>
+<span class="nd">@Component</span><span class="o">(</span><span class="s">"helloService"</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloServiceImpl</span> <span class="kd">implements</span> <span class="n">HelloService</span>
-</code></pre></div>
-<hr>
+</code></pre>
+</div>
+
+<hr />
 
 <h2 id="resource"> Resource依赖配置 </h2>
 
-<p>像上面例子中的<code class="prettyprint">private Hello hello;</code>加上了<code class="prettyprint">@Resource</code>注解，这样就可以将相应的<code class="prettyprint">Bean</code>注入到该属性中。<br>
-<code class="prettyprint">@Resource</code>有一个name属性，用于指定需要被注入的Bean的实例的标识(id)，也就是说，使用<code class="prettyprint">@Resource</code>的<code class="prettyprint">name属性</code>与<code class="prettyprint">&lt;property../&gt;</code>元素的<code class="prettyprint">ref属性</code>具有相同的效果。</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="nd">@Resource</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;hello&quot;</span><span class="o">)</span>
+<p>像上面例子中的<code class="highlighter-rouge">private Hello hello;</code>加上了<code class="highlighter-rouge">@Resource</code>注解，这样就可以将相应的<code class="highlighter-rouge">Bean</code>注入到该属性中。<br />
+<code class="highlighter-rouge">@Resource</code>有一个name属性，用于指定需要被注入的Bean的实例的标识(id)，也就是说，使用<code class="highlighter-rouge">@Resource</code>的<code class="highlighter-rouge">name属性</code>与<code class="highlighter-rouge">&lt;property../&gt;</code>元素的<code class="highlighter-rouge">ref属性</code>具有相同的效果。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nd">@Resource</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">"hello"</span><span class="o">)</span>
     <span class="kd">private</span> <span class="n">Hello</span> <span class="n">hello</span><span class="o">;</span>
     <span class="c1">//注解中的name作用与下面的ref作用相同</span>
-    <span class="o">&lt;</span><span class="n">property</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;属性名&quot;</span> <span class="n">ref</span><span class="o">=</span><span class="s">&quot;Bean的id&quot;</span><span class="o">/&gt;</span>
-</code></pre></div>
-<p>使用<code class="prettyprint">@Resource</code>可以标识属性、setter方法</p>
+    <span class="o">&lt;</span><span class="n">property</span> <span class="n">name</span><span class="o">=</span><span class="s">"属性名"</span> <span class="n">ref</span><span class="o">=</span><span class="s">"Bean的id"</span><span class="o">/&gt;</span>
+</code></pre>
+</div>
+<p>使用<code class="highlighter-rouge">@Resource</code>可以标识属性、setter方法</p>
 
 <ul>
-<li>当使用<code class="prettyprint">@Resource</code>修饰<code class="prettyprint">setter</code>方法，若省略name属性，则name属性默认值是从该setter方法去掉set子串之后首字母小写的子串。</li>
-<li>当使用<code class="prettyprint">@Resource</code>修饰<code class="prettyprint">Field</code>时，若省略name，则默认与Field的相同。</li>
+  <li>当使用<code class="highlighter-rouge">@Resource</code>修饰<code class="highlighter-rouge">setter</code>方法，若省略name属性，则name属性默认值是从该setter方法去掉set子串之后首字母小写的子串。</li>
+  <li>当使用<code class="highlighter-rouge">@Resource</code>修饰<code class="highlighter-rouge">Field</code>时，若省略name，则默认与Field的相同。</li>
 </ul>
 
-<hr>
+<hr />
 
 <h2 id="autowired"> Autowired自动装配 </h2>
 
-<p>像上面的<code class="prettyprint">@Resource</code>是通过<code class="prettyprint">byName</code>方式（通过id）进行注入，而<code class="prettyprint">@Autowired</code>是通过<code class="prettyprint">byType</code>策略进行注入，所以若有多个同类型的<code class="prettyprint">Bean</code>就容易出问题，为了避免这种问题，一般与<code class="prettyprint">Qualifier</code>精装配联合使用。</p>
+<p>像上面的<code class="highlighter-rouge">@Resource</code>是通过<code class="highlighter-rouge">byName</code>方式（通过id）进行注入，而<code class="highlighter-rouge">@Autowired</code>是通过<code class="highlighter-rouge">byType</code>策略进行注入，所以若有多个同类型的<code class="highlighter-rouge">Bean</code>就容易出问题，为了避免这种问题，一般与<code class="highlighter-rouge">Qualifier</code>精装配联合使用。</p>
 
-<p>使用<code class="prettyprint">@Autowired</code>可以标识属性、setter方法、普通方法、构造器（例子见@Qualifier中）</p>
+<p>使用<code class="highlighter-rouge">@Autowired</code>可以标识属性、setter方法、普通方法、构造器（例子见@Qualifier中）</p>
 
 <p><strong>注意</strong>:</p>
 
 <ul>
-<li>当<code class="prettyprint">@Autowired</code>标注<code class="prettyprint">Field</code>时，Spring会把容器中的与该<code class="prettyprint">Field</code>类型匹配的<code class="prettyprint">Bean</code>注入该属性，如果Spring容器中有多个同类型的<code class="prettyprint">Bean</code>与<code class="prettyprint">Field</code>类型匹配，则会出现异常。</li>
-<li>当<code class="prettyprint">@Autowired</code>标注数组或集合类的属性时，Spring会自动搜索Spring容器中所有与数组类型相匹配的类型的Bean，并把这些Bean当作数组的元素来创建数组。</li>
+  <li>当<code class="highlighter-rouge">@Autowired</code>标注<code class="highlighter-rouge">Field</code>时，Spring会把容器中的与该<code class="highlighter-rouge">Field</code>类型匹配的<code class="highlighter-rouge">Bean</code>注入该属性，如果Spring容器中有多个同类型的<code class="highlighter-rouge">Bean</code>与<code class="highlighter-rouge">Field</code>类型匹配，则会出现异常。</li>
+  <li>当<code class="highlighter-rouge">@Autowired</code>标注数组或集合类的属性时，Spring会自动搜索Spring容器中所有与数组类型相匹配的类型的Bean，并把这些Bean当作数组的元素来创建数组。</li>
 </ul>
 
-<hr>
+<hr />
 
 <h2 id="qualifier"> Qualifier精装配 </h2>
 
-<p>为了避免自动装配的问题，实现精确的配置，Spring提供<code class="prettyprint">@Qualifier</code>，可以根据Bean标识(id)来指定自动装配。</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="c1">// 标注属性</span>
+<p>为了避免自动装配的问题，实现精确的配置，Spring提供<code class="highlighter-rouge">@Qualifier</code>，可以根据Bean标识(id)来指定自动装配。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// 标注属性</span>
     <span class="nd">@Autowired</span>
-    <span class="nd">@Qualifier</span><span class="o">(</span><span class="s">&quot;hello&quot;</span><span class="o">)</span>
+    <span class="nd">@Qualifier</span><span class="o">(</span><span class="s">"hello"</span><span class="o">)</span>
     <span class="kd">private</span> <span class="n">Hello</span> <span class="n">hello</span><span class="o">;</span>
 
     <span class="c1">// Autowired标注数组，则所有Hello类型的Bean都会放到数组里</span>
@@ -203,11 +212,14 @@ jQuery(function(){
 
     <span class="c1">// Autowired标注构造方法，Qualifier标注方法的形参</span>
     <span class="nd">@Autowired</span>
-    <span class="kd">public</span> <span class="nf">HelloServiceImpl</span><span class="o">(</span><span class="nd">@Qualifier</span><span class="o">(</span><span class="s">&quot;hello&quot;</span><span class="o">)</span><span class="n">Hello</span> <span class="n">hello</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">HelloServiceImpl</span><span class="o">(</span><span class="nd">@Qualifier</span><span class="o">(</span><span class="s">"hello"</span><span class="o">)</span><span class="n">Hello</span> <span class="n">hello</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="na">hello</span> <span class="o">=</span> <span class="n">hello</span><span class="o">;</span>
     <span class="o">}</span>
-</code></pre></div>
-<hr>
+
+</code></pre>
+</div>
+
+<hr />
 
         </div>
     </div>

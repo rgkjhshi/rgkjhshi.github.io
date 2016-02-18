@@ -99,32 +99,30 @@ jQuery(function(){
     <div class="uk-grid">
         <div  class="uk-width-4-4">
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
-            <p>java 1.5 出现范型, 主要是靠<code class="prettyprint">java.lang.reflect.Type</code>等接口来实现的</p>
+            <p>java 1.5 出现范型, 主要是靠<code class="highlighter-rouge">java.lang.reflect.Type</code>等接口来实现的</p>
 
-<h2 id="反射相关接口">反射相关接口</h2>
+<h2 id="section">反射相关接口</h2>
+<p><img src="/static/images/reflect_interface.png" alt="反射相关接口继承关系图" title="反射相关接口继承关系图" /></p>
 
-<p><img src="/static/images/reflect_interface.png" alt="反射相关接口继承关系图" title="反射相关接口继承关系图"></p>
-
-<p>下面就把<code class="prettyprint">Type</code>的来龙去脉彻底弄清楚</p>
+<p>下面就把<code class="highlighter-rouge">Type</code>的来龙去脉彻底弄清楚</p>
 
 <h2 id="type">Type</h2>
-
-<p><code class="prettyprint">Type</code>是所有类型的父接口, 如原始类型(raw types,对应Class)、 参数化类型(parameterized types, 对应ParameterizedType)、 数组类型(array types,对应GenericArrayType)、 类型变量(type variables, 对应TypeVariable)和基本(原生)类型(primitive types, 对应Class), 子接口有<code class="prettyprint">ParameterizedType, TypeVariable&lt;D&gt;, GenericArrayType, WildcardType</code>, 实现类有<code class="prettyprint">Class</code></p>
+<p><code class="highlighter-rouge">Type</code>是所有类型的父接口, 如原始类型(raw types,对应Class)、 参数化类型(parameterized types, 对应ParameterizedType)、 数组类型(array types,对应GenericArrayType)、 类型变量(type variables, 对应TypeVariable)和基本(原生)类型(primitive types, 对应Class), 子接口有<code class="highlighter-rouge">ParameterizedType, TypeVariable&lt;D&gt;, GenericArrayType, WildcardType</code>, 实现类有<code class="highlighter-rouge">Class</code></p>
 
 <h2 id="parameterizedtype">ParameterizedType</h2>
-
-<p>具体的范型类型, 如<code class="prettyprint">Map&lt;String, String&gt;</code><br>
+<p>具体的范型类型, 如<code class="highlighter-rouge">Map&lt;String, String&gt;</code><br />
 有如下方法:</p>
 
 <ol>
-<li><code class="prettyprint">Type getRawType()</code>: 返回承载该泛型信息的对象, 如上面那个<code class="prettyprint">Map&lt;String, String&gt;</code>承载范型信息的对象是<code class="prettyprint">Map</code></li>
-<li><code class="prettyprint">Type[] getActualTypeArguments()</code>: 返回实际泛型类型列表, 如上面那个<code class="prettyprint">Map&lt;String, String&gt;</code>实际范型列表中有两个元素, 都是<code class="prettyprint">String</code></li>
-<li><code class="prettyprint">Type getOwnerType()</code>: 返回是谁的member.(上面那两个最常用)</li>
+  <li><code class="highlighter-rouge">Type getRawType()</code>: 返回承载该泛型信息的对象, 如上面那个<code class="highlighter-rouge">Map&lt;String, String&gt;</code>承载范型信息的对象是<code class="highlighter-rouge">Map</code></li>
+  <li><code class="highlighter-rouge">Type[] getActualTypeArguments()</code>: 返回实际泛型类型列表, 如上面那个<code class="highlighter-rouge">Map&lt;String, String&gt;</code>实际范型列表中有两个元素, 都是<code class="highlighter-rouge">String</code></li>
+  <li><code class="highlighter-rouge">Type getOwnerType()</code>: 返回是谁的member.(上面那两个最常用)</li>
 </ol>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestType</span> <span class="o">{</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestType</span> <span class="o">{</span>
     <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">map</span><span class="o">;</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-        <span class="n">Field</span> <span class="n">f</span> <span class="o">=</span> <span class="n">TestType</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">&quot;map&quot;</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">Field</span> <span class="n">f</span> <span class="o">=</span> <span class="n">TestType</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">"map"</span><span class="o">);</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">f</span><span class="o">.</span><span class="na">getGenericType</span><span class="o">());</span>                               <span class="c1">// java.util.List&lt;java.lang.String&gt;</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">f</span><span class="o">.</span><span class="na">getGenericType</span><span class="o">()</span> <span class="k">instanceof</span> <span class="n">ParameterizedType</span><span class="o">);</span>  <span class="c1">// true</span>
         <span class="n">ParameterizedType</span> <span class="n">pType</span> <span class="o">=</span> <span class="o">(</span><span class="n">ParameterizedType</span><span class="o">)</span> <span class="n">f</span><span class="o">.</span><span class="na">getGenericType</span><span class="o">();</span>
@@ -135,36 +133,38 @@ jQuery(function(){
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">pType</span><span class="o">.</span><span class="na">getOwnerType</span><span class="o">());</span>                             <span class="c1">// null</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre></div>
-<h2 id="typevariable">TypeVariable</h2>
+</code></pre>
+</div>
 
-<p>类型变量, 范型信息在编译时会被转换为一个特定的类型, 而<code class="prettyprint">TypeVariable</code>就是用来反映在JVM编译该泛型前的信息.<br>
-它的声明是这样的: <code class="prettyprint">public interface TypeVariable&lt;D extends GenericDeclaration&gt; extends Type</code><br>
-也就是说它跟<code class="prettyprint">GenericDeclaration</code>有一定的联系, 我是这么理解的:<br>
-<code class="prettyprint">TypeVariable</code>是指在<code class="prettyprint">GenericDeclaration</code>中声明的<code class="prettyprint">&lt;T&gt;、&lt;C extends Collection&gt;</code>这些东西中的那个变量<code class="prettyprint">T、C</code>;
+<h2 id="typevariable">TypeVariable</h2>
+<p>类型变量, 范型信息在编译时会被转换为一个特定的类型, 而<code class="highlighter-rouge">TypeVariable</code>就是用来反映在JVM编译该泛型前的信息.<br />
+它的声明是这样的: <code class="highlighter-rouge">public interface TypeVariable&lt;D extends GenericDeclaration&gt; extends Type</code><br />
+也就是说它跟<code class="highlighter-rouge">GenericDeclaration</code>有一定的联系, 我是这么理解的:<br />
+<code class="highlighter-rouge">TypeVariable</code>是指在<code class="highlighter-rouge">GenericDeclaration</code>中声明的<code class="highlighter-rouge">&lt;T&gt;、&lt;C extends Collection&gt;</code>这些东西中的那个变量<code class="highlighter-rouge">T、C</code>;
 它有如下方法:</p>
 
 <ol>
-<li><code class="prettyprint">Type[] getBounds()</code>: 获取类型变量的上边界, 若未明确声明上边界则默认为<code class="prettyprint">Object</code></li>
-<li><code class="prettyprint">D getGenericDeclaration()</code>: 获取声明该类型变量实体</li>
-<li><code class="prettyprint">String getName()</code>: 获取在源码中定义时的名字</li>
+  <li><code class="highlighter-rouge">Type[] getBounds()</code>: 获取类型变量的上边界, 若未明确声明上边界则默认为<code class="highlighter-rouge">Object</code></li>
+  <li><code class="highlighter-rouge">D getGenericDeclaration()</code>: 获取声明该类型变量实体</li>
+  <li><code class="highlighter-rouge">String getName()</code>: 获取在源码中定义时的名字</li>
 </ol>
 
 <p>注意:</p>
 
 <ul>
-<li>类型变量在定义的时候只能使用<code class="prettyprint">extends</code>进行(多)边界限定, 不能用<code class="prettyprint">super</code>;</li>
-<li>为什么边界是一个数组? 因为类型变量可以通过<code class="prettyprint">&amp;</code>进行多个上边界限定，因此上边界有多个</li>
+  <li>类型变量在定义的时候只能使用<code class="highlighter-rouge">extends</code>进行(多)边界限定, 不能用<code class="highlighter-rouge">super</code>;</li>
+  <li>为什么边界是一个数组? 因为类型变量可以通过<code class="highlighter-rouge">&amp;</code>进行多个上边界限定，因此上边界有多个</li>
 </ul>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestType</span> <span class="o">&lt;</span><span class="n">K</span> <span class="kd">extends</span> <span class="n">Comparable</span> <span class="o">&amp;</span> <span class="n">Serializable</span><span class="o">,</span> <span class="n">V</span><span class="o">&gt;</span> <span class="o">{</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestType</span> <span class="o">&lt;</span><span class="n">K</span> <span class="kd">extends</span> <span class="n">Comparable</span> <span class="o">&amp;</span> <span class="n">Serializable</span><span class="o">,</span> <span class="n">V</span><span class="o">&gt;</span> <span class="o">{</span>
     <span class="n">K</span> <span class="n">key</span><span class="o">;</span>
     <span class="n">V</span> <span class="n">value</span><span class="o">;</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
         <span class="c1">// 获取字段的类型</span>
-        <span class="n">Field</span> <span class="n">fk</span> <span class="o">=</span> <span class="n">TestType</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">);</span>
-        <span class="n">Field</span> <span class="n">fv</span> <span class="o">=</span> <span class="n">TestType</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">&quot;value&quot;</span><span class="o">);</span>
-        <span class="n">Assert</span><span class="o">.</span><span class="na">that</span><span class="o">(</span><span class="n">fk</span><span class="o">.</span><span class="na">getGenericType</span><span class="o">()</span> <span class="k">instanceof</span> <span class="n">TypeVariable</span><span class="o">,</span> <span class="s">&quot;必须为TypeVariable类型&quot;</span><span class="o">);</span>
-        <span class="n">Assert</span><span class="o">.</span><span class="na">that</span><span class="o">(</span><span class="n">fv</span><span class="o">.</span><span class="na">getGenericType</span><span class="o">()</span> <span class="k">instanceof</span> <span class="n">TypeVariable</span><span class="o">,</span> <span class="s">&quot;必须为TypeVariable类型&quot;</span><span class="o">);</span>
+        <span class="n">Field</span> <span class="n">fk</span> <span class="o">=</span> <span class="n">TestType</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">"key"</span><span class="o">);</span>
+        <span class="n">Field</span> <span class="n">fv</span> <span class="o">=</span> <span class="n">TestType</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">"value"</span><span class="o">);</span>
+        <span class="n">Assert</span><span class="o">.</span><span class="na">that</span><span class="o">(</span><span class="n">fk</span><span class="o">.</span><span class="na">getGenericType</span><span class="o">()</span> <span class="k">instanceof</span> <span class="n">TypeVariable</span><span class="o">,</span> <span class="s">"必须为TypeVariable类型"</span><span class="o">);</span>
+        <span class="n">Assert</span><span class="o">.</span><span class="na">that</span><span class="o">(</span><span class="n">fv</span><span class="o">.</span><span class="na">getGenericType</span><span class="o">()</span> <span class="k">instanceof</span> <span class="n">TypeVariable</span><span class="o">,</span> <span class="s">"必须为TypeVariable类型"</span><span class="o">);</span>
         <span class="n">TypeVariable</span> <span class="n">keyType</span> <span class="o">=</span> <span class="o">(</span><span class="n">TypeVariable</span><span class="o">)</span><span class="n">fk</span><span class="o">.</span><span class="na">getGenericType</span><span class="o">();</span>
         <span class="n">TypeVariable</span> <span class="n">valueType</span> <span class="o">=</span> <span class="o">(</span><span class="n">TypeVariable</span><span class="o">)</span><span class="n">fv</span><span class="o">.</span><span class="na">getGenericType</span><span class="o">();</span>
         <span class="c1">// getName 方法</span>
@@ -174,26 +174,28 @@ jQuery(function(){
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">keyType</span><span class="o">.</span><span class="na">getGenericDeclaration</span><span class="o">());</span>   <span class="c1">// class com.test.TestType</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">valueType</span><span class="o">.</span><span class="na">getGenericDeclaration</span><span class="o">());</span> <span class="c1">// class com.test.TestType</span>
         <span class="c1">// getBounds 方法</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;K 的上界:&quot;</span><span class="o">);</span>                        <span class="c1">// 有两个</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"K 的上界:"</span><span class="o">);</span>                        <span class="c1">// 有两个</span>
         <span class="k">for</span> <span class="o">(</span><span class="n">Type</span> <span class="n">type</span> <span class="o">:</span> <span class="n">keyType</span><span class="o">.</span><span class="na">getBounds</span><span class="o">())</span> <span class="o">{</span>                <span class="c1">// interface java.lang.Comparable</span>
             <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">type</span><span class="o">);</span>                          <span class="c1">// interface java.io.Serializable</span>
         <span class="o">}</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;V 的上界:&quot;</span><span class="o">);</span>                        <span class="c1">// 没明确声明上界的, 默认上界是 Object</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"V 的上界:"</span><span class="o">);</span>                        <span class="c1">// 没明确声明上界的, 默认上界是 Object</span>
         <span class="k">for</span> <span class="o">(</span><span class="n">Type</span> <span class="n">type</span> <span class="o">:</span> <span class="n">valueType</span><span class="o">.</span><span class="na">getBounds</span><span class="o">())</span> <span class="o">{</span>              <span class="c1">// class java.lang.Object</span>
             <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">type</span><span class="o">);</span>
         <span class="o">}</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre></div>
-<h2 id="genericarraytype">GenericArrayType</h2>
+</code></pre>
+</div>
 
-<p>范型数组,组成数组的元素中有范型则实现了该接口; 它的组成元素是<code class="prettyprint">ParameterizedType</code>或<code class="prettyprint">TypeVariable</code>类型,它只有一个方法:</p>
+<h2 id="genericarraytype">GenericArrayType</h2>
+<p>范型数组,组成数组的元素中有范型则实现了该接口; 它的组成元素是<code class="highlighter-rouge">ParameterizedType</code>或<code class="highlighter-rouge">TypeVariable</code>类型,它只有一个方法:</p>
 
 <ol>
-<li><code class="prettyprint">Type getGenericComponentType()</code>: 返回数组的组成对象, 即被JVM编译后实际的对象</li>
+  <li><code class="highlighter-rouge">Type getGenericComponentType()</code>: 返回数组的组成对象, 即被JVM编译后实际的对象</li>
 </ol>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestType</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestType</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
         <span class="n">Method</span> <span class="n">method</span> <span class="o">=</span> <span class="n">Test</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getDeclaredMethods</span><span class="o">()[</span><span class="mi">0</span><span class="o">];</span>
         <span class="c1">// public void com.test.Test.show(java.util.List[],java.lang.Object[],java.util.List,java.lang.String[],int[])</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">method</span><span class="o">);</span>
@@ -204,47 +206,49 @@ jQuery(function(){
     <span class="o">}</span>
 <span class="o">}</span>
 <span class="kd">class</span> <span class="nc">Test</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">show</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;[]</span> <span class="n">pTypeArray</span><span class="o">,</span> <span class="n">T</span><span class="o">[]</span> <span class="n">vTypeArray</span><span class="o">,</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">,</span> <span class="n">String</span><span class="o">[]</span> <span class="n">strings</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">ints</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">show</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;[]</span> <span class="n">pTypeArray</span><span class="o">,</span> <span class="n">T</span><span class="o">[]</span> <span class="n">vTypeArray</span><span class="o">,</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">,</span> <span class="n">String</span><span class="o">[]</span> <span class="n">strings</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">ints</span><span class="o">)</span> <span class="o">{</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <ul>
-<li>第一个参数<code class="prettyprint">List&lt;String&gt;[]</code>的组成元素<code class="prettyprint">List&lt;String&gt;</code>是<code class="prettyprint">ParameterizedType</code>类型, 打印结果为<code class="prettyprint">true</code></li>
-<li>第二个参数<code class="prettyprint">T[]</code>的组成元素<code class="prettyprint">T</code>是<code class="prettyprint">TypeVariable</code>类型, 打印结果为<code class="prettyprint">true</code></li>
-<li>第三个参数<code class="prettyprint">List&lt;String&gt;</code>不是数组, 打印结果为<code class="prettyprint">false</code></li>
-<li>第四个参数<code class="prettyprint">String[]</code>的组成元素<code class="prettyprint">String</code>是普通对象, 没有范型, 打印结果为<code class="prettyprint">false</code></li>
-<li>第五个参数<code class="prettyprint">int[] pTypeArray</code>的组成元素<code class="prettyprint">int</code>是原生类型, 也没有范型, 打印结果为<code class="prettyprint">false</code></li>
+  <li>第一个参数<code class="highlighter-rouge">List&lt;String&gt;[]</code>的组成元素<code class="highlighter-rouge">List&lt;String&gt;</code>是<code class="highlighter-rouge">ParameterizedType</code>类型, 打印结果为<code class="highlighter-rouge">true</code></li>
+  <li>第二个参数<code class="highlighter-rouge">T[]</code>的组成元素<code class="highlighter-rouge">T</code>是<code class="highlighter-rouge">TypeVariable</code>类型, 打印结果为<code class="highlighter-rouge">true</code></li>
+  <li>第三个参数<code class="highlighter-rouge">List&lt;String&gt;</code>不是数组, 打印结果为<code class="highlighter-rouge">false</code></li>
+  <li>第四个参数<code class="highlighter-rouge">String[]</code>的组成元素<code class="highlighter-rouge">String</code>是普通对象, 没有范型, 打印结果为<code class="highlighter-rouge">false</code></li>
+  <li>第五个参数<code class="highlighter-rouge">int[] pTypeArray</code>的组成元素<code class="highlighter-rouge">int</code>是原生类型, 也没有范型, 打印结果为<code class="highlighter-rouge">false</code></li>
 </ul>
 
 <h2 id="wildcardtype">WildcardType</h2>
-
-<p>该接口表示通配符泛型, 比如<code class="prettyprint">? extends Number</code> 和 <code class="prettyprint">? super Integer</code>
+<p>该接口表示通配符泛型, 比如<code class="highlighter-rouge">? extends Number</code> 和 <code class="highlighter-rouge">? super Integer</code>
 它有如下方法:</p>
 
 <ol>
-<li><code class="prettyprint">Type[] getUpperBounds()</code>: 获取范型变量的上界</li>
-<li><code class="prettyprint">Type[] getLowerBounds()</code>: 获取范型变量的下界</li>
+  <li><code class="highlighter-rouge">Type[] getUpperBounds()</code>: 获取范型变量的上界</li>
+  <li><code class="highlighter-rouge">Type[] getLowerBounds()</code>: 获取范型变量的下界</li>
 </ol>
 
 <p>注意:</p>
 
 <ul>
-<li>现阶段通配符只接受一个上边界或下边界, 返回数组是为了以后的扩展, 实际上现在返回的数组的大小是1</li>
+  <li>现阶段通配符只接受一个上边界或下边界, 返回数组是为了以后的扩展, 实际上现在返回的数组的大小是1</li>
 </ul>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestType</span> <span class="o">{</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestType</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="n">List</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Number</span><span class="o">&gt;</span> <span class="n">a</span><span class="o">;</span>  <span class="c1">// // a没有下界, 取下界会抛出ArrayIndexOutOfBoundsException</span>
     <span class="kd">private</span> <span class="n">List</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">b</span><span class="o">;</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-        <span class="n">Field</span> <span class="n">fieldA</span> <span class="o">=</span> <span class="n">TestType</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">&quot;a&quot;</span><span class="o">);</span>
-        <span class="n">Field</span> <span class="n">fieldB</span> <span class="o">=</span> <span class="n">TestType</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">&quot;b&quot;</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">Field</span> <span class="n">fieldA</span> <span class="o">=</span> <span class="n">TestType</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">"a"</span><span class="o">);</span>
+        <span class="n">Field</span> <span class="n">fieldB</span> <span class="o">=</span> <span class="n">TestType</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">"b"</span><span class="o">);</span>
         <span class="c1">// 先拿到范型类型</span>
-        <span class="n">Assert</span><span class="o">.</span><span class="na">that</span><span class="o">(</span><span class="n">fieldA</span><span class="o">.</span><span class="na">getGenericType</span><span class="o">()</span> <span class="k">instanceof</span> <span class="n">ParameterizedType</span><span class="o">,</span> <span class="s">&quot;&quot;</span><span class="o">);</span>
-        <span class="n">Assert</span><span class="o">.</span><span class="na">that</span><span class="o">(</span><span class="n">fieldB</span><span class="o">.</span><span class="na">getGenericType</span><span class="o">()</span> <span class="k">instanceof</span> <span class="n">ParameterizedType</span><span class="o">,</span> <span class="s">&quot;&quot;</span><span class="o">);</span>
+        <span class="n">Assert</span><span class="o">.</span><span class="na">that</span><span class="o">(</span><span class="n">fieldA</span><span class="o">.</span><span class="na">getGenericType</span><span class="o">()</span> <span class="k">instanceof</span> <span class="n">ParameterizedType</span><span class="o">,</span> <span class="s">""</span><span class="o">);</span>
+        <span class="n">Assert</span><span class="o">.</span><span class="na">that</span><span class="o">(</span><span class="n">fieldB</span><span class="o">.</span><span class="na">getGenericType</span><span class="o">()</span> <span class="k">instanceof</span> <span class="n">ParameterizedType</span><span class="o">,</span> <span class="s">""</span><span class="o">);</span>
         <span class="n">ParameterizedType</span> <span class="n">pTypeA</span> <span class="o">=</span> <span class="o">(</span><span class="n">ParameterizedType</span><span class="o">)</span> <span class="n">fieldA</span><span class="o">.</span><span class="na">getGenericType</span><span class="o">();</span>
         <span class="n">ParameterizedType</span> <span class="n">pTypeB</span> <span class="o">=</span> <span class="o">(</span><span class="n">ParameterizedType</span><span class="o">)</span> <span class="n">fieldB</span><span class="o">.</span><span class="na">getGenericType</span><span class="o">();</span>
         <span class="c1">// 再从范型里拿到通配符类型</span>
-        <span class="n">Assert</span><span class="o">.</span><span class="na">that</span><span class="o">(</span><span class="n">pTypeA</span><span class="o">.</span><span class="na">getActualTypeArguments</span><span class="o">()[</span><span class="mi">0</span><span class="o">]</span> <span class="k">instanceof</span> <span class="n">WildcardType</span><span class="o">,</span> <span class="s">&quot;&quot;</span><span class="o">);</span>
-        <span class="n">Assert</span><span class="o">.</span><span class="na">that</span><span class="o">(</span><span class="n">pTypeB</span><span class="o">.</span><span class="na">getActualTypeArguments</span><span class="o">()[</span><span class="mi">0</span><span class="o">]</span> <span class="k">instanceof</span> <span class="n">WildcardType</span><span class="o">,</span> <span class="s">&quot;&quot;</span><span class="o">);</span>
+        <span class="n">Assert</span><span class="o">.</span><span class="na">that</span><span class="o">(</span><span class="n">pTypeA</span><span class="o">.</span><span class="na">getActualTypeArguments</span><span class="o">()[</span><span class="mi">0</span><span class="o">]</span> <span class="k">instanceof</span> <span class="n">WildcardType</span><span class="o">,</span> <span class="s">""</span><span class="o">);</span>
+        <span class="n">Assert</span><span class="o">.</span><span class="na">that</span><span class="o">(</span><span class="n">pTypeB</span><span class="o">.</span><span class="na">getActualTypeArguments</span><span class="o">()[</span><span class="mi">0</span><span class="o">]</span> <span class="k">instanceof</span> <span class="n">WildcardType</span><span class="o">,</span> <span class="s">""</span><span class="o">);</span>
         <span class="n">WildcardType</span> <span class="n">wTypeA</span> <span class="o">=</span> <span class="o">(</span><span class="n">WildcardType</span><span class="o">)</span> <span class="n">pTypeA</span><span class="o">.</span><span class="na">getActualTypeArguments</span><span class="o">()[</span><span class="mi">0</span><span class="o">];</span>
         <span class="n">WildcardType</span> <span class="n">wTypeB</span> <span class="o">=</span> <span class="o">(</span><span class="n">WildcardType</span><span class="o">)</span> <span class="n">pTypeB</span><span class="o">.</span><span class="na">getActualTypeArguments</span><span class="o">()[</span><span class="mi">0</span><span class="o">];</span>
         <span class="c1">// 方法测试</span>
@@ -254,70 +258,70 @@ jQuery(function(){
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">wTypeA</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 <p>再写几个边界的例子:</p>
 
 <ul>
-<li><code class="prettyprint">List&lt;? extends Number&gt;</code>, 上界为<code class="prettyprint">class java.lang.Number</code>, 属于<code class="prettyprint">Class</code>类型</li>
-<li><code class="prettyprint">List&lt;? extends List&lt;T&gt;&gt;</code>, 上界为<code class="prettyprint">java.util.List&lt;T&gt;</code>, 属于<code class="prettyprint">ParameterizedType</code>类型</li>
-<li><code class="prettyprint">List&lt;? extends List&lt;String&gt;&gt;</code>, 上界为<code class="prettyprint">java.util.List&lt;java.lang.String&gt;</code>, 属于<code class="prettyprint">ParameterizedType</code>类型</li>
-<li><code class="prettyprint">List&lt;? extends T&gt;</code>, 上界为<code class="prettyprint">T</code>, 属于<code class="prettyprint">TypeVariable</code>类型</li>
-<li><code class="prettyprint">List&lt;? extends T[]&gt;</code>, 上界为<code class="prettyprint">T[]</code>, 属于<code class="prettyprint">GenericArrayType</code>类型</li>
+  <li><code class="highlighter-rouge">List&lt;? extends Number&gt;</code>, 上界为<code class="highlighter-rouge">class java.lang.Number</code>, 属于<code class="highlighter-rouge">Class</code>类型</li>
+  <li><code class="highlighter-rouge">List&lt;? extends List&lt;T&gt;&gt;</code>, 上界为<code class="highlighter-rouge">java.util.List&lt;T&gt;</code>, 属于<code class="highlighter-rouge">ParameterizedType</code>类型</li>
+  <li><code class="highlighter-rouge">List&lt;? extends List&lt;String&gt;&gt;</code>, 上界为<code class="highlighter-rouge">java.util.List&lt;java.lang.String&gt;</code>, 属于<code class="highlighter-rouge">ParameterizedType</code>类型</li>
+  <li><code class="highlighter-rouge">List&lt;? extends T&gt;</code>, 上界为<code class="highlighter-rouge">T</code>, 属于<code class="highlighter-rouge">TypeVariable</code>类型</li>
+  <li><code class="highlighter-rouge">List&lt;? extends T[]&gt;</code>, 上界为<code class="highlighter-rouge">T[]</code>, 属于<code class="highlighter-rouge">GenericArrayType</code>类型</li>
 </ul>
 
 <p>它们最终统一成Type作为数组的元素类型</p>
 
-<hr>
+<hr />
 
-<h2 id="type及其子接口的来历">Type及其子接口的来历</h2>
+<h2 id="type-1">Type及其子接口的来历</h2>
 
-<h3 id="泛型出现之前的类型"><strong>泛型出现之前的类型</strong></h3>
-
+<h3 id="section-1"><strong>泛型出现之前的类型</strong></h3>
 <p>没有泛型的时候，只有原始类型。此时，所有的原始类型都通过字节码文件类Class类进行抽象。Class类的一个具体对象就代表一个指定的原始类型。</p>
 
-<h3 id="泛型出现之后的类型"><strong>泛型出现之后的类型</strong></h3>
-
+<h3 id="section-2"><strong>泛型出现之后的类型</strong></h3>
 <p>泛型出现之后，扩充了数据类型。从只有原始类型扩充了参数化类型、类型变量类型、限定符类型 、泛型数组类型。</p>
 
-<h3 id="与泛型有关的类型不能和原始类型统一到class的原因"><strong>与泛型有关的类型不能和原始类型统一到Class的原因</strong></h3>
+<h3 id="class"><strong>与泛型有关的类型不能和原始类型统一到Class的原因</strong></h3>
 
 <ul>
-<li>产生泛型擦除的原因</li>
+  <li>产生泛型擦除的原因</li>
 </ul>
 
 <p>原始类型和新产生的类型都应该统一成各自的字节码文件类型对象。但是由于泛型不是最初Java中的成分。如果真的加入了泛型，涉及到JVM指令集的修改，这是非常致命的。</p>
 
 <ul>
-<li>Java中如何引入泛型</li>
+  <li>Java中如何引入泛型</li>
 </ul>
 
 <p>为了使用泛型又不真正引入泛型，Java采用泛型擦除机制来引入泛型。Java中的泛型仅仅是给编译器javac使用的，确保数据的安全性和免去强制类型转换的麻烦。但是，一旦编译完成，所有的和泛型有关的类型全部擦除。</p>
 
 <ul>
-<li>Class不能表达与泛型有关的类型</li>
+  <li>Class不能表达与泛型有关的类型</li>
 </ul>
 
 <p>因此，与泛型有关的参数化类型、类型变量类型、限定符类型 、泛型数组类型这些类型编译后全部被打回原形，在字节码文件中全部都是泛型被擦除后的原始类型，并不存在和自身类型对应的字节码文件。所以和泛型相关的新扩充进来的类型不能被统一到Class类中。</p>
 
 <ul>
-<li>与泛型有关的类型在Java中的表示</li>
+  <li>与泛型有关的类型在Java中的表示</li>
 </ul>
 
-<p>为了通过反射操作这些类型以迎合实际开发的需要，Java就新增了<code class="prettyprint">ParameterizedType, TypeVariable&lt;D&gt;, GenericArrayType, WildcardType</code>几种类型来代表不能被归一到Class类中的类型但是又和原始类型齐名的类型。</p>
+<p>为了通过反射操作这些类型以迎合实际开发的需要，Java就新增了<code class="highlighter-rouge">ParameterizedType, TypeVariable&lt;D&gt;, GenericArrayType, WildcardType</code>几种类型来代表不能被归一到Class类中的类型但是又和原始类型齐名的类型。</p>
 
 <ul>
-<li>引入Type的原因</li>
+  <li>引入Type的原因</li>
 </ul>
 
-<p>为了程序的扩展性，最终引入了Type接口作为<code class="prettyprint">Class和ParameterizedType, TypeVariable&lt;D&gt;, GenericArrayType, WildcardType</code>这几种类型的总的父接口。这样可以用Type类型的参数来接受以上五种子类的实参或者返回值类型就是Type类型的参数。统一了与泛型有关的类型和原始类型Class</p>
+<p>为了程序的扩展性，最终引入了Type接口作为<code class="highlighter-rouge">Class和ParameterizedType, TypeVariable&lt;D&gt;, GenericArrayType, WildcardType</code>这几种类型的总的父接口。这样可以用Type类型的参数来接受以上五种子类的实参或者返回值类型就是Type类型的参数。统一了与泛型有关的类型和原始类型Class</p>
 
 <ul>
-<li>Type接口中没有方法的原因</li>
+  <li>Type接口中没有方法的原因</li>
 </ul>
 
 <p>从上面看到，Type的出现仅仅起到了通过多态来达到程序扩展性提高的作用，没有其他的作用。因此Type接口的源码中没有任何方法。</p>
 
-<hr>
+<hr />
 
         </div>
     </div>

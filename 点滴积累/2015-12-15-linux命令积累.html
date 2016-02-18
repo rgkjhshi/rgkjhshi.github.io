@@ -101,59 +101,66 @@ jQuery(function(){
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
             <p>记录一些常用的linux shell命令, 做个备忘</p>
 
-<hr>
+<hr />
 
-<h2 id="链接命令-ln">链接命令 <em>ln</em></h2>
-
+<h2 id="ln">链接命令 <em>ln</em></h2>
 <ul>
-<li>软链接: 可链接目录、可跨文件系统、相当于快捷方式</li>
-<li>硬链接: 文件副本、不占空间、不可链接目录、不可跨文件系统</li>
+  <li>软链接: 可链接目录、可跨文件系统、相当于快捷方式</li>
+  <li>硬链接: 文件副本、不占空间、不可链接目录、不可跨文件系统</li>
 </ul>
-<div class="highlight"><pre><code class="language-text" data-lang="text">软链接: ln -s src_name link_name
+
+<div class="highlighter-rouge"><pre class="highlight"><code>软链接: ln -s src_name link_name
 硬链接: ln file_name link_name
-</code></pre></div>
-<hr>
+</code></pre>
+</div>
 
-<h2 id="打包命令-tar">打包命令 <em>tar</em></h2>
+<hr />
 
+<h2 id="tar">打包命令 <em>tar</em></h2>
 <p>常用参数:</p>
 
 <ul>
-<li>-c: 创建</li>
-<li>-x: 解压</li>
-<li>-f: 指定文件</li>
-<li>-v: 显示进度</li>
-<li>-t: 显示列表</li>
-<li>-z: 使用gzip压缩</li>
-<li>-j: 使用bzip2压缩</li>
+  <li>-c: 创建</li>
+  <li>-x: 解压</li>
+  <li>-f: 指定文件</li>
+  <li>-v: 显示进度</li>
+  <li>-t: 显示列表</li>
+  <li>-z: 使用gzip压缩</li>
+  <li>-j: 使用bzip2压缩</li>
 </ul>
 
 <p>常用示例:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">打包: tar -cvf output.tar inpt1 input2 ...
+
+<div class="highlighter-rouge"><pre class="highlight"><code>打包: tar -cvf output.tar inpt1 input2 ...
 压缩: tar -zcvf output.tar directory/input
 解压: tar -xvf input.tar
-</code></pre></div>
-<hr>
+</code></pre>
+</div>
 
-<h2 id="远程拷贝-scp">远程拷贝 <em>scp</em></h2>
+<hr />
 
+<h2 id="scp">远程拷贝 <em>scp</em></h2>
 <p>常用参数:</p>
 
 <ul>
-<li>-r: 递归拷贝，若文件夹下有文件，则底下文件也一起拷贝</li>
+  <li>-r: 递归拷贝，若文件夹下有文件，则底下文件也一起拷贝</li>
 </ul>
 
 <p>常用示例:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">上传: scp -r local_file username@remote_ip:remote_file
-下载: scp -r username@ip:remote_file local_file
-</code></pre></div>
-<h2 id="修改权限-chmod">修改权限 <em>chmod</em></h2>
 
+<div class="highlighter-rouge"><pre class="highlight"><code>上传: scp -r local_file username@remote_ip:remote_file
+下载: scp -r username@ip:remote_file local_file
+</code></pre>
+</div>
+
+<h2 id="chmod">修改权限 <em>chmod</em></h2>
 <p>递归修改权限，比如，将某目录下面的所有文件修改为644，所有目录修改为755</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">find ./mydir -type f | xargs chmod 644
+
+<div class="highlighter-rouge"><pre class="highlight"><code>find ./mydir -type f | xargs chmod 644
 find ./mydir -type d | xargs chmod 755
-</code></pre></div>
-<hr>
+</code></pre>
+</div>
+<hr />
 
         </div>
     </div>

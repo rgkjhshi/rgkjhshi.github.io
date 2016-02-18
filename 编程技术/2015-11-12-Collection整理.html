@@ -101,118 +101,111 @@ jQuery(function(){
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
             <p>Java中Collection的继承关系图, 虚线表示接口, 实线表示类</p>
 
-<hr>
+<hr />
 
-<h2 id="collection继承关系图">Collection继承关系图</h2>
+<h2 id="collection">Collection继承关系图</h2>
 
-<p><img src="/static/images/collection.png" alt="Collection继承关系图" title="Collection结构图"></p>
+<p><img src="/static/images/collection.png" alt="Collection继承关系图" title="Collection结构图" /></p>
 
-<hr>
+<hr />
 
-<h2 id="collection基本操作">Collection基本操作</h2>
-
-<ul>
-<li><code class="prettyprint">int size()</code>: 返回集合大小</li>
-<li><code class="prettyprint">boolean isEmpty()</code>: 是否为空</li>
-<li><code class="prettyprint">Iterator&lt;E&gt; iterator()</code>: 返回迭代器</li>
-<li><code class="prettyprint">Object[] toArray()</code>: 把集合转成数组</li>
-<li><code class="prettyprint">&lt;T&gt; T[] toArray(T[] a)</code>: 这个腹黑的方法详细说明看<a href="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-12-Collection%E7%9A%84toArray%E6%96%B9%E6%B3%95.html">这里</a></li>
-<li><code class="prettyprint">boolean contains(Object o)</code>: 是否包含该对象</li>
-<li><code class="prettyprint">boolean containsAll(Collection&lt;?&gt; c)</code>: 包含c里的全部元素则返回true</li>
-<li><code class="prettyprint">boolean add(E e)</code>: 添加成功改变了集合则返回true</li>
-<li><code class="prettyprint">boolean addAll(Collection&lt;? extends E&gt; c)</code>: 全部添加</li>
-<li><code class="prettyprint">boolean remove(E e)</code>: 移除元素</li>
-<li><code class="prettyprint">boolean removeAll(Collection&lt;?&gt; c)</code>: 相当于减集合c</li>
-<li><code class="prettyprint">boolean retainAll(Collection&lt;?&gt; c)</code>: 相当于求与c的交集</li>
-<li><code class="prettyprint">void clear()</code>: 清空集合</li>
-</ul>
-
-<h2 id="set接口">Set接口</h2>
+<h2 id="collection-1">Collection基本操作</h2>
 
 <ul>
-<li>Set不允许包含相同的元素, 而判断两个对象是否相同则是根据<code class="prettyprint">equals</code>方法</li>
-<li><code class="prettyprint">HashSet</code>不是同步的, 不能保证元素的排列顺序, 注意<code class="prettyprint">hashCode</code>方法的实现</li>
-<li><code class="prettyprint">LinkedHashSet</code>根据元素的<code class="prettyprint">hashCode</code>值来决定元素的存储位置，但它同时使用链表维护元素的次序</li>
-<li><code class="prettyprint">TreeSet</code>是<code class="prettyprint">SortedSet</code>接口的实现类, 有顺序, 可自定义比较器(<code class="prettyprint">Comparator</code>),有<code class="prettyprint">first、last、lower、higher</code>等方法</li>
+  <li><code class="highlighter-rouge">int size()</code>: 返回集合大小</li>
+  <li><code class="highlighter-rouge">boolean isEmpty()</code>: 是否为空</li>
+  <li><code class="highlighter-rouge">Iterator&lt;E&gt; iterator()</code>: 返回迭代器</li>
+  <li><code class="highlighter-rouge">Object[] toArray()</code>: 把集合转成数组</li>
+  <li><code class="highlighter-rouge">&lt;T&gt; T[] toArray(T[] a)</code>: 这个腹黑的方法详细说明看<a href="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-12-Collection%E7%9A%84toArray%E6%96%B9%E6%B3%95.html">这里</a></li>
+  <li><code class="highlighter-rouge">boolean contains(Object o)</code>: 是否包含该对象</li>
+  <li><code class="highlighter-rouge">boolean containsAll(Collection&lt;?&gt; c)</code>: 包含c里的全部元素则返回true</li>
+  <li><code class="highlighter-rouge">boolean add(E e)</code>: 添加成功改变了集合则返回true</li>
+  <li><code class="highlighter-rouge">boolean addAll(Collection&lt;? extends E&gt; c)</code>: 全部添加</li>
+  <li><code class="highlighter-rouge">boolean remove(E e)</code>: 移除元素</li>
+  <li><code class="highlighter-rouge">boolean removeAll(Collection&lt;?&gt; c)</code>: 相当于减集合c</li>
+  <li><code class="highlighter-rouge">boolean retainAll(Collection&lt;?&gt; c)</code>: 相当于求与c的交集</li>
+  <li><code class="highlighter-rouge">void clear()</code>: 清空集合</li>
 </ul>
 
-<h2 id="list接口">List接口</h2>
-
-<p><code class="prettyprint">List</code>是经常用到的工具, 是有序集合, 增加了与索引位置相关的操作:</p>
+<h2 id="set">Set接口</h2>
 
 <ul>
-<li><code class="prettyprint">E get(int index)</code>: 获取指定位置的元素</li>
-<li><code class="prettyprint">E set(int index, E element)</code>: 替换指定位置的元素</li>
-<li><code class="prettyprint">void add(int index, E element)</code>: 将元素添加到指定位置</li>
-<li><code class="prettyprint">boolean addAll(int index, Collection&lt;? extends E&gt; c)</code>: 将c里的元素添加到指定位置</li>
-<li><code class="prettyprint">E remove(int index)</code>: 移除指定位置的元素</li>
-<li><code class="prettyprint">int indexOf(Object o)</code>: o在list中第一次出现的位置</li>
-<li><code class="prettyprint">int lastIndexOf(Object o)</code>: o在list中最后一次出现的位置</li>
-<li><code class="prettyprint">List&lt;E&gt; subList(int fromIndex, int toIndex)</code>: 子list</li>
+  <li>Set不允许包含相同的元素, 而判断两个对象是否相同则是根据<code class="highlighter-rouge">equals</code>方法</li>
+  <li><code class="highlighter-rouge">HashSet</code>不是同步的, 不能保证元素的排列顺序, 注意<code class="highlighter-rouge">hashCode</code>方法的实现</li>
+  <li><code class="highlighter-rouge">LinkedHashSet</code>根据元素的<code class="highlighter-rouge">hashCode</code>值来决定元素的存储位置，但它同时使用链表维护元素的次序</li>
+  <li><code class="highlighter-rouge">TreeSet</code>是<code class="highlighter-rouge">SortedSet</code>接口的实现类, 有顺序, 可自定义比较器(<code class="highlighter-rouge">Comparator</code>),有<code class="highlighter-rouge">first、last、lower、higher</code>等方法</li>
 </ul>
 
-<h3 id="arraylist和vector">ArrayList和Vector</h3>
+<h2 id="list">List接口</h2>
+<p><code class="highlighter-rouge">List</code>是经常用到的工具, 是有序集合, 增加了与索引位置相关的操作:</p>
 
-<p><code class="prettyprint">ArrayList</code>是线程不安全的,而<code class="prettyprint">Vector</code>是线程安全的  </p>
+<ul>
+  <li><code class="highlighter-rouge">E get(int index)</code>: 获取指定位置的元素</li>
+  <li><code class="highlighter-rouge">E set(int index, E element)</code>: 替换指定位置的元素</li>
+  <li><code class="highlighter-rouge">void add(int index, E element)</code>: 将元素添加到指定位置</li>
+  <li><code class="highlighter-rouge">boolean addAll(int index, Collection&lt;? extends E&gt; c)</code>: 将c里的元素添加到指定位置</li>
+  <li><code class="highlighter-rouge">E remove(int index)</code>: 移除指定位置的元素</li>
+  <li><code class="highlighter-rouge">int indexOf(Object o)</code>: o在list中第一次出现的位置</li>
+  <li><code class="highlighter-rouge">int lastIndexOf(Object o)</code>: o在list中最后一次出现的位置</li>
+  <li><code class="highlighter-rouge">List&lt;E&gt; subList(int fromIndex, int toIndex)</code>: 子list</li>
+</ul>
+
+<h3 id="arraylistvector">ArrayList和Vector</h3>
+<p><code class="highlighter-rouge">ArrayList</code>是线程不安全的,而<code class="highlighter-rouge">Vector</code>是线程安全的  </p>
 
 <h3 id="stack">Stack</h3>
-
-<p><code class="prettyprint">Stack</code>是<code class="prettyprint">Vector</code>的子类,模拟数据结构中的栈,有下面几个操作:</p>
+<p><code class="highlighter-rouge">Stack</code>是<code class="highlighter-rouge">Vector</code>的子类,模拟数据结构中的栈,有下面几个操作:</p>
 
 <ul>
-<li><code class="prettyprint">E push(E item)</code>: 压栈</li>
-<li><code class="prettyprint">E pop()</code>: 出栈</li>
-<li><code class="prettyprint">E peek()</code>: 查看栈顶元素, 不出栈</li>
-<li><code class="prettyprint">boolean empty()</code>: 判断栈空</li>
-<li><code class="prettyprint">int search(Object o)</code>: 返回元素位置, 栈顶元素是1, －1表示栈里没有</li>
+  <li><code class="highlighter-rouge">E push(E item)</code>: 压栈</li>
+  <li><code class="highlighter-rouge">E pop()</code>: 出栈</li>
+  <li><code class="highlighter-rouge">E peek()</code>: 查看栈顶元素, 不出栈</li>
+  <li><code class="highlighter-rouge">boolean empty()</code>: 判断栈空</li>
+  <li><code class="highlighter-rouge">int search(Object o)</code>: 返回元素位置, 栈顶元素是1, －1表示栈里没有</li>
 </ul>
 
-<h2 id="queue接口">Queue接口</h2>
-
-<p><code class="prettyprint">Queue</code>用于模拟队列这种数据结构，实现先进先出<q>FIFO</q>等数据结构,常用如下操作:</p>
+<h2 id="queue">Queue接口</h2>
+<p><code class="highlighter-rouge">Queue</code>用于模拟队列这种数据结构，实现先进先出”FIFO”等数据结构,常用如下操作:</p>
 
 <ul>
-<li><code class="prettyprint">boolean add(E e)</code>: 不建议使用</li>
-<li><code class="prettyprint">boolean offer(E e)</code>: 将指定元素插入队尾列,当使用有容量限制的队列时,此方法通常要优于<code class="prettyprint">add(E)</code>,
+  <li><code class="highlighter-rouge">boolean add(E e)</code>: 不建议使用</li>
+  <li><code class="highlighter-rouge">boolean offer(E e)</code>: 将指定元素插入队尾列,当使用有容量限制的队列时,此方法通常要优于<code class="highlighter-rouge">add(E)</code>,
 后者可能无法插入元素，而只是抛出一个异常。<strong>推荐使用此方法取代add</strong></li>
-<li><code class="prettyprint">boolean remove()</code>: 不建议使用</li>
-<li><code class="prettyprint">boolean poll()</code>: 获取头部元素并且删除元素，队列为空返回null;<strong>推荐使用此方法取代remove</strong></li>
-<li><code class="prettyprint">boolean element()</code>: 返回队首元素, 队空抛<code class="prettyprint">NoSuchElementException</code></li>
-<li><code class="prettyprint">boolean peek()</code>: 返回队首元素, 队空返回<code class="prettyprint">null</code></li>
+  <li><code class="highlighter-rouge">boolean remove()</code>: 不建议使用</li>
+  <li><code class="highlighter-rouge">boolean poll()</code>: 获取头部元素并且删除元素，队列为空返回null;<strong>推荐使用此方法取代remove</strong></li>
+  <li><code class="highlighter-rouge">boolean element()</code>: 返回队首元素, 队空抛<code class="highlighter-rouge">NoSuchElementException</code></li>
+  <li><code class="highlighter-rouge">boolean peek()</code>: 返回队首元素, 队空返回<code class="highlighter-rouge">null</code></li>
 </ul>
 
-<h3 id="priorityqueue类">PriorityQueue类</h3>
+<h3 id="priorityqueue">PriorityQueue类</h3>
+<p><code class="highlighter-rouge">PriorityQueue</code>类中元素的顺序不是按照加入的顺序排列的, 而是按队列元素的优先级重新排序,
+调用<code class="highlighter-rouge">peek()</code>或者是<code class="highlighter-rouge">poll()</code>方法时，返回的是队列中优先级最小的元素, 可以自定义排序.</p>
 
-<p><code class="prettyprint">PriorityQueue</code>类中元素的顺序不是按照加入的顺序排列的, 而是按队列元素的优先级重新排序,
-调用<code class="prettyprint">peek()</code>或者是<code class="prettyprint">poll()</code>方法时，返回的是队列中优先级最小的元素, 可以自定义排序.</p>
-
-<h3 id="deque接口与arraydeque类">Deque接口与ArrayDeque类</h3>
-
-<p><code class="prettyprint">Deque</code>代表一个双端队列，可以当作一个双端队列使用，也可以当作“栈”来使用，因为它包含出栈<code class="prettyprint">pop()</code>与入栈<code class="prettyprint">push()</code>方法</p>
+<h3 id="dequearraydeque">Deque接口与ArrayDeque类</h3>
+<p><code class="highlighter-rouge">Deque</code>代表一个双端队列，可以当作一个双端队列使用，也可以当作“栈”来使用，因为它包含出栈<code class="highlighter-rouge">pop()</code>与入栈<code class="highlighter-rouge">push()</code>方法</p>
 
 <ul>
-<li><code class="prettyprint">void addFirst(E e)</code>: 元素增加至队头, 超容量抛异常</li>
-<li><code class="prettyprint">void addLast(E e)</code>: 元素增加至队尾, 超容量抛异常</li>
-<li><code class="prettyprint">boolean offerFirst(E e)</code>: 元素增加至队头, 比add安全</li>
-<li><code class="prettyprint">boolean offerLast(E e)</code>: 元素增加至队尾, 比add安全</li>
-<li><code class="prettyprint">E removeFirst()</code>: 获取并删除队头元素, 队空抛<code class="prettyprint">NoSuchElementException</code></li>
-<li><code class="prettyprint">E removeLast()</code>: 获取并删除队尾元素, 队空抛<code class="prettyprint">NoSuchElementException</code></li>
-<li><code class="prettyprint">E pollFirst()</code>: 获取并删除队头元素, 队空返回<code class="prettyprint">null</code></li>
-<li><code class="prettyprint">E pollLast()</code>: 获取并删除队尾元素, 队空返回<code class="prettyprint">null</code></li>
-<li><code class="prettyprint">E getFirst()</code>: 获取队头元素, 但不删除, 队空抛<code class="prettyprint">NoSuchElementException</code></li>
-<li><code class="prettyprint">E getLast()</code>: 获取队头元素, 但不删除, 队空抛<code class="prettyprint">NoSuchElementException</code></li>
-<li><code class="prettyprint">E peekFirst()</code>: 获取队头元素, 但不删除, 队空返回<code class="prettyprint">null</code></li>
-<li><code class="prettyprint">E peekLast()</code>: 获取队头元素, 但不删除, 队空返回<code class="prettyprint">null</code></li>
-<li><code class="prettyprint">void push(E e)</code>: 元素增加至队头, 类似<code class="prettyprint">offerFirst</code></li>
-<li><code class="prettyprint">E pop()</code>: 元素增加至队头, 类似<code class="prettyprint">pollFirst</code></li>
+  <li><code class="highlighter-rouge">void addFirst(E e)</code>: 元素增加至队头, 超容量抛异常</li>
+  <li><code class="highlighter-rouge">void addLast(E e)</code>: 元素增加至队尾, 超容量抛异常</li>
+  <li><code class="highlighter-rouge">boolean offerFirst(E e)</code>: 元素增加至队头, 比add安全</li>
+  <li><code class="highlighter-rouge">boolean offerLast(E e)</code>: 元素增加至队尾, 比add安全</li>
+  <li><code class="highlighter-rouge">E removeFirst()</code>: 获取并删除队头元素, 队空抛<code class="highlighter-rouge">NoSuchElementException</code></li>
+  <li><code class="highlighter-rouge">E removeLast()</code>: 获取并删除队尾元素, 队空抛<code class="highlighter-rouge">NoSuchElementException</code></li>
+  <li><code class="highlighter-rouge">E pollFirst()</code>: 获取并删除队头元素, 队空返回<code class="highlighter-rouge">null</code></li>
+  <li><code class="highlighter-rouge">E pollLast()</code>: 获取并删除队尾元素, 队空返回<code class="highlighter-rouge">null</code></li>
+  <li><code class="highlighter-rouge">E getFirst()</code>: 获取队头元素, 但不删除, 队空抛<code class="highlighter-rouge">NoSuchElementException</code></li>
+  <li><code class="highlighter-rouge">E getLast()</code>: 获取队头元素, 但不删除, 队空抛<code class="highlighter-rouge">NoSuchElementException</code></li>
+  <li><code class="highlighter-rouge">E peekFirst()</code>: 获取队头元素, 但不删除, 队空返回<code class="highlighter-rouge">null</code></li>
+  <li><code class="highlighter-rouge">E peekLast()</code>: 获取队头元素, 但不删除, 队空返回<code class="highlighter-rouge">null</code></li>
+  <li><code class="highlighter-rouge">void push(E e)</code>: 元素增加至队头, 类似<code class="highlighter-rouge">offerFirst</code></li>
+  <li><code class="highlighter-rouge">E pop()</code>: 元素增加至队头, 类似<code class="highlighter-rouge">pollFirst</code></li>
 </ul>
 
 <h3 id="linkedlist">LinkedList</h3>
-
-<p><code class="prettyprint">LinkedList</code>类同时实现了<code class="prettyprint">List</code>接口和<code class="prettyprint">Deque</code>接口, 因此它也可以当做一个双端队列来用, 也可以当作“栈”来使用.<br>
+<p><code class="highlighter-rouge">LinkedList</code>类同时实现了<code class="highlighter-rouge">List</code>接口和<code class="highlighter-rouge">Deque</code>接口, 因此它也可以当做一个双端队列来用, 也可以当作“栈”来使用.<br />
 它基于链表实现, 随机访问性能较差, 但插入与删除操作性能很好</p>
 
-<hr>
+<hr />
 
         </div>
     </div>

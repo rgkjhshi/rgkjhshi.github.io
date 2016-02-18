@@ -101,267 +101,281 @@ jQuery(function(){
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
             <p>CSS 选择器用法收集整理, 参考<a href="http://www.w3.org/TR/css3-selectors/#selectors">官方文档</a></p>
 
-<hr>
+<hr />
 
-<h2 id="常见的选择器">常见的选择器</h2>
+<h2 id="section">常见的选择器</h2>
 
-<table><thead>
-<tr>
-<th>选择器</th>
-<th>说明</th>
-</tr>
-</thead><tbody>
-<tr>
-<td><code class="prettyprint">*</code></td>
-<td>用于所有元素, 少用, 很慢</td>
-</tr>
-<tr>
-<td><code class="prettyprint">.X</code></td>
-<td>class选择器, <code class="prettyprint">class=&quot;X&quot;</code></td>
-</tr>
-<tr>
-<td><code class="prettyprint">#X</code></td>
-<td>id选择器, <code class="prettyprint">id=&quot;X&quot;</code></td>
-</tr>
-<tr>
-<td><code class="prettyprint">X</code></td>
-<td>标签选择器, 用语渲染html标签</td>
-</tr>
-</tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th>选择器</th>
+      <th>说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">*</code></td>
+      <td>用于所有元素, 少用, 很慢</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">.X</code></td>
+      <td>class选择器, <code class="highlighter-rouge">class="X"</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">#X</code></td>
+      <td>id选择器, <code class="highlighter-rouge">id="X"</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">X</code></td>
+      <td>标签选择器, 用语渲染html标签</td>
+    </tr>
+  </tbody>
+</table>
 
-<hr>
+<hr />
 
-<h2 id="xy"><code class="prettyprint">XY</code></h2>
-
+<h2 id="xy"><code class="highlighter-rouge">XY</code></h2>
 <p>组合选择器, 会有下面这几种:</p>
 
-<table><thead>
-<tr>
-<th>选择器</th>
-<th>说明</th>
-</tr>
-</thead><tbody>
-<tr>
-<td><code class="prettyprint">X.Y</code></td>
-<td><code class="prettyprint">class=&quot;Y&quot;</code>的元素</td>
-</tr>
-<tr>
-<td><code class="prettyprint">X#Y</code></td>
-<td><code class="prettyprint">id=&quot;Y&quot;</code>的元素</td>
-</tr>
-<tr>
-<td><code class="prettyprint">#X.Y</code></td>
-<td><code class="prettyprint">id=&quot;X&quot; class=&quot;Y&quot;</code>的元素</td>
-</tr>
-<tr>
-<td><code class="prettyprint">.X#Y</code></td>
-<td><code class="prettyprint">class=&quot;X&quot; id=&quot;Y&quot;</code>的元素, 跟上面一样</td>
-</tr>
-</tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th>选择器</th>
+      <th>说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">X.Y</code></td>
+      <td><code class="highlighter-rouge">class="Y"</code>的元素</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">X#Y</code></td>
+      <td><code class="highlighter-rouge">id="Y"</code>的元素</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">#X.Y</code></td>
+      <td><code class="highlighter-rouge">id="X" class="Y"</code>的元素</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">.X#Y</code></td>
+      <td><code class="highlighter-rouge">class="X" id="Y"</code>的元素, 跟上面一样</td>
+    </tr>
+  </tbody>
+</table>
 
-<hr>
+<hr />
 
-<h2 id="x,-y,-z"><code class="prettyprint">X, Y, Z</code></h2>
+<h2 id="x-y-z"><code class="highlighter-rouge">X, Y, Z</code></h2>
+<p>批量选择器, 即多个选择器用 <code class="highlighter-rouge">,</code> 隔开，中间有无空格都可以，表示适用于每个被隔开的选择器</p>
 
-<p>批量选择器, 即多个选择器用 <code class="prettyprint">,</code> 隔开，中间有无空格都可以，表示适用于每个被隔开的选择器</p>
+<hr />
 
-<hr>
+<h2 id="x-y"><code class="highlighter-rouge">X Y</code></h2>
+<p>后代选择器(中间用空格隔开), 选取 <code class="highlighter-rouge">X</code> 元素内的所有 <code class="highlighter-rouge">Y</code> 元素  </p>
 
-<h2 id="x-y"><code class="prettyprint">X Y</code></h2>
+<hr />
 
-<p>后代选择器(中间用空格隔开), 选取 <code class="prettyprint">X</code> 元素内的所有 <code class="prettyprint">Y</code> 元素  </p>
-
-<hr>
-
-<h2 id="x-&gt;-y"><code class="prettyprint">X &gt; Y</code></h2>
-
-<p>子元素选择器(直接后代选择器), 选取 <code class="prettyprint">X</code> 元素内的所有 <strong>直接出现</strong> 的<code class="prettyprint">Y</code> 元素
+<h2 id="x--y"><code class="highlighter-rouge">X &gt; Y</code></h2>
+<p>子元素选择器(直接后代选择器), 选取 <code class="highlighter-rouge">X</code> 元素内的所有 <strong>直接出现</strong> 的<code class="highlighter-rouge">Y</code> 元素
 相当于所有第一代子元素，而第二代子元素不会选中</p>
 
-<hr>
+<hr />
 
-<h2 id="x-+-y"><code class="prettyprint">X + Y</code></h2>
+<h2 id="x--y-1"><code class="highlighter-rouge">X + Y</code></h2>
+<p>临近选择器, 选取<strong>紧邻</strong>着 <code class="highlighter-rouge">X</code> 元素后面出现的<strong>第一个</strong> <code class="highlighter-rouge">Y</code> 元素<br />
+<code class="highlighter-rouge">X</code>和<code class="highlighter-rouge">Y</code>必须是同级且中间不隔着其他元素，否则不会选中</p>
 
-<p>临近选择器, 选取<strong>紧邻</strong>着 <code class="prettyprint">X</code> 元素后面出现的<strong>第一个</strong> <code class="prettyprint">Y</code> 元素<br>
-<code class="prettyprint">X</code>和<code class="prettyprint">Y</code>必须是同级且中间不隔着其他元素，否则不会选中</p>
+<hr />
 
-<hr>
+<h2 id="x--y-2"><code class="highlighter-rouge">X ~ Y</code></h2>
+<p>也是临近选择器, 选取 <code class="highlighter-rouge">X</code> 元素后面出现的<strong>所有与<code class="highlighter-rouge">X</code>同级</strong>的 <code class="highlighter-rouge">Y</code> 元素  </p>
 
-<h2 id="x-~-y"><code class="prettyprint">X ~ Y</code></h2>
+<hr />
 
-<p>也是临近选择器, 选取 <code class="prettyprint">X</code> 元素后面出现的<strong>所有与<code class="prettyprint">X</code>同级</strong>的 <code class="prettyprint">Y</code> 元素  </p>
+<h2 id="section-1">属性选择器</h2>
 
-<hr>
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">选择器</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">X[foo]</code></td>
+      <td style="text-align: left">选取具有属性<code class="highlighter-rouge">foo</code>的<code class="highlighter-rouge">X</code>元素</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">X[foo="bar"]</code></td>
+      <td style="text-align: left">选取具有属性<code class="highlighter-rouge">foo</code>且属性值为<code class="highlighter-rouge">bar</code>的<code class="highlighter-rouge">X</code>元素</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">X[foo*="bar"]</code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">X</code>元素的’foo’属性值中包含子串’bar’即可</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">X[foo^="bar"]</code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">X</code>元素的’foo’属性值必须以<code class="highlighter-rouge">bar</code>开头</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">X[foo$="bar"]</code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">X</code>元素的’foo’属性值必须以<code class="highlighter-rouge">bar</code>结尾</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">X[foo~="bar"]</code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">X</code>元素的有个’foo’属性, 属性值是空白隔开的值列表, 值列表中有一个是<code class="highlighter-rouge">bar</code>即可</td>
+    </tr>
+  </tbody>
+</table>
 
-<h2 id="属性选择器">属性选择器</h2>
+<hr />
 
-<table><thead>
-<tr>
-<th style="text-align: left">选择器</th>
-<th style="text-align: left">说明</th>
-</tr>
-</thead><tbody>
-<tr>
-<td style="text-align: left"><code class="prettyprint">X[foo]</code></td>
-<td style="text-align: left">选取具有属性<code class="prettyprint">foo</code>的<code class="prettyprint">X</code>元素</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">X[foo=&quot;bar&quot;]</code></td>
-<td style="text-align: left">选取具有属性<code class="prettyprint">foo</code>且属性值为<code class="prettyprint">bar</code>的<code class="prettyprint">X</code>元素</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">X[foo*=&quot;bar&quot;]</code></td>
-<td style="text-align: left"><code class="prettyprint">X</code>元素的&#39;foo&#39;属性值中包含子串&#39;bar&#39;即可</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">X[foo^=&quot;bar&quot;]</code></td>
-<td style="text-align: left"><code class="prettyprint">X</code>元素的&#39;foo&#39;属性值必须以<code class="prettyprint">bar</code>开头</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">X[foo$=&quot;bar&quot;]</code></td>
-<td style="text-align: left"><code class="prettyprint">X</code>元素的&#39;foo&#39;属性值必须以<code class="prettyprint">bar</code>结尾</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">X[foo~=&quot;bar&quot;]</code></td>
-<td style="text-align: left"><code class="prettyprint">X</code>元素的有个&#39;foo&#39;属性, 属性值是空白隔开的值列表, 值列表中有一个是<code class="prettyprint">bar</code>即可</td>
-</tr>
-</tbody></table>
+<h2 id="section-2">伪类选择器</h2>
 
-<hr>
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">选择器</th>
+      <th style="text-align: left">示例</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">X:link</code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">a:link</code></td>
+      <td style="text-align: left">未点击过的链接</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">X:visited</code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">a:visited</code></td>
+      <td style="text-align: left">已访问过的链接</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">X:active</code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">button:active</code></td>
+      <td style="text-align: left">获取到用户焦点时</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">X:hover</code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">div:hover</code></td>
+      <td style="text-align: left">鼠标移到元素上面时</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">X:checked</code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">input[type=radio]:checked</code></td>
+      <td style="text-align: left">被选中的元素单选框、复选框等</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">X:not(Y)</code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">div:not(#container)</code></td>
+      <td style="text-align: left">除 <code class="highlighter-rouge">#contaienr</code> 外的所有 <code class="highlighter-rouge">div</code> 元素</td>
+    </tr>
+  </tbody>
+</table>
 
-<h2 id="伪类选择器">伪类选择器</h2>
+<hr />
 
-<table><thead>
-<tr>
-<th style="text-align: left">选择器</th>
-<th style="text-align: left">示例</th>
-<th style="text-align: left">说明</th>
-</tr>
-</thead><tbody>
-<tr>
-<td style="text-align: left"><code class="prettyprint">X:link</code></td>
-<td style="text-align: left"><code class="prettyprint">a:link</code></td>
-<td style="text-align: left">未点击过的链接</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">X:visited</code></td>
-<td style="text-align: left"><code class="prettyprint">a:visited</code></td>
-<td style="text-align: left">已访问过的链接</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">X:active</code></td>
-<td style="text-align: left"><code class="prettyprint">button:active</code></td>
-<td style="text-align: left">获取到用户焦点时</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">X:hover</code></td>
-<td style="text-align: left"><code class="prettyprint">div:hover</code></td>
-<td style="text-align: left">鼠标移到元素上面时</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">X:checked</code></td>
-<td style="text-align: left"><code class="prettyprint">input[type=radio]:checked</code></td>
-<td style="text-align: left">被选中的元素单选框、复选框等</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">X:not(Y)</code></td>
-<td style="text-align: left"><code class="prettyprint">div:not(#container)</code></td>
-<td style="text-align: left">除 <code class="prettyprint">#contaienr</code> 外的所有 <code class="prettyprint">div</code> 元素</td>
-</tr>
-</tbody></table>
+<h2 id="section-3">结构伪类选择器</h2>
 
-<hr>
-
-<h2 id="结构伪类选择器">结构伪类选择器</h2>
-
-<table><thead>
-<tr>
-<th style="text-align: left">选择器</th>
-<th style="text-align: left">说明</th>
-</tr>
-</thead><tbody>
-<tr>
-<td style="text-align: left"><code class="prettyprint">X:nth-child(n)</code></td>
-<td style="text-align: left"><code class="prettyprint">X</code>元素且是父元素的第n个子元素</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">X:nth-last-child(n)</code></td>
-<td style="text-align: left"><code class="prettyprint">X</code>元素且是父元素的倒数第n个子元素</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">X:nth-of-type(n)</code></td>
-<td style="text-align: left">第n个兄弟<code class="prettyprint">X</code>元素</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">X:nth-last-of-type(n)</code></td>
-<td style="text-align: left">倒数第n个兄弟<code class="prettyprint">X</code>元素</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">X:first-child</code></td>
-<td style="text-align: left"><code class="prettyprint">X</code>元素且是父元素的第1个子元素</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">X:last-child</code></td>
-<td style="text-align: left"><code class="prettyprint">X</code>元素且是父元素的倒数第1个子元素</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">X:first-of-type</code></td>
-<td style="text-align: left"><code class="prettyprint">X</code>兄弟元素中的第1个</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">X:last-of-type</code></td>
-<td style="text-align: left"><code class="prettyprint">X</code>兄弟元素中的倒数第1个</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">X:only-child</code></td>
-<td style="text-align: left"><code class="prettyprint">X</code>元素且是父元素的唯一一个子元素</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">X:only-of-type</code></td>
-<td style="text-align: left"><code class="prettyprint">X</code>兄弟元素中的唯一一个(即同级别中就一个<code class="prettyprint">X</code>)</td>
-</tr>
-</tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">选择器</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">X:nth-child(n)</code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">X</code>元素且是父元素的第n个子元素</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">X:nth-last-child(n)</code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">X</code>元素且是父元素的倒数第n个子元素</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">X:nth-of-type(n)</code></td>
+      <td style="text-align: left">第n个兄弟<code class="highlighter-rouge">X</code>元素</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">X:nth-last-of-type(n)</code></td>
+      <td style="text-align: left">倒数第n个兄弟<code class="highlighter-rouge">X</code>元素</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">X:first-child</code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">X</code>元素且是父元素的第1个子元素</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">X:last-child</code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">X</code>元素且是父元素的倒数第1个子元素</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">X:first-of-type</code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">X</code>兄弟元素中的第1个</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">X:last-of-type</code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">X</code>兄弟元素中的倒数第1个</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">X:only-child</code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">X</code>元素且是父元素的唯一一个子元素</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">X:only-of-type</code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">X</code>兄弟元素中的唯一一个(即同级别中就一个<code class="highlighter-rouge">X</code>)</td>
+    </tr>
+  </tbody>
+</table>
 
 <p>最常用的方式是这样的:</p>
-<div class="highlight"><pre><code class="language-css" data-lang="css"><span class="nt">tbody</span> <span class="nt">tr</span><span class="nd">:nth-of-type</span><span class="o">(</span><span class="nt">odd</span><span class="o">)</span>  <span class="c">/* 奇数行 */</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">tbody</span> <span class="nt">tr</span><span class="nd">:nth-of-type</span><span class="o">(</span><span class="nt">odd</span><span class="o">)</span>  <span class="c">/* 奇数行 */</span>
 <span class="nt">tbody</span> <span class="nt">tr</span><span class="nd">:nth-of-type</span><span class="o">(</span><span class="nt">even</span><span class="o">)</span> <span class="c">/* 偶数行 */</span>
-</code></pre></div>
-<hr>
+</code></pre>
+</div>
 
-<h2 id="伪元素选择器">伪元素选择器</h2>
+<hr />
 
+<h2 id="section-4">伪元素选择器</h2>
 <p>只对块级元素生效  </p>
 
-<table><thead>
-<tr>
-<th style="text-align: left">选择器</th>
-<th style="text-align: left">示例</th>
-<th style="text-align: left">说明</th>
-</tr>
-</thead><tbody>
-<tr>
-<td style="text-align: left"><code class="prettyprint">X::first-line</code></td>
-<td style="text-align: left"><code class="prettyprint">p::first-line</code></td>
-<td style="text-align: left">第一行</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">X::first-letter</code></td>
-<td style="text-align: left"><code class="prettyprint">p::first-letter</code></td>
-<td style="text-align: left">第一个字母</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">X::before</code></td>
-<td style="text-align: left"></td>
-<td style="text-align: left">在<code class="prettyprint">X</code>元素之前声称某些内容</td>
-</tr>
-<tr>
-<td style="text-align: left"><code class="prettyprint">X::after</code></td>
-<td style="text-align: left"></td>
-<td style="text-align: left">在<code class="prettyprint">X</code>元素之后声称某些内容</td>
-</tr>
-</tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">选择器</th>
+      <th style="text-align: left">示例</th>
+      <th style="text-align: left">说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">X::first-line</code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">p::first-line</code></td>
+      <td style="text-align: left">第一行</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">X::first-letter</code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">p::first-letter</code></td>
+      <td style="text-align: left">第一个字母</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">X::before</code></td>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left">在<code class="highlighter-rouge">X</code>元素之前声称某些内容</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><code class="highlighter-rouge">X::after</code></td>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left">在<code class="highlighter-rouge">X</code>元素之后声称某些内容</td>
+    </tr>
+  </tbody>
+</table>
 
-<hr>
+<hr />
 
         </div>
     </div>

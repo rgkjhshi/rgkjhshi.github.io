@@ -99,68 +99,72 @@ jQuery(function(){
     <div class="uk-grid">
         <div  class="uk-width-4-4">
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
-            <p><code class="prettyprint">Splitter</code>相当于拆分器,跟<a href="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-19-Guava%E4%B9%8BJoiner.html">Joiner</a>正好是相反的操作</p>
+            <p><code class="highlighter-rouge">Splitter</code>相当于拆分器,跟<a href="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-19-Guava%E4%B9%8BJoiner.html">Joiner</a>正好是相反的操作</p>
 
-<hr>
+<hr />
 
-<h2 id="生成splitter的方法">生成<code class="prettyprint">Splitter</code>的方法</h2>
-
+<h2 id="splitter-">生成 Splitter 的方法</h2>
 <p>工厂方法:</p>
 
 <ul>
-<li><code class="prettyprint">Splitter on(char separator)</code></li>
-<li><code class="prettyprint">Splitter on(final CharMatcher separatorMatcher)</code></li>
-<li><code class="prettyprint">Splitter on(final String separator)</code></li>
-<li><code class="prettyprint">Splitter on(final Pattern separatorPattern)</code>: 支持正则</li>
-<li><code class="prettyprint">Splitter onPattern(String separatorPattern)</code>: 等效于<code class="prettyprint">Splitter.on(Pattern.compile(pattern))</code></li>
-<li><code class="prettyprint">Splitter fixedLength(final int length)</code>: 每length个元素分成一组</li>
+  <li><code class="highlighter-rouge">Splitter on(char separator)</code></li>
+  <li><code class="highlighter-rouge">Splitter on(final CharMatcher separatorMatcher)</code></li>
+  <li><code class="highlighter-rouge">Splitter on(final String separator)</code></li>
+  <li><code class="highlighter-rouge">Splitter on(final Pattern separatorPattern)</code>: 支持正则</li>
+  <li><code class="highlighter-rouge">Splitter onPattern(String separatorPattern)</code>: 等效于<code class="highlighter-rouge">Splitter.on(Pattern.compile(pattern))</code></li>
+  <li><code class="highlighter-rouge">Splitter fixedLength(final int length)</code>: 每length个元素分成一组</li>
 </ul>
 
 <p>修饰方法:</p>
 
 <ul>
-<li><code class="prettyprint">Splitter omitEmptyStrings()</code></li>
-<li><code class="prettyprint">Splitter limit(int limit)</code></li>
-<li><code class="prettyprint">Splitter trimResults()</code></li>
-<li><code class="prettyprint">Splitter trimResults(CharMatcher trimmer)</code></li>
+  <li><code class="highlighter-rouge">Splitter omitEmptyStrings()</code></li>
+  <li><code class="highlighter-rouge">Splitter limit(int limit)</code></li>
+  <li><code class="highlighter-rouge">Splitter trimResults()</code></li>
+  <li><code class="highlighter-rouge">Splitter trimResults(CharMatcher trimmer)</code></li>
 </ul>
 
 <p>示例:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Splitter</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="sc">&#39;,&#39;</span><span class="o">).</span><span class="na">split</span><span class="o">(</span><span class="s">&quot;foo,,bar&quot;</span><span class="o">);</span>  <span class="c1">// [&quot;foo&quot;, &quot;&quot;, &quot;bar&quot;]</span>
-<span class="n">Splitter</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="n">CharMatcher</span><span class="o">.</span><span class="na">anyOf</span><span class="o">(</span><span class="s">&quot;;,&quot;</span><span class="o">)).</span><span class="na">split</span><span class="o">(</span><span class="s">&quot;foo,;bar,quux&quot;</span><span class="o">);</span> <span class="c1">// [&quot;foo&quot;, &quot;&quot;, &quot;bar&quot;, &quot;quux&quot;]</span>
-<span class="n">Splitter</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="s">&quot;, &quot;</span><span class="o">).</span><span class="na">split</span><span class="o">(</span><span class="s">&quot;foo, bar,baz&quot;</span><span class="o">);</span> <span class="c1">// [&quot;foo&quot;, &quot;bar,baz&quot;]</span>
-<span class="n">Splitter</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="n">Pattern</span><span class="o">.</span><span class="na">compile</span><span class="o">(</span><span class="s">&quot;\\d+&quot;</span><span class="o">)).</span><span class="na">split</span><span class="o">(</span><span class="s">&quot;a12b3c&quot;</span><span class="o">);</span> <span class="c1">// [a, b, c]</span>
-<span class="n">Splitter</span><span class="o">.</span><span class="na">fixedLength</span><span class="o">(</span><span class="mi">2</span><span class="o">).</span><span class="na">split</span><span class="o">(</span><span class="s">&quot;abcde&quot;</span><span class="o">);</span> <span class="c1">// [&quot;ab&quot;, &quot;cd&quot;, &quot;e&quot;]</span>
-<span class="n">Splitter</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="sc">&#39;,&#39;</span><span class="o">).</span><span class="na">limit</span><span class="o">(</span><span class="mi">3</span><span class="o">).</span><span class="na">split</span><span class="o">(</span><span class="s">&quot;a,b,c,d&quot;</span><span class="o">);</span> <span class="c1">// [&quot;a&quot;, &quot;b&quot;, &quot;c,d&quot;]</span>
-<span class="n">Splitter</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="sc">&#39;,&#39;</span><span class="o">).</span><span class="na">limit</span><span class="o">(</span><span class="mi">3</span><span class="o">).</span><span class="na">omitEmptyStrings</span><span class="o">().</span><span class="na">split</span><span class="o">(</span><span class="s">&quot;a,,,b,,,c,d&quot;</span><span class="o">);</span> <span class="c1">// [&quot;a&quot;, &quot;b&quot;, &quot;c,d&quot;]</span>
-<span class="n">Splitter</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="sc">&#39;,&#39;</span><span class="o">).</span><span class="na">limit</span><span class="o">(</span><span class="mi">3</span><span class="o">).</span><span class="na">trimResults</span><span class="o">().</span><span class="na">split</span><span class="o">(</span><span class="s">&quot; a , b , c , d &quot;</span><span class="o">);</span> <span class="c1">// [&quot;a&quot;, &quot;b&quot;, &quot;c , d&quot;]</span>
-<span class="n">Splitter</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="sc">&#39;,&#39;</span><span class="o">).</span><span class="na">trimResults</span><span class="o">(</span><span class="n">CharMatcher</span><span class="o">.</span><span class="na">is</span><span class="o">(</span><span class="sc">&#39;_&#39;</span><span class="o">)).</span><span class="na">split</span><span class="o">(</span><span class="s">&quot;_a ,_b_ ,c__&quot;</span><span class="o">);</span> <span class="c1">// [&quot;a &quot;, &quot;b_ &quot;, &quot;c&quot;]</span>
-</code></pre></div>
-<hr>
 
-<h2 id="split-方法">split 方法</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Splitter</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="sc">','</span><span class="o">).</span><span class="na">split</span><span class="o">(</span><span class="s">"foo,,bar"</span><span class="o">);</span>  <span class="c1">// ["foo", "", "bar"]</span>
+<span class="n">Splitter</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="n">CharMatcher</span><span class="o">.</span><span class="na">anyOf</span><span class="o">(</span><span class="s">";,"</span><span class="o">)).</span><span class="na">split</span><span class="o">(</span><span class="s">"foo,;bar,quux"</span><span class="o">);</span> <span class="c1">// ["foo", "", "bar", "quux"]</span>
+<span class="n">Splitter</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="s">", "</span><span class="o">).</span><span class="na">split</span><span class="o">(</span><span class="s">"foo, bar,baz"</span><span class="o">);</span> <span class="c1">// ["foo", "bar,baz"]</span>
+<span class="n">Splitter</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="n">Pattern</span><span class="o">.</span><span class="na">compile</span><span class="o">(</span><span class="s">"\\d+"</span><span class="o">)).</span><span class="na">split</span><span class="o">(</span><span class="s">"a12b3c"</span><span class="o">);</span> <span class="c1">// [a, b, c]</span>
+<span class="n">Splitter</span><span class="o">.</span><span class="na">fixedLength</span><span class="o">(</span><span class="mi">2</span><span class="o">).</span><span class="na">split</span><span class="o">(</span><span class="s">"abcde"</span><span class="o">);</span> <span class="c1">// ["ab", "cd", "e"]</span>
+<span class="n">Splitter</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="sc">','</span><span class="o">).</span><span class="na">limit</span><span class="o">(</span><span class="mi">3</span><span class="o">).</span><span class="na">split</span><span class="o">(</span><span class="s">"a,b,c,d"</span><span class="o">);</span> <span class="c1">// ["a", "b", "c,d"]</span>
+<span class="n">Splitter</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="sc">','</span><span class="o">).</span><span class="na">limit</span><span class="o">(</span><span class="mi">3</span><span class="o">).</span><span class="na">omitEmptyStrings</span><span class="o">().</span><span class="na">split</span><span class="o">(</span><span class="s">"a,,,b,,,c,d"</span><span class="o">);</span> <span class="c1">// ["a", "b", "c,d"]</span>
+<span class="n">Splitter</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="sc">','</span><span class="o">).</span><span class="na">limit</span><span class="o">(</span><span class="mi">3</span><span class="o">).</span><span class="na">trimResults</span><span class="o">().</span><span class="na">split</span><span class="o">(</span><span class="s">" a , b , c , d "</span><span class="o">);</span> <span class="c1">// ["a", "b", "c , d"]</span>
+<span class="n">Splitter</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="sc">','</span><span class="o">).</span><span class="na">trimResults</span><span class="o">(</span><span class="n">CharMatcher</span><span class="o">.</span><span class="na">is</span><span class="o">(</span><span class="sc">'_'</span><span class="o">)).</span><span class="na">split</span><span class="o">(</span><span class="s">"_a ,_b_ ,c__"</span><span class="o">);</span> <span class="c1">// ["a ", "b_ ", "c"]</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="split-">split 方法</h2>
 
 <ul>
-<li><code class="prettyprint">Iterable&lt;String&gt; split(final CharSequence sequence)</code></li>
-<li><code class="prettyprint">List&lt;String&gt; splitToList(CharSequence sequence)</code></li>
+  <li><code class="highlighter-rouge">Iterable&lt;String&gt; split(final CharSequence sequence)</code></li>
+  <li><code class="highlighter-rouge">List&lt;String&gt; splitToList(CharSequence sequence)</code></li>
 </ul>
 
-<hr>
+<hr />
 
 <h2 id="mapsplitter">MapSplitter</h2>
-
-<p>Splitter提供了个方法返回内部类<code class="prettyprint">Splitter.MapSplitter</code>专门分割成map  </p>
+<p>Splitter提供了个方法返回内部类<code class="highlighter-rouge">Splitter.MapSplitter</code>专门分割成map</p>
 
 <ul>
-<li><code class="prettyprint">MapSplitter withKeyValueSeparator(String separator)</code></li>
-<li><code class="prettyprint">MapSplitter withKeyValueSeparator(char separator)</code></li>
-<li><code class="prettyprint">MapSplitter withKeyValueSeparator(Splitter keyValueSplitter)</code></li>
+  <li><code class="highlighter-rouge">MapSplitter withKeyValueSeparator(String separator)</code></li>
+  <li><code class="highlighter-rouge">MapSplitter withKeyValueSeparator(char separator)</code></li>
+  <li><code class="highlighter-rouge">MapSplitter withKeyValueSeparator(Splitter keyValueSplitter)</code></li>
 </ul>
 
-<p>注意: <code class="prettyprint">MapSplitter</code>的<code class="prettyprint">split</code>方法返回的是<code class="prettyprint">Map&lt;String, String&gt;</code></p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="n">Splitter</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="s">&quot;&amp;&quot;</span><span class="o">).</span><span class="na">withKeyValueSeparator</span><span class="o">(</span><span class="s">&quot;=&quot;</span><span class="o">).</span><span class="na">split</span><span class="o">(</span><span class="s">&quot;a=1&amp;b=2&amp;c=3&quot;</span><span class="o">);</span>
-</code></pre></div>
-<hr>
+<p>注意: <code class="highlighter-rouge">MapSplitter</code>的<code class="highlighter-rouge">split</code>方法返回的是<code class="highlighter-rouge">Map&lt;String, String&gt;</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="n">Splitter</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="s">"&amp;"</span><span class="o">).</span><span class="na">withKeyValueSeparator</span><span class="o">(</span><span class="s">"="</span><span class="o">).</span><span class="na">split</span><span class="o">(</span><span class="s">"a=1&amp;b=2&amp;c=3"</span><span class="o">);</span>
+</code></pre>
+</div>
+
+<hr />
 
         </div>
     </div>

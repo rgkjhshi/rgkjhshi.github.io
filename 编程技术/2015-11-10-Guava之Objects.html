@@ -99,66 +99,75 @@ jQuery(function(){
     <div class="uk-grid">
         <div  class="uk-width-4-4">
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
-            <p><code class="prettyprint">Objects</code>在Guava的<code class="prettyprint">com.google.common.base</code>包中<br>
-JDK7已经把Objects收录在了<code class="prettyprint">java.util.Objects</code>里, 现在可以直接用啦</p>
+            <p><code class="highlighter-rouge">Objects</code>在Guava的<code class="highlighter-rouge">com.google.common.base</code>包中<br />
+JDK7已经把Objects收录在了<code class="highlighter-rouge">java.util.Objects</code>里, 现在可以直接用啦</p>
 
-<hr>
+<hr />
 
 <h2 id="equals">equals</h2>
-
 <p>看实现代码， 不用担心空指针了</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">boolean</span> <span class="nf">equals</span><span class="o">(</span><span class="n">Object</span> <span class="n">a</span><span class="o">,</span> <span class="n">Object</span> <span class="n">b</span><span class="o">)</span> <span class="o">{</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">boolean</span> <span class="nf">equals</span><span class="p">(</span><span class="n">Object</span> <span class="n">a</span><span class="o">,</span> <span class="n">Object</span> <span class="n">b</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">return</span> <span class="o">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="n">a</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">b</span><span class="o">));</span>
 <span class="o">}</span>
-</code></pre></div>
-<hr>
+</code></pre>
+</div>
 
-<h2 id="hashcode和hash">hashCode和hash</h2>
+<hr />
 
-<p>首先<code class="prettyprint">hashCode(Object o)</code>不用担心空指针</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">hashCode</span><span class="o">(</span><span class="n">Object</span> <span class="n">o</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="n">o</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">?</span> <span class="n">o</span><span class="o">.</span><span class="na">hashCode</span><span class="o">()</span> <span class="o">:</span> <span class="mi">0</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></div>
-<p>另外还有个<code class="prettyprint">hash(Object... values)</code>方法非常好用，可以传多个对象进去得到hash值, 比如可以这样用:<br>
-<code class="prettyprint">Objects.hashCode(field1, field2, ..., fieldn)</code><br>
+<h2 id="hashcodehash">hashCode和hash</h2>
+<p>首先<code class="highlighter-rouge">hashCode(Object o)</code>不用担心空指针
+~~~java
+public static int hashCode(Object o) {
+    return o != null ? o.hashCode() : 0;
+}
+~~~
+另外还有个<code class="highlighter-rouge">hash(Object... values)</code>方法非常好用，可以传多个对象进去得到hash值, 比如可以这样用:<br />
+<code class="highlighter-rouge">Objects.hashCode(field1, field2, ..., fieldn)</code><br />
 来个例子:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java">    <span class="n">Objects</span><span class="o">.</span><span class="na">hash</span><span class="o">(</span><span class="s">&quot;a&quot;</span><span class="o">,</span> <span class="s">&quot;b&quot;</span><span class="o">);</span> <span class="c1">// 4066</span>
-    <span class="n">Objects</span><span class="o">.</span><span class="na">hash</span><span class="o">(</span><span class="s">&quot;b&quot;</span><span class="o">,</span> <span class="s">&quot;a&quot;</span><span class="o">);</span> <span class="c1">// 4096</span>
-</code></pre></div>
-<hr>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="n">Objects</span><span class="o">.</span><span class="na">hash</span><span class="o">(</span><span class="s">"a"</span><span class="o">,</span> <span class="s">"b"</span><span class="o">);</span> <span class="c1">// 4066</span>
+    <span class="n">Objects</span><span class="o">.</span><span class="na">hash</span><span class="o">(</span><span class="s">"b"</span><span class="o">,</span> <span class="s">"a"</span><span class="o">);</span> <span class="c1">// 4096</span>
+</code></pre>
+</div>
+
+<hr />
 
 <h2 id="tostring">toString</h2>
+<p>有两个方法<code class="highlighter-rouge">toString(Object o)</code>和<code class="highlighter-rouge">toString(Object o, String nullDefault)</code>, 代码如下:</p>
 
-<p>有两个方法<code class="prettyprint">toString(Object o)</code>和<code class="prettyprint">toString(Object o, String nullDefault)</code>, 代码如下:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// 如果传null则返回字符串&quot;null&quot;</span>
-<span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">(</span><span class="n">Object</span> <span class="n">o</span><span class="o">)</span> <span class="o">{</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 如果传null则返回字符串"null"</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">toString</span><span class="p">(</span><span class="n">Object</span> <span class="n">o</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">return</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">o</span><span class="o">);</span>
 <span class="o">}</span>
 <span class="c1">// 这个可以自己指定为null时返回什么</span>
-<span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">(</span><span class="n">Object</span> <span class="n">o</span><span class="o">,</span> <span class="n">String</span> <span class="n">nullDefault</span><span class="o">)</span> <span class="o">{</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">toString</span><span class="p">(</span><span class="n">Object</span> <span class="n">o</span><span class="o">,</span> <span class="n">String</span> <span class="n">nullDefault</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">return</span> <span class="o">(</span><span class="n">o</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">?</span> <span class="n">o</span><span class="o">.</span><span class="na">toString</span><span class="o">()</span> <span class="o">:</span> <span class="n">nullDefault</span><span class="o">;</span>
 <span class="o">}</span>
-</code></pre></div>
-<hr>
+</code></pre>
+</div>
+
+<hr />
 
 <h2 id="requirenonnull">requireNonNull</h2>
-
 <p>还有两个判空方法</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">// 直接抛空指针异常</span>
-<span class="kd">public</span> <span class="kd">static</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">T</span> <span class="nf">requireNonNull</span><span class="o">(</span><span class="n">T</span> <span class="n">obj</span><span class="o">)</span> <span class="o">{</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 直接抛空指针异常</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">T</span> <span class="n">requireNonNull</span><span class="o">(</span><span class="n">T</span> <span class="n">obj</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">if</span> <span class="o">(</span><span class="n">obj</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
-        <span class="k">throw</span> <span class="k">new</span> <span class="nf">NullPointerException</span><span class="o">();</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="n">NullPointerException</span><span class="o">();</span>
     <span class="k">return</span> <span class="n">obj</span><span class="o">;</span>
 <span class="o">}</span>
 <span class="c1">// 可以自定义异常描述</span>
-<span class="kd">public</span> <span class="kd">static</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">T</span> <span class="nf">requireNonNull</span><span class="o">(</span><span class="n">T</span> <span class="n">obj</span><span class="o">,</span> <span class="n">String</span> <span class="n">message</span><span class="o">)</span> <span class="o">{</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">T</span> <span class="n">requireNonNull</span><span class="o">(</span><span class="n">T</span> <span class="n">obj</span><span class="o">,</span> <span class="n">String</span> <span class="n">message</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">if</span> <span class="o">(</span><span class="n">obj</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
-        <span class="k">throw</span> <span class="k">new</span> <span class="nf">NullPointerException</span><span class="o">(</span><span class="n">message</span><span class="o">);</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="n">NullPointerException</span><span class="o">(</span><span class="n">message</span><span class="o">);</span>
     <span class="k">return</span> <span class="n">obj</span><span class="o">;</span>
 <span class="o">}</span>
-</code></pre></div>
-<hr>
+</code></pre>
+</div>
+
+<hr />
 
         </div>
     </div>

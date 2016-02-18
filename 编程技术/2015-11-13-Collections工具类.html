@@ -101,46 +101,46 @@ jQuery(function(){
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
             <p>JDK的Collections类中提供了大量对Collection和Map的操作,网上资料整理记录下来</p>
 
-<hr>
+<hr />
 
-<h2 id="排序操作(主要对list)">排序操作(主要对List)</h2>
-
-<ul>
-<li><code class="prettyprint">void sort(List list)</code>: 对List里的元素根据自然升序排序</li>
-<li><code class="prettyprint">void sort(List list, Comparator c)</code>: 自定义比较器排序</li>
-<li><code class="prettyprint">void reverse(List list)</code>: 反转指定List集合中元素的顺序</li>
-<li><code class="prettyprint">void shuffle(List list)</code>: 打乱List中元素的顺序(重新洗牌)</li>
-<li><code class="prettyprint">void swap(List list, int i, int j)</code>: 交换list中的两个元素</li>
-<li><code class="prettyprint">void swap(Object[] arr, int i, int j)</code>: 交换数组中的两个元素</li>
-<li><code class="prettyprint">void rotate(List list, int distance)</code>: 所有元素循环右移distance位, distance=size则相当于没变</li>
-</ul>
-
-<hr>
-
-<h2 id="查找和替换(主要对collection接口)">查找和替换(主要对Collection接口)</h2>
+<h2 id="list">排序操作(主要对List)</h2>
 
 <ul>
-<li><code class="prettyprint">int binarySearch(List list, T key)</code>: 二分搜索法, 返回对象在List中的索引, 前提是集合已经排序</li>
-<li><code class="prettyprint">void fill(List list, T obj)</code>: 填充对象</li>
-<li><code class="prettyprint">boolean replaceAll(List list, T oldVal, T newVal)</code>: 替换, 返回是否含有要替换的元素</li>
-<li><code class="prettyprint">T min(Collection coll)</code>: 返回最小元素</li>
-<li><code class="prettyprint">T min(Collection coll, Comparator comp)</code>: 根据自定义比较器，返回最小元素</li>
-<li><code class="prettyprint">T max(Collection coll)</code>: 返回最大元素</li>
-<li><code class="prettyprint">T max(Collection coll, Comparator comp)</code>: 根据自定义比较器，返回最大元素</li>
-<li><code class="prettyprint">int frequency(Collection c, Object o)</code>: 返回指定对象在集合中出现的次数</li>
+  <li><code class="highlighter-rouge">void sort(List list)</code>: 对List里的元素根据自然升序排序</li>
+  <li><code class="highlighter-rouge">void sort(List list, Comparator c)</code>: 自定义比较器排序</li>
+  <li><code class="highlighter-rouge">void reverse(List list)</code>: 反转指定List集合中元素的顺序</li>
+  <li><code class="highlighter-rouge">void shuffle(List list)</code>: 打乱List中元素的顺序(重新洗牌)</li>
+  <li><code class="highlighter-rouge">void swap(List list, int i, int j)</code>: 交换list中的两个元素</li>
+  <li><code class="highlighter-rouge">void swap(Object[] arr, int i, int j)</code>: 交换数组中的两个元素</li>
+  <li><code class="highlighter-rouge">void rotate(List list, int distance)</code>: 所有元素循环右移distance位, distance=size则相当于没变</li>
 </ul>
 
-<hr>
+<hr />
 
-<h2 id="其他操作">其他操作</h2>
+<h2 id="collection">查找和替换(主要对Collection接口)</h2>
 
 <ul>
-<li><code class="prettyprint">boolean addAll(Collection c, T... elements)</code>: 把elements添加到集合里</li>
-<li><code class="prettyprint">Comparator reverseOrder()</code>: 返回自然顺序的反序比较器</li>
-<li><code class="prettyprint">Comparator reverseOrder(Comparator cmp)</code>: 返回cmp的逆序比较器, 若cmp为null则等同于<code class="prettyprint">reverseOrder()</code></li>
+  <li><code class="highlighter-rouge">int binarySearch(List list, T key)</code>: 二分搜索法, 返回对象在List中的索引, 前提是集合已经排序</li>
+  <li><code class="highlighter-rouge">void fill(List list, T obj)</code>: 填充对象</li>
+  <li><code class="highlighter-rouge">boolean replaceAll(List list, T oldVal, T newVal)</code>: 替换, 返回是否含有要替换的元素</li>
+  <li><code class="highlighter-rouge">T min(Collection coll)</code>: 返回最小元素</li>
+  <li><code class="highlighter-rouge">T min(Collection coll, Comparator comp)</code>: 根据自定义比较器，返回最小元素</li>
+  <li><code class="highlighter-rouge">T max(Collection coll)</code>: 返回最大元素</li>
+  <li><code class="highlighter-rouge">T max(Collection coll, Comparator comp)</code>: 根据自定义比较器，返回最大元素</li>
+  <li><code class="highlighter-rouge">int frequency(Collection c, Object o)</code>: 返回指定对象在集合中出现的次数</li>
 </ul>
 
-<hr>
+<hr />
+
+<h2 id="section">其他操作</h2>
+
+<ul>
+  <li><code class="highlighter-rouge">boolean addAll(Collection c, T... elements)</code>: 把elements添加到集合里</li>
+  <li><code class="highlighter-rouge">Comparator reverseOrder()</code>: 返回自然顺序的反序比较器</li>
+  <li><code class="highlighter-rouge">Comparator reverseOrder(Comparator cmp)</code>: 返回cmp的逆序比较器, 若cmp为null则等同于<code class="highlighter-rouge">reverseOrder()</code></li>
+</ul>
+
+<hr />
 
         </div>
     </div>

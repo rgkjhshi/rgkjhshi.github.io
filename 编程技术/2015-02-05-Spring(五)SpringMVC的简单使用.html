@@ -99,43 +99,45 @@ jQuery(function(){
     <div class="uk-grid">
         <div  class="uk-width-4-4">
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
-            <p><code class="prettyprint">SpringMVC</code>是在Spring基础上的一个MVC框架，可以很方便地进行web项目开发。</p>
+            <p><code class="highlighter-rouge">SpringMVC</code>是在Spring基础上的一个MVC框架，可以很方便地进行web项目开发。</p>
 
-<hr>
-
-<h2 id="本文结构">本文结构</h2>
-
-<ul>
-<li><a href="#servlet">传统的servlet</a></li>
-<li><a href="#DispatcherServlet">SpringMVC的控制转发</a>
+<hr />
+<p>## 本文结构</p>
 
 <ul>
-<li><a href="#web">web配置</a></li>
-<li><a href="#controller">类处理器</a></li>
-<li><a href="#spring">spring的配置</a></li>
-</ul></li>
+  <li><a href="#servlet">传统的servlet</a></li>
+  <li><a href="#DispatcherServlet">SpringMVC的控制转发</a>
+    <ul>
+      <li><a href="#web">web配置</a></li>
+      <li><a href="#controller">类处理器</a></li>
+      <li><a href="#spring">spring的配置</a></li>
+    </ul>
+  </li>
 </ul>
 
-<hr>
+<hr />
 
 <h2 id="servlet"> 传统的servlet </h2>
 
-<p>传统的Java Web项目是通过<code class="prettyprint">Servlet</code>进行控制转发的（其实<code class="prettyprint">SpringMVC</code>也是基于<code class="prettyprint">servlet</code>的），在不使用其他框架的情况下，一个单纯使用<code class="prettyprint">servlet</code>的web项目应该是这样子的：<br>
-定义一个类(如<code class="prettyprint">LoginServlet</code>)继承<code class="prettyprint">HttpServlet</code>，重写其中的<code class="prettyprint">doGet</code>方法和<code class="prettyprint">doPost</code>方法</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">//LoginServlet.java</span>
+<p>传统的Java Web项目是通过<code class="highlighter-rouge">Servlet</code>进行控制转发的（其实<code class="highlighter-rouge">SpringMVC</code>也是基于<code class="highlighter-rouge">servlet</code>的），在不使用其他框架的情况下，一个单纯使用<code class="highlighter-rouge">servlet</code>的web项目应该是这样子的：<br />
+定义一个类(如<code class="highlighter-rouge">LoginServlet</code>)继承<code class="highlighter-rouge">HttpServlet</code>，重写其中的<code class="highlighter-rouge">doGet</code>方法和<code class="highlighter-rouge">doPost</code>方法</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">//LoginServlet.java</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">LoginServlet</span> <span class="kd">extends</span> <span class="n">HttpServlet</span> <span class="o">{</span>
     <span class="nd">@Override</span>
-    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">doGet</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">req</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">resp</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ServletException</span><span class="o">,</span> <span class="n">IOException</span> <span class="o">{</span>
-        <span class="n">req</span><span class="o">.</span><span class="na">getRequestDispatcher</span><span class="o">(</span><span class="s">&quot;/login.jsp&quot;</span><span class="o">).</span><span class="na">forward</span><span class="o">(</span><span class="n">req</span><span class="o">,</span> <span class="n">resp</span><span class="o">);</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="n">doGet</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">req</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">resp</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ServletException</span><span class="o">,</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">req</span><span class="o">.</span><span class="na">getRequestDispatcher</span><span class="o">(</span><span class="s">"/login.jsp"</span><span class="o">).</span><span class="na">forward</span><span class="o">(</span><span class="n">req</span><span class="o">,</span> <span class="n">resp</span><span class="o">);</span>
     <span class="o">}</span>
     <span class="nd">@Override</span>
-    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">doPost</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">req</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">resp</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ServletException</span><span class="o">,</span> <span class="n">IOException</span> <span class="o">{</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="n">doPost</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">req</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">resp</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ServletException</span><span class="o">,</span> <span class="n">IOException</span> <span class="o">{</span>
         <span class="kd">super</span><span class="o">.</span><span class="na">doPost</span><span class="o">(</span><span class="n">req</span><span class="o">,</span> <span class="n">resp</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre></div>
-<p>然后在web项目的配置文件<code class="prettyprint">web.xml</code>中添加servlet的配置：</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;servlet&gt;</span>
+</code></pre>
+</div>
+<p>然后在web项目的配置文件<code class="highlighter-rouge">web.xml</code>中添加servlet的配置：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;servlet&gt;</span>
     <span class="nt">&lt;servlet-name&gt;</span>LoginServlet<span class="nt">&lt;/servlet-name&gt;</span>
     <span class="nt">&lt;servlet-class&gt;</span>com.test.servlet.LoginServlet<span class="nt">&lt;/servlet-class&gt;</span>
 <span class="nt">&lt;/servlet&gt;</span>
@@ -145,21 +147,25 @@ jQuery(function(){
     <span class="c">&lt;!-- http请求的url --&gt;</span>
     <span class="nt">&lt;url-pattern&gt;</span>/login<span class="nt">&lt;/url-pattern&gt;</span>
 <span class="nt">&lt;/servlet-mapping&gt;</span>
-</code></pre></div>
-<hr>
+</code></pre>
+</div>
+
+<hr />
 
 <h2 id="DispatcherServlet"> SpringMVC的控制转发 </h2>
 
-<p><code class="prettyprint">SpringMVC</code>是基于<code class="prettyprint">DispatcherServlet</code>的MVC框架，<code class="prettyprint">DispatcherServlet</code>的继承关系为：</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">HttpServlet &lt;-- HttpServletBean &lt;-- FrameworkServlet &lt;-- DispatcherServlet
-</code></pre></div>
-<p>每一个请求最先访问的都是<code class="prettyprint">DispatcherServlet</code>，<code class="prettyprint">DispatcherServlet</code>负责转发<code class="prettyprint">Request</code>请求给相应的<code class="prettyprint">Handler</code>，<code class="prettyprint">Handler</code>处理以后再返回相应的视图(View)或模型(Model)或都不返回。<br>
-在使用注解的<code class="prettyprint">SpringMVC</code>中，处理器<code class="prettyprint">Handler</code>是基于<code class="prettyprint">@Controller</code>和<code class="prettyprint">@RequestMapping</code>这两个注解的，<code class="prettyprint">@Controller</code>声明一个处理器类，<code class="prettyprint">@RequestMapping</code>声明对应请求的映射关系，这样就可以提供一个非常灵活的匹配和处理方式。  </p>
+<p><code class="highlighter-rouge">SpringMVC</code>是基于<code class="highlighter-rouge">DispatcherServlet</code>的MVC框架，<code class="highlighter-rouge">DispatcherServlet</code>的继承关系为：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>HttpServlet &lt;-- HttpServletBean &lt;-- FrameworkServlet &lt;-- DispatcherServlet
+</code></pre>
+</div>
+<p>每一个请求最先访问的都是<code class="highlighter-rouge">DispatcherServlet</code>，<code class="highlighter-rouge">DispatcherServlet</code>负责转发<code class="highlighter-rouge">Request</code>请求给相应的<code class="highlighter-rouge">Handler</code>，<code class="highlighter-rouge">Handler</code>处理以后再返回相应的视图(View)或模型(Model)或都不返回。<br />
+在使用注解的<code class="highlighter-rouge">SpringMVC</code>中，处理器<code class="highlighter-rouge">Handler</code>是基于<code class="highlighter-rouge">@Controller</code>和<code class="highlighter-rouge">@RequestMapping</code>这两个注解的，<code class="highlighter-rouge">@Controller</code>声明一个处理器类，<code class="highlighter-rouge">@RequestMapping</code>声明对应请求的映射关系，这样就可以提供一个非常灵活的匹配和处理方式。  </p>
 
 <h3 id="web"> web配置 </h3>
+<p>要想使用<code class="highlighter-rouge">SpringMVC</code>，就得在<code class="highlighter-rouge">web.xml</code>文件中像配置普通<code class="highlighter-rouge">servlet</code>那样对<code class="highlighter-rouge">DispatcherServlet</code>进行配置：</p>
 
-<p>要想使用<code class="prettyprint">SpringMVC</code>，就得在<code class="prettyprint">web.xml</code>文件中像配置普通<code class="prettyprint">servlet</code>那样对<code class="prettyprint">DispatcherServlet</code>进行配置：</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;servlet&gt;</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;servlet&gt;</span>
     <span class="nt">&lt;servlet-name&gt;</span>web<span class="nt">&lt;/servlet-name&gt;</span>
     <span class="nt">&lt;servlet-class&gt;</span>org.springframework.web.servlet.DispatcherServlet<span class="nt">&lt;/servlet-class&gt;</span>
     <span class="nt">&lt;init-param&gt;</span>
@@ -171,43 +177,48 @@ jQuery(function(){
     <span class="nt">&lt;servlet-name&gt;</span>web<span class="nt">&lt;/servlet-name&gt;</span>
     <span class="nt">&lt;url-pattern&gt;</span>/<span class="nt">&lt;/url-pattern&gt;</span>
 <span class="nt">&lt;/servlet-mapping&gt;</span>
-</code></pre></div>
-<p>上面的<code class="prettyprint">servlet</code>配置中直接通过初始化参数设置了<code class="prettyprint">contextConfigLocation</code>，这样就会去指定的位置加载spring配置；如果设置的话，则<code class="prettyprint">SpringMVC</code>会自动到<code class="prettyprint">/WEB-INF</code>目录下寻找一个叫<code class="prettyprint">[servlet-name]-servlet.xml</code>的配置文件，像上面的例子就会找<code class="prettyprint">/WEB-INF/web-servlet.xml</code>进行加载。</p>
+</code></pre>
+</div>
+<p>上面的<code class="highlighter-rouge">servlet</code>配置中直接通过初始化参数设置了<code class="highlighter-rouge">contextConfigLocation</code>，这样就会去指定的位置加载spring配置；如果设置的话，则<code class="highlighter-rouge">SpringMVC</code>会自动到<code class="highlighter-rouge">/WEB-INF</code>目录下寻找一个叫<code class="highlighter-rouge">[servlet-name]-servlet.xml</code>的配置文件，像上面的例子就会找<code class="highlighter-rouge">/WEB-INF/web-servlet.xml</code>进行加载。</p>
 
 <ul>
-<li><code class="prettyprint">classpath*:spring.xml</code>与<code class="prettyprint">classpath:spring.xml</code>的区别</li>
+  <li><code class="highlighter-rouge">classpath*:spring.xml</code>与<code class="highlighter-rouge">classpath:spring.xml</code>的区别</li>
 </ul>
 
-<p><code class="prettyprint">classpath:spring.xml</code>表示仅加载<code class="prettyprint">classpath</code>目录下的<code class="prettyprint">spring.xml</code><br>
-<code class="prettyprint">classpath*:spring.xml</code>表示加载<code class="prettyprint">classpath</code>目录及其子目录下，还有jar包中所有名为的<code class="prettyprint">spring.xml</code>的文件</p>
+<p><code class="highlighter-rouge">classpath:spring.xml</code>表示仅加载<code class="highlighter-rouge">classpath</code>目录下的<code class="highlighter-rouge">spring.xml</code><br />
+<code class="highlighter-rouge">classpath*:spring.xml</code>表示加载<code class="highlighter-rouge">classpath</code>目录及其子目录下，还有jar包中所有名为的<code class="highlighter-rouge">spring.xml</code>的文件</p>
 
 <h3 id="controller"> 类控制器 </h3>
+<p>类控制器是真正做事情的<code class="highlighter-rouge">Handler</code>，web配置好了之后，来看看处理器类是怎么写的：</p>
 
-<p>类控制器是真正做事情的<code class="prettyprint">Handler</code>，web配置好了之后，来看看处理器类是怎么写的：</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="c1">//LoginController.java</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">//LoginController.java</span>
 <span class="nd">@Controller</span>
-<span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;/admin&quot;</span><span class="o">)</span>
+<span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/admin"</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">LoginController</span> <span class="o">{</span>
-    <span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;/login&quot;</span><span class="o">,</span> <span class="n">method</span> <span class="o">=</span> <span class="n">RequestMethod</span><span class="o">.</span><span class="na">GET</span><span class="o">)</span>
+    <span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/login"</span><span class="o">,</span> <span class="n">method</span> <span class="o">=</span> <span class="n">RequestMethod</span><span class="o">.</span><span class="na">GET</span><span class="o">)</span>
     <span class="nd">@ResponseBody</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="nf">login</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="s">&quot;login success&quot;</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="n">login</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"login success"</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre></div>
-<p>上面例子中请求的URL后面的路径为：<code class="prettyprint">/admin/login</code>，即方法上的<code class="prettyprint">@RequestMapping</code>注解是在类的注解基础上的，如果类上没有<code class="prettyprint">@RequestMapping</code>注解，则方法上注解的路径就是绝对路径了。<br>
-另外注解<code class="prettyprint">@ResponseBody</code>表示直接返回结果，否则，返回的字符串会被当成一个模板文件(如jsp)，具体内容后续文章再说。</p>
+</code></pre>
+</div>
+<p>上面例子中请求的URL后面的路径为：<code class="highlighter-rouge">/admin/login</code>，即方法上的<code class="highlighter-rouge">@RequestMapping</code>注解是在类的注解基础上的，如果类上没有<code class="highlighter-rouge">@RequestMapping</code>注解，则方法上注解的路径就是绝对路径了。<br />
+另外注解<code class="highlighter-rouge">@ResponseBody</code>表示直接返回结果，否则，返回的字符串会被当成一个模板文件(如jsp)，具体内容后续文章再说。</p>
 
 <h3 id="spring"> spring的配置 </h3>
 
-<p>通过web配置，可以把请求转发到我们定义的类控制器中处理，前提是web项目能够找到我们定义的类控制器，这就需要在spring配置文件中来指定。<br>
-这里的spring配置跟之前的差不多，无非就是让Spring能够找到我们用<code class="prettyprint">@Controller</code>注解的Bean，另外还需要添加<code class="prettyprint">&lt;mvc:annotation-driven /&gt;</code>来支持SpringMVC注解</p>
-<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="c">&lt;!-- 支持SpringMVC注解 --&gt;</span>
+<p>通过web配置，可以把请求转发到我们定义的类控制器中处理，前提是web项目能够找到我们定义的类控制器，这就需要在spring配置文件中来指定。<br />
+这里的spring配置跟之前的差不多，无非就是让Spring能够找到我们用<code class="highlighter-rouge">@Controller</code>注解的Bean，另外还需要添加<code class="highlighter-rouge">&lt;mvc:annotation-driven /&gt;</code>来支持SpringMVC注解</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">&lt;!-- 支持SpringMVC注解 --&gt;</span>
 <span class="nt">&lt;mvc:annotation-driven</span> <span class="nt">/&gt;</span>
 <span class="c">&lt;!-- 扫描 LoginController 所在的包 --&gt;</span>
-<span class="nt">&lt;context:component-scan</span> <span class="na">base-package=</span><span class="s">&quot;com.test.springMVC&quot;</span><span class="nt">/&gt;</span>
-</code></pre></div>
-<hr>
+<span class="nt">&lt;context:component-scan</span> <span class="na">base-package=</span><span class="s">"com.test.springMVC"</span><span class="nt">/&gt;</span>
+</code></pre>
+</div>
+
+<hr />
 
         </div>
     </div>

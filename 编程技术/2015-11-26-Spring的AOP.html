@@ -101,387 +101,413 @@ jQuery(function(){
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
             <p>在Spring中使用AOP的详细资料可以查看<a href="http://shouce.jb51.net/spring/aop.html">这里</a></p>
 
-<hr>
+<hr />
 
-<h2 id="aop的实现方式">AOP的实现方式</h2>
-
+<h2 id="aop">AOP的实现方式</h2>
 <p>在Java中,从织入切面的方式上来看,存在三种织入方式:编译时织入、加载时织入和运行时织入</p>
 
 <ul>
-<li>编译时织入(Compile Time Weaving, CTW)</li>
+  <li>编译时织入(Compile Time Weaving, CTW)</li>
 </ul>
 
-<p>指在Java编译期,采用特殊的编译器, 将切面织入到Java类中,即发生在从java文件到class文件的过程.<br>
+<p>指在Java编译期,采用特殊的编译器, 将切面织入到Java类中,即发生在从java文件到class文件的过程.<br />
 这种方式将切面直接编译进了字节码，所以运行时不再需要动态创建代理对象, 节约了内存和CPU, 但编译过程复杂(可借助Maven AspectJ插件)，编写aspect文件(.aj文件)复杂</p>
 
 <ul>
-<li>加载时织入(Load Time Weaving, LTW)</li>
+  <li>加载时织入(Load Time Weaving, LTW)</li>
 </ul>
 
-<p>指通过特殊的类加载器(如AspectJ compiler), 在JVM载入字节码文件时, 织入切面, 即发生在class文件加载的过程.<br>
+<p>指通过特殊的类加载器(如AspectJ compiler), 在JVM载入字节码文件时, 织入切面, 即发生在class文件加载的过程.<br />
 具体可参考<a href="http://shouce.jb51.net/spring/aop.html#aop-aj-ltw">这里</a></p>
 
 <ul>
-<li>运行时织入</li>
+  <li>运行时织入</li>
 </ul>
 
 <p>采用CGLib工具或JDK动态代理进行切面的织入, 如Spring AOP</p>
 
-<hr>
+<hr />
 
-<h2 id="aop、cglib、spring-aop、aspectj之间的关系">AOP、CGLib、Spring AOP、AspectJ之间的关系</h2>
-
-<ul>
-<li>AOP, Aspect Oriented Programming, 面向切面编程,是个概念, 类似于面向对象编程(OOP)一样</li>
-<li>CGLib, 基于<code class="prettyprint">asm.jar</code>的字节码增强技术API, 开源的, 也是个jar包:<code class="prettyprint">cglib.jar</code></li>
-<li>Spring AOP, Spring的AOP实现, 在运行时基于动态代理(JDK或cglib)的方式进行织入, Spring3.2以后不再需要依赖<code class="prettyprint">cglib.jar</code>包, 因为它里面的类已经被<code class="prettyprint">spring-core.jar</code>包含了</li>
-<li>AspectJ, 提供了完整的AOP实现
-
-<ol>
-<li>AspectJ是一个代码生成工具,于自己的语法编译工具，编译的结果是Java Class文件, 支持编译时织入切面，即所谓的CTW机制</li>
-<li>AspectJ有自己的类装载器，支持在类装载时织入切面，即所谓的LTW机制</li>
-<li>AspectJ同样也支持运行时织入，运行时织入是基于动态代理的(默认机制)</li>
-</ol></li>
-</ul>
-
-<hr>
-
-<h2 id="spring中aop相关的概念">Spring中AOP相关的概念</h2>
-
-<p>在怎么使用之前,最好先看看相关概念,有关<code class="prettyprint">Joinpoint</code>、<code class="prettyprint">Pointcut</code>、<code class="prettyprint">Advice</code>等概念,看<a href="http://shouce.jb51.net/spring/aop.html#aop-introduction-defn">这里</a></p>
-
-<h2 id="启用@aspectj支持">启用@AspectJ支持</h2>
-
-<p>在Spring中使用<code class="prettyprint">@AspectJ</code>可以在配置文件中启用<code class="prettyprint">&lt;aop:aspectj-autoproxy/&gt;</code>, 甚至启用LTW机制<code class="prettyprint">&lt;context:load-time-weaver/&gt;</code>, 对应的注解分别为<code class="prettyprint">@EnableAspectJAutoProxy</code>和<code class="prettyprint">@EnableLoadTimeWeaving</code></p>
-
-<h2 id="声明一个切面">声明一个切面</h2>
-
-<p>在带有<code class="prettyprint">@AspectJ</code>注解的类上同时加上<code class="prettyprint">@Component</code>(声明为一个bean)注解并确保被自动扫描, 这样才会被Spring识别并管理</p>
-
-<h2 id="声明一个切入点">声明一个切入点</h2>
-
-<p>切入点决定了连接点关注的内容，使得我们可以控制通知什么时候执行, 即从哪里把要做的操作(通知)切入进去<br>
-一个切入点声明有两个部分: <em>切入点签名</em> 和 <em>切入点表达式</em><br>
-在<code class="prettyprint">@AspectJ</code>注解风格的AOP中, <em>切入点签名</em> 通过一个普通的方法定义来提供, 该方法必需反回<code class="prettyprint">void</code>类型;<br>
-<em>切入点表达式</em> 使用<code class="prettyprint">@Pointcut</code>注解来表示(内容略多, 后面讲), 一个切入点声明如下:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Pointcut</span><span class="o">(</span><span class="n">value</span><span class="o">=</span><span class="s">&quot;execution(* sayAdvisorBefore(..)) &amp;&amp; args(param)&quot;</span><span class="o">,</span> <span class="n">argNames</span> <span class="o">=</span> <span class="s">&quot;param&quot;</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kt">void</span> <span class="nf">pointcutName</span><span class="o">(</span><span class="n">String</span> <span class="n">param</span><span class="o">)</span> <span class="o">{}</span>
-</code></pre></div>
-<ul>
-<li>value: 指定切入点表达式, 如<code class="prettyprint">execution</code>、<code class="prettyprint">args</code>等</li>
-<li>argNames: 指定该切入点方法参数列表,多个用<code class="prettyprint">,</code>分隔,这些参数将传递给通知方法同名的参数;</li>
-<li>pointcutName: 切入点名字，可以用该名字引用该切入点表达式</li>
-</ul>
-
-<h2 id="声明通知">声明通知</h2>
-
-<p><code class="prettyprint">@AspectJ</code>风格的声明通知支持5种通知类型:</p>
+<h2 id="aopcglibspring-aopaspectj">AOP、CGLib、Spring AOP、AspectJ之间的关系</h2>
 
 <ul>
-<li><code class="prettyprint">@Before</code>: 前置通知,执行连接点方法之前执行</li>
-<li><code class="prettyprint">@AfterReturning</code>: 后置返回通知, 一个匹配的方法返回的时候执行</li>
-<li><code class="prettyprint">@AfterThrowing</code>: 异常通知, 在一个方法抛出异常后执行</li>
-<li><code class="prettyprint">@After</code>: 最终通知, 不论一个方法是如何结束的,最终通知都会运行, 最终通知必须准备处理正常返回和异常返回两种情况</li>
-<li><code class="prettyprint">@Around</code>: 环绕通知, 在一个方法执行之前和之后执行, 而且它可以决定这个方法在什么时候执行，如何执行，甚至是否执行. 通知的第一个参数必须是<code class="prettyprint">ProceedingJoinPoint</code>类型,在通知体内，调用<code class="prettyprint">ProceedingJoinPoint</code>的<code class="prettyprint">proceed()</code>方法会导致 后台的连接点方法执行</li>
+  <li>AOP, Aspect Oriented Programming, 面向切面编程,是个概念, 类似于面向对象编程(OOP)一样</li>
+  <li>CGLib, 基于<code class="highlighter-rouge">asm.jar</code>的字节码增强技术API, 开源的, 也是个jar包:<code class="highlighter-rouge">cglib.jar</code></li>
+  <li>Spring AOP, Spring的AOP实现, 在运行时基于动态代理(JDK或cglib)的方式进行织入, Spring3.2以后不再需要依赖<code class="highlighter-rouge">cglib.jar</code>包, 因为它里面的类已经被<code class="highlighter-rouge">spring-core.jar</code>包含了</li>
+  <li>AspectJ, 提供了完整的AOP实现
+    <ol>
+      <li>AspectJ是一个代码生成工具,于自己的语法编译工具，编译的结果是Java Class文件, 支持编译时织入切面，即所谓的CTW机制</li>
+      <li>AspectJ有自己的类装载器，支持在类装载时织入切面，即所谓的LTW机制</li>
+      <li>AspectJ同样也支持运行时织入，运行时织入是基于动态代理的(默认机制)</li>
+    </ol>
+  </li>
 </ul>
 
-<p>如果在同一个连接点上执行多个通知,可以使用<code class="prettyprint">@Order</code>注解决定其执行顺序</p>
+<hr />
+
+<h2 id="springaop">Spring中AOP相关的概念</h2>
+<p>在怎么使用之前,最好先看看相关概念,有关<code class="highlighter-rouge">Joinpoint</code>、<code class="highlighter-rouge">Pointcut</code>、<code class="highlighter-rouge">Advice</code>等概念,看<a href="http://shouce.jb51.net/spring/aop.html#aop-introduction-defn">这里</a></p>
+
+<h2 id="aspectj">启用@AspectJ支持</h2>
+<p>在Spring中使用<code class="highlighter-rouge">@AspectJ</code>可以在配置文件中启用<code class="highlighter-rouge">&lt;aop:aspectj-autoproxy/&gt;</code>, 甚至启用LTW机制<code class="highlighter-rouge">&lt;context:load-time-weaver/&gt;</code>, 对应的注解分别为<code class="highlighter-rouge">@EnableAspectJAutoProxy</code>和<code class="highlighter-rouge">@EnableLoadTimeWeaving</code></p>
+
+<h2 id="section">声明一个切面</h2>
+<p>在带有<code class="highlighter-rouge">@AspectJ</code>注解的类上同时加上<code class="highlighter-rouge">@Component</code>(声明为一个bean)注解并确保被自动扫描, 这样才会被Spring识别并管理</p>
+
+<h2 id="section-1">声明一个切入点</h2>
+<p>切入点决定了连接点关注的内容，使得我们可以控制通知什么时候执行, 即从哪里把要做的操作(通知)切入进去<br />
+一个切入点声明有两个部分: <em>切入点签名</em> 和 <em>切入点表达式</em><br />
+在<code class="highlighter-rouge">@AspectJ</code>注解风格的AOP中, <em>切入点签名</em> 通过一个普通的方法定义来提供, 该方法必需反回<code class="highlighter-rouge">void</code>类型;<br />
+<em>切入点表达式</em> 使用<code class="highlighter-rouge">@Pointcut</code>注解来表示(内容略多, 后面讲), 一个切入点声明如下:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Pointcut</span><span class="o">(</span><span class="n">value</span><span class="o">=</span><span class="s">"execution(* sayAdvisorBefore(..)) &amp;&amp; args(param)"</span><span class="o">,</span> <span class="n">argNames</span> <span class="o">=</span> <span class="s">"param"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">pointcutName</span><span class="p">(</span><span class="n">String</span> <span class="n">param</span><span class="o">)</span> <span class="o">{}</span>
+</code></pre>
+</div>
+
+<ul>
+  <li>value: 指定切入点表达式, 如<code class="highlighter-rouge">execution</code>、<code class="highlighter-rouge">args</code>等</li>
+  <li>argNames: 指定该切入点方法参数列表,多个用<code class="highlighter-rouge">,</code>分隔,这些参数将传递给通知方法同名的参数;</li>
+  <li>pointcutName: 切入点名字，可以用该名字引用该切入点表达式</li>
+</ul>
+
+<h2 id="section-2">声明通知</h2>
+<p><code class="highlighter-rouge">@AspectJ</code>风格的声明通知支持5种通知类型:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">@Before</code>: 前置通知,执行连接点方法之前执行</li>
+  <li><code class="highlighter-rouge">@AfterReturning</code>: 后置返回通知, 一个匹配的方法返回的时候执行</li>
+  <li><code class="highlighter-rouge">@AfterThrowing</code>: 异常通知, 在一个方法抛出异常后执行</li>
+  <li><code class="highlighter-rouge">@After</code>: 最终通知, 不论一个方法是如何结束的,最终通知都会运行, 最终通知必须准备处理正常返回和异常返回两种情况</li>
+  <li><code class="highlighter-rouge">@Around</code>: 环绕通知, 在一个方法执行之前和之后执行, 而且它可以决定这个方法在什么时候执行，如何执行，甚至是否执行. 通知的第一个参数必须是<code class="highlighter-rouge">ProceedingJoinPoint</code>类型,在通知体内，调用<code class="highlighter-rouge">ProceedingJoinPoint</code>的<code class="highlighter-rouge">proceed()</code>方法会导致 后台的连接点方法执行</li>
+</ul>
+
+<p>如果在同一个连接点上执行多个通知,可以使用<code class="highlighter-rouge">@Order</code>注解决定其执行顺序</p>
 
 <p>下面是通知的使用方式:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Before</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;切入点表达式或命名切入点&quot;</span><span class="o">,</span> <span class="n">argNames</span> <span class="o">=</span> <span class="s">&quot;参数列表参数名&quot;</span><span class="o">)</span>
-<span class="nd">@After</span><span class="o">(</span><span class="n">value</span>  <span class="o">=</span> <span class="s">&quot;切入点表达式或命名切入点&quot;</span><span class="o">,</span> <span class="n">argNames</span> <span class="o">=</span> <span class="s">&quot;参数列表参数名&quot;</span><span class="o">)</span>
-<span class="nd">@Around</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;切入点表达式或命名切入点&quot;</span><span class="o">,</span> <span class="n">argNames</span> <span class="o">=</span> <span class="s">&quot;参数列表参数名&quot;</span><span class="o">)</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Before</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"切入点表达式或命名切入点"</span><span class="o">,</span> <span class="n">argNames</span> <span class="o">=</span> <span class="s">"参数列表参数名"</span><span class="o">)</span>
+<span class="nd">@After</span><span class="o">(</span><span class="n">value</span>  <span class="o">=</span> <span class="s">"切入点表达式或命名切入点"</span><span class="o">,</span> <span class="n">argNames</span> <span class="o">=</span> <span class="s">"参数列表参数名"</span><span class="o">)</span>
+<span class="nd">@Around</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"切入点表达式或命名切入点"</span><span class="o">,</span> <span class="n">argNames</span> <span class="o">=</span> <span class="s">"参数列表参数名"</span><span class="o">)</span>
 <span class="nd">@AfterReturning</span><span class="o">(</span>
-<span class="n">value</span> <span class="o">=</span> <span class="s">&quot;切入点表达式或命名切入点&quot;</span><span class="o">,</span>
-<span class="n">pointcut</span> <span class="o">=</span> <span class="s">&quot;切入点表达式或命名切入点&quot;</span><span class="o">,</span> <span class="c1">// 如果指定了将覆盖value属性指定的，pointcut具有高优先级</span>
-<span class="n">argNames</span> <span class="o">=</span> <span class="s">&quot;参数列表参数名&quot;</span><span class="o">,</span>
-<span class="n">returning</span> <span class="o">=</span> <span class="s">&quot;返回值对应参数名&quot;</span><span class="o">)</span>
+<span class="n">value</span> <span class="o">=</span> <span class="s">"切入点表达式或命名切入点"</span><span class="o">,</span>
+<span class="n">pointcut</span> <span class="o">=</span> <span class="s">"切入点表达式或命名切入点"</span><span class="o">,</span> <span class="c1">// 如果指定了将覆盖value属性指定的，pointcut具有高优先级</span>
+<span class="n">argNames</span> <span class="o">=</span> <span class="s">"参数列表参数名"</span><span class="o">,</span>
+<span class="n">returning</span> <span class="o">=</span> <span class="s">"返回值对应参数名"</span><span class="o">)</span>
 <span class="nd">@AfterThrowing</span><span class="o">(</span>
-<span class="n">value</span> <span class="o">=</span> <span class="s">&quot;切入点表达式或命名切入点&quot;</span><span class="o">,</span>
-<span class="n">pointcut</span> <span class="o">=</span> <span class="s">&quot;切入点表达式或命名切入点&quot;</span><span class="o">,</span>
-<span class="n">argNames</span> <span class="o">=</span> <span class="s">&quot;参数列表参数名&quot;</span><span class="o">,</span>
-<span class="n">throwing</span> <span class="o">=</span> <span class="s">&quot;异常对应参数名&quot;</span><span class="o">)</span>
-</code></pre></div>
+<span class="n">value</span> <span class="o">=</span> <span class="s">"切入点表达式或命名切入点"</span><span class="o">,</span>
+<span class="n">pointcut</span> <span class="o">=</span> <span class="s">"切入点表达式或命名切入点"</span><span class="o">,</span>
+<span class="n">argNames</span> <span class="o">=</span> <span class="s">"参数列表参数名"</span><span class="o">,</span>
+<span class="n">throwing</span> <span class="o">=</span> <span class="s">"异常对应参数名"</span><span class="o">)</span>
+</code></pre>
+</div>
 <p>来个小例子:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@Aspect</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Aspect</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">BeforeExample</span> <span class="o">{</span>
-    <span class="nd">@Before</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;pointcutName(param)&quot;</span><span class="o">,</span> <span class="n">argNames</span> <span class="o">=</span> <span class="s">&quot;param&quot;</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">beforeAdvice</span><span class="o">(</span><span class="n">String</span> <span class="n">param</span><span class="o">)</span> <span class="o">{</span>  <span class="c1">// 切入点匹配到的参数将传递过来</span>
+    <span class="nd">@Before</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"pointcutName(param)"</span><span class="o">,</span> <span class="n">argNames</span> <span class="o">=</span> <span class="s">"param"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">beforeAdvice</span><span class="o">(</span><span class="n">String</span> <span class="n">param</span><span class="o">)</span> <span class="o">{</span>  <span class="c1">// 切入点匹配到的参数将传递过来</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">param</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre></div>
-<p>上例使用<code class="prettyprint">@Before</code>进行前置通知声明,其中value用于定义切入点表达式或引用命名切入点</p>
+</code></pre>
+</div>
+<p>上例使用<code class="highlighter-rouge">@Before</code>进行前置通知声明,其中value用于定义切入点表达式或引用命名切入点</p>
 
-<hr>
+<hr />
 
-<h2 id="通知参数">通知参数</h2>
+<h2 id="section-3">通知参数</h2>
+<p>通知方法可以获取被通知方法的参数，主要是通过<code class="highlighter-rouge">JoinPoint</code>(环绕通知是<code class="highlighter-rouge">JoinPoint</code>的子类<code class="highlighter-rouge">ProceedingJoinPoint</code>)来获取, <code class="highlighter-rouge">JoinPoint</code>必须是第一个参数, Spring会自动传入.</p>
 
-<p>通知方法可以获取被通知方法的参数，主要是通过<code class="prettyprint">JoinPoint</code>(环绕通知是<code class="prettyprint">JoinPoint</code>的子类<code class="prettyprint">ProceedingJoinPoint</code>)来获取, <code class="prettyprint">JoinPoint</code>必须是第一个参数, Spring会自动传入.</p>
+<p><code class="highlighter-rouge">JoinPoint</code>的声明如下:</p>
 
-<p><code class="prettyprint">JoinPoint</code>的声明如下:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">ProceedingJoinPoint</span> <span class="kd">extends</span> <span class="n">JoinPoint</span> <span class="o">{</span>  
-    <span class="kd">public</span> <span class="n">Object</span> <span class="nf">proceed</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Throwable</span><span class="o">;</span>    <span class="c1">// 执行连接点的方法</span>
-    <span class="kd">public</span> <span class="n">Object</span> <span class="nf">proceed</span><span class="o">(</span><span class="n">Object</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Throwable</span><span class="o">;</span> <span class="c1">// 执行连接点的方法,可以把原来的参数用新的args替换掉</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">ProceedingJoinPoint</span> <span class="kd">extends</span> <span class="n">JoinPoint</span> <span class="o">{</span>  
+    <span class="kd">public</span> <span class="n">Object</span> <span class="n">proceed</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Throwable</span><span class="o">;</span>    <span class="c1">// 执行连接点的方法</span>
+    <span class="kd">public</span> <span class="n">Object</span> <span class="n">proceed</span><span class="o">(</span><span class="n">Object</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Throwable</span><span class="o">;</span> <span class="c1">// 执行连接点的方法,可以把原来的参数用新的args替换掉</span>
 <span class="o">}</span>
 <span class="kd">public</span> <span class="kd">interface</span> <span class="nc">JoinPoint</span> <span class="o">{</span>  
-    <span class="n">String</span> <span class="nf">toString</span><span class="o">();</span>          <span class="c1">//连接点所在位置的相关信息  </span>
-    <span class="n">String</span> <span class="nf">toShortString</span><span class="o">();</span>     <span class="c1">//连接点所在位置的简短相关信息  </span>
-    <span class="n">String</span> <span class="nf">toLongString</span><span class="o">();</span>      <span class="c1">//连接点所在位置的全部相关信息  </span>
-    <span class="n">Object</span> <span class="nf">getThis</span><span class="o">();</span>           <span class="c1">//返回AOP代理对象  </span>
-    <span class="n">Object</span> <span class="nf">getTarget</span><span class="o">();</span>         <span class="c1">//返回目标对象  </span>
-    <span class="n">Object</span><span class="o">[]</span> <span class="nf">getArgs</span><span class="o">();</span>         <span class="c1">//返回被通知方法参数列表  </span>
-    <span class="n">Signature</span> <span class="nf">getSignature</span><span class="o">();</span>   <span class="c1">//返回当前连接点签名  </span>
-    <span class="n">SourceLocation</span> <span class="nf">getSourceLocation</span><span class="o">();</span><span class="c1">//返回连接点方法所在类文件中的位置  </span>
-    <span class="n">String</span> <span class="nf">getKind</span><span class="o">();</span>           <span class="c1">//连接点类型  </span>
-    <span class="n">StaticPart</span> <span class="nf">getStaticPart</span><span class="o">();</span> <span class="c1">//返回连接点静态部分</span>
+    <span class="n">String</span> <span class="n">toString</span><span class="o">();</span>          <span class="c1">//连接点所在位置的相关信息  </span>
+    <span class="n">String</span> <span class="n">toShortString</span><span class="o">();</span>     <span class="c1">//连接点所在位置的简短相关信息  </span>
+    <span class="n">String</span> <span class="n">toLongString</span><span class="o">();</span>      <span class="c1">//连接点所在位置的全部相关信息  </span>
+    <span class="n">Object</span> <span class="n">getThis</span><span class="o">();</span>           <span class="c1">//返回AOP代理对象  </span>
+    <span class="n">Object</span> <span class="n">getTarget</span><span class="o">();</span>         <span class="c1">//返回目标对象  </span>
+    <span class="n">Object</span><span class="o">[]</span> <span class="n">getArgs</span><span class="o">();</span>         <span class="c1">//返回被通知方法参数列表  </span>
+    <span class="n">Signature</span> <span class="n">getSignature</span><span class="o">();</span>   <span class="c1">//返回当前连接点签名  </span>
+    <span class="n">SourceLocation</span> <span class="n">getSourceLocation</span><span class="o">();</span><span class="c1">//返回连接点方法所在类文件中的位置  </span>
+    <span class="n">String</span> <span class="n">getKind</span><span class="o">();</span>           <span class="c1">//连接点类型  </span>
+    <span class="n">StaticPart</span> <span class="n">getStaticPart</span><span class="o">();</span> <span class="c1">//返回连接点静态部分</span>
     <span class="c1">// 这是个内部接口, 提供访问连接点的静态部分，如被通知方法签名、连接点类型等</span>
     <span class="kd">public</span> <span class="kd">interface</span> <span class="nc">StaticPart</span> <span class="o">{</span>  
-        <span class="n">Signature</span> <span class="nf">getSignature</span><span class="o">();</span>    <span class="c1">//返回当前连接点签名  </span>
-        <span class="n">String</span> <span class="nf">getKind</span><span class="o">();</span>            <span class="c1">//连接点类型  </span>
-        <span class="kt">int</span> <span class="nf">getId</span><span class="o">();</span>                 <span class="c1">//唯一标识  </span>
-        <span class="n">String</span> <span class="nf">toString</span><span class="o">();</span>           <span class="c1">//连接点所在位置的相关信息  </span>
-        <span class="n">String</span> <span class="nf">toShortString</span><span class="o">();</span>      <span class="c1">//连接点所在位置的简短相关信息  </span>
-        <span class="n">String</span> <span class="nf">toLongString</span><span class="o">();</span>       <span class="c1">//连接点所在位置的全部相关信息  </span>
+        <span class="n">Signature</span> <span class="n">getSignature</span><span class="o">();</span>    <span class="c1">//返回当前连接点签名  </span>
+        <span class="n">String</span> <span class="n">getKind</span><span class="o">();</span>            <span class="c1">//连接点类型  </span>
+        <span class="kt">int</span> <span class="n">getId</span><span class="o">();</span>                 <span class="c1">//唯一标识  </span>
+        <span class="n">String</span> <span class="n">toString</span><span class="o">();</span>           <span class="c1">//连接点所在位置的相关信息  </span>
+        <span class="n">String</span> <span class="n">toShortString</span><span class="o">();</span>      <span class="c1">//连接点所在位置的简短相关信息  </span>
+        <span class="n">String</span> <span class="n">toLongString</span><span class="o">();</span>       <span class="c1">//连接点所在位置的全部相关信息  </span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre></div>
-<hr>
+</code></pre>
+</div>
 
-<h2 id="切入点表达式">切入点表达式</h2>
+<hr />
 
-<p>切入点表达式就是组成<code class="prettyprint">@Pointcut</code>注解的值, 用于匹配具体的连接点.<br>
+<h2 id="section-4">切入点表达式</h2>
+<p>切入点表达式就是组成<code class="highlighter-rouge">@Pointcut</code>注解的值, 用于匹配具体的连接点.<br />
 切入点表达式由切入点指示符、类型匹配语句、通配符、组合符组成</p>
 
-<p><strong>切入点指示符(PCD)</strong><br>
-在切入点表达式中可以使用如下的AspectJ切入点指示符(PCD):</p>
-
-<ul>
-<li>execution: 匹配方法执行, 这是最经常的切入点指示符</li>
-<li>within: 匹配特定类型之内的全部方法执行</li>
-<li>this: 用于匹配当前AOP代理对象类型的连接点,包括接口</li>
-<li>target: 用于匹配当前目标对象类型的连接点,不包括接口</li>
-<li>args: 用于匹配当前执行的方法传入的参数为指定类型的连接点</li>
-<li>@within: 用于匹配持有指定注解类型内的连接点</li>
-<li>@target: 用于匹配当前目标对象类型的连接点，其中目标对象持有指定的注解</li>
-<li>@args: 匹配当前执行的方法传入的参数持有指定的注解</li>
-<li>@annotation: 匹配当前执行方法持有指定注解的方法</li>
-</ul>
+<p><strong>切入点指示符(PCD)</strong><br />
+在切入点表达式中可以使用如下的AspectJ切入点指示符(PCD):
+* execution: 匹配方法执行, 这是最经常的切入点指示符
+* within: 匹配特定类型之内的全部方法执行
+* this: 用于匹配当前AOP代理对象类型的连接点,包括接口
+* target: 用于匹配当前目标对象类型的连接点,不包括接口
+* args: 用于匹配当前执行的方法传入的参数为指定类型的连接点
+* @within: 用于匹配持有指定注解类型内的连接点
+* @target: 用于匹配当前目标对象类型的连接点，其中目标对象持有指定的注解
+* @args: 匹配当前执行的方法传入的参数持有指定的注解
+* @annotation: 匹配当前执行方法持有指定注解的方法</p>
 
 <p>看不明白还是看最后面的例子吧</p>
 
-<p><strong>类型匹配语句</strong><br>
-类型匹配语句格式像下面这样(带<code class="prettyprint">?</code>的属于可选,可以不写):</p>
+<p><strong>类型匹配语句</strong><br />
+类型匹配语句格式像下面这样(带<code class="highlighter-rouge">?</code>的属于可选,可以不写):</p>
 
 <ul>
-<li>对类的匹配: <code class="prettyprint">注解? 类的全限定名字</code></li>
-<li>对方法的匹配: <code class="prettyprint">注解? 修饰符? 返回值类型 类型声明? 方法名(参数列表) 异常列表？</code></li>
+  <li>对类的匹配: <code class="highlighter-rouge">注解? 类的全限定名字</code></li>
+  <li>对方法的匹配: <code class="highlighter-rouge">注解? 修饰符? 返回值类型 类型声明? 方法名(参数列表) 异常列表？</code></li>
 </ul>
 
-<p><strong>类型匹配的通配符</strong>  </p>
+<p><strong>类型匹配的通配符</strong></p>
 
 <ul>
-<li><code class="prettyprint">*</code>: 匹配任何数量字符；</li>
-<li><code class="prettyprint">..</code>:(两个点)匹配任何数量字符的重复;如在类型模式中匹配任何数量子包,而在方法参数模式中匹配任何数量参数</li>
-<li><code class="prettyprint">+</code>: 匹配指定类型的子类型,仅能作为后缀放在类型模式后边</li>
+  <li><code class="highlighter-rouge">*</code>: 匹配任何数量字符；</li>
+  <li><code class="highlighter-rouge">..</code>:(两个点)匹配任何数量字符的重复;如在类型模式中匹配任何数量子包,而在方法参数模式中匹配任何数量参数</li>
+  <li><code class="highlighter-rouge">+</code>: 匹配指定类型的子类型,仅能作为后缀放在类型模式后边</li>
 </ul>
 
-<p><strong>组合切入点表达式</strong><br>
+<p><strong>组合切入点表达式</strong><br />
 AspectJ使用 与(&amp;&amp;)、或(||)、非(!)来组合切入点表达式, 在xml文件中可使用and、or、not</p>
 
-<h2 id="切入点表达式示例">切入点表达式示例</h2>
+<h2 id="section-5">切入点表达式示例</h2>
 
 <ul>
-<li><code class="prettyprint">execution</code>使用<code class="prettyprint">execution(方法表达式)</code>匹配方法执行</li>
+  <li><code class="highlighter-rouge">execution</code>使用<code class="highlighter-rouge">execution(方法表达式)</code>匹配方法执行</li>
 </ul>
 
-<table><thead>
-<tr>
-<th>表达式</th>
-<th>描述</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>public * *(..)</td>
-<td>所有public方法</td>
-</tr>
-<tr>
-<td>* cn.test..IService.*()</td>
-<td>cn.test及子包下IService中任何无参方法</td>
-</tr>
-<tr>
-<td>* cn.test..IService＋.*()</td>
-<td>cn.test及子包下IService及子类中任何无参方法</td>
-</tr>
-<tr>
-<td>* cn.test..IService.*(＊)</td>
-<td>cn.test及子包下IService中只有一个参数的方法</td>
-</tr>
-<tr>
-<td>* cn.test..IService.*(..)</td>
-<td>cn.test及子包下IService中所有方法</td>
-</tr>
-<tr>
-<td>* cn.test..IService.*(java.util.Date)</td>
-<td>cn.test及子包下IService中只有一个Date类型参数的方法</td>
-</tr>
-<tr>
-<td>* cn.test..IService*.test*(..)</td>
-<td>cn.test及子包下IService前缀类型中test前缀开头的任何方法</td>
-</tr>
-<tr>
-<td>* cn.test..<em>.</em>(..)</td>
-<td>cn.test及子包下任何类的任何方法</td>
-</tr>
-<tr>
-<td>@java.lang.Deprecated * *(..)</td>
-<td>任何持有@Deprecated注解的方法</td>
-</tr>
-<tr>
-<td>@(java.lang.Deprecated &amp;&amp; cn.javass..Secure) * *(..)</td>
-<td>任何持有@java.lang.Deprecated和@ cn.javass..Secure注解的方法</td>
-</tr>
-</tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th>表达式</th>
+      <th>描述</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>public * *(..)</td>
+      <td>所有public方法</td>
+    </tr>
+    <tr>
+      <td>* cn.test..IService.*()</td>
+      <td>cn.test及子包下IService中任何无参方法</td>
+    </tr>
+    <tr>
+      <td>* cn.test..IService＋.*()</td>
+      <td>cn.test及子包下IService及子类中任何无参方法</td>
+    </tr>
+    <tr>
+      <td>* cn.test..IService.*(＊)</td>
+      <td>cn.test及子包下IService中只有一个参数的方法</td>
+    </tr>
+    <tr>
+      <td>* cn.test..IService.*(..)</td>
+      <td>cn.test及子包下IService中所有方法</td>
+    </tr>
+    <tr>
+      <td>* cn.test..IService.*(java.util.Date)</td>
+      <td>cn.test及子包下IService中只有一个Date类型参数的方法</td>
+    </tr>
+    <tr>
+      <td>* cn.test..IService<em>.test</em>(..)</td>
+      <td>cn.test及子包下IService前缀类型中test前缀开头的任何方法</td>
+    </tr>
+    <tr>
+      <td>* cn.test..<em>.</em>(..)</td>
+      <td>cn.test及子包下任何类的任何方法</td>
+    </tr>
+    <tr>
+      <td>@java.lang.Deprecated * *(..)</td>
+      <td>任何持有@Deprecated注解的方法</td>
+    </tr>
+    <tr>
+      <td>@(java.lang.Deprecated &amp;&amp; cn.javass..Secure) * *(..)</td>
+      <td>任何持有@java.lang.Deprecated和@ cn.javass..Secure注解的方法</td>
+    </tr>
+  </tbody>
+</table>
 
 <ul>
-<li><code class="prettyprint">within</code>使用<code class="prettyprint">within(类型表达式)</code>匹配指定类型内的方法执行</li>
+  <li><code class="highlighter-rouge">within</code>使用<code class="highlighter-rouge">within(类型表达式)</code>匹配指定类型内的方法执行</li>
 </ul>
 
-<table><thead>
-<tr>
-<th>表达式</th>
-<th>描述</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>within(cn.test..*)</td>
-<td>cn.test及子包下的任何方法</td>
-</tr>
-<tr>
-<td>within(cn.test..IService＋)</td>
-<td>cn.test及子包下IService及子类的任何方法</td>
-</tr>
-<tr>
-<td>within(@cn.test.Secure *)</td>
-<td>cn.test及子包下带有@cn.test.Secure注解的任何类(接口不行)的任何方法</td>
-</tr>
-</tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th>表达式</th>
+      <th>描述</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>within(cn.test..*)</td>
+      <td>cn.test及子包下的任何方法</td>
+    </tr>
+    <tr>
+      <td>within(cn.test..IService＋)</td>
+      <td>cn.test及子包下IService及子类的任何方法</td>
+    </tr>
+    <tr>
+      <td>within(@cn.test.Secure *)</td>
+      <td>cn.test及子包下带有@cn.test.Secure注解的任何类(接口不行)的任何方法</td>
+    </tr>
+  </tbody>
+</table>
 
 <ul>
-<li><code class="prettyprint">this</code>使用<code class="prettyprint">this(类型全限定名)</code>匹配当前AOP代理对象类型的执行方法,包括引入接口,不支持通配符</li>
+  <li><code class="highlighter-rouge">this</code>使用<code class="highlighter-rouge">this(类型全限定名)</code>匹配当前AOP代理对象类型的执行方法,包括引入接口,不支持通配符</li>
 </ul>
 
-<table><thead>
-<tr>
-<th>表达式</th>
-<th>描述</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>this(cn.test.IService)</td>
-<td>当前AOP对象实现了IService接口的任何方法</td>
-</tr>
-</tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th>表达式</th>
+      <th>描述</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>this(cn.test.IService)</td>
+      <td>当前AOP对象实现了IService接口的任何方法</td>
+    </tr>
+  </tbody>
+</table>
 
 <ul>
-<li><code class="prettyprint">target</code>使用<code class="prettyprint">target(类型全限定名)</code>匹配当前目标对象类型的执行方法,不包括引入接口,不支持通配符</li>
+  <li><code class="highlighter-rouge">target</code>使用<code class="highlighter-rouge">target(类型全限定名)</code>匹配当前目标对象类型的执行方法,不包括引入接口,不支持通配符</li>
 </ul>
 
-<table><thead>
-<tr>
-<th>表达式</th>
-<th>描述</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>this(cn.test.IService)</td>
-<td>当前目标对象(非AOP对象)实现了IService接口的任何方法</td>
-</tr>
-</tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th>表达式</th>
+      <th>描述</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>this(cn.test.IService)</td>
+      <td>当前目标对象(非AOP对象)实现了IService接口的任何方法</td>
+    </tr>
+  </tbody>
+</table>
 
 <ul>
-<li><code class="prettyprint">args</code>使用<code class="prettyprint">args(参数类型列表)</code>匹配传入参数(不是声明时的参数)为指定类型的执行方法,参数类型必须是全限定名, 不支持通配符</li>
+  <li><code class="highlighter-rouge">args</code>使用<code class="highlighter-rouge">args(参数类型列表)</code>匹配传入参数(不是声明时的参数)为指定类型的执行方法,参数类型必须是全限定名, 不支持通配符</li>
 </ul>
 
 <p>args属于动态切入点，这种切入点开销非常大，非特殊情况最好不要使用</p>
 
-<table><thead>
-<tr>
-<th>表达式</th>
-<th>描述</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>args(java.lang.String, ..)</td>
-<td>第一个参数为String,后面有任意个参数的方法</td>
-</tr>
-</tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th>表达式</th>
+      <th>描述</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>args(java.lang.String, ..)</td>
+      <td>第一个参数为String,后面有任意个参数的方法</td>
+    </tr>
+  </tbody>
+</table>
 
 <ul>
-<li><code class="prettyprint">@within</code>使用<code class="prettyprint">@within(注解类型全限定名)</code>匹配所以持有指定注解类型内的方法, 必须是在目标对象上声明注解，在接口上声明不起作用</li>
+  <li><code class="highlighter-rouge">@within</code>使用<code class="highlighter-rouge">@within(注解类型全限定名)</code>匹配所以持有指定注解类型内的方法, 必须是在目标对象上声明注解，在接口上声明不起作用</li>
 </ul>
 
-<table><thead>
-<tr>
-<th>表达式</th>
-<th>描述</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>@within(cn.test.Secure)</td>
-<td>任何目标对象对应的类型持有Secure注解的类方法</td>
-</tr>
-</tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th>表达式</th>
+      <th>描述</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>@within(cn.test.Secure)</td>
+      <td>任何目标对象对应的类型持有Secure注解的类方法</td>
+    </tr>
+  </tbody>
+</table>
 
 <ul>
-<li><code class="prettyprint">@target</code>使用<code class="prettyprint">@target(注解类型全限定名)</code>匹配当前目标对象类型的执行方法, 必须是在目标对象上声明注解，在接口上声明不起作用</li>
+  <li><code class="highlighter-rouge">@target</code>使用<code class="highlighter-rouge">@target(注解类型全限定名)</code>匹配当前目标对象类型的执行方法, 必须是在目标对象上声明注解，在接口上声明不起作用</li>
 </ul>
 
-<table><thead>
-<tr>
-<th>表达式</th>
-<th>描述</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>@target(cn.test.Secure)</td>
-<td>任何目标对象对应的类型持有Secure注解的类方法</td>
-</tr>
-</tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th>表达式</th>
+      <th>描述</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>@target(cn.test.Secure)</td>
+      <td>任何目标对象对应的类型持有Secure注解的类方法</td>
+    </tr>
+  </tbody>
+</table>
 
 <ul>
-<li><code class="prettyprint">@args</code>使用<code class="prettyprint">@args(注解类型全限定名)</code>匹配当前执行的方法传入的参数持有指定注解的执行</li>
+  <li><code class="highlighter-rouge">@args</code>使用<code class="highlighter-rouge">@args(注解类型全限定名)</code>匹配当前执行的方法传入的参数持有指定注解的执行</li>
 </ul>
 
-<table><thead>
-<tr>
-<th>表达式</th>
-<th>描述</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>@args(cn.test.Secure)</td>
-<td>任何只接受一个参数的方法，且方法运行时传入的参数持有Secure注解</td>
-</tr>
-</tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th>表达式</th>
+      <th>描述</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>@args(cn.test.Secure)</td>
+      <td>任何只接受一个参数的方法，且方法运行时传入的参数持有Secure注解</td>
+    </tr>
+  </tbody>
+</table>
 
 <ul>
-<li><code class="prettyprint">@annotation</code>使用<code class="prettyprint">@annotation(注解类型全限定名)</code>匹配当前执行方法持有指定注解的方法</li>
+  <li><code class="highlighter-rouge">@annotation</code>使用<code class="highlighter-rouge">@annotation(注解类型全限定名)</code>匹配当前执行方法持有指定注解的方法</li>
 </ul>
 
-<table><thead>
-<tr>
-<th>表达式</th>
-<th>描述</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>@annotation(cn.test.Secure)</td>
-<td>当前执行方法上持有Secure注解的方法</td>
-</tr>
-</tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th>表达式</th>
+      <th>描述</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>@annotation(cn.test.Secure)</td>
+      <td>当前执行方法上持有Secure注解的方法</td>
+    </tr>
+  </tbody>
+</table>
 
-<hr>
+<hr />
 
         </div>
     </div>

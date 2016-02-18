@@ -99,145 +99,149 @@ jQuery(function(){
     <div class="uk-grid">
         <div  class="uk-width-4-4">
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
-            <p><code class="prettyprint">CharMatcher</code>是字符匹配器, 代表着某一类字符, <code class="prettyprint">CharMatcher</code>实现了<code class="prettyprint">Predicate&lt;Character&gt;</code>接口<br>
-<code class="prettyprint">CharMatcher</code>提供了一系列方法，让你对字符作特定类型的操作：修剪[trim]、折叠[collapse]、移除[remove]、保留[retain]等<br>
-<code class="prettyprint">CharMatcher</code>只处理<code class="prettyprint">char</code>类型代表的字符即<code class="prettyprint">0x0000</code>~<code class="prettyprint">0xFFFF</code></p>
+            <p><code class="highlighter-rouge">CharMatcher</code>是字符匹配器, 代表着某一类字符, <code class="highlighter-rouge">CharMatcher</code>实现了<code class="highlighter-rouge">Predicate&lt;Character&gt;</code>接口<br />
+<code class="highlighter-rouge">CharMatcher</code>提供了一系列方法，让你对字符作特定类型的操作：修剪[trim]、折叠[collapse]、移除[remove]、保留[retain]等<br />
+<code class="highlighter-rouge">CharMatcher</code>只处理<code class="highlighter-rouge">char</code>类型代表的字符即<code class="highlighter-rouge">0x0000</code>~<code class="highlighter-rouge">0xFFFF</code></p>
 
-<hr>
+<hr />
 
-<h2 id="获取charmatcher">获取CharMatcher</h2>
-
+<h2 id="charmatcher">获取CharMatcher</h2>
 <p>CharMatcher中的常量可以满足大多数字符匹配需求</p>
 
-<table><thead>
-<tr>
-<th>内置CharMatcher</th>
-<th>说明</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>ANY</td>
-<td>任何字符都匹配</td>
-</tr>
-<tr>
-<td>NONE</td>
-<td>不匹配任何字符</td>
-</tr>
-<tr>
-<td>WHITESPACE</td>
-<td>空白字符(Unicode标准)</td>
-</tr>
-<tr>
-<td>BREAKING_WHITESPACE</td>
-<td>被空白隔开的两个词之间的那个空白, 比如两个单词之间的空白间隔</td>
-</tr>
-<tr>
-<td>INVISIBLE</td>
-<td>不可见字符, 如LINE_SEPARATOR</td>
-</tr>
-<tr>
-<td>DIGIT</td>
-<td>Unicode数字,比JAVA_DIGIT范围大,如果要表示0～9请用<code class="prettyprint">inRange(&#39;0&#39;, &#39;9&#39;)</code></td>
-</tr>
-<tr>
-<td>JAVA_LETTER</td>
-<td></td>
-</tr>
-<tr>
-<td>JAVA_DIGIT</td>
-<td>Java定义的数字,范围超过0~9,如果要表示0～9请用<code class="prettyprint">inRange(&#39;0&#39;, &#39;9&#39;)</code></td>
-</tr>
-<tr>
-<td>JAVA_LETTER_OR_DIGIT</td>
-<td>JAVA_LETTER 或 JAVA_DIGIT</td>
-</tr>
-<tr>
-<td>JAVA_UPPER_CASE</td>
-<td>范围比a~z大</td>
-</tr>
-<tr>
-<td>JAVA_LOWER_CASE</td>
-<td></td>
-</tr>
-<tr>
-<td>JAVA_ISO_CONTROL</td>
-<td></td>
-</tr>
-<tr>
-<td>ASCII</td>
-<td>ASCII码,这意味着它的代码点低于128</td>
-</tr>
-<tr>
-<td>SINGLE_WIDTH</td>
-<td></td>
-</tr>
-<tr>
-<td>ZEROES</td>
-<td></td>
-</tr>
-<tr>
-<td>NINES</td>
-<td></td>
-</tr>
-</tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th>内置CharMatcher</th>
+      <th>说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ANY</td>
+      <td>任何字符都匹配</td>
+    </tr>
+    <tr>
+      <td>NONE</td>
+      <td>不匹配任何字符</td>
+    </tr>
+    <tr>
+      <td>WHITESPACE</td>
+      <td>空白字符(Unicode标准)</td>
+    </tr>
+    <tr>
+      <td>BREAKING_WHITESPACE</td>
+      <td>被空白隔开的两个词之间的那个空白, 比如两个单词之间的空白间隔</td>
+    </tr>
+    <tr>
+      <td>INVISIBLE</td>
+      <td>不可见字符, 如LINE_SEPARATOR</td>
+    </tr>
+    <tr>
+      <td>DIGIT</td>
+      <td>Unicode数字,比JAVA_DIGIT范围大,如果要表示0～9请用<code class="highlighter-rouge">inRange('0', '9')</code></td>
+    </tr>
+    <tr>
+      <td>JAVA_LETTER</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>JAVA_DIGIT</td>
+      <td>Java定义的数字,范围超过0~9,如果要表示0～9请用<code class="highlighter-rouge">inRange('0', '9')</code></td>
+    </tr>
+    <tr>
+      <td>JAVA_LETTER_OR_DIGIT</td>
+      <td>JAVA_LETTER 或 JAVA_DIGIT</td>
+    </tr>
+    <tr>
+      <td>JAVA_UPPER_CASE</td>
+      <td>范围比a~z大</td>
+    </tr>
+    <tr>
+      <td>JAVA_LOWER_CASE</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>JAVA_ISO_CONTROL</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>ASCII</td>
+      <td>ASCII码,这意味着它的代码点低于128</td>
+    </tr>
+    <tr>
+      <td>SINGLE_WIDTH</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>ZEROES</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>NINES</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
 
 <p>获取字符匹配器的常见方法</p>
 
 <ul>
-<li><code class="prettyprint">is(final char match)</code>: 给定单一字符匹配</li>
-<li><code class="prettyprint">isNot(final char match)</code>: 不是某字符</li>
-<li><code class="prettyprint">anyOf(final CharSequence sequence)</code>: 枚举匹配字符,如<code class="prettyprint">CharMatcher.anyOf(“aeiou”)</code>匹配小写英语元音</li>
-<li><code class="prettyprint">noneOf(CharSequence sequence)</code>: 不是sequence里的任意一个,anyOf的相反方法, 等同于<code class="prettyprint">anyOf(sequence).negate()</code></li>
-<li><code class="prettyprint">inRange(final char startInclusive, final char endInclusive)</code>: 给定字符范围匹配，如<code class="prettyprint">CharMatcher.inRange(‘a’, ‘z’)</code></li>
-<li><code class="prettyprint">or(CharMatcher other)</code>: 取并集</li>
-<li><code class="prettyprint">and(CharMatcher other)</code>: 取交集</li>
-<li><code class="prettyprint">negate(CharMatcher other)</code>: 取反</li>
+  <li><code class="highlighter-rouge">is(final char match)</code>: 给定单一字符匹配</li>
+  <li><code class="highlighter-rouge">isNot(final char match)</code>: 不是某字符</li>
+  <li><code class="highlighter-rouge">anyOf(final CharSequence sequence)</code>: 枚举匹配字符,如<code class="highlighter-rouge">CharMatcher.anyOf(“aeiou”)</code>匹配小写英语元音</li>
+  <li><code class="highlighter-rouge">noneOf(CharSequence sequence)</code>: 不是sequence里的任意一个,anyOf的相反方法, 等同于<code class="highlighter-rouge">anyOf(sequence).negate()</code></li>
+  <li><code class="highlighter-rouge">inRange(final char startInclusive, final char endInclusive)</code>: 给定字符范围匹配，如<code class="highlighter-rouge">CharMatcher.inRange(‘a’, ‘z’)</code></li>
+  <li><code class="highlighter-rouge">or(CharMatcher other)</code>: 取并集</li>
+  <li><code class="highlighter-rouge">and(CharMatcher other)</code>: 取交集</li>
+  <li><code class="highlighter-rouge">negate(CharMatcher other)</code>: 取反</li>
 </ul>
 
-<hr>
+<hr />
 
-<h2 id="使用字符匹配器">使用字符匹配器</h2>
-
-<p>返回是否匹配(<code class="prettyprint">boolean</code>)的方法:</p>
+<h2 id="section">使用字符匹配器</h2>
+<p>返回是否匹配(<code class="highlighter-rouge">boolean</code>)的方法:</p>
 
 <ul>
-<li><code class="prettyprint">boolean matchesAnyOf(CharSequence sequence)</code> : 是否sequence中有匹配的字符</li>
-<li><code class="prettyprint">boolean matchesAllOf(CharSequence sequence)</code> : 是否sequence中的所有字符都匹配</li>
-<li><code class="prettyprint">boolean matchesNoneOf(CharSequence sequence)</code> : sequence中不包含能够匹配的字符</li>
+  <li><code class="highlighter-rouge">boolean matchesAnyOf(CharSequence sequence)</code> : 是否sequence中有匹配的字符</li>
+  <li><code class="highlighter-rouge">boolean matchesAllOf(CharSequence sequence)</code> : 是否sequence中的所有字符都匹配</li>
+  <li><code class="highlighter-rouge">boolean matchesNoneOf(CharSequence sequence)</code> : sequence中不包含能够匹配的字符</li>
 </ul>
 
-<p>返回<code class="prettyprint">int</code>的方法:</p>
+<p>返回<code class="highlighter-rouge">int</code>的方法:</p>
 
 <ul>
-<li><code class="prettyprint">int indexIn(CharSequence sequence)</code> : 返回第一次匹配上的下标, -1表示没有匹配的</li>
-<li><code class="prettyprint">int indexIn(CharSequence sequence, int start)</code> : &gt;=start或-1</li>
-<li><code class="prettyprint">int lastIndexIn(CharSequence sequence)</code> : 最后一次匹配的下标, -1表示没有匹配的</li>
+  <li><code class="highlighter-rouge">int indexIn(CharSequence sequence)</code> : 返回第一次匹配上的下标, -1表示没有匹配的</li>
+  <li><code class="highlighter-rouge">int indexIn(CharSequence sequence, int start)</code> : &gt;=start或-1</li>
+  <li><code class="highlighter-rouge">int lastIndexIn(CharSequence sequence)</code> : 最后一次匹配的下标, -1表示没有匹配的</li>
 </ul>
 
-<p>返回匹配的内容(<code class="prettyprint">String</code>)的方法:</p>
+<p>返回匹配的内容(<code class="highlighter-rouge">String</code>)的方法:</p>
 
 <ul>
-<li><code class="prettyprint">String removeFrom(CharSequence sequence)</code> : 移除匹配字符,返回的是移除匹配字符之后剩下的</li>
-<li><code class="prettyprint">String retainFrom(CharSequence sequence)</code> : 保留匹配字符</li>
-<li><code class="prettyprint">String replaceFrom(CharSequence sequence, char replacement)</code> : 替代匹配字符</li>
-<li><code class="prettyprint">String replaceFrom(CharSequence sequence, CharSequence replacement)</code> :替代匹配字符</li>
-<li><code class="prettyprint">String trimFrom(CharSequence sequence)</code> : 移除前导和尾部的匹配字符</li>
-<li><code class="prettyprint">String trimLeadingFrom(CharSequence sequence)</code>: 只移除前导匹配的</li>
-<li><code class="prettyprint">String trimTrailingFrom(CharSequence sequence)</code>: 只移除尾部匹配的</li>
-<li><code class="prettyprint">String collapseFrom(CharSequence sequence, char replacement)</code>: 替换,但连续的匹配字符只替换一次</li>
-<li><code class="prettyprint">String trimAndCollapseFrom(CharSequence sequence, char replacement)</code>: 中间连续的只替换一次,开头和结尾的直接去掉</li>
+  <li><code class="highlighter-rouge">String removeFrom(CharSequence sequence)</code> : 移除匹配字符,返回的是移除匹配字符之后剩下的</li>
+  <li><code class="highlighter-rouge">String retainFrom(CharSequence sequence)</code> : 保留匹配字符</li>
+  <li><code class="highlighter-rouge">String replaceFrom(CharSequence sequence, char replacement)</code> : 替代匹配字符</li>
+  <li><code class="highlighter-rouge">String replaceFrom(CharSequence sequence, CharSequence replacement)</code> :替代匹配字符</li>
+  <li><code class="highlighter-rouge">String trimFrom(CharSequence sequence)</code> : 移除前导和尾部的匹配字符</li>
+  <li><code class="highlighter-rouge">String trimLeadingFrom(CharSequence sequence)</code>: 只移除前导匹配的</li>
+  <li><code class="highlighter-rouge">String trimTrailingFrom(CharSequence sequence)</code>: 只移除尾部匹配的</li>
+  <li><code class="highlighter-rouge">String collapseFrom(CharSequence sequence, char replacement)</code>: 替换,但连续的匹配字符只替换一次</li>
+  <li><code class="highlighter-rouge">String trimAndCollapseFrom(CharSequence sequence, char replacement)</code>: 中间连续的只替换一次,开头和结尾的直接去掉</li>
 </ul>
 
 <p>示例:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">CharMatcher</span><span class="o">.</span><span class="na">is</span><span class="o">(</span><span class="sc">&#39;a&#39;</span><span class="o">).</span><span class="na">removeFrom</span><span class="o">(</span><span class="s">&quot;bazaar&quot;</span><span class="o">);</span>  <span class="c1">// &quot;bzr&quot;</span>
-<span class="n">CharMatcher</span><span class="o">.</span><span class="na">is</span><span class="o">(</span><span class="sc">&#39;a&#39;</span><span class="o">).</span><span class="na">retainFrom</span><span class="o">(</span><span class="s">&quot;bazaar&quot;</span><span class="o">);</span>  <span class="c1">// &quot;aaa&quot;</span>
-<span class="n">CharMatcher</span><span class="o">.</span><span class="na">is</span><span class="o">(</span><span class="sc">&#39;a&#39;</span><span class="o">).</span><span class="na">replaceFrom</span><span class="o">(</span><span class="s">&quot;radar&quot;</span><span class="o">,</span> <span class="sc">&#39;o&#39;</span><span class="o">);</span> <span class="c1">// &quot;rodor&quot;</span>
-<span class="n">CharMatcher</span><span class="o">.</span><span class="na">is</span><span class="o">(</span><span class="sc">&#39;a&#39;</span><span class="o">).</span><span class="na">replaceFrom</span><span class="o">(</span><span class="s">&quot;yaha&quot;</span><span class="o">,</span> <span class="s">&quot;oo&quot;</span><span class="o">);</span> <span class="c1">// &quot;yoohoo&quot;</span>
-<span class="n">CharMatcher</span><span class="o">.</span><span class="na">anyOf</span><span class="o">(</span><span class="s">&quot;ab&quot;</span><span class="o">).</span><span class="na">trimFrom</span><span class="o">(</span><span class="s">&quot;abacatbab&quot;</span><span class="o">);</span> <span class="c1">// &quot;cat&quot;</span>
-<span class="n">CharMatcher</span><span class="o">.</span><span class="na">inRange</span><span class="o">(</span><span class="sc">&#39;\0&#39;</span><span class="o">,</span> <span class="sc">&#39; &#39;</span><span class="o">).</span><span class="na">trimFrom</span><span class="o">(</span><span class="n">str</span><span class="o">);</span> <span class="c1">// 等同于 str.trim()</span>
-<span class="n">CharMatcher</span><span class="o">.</span><span class="na">anyOf</span><span class="o">(</span><span class="s">&quot;eko&quot;</span><span class="o">).</span><span class="na">collapseFrom</span><span class="o">(</span><span class="s">&quot;bookkeeper&quot;</span><span class="o">,</span> <span class="sc">&#39;-&#39;</span><span class="o">)</span> <span class="c1">// &quot;b-p-r&quot;</span>
-</code></pre></div>
-<hr>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">CharMatcher</span><span class="o">.</span><span class="na">is</span><span class="o">(</span><span class="sc">'a'</span><span class="o">).</span><span class="na">removeFrom</span><span class="o">(</span><span class="s">"bazaar"</span><span class="o">);</span>  <span class="c1">// "bzr"</span>
+<span class="n">CharMatcher</span><span class="o">.</span><span class="na">is</span><span class="o">(</span><span class="sc">'a'</span><span class="o">).</span><span class="na">retainFrom</span><span class="o">(</span><span class="s">"bazaar"</span><span class="o">);</span>  <span class="c1">// "aaa"</span>
+<span class="n">CharMatcher</span><span class="o">.</span><span class="na">is</span><span class="o">(</span><span class="sc">'a'</span><span class="o">).</span><span class="na">replaceFrom</span><span class="o">(</span><span class="s">"radar"</span><span class="o">,</span> <span class="sc">'o'</span><span class="o">);</span> <span class="c1">// "rodor"</span>
+<span class="n">CharMatcher</span><span class="o">.</span><span class="na">is</span><span class="o">(</span><span class="sc">'a'</span><span class="o">).</span><span class="na">replaceFrom</span><span class="o">(</span><span class="s">"yaha"</span><span class="o">,</span> <span class="s">"oo"</span><span class="o">);</span> <span class="c1">// "yoohoo"</span>
+<span class="n">CharMatcher</span><span class="o">.</span><span class="na">anyOf</span><span class="o">(</span><span class="s">"ab"</span><span class="o">).</span><span class="na">trimFrom</span><span class="o">(</span><span class="s">"abacatbab"</span><span class="o">);</span> <span class="c1">// "cat"</span>
+<span class="n">CharMatcher</span><span class="o">.</span><span class="na">inRange</span><span class="o">(</span><span class="sc">'\0'</span><span class="o">,</span> <span class="sc">' '</span><span class="o">).</span><span class="na">trimFrom</span><span class="o">(</span><span class="n">str</span><span class="o">);</span> <span class="c1">// 等同于 str.trim()</span>
+<span class="n">CharMatcher</span><span class="o">.</span><span class="na">anyOf</span><span class="o">(</span><span class="s">"eko"</span><span class="o">).</span><span class="na">collapseFrom</span><span class="o">(</span><span class="s">"bookkeeper"</span><span class="o">,</span> <span class="sc">'-'</span><span class="o">)</span> <span class="c1">// "b-p-r"</span>
+</code></pre>
+</div>
+
+<hr />
 
         </div>
     </div>

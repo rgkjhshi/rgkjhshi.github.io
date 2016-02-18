@@ -13,7 +13,7 @@
     <!-- ico图标 -->
     <link rel="shortcut icon" type="image/x-icon" media="screen" href="/static/favicon.ico" />
     <!-- 搜索引擎收入相关 -->
-    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-10-20-javaWeb%E9%A1%B9%E7%9B%AE%E7%9A%84%E8%AF%B7%E6%B1%82%E8%B7%AF%E5%BE%840.html" />
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-10-20-javaWeb%E9%A1%B9%E7%9B%AE%E7%9A%84%E8%AF%B7%E6%B1%82%E8%B7%AF%E5%BE%84.html" />
     <!-- rss输出源 -->
     <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
     <!-- jquery -->
@@ -87,7 +87,7 @@ jQuery(function(){
 	jQuery('#qrcode').qrcode({
         width: 150,
         height: 150,
-        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-10-20-javaWeb%E9%A1%B9%E7%9B%AE%E7%9A%84%E8%AF%B7%E6%B1%82%E8%B7%AF%E5%BE%840.html"
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-10-20-javaWeb%E9%A1%B9%E7%9B%AE%E7%9A%84%E8%AF%B7%E6%B1%82%E8%B7%AF%E5%BE%84.html"
     });
 })
 </script>
@@ -99,74 +99,82 @@ jQuery(function(){
     <div class="uk-grid">
         <div  class="uk-width-4-4">
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
-            <p><code class="prettyprint">HttpServletRequest</code>中方法<code class="prettyprint">getRequestURI</code>和<code class="prettyprint">getRequestURI</code>等的区别</p>
+            <p><code class="highlighter-rouge">HttpServletRequest</code>中方法<code class="highlighter-rouge">getRequestURI</code>和<code class="highlighter-rouge">getRequestURI</code>等的区别</p>
 
-<hr>
+<hr />
 
-<p>项目在tomcat中的目录结构是这样子的: <code class="prettyprint">webapps/testApp/项目内容</code><br>
-<code class="prettyprint">webapps</code>为tomcat容器的目录<br>
-<code class="prettyprint">testApp</code>即为项目部署的名称<br>
+<p>项目在tomcat中的目录结构是这样子的: <code class="highlighter-rouge">webapps/testApp/项目内容</code><br />
+<code class="highlighter-rouge">webapps</code>为tomcat容器的目录<br />
+<code class="highlighter-rouge">testApp</code>即为项目部署的名称<br />
 项目的代码片段是这样子的:</p>
-<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="nd">@RestController</span>
-<span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;/testController&quot;</span><span class="o">)</span>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@RestController</span>
+<span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/testController"</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestController</span> <span class="o">{</span>
-    <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;/testAPI.htm&quot;</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="n">ModelAndView</span> <span class="nf">test</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/testAPI.htm"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">ModelAndView</span> <span class="n">test</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="n">Maps</span><span class="o">.</span><span class="na">newHashMap</span><span class="o">();</span>
-        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;getContextPath&quot;</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getContextPath</span><span class="o">());</span>
-        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;getServletPath&quot;</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getServletPath</span><span class="o">());</span>
-        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;getRequestURL&quot;</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getRequestURL</span><span class="o">());</span>
-        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;getRequestURI&quot;</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getRequestURI</span><span class="o">());</span>
-        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;getQueryString&quot;</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getQueryString</span><span class="o">());</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nf">ModelAndView</span><span class="o">(</span><span class="k">new</span> <span class="nf">MappingJackson2JsonView</span><span class="o">(),</span> <span class="n">map</span><span class="o">);</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"getContextPath"</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getContextPath</span><span class="o">());</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"getServletPath"</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getServletPath</span><span class="o">());</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"getRequestURL"</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getRequestURL</span><span class="o">());</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"getRequestURI"</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getRequestURI</span><span class="o">());</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"getQueryString"</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getQueryString</span><span class="o">());</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">ModelAndView</span><span class="o">(</span><span class="k">new</span> <span class="n">MappingJackson2JsonView</span><span class="o">(),</span> <span class="n">map</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre></div>
-<p>请求的URL为: <code class="prettyprint">http://localhost:8080/testApp/testController/testAPI.htm?a=1&amp;b=2</code><br>
+</code></pre>
+</div>
+<p>请求的URL为: <code class="highlighter-rouge">http://localhost:8080/testApp/testController/testAPI.htm?a=1&amp;b=2</code><br />
 得到的结果是:</p>
-<div class="highlight"><pre><code class="language-js" data-lang="js"><span class="p">{</span>
-    <span class="s2">&quot;getContextPath&quot;</span><span class="o">:</span><span class="s2">&quot;/testApp&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;getServletPath&quot;</span><span class="o">:</span><span class="s2">&quot;/testController/testAPI.htm&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;getRequestURL&quot;</span><span class="o">:</span><span class="s2">&quot;http://localhost:8080/testApp/testController/testAPI.htm&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;getRequestURI&quot;</span><span class="o">:</span><span class="s2">&quot;/testApp/testController/testAPI.htm&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;getQueryString&quot;</span><span class="o">:</span><span class="s2">&quot;a=1&amp;b=2&quot;</span>
-<span class="p">}</span>
-</code></pre></div>
-<table><thead>
-<tr>
-<th>变量名称</th>
-<th>变量值</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>ContextPath</td>
-<td>项目部署路径，没有名称(如直接部署在在ROOT里)则为空串</td>
-</tr>
-<tr>
-<td>ServletPath</td>
-<td>请求地址(不包括项目名称)</td>
-</tr>
-<tr>
-<td>RequestURL</td>
-<td>整个URL(不包括查询参数)</td>
-</tr>
-<tr>
-<td>RequestURI</td>
-<td>请求地址(包括项目名称)</td>
-</tr>
-<tr>
-<td>QueryString</td>
-<td>?后面的那一堆查询串</td>
-</tr>
-</tbody></table>
 
-<hr>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"getContextPath"</span><span class="p">:</span><span class="s2">"/testApp"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"getServletPath"</span><span class="p">:</span><span class="s2">"/testController/testAPI.htm"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"getRequestURL"</span><span class="p">:</span><span class="s2">"http://localhost:8080/testApp/testController/testAPI.htm"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"getRequestURI"</span><span class="p">:</span><span class="s2">"/testApp/testController/testAPI.htm"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"getQueryString"</span><span class="p">:</span><span class="s2">"a=1&amp;b=2"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>变量名称</th>
+      <th>变量值</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ContextPath</td>
+      <td>项目部署路径，没有名称(如直接部署在在ROOT里)则为空串</td>
+    </tr>
+    <tr>
+      <td>ServletPath</td>
+      <td>请求地址(不包括项目名称)</td>
+    </tr>
+    <tr>
+      <td>RequestURL</td>
+      <td>整个URL(不包括查询参数)</td>
+    </tr>
+    <tr>
+      <td>RequestURI</td>
+      <td>请求地址(包括项目名称)</td>
+    </tr>
+    <tr>
+      <td>QueryString</td>
+      <td>?后面的那一堆查询串</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
 
         </div>
     </div>
 
     <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/javaWeb项目的请求路径0" data-title="HttpServletRequest的请求路径" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-10-20-javaWeb%E9%A1%B9%E7%9B%AE%E7%9A%84%E8%AF%B7%E6%B1%82%E8%B7%AF%E5%BE%840.html"></div>
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/javaWeb项目的请求路径" data-title="HttpServletRequest的请求路径" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-10-20-javaWeb%E9%A1%B9%E7%9B%AE%E7%9A%84%E8%AF%B7%E6%B1%82%E8%B7%AF%E5%BE%84.html"></div>
     <!-- 多说评论框 end -->
 </div>
 
