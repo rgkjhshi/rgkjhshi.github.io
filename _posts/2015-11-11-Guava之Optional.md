@@ -13,6 +13,11 @@ tag: Guava
 
 *****
 
+* any list
+{:toc}
+
+*****
+
 ## 静态方法
 `Optional`有三个常用的静态方法:  
 

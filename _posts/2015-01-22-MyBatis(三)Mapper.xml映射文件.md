@@ -13,16 +13,12 @@ tag: MyBatis
 
 *****
 
-## 本文结构
-
-* [select 语句简介](#select)
-* [insert update delete 简介](#insert)
-* [Parameters 参数](#parameter)
-* [ResultMap](#ResultMap)
+* any list
+{:toc}
 
 *****
 
-<h2 id="select"> select 语句简介 </h2>
+## select 语句简介
 
 查询语句是 MyBatis 中最常用的元素之一，先来个例子
 
@@ -59,7 +55,7 @@ resultSets      | 这个设置仅对多结果集的情况适用, 它将列出语
 
 *****
 
-<h2 id="insert"> insert, update 和 delete 简介</h2>
+## insert, update 和 delete 简介
 `insert, update, delete`同`select`类似，也有许多属性，其中  
 
 *  `id, parameterType, timeout, statementType, databaseId`与select元素中的属性相同;   
@@ -82,7 +78,7 @@ keyColumn         | 通过生成的键值设置表中的列名,当主键列不�
 
 *****
 
-<h2 id="parameter"> Parameters 参数 </h2>
+## Parameters 参数
 参数是 MyBatis 非常强大的功能, `parameterType="anyType"`其中的`anyType`可以是`int`等基本类型，也可以是`User`等复杂类型。  
 
 ~~~xml
@@ -108,7 +104,7 @@ ORDER BY ${columnName}
 
 *****
 
-<h2 id="ResultMap"> ResultMap </h2>
+<h2 id="ResultMap"> ResultMap
 `resultMap` 元素是MyBatis中最重要最强大的元素，resultMap元素本身有一些属性，如下代码，`id`用于标识该`resultMap`，`type`用于指定该`resultMap`映射到哪个`JavaBean`
 
 ~~~xml

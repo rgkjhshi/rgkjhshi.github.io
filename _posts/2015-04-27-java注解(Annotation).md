@@ -16,14 +16,12 @@ tag: Java
 
 *****
 
-## 本文结构
-
-* [如何定义注解](#define)
-* [注解的使用规则](#rule)
+* any list
+{:toc}
 
 *****
 
-<h2 id="define"> 如何定义注解 </h2>
+## 如何定义注解
 我们可以通过关键字`class`来声明一个类，类似的我们可以用某东西来声明注解，用来声明注解的这东西叫做"元注解"。  
 在`java.lang.annotation`包中定义了4个元注解，分别是: `@Target、 @Retention、 @Documented、 @Inherited`  
 
@@ -94,7 +92,7 @@ public class AnnotationTest {
 
 *****
 
-<h2 id="rule"> 注解的使用规则 </h2>
+## 注解的使用规则
 
 1. 使用`@interface`定义注解时，自动继承了`java.lang.annotation.Annotation`接口，由编译程序自动完成其他细节。  
 2. 定义注解时，不能继承其他的注解或接口。  

@@ -14,20 +14,12 @@ Intellij Idea 的常用快捷键
 
 *****
 
-## 本文结构
-
-* [视图切换](#view)
-* [搜索内容](#search)
-* [编辑代码](#edit)
-* [重构的快捷键](#reb)
-* [查看代码](#navigate)
-* [运行与Debug](#run)
-* [其他快捷键](#other)
-
+* any list
+{:toc}
 
 *****
 
-<h2 id="view"> 视图切换 </h2>
+## 视图切换
 
 | cmd + 数字        | 切换到数字对应的视图  |
 | alt + maven      | 切换到maven的视图    |
@@ -37,7 +29,7 @@ Intellij Idea 的常用快捷键
 
 *****
 
-<h2 id="search"> 搜索内容 </h2>
+## 搜索内容
 
 | cmd + f              | 开始搜索  |
 | cmd + r              | 搜索替换  |
@@ -51,7 +43,7 @@ Intellij Idea 的常用快捷键
 
 *****
 
-<h2 id="edit"> 编辑代码 </h2>
+## 编辑代码
 
 | cmd + j                |    调出live template |
 | ctrl + n               |    各种自动生成代码,创建文件,生成setter getter override |
@@ -71,7 +63,7 @@ Intellij Idea 的常用快捷键
 
 其实上面两个快捷键很少用,因为有 alt + enter 可完全替换掉这两个快捷键的功能
 
-<h2 id="reb"> 重构的快捷键 </h2>
+## 重构的快捷键
 
 | F6                     |    移动文件到其它地方
 | F5                     |    拷贝文件到其它地方
@@ -86,7 +78,7 @@ Intellij Idea 的常用快捷键
 
 *****
 
-<h2 id="navigate"> 查看代码 </h2>
+## 查看代码
 
 | cmd + p                |    查询某方法的参数信息 |
 | cmd + b                |    跳到调用方法的定义处  |
@@ -100,7 +92,7 @@ Intellij Idea 的常用快捷键
 
 *****
 
-<h2 id="run"> 运行与Debug </h2>
+## 运行与Debug
 
 | shift + alt + F9       |    debug模式运行程序 |
 | shift + alt + F10      |    运行程序 |
@@ -111,7 +103,7 @@ Intellij Idea 的常用快捷键
 
 *****
 
-<h2 id="other"> 其他快捷键 </h2>
+## 其他快捷键
 
 | cmd + ,                |    调出setting界面 |
 | cmd + ;                |    调出项目setting界面 |

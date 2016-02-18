@@ -8,27 +8,16 @@ tag: Java日志
 logback配置文件的简单介绍，主要内容均来自[logback官方文档](http://logback.qos.ch/manual/)
 
 
-*****
-
-## 本文结构
-
-* [logback配置文件的结构](#structure)
-* [configuration元素](#configuration)
-  * [debug属性](#debug)
-  * [scan属性](#scan)
-* [logger元素](#logger)
-  * [name属性](#name)
-  * [level属性](#level)
-  * [additivity属性](#additivity)
-* [appender元素](#appender)
-  * [encoder子元素](#encoder)
-  * [layout子元素](#layout)
-    * [日志格式的详细说明(pattern元素)](#pattern)
 
 
 *****
 
-<h2 id="structure"> logback配置文件的结构 </h2>
+* any list
+{:toc}
+
+*****
+
+## logback配置文件的结构
 
 logback配置文件的跟节点为`<configuration>`,它的子节点有3个:`root、logger、appender`，除了`root`之外，每个都可以多次出现。  
 下面是我画的一个结构图，实线表示节点，虚线表示属性
@@ -41,9 +30,10 @@ logback配置文件的跟节点为`<configuration>`,它的子节点有3个:`root
 
 ******
 
-<h2 id="configuration"> configuration元素 </h2>
+## configuration元素
 `configuration`元素是logback配置文件的根元素，它也有许多可选属性，如: `debug、scan、scanPeriod`等
-<h3 id="debug"> debug 属性 </h3>
+
+### debug 属性
 如果logback的配置文件加载过程中出现了warning或error，则logback会把自身状态的日志打印出来，如下:
 
 ~~~
@@ -60,19 +50,19 @@ logback配置文件的跟节点为`<configuration>`,它的子节点有3个:`root
 如果加载过程未出现警告或者错误，就不会打印出来了。  
 若指定了`debug="true"`，即使不出现警告和错误，也会打印出logback内部的状态日志。
 
-<h3 id="scan"> scan 属性 </h3>
+### scan 属性
 可通过属性设置`scan="true"`，在配置文件发生改变时自动重新加载配置文件，默认1分钟重新扫描一次。  
 可通过属性设置`scanPeriod="30 seconds"`，指定30秒扫描一次。  
 扫描间隔的单位可以是`milliseconds, seconds, minutes 或 hours`，若不指定单位，默认为`milliseconds`。
 
 *****
 
-<h2 id="logger"> logger元素 </h2>
+## logger元素
 `logger`元素用于配置代码中的logger，它有属性如: `name、level、additivity`，其中`name`属性是必须的，其他2个可选。
 有0个或多个子元素`<appender-ref ref="STDOUT" />`来指定日志输出的格式。若0个，则不指定输出格式，就不会输出了。  
 **注意**`root`是最顶级的logger，它只有个可选属性level。
 
-<h3 id="name"> name 属性 </h3>
+### name 属性
 在java代码中，getLogger(String className)的参数一样获取到的logger是同一个，如下面的`logger1`和`logger2`就是同一个对象:
 
 ~~~java
@@ -89,7 +79,7 @@ Logger logger2 = LoggerFactory.getLogger("org.slf4j.Logger");
 ~~~
 输出的日志会先在配置文件中匹配名字为"A.B.C"的logger，未找到，匹配到了"A.B"的logger，则按照其指定的`appender`格式进行输出。
 
-<h3 id="level"> level属性 </h3>
+### level属性
 日志的级别有: `TRACE < DEBUG < INFO <  WARN < ERROR (ALL、OFF)`  
 日志级别是可以继承的，root不用指定级别，默认就是"DEBUG". 举个继承的例子:
 
@@ -100,7 +90,7 @@ Logger logger2 = LoggerFactory.getLogger("org.slf4j.Logger");
 | X.Y         | 未指定          | INFO(继承来的)   |
 | X.Y.Z       | ERROR          | ERROR(自己有)    |
 
-<h3 id="additivity"> additivity属性 </h3>
+### additivity属性
 该属性表示日志的可叠加性，默认为true,表示到达本logger的日志通过本日志的appender指定格式输出之后， 仍会将日志扩散给父logger。  
 弄个表格就容易看清楚了:
 
@@ -132,12 +122,12 @@ Logger logger2 = LoggerFactory.getLogger("org.slf4j.Logger");
 root级别为OFF，但是logger扩散过来的日志级别仍为继承的info.  
 所以只有A.B.C包中级别大于等于info的日志会被打印。
 
-<h2 id="appender"> appender元素 </h2>
+## appender元素
 `appender`元素内容稍微多点，它有2个必需属性:`name`和`class`。  
 有3个可选的子元素`<encoder>、<layout>、<filter>`，这3个子元素可有0个或者多个。  
 一般只用`<encoder>`，它包装了`<layout>`。
 
-<h3 id="encoder"> encoder 子元素 </h3>
+### encoder 子元素
 `encoder`的作用是把消息转化成输出流，可以控制消息怎么转化，何时输出等。  
 而`layout`仅指定消息输出的格式，不能控制消息什么时候输出，不能控制消息暂存到flush然后一下子批量输出。  
 实际上`encoder`内部包装了`PatternLayout`，然后又多了一些控制功能。
@@ -165,7 +155,8 @@ root级别为OFF，但是logger扩散过来的日志级别仍为继承的info.
   </layout>
 </appender>  
 ~~~
-<h3 id="layout"> layout 子元素 </h3>
+
+### layout 子元素
 `layout`用于指定输出格式,有个class属性，不写默认是`ch.qos.logback.classic.PatternLayout`。  
 也可以自己定义layout，然后像下面这样使用(一般也不自己定义):
 
@@ -193,7 +184,7 @@ root级别为OFF，但是logger扩散过来的日志级别仍为继承的info.
 </appender>
 ~~~
 
-<h3 id="pattern"> 日志格式的详细说明(pattern元素) </h3>
+### 日志格式的详细说明(pattern元素)
 不管是`encoder`元素中还是`layout`元素中，都少不了`pattern`，它是用来描述日志输出格式的。  
 下面就是格式的详细介绍
 

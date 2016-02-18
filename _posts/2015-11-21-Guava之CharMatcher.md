@@ -14,6 +14,11 @@ tag: Guava
 
 *****
 
+* any list
+{:toc}
+
+*****
+
 ## 获取CharMatcher
 CharMatcher中的常量可以满足大多数字符匹配需求
 

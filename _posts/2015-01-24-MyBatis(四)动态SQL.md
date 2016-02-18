@@ -13,17 +13,12 @@ MyBatis的动态SQL是基于ONGL表达式的
 
 *****
 
-## 本文结构
-
-* [if](#if)
-* [where](#where)
-* [set](#set)
-* [foreach](#foreach)
-* [choose (when, otherwise)](#choose)
+* any list
+{:toc}
 
 *****
 
-<h2 id="if"> if </h2>
+## if
 
 if一般是where的一部分，如
 
@@ -42,7 +37,7 @@ if一般是where的一部分，如
 
 *****
 
-<h2 id="where"> where </h2>
+## where
 像上面的例子，为了拼接sql，专门写了个 WHERE 1 = 1，`where`标签就能避免这样的问题，它会自动去除不该有的`AND`或`OR`
 
 ~~~xml
@@ -64,7 +59,7 @@ if一般是where的一部分，如
 
 *****
 
-<h2 id="set"> set </h2>
+## set
 set元素主要是用在更新操作的时候，它会智能去掉最后的逗号。如果set中一个条件都不满足，则会报错。
 
 ~~~xml
@@ -87,7 +82,7 @@ set元素主要是用在更新操作的时候，它会智能去掉最后的逗�
 
 *****
 
-<h2 id="foreach"> foreach </h2>
+## foreach
 foreach主要用在in语句中，它可以在SQL语句中遍历一个集合。
 
 ~~~xml
@@ -110,7 +105,7 @@ foreach主要用在in语句中，它可以在SQL语句中遍历一个集合。
 
 *****
 
-<h2 id="choose"> choose (when, otherwise) </h2>
+## choose (when, otherwise)
 choose元素的作用就相当于JAVA中的switch语句
 
 ~~~xml

@@ -10,7 +10,9 @@ Java中Collection的有两个toArray方法:`Object[] toArray()`和`<T> T[] toArr
 
 
 
-******
+
+*****
+
 `<T> T[] toArray(T[] a)`方法在抽象类`AbstractCollection`中有个实现  
 该方法也是把集合转成数组, 你可以指定转成什么类型的数组,若转换的类型与集合中元素类型不一样,会抛`ArrayStoreException`.  
 关于参数的写法上, 这个数组a可以是空的, 也可以不空, 会有不同的效果, 看下面代码:

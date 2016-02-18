@@ -9,18 +9,12 @@ tag: Spring
 
 *****
 
-## 本文结构
-
-* [整合的方法](#id1)
-* [SqlSessionFactoryBean的注入](#SqlSessionFactoryBean)
-* [MapperFactoryBean](#MapperFactoryBean)
-* [使用MapperScannerConfigurer自动注册Mapper](#MapperScannerConfigurer)
-* [事务管理](#transactionManager)
-
+* any list
+{:toc}
 
 *****
 
-<h2 id="id1"> 整合的方法 </h2>
+## 整合的方法
 
 MyBatis 是以`SqlSessionFactory`为核心的，Spring是以`BeanFactory`或`ApplicationContext`为核心的。把两者整合在一起，`Mybatis-Spring`封装了一个`SqlSessionFactoryBean`，在这个`Bean`里可以产生`SqlSessionFactory`。所以通过Spring的IoC实现`SqlSessionFactoryBean`的注入即可将二者整合。
 
@@ -36,7 +30,7 @@ MyBatis 是以`SqlSessionFactory`为核心的，Spring是以`BeanFactory`或`App
 
 *****
 
-<h2 id="SqlSessionFactoryBean"> SqlSessionFactoryBean的注入 </h2>
+## SqlSessionFactoryBean的注入
 
 在`MyBatis`中,`session`工厂可以使用`SqlSessionFactoryBuilder`来创建。而在`MyBatis-Spring`中,则使用`SqlSessionFactoryBean`来替代。
 要想实现对`SqlSessionFactoryBean`的注入，需要在spring的配置文件中添加这样的一个bean元素：
@@ -84,7 +78,7 @@ MyBatis 是以`SqlSessionFactory`为核心的，Spring是以`BeanFactory`或`App
 
 *****
 
-<h2 id="MapperFactoryBean"> MapperFactoryBean </h2>
+## MapperFactoryBean
 
 通过`SqlSessionFactoryBean`可以产生`SqlSessionFactory`，在MyBatis中，通过`sqlSessionFactory.openSession()`得到`sqlSession`，然后通过`session.getMapper(xxx.class)`得到对应的`Mapper`。在Spring中，通过`MapperFactoryBean`可以获取到我们想要的`Mapper`对象。
 
@@ -114,7 +108,7 @@ public interface UserMapper {
 
 *****
 
-<h2 id="MapperScannerConfigurer"> 使用MapperScannerConfigurer自动注册Mapper </h2>
+## 使用MapperScannerConfigurer自动注册Mapper
 
 像上面一个`Mapper`就需要定义一个对应的`MapperFactoryBean`。`Mybatis-Spring`提供了一个叫`MapperScannerConfigurer`的类，可以自动注册`Mapper`对应的`MapperFactoryBean`对象。我们只需要在配置文件中添加这样的内容：
 
@@ -133,7 +127,7 @@ public interface UserMapper {
 
 *****
 
-<h2 id="transactionManager"> 事务管理 </h2>
+## 事务管理
 
 `MyBatis-Spring`利用了存在于`Spring`中的`DataSourceTransactionManager`进行事务管理。一旦`Spring`的`PlatformTransactionManager`配置好了,就可以在`Spring`中以你通常的做法`(@Transactional注解)`来配置事务。在事务处理期间,会创建一个单独的`SqlSession`对象，当事务完成时,这个`session`会以合适的方式提交或回滚。
 

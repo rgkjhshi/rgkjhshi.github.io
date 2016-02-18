@@ -13,6 +13,11 @@ tag: Guava
 
 *****
 
+* any list
+{:toc}
+
+*****
+
 ## checkNotNull
 函数声明: `public static <T> T checkNotNull(T reference)`  
 函数功能: 检查参数不为空, 否则抛出`NullPointerException`  

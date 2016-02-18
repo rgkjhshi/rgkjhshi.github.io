@@ -13,6 +13,11 @@ tag: Guava
 
 *****
 
+* any list
+{:toc}
+
+*****
+
 ## 生成 Splitter 的方法
 工厂方法:
 

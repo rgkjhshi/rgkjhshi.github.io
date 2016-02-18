@@ -3,13 +3,14 @@
  */
 $(document).ready(function() {
     backToTop();
+    scrollToc();
     // 动态背景
     // $("body").quietflow({
     //     theme : "starfield"
     // });
 });
 
- // 回到顶部
+// 回到顶部
 function backToTop() {
     var st = $(".page-scrollTop");
     var $window = $(window);
@@ -28,4 +29,13 @@ function backToTop() {
             scrollTop: "0"
         }, 500);
     });
+}
+
+// 给toc添加滑动效果
+function scrollToc() {
+    var links = $("ul#markdown-toc a");
+    for (var i=0; i<links.length; i++) {
+        links[i].dataset.ukSmoothScroll="{offset: 50}";
+        // links[i].attr("data-uk-smooth-scroll", "{offset: 50}");
+    }
 }

@@ -13,6 +13,11 @@ SpringMVC中,每一个URL请求是通过`DispatcherServlet`负责转发给相应
 
 *****
 
+* any list
+{:toc}
+
+*****
+
 ## 简单URL映射规则
 `@RequestMapping`可以标记在类上,也可以标记在方法上,通过例子说明(假设拦截`*.do`)
 
