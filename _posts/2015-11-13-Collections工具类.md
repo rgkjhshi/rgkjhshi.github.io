@@ -12,6 +12,7 @@ JDK的Collections类中提供了大量对Collection和Map的操作,网上资料�
 
 
 ******
+
 ## 排序操作(主要对List)
 
 * `void sort(List list)`: 对List里的元素根据自然升序排序
@@ -23,6 +24,7 @@ JDK的Collections类中提供了大量对Collection和Map的操作,网上资料�
 * `void rotate(List list, int distance)`: 所有元素循环右移distance位, distance=size则相当于没变
 
 ******
+
 ## 查找和替换(主要对Collection接口)
 
 * `int binarySearch(List list, T key)`: 二分搜索法, 返回对象在List中的索引, 前提是集合已经排序
@@ -35,6 +37,7 @@ JDK的Collections类中提供了大量对Collection和Map的操作,网上资料�
 * `int frequency(Collection c, Object o)`: 返回指定对象在集合中出现的次数
 
 ******
+
 ## 其他操作
 
 * `boolean addAll(Collection c, T... elements)`: 把elements添加到集合里

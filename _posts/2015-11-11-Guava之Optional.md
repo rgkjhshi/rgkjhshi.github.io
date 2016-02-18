@@ -12,6 +12,7 @@ tag: Guava
 
 
 *****
+
 ## 静态方法
 `Optional`有三个常用的静态方法:  
 
@@ -20,6 +21,7 @@ tag: Guava
 3. Optional.fromNullable(T nullableReference): 返回的可能是`Present`或者`Absent`, 表示对象肯能为`null`, 即参数为`null`时等同于`absent()`  
 
 *****
+
 ## 实例方法
 
 1. boolean isPresent( ): Optional包含的T实例不为`null`，则返回true

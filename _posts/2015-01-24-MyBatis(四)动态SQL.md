@@ -27,7 +27,7 @@ MyBatis的动态SQL是基于ONGL表达式的
 
 if一般是where的一部分，如
 
-```xml
+~~~xml
 <select id="findBlog" resultType="Blog">
   SELECT * FROM BLOG WHERE 1 = 1
   <if test="title != null">
@@ -38,14 +38,14 @@ if一般是where的一部分，如
     AND author_name like #{author.name}
   </if>
 </select>
-```
+~~~
 
 *****
 
 <h2 id="where"> where </h2>
 像上面的例子，为了拼接sql，专门写了个 WHERE 1 = 1，`where`标签就能避免这样的问题，它会自动去除不该有的`AND`或`OR`
 
-```xml
+~~~xml
 <select id="findBlog" resultType="Blog">
   SELECT * FROM blog
   <where>
@@ -60,14 +60,14 @@ if一般是where的一部分，如
     </if>
   </where>
 </select>
-```
+~~~
 
 *****
 
 <h2 id="set"> set </h2>
 set元素主要是用在更新操作的时候，它会智能去掉最后的逗号。如果set中一个条件都不满足，则会报错。
 
-```xml
+~~~xml
 <update id="updateBlog" parameterType="Blog">  
     UPDATE blog  
     <set>  
@@ -83,21 +83,21 @@ set元素主要是用在更新操作的时候，它会智能去掉最后的逗�
     </set>  
     where id = #{id}  
 </update>  
-```
+~~~
 
 *****
 
 <h2 id="foreach"> foreach </h2>
 foreach主要用在in语句中，它可以在SQL语句中遍历一个集合。
 
-```xml
+~~~xml
 <select id="foreachTest" parameterType="java.util.List" resultType="Blog">  
     SELECT * FROM blog WHERE id in  
     <foreach collection="list" index="index" item="item" open="(" separator="," close=")">  
         #{item}  
     </foreach>  
 </select>
-```
+~~~
 
 * `item`声明可以用在元素体内的集合项，相当于集合每一个元素进行迭代时的别名  
 * `index`声明可以用在元素体内的索引变量，即元素的位置。
@@ -113,7 +113,7 @@ foreach主要用在in语句中，它可以在SQL语句中遍历一个集合。
 <h2 id="choose"> choose (when, otherwise) </h2>
 choose元素的作用就相当于JAVA中的switch语句
 
-```xml
+~~~xml
 <select id="chooseTest" parameterType="Blog" resultType="Blog">  
     SELECT * FROM blog WHERE 1 = 1   
     <choose>  
@@ -128,6 +128,6 @@ choose元素的作用就相当于JAVA中的switch语句
         </otherwise>  
     </choose>  
 </select>
-```
+~~~
 
 *****

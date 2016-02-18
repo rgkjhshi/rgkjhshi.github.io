@@ -17,6 +17,7 @@ Java中Collection的继承关系图, 虚线表示接口, 实线表示类
 ![Collection继承关系图]({{ "/static/images/collection.png" | prepend: site.baseurl }} "Collection结构图")
 
 ******
+
 ## Collection基本操作
 
 * `int size()`: 返回集合大小
@@ -34,6 +35,7 @@ Java中Collection的继承关系图, 虚线表示接口, 实线表示类
 * `void clear()`: 清空集合
 
 ## Set接口
+
 * Set不允许包含相同的元素, 而判断两个对象是否相同则是根据`equals`方法
 * `HashSet`不是同步的, 不能保证元素的排列顺序, 注意`hashCode`方法的实现
 * `LinkedHashSet`根据元素的`hashCode`值来决定元素的存储位置，但它同时使用链表维护元素的次序
@@ -41,6 +43,7 @@ Java中Collection的继承关系图, 虚线表示接口, 实线表示类
 
 ## List接口
 `List`是经常用到的工具, 是有序集合, 增加了与索引位置相关的操作:
+
 * `E get(int index)`: 获取指定位置的元素
 * `E set(int index, E element)`: 替换指定位置的元素
 * `void add(int index, E element)`: 将元素添加到指定位置
@@ -52,8 +55,10 @@ Java中Collection的继承关系图, 虚线表示接口, 实线表示类
 
 ### ArrayList和Vector
 `ArrayList`是线程不安全的,而`Vector`是线程安全的  
+
 ### Stack
 `Stack`是`Vector`的子类,模拟数据结构中的栈,有下面几个操作:
+
 * `E push(E item)`: 压栈
 * `E pop()`: 出栈
 * `E peek()`: 查看栈顶元素, 不出栈
@@ -62,6 +67,7 @@ Java中Collection的继承关系图, 虚线表示接口, 实线表示类
 
 ## Queue接口
 `Queue`用于模拟队列这种数据结构，实现先进先出"FIFO"等数据结构,常用如下操作:
+
 * `boolean add(E e)`: 不建议使用
 * `boolean offer(E e)`: 将指定元素插入队尾列,当使用有容量限制的队列时,此方法通常要优于`add(E)`,
 后者可能无法插入元素，而只是抛出一个异常。**推荐使用此方法取代add**
@@ -76,6 +82,7 @@ Java中Collection的继承关系图, 虚线表示接口, 实线表示类
 
 ### Deque接口与ArrayDeque类
 `Deque`代表一个双端队列，可以当作一个双端队列使用，也可以当作“栈”来使用，因为它包含出栈`pop()`与入栈`push()`方法
+
 * `void addFirst(E e)`: 元素增加至队头, 超容量抛异常
 * `void addLast(E e)`: 元素增加至队尾, 超容量抛异常
 * `boolean offerFirst(E e)`: 元素增加至队头, 比add安全

@@ -12,10 +12,11 @@ SpringMVC中,每一个URL请求是通过`DispatcherServlet`负责转发给相应
 
 
 *****
+
 ## 简单URL映射规则
 `@RequestMapping`可以标记在类上,也可以标记在方法上,通过例子说明(假设拦截`*.do`)
 
-```java
+~~~java
 @Controller
 @RequestMapping("/test")  // 若类`TestController`上没有`@RequestMapping`注解, 则访问`/index1.do`即可调用`index1`方法
 public class TestController {
@@ -30,10 +31,11 @@ public class TestController {
         return "index2";
     }
 }
-```
+~~~
+
 *****
 
-## `@RequestMapping`
+## RequestMapping
 `@RequestMapping`还有很多高级应用, 它有如下属性:
 
 * value : url映射路径,如`@RequestMapping({"/index1"})`、`@RequestMapping({"/index2", "/index3"})`
@@ -44,7 +46,7 @@ public class TestController {
 * consumes : 指定处理请求的提交内容类型(Content-Type),例如application/json, text/html
 * produces : 指定返回的内容类型，仅当request请求头中的(Accept)类型中包含该指定类型才返回
 
-```java
+~~~java
 @Controller
 @RequestMapping("/test")
 public class TestController {
@@ -78,14 +80,16 @@ public class TestController {
     public String index5() {
         return "index5";
     }
-```
+}
+~~~
 
 *****
-## `@PathVariable`
+
+## PathVariable
 在`@RequestMapping`注解标注的方法上可以使用URI模板  
 URI模板就是在URI中给定一个变量, 然后在映射的时候动态的给该变量赋值, 通过注解`@PathVariable`获取URI模板中的值
 
-```java
+~~~java
 @Controller
 //@RequestMapping(value = "/{testName}")  // 类上的模板变量可以赋值给所有成员方法的参数
 public class TestController {
@@ -102,9 +106,11 @@ public class TestController {
         return indexName + "-" + v;
     }
 }
-```
+~~~
+
 *****
-## `@RequestParam`
+
+## RequestParam
 使用`@RequestParam`可以绑定`HttpServletRequest`请求参数到Controller的方法参数  
 它有几个属性:
 
@@ -113,7 +119,7 @@ public class TestController {
 * required : 是否必传, 默认为`true`
 * defaultValue : 默认值, 不传时相当于默认传了该值
 
-```java
+~~~java
 @Controller
 public class TestController {
     // URI: `/index1.do?id=5`, 则 id = 5
@@ -123,16 +129,19 @@ public class TestController {
         return id;
     }
 }
-```
+~~~
+
 *****
-## `@CookieValue`
+
+## CookieValue
 使用`@CookieValue`可以绑定 cookie 的值到Controller的方法参数, 它的属性和用法同`RequestParam`
 
 *****
-## `@RequestHeader`
+
+## RequestHeader
 使用`@RequestHeader`可以绑定`HttpServletRequest`头信息到Controller的方法参数, 属性和用法同`RequestParam`
 
-```java
+~~~java
 @Controller
 public class TestController {
     @RequestMapping("/index")
@@ -141,9 +150,11 @@ public class TestController {
         return Host + ";" + host;  // 两个值是一样的, 即RequestHeader是大小写不敏感的, 这是与RequestParam的不同
     }
 }
-```
+~~~
+
 *****
-## `@ModelAttribute`和`@SessionAttributes`
+
+## ModelAttribute 和 SessionAttributes
 `@ModelAttribute`和`@SessionAttributes`可在不同的模型和控制器之间共享数据  
 `@ModelAttribute`主要有两种使用方式，一种是标注在方法上，一种是标注在Controller的方法参数上:
 
@@ -160,7 +171,7 @@ public class TestController {
 
 如何使用看下面例子
 
-```java
+~~~java
 // OneController没有使用`@SessionAttributes`标注, 属性值存放在模型属性中
 @RestController
 public class OneController {
@@ -218,10 +229,10 @@ public class TwoController {
         return v1 + "," + s1 + "," + s2 + "," + d1;
     }
 }
-```
+~~~
 对于`TwoController`的输出结果有必要说明下:
 
-```java
+~~~java
 // 第一遍请求/two.do输出的结果:
 model:v1
 model:s1
@@ -233,10 +244,11 @@ model:d1
 session:v1
 session:s1
 session:string
-```
+~~~
 第一遍请求时session中还没有属性，请求完建立session之后才有值
 
 *****
+
 ## 自定义参数类型转换
 处理器方法参数接收请求参数绑定数据的时候,对于一些简单的数据类型Spring会帮我们自动进行类型转换,而对于一些复杂的类型想要在接受参数时自动转换就必须向Spring注册一个对特定类型的识别转换器  
 Spring允许我们提供两种类型的识别转换器，一种是注册在Controller中的，一种是注册在SpringMVC的配置中;  
@@ -247,7 +259,7 @@ Spring允许我们提供两种类型的识别转换器，一种是注册在Contr
 ### 使用`@InitBinder`注解定义局部的类型转换器
 在控制器里定义一个用`@InitBinder`注解的方法并声明一个`WebDataBinder`参数, 当Controller在处理请求方法时,若发现有不能解析的对象, 就会看该类中是否有用`@InitBinder`标记的方法, 如果有就会执行该方法, 然后看里面定义的类型转换器是否与当前需要的类型匹配.如下:
 
-```java
+~~~java
 @Controller
 public class TestController {
     @InitBinder
@@ -260,15 +272,17 @@ public class TestController {
     public void testDate(@PathVariable Date date, Writer writer) throws IOException {
         writer.write(String.valueOf(date.getTime()));  // 输出: 1450368000000
     }
-```
+}
+~~~
 类型转换器是通过`WebDataBinder`对象的`registerCustomEditor`方法来注册的,要实现自己的类型转换器就要实现自己的`PropertyEditor` 对象. Spring已经提供了一些常用的属性编辑器,如`CustomDateEditor`,`CustomBooleanEditor`等
-### `PropertyEditor`属性编辑器
+
+### PropertyEditor属性编辑器
 `PropertyEditor`是JDK的接口,它有个实现类:`PropertyEditorSupport`,所以要实现自己的`PropertyEditor`时只需继承`PropertyEditorSupport`类, 然后重写其中的一些方法即可,一般重写`setAsText`和`getAsText`方法就可以了.
 
 `setAsText`方法用于把字符串类型的值转换为对应的对象,一般先把字符串类型的对象转为特定的对象，然后利用`PropertyEditor`的`setValue`方法设定转换后的值.  
 `getAsText`方法用于把对象当做字符串来返回,一般先使用`getValue`方法获取当前的对象, 然后把它转换为字符串后再返回给`getAsText`方法
 
-```java
+~~~java
 @Controller
 public class TestController {
     @InitBinder
@@ -289,11 +303,13 @@ public class TestController {
         // 使用 WebDataBinder 注册 User 类型的属性编辑器
         binder.registerCustomEditor(User.class , userEditor);
     }
-```
-### 实现`WebBindingInitializer`接口定义全局的类型转换器
+}
+~~~
+
+### 实现WebBindingInitializer接口定义全局的类型转换器
 定义全局的类型转换器需要实现自己的`WebBindingInitializer`对象,然后把该对象注入到`RequestMappingHandlerAdapter`中,这样Spring在遇到自己不能解析的对象的时候就会到全局的`WebBindingInitializer`的`initBinder`方法中去找,每次遇到不认识的对象时,`initBinder`方法都会被执行一遍.
 
-```java
+~~~java
     @Bean
     public RequestMappingHandlerAdapter requestMappingHandlerAdapter() {
         RequestMappingHandlerAdapter adapter = super.requestMappingHandlerAdapter();
@@ -307,9 +323,10 @@ public class TestController {
         });
         return adapter;
     }
-```
+~~~
 
 *****
+
 ## 控制器方法支持的方法参数
 `@RequestMapping`标记的控制器方法,传入spring会自动帮我们赋值，我们直接在方法上声明参数即可。  
 方法的传入参数归纳如下:
@@ -318,7 +335,7 @@ public class TestController {
 * Spring自己的`WebRequest`对象: 该对象可以访问到存放在HttpServletRequest和HttpSession中的属性值
 * 流对象: 包括`InputStream`, `OutputStream`, `Reader`和`Writer`.`InputStream`和`Reader`是针对HttpServletRequest 而言的,可以从里面取数据; `OutputStream`和`Writer`是针对HttpServletResponse而言的,可以往里面写数据,如下列子:
 
-```java
+~~~java
 @Controller
 public class TestController {
     @RequestMapping("/index")  //  直接向客户端输出内容
@@ -329,7 +346,7 @@ public class TestController {
         writer.write( "\r" );
     }
 }
-```
+~~~
 
 * 使用`@PathVariable`, `@RequestParam`, `@CookieValue`和`@RequestHeader`标记的参数
 * 使用`@ModelAttribute`标记的参数: 取模型属性相当于`request.getAttribute("key")`;  使用`@SessionAttributes`注解控制器之后,从session中取数据相当于`session.getAttribute("key")`
@@ -339,6 +356,7 @@ public class TestController {
 * Spring封装的`Errors`和`BindingResult`对象: 这两个对象参数必须紧接在需要验证的实体对象参数之后，它里面包含了实体对象的验证结果
 
 *****
+
 ## 返回值的类型
 处理器中`@RequestMapping`标记的处理器方法的返回值也有不同情况，大部分情况是返回一个`ModelAndView`, 这个过程中发挥作用的就是`ViewResolver`和`View`.
 有下面这些情况:

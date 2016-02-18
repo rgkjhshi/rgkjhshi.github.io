@@ -31,26 +31,24 @@ tag: Java
 
 `@Target`用于说明Annotation所修饰的对象范围，比如用于修饰类、接口、构造方法、成员方法、成员变量等，它作用范围的取值有:  
 
-```
-ElementType.TYPE            : 用于描述类、接口(包括注解类型) 或enum声明
-ElementType.FIELD           : 用于描述字段
-ElementType.METHOD          : 用于描述方法
-ElementType.PARAMETER       : 用于描述参数
-ElementType.CONSTRUCTOR     : 用于描述构造器
-ElementType.LOCAL_VARIABLE  : 用于描述局部变量
-ElementType.ANNOTATION_TYPE : 用于注解类型
-ElementType.PACKAGE         : 用于描述包
-```
+| ElementType.TYPE            | 用于描述类、接口(包括注解类型) 或enum声明 |
+| ElementType.FIELD           | 用于描述字段  |
+| ElementType.METHOD          | 用于描述方法  |
+| ElementType.PARAMETER       | 用于描述参数  |
+| ElementType.CONSTRUCTOR     | 用于描述构造器 |
+| ElementType.LOCAL_VARIABLE  | 用于描述局部变量 |
+| ElementType.ANNOTATION_TYPE | 用于注解类型 |
+| ElementType.PACKAGE         | 用于描述包 |
 
 * @Retention
 
 `@Retention`定义Annotation的有效期，即生命周期，如是源码级还是class级还是可以被加载到虚拟机，它的取值有:   
 
-```
+~~~
 RetentionPoicy.SOURCE       : 在源文件中有效（即源文件保留）
 RetentionPoicy.CLASS        : 在class文件中有效（即class保留）
 RetentionPoicy.RUNTIME      : 在运行时有效（即运行时保留）
-```
+~~~
 
 * @Documented
 
@@ -62,7 +60,7 @@ RetentionPoicy.RUNTIME      : 在运行时有效（即运行时保留）
 
 下面是定义注解的例子:
 
-```java
+~~~java
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -91,7 +89,7 @@ public class AnnotationTest {
         }
     }
 }
-```
+~~~
 
 
 *****

@@ -11,6 +11,7 @@ tag: Spring
 
 
 *****
+
 ## AOP的实现方式
 在Java中,从织入切面的方式上来看,存在三种织入方式:编译时织入、加载时织入和运行时织入
 
@@ -18,6 +19,7 @@ tag: Spring
 
 指在Java编译期,采用特殊的编译器, 将切面织入到Java类中,即发生在从java文件到class文件的过程.  
 这种方式将切面直接编译进了字节码，所以运行时不再需要动态创建代理对象, 节约了内存和CPU, 但编译过程复杂(可借助Maven AspectJ插件)，编写aspect文件(.aj文件)复杂
+
 * 加载时织入(Load Time Weaving, LTW)
 
 指通过特殊的类加载器(如AspectJ compiler), 在JVM载入字节码文件时, 织入切面, 即发生在class文件加载的过程.  
@@ -28,6 +30,7 @@ tag: Spring
 采用CGLib工具或JDK动态代理进行切面的织入, 如Spring AOP
 
 *****
+
 ## AOP、CGLib、Spring AOP、AspectJ之间的关系
 
 * AOP, Aspect Oriented Programming, 面向切面编程,是个概念, 类似于面向对象编程(OOP)一样
@@ -39,6 +42,7 @@ tag: Spring
   3. AspectJ同样也支持运行时织入，运行时织入是基于动态代理的(默认机制)
 
 *****
+
 ## Spring中AOP相关的概念
 在怎么使用之前,最好先看看相关概念,有关`Joinpoint`、`Pointcut`、`Advice`等概念,看[这里](http://shouce.jb51.net/spring/aop.html#aop-introduction-defn)
 
@@ -54,16 +58,18 @@ tag: Spring
 在`@AspectJ`注解风格的AOP中, *切入点签名* 通过一个普通的方法定义来提供, 该方法必需反回`void`类型;  
 *切入点表达式* 使用`@Pointcut`注解来表示(内容略多, 后面讲), 一个切入点声明如下:
 
-```java
+~~~java
 @Pointcut(value="execution(* sayAdvisorBefore(..)) && args(param)", argNames = "param")
 public void pointcutName(String param) {}
-```
+~~~
+
 * value: 指定切入点表达式, 如`execution`、`args`等
 * argNames: 指定该切入点方法参数列表,多个用`,`分隔,这些参数将传递给通知方法同名的参数;
 * pointcutName: 切入点名字，可以用该名字引用该切入点表达式
 
 ## 声明通知
 `@AspectJ`风格的声明通知支持5种通知类型:
+
 * `@Before`: 前置通知,执行连接点方法之前执行
 * `@AfterReturning`: 后置返回通知, 一个匹配的方法返回的时候执行
 * `@AfterThrowing`: 异常通知, 在一个方法抛出异常后执行
@@ -74,7 +80,7 @@ public void pointcutName(String param) {}
 
 下面是通知的使用方式:
 
-```java
+~~~java
 @Before(value = "切入点表达式或命名切入点", argNames = "参数列表参数名")
 @After(value  = "切入点表达式或命名切入点", argNames = "参数列表参数名")
 @Around(value = "切入点表达式或命名切入点", argNames = "参数列表参数名")
@@ -88,10 +94,10 @@ value = "切入点表达式或命名切入点",
 pointcut = "切入点表达式或命名切入点",
 argNames = "参数列表参数名",
 throwing = "异常对应参数名")
-```
+~~~
 来个小例子:
 
-```java
+~~~java
 @Aspect
 public class BeforeExample {
     @Before(value = "pointcutName(param)", argNames = "param")
@@ -99,16 +105,17 @@ public class BeforeExample {
         System.out.println(param);
     }
 }
-```
+~~~
 上例使用`@Before`进行前置通知声明,其中value用于定义切入点表达式或引用命名切入点
 
 *****
+
 ## 通知参数
 通知方法可以获取被通知方法的参数，主要是通过`JoinPoint`(环绕通知是`JoinPoint`的子类`ProceedingJoinPoint`)来获取, `JoinPoint`必须是第一个参数, Spring会自动传入.
 
 `JoinPoint`的声明如下:
 
-```java
+~~~java
 public interface ProceedingJoinPoint extends JoinPoint {  
     public Object proceed() throws Throwable;    // 执行连接点的方法
     public Object proceed(Object[] args) throws Throwable; // 执行连接点的方法,可以把原来的参数用新的args替换掉
@@ -134,8 +141,10 @@ public interface JoinPoint {
         String toLongString();       //连接点所在位置的全部相关信息  
     }
 }
-```
+~~~
+
 *****
+
 ## 切入点表达式
 切入点表达式就是组成`@Pointcut`注解的值, 用于匹配具体的连接点.  
 切入点表达式由切入点指示符、类型匹配语句、通配符、组合符组成
@@ -160,7 +169,8 @@ public interface JoinPoint {
 * 对类的匹配: `注解? 类的全限定名字`
 * 对方法的匹配: `注解? 修饰符? 返回值类型 类型声明? 方法名(参数列表) 异常列表？`
 
-**类型匹配的通配符**  
+**类型匹配的通配符**
+
 * `*`: 匹配任何数量字符；
 * `..`:(两个点)匹配任何数量字符的重复;如在类型模式中匹配任何数量子包,而在方法参数模式中匹配任何数量参数
 * `+`: 匹配指定类型的子类型,仅能作为后缀放在类型模式后边
@@ -169,6 +179,7 @@ public interface JoinPoint {
 AspectJ使用 与(&&)、或(||)、非(!)来组合切入点表达式, 在xml文件中可使用and、or、not
 
 ## 切入点表达式示例
+
 * `execution`使用`execution(方法表达式)`匹配方法执行
 
 | 表达式                    | 描述     |

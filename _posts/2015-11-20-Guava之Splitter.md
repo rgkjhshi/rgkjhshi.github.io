@@ -12,8 +12,10 @@ tag: Guava
 
 
 *****
-## 生成`Splitter`的方法
+
+## 生成 Splitter 的方法
 工厂方法:
+
 * `Splitter on(char separator)`
 * `Splitter on(final CharMatcher separatorMatcher)`
 * `Splitter on(final String separator)`
@@ -22,6 +24,7 @@ tag: Guava
 * `Splitter fixedLength(final int length)`: 每length个元素分成一组
 
 修饰方法:
+
 * `Splitter omitEmptyStrings()`
 * `Splitter limit(int limit)`
 * `Splitter trimResults()`
@@ -29,7 +32,7 @@ tag: Guava
 
 示例:
 
-```java
+~~~java
 Splitter.on(',').split("foo,,bar");  // ["foo", "", "bar"]
 Splitter.on(CharMatcher.anyOf(";,")).split("foo,;bar,quux"); // ["foo", "", "bar", "quux"]
 Splitter.on(", ").split("foo, bar,baz"); // ["foo", "bar,baz"]
@@ -39,7 +42,8 @@ Splitter.on(',').limit(3).split("a,b,c,d"); // ["a", "b", "c,d"]
 Splitter.on(',').limit(3).omitEmptyStrings().split("a,,,b,,,c,d"); // ["a", "b", "c,d"]
 Splitter.on(',').limit(3).trimResults().split(" a , b , c , d "); // ["a", "b", "c , d"]
 Splitter.on(',').trimResults(CharMatcher.is('_')).split("_a ,_b_ ,c__"); // ["a ", "b_ ", "c"]
-```
+~~~
+
 *****
 
 ## split 方法
@@ -50,15 +54,16 @@ Splitter.on(',').trimResults(CharMatcher.is('_')).split("_a ,_b_ ,c__"); // ["a 
 *****
 
 ## MapSplitter
-Splitter提供了个方法返回内部类`Splitter.MapSplitter`专门分割成map  
+Splitter提供了个方法返回内部类`Splitter.MapSplitter`专门分割成map
+
 * `MapSplitter withKeyValueSeparator(String separator)`
 * `MapSplitter withKeyValueSeparator(char separator)`
 * `MapSplitter withKeyValueSeparator(Splitter keyValueSplitter)`
 
 注意: `MapSplitter`的`split`方法返回的是`Map<String, String>`
 
-```java
+~~~java
 Map<String, String> map = Splitter.on("&").withKeyValueSeparator("=").split("a=1&b=2&c=3");
-```
+~~~
 
 *****

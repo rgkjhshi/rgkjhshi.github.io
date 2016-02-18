@@ -12,7 +12,9 @@ guava的collection包里有个`Ordering`抽象类实现了`java.util.Comparator`
 
 
 *****
+
 ## 静态方法
+
 * `Ordering<C> natural()`: 返回自然顺序的比较器, 如数字按大小，日期按先后
 * `Ordering<T> from(Comparator<T> comparator)`: 把给定的Comparator转化为排序器
 * `Ordering<Object> usingToString()`: 按对象的字符串形式做字典排序
@@ -22,7 +24,9 @@ guava的collection包里有个`Ordering`抽象类实现了`java.util.Comparator`
 比如:`Ordering.allEqual().nullsLast().sortedCopy(asList(t, null, e, s, null, t, null))}`
 
 *****
+
 ## 实例方法:链式调用
+
 * `Ordering<S> reverse()`: 返回反序比较器
 * `Ordering<S> nullsFirst()`: 使用当前排序器, 但额外把`null`放到最前面
 * `Ordering<S> nullsLast()`: 使用当前排序器, 但额外把`null`放到最后面
@@ -31,17 +35,19 @@ guava的collection包里有个`Ordering`抽象类实现了`java.util.Comparator`
 
 看下面这个链式调用的例子, 应该从后往前读, 先调用apply方法获取Foo的name值, 在把null放前面, 再对剩下的按照name的自然顺序进行排序
 
-```java
+~~~java
 Ordering<Foo> ordering = Ordering.natural().nullsFirst().onResultOf(new Function<Foo, String>() {
     public String apply(Foo foo) {
         return foo.getName;
     }
 });
-```
+~~~
 
 *****
+
 ## 实例方法:操作集合元素的方法
 注:后面说的大小是指排序的前后
+
 ### `min()`: 返回最小的那个元素, 重载方法有
 * `E min(Iterator<E> iterator)`: 迭代器空则抛出`NoSuchElementException`
 * `E min(Iterable<E> iterable)`

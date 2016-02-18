@@ -46,7 +46,7 @@ logback配置文件的跟节点为`<configuration>`,它的子节点有3个:`root
 <h3 id="debug"> debug 属性 </h3>
 如果logback的配置文件加载过程中出现了warning或error，则logback会把自身状态的日志打印出来，如下:
 
-```
+~~~
 00:16:31,885 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.test.log] to INFO
 00:16:31,885 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting additivity of logger [com.test.log] to false
 00:16:31,885 |-ERROR in ch.qos.logback.core.joran.action.AppenderRefAction - Could not find an appender named [STDOUT]....
@@ -56,15 +56,18 @@ logback配置文件的跟节点为`<configuration>`,它的子节点有3个:`root
 00:16:31,885 |-ERROR in ch.qos.logback.core.joran.action.AppenderRefAction - See ... for more details.
 00:16:31,885 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - End of configuration.
 00:16:31,888 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@36577c06 - Registering current configuration as...
-```
+~~~
 如果加载过程未出现警告或者错误，就不会打印出来了。  
 若指定了`debug="true"`，即使不出现警告和错误，也会打印出logback内部的状态日志。
+
 <h3 id="scan"> scan 属性 </h3>
 可通过属性设置`scan="true"`，在配置文件发生改变时自动重新加载配置文件，默认1分钟重新扫描一次。  
 可通过属性设置`scanPeriod="30 seconds"`，指定30秒扫描一次。  
 扫描间隔的单位可以是`milliseconds, seconds, minutes 或 hours`，若不指定单位，默认为`milliseconds`。
+
 *****
-<h2 id="logger"> logger元素 </h3>
+
+<h2 id="logger"> logger元素 </h2>
 `logger`元素用于配置代码中的logger，它有属性如: `name、level、additivity`，其中`name`属性是必须的，其他2个可选。
 有0个或多个子元素`<appender-ref ref="STDOUT" />`来指定日志输出的格式。若0个，则不指定输出格式，就不会输出了。  
 **注意**`root`是最顶级的logger，它只有个可选属性level。
@@ -72,115 +75,48 @@ logback配置文件的跟节点为`<configuration>`,它的子节点有3个:`root
 <h3 id="name"> name 属性 </h3>
 在java代码中，getLogger(String className)的参数一样获取到的logger是同一个，如下面的`logger1`和`logger2`就是同一个对象:
 
-```java
+~~~java
 Logger logger1 = LoggerFactory.getLogger("org.slf4j.Logger");
 Logger logger2 = LoggerFactory.getLogger("org.slf4j.Logger");
-```
+~~~
 日志`logger`有个`name`属性，跟代码中传的参数有一定的关系，举个例子:
 
-```java
+~~~java
     <!-- 配置文件中 -->
     <logger name="A.B" level="debug" >
     // java 代码中
     Logger logger = LoggerFactory.getLogger("A.B.C");
-```
+~~~
 输出的日志会先在配置文件中匹配名字为"A.B.C"的logger，未找到，匹配到了"A.B"的logger，则按照其指定的`appender`格式进行输出。
+
 <h3 id="level"> level属性 </h3>
 日志的级别有: `TRACE < DEBUG < INFO <  WARN < ERROR (ALL、OFF)`  
 日志级别是可以继承的，root不用指定级别，默认就是"DEBUG". 举个继承的例子:
-<table>
-	<tr>
-		<th>Logger name</th>
-		<th>Assigned level</th>
-		<th>Effective level</th>
-	</tr>
-	<tr class="alt" align="left">
-		<td>root</td>
-		<td>DEBUG</td>
-		<td>DEBUG</td>
-	</tr>
-	<tr align="left">
-		<td>X</td>
-		<td>INFO</td>
-		<td>INFO</td>
-	</tr>
-	<tr class="alt" align="left">
-		<td>X.Y</td>
-		<td>未指定</td>
-		<td>INFO(继承来的)</td>
-	</tr>
-	<tr align="left">
-		<td>X.Y.Z</td>
-		<td>ERROR</td>
-		<td>ERROR(自己有)</td>
-	</tr>
-</table>
+
+| Logger name | Assigned level | Effective level |
+|: ---------- |: ------------- |: -------------- |
+| root        | DEBUG          | DEBUG           |
+| X           | INFO           | INFO            |
+| X.Y         | 未指定          | INFO(继承来的)   |
+| X.Y.Z       | ERROR          | ERROR(自己有)    |
 
 <h3 id="additivity"> additivity属性 </h3>
-该属性表示日志的可叠加性，默认为true,表示到达本logger的日志通过本日志的appender指定格式输出之后，仍会将日志扩散给父logger。  
+该属性表示日志的可叠加性，默认为true,表示到达本logger的日志通过本日志的appender指定格式输出之后， 仍会将日志扩散给父logger。  
 弄个表格就容易看清楚了:
-<table class="bodyTable">
-	<tr>
-		<th>Logger Name</th>
-		<th>Attached Appenders</th>
-		<th>Additivity Flag</th>
-		<th>Output Targets</th>
-		<th>Comment</th>
-	</tr>
-	<tr>
-		<td>root</td>
-		<td>A1</td>
-		<td>not applicable</td>
-		<td>A1</td>
-		<td>root没有父logger，<br>所以additivity属性对root不适用
-		</td>
-	</tr>
-	<tr class="alt">
-		<td>x</td>
-		<td>A-x1, A-x2</td>
-		<td>true</td>
-		<td>A1, <br>A-x1, A-x2</td>
-		<td>"x"(自己)的appender<br>扩散到root的appender</td>
-	</tr>
-	<tr>
-		<td>x.y</td>
-		<td>none</td>
-		<td>true</td>
-		<td>A1, <br>A-x1, A-x2</td>
-		<td>扩散到"x"和root的appender.</td>
-	</tr>
-	<tr class="alt">
-		<td>x.y.z</td>
-		<td>A-xyz1</td>
-		<td>true</td>
-		<td>A1, <br>A-x1, A-x2, <br>A-xyz1</td>
-		<td>"x.y.z"的appender<br>扩散到"x"和root的appender.</td>
-	</tr>
-	<tr>
-		<td>security</td>
-		<td>A-sec</td>
-		<td class="blue"><span class="blue">false</span></td>
-		<td>A-sec</td>
-		<td>
-			additivity=<code>false</code>.<br>
-            只用到 appender A-sec.
-		</td>
-	</tr>
-	<tr class="alt">
-		<td>security.access</td>
-		<td>none</td>
-		<td>true</td>
-        <td>A-sec</td>
-		<td>
-            "security"中的additivity＝<code>false</code>.<br>
-			只扩散到了"security" 的appender.
-		</td>
-	</tr>
-</table>
+
+| Logger Name | Attached Appenders | Additivity Flag | Output Targets | Comment |
+|: ---------- |: ------------- |: -------------- |: ------------- |: -------------- |
+| root        | A1             | not applicable  | A1             | root没有父logger,所以additivity属性对root不适用    |
+| x           | A-x1, A-x2      | true           | A1,<br> A-x1, A-x2     | "x"(自己)的appender,<br> 扩散到root的appender    |
+| x.y         | none            | true           | A1,<br> A-x1, A-x2     | 扩散到"x"和root的appender    |
+| x.y.z       | A-xyz1          | true           | A1,<br> A-x1, A-x2<br> A-xyz1     | "x.y.z"的appender<br> 扩散到"x"和root的appender    |
+| security    | A-sec           | false          | A-sec     | additivity=false, 只用到 appender A-sec   |
+| security.access    | none     | true           | A-sec     | "security"中的additivity＝false. 只扩散到了"security" 的appender   |
+
 **注意**  
 最后一个小例子:
 
-```java
+~~~java
     // java代码,A.B.C包中的类
     logger.debug("debug");
     logger.info("info");
@@ -190,13 +126,13 @@ Logger logger2 = LoggerFactory.getLogger("org.slf4j.Logger");
     <root level="OFF">
         <appender-ref ref="STDOUT"/>
     </root>
-```
+~~~
 运行的结果是会打印"info".  
 因为logger配置了级别为info，但是并不打印，扩散到了root;  
 root级别为OFF，但是logger扩散过来的日志级别仍为继承的info.  
 所以只有A.B.C包中级别大于等于info的日志会被打印。
 
-<h2 id="appender"> appender元素 </h3>
+<h2 id="appender"> appender元素 </h2>
 `appender`元素内容稍微多点，它有2个必需属性:`name`和`class`。  
 有3个可选的子元素`<encoder>、<layout>、<filter>`，这3个子元素可有0个或者多个。  
 一般只用`<encoder>`，它包装了`<layout>`。
@@ -207,7 +143,7 @@ root级别为OFF，但是logger扩散过来的日志级别仍为继承的info.
 实际上`encoder`内部包装了`PatternLayout`，然后又多了一些控制功能。
 来个例子:
 
-```xml
+~~~xml
 <!-- 一般这样写 -->
 <appender name="FILE" class="ch.qos.logback.core.FileAppender">
   <file>testFile.log</file>
@@ -228,21 +164,21 @@ root级别为OFF，但是logger扩散过来的日志级别仍为继承的info.
     <pattern>%msg%n</pattern>
   </layout>
 </appender>  
-```
+~~~
 <h3 id="layout"> layout 子元素 </h3>
 `layout`用于指定输出格式,有个class属性，不写默认是`ch.qos.logback.classic.PatternLayout`。  
 也可以自己定义layout，然后像下面这样使用(一般也不自己定义):
 
-```xml
+~~~xml
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
       <layout class="chapters.layouts.MySampleLayout" />
     </encoder>
   </appender>
-```
+~~~
 我们一般使用的方式是上一小结那样，仅自己指定输出格式,输出格式很有必要说明,先来个简单的介绍,下一小节详细介绍pattern
 
-```xml
+~~~xml
 <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <!-- class默认就是这个类，可不写 -->
     <layout class="ch.qos.logback.classic.PatternLayout">
@@ -255,7 +191,8 @@ root级别为OFF，但是logger扩散过来的日志级别仍为继承的info.
         <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
     </layout>
 </appender>
-```
+~~~
+
 <h3 id="pattern"> 日志格式的详细说明(pattern元素) </h3>
 不管是`encoder`元素中还是`layout`元素中，都少不了`pattern`，它是用来描述日志输出格式的。  
 下面就是格式的详细介绍
@@ -264,7 +201,7 @@ root级别为OFF，但是logger扩散过来的日志级别仍为继承的info.
 
 像`%logger, %class`等都可以通过`length`来限定长度，对其进行缩写，不过这个长度有点特殊，举个例子说明会更明白:
 
-```java
+~~~java
 有个logger这样定义:
 private static final Logger logger = LoggerFactory.getLogger("Aaaaa.Bbbbb.TestLength");
    格式       |       结果
@@ -274,11 +211,12 @@ private static final Logger logger = LoggerFactory.getLogger("Aaaaa.Bbbbb.TestLe
 %logger{18}   :   A.Bbbbb.TestLength
 %logger{21}   :   A.Bbbbb.TestLength
 %logger{22}   :   Aaaaa.Bbbbb.TestLength
-```
+~~~
 最右边的那个类名总是显示的;  
 由于`A.Bbbbb.TestLength`长度为18，所以`0<lenght<18`时会被缩写成`A.B.TestLength`;  
 由于`Aaaaa.Bbbbb.TestLength`长度为22，所以`18<lenght<22`时会被缩写成`A.Bbbbb.TestLength`;  
 `lenght>=22`时不缩写;  
+
 **length总结** :
 
 1. 0只显示短类名(最右边的); 非0显示全类名，但是包名可能会被缩写，缩写成只有一个首字母
@@ -313,25 +251,25 @@ private static final Logger logger = LoggerFactory.getLogger("Aaaaa.Bbbbb.TestLe
 
 产生日志的时间。日志的格式如下:
 
-```java
+~~~java
 %d	                   : 2015-07-07 22:45:25,665
 %date	               : 2015-07-07 22:45:25,665
 %date{HH:mm:ss.SSS}	   : 22:45:25.665
 %date{yyyy-MM-dd HH:mm:ss.SSS}	2015-07-07 22:45:25.665
 注意那个毫秒前一定要写成点(.)
-```
+~~~
 
 * **格式控制**
 
 `"."`前面是最短长度，不够则补白；`"."`后面是最大长度。直接来个例子:
 
-```java
+~~~java
    格式化串         logger名                结果
 [%20.20logger]	  main.Name             [           main.Name]
 [%-20.20logger]   main.Name             [main.Name           ]
 [%10.10logger]	  main.foo.foo.bar.Name [o.bar.Name]
 [%10.-10logger]	  main.foo.foo.bar.Name [main.foo.f]
-```
+~~~
 
 
 *****

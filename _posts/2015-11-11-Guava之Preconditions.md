@@ -12,7 +12,8 @@ tag: Guava
 
 
 *****
-## `checkNotNull`
+
+## checkNotNull
 函数声明: `public static <T> T checkNotNull(T reference)`  
 函数功能: 检查参数不为空, 否则抛出`NullPointerException`  
 应用场景: 判断对象不为null  
@@ -24,14 +25,16 @@ tag: Guava
 第二个可自定义错误描述，第三个可以使用模板,如`("Age is %s", 18)`等
 
 *****
-## `checkArgument`
+
+## checkArgument
 函数声明: `public static void checkArgument(boolean expression)`  
 函数功能: 检查参数表达式是否为true, 为false时抛出`IllegalArgumentException`  
 应用场景: 判断表达式真假, 如`age > 18`  
 同样有三个重载函数
 
 *****
-## `checkState`
+
+## checkState
 函数声明: `public static void checkState(boolean expression)`  
 函数功能: 检查参数不为空, 否则抛出`IllegalStateException`  
 应用场景: 判断表达式真假, 常用于不依赖参数的判断, 如`Iterator.next()`  
@@ -39,7 +42,7 @@ tag: Guava
 
 *****
 
-## `checkElementIndex`
+## checkElementIndex
 函数声明: `public static int checkElementIndex(int index, int size)`  
 函数功能: 检查index范围属于[0, size), 否则抛出`IndexOutOfBoundsException`  
 应用场景: 一个List只传入`list.size()`和要判断的下标即可  
@@ -52,7 +55,7 @@ tag: Guava
 
 *****
 
-## `checkPositionIndex`
+## checkPositionIndex
 函数声明: `public static int checkPositionIndex(int index, int size)`  
 函数功能: 检查index范围属于[0, size], 否则抛出`IndexOutOfBoundsException`  
 应用场景: 我还在想  
@@ -60,7 +63,7 @@ tag: Guava
 
 *****
 
-## `checkPositionIndexes`
+## checkPositionIndexes
 函数声明: `public static void checkPositionIndexes(int start, int end, int size)`  
 函数功能: 检查 start和end属于[0, size]且start<=end, 否则抛出`IndexOutOfBoundsException`  
 

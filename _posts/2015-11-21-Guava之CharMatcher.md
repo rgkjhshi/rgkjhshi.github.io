@@ -13,6 +13,7 @@ tag: Guava
 
 
 *****
+
 ## 获取CharMatcher
 CharMatcher中的常量可以满足大多数字符匹配需求
 
@@ -36,6 +37,7 @@ CharMatcher中的常量可以满足大多数字符匹配需求
 | NINES                    |              |
 
 获取字符匹配器的常见方法
+
 * `is(final char match)`: 给定单一字符匹配
 * `isNot(final char match)`: 不是某字符
 * `anyOf(final CharSequence sequence)`: 枚举匹配字符,如`CharMatcher.anyOf(“aeiou”)`匹配小写英语元音
@@ -49,16 +51,19 @@ CharMatcher中的常量可以满足大多数字符匹配需求
 
 ## 使用字符匹配器
 返回是否匹配(`boolean`)的方法:
+
 * `boolean matchesAnyOf(CharSequence sequence)` : 是否sequence中有匹配的字符
 * `boolean matchesAllOf(CharSequence sequence)` : 是否sequence中的所有字符都匹配
 * `boolean matchesNoneOf(CharSequence sequence)` : sequence中不包含能够匹配的字符
 
 返回`int`的方法:
+
 * `int indexIn(CharSequence sequence)` : 返回第一次匹配上的下标, -1表示没有匹配的
 * `int indexIn(CharSequence sequence, int start)` : >=start或-1
 * `int lastIndexIn(CharSequence sequence)` : 最后一次匹配的下标, -1表示没有匹配的
 
 返回匹配的内容(`String`)的方法:
+
 * `String removeFrom(CharSequence sequence)` : 移除匹配字符,返回的是移除匹配字符之后剩下的
 * `String retainFrom(CharSequence sequence)` : 保留匹配字符
 * `String replaceFrom(CharSequence sequence, char replacement)` : 替代匹配字符
@@ -71,7 +76,7 @@ CharMatcher中的常量可以满足大多数字符匹配需求
 
 示例:
 
-```java
+~~~java
 CharMatcher.is('a').removeFrom("bazaar");  // "bzr"
 CharMatcher.is('a').retainFrom("bazaar");  // "aaa"
 CharMatcher.is('a').replaceFrom("radar", 'o'); // "rodor"
@@ -79,6 +84,6 @@ CharMatcher.is('a').replaceFrom("yaha", "oo"); // "yoohoo"
 CharMatcher.anyOf("ab").trimFrom("abacatbab"); // "cat"
 CharMatcher.inRange('\0', ' ').trimFrom(str); // 等同于 str.trim()
 CharMatcher.anyOf("eko").collapseFrom("bookkeeper", '-') // "b-p-r"
-```
+~~~
 
 *****
