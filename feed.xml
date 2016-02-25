@@ -5,9 +5,276 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 25 Feb 2016 14:39:00 +0800</pubDate>
-    <lastBuildDate>Thu, 25 Feb 2016 14:39:00 +0800</lastBuildDate>
+    <pubDate>Thu, 25 Feb 2016 17:13:00 +0800</pubDate>
+    <lastBuildDate>Thu, 25 Feb 2016 17:13:00 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>Class类简介</title>
+        <description>&lt;p&gt;java反射中经常用到Class类, 本文对它以及它的方法进行简单说明&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#class&quot;&gt;Class类简介&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;判定方法&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;获取内容系列方法&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;获取属性&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-3&quot;&gt;获取方法&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-4&quot;&gt;获取构造方法&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-5&quot;&gt;获取注解&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-6&quot;&gt;父类子类(接口)相关&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-7&quot;&gt;内部类相关&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-8&quot;&gt;名字相关&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-9&quot;&gt;其他方法&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;class&quot;&gt;Class类简介&lt;/h2&gt;
+&lt;p&gt;Class类位于&lt;code class=&quot;highlighter-rouge&quot;&gt;java.lang&lt;/code&gt;包中, Class类的实例表示正在运行的Java应用程序中的类和接口.&lt;br /&gt;
+枚举算类, 注解算接口; 数组算类,它映射的Class对象被有着相同元素和大小的数组共享;&lt;br /&gt;
+Java的原生(primitive types)类型(&lt;code class=&quot;highlighter-rouge&quot;&gt;boolean、byte、char、short、int、long、float、double&lt;/code&gt;)和关键字&lt;code class=&quot;highlighter-rouge&quot;&gt;void&lt;/code&gt;也代表Class对象.&lt;/p&gt;
+
+&lt;p&gt;Class类实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;Serializable、GenericDeclaration、Type、AnnotatedElement&lt;/code&gt;接口&lt;/p&gt;
+
+&lt;p&gt;Class类无public构造函数, Class类对象是由JVM在类加载的时候调用类加载器的&lt;code class=&quot;highlighter-rouge&quot;&gt;defineClass&lt;/code&gt;方法创建的.&lt;br /&gt;
+如下方法能够获取类名:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;obj.getClass().getName()&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Foo.class.getName()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;判定方法&lt;/h2&gt;
+&lt;p&gt;这些方法可以判断某个类是否是接口、是否是枚举、是否是注解、是否有某个注解、是否是匿名类、是否是某个类的超类(是否可强制转换为该类)等&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;boolean isArray()&lt;/code&gt;: 是否是数组; &lt;code class=&quot;highlighter-rouge&quot;&gt;int[].class.isArray()&lt;/code&gt;为&lt;code class=&quot;highlighter-rouge&quot;&gt;true&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;boolean isAnnotation()&lt;/code&gt;: 是否是注解, 若返回&lt;code class=&quot;highlighter-rouge&quot;&gt;true&lt;/code&gt;,则&lt;code class=&quot;highlighter-rouge&quot;&gt;isInterface&lt;/code&gt;也为&lt;code class=&quot;highlighter-rouge&quot;&gt;ture&lt;/code&gt;; &lt;code class=&quot;highlighter-rouge&quot;&gt;Target.class.isAnnotation()&lt;/code&gt;为&lt;code class=&quot;highlighter-rouge&quot;&gt;true&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;boolean isEnum()&lt;/code&gt;: 是否是枚举类&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;boolean isPrimitive()&lt;/code&gt;: 是否是原生类型(共9个, 包装类返回&lt;code class=&quot;highlighter-rouge&quot;&gt;false&lt;/code&gt;), &lt;code class=&quot;highlighter-rouge&quot;&gt;void.class.isArray()&lt;/code&gt;为&lt;code class=&quot;highlighter-rouge&quot;&gt;true&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;boolean isInterface()&lt;/code&gt;: 是否是接口&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;boolean isMemberClass()&lt;/code&gt;: 是否是成员类, 类的定义在另一个类里面的那种&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;boolean isAnonymousClass()&lt;/code&gt;: 是否是匿名类&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;boolean isLocalClass()&lt;/code&gt;: 是否是本地类&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;boolean isSynthetic()&lt;/code&gt;: 是否是复合类 (接口&lt;code class=&quot;highlighter-rouge&quot;&gt;Member&lt;/code&gt;也有这个方法)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;boolean isInstance(Object obj)&lt;/code&gt;: obj是否是该类的一个实例&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;boolean isAssignableFrom(Class&amp;lt;?&amp;gt; cls)&lt;/code&gt;: cls是否可以被转换成该类&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;boolean isAnnotationPresent(Class&amp;lt;? extends Annotation&amp;gt; annotationClass)&lt;/code&gt;: 该类上是否存在这个注解(继承自接口&lt;code class=&quot;highlighter-rouge&quot;&gt;AnnotatedElement&lt;/code&gt;)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;下面是几个方法的实例说明:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Main&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 这是传说中的成员类&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LocalClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 这是传说中的本地类&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Hello&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(){&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;// Hello是其他地方定义的一个接口, 有一个sayHello()方法, 这就是匿名类(无类名)&lt;/span&gt;
+            &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sayHello&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;};&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isMemberClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;         &lt;span class=&quot;c1&quot;&gt;// true&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isAnonymousClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// true&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LocalClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isLocalClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;// true&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Hello&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isInstance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;// true&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Bean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isAnnotationPresent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;// true&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;instanceof&lt;/code&gt;、 &lt;code class=&quot;highlighter-rouge&quot;&gt;isInstance&lt;/code&gt;、 &lt;code class=&quot;highlighter-rouge&quot;&gt;isAssignableFrom&lt;/code&gt;的区别&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;instanceof&lt;/code&gt;运算符只被用于对象引用变量, 比如: &lt;code class=&quot;highlighter-rouge&quot;&gt;自身类或子类的实例 instanceof 自身类&lt;/code&gt; 返回true&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;isInstance(Object obj)&lt;/code&gt;是&lt;code class=&quot;highlighter-rouge&quot;&gt;instanceof&lt;/code&gt;运算符的动态等价, 比如: &lt;code class=&quot;highlighter-rouge&quot;&gt;自身类.class.isInstance(自身类或子类的实例)&lt;/code&gt; 返回true&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;isAssignableFrom(Class&amp;lt;?&amp;gt; cls)&lt;/code&gt;是两个类之间的关系, 比如: &lt;code class=&quot;highlighter-rouge&quot;&gt;自身类.class.isAssignableFrom(自身类或子类.class)&lt;/code&gt; 返回true  &lt;/p&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;获取内容系列方法&lt;/h2&gt;
+&lt;p&gt;通过Class类可以获取这个类的一些内容性质的信息, 比如属性、方法、构造方法、注解&lt;/p&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;获取属性&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Field[] getFields()&lt;/code&gt;: 获取本类或父类中所有public属性&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Field getField(String name)&lt;/code&gt;: 获取本类或父类中特定名字的public属性&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Field[] getDeclaredFields()&lt;/code&gt;: 获取本类中声明的所有属性&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Field getDeclaredField(String name)&lt;/code&gt;: 获取本类中声明的特定名字的属性&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;获取方法&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Method[] getMethods()&lt;/code&gt;: 获取本类或父类中所有public方法(包括构造器方法)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Method getMethod(String name, Class&amp;lt;?&amp;gt;... parameterTypes)&lt;/code&gt;: 获取本类或父类中特定名字和参数的public方法&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Method[] getDeclaredMethods()&lt;/code&gt;: 获取本类中声明的所有方法(包括非public但不包括继承来的)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Method getDeclaredMethod(String name, Class&amp;lt;?&amp;gt;... parameterTypes)&lt;/code&gt;: 获取本类中声明的特定名字和参数的方法(最常用)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;section-4&quot;&gt;获取构造方法&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Constructor&amp;lt;?&amp;gt;[] getConstructors()&lt;/code&gt;: 获取本类中所有public构造器&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Constructor&amp;lt;T&amp;gt; getConstructor(Class&amp;lt;?&amp;gt;... parameterTypes)&lt;/code&gt;: 获取本类中特定参数的public构造器&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Constructor&amp;lt;?&amp;gt;[] getDeclaredConstructors()&lt;/code&gt;: 获取本类中所有构造器&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Constructor&amp;lt;T&amp;gt; getDeclaredConstructor(Class&amp;lt;?&amp;gt;... parameterTypes)&lt;/code&gt;: 获取本类中指定参数的构造器&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;section-5&quot;&gt;获取注解&lt;/h3&gt;
+
+&lt;p&gt;这几个方法均继承自接口&lt;code class=&quot;highlighter-rouge&quot;&gt;AnnotatedElement&lt;/code&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Annotation[] getAnnotations()&lt;/code&gt;: 获取这个元素上的所有注解(包括父类上被&lt;code class=&quot;highlighter-rouge&quot;&gt;@Inherited&lt;/code&gt;标记的注解)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;A extends Annotation&amp;gt; A getAnnotation(Class&amp;lt;A&amp;gt; annotationClass)&lt;/code&gt;: 获取这个元素上指定类型的注解, 没有返回null&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Annotation[] getDeclaredAnnotations()&lt;/code&gt;: 获取直接标注在这个元素上的注解&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;section-6&quot;&gt;父类子类(接口)相关&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Class&amp;lt;? super T&amp;gt; getSuperclass()&lt;/code&gt;: 返回本类的父类(直接超类);&lt;code class=&quot;highlighter-rouge&quot;&gt;int[].class&lt;/code&gt;为&lt;code class=&quot;highlighter-rouge&quot;&gt;Object&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;int.class&lt;/code&gt;为&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;Object.class&lt;/code&gt;为&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Type getGenericSuperclass()&lt;/code&gt;: 以Type的形式返回本类的父类, 带有范型信息(没有范型信息时把Class以Type形式返回)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Class&amp;lt;?&amp;gt;[] getInterfaces()&lt;/code&gt;: 返回本类&lt;strong&gt;直接实现&lt;/strong&gt;的接口&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Type[] getGenericInterfaces()&lt;/code&gt;: 以Type的形式返回本类&lt;strong&gt;直接实现&lt;/strong&gt;的接口, 带有范型信息&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;U&amp;gt; Class&amp;lt;? extends U&amp;gt; asSubclass(Class&amp;lt;U&amp;gt; clazz) &lt;/code&gt;: 把当前类转为clazz表示的子类(或自己), 不能转抛&lt;code class=&quot;highlighter-rouge&quot;&gt;ClassCastException&lt;/code&gt;异常&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;asSubclass&lt;/code&gt;的作用&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ArrayList.class.asSubclass(List.class)&lt;/code&gt;得到的还是&lt;code class=&quot;highlighter-rouge&quot;&gt;ArrayList.class&lt;/code&gt;, 看起来没什么作用&lt;br /&gt;
+但是它的作用体现在&lt;strong&gt;窄化未知的Class类型的范围&lt;/strong&gt;, 比如通常我们用到&lt;code class=&quot;highlighter-rouge&quot;&gt;Class.forName(&quot;XXX&quot;)&lt;/code&gt;, 它的返回是&lt;code class=&quot;highlighter-rouge&quot;&gt;Class&amp;lt;?&amp;gt;&lt;/code&gt;比较宽泛, 我们可以窄化一下: &lt;code class=&quot;highlighter-rouge&quot;&gt;Class.forName(&quot;XXX&quot;).asSubclass(List.class).newInstance()&lt;/code&gt;. 当&lt;code class=&quot;highlighter-rouge&quot;&gt;XXX&lt;/code&gt;不是&lt;code class=&quot;highlighter-rouge&quot;&gt;List&lt;/code&gt;的子类时,抛出&lt;code class=&quot;highlighter-rouge&quot;&gt;ClassCastException&lt;/code&gt;异常&lt;/p&gt;
+
+&lt;h3 id=&quot;section-7&quot;&gt;内部类相关&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Class&amp;lt;?&amp;gt; getEnclosingClass()&lt;/code&gt;: 获取底层类的直接封闭类, 如上面&lt;code class=&quot;highlighter-rouge&quot;&gt;LocalClass&lt;/code&gt;的封闭类为&lt;code class=&quot;highlighter-rouge&quot;&gt;Main&lt;/code&gt;, 那个匿名类的封闭类也是&lt;code class=&quot;highlighter-rouge&quot;&gt;Main&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Constructor&amp;lt;?&amp;gt; getEnclosingConstructor()&lt;/code&gt;: 若该Class对象是在一个构造方法中的本地类或匿名类时, 返回这个构造器对象, 表示底层类直接封闭构造方法, 否则返回&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;; 上面的&lt;code class=&quot;highlighter-rouge&quot;&gt;LocalClass&lt;/code&gt;不在构造方法中,因此返回&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Method getEnclosingMethod()&lt;/code&gt;: 若该Class对象是在一个方法中的本地类或匿名类时, 返回这个&lt;code class=&quot;highlighter-rouge&quot;&gt;Method&lt;/code&gt;对象, 表示底层类的直接封闭方法, 否则返回&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Class&amp;lt;?&amp;gt; getDeclaringClass()&lt;/code&gt;: 该类是另一个类的成员(&lt;code class=&quot;highlighter-rouge&quot;&gt;isMemberClass&lt;/code&gt;),则返回该类的声明类(外部类); 接口&lt;code class=&quot;highlighter-rouge&quot;&gt;Member&lt;/code&gt;中也有该方法&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Class&amp;lt;?&amp;gt;[] getDeclaredClasses() &lt;/code&gt;: 返回该类中直接声明的所有类&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Class&amp;lt;?&amp;gt;[] getClasses() &lt;/code&gt;: 返回该类中直接声明的所有public类&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;section-8&quot;&gt;名字相关&lt;/h2&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;static Class&amp;lt;?&amp;gt; forName(String className)&lt;/code&gt;: 返回与给定的字符串名称相关联的Class对象&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;String getSimpleName()&lt;/code&gt;: 返回源码中定义的简单类名, 匿名类返回空串, 数组返回”组件类型[]”&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;String getCanonicalName&lt;/code&gt;: 返回底层类的Java语言规范中定义的标准名称&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;public String getName()&lt;/code&gt;: 返回此Class对象所表示的实体(类，接口，数组类，基本类型或void)的名字, 略复杂,规则如下:
+    &lt;ul&gt;
+      &lt;li&gt;若是原始类型(class), 则返回Java语言规范中定义的标准名称&lt;/li&gt;
+      &lt;li&gt;若是原生类型(primitive)或void, 直接返回关键字对应的字符串&lt;/li&gt;
+      &lt;li&gt;若是数组, 则用”[“代表数组维度,后面跟上元素类型代码,具体如下表:&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;元素类型&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;类型代码&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;boolean&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;Z&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;byte&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;B&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;char&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;C&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;double&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;D&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;float&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;F&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;int&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;I&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;long&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;J&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;short&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;S&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;class or interface&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;Lclassname;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;来个例子:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ClassTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Class&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;clazz&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;clazz&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getSimpleName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;// String&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;clazz&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getCanonicalName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// java.lang.String&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;clazz&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;          &lt;span class=&quot;c1&quot;&gt;// java.lang.String&lt;/span&gt;
+
+        &lt;span class=&quot;n&quot;&gt;clazz&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;clazz&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getSimpleName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;// int&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;clazz&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getCanonicalName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// int&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;clazz&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;          &lt;span class=&quot;c1&quot;&gt;// int&lt;/span&gt;
+
+        &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;strings&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;a&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;b&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;};&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;clazz&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;strings&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;clazz&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getSimpleName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;// String[]&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;clazz&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getCanonicalName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// java.lang.String[]&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;clazz&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;          &lt;span class=&quot;c1&quot;&gt;// [Ljava.lang.String;&lt;/span&gt;
+
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[][]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;array&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]{&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;},&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]{&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}};&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;clazz&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;clazz&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getSimpleName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;// int[][]&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;clazz&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getCanonicalName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// int[][]&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;clazz&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;          &lt;span class=&quot;c1&quot;&gt;// [[I&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-9&quot;&gt;其他方法&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;TypeVariable&amp;lt;Class&amp;lt;T&amp;gt;&amp;gt;[] getTypeParameters()&lt;/code&gt;: 继承自接口&lt;code class=&quot;highlighter-rouge&quot;&gt;GenericDeclaration&lt;/code&gt;,按照声明顺序返回声明的类型变量&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Class&amp;lt;?&amp;gt; getComponentType()&lt;/code&gt;: 若该类是个数组，则返回组件的类型&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;还有一些方法暂不介绍了.&lt;/p&gt;
+
+&lt;hr /&gt;
+</description>
+        <pubDate>Thu, 25 Feb 2016 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-02-25-Class%E7%B1%BB%E7%AE%80%E4%BB%8B.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-02-25-Class%E7%B1%BB%E7%AE%80%E4%BB%8B.html</guid>
+        
+        <category>Java</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
     
       <item>
         <title>表达式引擎aviator</title>
@@ -2525,170 +2792,6 @@ Guava直接提供了不可变集合类型&lt;code class=&quot;highlighter-rouge&
         <pubDate>Mon, 23 Nov 2015 00:00:00 +0800</pubDate>
         <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-23-Guava%E4%B8%8D%E5%8F%AF%E5%8F%98%E9%9B%86%E5%90%88.html</link>
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-23-Guava%E4%B8%8D%E5%8F%AF%E5%8F%98%E9%9B%86%E5%90%88.html</guid>
-        
-        <category>Guava</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>Guava之CharMatcher</title>
-        <description>&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;CharMatcher&lt;/code&gt;是字符匹配器, 代表着某一类字符, &lt;code class=&quot;highlighter-rouge&quot;&gt;CharMatcher&lt;/code&gt;实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;Predicate&amp;lt;Character&amp;gt;&lt;/code&gt;接口&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;CharMatcher&lt;/code&gt;提供了一系列方法，让你对字符作特定类型的操作：修剪[trim]、折叠[collapse]、移除[remove]、保留[retain]等&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;CharMatcher&lt;/code&gt;只处理&lt;code class=&quot;highlighter-rouge&quot;&gt;char&lt;/code&gt;类型代表的字符即&lt;code class=&quot;highlighter-rouge&quot;&gt;0x0000&lt;/code&gt;~&lt;code class=&quot;highlighter-rouge&quot;&gt;0xFFFF&lt;/code&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#charmatcher&quot;&gt;获取CharMatcher&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;使用字符匹配器&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;charmatcher&quot;&gt;获取CharMatcher&lt;/h2&gt;
-&lt;p&gt;CharMatcher中的常量可以满足大多数字符匹配需求&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;内置CharMatcher&lt;/th&gt;
-      &lt;th&gt;说明&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;ANY&lt;/td&gt;
-      &lt;td&gt;任何字符都匹配&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;NONE&lt;/td&gt;
-      &lt;td&gt;不匹配任何字符&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;WHITESPACE&lt;/td&gt;
-      &lt;td&gt;空白字符(Unicode标准)&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;BREAKING_WHITESPACE&lt;/td&gt;
-      &lt;td&gt;被空白隔开的两个词之间的那个空白, 比如两个单词之间的空白间隔&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;INVISIBLE&lt;/td&gt;
-      &lt;td&gt;不可见字符, 如LINE_SEPARATOR&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;DIGIT&lt;/td&gt;
-      &lt;td&gt;Unicode数字,比JAVA_DIGIT范围大,如果要表示0～9请用&lt;code class=&quot;highlighter-rouge&quot;&gt;inRange(&#39;0&#39;, &#39;9&#39;)&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;JAVA_LETTER&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;JAVA_DIGIT&lt;/td&gt;
-      &lt;td&gt;Java定义的数字,范围超过0~9,如果要表示0～9请用&lt;code class=&quot;highlighter-rouge&quot;&gt;inRange(&#39;0&#39;, &#39;9&#39;)&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;JAVA_LETTER_OR_DIGIT&lt;/td&gt;
-      &lt;td&gt;JAVA_LETTER 或 JAVA_DIGIT&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;JAVA_UPPER_CASE&lt;/td&gt;
-      &lt;td&gt;范围比a~z大&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;JAVA_LOWER_CASE&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;JAVA_ISO_CONTROL&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;ASCII&lt;/td&gt;
-      &lt;td&gt;ASCII码,这意味着它的代码点低于128&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;SINGLE_WIDTH&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;ZEROES&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;NINES&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;获取字符匹配器的常见方法&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;is(final char match)&lt;/code&gt;: 给定单一字符匹配&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;isNot(final char match)&lt;/code&gt;: 不是某字符&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;anyOf(final CharSequence sequence)&lt;/code&gt;: 枚举匹配字符,如&lt;code class=&quot;highlighter-rouge&quot;&gt;CharMatcher.anyOf(“aeiou”)&lt;/code&gt;匹配小写英语元音&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;noneOf(CharSequence sequence)&lt;/code&gt;: 不是sequence里的任意一个,anyOf的相反方法, 等同于&lt;code class=&quot;highlighter-rouge&quot;&gt;anyOf(sequence).negate()&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;inRange(final char startInclusive, final char endInclusive)&lt;/code&gt;: 给定字符范围匹配，如&lt;code class=&quot;highlighter-rouge&quot;&gt;CharMatcher.inRange(‘a’, ‘z’)&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;or(CharMatcher other)&lt;/code&gt;: 取并集&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;and(CharMatcher other)&lt;/code&gt;: 取交集&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;negate(CharMatcher other)&lt;/code&gt;: 取反&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;使用字符匹配器&lt;/h2&gt;
-&lt;p&gt;返回是否匹配(&lt;code class=&quot;highlighter-rouge&quot;&gt;boolean&lt;/code&gt;)的方法:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;boolean matchesAnyOf(CharSequence sequence)&lt;/code&gt; : 是否sequence中有匹配的字符&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;boolean matchesAllOf(CharSequence sequence)&lt;/code&gt; : 是否sequence中的所有字符都匹配&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;boolean matchesNoneOf(CharSequence sequence)&lt;/code&gt; : sequence中不包含能够匹配的字符&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;返回&lt;code class=&quot;highlighter-rouge&quot;&gt;int&lt;/code&gt;的方法:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;int indexIn(CharSequence sequence)&lt;/code&gt; : 返回第一次匹配上的下标, -1表示没有匹配的&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;int indexIn(CharSequence sequence, int start)&lt;/code&gt; : &amp;gt;=start或-1&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;int lastIndexIn(CharSequence sequence)&lt;/code&gt; : 最后一次匹配的下标, -1表示没有匹配的&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;返回匹配的内容(&lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt;)的方法:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;String removeFrom(CharSequence sequence)&lt;/code&gt; : 移除匹配字符,返回的是移除匹配字符之后剩下的&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;String retainFrom(CharSequence sequence)&lt;/code&gt; : 保留匹配字符&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;String replaceFrom(CharSequence sequence, char replacement)&lt;/code&gt; : 替代匹配字符&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;String replaceFrom(CharSequence sequence, CharSequence replacement)&lt;/code&gt; :替代匹配字符&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;String trimFrom(CharSequence sequence)&lt;/code&gt; : 移除前导和尾部的匹配字符&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;String trimLeadingFrom(CharSequence sequence)&lt;/code&gt;: 只移除前导匹配的&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;String trimTrailingFrom(CharSequence sequence)&lt;/code&gt;: 只移除尾部匹配的&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;String collapseFrom(CharSequence sequence, char replacement)&lt;/code&gt;: 替换,但连续的匹配字符只替换一次&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;String trimAndCollapseFrom(CharSequence sequence, char replacement)&lt;/code&gt;: 中间连续的只替换一次,开头和结尾的直接去掉&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;示例:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;CharMatcher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;is&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;&#39;a&#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;removeFrom&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;bazaar&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// &quot;bzr&quot;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;CharMatcher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;is&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;&#39;a&#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;retainFrom&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;bazaar&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// &quot;aaa&quot;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;CharMatcher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;is&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;&#39;a&#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;replaceFrom&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;radar&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&#39;o&#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// &quot;rodor&quot;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;CharMatcher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;is&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;&#39;a&#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;replaceFrom&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;yaha&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;oo&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// &quot;yoohoo&quot;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;CharMatcher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;anyOf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ab&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;trimFrom&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;abacatbab&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// &quot;cat&quot;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;CharMatcher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;inRange&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;&#39;\0&#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&#39; &#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;trimFrom&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 等同于 str.trim()&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;CharMatcher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;anyOf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;eko&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;collapseFrom&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;bookkeeper&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;&#39;-&#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// &quot;b-p-r&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;hr /&gt;
-</description>
-        <pubDate>Sat, 21 Nov 2015 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-21-Guava%E4%B9%8BCharMatcher.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-21-Guava%E4%B9%8BCharMatcher.html</guid>
         
         <category>Guava</category>
         
