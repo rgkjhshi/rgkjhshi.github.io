@@ -5,9 +5,739 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 19 Feb 2016 19:59:16 +0800</pubDate>
-    <lastBuildDate>Fri, 19 Feb 2016 19:59:16 +0800</lastBuildDate>
+    <pubDate>Thu, 25 Feb 2016 12:35:15 +0800</pubDate>
+    <lastBuildDate>Thu, 25 Feb 2016 12:35:15 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>表达式引擎aviator</title>
+        <description>&lt;p&gt;Aviator是一个轻量级、高性能的Java表达式执行引擎, 本文内容主要来自于官方文档&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;简介&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;包依赖&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;使用手册&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-3&quot;&gt;执行表达式&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-4&quot;&gt;使用变量&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#exec-&quot;&gt;exec 方法&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-5&quot;&gt;调用函数&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-6&quot;&gt;自定义函数&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-7&quot;&gt;编译表达式&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-8&quot;&gt;访问数组和集合&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-9&quot;&gt;三元操作符&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-10&quot;&gt;正则表达式匹配&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-11&quot;&gt;变量的语法糖&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#nil-&quot;&gt;nil 对象&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-12&quot;&gt;日期比较&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-13&quot;&gt;大数计算和精度&lt;/a&gt;        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#section-14&quot;&gt;字面量表示&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#section-15&quot;&gt;运算&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#section-16&quot;&gt;类型转换和提升&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#decimal-&quot;&gt;decimal 的计算精度&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#seq-&quot;&gt;强大的 seq 库&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-17&quot;&gt;两种运行模式&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-18&quot;&gt;调试信息&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-19&quot;&gt;语法手册&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-20&quot;&gt;数据类型&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-21&quot;&gt;操作符&lt;/a&gt;        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#section-22&quot;&gt;算术运算符&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#section-23&quot;&gt;逻辑运算符&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#section-24&quot;&gt;关系运算符&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#section-25&quot;&gt;位运算符&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#section-26&quot;&gt;匹配运算符&lt;/a&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;a href=&quot;#section-27&quot;&gt;三元运算符&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-28&quot;&gt;内置函数&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-29&quot;&gt;相关链接&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;简介&lt;/h2&gt;
+
+&lt;p&gt;Aviator是一个高性能、轻量级的 java 语言实现的表达式求值引擎, 主要用于各种表达式的动态求值。现在已经有很多开源可用的 java 表达式求值引擎,为什么还需要 Avaitor 呢?&lt;br /&gt;
+Aviator的设计目标是轻量级和高性能,相比于Groovy、JRuby的笨重, Aviator非常小, 加上依赖包也才450K,不算依赖包的话只有 70K; 当然, Aviator的语法是受限的, 它不是一门完整的语言, 而只是语言的一小部分集合。&lt;br /&gt;
+其次, Aviator的实现思路与其他轻量级的求值器很不相同, 其他求值器一般都是通过解释的方式运行, 而Aviator则是直接将表达式编译成Java 字节码, 交给JVM去执行。简单来说, Aviator的定位是介于Groovy这样的重量级脚本语言和IKExpression这样的轻量级表达式引擎 之间。&lt;br /&gt;
+Aviator支持大部分运算操作符, 包括算术操作符、关系运算符、逻辑操作符、位运算符、正则匹配操作符(&lt;code class=&quot;highlighter-rouge&quot;&gt;=~&lt;/code&gt;)、三元表达式(&lt;code class=&quot;highlighter-rouge&quot;&gt;?:&lt;/code&gt;), 并且支持操作符的优先级和括号强制优先级, 具体请看后面的操作符列表, 支持自定义函数.&lt;/p&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;包依赖&lt;/h2&gt;
+
+&lt;p&gt;Aviator依赖了&lt;code class=&quot;highlighter-rouge&quot;&gt;commons-beanutils&lt;/code&gt;, 使用Aviator可以添加下面的maven依赖:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;com.googlecode.aviator&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;aviator&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;2.3.3&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;使用手册&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;执行表达式&lt;/h3&gt;
+
+&lt;p&gt;Aviator的使用都是集中通过&lt;code class=&quot;highlighter-rouge&quot;&gt;com.googlecode.aviator.AviatorEvaluator&lt;/code&gt;这个入口类来处理, 最简单的例子, 执行一个计算&lt;code class=&quot;highlighter-rouge&quot;&gt;1+2+3&lt;/code&gt;的表达式:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;com.googlecode.aviator.AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TestAviator&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Long&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;1+2+3&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;细心的朋友肯定注意到结果是&lt;code class=&quot;highlighter-rouge&quot;&gt;Long&lt;/code&gt;,而不是&lt;code class=&quot;highlighter-rouge&quot;&gt;Integer&lt;/code&gt;。这是因为&lt;code class=&quot;highlighter-rouge&quot;&gt;Aviator&lt;/code&gt;的数值类型仅支持&lt;code class=&quot;highlighter-rouge&quot;&gt;Long&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;Double&lt;/code&gt;, 任何整数都将转换成&lt;code class=&quot;highlighter-rouge&quot;&gt;Long&lt;/code&gt;, 任何浮点数都将转换为&lt;code class=&quot;highlighter-rouge&quot;&gt;Double&lt;/code&gt;, 包括用户传入的变量数值。这个例子的打印结果将是正确答案&lt;code class=&quot;highlighter-rouge&quot;&gt;6&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-4&quot;&gt;使用变量&lt;/h3&gt;
+
+&lt;p&gt;想让Aviator对你&lt;code class=&quot;highlighter-rouge&quot;&gt;say hello&lt;/code&gt;吗? 很简单, 传入你的名字, 让Aviator负责字符串的相加:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TestAviator&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;yourName&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Michael&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HashMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;yourName&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;yourName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot; &#39;hello &#39; + yourName &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// hello Michael&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;上面的例子演示了怎么向表达式传入变量值, 表达式中的&lt;code class=&quot;highlighter-rouge&quot;&gt;yourName&lt;/code&gt;是一个变量, 默认为&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;, 通过传入&lt;code class=&quot;highlighter-rouge&quot;&gt;Map&amp;lt;String,Object&amp;gt;&lt;/code&gt;的变量绑定环境, 将&lt;code class=&quot;highlighter-rouge&quot;&gt;yourName&lt;/code&gt;设置为你输入的名称。 &lt;code class=&quot;highlighter-rouge&quot;&gt;env&lt;/code&gt;
+的&lt;code class=&quot;highlighter-rouge&quot;&gt;key&lt;/code&gt;是变量名, &lt;code class=&quot;highlighter-rouge&quot;&gt;value&lt;/code&gt;是变量的值。&lt;br /&gt;
+上面例子中的&lt;code class=&quot;highlighter-rouge&quot;&gt;&#39;hello &#39;&lt;/code&gt;是一个&lt;code class=&quot;highlighter-rouge&quot;&gt;Aviator&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;Aviator&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt;是任何用单引号或者双引号括起来的字符序列, &lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt;可以比较大小(基于&lt;code class=&quot;highlighter-rouge&quot;&gt;unicode&lt;/code&gt;顺序), 可以参与正则匹配, 可以与任何对象相加, 任何对象与&lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt;相加结果为&lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt;。 &lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt;中也可以有转义字符,如&lt;code class=&quot;highlighter-rouge&quot;&gt;\n、\\、\&#39;&lt;/code&gt; 等。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot; &#39;a\&quot;b&#39; &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;           &lt;span class=&quot;c1&quot;&gt;// 字符串 a&quot;b&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot; \&quot;a\&#39;b\&quot; &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;         &lt;span class=&quot;c1&quot;&gt;// 字符串 a&#39;b&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot; &#39;hello &#39; + 3 &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;     &lt;span class=&quot;c1&quot;&gt;// 字符串 hello 3&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot; &#39;hello &#39;+ unknow &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 字符串 hello null&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;exec-&quot;&gt;exec 方法&lt;/h3&gt;
+
+&lt;p&gt;Aviator 2.2 开始新增加一个&lt;code class=&quot;highlighter-rouge&quot;&gt;exec&lt;/code&gt;方法, 可以更方便地传入变量并执行, 而不需要构造&lt;code class=&quot;highlighter-rouge&quot;&gt;env&lt;/code&gt;这个&lt;code class=&quot;highlighter-rouge&quot;&gt;map&lt;/code&gt;了:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;dennis&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;exec&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot; &#39;hello &#39; + yourName &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// hello dennis&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;只要在&lt;code class=&quot;highlighter-rouge&quot;&gt;exec&lt;/code&gt;中按照变量在表达式中的出现顺序传入变量值就可以执行, 不需要构建&lt;code class=&quot;highlighter-rouge&quot;&gt;Map&lt;/code&gt;了。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-5&quot;&gt;调用函数&lt;/h3&gt;
+
+&lt;p&gt;Aviator 支持函数调用, 函数调用的风格类似 lua, 下面的例子获取字符串的长度:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;string.length(&#39;hello&#39;)&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 5&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;string.length(&#39;hello&#39;)&lt;/code&gt;是一个函数调用, &lt;code class=&quot;highlighter-rouge&quot;&gt;string.length&lt;/code&gt;是一个函数, &lt;code class=&quot;highlighter-rouge&quot;&gt;&#39;hello&#39;&lt;/code&gt;是调用的参数。&lt;br /&gt;
+再用&lt;code class=&quot;highlighter-rouge&quot;&gt;string.substring&lt;/code&gt;来截取字符串:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;string.contains(\&quot;test\&quot;, string.substring(&#39;hello&#39;, 1, 2))&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// true&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;string.substring(&#39;hello&#39;, 1, 2)&lt;/code&gt;获取字符串&lt;code class=&quot;highlighter-rouge&quot;&gt;&#39;e&#39;&lt;/code&gt;, 然后通过函数&lt;code class=&quot;highlighter-rouge&quot;&gt;string.contains&lt;/code&gt;判断&lt;code class=&quot;highlighter-rouge&quot;&gt;e&lt;/code&gt;是否在&lt;code class=&quot;highlighter-rouge&quot;&gt;&#39;test&#39;&lt;/code&gt;中。可以看到, 函数可以嵌套调用。&lt;br /&gt;
+Aviator 的内置函数列表请看后面。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-6&quot;&gt;自定义函数&lt;/h3&gt;
+
+&lt;p&gt;Aviator 除了内置的函数之外,还允许用户自定义函数,只要实现&lt;code class=&quot;highlighter-rouge&quot;&gt;com.googlecode.aviator.runtime.type.AviatorFunction&lt;/code&gt;接口, 并注册到&lt;code class=&quot;highlighter-rouge&quot;&gt;AviatorEvaluator&lt;/code&gt;即可使用. &lt;code class=&quot;highlighter-rouge&quot;&gt;AviatorFunction&lt;/code&gt;接口十分庞大, 通常来说你并不需要实现所有的方法, 只要根据你的方法的参 数个数, 继承&lt;code class=&quot;highlighter-rouge&quot;&gt;AbstractFunction&lt;/code&gt;类并&lt;code class=&quot;highlighter-rouge&quot;&gt;override&lt;/code&gt;相应方法即可。&lt;/p&gt;
+
+&lt;p&gt;可以看一个例子,我们实现一个&lt;code class=&quot;highlighter-rouge&quot;&gt;add&lt;/code&gt;函数来做数值的相加:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TestAviator&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//注册函数&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addFunction&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AddFunction&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;add(1, 2)&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;           &lt;span class=&quot;c1&quot;&gt;// 3.0&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;add(add(1, 2), 100)&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 103.0&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AddFunction&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AbstractFunction&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AviatorObject&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AviatorObject&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;arg1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AviatorObject&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;arg2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Number&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;left&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FunctionUtils&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getNumberValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arg1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Number&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FunctionUtils&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getNumberValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arg2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AviatorDouble&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;doubleValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;doubleValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;add&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;注册函数通过&lt;code class=&quot;highlighter-rouge&quot;&gt;AviatorEvaluator.addFunction&lt;/code&gt;方法, 移除可以通过&lt;code class=&quot;highlighter-rouge&quot;&gt;removeFunction&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-7&quot;&gt;编译表达式&lt;/h3&gt;
+
+&lt;p&gt;上面提到的例子都是直接执行表达式, 事实上 Aviator 背后都帮你做了编译并执行的工作。 你可以自己先编译表达式, 返回一个编译的结果, 然后传入不同的&lt;code class=&quot;highlighter-rouge&quot;&gt;env&lt;/code&gt;来复用编译结果, 提高性能, 这是更推荐的使用方式:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TestAviator&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expression&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;a-(b-c)&amp;gt;100&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// 编译表达式&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Expression&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;compiledExp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;compile&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;expression&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HashMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;a&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;100.3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;b&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;45&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;c&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;199.100&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// 执行表达式&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Boolean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Boolean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;compiledExp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// false&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;compile&lt;/code&gt;方法可以将表达式编译成&lt;code class=&quot;highlighter-rouge&quot;&gt;Expression&lt;/code&gt;的中间对象, 当要执行表达式的时候传入&lt;code class=&quot;highlighter-rouge&quot;&gt;env&lt;/code&gt;并调用&lt;code class=&quot;highlighter-rouge&quot;&gt;Expression&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;execute&lt;/code&gt;方法即可。 表达式中使用了括号来强制优先级, 这个例子还使用了&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;gt;&lt;/code&gt;用于比较数值大小, 比较运算符&lt;code class=&quot;highlighter-rouge&quot;&gt;!=、==、&amp;gt;、&amp;gt;=、&amp;lt;、&amp;lt;=&lt;/code&gt;不仅可以用于数值, 也可以用于&lt;code class=&quot;highlighter-rouge&quot;&gt;String、Pattern、Boolean&lt;/code&gt;等等, 甚至是任何用户传入的两个都实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;java.lang.Comparable&lt;/code&gt;接口的对象之间。&lt;/p&gt;
+
+&lt;p&gt;编译后的结果你可以自己缓存, 也可以交给 Aviator 帮你缓存, &lt;code class=&quot;highlighter-rouge&quot;&gt;AviatorEvaluator&lt;/code&gt;内部有一个全局的缓存池, 如果你决定缓存编译结果, 可以通过:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Expression&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;compile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expression&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cached&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;将&lt;code class=&quot;highlighter-rouge&quot;&gt;cached&lt;/code&gt;设置为&lt;code class=&quot;highlighter-rouge&quot;&gt;true&lt;/code&gt;即可, 那么下次编译同一个表达式的时候将直接返回上一次编译的结果。&lt;br /&gt;
+使缓存失效通过:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;invalidateCache&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expression&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;方法。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-8&quot;&gt;访问数组和集合&lt;/h3&gt;
+
+&lt;p&gt;可以通过中括号去访问数组和&lt;code class=&quot;highlighter-rouge&quot;&gt;java.util.List&lt;/code&gt;对象, 可以通过&lt;code class=&quot;highlighter-rouge&quot;&gt;map.key&lt;/code&gt;访问&lt;code class=&quot;highlighter-rouge&quot;&gt;java.util.Map&lt;/code&gt;中&lt;code class=&quot;highlighter-rouge&quot;&gt;key&lt;/code&gt;对应的&lt;code class=&quot;highlighter-rouge&quot;&gt;value&lt;/code&gt;, 一个例子:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;hello&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot; world&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;array&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HashMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;date&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HashMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;list&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;array&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;mmap&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;list[0]+list[1]&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;// hello world&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&#39;array[0]+array[1]+array[2]=&#39; + (array[0]+array[1]+array[2])&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// array[0]+array[1]+array[2]=4&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&#39;today is &#39; + mmap.date &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// today is Wed Feb 24 17:31:45 CST 2016&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-9&quot;&gt;三元操作符&lt;/h3&gt;
+
+&lt;p&gt;Aviator 不提供&lt;code class=&quot;highlighter-rouge&quot;&gt;if else&lt;/code&gt;语句, 但是提供了三元操作符&lt;code class=&quot;highlighter-rouge&quot;&gt;?:&lt;/code&gt;用于条件判断,使用上与 java 没有什么不同:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;exec&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;a&amp;gt;0? &#39;yes&#39;:&#39;no&#39;&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// yes&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Aviator 的三元表达式对于两个分支的结果类型并不要求一致,可以是任何类型,这一点与 java 不同。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-10&quot;&gt;正则表达式匹配&lt;/h3&gt;
+
+&lt;p&gt;Aviator 支持类 Ruby 和 Perl 风格的表达式匹配运算,通过&lt;code class=&quot;highlighter-rouge&quot;&gt;=~&lt;/code&gt;操作符, 如下面这个例子匹配 email 并提取用户名返回:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;email&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;killme2008@gmail.com&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HashMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;email&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;email&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;username&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;email=~/([\\w0-8]+)@\\w+[\\.\\w+]+/ ? $1 : &#39;unknow&#39; &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// killme2008&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;email&lt;/code&gt;与正则表达式&lt;code class=&quot;highlighter-rouge&quot;&gt;/([\\w0-8]+@\\w+[\\.\\w+]+)/&lt;/code&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;=~&lt;/code&gt;操作符来匹配,结果为一个 &lt;code class=&quot;highlighter-rouge&quot;&gt;Boolean&lt;/code&gt; 类 型, 因此可以用于三元表达式判断,匹配成功的时候返回&lt;code class=&quot;highlighter-rouge&quot;&gt;$1&lt;/code&gt;,指代正则表达式的分组 1,也就是用户名,否则返回&lt;code class=&quot;highlighter-rouge&quot;&gt;unknown&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;Aviator 在表达式级别支持正则表达式,通过&lt;code class=&quot;highlighter-rouge&quot;&gt;//&lt;/code&gt;括起来的字符序列构成一个正则表达式,正则表 达式可以用于匹配(作为&lt;code class=&quot;highlighter-rouge&quot;&gt;=~&lt;/code&gt;的右操作数)、比较大小,匹配仅能与字符串进行匹配。匹配成功后, Aviator 会自动将匹配成功的分组放入&lt;code class=&quot;highlighter-rouge&quot;&gt;$num&lt;/code&gt;的变量中,其中&lt;code class=&quot;highlighter-rouge&quot;&gt;$0&lt;/code&gt; 指代整个匹配的字符串,而&lt;code class=&quot;highlighter-rouge&quot;&gt;$1&lt;/code&gt;表示第一个分组,以此类推。&lt;/p&gt;
+
+&lt;p&gt;Aviator 的正则表达式规则跟 Java 完全一样,因为内部其实就是使用&lt;code class=&quot;highlighter-rouge&quot;&gt;java.util.regex.Pattern&lt;/code&gt;做编译的。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-11&quot;&gt;变量的语法糖&lt;/h3&gt;
+
+&lt;p&gt;Aviator 有个方便用户使用变量的语法糖, 当你要访问变量&lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt;中的某个属性&lt;code class=&quot;highlighter-rouge&quot;&gt;b&lt;/code&gt;, 那么你可以通过&lt;code class=&quot;highlighter-rouge&quot;&gt;a.b&lt;/code&gt;访问到, 更进一步, &lt;code class=&quot;highlighter-rouge&quot;&gt;a.b.c&lt;/code&gt;将访问变量&lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;b&lt;/code&gt;属性中的&lt;code class=&quot;highlighter-rouge&quot;&gt;c&lt;/code&gt;属性值, 推广开来也就是说 Aviator 可以将变量声明为嵌套访问的形式。&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;TestAviator&lt;/code&gt;类符合&lt;code class=&quot;highlighter-rouge&quot;&gt;JavaBean&lt;/code&gt;规范, 并且是 &lt;code class=&quot;highlighter-rouge&quot;&gt;public&lt;/code&gt; 的，我们就可以使用语法糖:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TestAviator&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;float&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Date&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// 构造方法&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TestAviator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;float&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Date&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;f&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// getter and setter&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;TestAviator&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;foo&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TestAviator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;3.14f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HashMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;foo&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;foo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&#39;foo.i = &#39;+foo.i&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;// foo.i = 100&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&#39;foo.f = &#39;+foo.f&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;// foo.f = 3.14&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&#39;foo.date.year = &#39;+(foo.date.year+1990)&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// foo.date.year = 2106&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;nil-&quot;&gt;nil 对象&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;nil&lt;/code&gt;是 Aviator 内置的常量,类似 java 中的&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;,表示空的值。&lt;code class=&quot;highlighter-rouge&quot;&gt;nil&lt;/code&gt;跟&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;不同的在于,在 java 中&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;只能使用在&lt;code class=&quot;highlighter-rouge&quot;&gt;==、!=&lt;/code&gt;的比较运算符,而&lt;code class=&quot;highlighter-rouge&quot;&gt;nil&lt;/code&gt;还可以使用&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;gt;、&amp;gt;=、&amp;lt;、&amp;lt;=&lt;/code&gt;等比较运算符。 Aviator 规定,任何对象都比&lt;code class=&quot;highlighter-rouge&quot;&gt;nil&lt;/code&gt;大除了&lt;code class=&quot;highlighter-rouge&quot;&gt;nil&lt;/code&gt;本身。用户传入的变量如果为&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;,将自动以&lt;code class=&quot;highlighter-rouge&quot;&gt;nil&lt;/code&gt;替代。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;nil == nil&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;//true&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot; 3&amp;gt; nil&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;      &lt;span class=&quot;c1&quot;&gt;//true&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot; true!= nil&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;//true&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot; &#39; &#39;&amp;gt;nil &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;//true&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot; a==nil &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;     &lt;span class=&quot;c1&quot;&gt;//true, a 是 null&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;nil&lt;/code&gt;与&lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt;相加的时候,跟 java 一样显示为 &lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;section-12&quot;&gt;日期比较&lt;/h3&gt;
+
+&lt;p&gt;Aviator 并不支持日期类型,如果要比较日期,你需要将日期写字符串的形式,并且要求是形如 “yyyy-MM-dd HH:mm:ss:SS”的字符串,否则都将报错。 字符串跟&lt;code class=&quot;highlighter-rouge&quot;&gt;java.util.Date&lt;/code&gt;比较的时候将自动转换为&lt;code class=&quot;highlighter-rouge&quot;&gt;Date&lt;/code&gt;对象进行比较:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HashMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Date&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dateStr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SimpleDateFormat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;yyyy-MM-dd HH:mm:ss:SS&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;date&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;dateStr&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dateStr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Boolean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Boolean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;date==dateStr&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// true&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Boolean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;date &amp;gt; &#39;2010-12-20 00:00:00:00&#39; &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// true&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Boolean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;date &amp;lt; &#39;2200-12-20 00:00:00:00&#39; &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// true&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Boolean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;date==date &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// true&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;也就是说&lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt;除了能跟&lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt;比较之外,还能跟&lt;code class=&quot;highlighter-rouge&quot;&gt;nil&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;java.util.Date&lt;/code&gt;对象比较。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-13&quot;&gt;大数计算和精度&lt;/h3&gt;
+
+&lt;p&gt;从 2.3.0 版本开始,aviator 开始支持大数字计算和特定精度的计算, 本质上就是支持&lt;code class=&quot;highlighter-rouge&quot;&gt;java.math.BigInteger&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;java.math.BigDecimal&lt;/code&gt;两种类型, 这两种类型在 aviator 中简称
+为&lt;code class=&quot;highlighter-rouge&quot;&gt;big int&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;decimal&lt;/code&gt;类型。
+类似&lt;code class=&quot;highlighter-rouge&quot;&gt;99999999999999999999999999999999&lt;/code&gt;这样的数字在 Java 语言里是没办法编译通过 的, 因为它超过了&lt;code class=&quot;highlighter-rouge&quot;&gt;Long&lt;/code&gt;类型的范围, 只能用&lt;code class=&quot;highlighter-rouge&quot;&gt;BigInteger&lt;/code&gt;来封装。但是 aviator 通过包装,可 以直接支持这种大整数的计算,例如:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;exec&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;99999999999999999999999999999999 + 99999999999999999999999999999999&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;结果为类型&lt;code class=&quot;highlighter-rouge&quot;&gt;big int&lt;/code&gt;的: &lt;code class=&quot;highlighter-rouge&quot;&gt;199999999999999999999999999999998&lt;/code&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;section-14&quot;&gt;字面量表示&lt;/h4&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;big int&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;decimal&lt;/code&gt;的表示与其他数字不同,两条规则:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;以大写字母&lt;code class=&quot;highlighter-rouge&quot;&gt;N&lt;/code&gt;为后缀的整数都被认为是&lt;code class=&quot;highlighter-rouge&quot;&gt;big int&lt;/code&gt;,如&lt;code class=&quot;highlighter-rouge&quot;&gt;1N,2N,9999999999999999999999N&lt;/code&gt;等, 都是&lt;code class=&quot;highlighter-rouge&quot;&gt;big int&lt;/code&gt;类型。&lt;/li&gt;
+  &lt;li&gt;超过&lt;code class=&quot;highlighter-rouge&quot;&gt;long&lt;/code&gt;范围的整数字面量都将自动转换为&lt;code class=&quot;highlighter-rouge&quot;&gt;big int&lt;/code&gt;类型。&lt;/li&gt;
+  &lt;li&gt;以大写字母&lt;code class=&quot;highlighter-rouge&quot;&gt;M&lt;/code&gt;为后缀的数字都被认为是&lt;code class=&quot;highlighter-rouge&quot;&gt;decimal&lt;/code&gt;, 如&lt;code class=&quot;highlighter-rouge&quot;&gt;1M,2.222M, 100000.9999M&lt;/code&gt;等, 都是&lt;code class=&quot;highlighter-rouge&quot;&gt;decimal&lt;/code&gt;类型。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;用户也可以通过变量传入这两种类型来参与计算。&lt;/p&gt;
+
+&lt;h4 id=&quot;section-15&quot;&gt;运算&lt;/h4&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;big int&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;decimal&lt;/code&gt;的运算,跟其他数字类型&lt;code class=&quot;highlighter-rouge&quot;&gt;long,double&lt;/code&gt;没有什么区别,操作符仍然是一样的。 aviator重载了基本算术操作符来支持这两种新类型:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;exec&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;9223372036854775807100.356M * 2&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot; &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 18446744073709551614200.712 class java.math.BigDecimal&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;rt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;exec&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;92233720368547758074+1000&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot; &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 92233720368547759074 class java.math.BigInteger&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;BigInteger&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BigInteger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;valueOf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Long&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;MAX_VALUE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;valueOf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Long&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;MAX_VALUE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;BigDecimal&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BigDecimal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;3.2&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;BigDecimal&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BigDecimal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;9999.99999&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;rt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;exec&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;a+10000000000000000000&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot; &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 92233720368547758089223372036854775807 class java.math.BigInteger&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;rt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;exec&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;b+c*2&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot; &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 20003.19998 class java.math.BigDecimal&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;rt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;exec&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;a*b/c&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rt&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot; &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 2.951479054745007313280155218459508E+34 class java.math.BigDecimal&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h4 id=&quot;section-16&quot;&gt;类型转换和提升&lt;/h4&gt;
+
+&lt;p&gt;当&lt;code class=&quot;highlighter-rouge&quot;&gt;big int&lt;/code&gt;或者&lt;code class=&quot;highlighter-rouge&quot;&gt;decimal&lt;/code&gt;和其他类型的数字做运算的时候,按照&lt;code class=&quot;highlighter-rouge&quot;&gt;long &amp;lt; big int &amp;lt; decimal &amp;lt; double&lt;/code&gt;的规则做提升, 也就是说运算的数字如果类型不一致, 结果的类型为两者之间更“高”的类型。例如:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;1 + 3N&lt;/code&gt;, 结果为&lt;code class=&quot;highlighter-rouge&quot;&gt;big int&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;4N&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;1 + 3.1M&lt;/code&gt;,结果为&lt;code class=&quot;highlighter-rouge&quot;&gt;decimal&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;4.1M&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;1N + 3.1M&lt;/code&gt;,结果为&lt;code class=&quot;highlighter-rouge&quot;&gt;decimal&lt;/code&gt;的 &lt;code class=&quot;highlighter-rouge&quot;&gt;4.1M&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;1.0 + 3N&lt;/code&gt;,结果为&lt;code class=&quot;highlighter-rouge&quot;&gt;double&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;4.0&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;1.0 + 3.1M&lt;/code&gt;,结果为&lt;code class=&quot;highlighter-rouge&quot;&gt;double&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;4.1&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;decimal-&quot;&gt;decimal 的计算精度&lt;/h4&gt;
+
+&lt;p&gt;Java 的&lt;code class=&quot;highlighter-rouge&quot;&gt;java.math.BigDecimal&lt;/code&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;java.math.MathContext&lt;/code&gt;支持特定精度的计算,任何涉及到金额的计算都应该使用&lt;code class=&quot;highlighter-rouge&quot;&gt;decimal&lt;/code&gt;类型。&lt;/p&gt;
+
+&lt;p&gt;默认 Aviator 的计算精度为&lt;code class=&quot;highlighter-rouge&quot;&gt;MathContext.DECIMAL128&lt;/code&gt;,你可以自定义精度, 通过:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setMathContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MathContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;DECIMAL64&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;即可设置,更多关于&lt;code class=&quot;highlighter-rouge&quot;&gt;decimal&lt;/code&gt;的精度问题请看&lt;code class=&quot;highlighter-rouge&quot;&gt;java.math.BigDecimal&lt;/code&gt;的 javadoc 文档。&lt;/p&gt;
+
+&lt;h3 id=&quot;seq-&quot;&gt;强大的 seq 库&lt;/h3&gt;
+
+&lt;p&gt;aviator 拥有强大的操作集合和数组的 &lt;code class=&quot;highlighter-rouge&quot;&gt;seq&lt;/code&gt; 库。整个库风格类似函数式编程中的高阶函数。在 aviator 中, 数组以及&lt;code class=&quot;highlighter-rouge&quot;&gt;java.util.Collection&lt;/code&gt;下的子类都称为&lt;code class=&quot;highlighter-rouge&quot;&gt;seq&lt;/code&gt;,可以直接利用 &lt;code class=&quot;highlighter-rouge&quot;&gt;seq&lt;/code&gt; 库进行遍历、过滤和聚合等操作。&lt;/p&gt;
+
+&lt;p&gt;例如,假设我有个 &lt;code class=&quot;highlighter-rouge&quot;&gt;list&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HashMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;list&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;count(list)&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 3&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;reduce(list,+,0)&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 33&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;filter(list,seq.gt(9))&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// [10, 20]&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;include(list,10)&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// true&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;sort(list)&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// [3, 10, 20]&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;map(list,println)&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;我们可以:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;求长度: &lt;code class=&quot;highlighter-rouge&quot;&gt;count(list)&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;求和: &lt;code class=&quot;highlighter-rouge&quot;&gt;reduce(list,+,0)&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;reduce&lt;/code&gt;函数接收三个参数,第一个是&lt;code class=&quot;highlighter-rouge&quot;&gt;seq&lt;/code&gt;,第二个是聚合的函数,如&lt;code class=&quot;highlighter-rouge&quot;&gt;+&lt;/code&gt;等,第三个是聚合的初始值&lt;/li&gt;
+  &lt;li&gt;过滤: &lt;code class=&quot;highlighter-rouge&quot;&gt;filter(list,seq.gt(9))&lt;/code&gt;, 过滤出&lt;code class=&quot;highlighter-rouge&quot;&gt;list&lt;/code&gt;中所有大于&lt;code class=&quot;highlighter-rouge&quot;&gt;9&lt;/code&gt;的元素并返回集合; &lt;code class=&quot;highlighter-rouge&quot;&gt;seq.gt&lt;/code&gt;函数用于生成一个谓词,表示大于某个值&lt;/li&gt;
+  &lt;li&gt;判断元素在不在集合里: &lt;code class=&quot;highlighter-rouge&quot;&gt;include(list,10)&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;排序: &lt;code class=&quot;highlighter-rouge&quot;&gt;sort(list)&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;遍历整个集合: &lt;code class=&quot;highlighter-rouge&quot;&gt;map(list,println)&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;map&lt;/code&gt;接受的第二个函数将作用于集合中的每个元素,这里简单地调用&lt;code class=&quot;highlighter-rouge&quot;&gt;println&lt;/code&gt;打印每个元素&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-17&quot;&gt;两种运行模式&lt;/h3&gt;
+
+&lt;p&gt;默认 &lt;code class=&quot;highlighter-rouge&quot;&gt;AviatorEvaluator&lt;/code&gt; 以执行速度优先:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setOptimize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;EVAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;你可以修改为编译速度优先,这样不会做编译优化:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setOptimize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;COMPILE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-18&quot;&gt;调试信息&lt;/h3&gt;
+
+&lt;p&gt;从 2.1.1.版本开始,Aviator允许设置输出每个表达式生成的字节码,只要设置&lt;code class=&quot;highlighter-rouge&quot;&gt;trace&lt;/code&gt;为&lt;code class=&quot;highlighter-rouge&quot;&gt;true&lt;/code&gt;即可:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setTrace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;方便用户做跟踪和调试。默认是输出到标准输出,你可以改变输出指向:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;AviatorEvaluator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setTraceOutputStream&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FileOutputStream&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;File&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;aviator.log&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)));&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;section-19&quot;&gt;语法手册&lt;/h2&gt;
+
+&lt;p&gt;下面是 Aviator 详细的语法规则定义。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-20&quot;&gt;数据类型&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Number&lt;/code&gt;类型: 数字类型,支持四种类型,分别是&lt;code class=&quot;highlighter-rouge&quot;&gt;long,double,java.math.BigInteger(简称 big int)&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;java.math.BigDecimal(简
+称 decimal)&lt;/code&gt;,规则如下:
+    &lt;ul&gt;
+      &lt;li&gt;任何以大写字母 &lt;code class=&quot;highlighter-rouge&quot;&gt;N&lt;/code&gt; 结尾的整数都被认为是 &lt;code class=&quot;highlighter-rouge&quot;&gt;big int&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;任何以大写字母 &lt;code class=&quot;highlighter-rouge&quot;&gt;M&lt;/code&gt; 结尾的数字都被认为是 &lt;code class=&quot;highlighter-rouge&quot;&gt;decimal&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;其他的任何整数都将被转换为 &lt;code class=&quot;highlighter-rouge&quot;&gt;Long&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;其他任何浮点数都将被转换为 &lt;code class=&quot;highlighter-rouge&quot;&gt;Double&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;超过 &lt;code class=&quot;highlighter-rouge&quot;&gt;long&lt;/code&gt; 范围的整数字面量都将自动转换为 &lt;code class=&quot;highlighter-rouge&quot;&gt;big int&lt;/code&gt; 类型&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;其中 &lt;code class=&quot;highlighter-rouge&quot;&gt;big int&lt;/code&gt; 和 &lt;code class=&quot;highlighter-rouge&quot;&gt;decimal&lt;/code&gt; 是 2.3.0 版本开始引入的。数字还支持十六进制(以&lt;code class=&quot;highlighter-rouge&quot;&gt;0x&lt;/code&gt;或者&lt;code class=&quot;highlighter-rouge&quot;&gt;0X&lt;/code&gt;开头的数字), 以及科学计数法,如&lt;code class=&quot;highlighter-rouge&quot;&gt;1e-3&lt;/code&gt;等。 不支持其他进制。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt;类型: 字符串类型,单引号或者双引号括起来的文本串,如&lt;code class=&quot;highlighter-rouge&quot;&gt;&#39;hello world&#39;&lt;/code&gt;, 变量如果传入的是&lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt;或者&lt;code class=&quot;highlighter-rouge&quot;&gt;Character&lt;/code&gt;也将转为&lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt;类型&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Bool&lt;/code&gt;类型: 常量&lt;code class=&quot;highlighter-rouge&quot;&gt;true&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;false&lt;/code&gt;,表示真值和假值,与 java 的&lt;code class=&quot;highlighter-rouge&quot;&gt;Boolean.TRUE&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;Boolean.False&lt;/code&gt;对应&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Pattern&lt;/code&gt;类型: 正则表达式, 以&lt;code class=&quot;highlighter-rouge&quot;&gt;//&lt;/code&gt;括起来的字符串,如&lt;code class=&quot;highlighter-rouge&quot;&gt;/\d+/&lt;/code&gt;,内部 实现为&lt;code class=&quot;highlighter-rouge&quot;&gt;java.util.Pattern&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;变量类型: 与 Java 的变量命名规则相同,变量的值由用户传入&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;nil&lt;/code&gt;类型: 常量&lt;code class=&quot;highlighter-rouge&quot;&gt;nil&lt;/code&gt;,类似 java 中的&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;,但是&lt;code class=&quot;highlighter-rouge&quot;&gt;nil&lt;/code&gt;比较特殊,&lt;code class=&quot;highlighter-rouge&quot;&gt;nil&lt;/code&gt;不仅可以参与&lt;code class=&quot;highlighter-rouge&quot;&gt;==、!=&lt;/code&gt;的比较, 也可以参与&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;gt;、&amp;gt;=、&amp;lt;、&amp;lt;=&lt;/code&gt;的比较,Aviator 规定任何类型都大于&lt;code class=&quot;highlighter-rouge&quot;&gt;nil&lt;/code&gt;除了&lt;code class=&quot;highlighter-rouge&quot;&gt;nil&lt;/code&gt;本身,&lt;code class=&quot;highlighter-rouge&quot;&gt;nil==nil&lt;/code&gt;返回&lt;code class=&quot;highlighter-rouge&quot;&gt;true&lt;/code&gt;。 用户传入的变量值如果为&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;,那么也将作为&lt;code class=&quot;highlighter-rouge&quot;&gt;nil&lt;/code&gt;处理,&lt;code class=&quot;highlighter-rouge&quot;&gt;nil&lt;/code&gt;打印为&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-21&quot;&gt;操作符&lt;/h3&gt;
+
+&lt;h4 id=&quot;section-22&quot;&gt;算术运算符&lt;/h4&gt;
+
+&lt;p&gt;Aviator 支持常见的算术运算符,包括&lt;code class=&quot;highlighter-rouge&quot;&gt;+ - * / %&lt;/code&gt;五个二元运算符,和一元运算符&lt;code class=&quot;highlighter-rouge&quot;&gt;-(负)&lt;/code&gt;。其中&lt;code class=&quot;highlighter-rouge&quot;&gt;- * / %&lt;/code&gt;和一元的&lt;code class=&quot;highlighter-rouge&quot;&gt;-&lt;/code&gt;仅能作用于&lt;code class=&quot;highlighter-rouge&quot;&gt;Number&lt;/code&gt;类型。&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;+&lt;/code&gt;不仅能用于&lt;code class=&quot;highlighter-rouge&quot;&gt;Number&lt;/code&gt;类型,还可以用于&lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt;的相加,或者字符串与其他对象的相加。&lt;br /&gt;
+Aviator 规定,任何类型与&lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt;相加,结果为&lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h4 id=&quot;section-23&quot;&gt;逻辑运算符&lt;/h4&gt;
+
+&lt;p&gt;Avaitor 的支持的逻辑运算符包括,一元否定运算符&lt;code class=&quot;highlighter-rouge&quot;&gt;!&lt;/code&gt;,以及逻辑与的&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;amp;&amp;amp;&lt;/code&gt;,逻辑或的&lt;code class=&quot;highlighter-rouge&quot;&gt;||&lt;/code&gt;。逻辑运算符的操作数只能为&lt;code class=&quot;highlighter-rouge&quot;&gt;Boolean&lt;/code&gt;。&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;amp;&amp;amp;&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;||&lt;/code&gt;都执行短路规则。&lt;/p&gt;
+
+&lt;h4 id=&quot;section-24&quot;&gt;关系运算符&lt;/h4&gt;
+
+&lt;p&gt;Aviator 支持的关系运算符包括&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;, &amp;lt;=, &amp;gt;, &amp;gt;=&lt;/code&gt;以及&lt;code class=&quot;highlighter-rouge&quot;&gt;==&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;!=&lt;/code&gt; 。&lt;br /&gt;
+关系运算符可以作用于&lt;code class=&quot;highlighter-rouge&quot;&gt;Number&lt;/code&gt;之间、&lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt;之间、&lt;code class=&quot;highlighter-rouge&quot;&gt;Pattern&lt;/code&gt;之间、&lt;code class=&quot;highlighter-rouge&quot;&gt;Boolean&lt;/code&gt;之间、变量之间以及其他类型与&lt;code class=&quot;highlighter-rouge&quot;&gt;nil&lt;/code&gt;之间的关系比较, 不同类型除了&lt;code class=&quot;highlighter-rouge&quot;&gt;nil&lt;/code&gt;之外不能相互比较。&lt;/p&gt;
+
+&lt;h4 id=&quot;section-25&quot;&gt;位运算符&lt;/h4&gt;
+
+&lt;p&gt;Aviator 支持所有的 Java 位运算符,包括&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;amp;, |, ^, ~, &amp;gt;&amp;gt;, &amp;lt;&amp;lt;, &amp;gt;&amp;gt;&amp;gt;&lt;/code&gt;。&lt;/p&gt;
+
+&lt;h4 id=&quot;section-26&quot;&gt;匹配运算符&lt;/h4&gt;
+
+&lt;p&gt;匹配运算符&lt;code class=&quot;highlighter-rouge&quot;&gt;=~&lt;/code&gt;用于&lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;Pattern&lt;/code&gt;的匹配,它的左操作数必须为&lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt;,右操作数必须为&lt;code class=&quot;highlighter-rouge&quot;&gt;Pattern&lt;/code&gt;。 匹配成功后,&lt;code class=&quot;highlighter-rouge&quot;&gt;Pattern&lt;/code&gt;的分组将存于变量&lt;code class=&quot;highlighter-rouge&quot;&gt;$num&lt;/code&gt;,&lt;code class=&quot;highlighter-rouge&quot;&gt;num&lt;/code&gt;为分组索引。&lt;/p&gt;
+
+&lt;h4 id=&quot;section-27&quot;&gt;三元运算符&lt;/h4&gt;
+&lt;p&gt;Aviator 没有提供&lt;code class=&quot;highlighter-rouge&quot;&gt;if else&lt;/code&gt;语句,但是提供了三元运算符&lt;code class=&quot;highlighter-rouge&quot;&gt;?:&lt;/code&gt;,形式为&lt;code class=&quot;highlighter-rouge&quot;&gt;bool ? exp1: exp2&lt;/code&gt;。 其中&lt;code class=&quot;highlighter-rouge&quot;&gt;bool&lt;/code&gt;必须为&lt;code class=&quot;highlighter-rouge&quot;&gt;Boolean&lt;/code&gt;类型的表达式, 而&lt;code class=&quot;highlighter-rouge&quot;&gt;exp1&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;exp2&lt;/code&gt;可以为任何合法的 Aviator 表达式,并且不要求&lt;code class=&quot;highlighter-rouge&quot;&gt;exp1&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;exp2&lt;/code&gt;返回的结果类型一致。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-28&quot;&gt;内置函数&lt;/h2&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;函数名称&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;说明&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;sysdate()&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;返回当前日期对象 java.util.Date&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;rand()&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;返回一个介于 0-1 的随机数,double 类型&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;print([out],obj)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;打印对象,如果指定 out,向 out 打印, 否则输出到控制台&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;println([out],obj)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;与 print 类似,但是在输出后换行&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;now()&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;返回 System.currentTimeMillis&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;long(v)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;将值的类型转为 long&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;double(v)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;将值的类型转为 double&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;str(v)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;将值的类型转为 string&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;date_to_string(date,format)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;将 Date 对象转化化特定格式的字符串,2.1.1 新增&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;string_to_date(source,format)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;将特定格式的字符串转化为 Date 对 象,2.1.1 新增&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;string.contains(s1,s2)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;判断 s1 是否包含 s2,返回 Boolean&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;string.length(s)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;求字符串长度,返回 Long&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;string.startsWith(s1,s2)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;s1 是否以 s2 开始,返回 Boolean&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;string.endsWith(s1,s2)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;s1 是否以 s2 结尾,返回 Boolean&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;string.substring(s,begin[,end])&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;截取字符串 s,从 begin 到 end,如果忽略 end 的话,将从 begin 到结尾,与 java.util.String.substring 一样。&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;string.indexOf(s1,s2)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;java 中的 s1.indexOf(s2),求 s2 在 s1 中 的起始索引位置,如果不存在为-1&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;string.split(target,regex,[limit])&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;Java 里的 String.split 方法一致,2.1.1 新增函数&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;string.join(seq,seperator)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;将集合 seq 里的元素以 seperator 为间隔 连接起来形成字符串,2.1.1 新增函数&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;string.replace_first(s,regex,replacement)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;Java 里的 String.replaceFirst 方法, 2.1.1 新增&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;string.replace_all(s,regex,replacement)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;Java 里的 String.replaceAll 方法 , 2.1.1 新增&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;math.abs(d)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;求 d 的绝对值&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;math.sqrt(d)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;求 d 的平方根&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;math.pow(d1,d2)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;求 d1 的 d2 次方&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;math.log(d)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;求 d 的自然对数&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;math.log10(d)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;求 d 以 10 为底的对数&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;math.sin(d)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;正弦函数&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;math.cos(d)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;余弦函数&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;math.tan(d)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;正切函数&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;map(seq,fun)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;将函数 fun 作用到集合 seq 每个元素上, 返回新元素组成的集合&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;filter(seq,predicate)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;将谓词 predicate 作用在集合的每个元素 上,返回谓词为 true 的元素组成的集合&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;count(seq)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;返回集合大小&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;include(seq,element)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;判断 element 是否在集合 seq 中,返回 boolean 值&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;sort(seq)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;排序集合,仅对数组和 List 有效,返回排 序后的新集合&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;reduce(seq,fun,init)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;fun 接收两个参数,第一个是集合元素, 第二个是累积的函数,本函数用于将 fun 作用在集合每个元素和初始值上面,返回 最终的 init 值&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;seq.eq(value)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;返回一个谓词,用来判断传入的参数是否跟 value 相等,用于 filter 函数,如filter(seq,seq.eq(3)) 过滤返回等于3 的元素组成的集合&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;seq.neq(value)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;与 seq.eq 类似,返回判断不等于的谓词&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;seq.gt(value)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;返回判断大于 value 的谓词&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;seq.ge(value)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;返回判断大于等于 value 的谓词&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;seq.lt(value)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;返回判断小于 value 的谓词&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;seq.le(value)&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;返回判断小于等于 value 的谓词&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;seq.nil()&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;返回判断是否为 nil 的谓词&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;seq.exists()&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;返回判断不为 nil 的谓词&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h2 id=&quot;section-29&quot;&gt;相关链接&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/killme2008/aviator&quot;&gt;GitHub上的资料&lt;/a&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+</description>
+        <pubDate>Wed, 24 Feb 2016 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-02-24-%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%BC%95%E6%93%8Eaviator.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-02-24-%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%BC%95%E6%93%8Eaviator.html</guid>
+        
+        <category>Java</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
     
       <item>
         <title>Type详解</title>
@@ -1956,94 +2686,6 @@ Guava直接提供了不可变集合类型&lt;code class=&quot;highlighter-rouge&
         <pubDate>Sat, 21 Nov 2015 00:00:00 +0800</pubDate>
         <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-21-Guava%E4%B9%8BCharMatcher.html</link>
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-21-Guava%E4%B9%8BCharMatcher.html</guid>
-        
-        <category>Guava</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>Guava之Splitter</title>
-        <description>&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Splitter&lt;/code&gt;相当于拆分器,跟&lt;a href=&quot;/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-19-Guava%E4%B9%8BJoiner.html&quot;&gt;Joiner&lt;/a&gt;正好是相反的操作&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#splitter-&quot;&gt;生成 Splitter 的方法&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#split-&quot;&gt;split 方法&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#mapsplitter&quot;&gt;MapSplitter&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;splitter-&quot;&gt;生成 Splitter 的方法&lt;/h2&gt;
-&lt;p&gt;工厂方法:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Splitter on(char separator)&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Splitter on(final CharMatcher separatorMatcher)&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Splitter on(final String separator)&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Splitter on(final Pattern separatorPattern)&lt;/code&gt;: 支持正则&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Splitter onPattern(String separatorPattern)&lt;/code&gt;: 等效于&lt;code class=&quot;highlighter-rouge&quot;&gt;Splitter.on(Pattern.compile(pattern))&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Splitter fixedLength(final int length)&lt;/code&gt;: 每length个元素分成一组&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;修饰方法:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Splitter omitEmptyStrings()&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Splitter limit(int limit)&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Splitter trimResults()&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Splitter trimResults(CharMatcher trimmer)&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;示例:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;Splitter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;&#39;,&#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;foo,,bar&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// [&quot;foo&quot;, &quot;&quot;, &quot;bar&quot;]&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Splitter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CharMatcher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;anyOf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;;,&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;foo,;bar,quux&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// [&quot;foo&quot;, &quot;&quot;, &quot;bar&quot;, &quot;quux&quot;]&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Splitter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;, &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;foo, bar,baz&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// [&quot;foo&quot;, &quot;bar,baz&quot;]&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Splitter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Pattern&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;compile&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;\\d+&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;a12b3c&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// [a, b, c]&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Splitter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;fixedLength&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;abcde&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// [&quot;ab&quot;, &quot;cd&quot;, &quot;e&quot;]&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Splitter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;&#39;,&#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;limit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;a,b,c,d&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// [&quot;a&quot;, &quot;b&quot;, &quot;c,d&quot;]&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Splitter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;&#39;,&#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;limit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;omitEmptyStrings&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;a,,,b,,,c,d&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// [&quot;a&quot;, &quot;b&quot;, &quot;c,d&quot;]&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Splitter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;&#39;,&#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;limit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;trimResults&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot; a , b , c , d &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// [&quot;a&quot;, &quot;b&quot;, &quot;c , d&quot;]&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Splitter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;&#39;,&#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;trimResults&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CharMatcher&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;is&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;&#39;_&#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;_a ,_b_ ,c__&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// [&quot;a &quot;, &quot;b_ &quot;, &quot;c&quot;]&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;split-&quot;&gt;split 方法&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Iterable&amp;lt;String&amp;gt; split(final CharSequence sequence)&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;List&amp;lt;String&amp;gt; splitToList(CharSequence sequence)&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;mapsplitter&quot;&gt;MapSplitter&lt;/h2&gt;
-&lt;p&gt;Splitter提供了个方法返回内部类&lt;code class=&quot;highlighter-rouge&quot;&gt;Splitter.MapSplitter&lt;/code&gt;专门分割成map&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;MapSplitter withKeyValueSeparator(String separator)&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;MapSplitter withKeyValueSeparator(char separator)&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;MapSplitter withKeyValueSeparator(Splitter keyValueSplitter)&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;注意: &lt;code class=&quot;highlighter-rouge&quot;&gt;MapSplitter&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;split&lt;/code&gt;方法返回的是&lt;code class=&quot;highlighter-rouge&quot;&gt;Map&amp;lt;String, String&amp;gt;&lt;/code&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Splitter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&amp;amp;&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;withKeyValueSeparator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;=&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;a=1&amp;amp;b=2&amp;amp;c=3&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;hr /&gt;
-</description>
-        <pubDate>Fri, 20 Nov 2015 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-20-Guava%E4%B9%8BSplitter.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-20-Guava%E4%B9%8BSplitter.html</guid>
         
         <category>Guava</category>
         
