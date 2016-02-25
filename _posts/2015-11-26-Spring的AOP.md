@@ -156,6 +156,7 @@ public interface JoinPoint {
 
 **切入点指示符(PCD)**  
 在切入点表达式中可以使用如下的AspectJ切入点指示符(PCD):
+
 * execution: 匹配方法执行, 这是最经常的切入点指示符
 * within: 匹配特定类型之内的全部方法执行
 * this: 用于匹配当前AOP代理对象类型的连接点,包括接口
