@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="Java中弱引用, 编程技术, Java, 逆水行舟" />
+    <meta name="description" content="Java中弱引用, 编程技术, Java, 第一次接触到弱引用WeakReference是在ThreadLocal中, 于是就把相关知识梳理了下" />
+
+    <title>逆水行舟</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-03-04-java%E4%B8%AD%E5%BC%B1%E5%BC%95%E7%94%A8.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="/static/js/jquery.qrcode.min.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="/static/js/uikit.min.js"></script>
+    <!-- quietflow -->
+    <!-- <script type="text/javascript" src="http://loveshisong.cn/static/js/quietflow.min.js"></script> -->
+    <!-- UK sticky -->
+    <script type="text/javascript" src="/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "shisong"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" data-uk-sticky>
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <script type="text/javascript">
+jQuery(function(){
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-03-04-java%E4%B8%AD%E5%BC%B1%E5%BC%95%E7%94%A8.html"
+    });
+})
+</script>
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>Java中弱引用</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <p>第一次接触到弱引用<code class="highlighter-rouge">WeakReference</code>是在<code class="highlighter-rouge">ThreadLocal</code>中, 于是就把相关知识梳理了下</p>
+
+<hr />
+
+<ul id="markdown-toc">
+  <li><a href="#section">引用简介</a></li>
+  <li><a href="#section-1">强引用</a></li>
+  <li><a href="#section-2">弱引用</a></li>
+  <li><a href="#section-3">软引用</a></li>
+  <li><a href="#section-4">虚引用</a></li>
+  <li><a href="#section-5">引用队列</a></li>
+</ul>
+
+<hr />
+
+<h2 id="section">引用简介</h2>
+
+<p>引用跟垃圾回收相关, 关于引用的类位于<code class="highlighter-rouge">java.long.ref</code>包中, 他们的继承关系图如下(蓝色表示抽象类):</p>
+
+<p><img src="/static/images/reference.png" alt="引用相关的类" title="引用相关的类" /></p>
+
+<p>按照他们阻止被回收的能力强弱可以分为:
+<code class="highlighter-rouge">强引用 &gt; 软引用(SoftReference) &gt; 弱引用(WeakReference) &gt; 虚引用(PhantomReference)</code></p>
+
+<h2 id="section-1">强引用</h2>
+
+<p>就是我们平时使用的对象的引用, 比如:<code class="highlighter-rouge">Object o = new Object()</code>, 那个<code class="highlighter-rouge">o</code>就是一个强引用.<br />
+如果一个对象通过强引用链可到达, 它是不会被回收的, 不可达时才有可能被回收.</p>
+
+<h2 id="section-2">弱引用</h2>
+
+<p>先说下弱引用(<code class="highlighter-rouge">WeakReference</code>),  它阻止被回收的能力不太强,  由JVM决定何时回收. 可以这样创建一个弱引用对象:
+<code class="highlighter-rouge">WeakReference&lt;Object&gt; weakObject = new WeakReference&lt;Object&gt;(o);</code>, 通过<code class="highlighter-rouge">weakObject.get()</code>就可以得到引用的对象了.<br />
+因为弱引用不能阻止回收, 所以如果没有其他强引用指向这个对象时, 当使用get方法时说不准就返回<code class="highlighter-rouge">null</code>了.<br />
+如果一个对象是弱引用可到达, 那么这个对象会JVM的下一个回收周期销毁.<br />
+有一个<code class="highlighter-rouge">WeakHashMap</code>和<code class="highlighter-rouge">HashMap</code>几乎一样, 唯一的区别就是它的键(key)使用<code class="highlighter-rouge">WeakReference</code>引用, 当它里面的某个key被标记为垃圾时, 对应的这个<code class="highlighter-rouge">Entry</code>就被自动移除了</p>
+
+<h2 id="section-3">软引用</h2>
+
+<p>软引用(<code class="highlighter-rouge">SoftReference</code>)比弱引用稍微强一些, 当内存不足时(即将<code class="highlighter-rouge">OutOfMemory</code>)垃圾回收器才会回收这些软引用可到达的对象.</p>
+
+<h2 id="section-4">虚引用</h2>
+<p>虚引用(PhantomReference)指向的对象十分脆弱,我们不能用get方法来得到其指向的对象(get总返回<code class="highlighter-rouge">null</code>).<br />
+它的唯一作用就是当其指向的对象被回收之后，自己被加入到引用队列，用作记录该引用指向的对象已被销毁。</p>
+
+<h2 id="section-5">引用队列</h2>
+
+<p>各种引用的父类<code class="highlighter-rouge">Reference</code>中有个字段<code class="highlighter-rouge">queue</code>, 它就是引用队列<code class="highlighter-rouge">ReferenceQueue</code>.<br />
+一旦弱引用对象开始返回<code class="highlighter-rouge">null</code>, 该引用指向的对象就被标记成了垃圾.<br />
+当构造时传入一个<code class="highlighter-rouge">ReferenceQueue</code>对象, 则当引用只想的对象被标记为垃圾时, 这个引用对象会自动地加入到引用队列里面.<br />
+我们可以处理传入的引用队列来主动清理一些已经不用的引用.<br />
+软引用和弱引用被放入引用队列时, 并不能保证此时引用对象已经被销毁了(对象可以在<code class="highlighter-rouge">finalize</code>方法里再生), 虚引用放入引用队列时, 可保证引用对象已经被销毁了.  </p>
+
+<hr />
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/java中弱引用" data-title="Java中弱引用" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-03-04-java%E4%B8%AD%E5%BC%B1%E5%BC%95%E7%94%A8.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
+
+</body>
+
+</html>

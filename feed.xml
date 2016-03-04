@@ -5,9 +5,77 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 01 Mar 2016 17:18:13 +0800</pubDate>
-    <lastBuildDate>Tue, 01 Mar 2016 17:18:13 +0800</lastBuildDate>
+    <pubDate>Fri, 04 Mar 2016 15:22:56 +0800</pubDate>
+    <lastBuildDate>Fri, 04 Mar 2016 15:22:56 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>Java中弱引用</title>
+        <description>&lt;p&gt;第一次接触到弱引用&lt;code class=&quot;highlighter-rouge&quot;&gt;WeakReference&lt;/code&gt;是在&lt;code class=&quot;highlighter-rouge&quot;&gt;ThreadLocal&lt;/code&gt;中, 于是就把相关知识梳理了下&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;引用简介&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;强引用&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;弱引用&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-3&quot;&gt;软引用&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-4&quot;&gt;虚引用&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-5&quot;&gt;引用队列&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;引用简介&lt;/h2&gt;
+
+&lt;p&gt;引用跟垃圾回收相关, 关于引用的类位于&lt;code class=&quot;highlighter-rouge&quot;&gt;java.long.ref&lt;/code&gt;包中, 他们的继承关系图如下(蓝色表示抽象类):&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/reference.png&quot; alt=&quot;引用相关的类&quot; title=&quot;引用相关的类&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;按照他们阻止被回收的能力强弱可以分为:
+&lt;code class=&quot;highlighter-rouge&quot;&gt;强引用 &amp;gt; 软引用(SoftReference) &amp;gt; 弱引用(WeakReference) &amp;gt; 虚引用(PhantomReference)&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;强引用&lt;/h2&gt;
+
+&lt;p&gt;就是我们平时使用的对象的引用, 比如:&lt;code class=&quot;highlighter-rouge&quot;&gt;Object o = new Object()&lt;/code&gt;, 那个&lt;code class=&quot;highlighter-rouge&quot;&gt;o&lt;/code&gt;就是一个强引用.&lt;br /&gt;
+如果一个对象通过强引用链可到达, 它是不会被回收的, 不可达时才有可能被回收.&lt;/p&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;弱引用&lt;/h2&gt;
+
+&lt;p&gt;先说下弱引用(&lt;code class=&quot;highlighter-rouge&quot;&gt;WeakReference&lt;/code&gt;),  它阻止被回收的能力不太强,  由JVM决定何时回收. 可以这样创建一个弱引用对象:
+&lt;code class=&quot;highlighter-rouge&quot;&gt;WeakReference&amp;lt;Object&amp;gt; weakObject = new WeakReference&amp;lt;Object&amp;gt;(o);&lt;/code&gt;, 通过&lt;code class=&quot;highlighter-rouge&quot;&gt;weakObject.get()&lt;/code&gt;就可以得到引用的对象了.&lt;br /&gt;
+因为弱引用不能阻止回收, 所以如果没有其他强引用指向这个对象时, 当使用get方法时说不准就返回&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;了.&lt;br /&gt;
+如果一个对象是弱引用可到达, 那么这个对象会JVM的下一个回收周期销毁.&lt;br /&gt;
+有一个&lt;code class=&quot;highlighter-rouge&quot;&gt;WeakHashMap&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;HashMap&lt;/code&gt;几乎一样, 唯一的区别就是它的键(key)使用&lt;code class=&quot;highlighter-rouge&quot;&gt;WeakReference&lt;/code&gt;引用, 当它里面的某个key被标记为垃圾时, 对应的这个&lt;code class=&quot;highlighter-rouge&quot;&gt;Entry&lt;/code&gt;就被自动移除了&lt;/p&gt;
+
+&lt;h2 id=&quot;section-3&quot;&gt;软引用&lt;/h2&gt;
+
+&lt;p&gt;软引用(&lt;code class=&quot;highlighter-rouge&quot;&gt;SoftReference&lt;/code&gt;)比弱引用稍微强一些, 当内存不足时(即将&lt;code class=&quot;highlighter-rouge&quot;&gt;OutOfMemory&lt;/code&gt;)垃圾回收器才会回收这些软引用可到达的对象.&lt;/p&gt;
+
+&lt;h2 id=&quot;section-4&quot;&gt;虚引用&lt;/h2&gt;
+&lt;p&gt;虚引用(PhantomReference)指向的对象十分脆弱,我们不能用get方法来得到其指向的对象(get总返回&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;).&lt;br /&gt;
+它的唯一作用就是当其指向的对象被回收之后，自己被加入到引用队列，用作记录该引用指向的对象已被销毁。&lt;/p&gt;
+
+&lt;h2 id=&quot;section-5&quot;&gt;引用队列&lt;/h2&gt;
+
+&lt;p&gt;各种引用的父类&lt;code class=&quot;highlighter-rouge&quot;&gt;Reference&lt;/code&gt;中有个字段&lt;code class=&quot;highlighter-rouge&quot;&gt;queue&lt;/code&gt;, 它就是引用队列&lt;code class=&quot;highlighter-rouge&quot;&gt;ReferenceQueue&lt;/code&gt;.&lt;br /&gt;
+一旦弱引用对象开始返回&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;, 该引用指向的对象就被标记成了垃圾.&lt;br /&gt;
+当构造时传入一个&lt;code class=&quot;highlighter-rouge&quot;&gt;ReferenceQueue&lt;/code&gt;对象, 则当引用只想的对象被标记为垃圾时, 这个引用对象会自动地加入到引用队列里面.&lt;br /&gt;
+我们可以处理传入的引用队列来主动清理一些已经不用的引用.&lt;br /&gt;
+软引用和弱引用被放入引用队列时, 并不能保证此时引用对象已经被销毁了(对象可以在&lt;code class=&quot;highlighter-rouge&quot;&gt;finalize&lt;/code&gt;方法里再生), 虚引用放入引用队列时, 可保证引用对象已经被销毁了.  &lt;/p&gt;
+
+&lt;hr /&gt;
+</description>
+        <pubDate>Fri, 04 Mar 2016 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-03-04-java%E4%B8%AD%E5%BC%B1%E5%BC%95%E7%94%A8.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-03-04-java%E4%B8%AD%E5%BC%B1%E5%BC%95%E7%94%A8.html</guid>
+        
+        <category>Java</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
     
       <item>
         <title>Java中的并发(二)</title>
@@ -108,6 +176,7 @@
         &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
             &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;get会抛出InterruptedException, ExecutionException异常&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
         &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;executor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;shutdown&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
@@ -2423,447 +2492,6 @@ find ./mydir -type d | xargs chmod 755
         
         
         <category>点滴积累</category>
-        
-      </item>
-    
-      <item>
-        <title>Spring的AOP</title>
-        <description>&lt;p&gt;在Spring中使用AOP的详细资料可以查看&lt;a href=&quot;http://shouce.jb51.net/spring/aop.html&quot;&gt;这里&lt;/a&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#aop&quot;&gt;AOP的实现方式&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#aopcglibspring-aopaspectj&quot;&gt;AOP、CGLib、Spring AOP、AspectJ之间的关系&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#springaop&quot;&gt;Spring中AOP相关的概念&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#aspectj&quot;&gt;启用@AspectJ支持&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;声明一个切面&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;声明一个切入点&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;声明通知&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-3&quot;&gt;通知参数&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-4&quot;&gt;切入点表达式&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-5&quot;&gt;切入点表达式示例&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;aop&quot;&gt;AOP的实现方式&lt;/h2&gt;
-&lt;p&gt;在Java中,从织入切面的方式上来看,存在三种织入方式:编译时织入、加载时织入和运行时织入&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;编译时织入(Compile Time Weaving, CTW)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;指在Java编译期,采用特殊的编译器, 将切面织入到Java类中,即发生在从java文件到class文件的过程.&lt;br /&gt;
-这种方式将切面直接编译进了字节码，所以运行时不再需要动态创建代理对象, 节约了内存和CPU, 但编译过程复杂(可借助Maven AspectJ插件)，编写aspect文件(.aj文件)复杂&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;加载时织入(Load Time Weaving, LTW)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;指通过特殊的类加载器(如AspectJ compiler), 在JVM载入字节码文件时, 织入切面, 即发生在class文件加载的过程.&lt;br /&gt;
-具体可参考&lt;a href=&quot;http://shouce.jb51.net/spring/aop.html#aop-aj-ltw&quot;&gt;这里&lt;/a&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;运行时织入&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;采用CGLib工具或JDK动态代理进行切面的织入, 如Spring AOP&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;aopcglibspring-aopaspectj&quot;&gt;AOP、CGLib、Spring AOP、AspectJ之间的关系&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;AOP, Aspect Oriented Programming, 面向切面编程,是个概念, 类似于面向对象编程(OOP)一样&lt;/li&gt;
-  &lt;li&gt;CGLib, 基于&lt;code class=&quot;highlighter-rouge&quot;&gt;asm.jar&lt;/code&gt;的字节码增强技术API, 开源的, 也是个jar包:&lt;code class=&quot;highlighter-rouge&quot;&gt;cglib.jar&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;Spring AOP, Spring的AOP实现, 在运行时基于动态代理(JDK或cglib)的方式进行织入, Spring3.2以后不再需要依赖&lt;code class=&quot;highlighter-rouge&quot;&gt;cglib.jar&lt;/code&gt;包, 因为它里面的类已经被&lt;code class=&quot;highlighter-rouge&quot;&gt;spring-core.jar&lt;/code&gt;包含了&lt;/li&gt;
-  &lt;li&gt;AspectJ, 提供了完整的AOP实现
-    &lt;ol&gt;
-      &lt;li&gt;AspectJ是一个代码生成工具,于自己的语法编译工具，编译的结果是Java Class文件, 支持编译时织入切面，即所谓的CTW机制&lt;/li&gt;
-      &lt;li&gt;AspectJ有自己的类装载器，支持在类装载时织入切面，即所谓的LTW机制&lt;/li&gt;
-      &lt;li&gt;AspectJ同样也支持运行时织入，运行时织入是基于动态代理的(默认机制)&lt;/li&gt;
-    &lt;/ol&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;springaop&quot;&gt;Spring中AOP相关的概念&lt;/h2&gt;
-&lt;p&gt;在怎么使用之前,最好先看看相关概念,有关&lt;code class=&quot;highlighter-rouge&quot;&gt;Joinpoint&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;Pointcut&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;Advice&lt;/code&gt;等概念,看&lt;a href=&quot;http://shouce.jb51.net/spring/aop.html#aop-introduction-defn&quot;&gt;这里&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;aspectj&quot;&gt;启用@AspectJ支持&lt;/h2&gt;
-&lt;p&gt;在Spring中使用&lt;code class=&quot;highlighter-rouge&quot;&gt;@AspectJ&lt;/code&gt;可以在配置文件中启用&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;aop:aspectj-autoproxy/&amp;gt;&lt;/code&gt;, 甚至启用LTW机制&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;context:load-time-weaver/&amp;gt;&lt;/code&gt;, 对应的注解分别为&lt;code class=&quot;highlighter-rouge&quot;&gt;@EnableAspectJAutoProxy&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;@EnableLoadTimeWeaving&lt;/code&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;声明一个切面&lt;/h2&gt;
-&lt;p&gt;在带有&lt;code class=&quot;highlighter-rouge&quot;&gt;@AspectJ&lt;/code&gt;注解的类上同时加上&lt;code class=&quot;highlighter-rouge&quot;&gt;@Component&lt;/code&gt;(声明为一个bean)注解并确保被自动扫描, 这样才会被Spring识别并管理&lt;/p&gt;
-
-&lt;h2 id=&quot;section-1&quot;&gt;声明一个切入点&lt;/h2&gt;
-&lt;p&gt;切入点决定了连接点关注的内容，使得我们可以控制通知什么时候执行, 即从哪里把要做的操作(通知)切入进去&lt;br /&gt;
-一个切入点声明有两个部分: &lt;em&gt;切入点签名&lt;/em&gt; 和 &lt;em&gt;切入点表达式&lt;/em&gt;&lt;br /&gt;
-在&lt;code class=&quot;highlighter-rouge&quot;&gt;@AspectJ&lt;/code&gt;注解风格的AOP中, &lt;em&gt;切入点签名&lt;/em&gt; 通过一个普通的方法定义来提供, 该方法必需反回&lt;code class=&quot;highlighter-rouge&quot;&gt;void&lt;/code&gt;类型;&lt;br /&gt;
-&lt;em&gt;切入点表达式&lt;/em&gt; 使用&lt;code class=&quot;highlighter-rouge&quot;&gt;@Pointcut&lt;/code&gt;注解来表示(内容略多, 后面讲), 一个切入点声明如下:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Pointcut&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;execution(* sayAdvisorBefore(..)) &amp;amp;&amp;amp; args(param)&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;argNames&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;param&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;pointcutName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;param&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;value: 指定切入点表达式, 如&lt;code class=&quot;highlighter-rouge&quot;&gt;execution&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;args&lt;/code&gt;等&lt;/li&gt;
-  &lt;li&gt;argNames: 指定该切入点方法参数列表,多个用&lt;code class=&quot;highlighter-rouge&quot;&gt;,&lt;/code&gt;分隔,这些参数将传递给通知方法同名的参数;&lt;/li&gt;
-  &lt;li&gt;pointcutName: 切入点名字，可以用该名字引用该切入点表达式&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;section-2&quot;&gt;声明通知&lt;/h2&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@AspectJ&lt;/code&gt;风格的声明通知支持5种通知类型:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@Before&lt;/code&gt;: 前置通知,执行连接点方法之前执行&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@AfterReturning&lt;/code&gt;: 后置返回通知, 一个匹配的方法返回的时候执行&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@AfterThrowing&lt;/code&gt;: 异常通知, 在一个方法抛出异常后执行&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@After&lt;/code&gt;: 最终通知, 不论一个方法是如何结束的,最终通知都会运行, 最终通知必须准备处理正常返回和异常返回两种情况&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@Around&lt;/code&gt;: 环绕通知, 在一个方法执行之前和之后执行, 而且它可以决定这个方法在什么时候执行，如何执行，甚至是否执行. 通知的第一个参数必须是&lt;code class=&quot;highlighter-rouge&quot;&gt;ProceedingJoinPoint&lt;/code&gt;类型,在通知体内，调用&lt;code class=&quot;highlighter-rouge&quot;&gt;ProceedingJoinPoint&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;proceed()&lt;/code&gt;方法会导致 后台的连接点方法执行&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;如果在同一个连接点上执行多个通知,可以使用&lt;code class=&quot;highlighter-rouge&quot;&gt;@Order&lt;/code&gt;注解决定其执行顺序&lt;/p&gt;
-
-&lt;p&gt;下面是通知的使用方式:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Before&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;切入点表达式或命名切入点&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;argNames&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;参数列表参数名&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@After&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;切入点表达式或命名切入点&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;argNames&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;参数列表参数名&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@Around&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;切入点表达式或命名切入点&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;argNames&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;参数列表参数名&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@AfterReturning&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;切入点表达式或命名切入点&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;pointcut&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;切入点表达式或命名切入点&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 如果指定了将覆盖value属性指定的，pointcut具有高优先级&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;argNames&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;参数列表参数名&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;returning&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;返回值对应参数名&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@AfterThrowing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;切入点表达式或命名切入点&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;pointcut&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;切入点表达式或命名切入点&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;argNames&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;参数列表参数名&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;throwing&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;异常对应参数名&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;来个小例子:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Aspect&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BeforeExample&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Before&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;pointcutName(param)&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;argNames&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;param&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;beforeAdvice&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;param&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 切入点匹配到的参数将传递过来&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;param&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;上例使用&lt;code class=&quot;highlighter-rouge&quot;&gt;@Before&lt;/code&gt;进行前置通知声明,其中value用于定义切入点表达式或引用命名切入点&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section-3&quot;&gt;通知参数&lt;/h2&gt;
-&lt;p&gt;通知方法可以获取被通知方法的参数，主要是通过&lt;code class=&quot;highlighter-rouge&quot;&gt;JoinPoint&lt;/code&gt;(环绕通知是&lt;code class=&quot;highlighter-rouge&quot;&gt;JoinPoint&lt;/code&gt;的子类&lt;code class=&quot;highlighter-rouge&quot;&gt;ProceedingJoinPoint&lt;/code&gt;)来获取, &lt;code class=&quot;highlighter-rouge&quot;&gt;JoinPoint&lt;/code&gt;必须是第一个参数, Spring会自动传入.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;JoinPoint&lt;/code&gt;的声明如下:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ProceedingJoinPoint&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;JoinPoint&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;proceed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Throwable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;// 执行连接点的方法&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;proceed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Throwable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 执行连接点的方法,可以把原来的参数用新的args替换掉&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;JoinPoint&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  
-    &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;          &lt;span class=&quot;c1&quot;&gt;//连接点所在位置的相关信息  &lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toShortString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;     &lt;span class=&quot;c1&quot;&gt;//连接点所在位置的简短相关信息  &lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toLongString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;      &lt;span class=&quot;c1&quot;&gt;//连接点所在位置的全部相关信息  &lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getThis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;           &lt;span class=&quot;c1&quot;&gt;//返回AOP代理对象  &lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getTarget&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;         &lt;span class=&quot;c1&quot;&gt;//返回目标对象  &lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getArgs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;         &lt;span class=&quot;c1&quot;&gt;//返回被通知方法参数列表  &lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;Signature&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getSignature&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;//返回当前连接点签名  &lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;SourceLocation&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getSourceLocation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;//返回连接点方法所在类文件中的位置  &lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getKind&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;           &lt;span class=&quot;c1&quot;&gt;//连接点类型  &lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;StaticPart&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getStaticPart&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//返回连接点静态部分&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// 这是个内部接口, 提供访问连接点的静态部分，如被通知方法签名、连接点类型等&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;StaticPart&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  
-        &lt;span class=&quot;n&quot;&gt;Signature&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getSignature&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;//返回当前连接点签名  &lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getKind&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;            &lt;span class=&quot;c1&quot;&gt;//连接点类型  &lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;                 &lt;span class=&quot;c1&quot;&gt;//唯一标识  &lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;           &lt;span class=&quot;c1&quot;&gt;//连接点所在位置的相关信息  &lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toShortString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;      &lt;span class=&quot;c1&quot;&gt;//连接点所在位置的简短相关信息  &lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toLongString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;       &lt;span class=&quot;c1&quot;&gt;//连接点所在位置的全部相关信息  &lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section-4&quot;&gt;切入点表达式&lt;/h2&gt;
-&lt;p&gt;切入点表达式就是组成&lt;code class=&quot;highlighter-rouge&quot;&gt;@Pointcut&lt;/code&gt;注解的值, 用于匹配具体的连接点.&lt;br /&gt;
-切入点表达式由切入点指示符、类型匹配语句、通配符、组合符组成&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;切入点指示符(PCD)&lt;/strong&gt;&lt;br /&gt;
-在切入点表达式中可以使用如下的AspectJ切入点指示符(PCD):&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;execution: 匹配方法执行, 这是最经常的切入点指示符&lt;/li&gt;
-  &lt;li&gt;within: 匹配特定类型之内的全部方法执行&lt;/li&gt;
-  &lt;li&gt;this: 用于匹配当前AOP代理对象类型的连接点,包括接口&lt;/li&gt;
-  &lt;li&gt;target: 用于匹配当前目标对象类型的连接点,不包括接口&lt;/li&gt;
-  &lt;li&gt;args: 用于匹配当前执行的方法传入的参数为指定类型的连接点&lt;/li&gt;
-  &lt;li&gt;@within: 用于匹配持有指定注解类型内的连接点&lt;/li&gt;
-  &lt;li&gt;@target: 用于匹配当前目标对象类型的连接点，其中目标对象持有指定的注解&lt;/li&gt;
-  &lt;li&gt;@args: 匹配当前执行的方法传入的参数持有指定的注解&lt;/li&gt;
-  &lt;li&gt;@annotation: 匹配当前执行方法持有指定注解的方法&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;看不明白还是看最后面的例子吧&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;类型匹配语句&lt;/strong&gt;&lt;br /&gt;
-类型匹配语句格式像下面这样(带&lt;code class=&quot;highlighter-rouge&quot;&gt;?&lt;/code&gt;的属于可选,可以不写):&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;对类的匹配: &lt;code class=&quot;highlighter-rouge&quot;&gt;注解? 类的全限定名字&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;对方法的匹配: &lt;code class=&quot;highlighter-rouge&quot;&gt;注解? 修饰符? 返回值类型 类型声明? 方法名(参数列表) 异常列表？&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;类型匹配的通配符&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;*&lt;/code&gt;: 匹配任何数量字符；&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;..&lt;/code&gt;:(两个点)匹配任何数量字符的重复;如在类型模式中匹配任何数量子包,而在方法参数模式中匹配任何数量参数&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;+&lt;/code&gt;: 匹配指定类型的子类型,仅能作为后缀放在类型模式后边&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;组合切入点表达式&lt;/strong&gt;&lt;br /&gt;
-AspectJ使用 与(&amp;amp;&amp;amp;)、或(||)、非(!)来组合切入点表达式, 在xml文件中可使用and、or、not&lt;/p&gt;
-
-&lt;h2 id=&quot;section-5&quot;&gt;切入点表达式示例&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;execution&lt;/code&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;execution(方法表达式)&lt;/code&gt;匹配方法执行&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;表达式&lt;/th&gt;
-      &lt;th&gt;描述&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;public * *(..)&lt;/td&gt;
-      &lt;td&gt;所有public方法&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;* cn.test..IService.*()&lt;/td&gt;
-      &lt;td&gt;cn.test及子包下IService中任何无参方法&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;* cn.test..IService＋.*()&lt;/td&gt;
-      &lt;td&gt;cn.test及子包下IService及子类中任何无参方法&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;* cn.test..IService.*(＊)&lt;/td&gt;
-      &lt;td&gt;cn.test及子包下IService中只有一个参数的方法&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;* cn.test..IService.*(..)&lt;/td&gt;
-      &lt;td&gt;cn.test及子包下IService中所有方法&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;* cn.test..IService.*(java.util.Date)&lt;/td&gt;
-      &lt;td&gt;cn.test及子包下IService中只有一个Date类型参数的方法&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;* cn.test..IService&lt;em&gt;.test&lt;/em&gt;(..)&lt;/td&gt;
-      &lt;td&gt;cn.test及子包下IService前缀类型中test前缀开头的任何方法&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;* cn.test..&lt;em&gt;.&lt;/em&gt;(..)&lt;/td&gt;
-      &lt;td&gt;cn.test及子包下任何类的任何方法&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;@java.lang.Deprecated * *(..)&lt;/td&gt;
-      &lt;td&gt;任何持有@Deprecated注解的方法&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;@(java.lang.Deprecated &amp;amp;&amp;amp; cn.javass..Secure) * *(..)&lt;/td&gt;
-      &lt;td&gt;任何持有@java.lang.Deprecated和@ cn.javass..Secure注解的方法&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;within&lt;/code&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;within(类型表达式)&lt;/code&gt;匹配指定类型内的方法执行&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;表达式&lt;/th&gt;
-      &lt;th&gt;描述&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;within(cn.test..*)&lt;/td&gt;
-      &lt;td&gt;cn.test及子包下的任何方法&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;within(cn.test..IService＋)&lt;/td&gt;
-      &lt;td&gt;cn.test及子包下IService及子类的任何方法&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;within(@cn.test.Secure *)&lt;/td&gt;
-      &lt;td&gt;cn.test及子包下带有@cn.test.Secure注解的任何类(接口不行)的任何方法&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;this&lt;/code&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;this(类型全限定名)&lt;/code&gt;匹配当前AOP代理对象类型的执行方法,包括引入接口,不支持通配符&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;表达式&lt;/th&gt;
-      &lt;th&gt;描述&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;this(cn.test.IService)&lt;/td&gt;
-      &lt;td&gt;当前AOP对象实现了IService接口的任何方法&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;target&lt;/code&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;target(类型全限定名)&lt;/code&gt;匹配当前目标对象类型的执行方法,不包括引入接口,不支持通配符&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;表达式&lt;/th&gt;
-      &lt;th&gt;描述&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;this(cn.test.IService)&lt;/td&gt;
-      &lt;td&gt;当前目标对象(非AOP对象)实现了IService接口的任何方法&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;args&lt;/code&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;args(参数类型列表)&lt;/code&gt;匹配传入参数(不是声明时的参数)为指定类型的执行方法,参数类型必须是全限定名, 不支持通配符&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;args属于动态切入点，这种切入点开销非常大，非特殊情况最好不要使用&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;表达式&lt;/th&gt;
-      &lt;th&gt;描述&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;args(java.lang.String, ..)&lt;/td&gt;
-      &lt;td&gt;第一个参数为String,后面有任意个参数的方法&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@within&lt;/code&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;@within(注解类型全限定名)&lt;/code&gt;匹配所以持有指定注解类型内的方法, 必须是在目标对象上声明注解，在接口上声明不起作用&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;表达式&lt;/th&gt;
-      &lt;th&gt;描述&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;@within(cn.test.Secure)&lt;/td&gt;
-      &lt;td&gt;任何目标对象对应的类型持有Secure注解的类方法&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@target&lt;/code&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;@target(注解类型全限定名)&lt;/code&gt;匹配当前目标对象类型的执行方法, 必须是在目标对象上声明注解，在接口上声明不起作用&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;表达式&lt;/th&gt;
-      &lt;th&gt;描述&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;@target(cn.test.Secure)&lt;/td&gt;
-      &lt;td&gt;任何目标对象对应的类型持有Secure注解的类方法&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@args&lt;/code&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;@args(注解类型全限定名)&lt;/code&gt;匹配当前执行的方法传入的参数持有指定注解的执行&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;表达式&lt;/th&gt;
-      &lt;th&gt;描述&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;@args(cn.test.Secure)&lt;/td&gt;
-      &lt;td&gt;任何只接受一个参数的方法，且方法运行时传入的参数持有Secure注解&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@annotation&lt;/code&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;@annotation(注解类型全限定名)&lt;/code&gt;匹配当前执行方法持有指定注解的方法&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;表达式&lt;/th&gt;
-      &lt;th&gt;描述&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;@annotation(cn.test.Secure)&lt;/td&gt;
-      &lt;td&gt;当前执行方法上持有Secure注解的方法&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;hr /&gt;
-</description>
-        <pubDate>Thu, 26 Nov 2015 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-26-Spring%E7%9A%84AOP.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2015-11-26-Spring%E7%9A%84AOP.html</guid>
-        
-        <category>Spring</category>
-        
-        
-        <category>编程技术</category>
         
       </item>
     
