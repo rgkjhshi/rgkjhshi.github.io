@@ -5,9 +5,99 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 07 Mar 2016 15:56:12 +0800</pubDate>
-    <lastBuildDate>Mon, 07 Mar 2016 15:56:12 +0800</lastBuildDate>
+    <pubDate>Fri, 25 Mar 2016 17:49:41 +0800</pubDate>
+    <lastBuildDate>Fri, 25 Mar 2016 17:49:41 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>一致性哈希</title>
+        <description>&lt;p&gt;一致性哈希在哈希算法基础上, 适用于动态变化的Cache环境中&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;场景&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;使用一致性哈希解决上述场景&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;算法步骤&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#cache&quot;&gt;新增Cache服务器的情景&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#cache-1&quot;&gt;删除Cache服务器的情景&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#cache-2&quot;&gt;虚拟Cache服务器&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;场景&lt;/h2&gt;
+
+&lt;p&gt;如果我们有4台Cache服务器来存放一些对象, 可以用简单的办法来分配:&lt;code class=&quot;highlighter-rouge&quot;&gt;object.hashCode() % 4&lt;/code&gt;.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Cache0: &lt;code class=&quot;highlighter-rouge&quot;&gt;object.hashCode() % 4 == 0&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Cache1: &lt;code class=&quot;highlighter-rouge&quot;&gt;object.hashCode() % 4 == 1&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Cache2: &lt;code class=&quot;highlighter-rouge&quot;&gt;object.hashCode() % 4 == 2&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Cache3: &lt;code class=&quot;highlighter-rouge&quot;&gt;object.hashCode() % 4 == 3&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;动态变化体现在, 如果因为某些原因Cache服务器少了一台或者多了一台, 我们怎么处理对象与服务器的关系呢?&lt;br /&gt;
+少了一台应该&lt;code class=&quot;highlighter-rouge&quot;&gt;%3&lt;/code&gt;, 多了一台应该&lt;code class=&quot;highlighter-rouge&quot;&gt;%5&lt;/code&gt;, 这样服务器上原来存放的对象与服务器的对应关系就全乱了&lt;/p&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;使用一致性哈希解决上述场景&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;算法步骤&lt;/h3&gt;
+
+&lt;p&gt;一致性哈希算法采用一种新的方式来解决问题，不再仅仅依赖object.hashCode()本身，而且将Cache的配置也进行哈希运算。具体步骤如下:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;先求出每个Cache的哈希值, 并将其配置到一个0~2^32的圆环区间上(为啥是32?哈希值一般不超过32位)&lt;/li&gt;
+  &lt;li&gt;求出需要存储对象的哈希值, 也将其配置到这个圆环上&lt;/li&gt;
+  &lt;li&gt;从对象所映射到的位置顺时针开始找, 把对象保存在第一个找到的Cache节点上&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/hash01.png&quot; alt=&quot;一致性哈希算法&quot; title=&quot;一致性哈希算法&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;cache&quot;&gt;新增Cache服务器的情景&lt;/h3&gt;
+
+&lt;p&gt;假设在这个环形哈希空间中, Cache5被映射在Cache3和Cache4之间, 那么受影响的将仅是沿Cache5逆时针遍历, 直到下一个Cache(Cache3)之间的对象. 只对这些对象进行转移即可.
+Cache3~Cache5之间部分原来映射到Cache4, 现在应该映射到Cache5;&lt;br /&gt;
+Cache5~Cache4之间部分原来映射到Cache4, 现在还是映射到Cache4, 不受影响;  &lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/hash02.png&quot; alt=&quot;新增Cache服务器的情景&quot; title=&quot;新增Cache服务器的情景&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;cache-1&quot;&gt;删除Cache服务器的情景&lt;/h3&gt;
+
+&lt;p&gt;假设在这个环形哈希空间中, Cache3被移除, 那么受影响的将仅是沿Cache3逆时针遍历直到下一个Cache(Cache2)之间的对象&lt;/p&gt;
+
+&lt;p&gt;原来Cache2~Cache3之间部分原来映射到Cache3, 现在应该映射到Cache4;&lt;br /&gt;
+原来Cache3~Cache4之间部分原来映射到Cache4, 现在还是映射到Cache4, 不受影响;  &lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/hash03.png&quot; alt=&quot;删除Cache服务器的情景&quot; title=&quot;删除Cache服务器的情景&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;cache-2&quot;&gt;虚拟Cache服务器&lt;/h2&gt;
+
+&lt;p&gt;考虑到哈希算法并不是保证绝对的平衡, 尤其Cache较少的话, 对象并不能被均匀的映射到Cache上. 为了解决这种情况引入了”虚拟节点”的概念.&lt;br /&gt;
+虚拟节点是实际节点在环形空间的复制品, 一个实际节点对应了若干个”虚拟节点”, 这个对应个数也称为”复制个数”, “虚拟节点”在哈希空间中以哈希值排列.&lt;/p&gt;
+
+&lt;p&gt;仍以4台Cache服务器为例,设置”复制个数”为2后, 共有8个“虚拟节点”分部在环形区域上, 会如下图一样:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/hash04.png&quot; alt=&quot;虚拟节点&quot; title=&quot;虚拟节点&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;引入了”虚拟节点”后，映射关系就从&lt;code class=&quot;highlighter-rouge&quot;&gt;对象--&amp;gt;Cache服务器&lt;/code&gt;转换成了&lt;code class=&quot;highlighter-rouge&quot;&gt;对象--&amp;gt;虚拟节点--&amp;gt;Cache服务器&lt;/code&gt;. 当然虚拟节点与真正的服务器之间也有对应关系. 查询对象所在Cache服务器的映射关系整个流程如下图所示:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/hash05.png&quot; alt=&quot;映射关系&quot; title=&quot;映射关系&quot; /&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+</description>
+        <pubDate>Fri, 25 Mar 2016 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-03-25-%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-03-25-%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C.html</guid>
+        
+        <category>一致性哈希</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
     
       <item>
         <title>Java中弱引用</title>
@@ -2407,91 +2497,6 @@ Spring允许我们提供两种类型的识别转换器，一种是注册在Contr
         
         
         <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>linux命令积累</title>
-        <description>&lt;p&gt;记录一些常用的linux shell命令, 做个备忘&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#ln&quot;&gt;链接命令 &lt;em&gt;ln&lt;/em&gt;&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#tar&quot;&gt;打包命令 &lt;em&gt;tar&lt;/em&gt;&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#scp&quot;&gt;远程拷贝 &lt;em&gt;scp&lt;/em&gt;&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#chmod&quot;&gt;修改权限 &lt;em&gt;chmod&lt;/em&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;ln&quot;&gt;链接命令 &lt;em&gt;ln&lt;/em&gt;&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;软链接: 可链接目录、可跨文件系统、相当于快捷方式&lt;/li&gt;
-  &lt;li&gt;硬链接: 文件副本、不占空间、不可链接目录、不可跨文件系统&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;软链接: ln -s src_name link_name
-硬链接: ln file_name link_name
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;tar&quot;&gt;打包命令 &lt;em&gt;tar&lt;/em&gt;&lt;/h2&gt;
-&lt;p&gt;常用参数:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;-c: 创建&lt;/li&gt;
-  &lt;li&gt;-x: 解压&lt;/li&gt;
-  &lt;li&gt;-f: 指定文件&lt;/li&gt;
-  &lt;li&gt;-v: 显示进度&lt;/li&gt;
-  &lt;li&gt;-t: 显示列表&lt;/li&gt;
-  &lt;li&gt;-z: 使用gzip压缩&lt;/li&gt;
-  &lt;li&gt;-j: 使用bzip2压缩&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;常用示例:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;打包: tar -cvf output.tar inpt1 input2 ...
-压缩: tar -zcvf output.tar directory/input
-解压: tar -xvf input.tar
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;scp&quot;&gt;远程拷贝 &lt;em&gt;scp&lt;/em&gt;&lt;/h2&gt;
-&lt;p&gt;常用参数:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;-r: 递归拷贝，若文件夹下有文件，则底下文件也一起拷贝&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;常用示例:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;上传: scp -r local_file username@remote_ip:remote_file
-下载: scp -r username@ip:remote_file local_file
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;chmod&quot;&gt;修改权限 &lt;em&gt;chmod&lt;/em&gt;&lt;/h2&gt;
-&lt;p&gt;递归修改权限，比如，将某目录下面的所有文件修改为644，所有目录修改为755&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;find ./mydir -type f | xargs chmod 644
-find ./mydir -type d | xargs chmod 755
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;hr /&gt;
-</description>
-        <pubDate>Tue, 15 Dec 2015 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-12-15-linux%E5%91%BD%E4%BB%A4%E7%A7%AF%E7%B4%AF.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-12-15-linux%E5%91%BD%E4%BB%A4%E7%A7%AF%E7%B4%AF.html</guid>
-        
-        <category>linux</category>
-        
-        
-        <category>点滴积累</category>
         
       </item>
     

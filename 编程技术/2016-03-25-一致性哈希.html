@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="一致性哈希, 编程技术, 一致性哈希, 逆水行舟" />
+    <meta name="description" content="一致性哈希, 编程技术, 一致性哈希, 一致性哈希在哈希算法基础上, 适用于动态变化的Cache环境中" />
+
+    <title>逆水行舟</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-03-25-%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="/static/js/jquery.qrcode.min.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="/static/js/uikit.min.js"></script>
+    <!-- quietflow -->
+    <!-- <script type="text/javascript" src="http://loveshisong.cn/static/js/quietflow.min.js"></script> -->
+    <!-- UK sticky -->
+    <script type="text/javascript" src="/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "shisong"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" data-uk-sticky>
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <script type="text/javascript">
+jQuery(function(){
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-03-25-%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C.html"
+    });
+})
+</script>
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>一致性哈希</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <p>一致性哈希在哈希算法基础上, 适用于动态变化的Cache环境中</p>
+
+<hr />
+
+<ul id="markdown-toc">
+  <li><a href="#section">场景</a></li>
+  <li><a href="#section-1">使用一致性哈希解决上述场景</a>    <ul>
+      <li><a href="#section-2">算法步骤</a></li>
+      <li><a href="#cache">新增Cache服务器的情景</a></li>
+      <li><a href="#cache-1">删除Cache服务器的情景</a></li>
+    </ul>
+  </li>
+  <li><a href="#cache-2">虚拟Cache服务器</a></li>
+</ul>
+
+<hr />
+
+<h2 id="section">场景</h2>
+
+<p>如果我们有4台Cache服务器来存放一些对象, 可以用简单的办法来分配:<code class="highlighter-rouge">object.hashCode() % 4</code>.</p>
+
+<ul>
+  <li>Cache0: <code class="highlighter-rouge">object.hashCode() % 4 == 0</code></li>
+  <li>Cache1: <code class="highlighter-rouge">object.hashCode() % 4 == 1</code></li>
+  <li>Cache2: <code class="highlighter-rouge">object.hashCode() % 4 == 2</code></li>
+  <li>Cache3: <code class="highlighter-rouge">object.hashCode() % 4 == 3</code></li>
+</ul>
+
+<p>动态变化体现在, 如果因为某些原因Cache服务器少了一台或者多了一台, 我们怎么处理对象与服务器的关系呢?<br />
+少了一台应该<code class="highlighter-rouge">%3</code>, 多了一台应该<code class="highlighter-rouge">%5</code>, 这样服务器上原来存放的对象与服务器的对应关系就全乱了</p>
+
+<h2 id="section-1">使用一致性哈希解决上述场景</h2>
+
+<h3 id="section-2">算法步骤</h3>
+
+<p>一致性哈希算法采用一种新的方式来解决问题，不再仅仅依赖object.hashCode()本身，而且将Cache的配置也进行哈希运算。具体步骤如下:</p>
+
+<ol>
+  <li>先求出每个Cache的哈希值, 并将其配置到一个0~2^32的圆环区间上(为啥是32?哈希值一般不超过32位)</li>
+  <li>求出需要存储对象的哈希值, 也将其配置到这个圆环上</li>
+  <li>从对象所映射到的位置顺时针开始找, 把对象保存在第一个找到的Cache节点上</li>
+</ol>
+
+<p><img src="/static/images/hash01.png" alt="一致性哈希算法" title="一致性哈希算法" /></p>
+
+<h3 id="cache">新增Cache服务器的情景</h3>
+
+<p>假设在这个环形哈希空间中, Cache5被映射在Cache3和Cache4之间, 那么受影响的将仅是沿Cache5逆时针遍历, 直到下一个Cache(Cache3)之间的对象. 只对这些对象进行转移即可.
+Cache3~Cache5之间部分原来映射到Cache4, 现在应该映射到Cache5;<br />
+Cache5~Cache4之间部分原来映射到Cache4, 现在还是映射到Cache4, 不受影响;  </p>
+
+<p><img src="/static/images/hash02.png" alt="新增Cache服务器的情景" title="新增Cache服务器的情景" /></p>
+
+<h3 id="cache-1">删除Cache服务器的情景</h3>
+
+<p>假设在这个环形哈希空间中, Cache3被移除, 那么受影响的将仅是沿Cache3逆时针遍历直到下一个Cache(Cache2)之间的对象</p>
+
+<p>原来Cache2~Cache3之间部分原来映射到Cache3, 现在应该映射到Cache4;<br />
+原来Cache3~Cache4之间部分原来映射到Cache4, 现在还是映射到Cache4, 不受影响;  </p>
+
+<p><img src="/static/images/hash03.png" alt="删除Cache服务器的情景" title="删除Cache服务器的情景" /></p>
+
+<h2 id="cache-2">虚拟Cache服务器</h2>
+
+<p>考虑到哈希算法并不是保证绝对的平衡, 尤其Cache较少的话, 对象并不能被均匀的映射到Cache上. 为了解决这种情况引入了”虚拟节点”的概念.<br />
+虚拟节点是实际节点在环形空间的复制品, 一个实际节点对应了若干个”虚拟节点”, 这个对应个数也称为”复制个数”, “虚拟节点”在哈希空间中以哈希值排列.</p>
+
+<p>仍以4台Cache服务器为例,设置”复制个数”为2后, 共有8个“虚拟节点”分部在环形区域上, 会如下图一样:</p>
+
+<p><img src="/static/images/hash04.png" alt="虚拟节点" title="虚拟节点" /></p>
+
+<p>引入了”虚拟节点”后，映射关系就从<code class="highlighter-rouge">对象--&gt;Cache服务器</code>转换成了<code class="highlighter-rouge">对象--&gt;虚拟节点--&gt;Cache服务器</code>. 当然虚拟节点与真正的服务器之间也有对应关系. 查询对象所在Cache服务器的映射关系整个流程如下图所示:</p>
+
+<p><img src="/static/images/hash05.png" alt="映射关系" title="映射关系" /></p>
+
+<hr />
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/一致性哈希" data-title="一致性哈希" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-03-25-%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
+
+</body>
+
+</html>
