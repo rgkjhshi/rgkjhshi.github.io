@@ -125,10 +125,12 @@ public interface ProceedingJoinPoint extends JoinPoint {
     public Object proceed() throws Throwable;    // 执行连接点的方法
     public Object proceed(Object[] args) throws Throwable; // 执行连接点的方法,可以把原来的参数用新的args替换掉
 }
+// 如果我这么声明切点: @Pointcut("within(com.test.spring.bean.Hello))")
 public interface JoinPoint {  
-    String toString();          //连接点所在位置的相关信息  
-    String toShortString();     //连接点所在位置的简短相关信息  
-    String toLongString();      //连接点所在位置的全部相关信息  
+    String toString();          // execution(String com.test.spring.bean.Hello.hello(String))
+    String toShortString();     // execution(Hello.hello(..))
+    String toLongString();      // execution(public java.lang.String com.test.spring.bean.Hello.hello(java.lang.String))
+    // 上面这几个toString, 是打印切点相关信息, 注意上面是用 within声明 而打印出来的是 execution.
     Object getThis();           //返回AOP代理对象  
     Object getTarget();         //返回目标对象  
     Object[] getArgs();         //返回被通知方法参数列表  
@@ -148,6 +150,18 @@ public interface JoinPoint {
 }
 ~~~
 
+`Signature`中的部分方法说明如下:
+
+~~~java
+public interface Signature {  
+    // Signature代表的是切点处的签名信息
+    String toString();       // String com.test.spring.bean.Hello.hello(String)
+    String toShortString();  // Hello.hello(..)
+    String toLongString();   // public java.lang.String com.test.spring.bean.Hello.hello(java.lang.String)
+    String getName();        // hello 可参考:java.lang.reflect.Member.getName
+}
+~~~
+
 *****
 
 ## 切入点表达式
@@ -157,15 +171,15 @@ public interface JoinPoint {
 **切入点指示符(PCD)**  
 在切入点表达式中可以使用如下的AspectJ切入点指示符(PCD):
 
-* execution: 匹配方法执行, 这是最经常的切入点指示符
-* within: 匹配特定类型之内的全部方法执行
+* execution: 匹配方法, 这是最经常的切入点指示符
+* within: 匹配特定类型之内的全部方法
 * this: 用于匹配当前AOP代理对象类型的连接点,包括接口
 * target: 用于匹配当前目标对象类型的连接点,不包括接口
 * args: 用于匹配当前执行的方法传入的参数为指定类型的连接点
-* @within: 用于匹配持有指定注解类型内的连接点
+* @within: 匹配持有指定注解的类型里面的所有方法(注解在类上)
 * @target: 用于匹配当前目标对象类型的连接点，其中目标对象持有指定的注解
 * @args: 匹配当前执行的方法传入的参数持有指定的注解
-* @annotation: 匹配当前执行方法持有指定注解的方法
+* @annotation: 匹配持有指定注解的方法(注解在方法上)
 
 看不明白还是看最后面的例子吧
 
@@ -229,7 +243,7 @@ args属于动态切入点，这种切入点开销非常大，非特殊情况最�
 | ------------------------ | -------------- |
 | args(java.lang.String, ..)   | 第一个参数为String,后面有任意个参数的方法  |
 
-* `@within`使用`@within(注解类型全限定名)`匹配所以持有指定注解类型内的方法, 必须是在目标对象上声明注解，在接口上声明不起作用
+* `@within`使用`@within(注解类型全限定名)`匹配所有持有指定注解的类里面的方法, 即要把注解加在类上
 
 | 表达式                    | 描述     |
 | ------------------------ | -------------- |
@@ -247,7 +261,7 @@ args属于动态切入点，这种切入点开销非常大，非特殊情况最�
 | ------------------------ | -------------- |
 | @args(cn.test.Secure)  | 任何只接受一个参数的方法，且方法运行时传入的参数持有Secure注解   |
 
-* `@annotation`使用`@annotation(注解类型全限定名)`匹配当前执行方法持有指定注解的方法
+* `@annotation`使用`@annotation(注解类型全限定名)`匹配持有指定注解的方法, 即要把注解加在方法上才管用
 
 | 表达式                    | 描述     |
 | ------------------------ | -------------- |
