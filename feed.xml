@@ -5,9 +5,80 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 11 Apr 2016 11:25:14 +0800</pubDate>
-    <lastBuildDate>Mon, 11 Apr 2016 11:25:14 +0800</lastBuildDate>
+    <pubDate>Tue, 12 Apr 2016 15:58:57 +0800</pubDate>
+    <lastBuildDate>Tue, 12 Apr 2016 15:58:57 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>HBase Shell命令总结</title>
+        <description>&lt;p&gt;SpringMVC项目中通过GET方式传递的参数中有中文时, 有可能产生乱码.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#namespace&quot;&gt;namespace&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;常用命令&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#api&quot;&gt;API&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;namespace&quot;&gt;namespace&lt;/h2&gt;
+
+&lt;p&gt;表名&lt;code class=&quot;highlighter-rouge&quot;&gt;ns:table1&lt;/code&gt;中冒号前面的就是&lt;code class=&quot;highlighter-rouge&quot;&gt;namespace&lt;/code&gt;, 它可以在逻辑上隔离数据, 也可以对不同的&lt;code class=&quot;highlighter-rouge&quot;&gt;namespace&lt;/code&gt;进行不同授权&lt;br /&gt;
+HBase系统默认定义了两个缺省的namespace&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;hbase&lt;/code&gt;: 系统内建表，包括namespace和meta表&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;default&lt;/code&gt;: 用户建表时未指定namespace的表都创建在此&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;常用命令&lt;/h3&gt;
+
+&lt;p&gt;下面是对于&lt;code class=&quot;highlighter-rouge&quot;&gt;namespace&lt;/code&gt;的一些操作&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;创建: &lt;code class=&quot;highlighter-rouge&quot;&gt;create_namespace &#39;ns&#39;&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;删除: &lt;code class=&quot;highlighter-rouge&quot;&gt;drop_namespace &#39;ns&#39;&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;查看所有: &lt;code class=&quot;highlighter-rouge&quot;&gt;list_namespace&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;查看某个: &lt;code class=&quot;highlighter-rouge&quot;&gt;describe_namespace &#39;ns&#39;&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;查看namespace下的表: &lt;code class=&quot;highlighter-rouge&quot;&gt;list_namespace_tables &#39;ns&#39;&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;在namespace下创建表: &lt;code class=&quot;highlighter-rouge&quot;&gt;create &#39;ns:testtable&#39;, &#39;fm1&#39;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;api&quot;&gt;API&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;Configuration&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conf&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HBaseConfiguration&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;HBaseAdmin&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;admin&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HBaseAdmin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;conf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;//create namespace named &quot;my_ns&quot;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;admin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;createNamespace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;NamespaceDescriptor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;my_ns&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;//create tableDesc, with namespace name &quot;my_ns&quot; and table name &quot;mytable&quot;&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;//HTableDescriptor tableDesc = new HTableDescriptor(TableName.valueOf(&quot;my_ns:mytable&quot;));&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;//tableDesc.setDurability(Durability.SYNC_WAL);&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;//add a column family &quot;mycf&quot;&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;//HColumnDescriptor hcd = new HColumnDescriptor(&quot;mycf&quot;);&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;//tableDesc.addFamily(hcd);&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;//admin.createTable(tableDesc);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;admin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;close&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+</description>
+        <pubDate>Tue, 12 Apr 2016 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2016-04-12-HBase-Shell%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2016-04-12-HBase-Shell%E5%91%BD%E4%BB%A4%E6%80%BB%E7%BB%93.html</guid>
+        
+        <category>HBase</category>
+        
+        
+        <category>点滴积累</category>
+        
+      </item>
     
       <item>
         <title>SpringMVC解决GET参数乱码</title>
@@ -41,8 +112,8 @@
 &lt;hr /&gt;
 </description>
         <pubDate>Mon, 11 Apr 2016 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-04-11-%E4%B8%80SpringMVC%E8%A7%A3%E5%86%B3GET%E5%8F%82%E6%95%B0%E4%B9%B1%E7%A0%81.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-04-11-%E4%B8%80SpringMVC%E8%A7%A3%E5%86%B3GET%E5%8F%82%E6%95%B0%E4%B9%B1%E7%A0%81.html</guid>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-04-11-SpringMVC%E8%A7%A3%E5%86%B3GET%E5%8F%82%E6%95%B0%E4%B9%B1%E7%A0%81.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-04-11-SpringMVC%E8%A7%A3%E5%86%B3GET%E5%8F%82%E6%95%B0%E4%B9%B1%E7%A0%81.html</guid>
         
         <category>Spring</category>
         
@@ -1854,280 +1925,6 @@ Aviator 规定,任何类型与&lt;code class=&quot;highlighter-rouge&quot;&gt;St
         
         
         <category>点滴积累</category>
-        
-      </item>
-    
-      <item>
-        <title>java中的反射</title>
-        <description>&lt;p&gt;java反射涉及到的内容有点多，但不难，主要是一些之前没见过的类型，本文先简单介绍一部分&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;反射相关的类和接口简介&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;相关类说明&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;相关接口继承关系图&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-3&quot;&gt;相关接口说明&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#object-classtype&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Object&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;Class&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;Type&lt;/code&gt;的关系和区别&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-4&quot;&gt;反射的具体功能&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-5&quot;&gt;获取类&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-6&quot;&gt;获取对象实例&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-7&quot;&gt;反射相关接口的详细说明&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#annotatedelement&quot;&gt;AnnotatedElement&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#member&quot;&gt;Member&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#invocationhandler&quot;&gt;InvocationHandler&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#genericdeclaration&quot;&gt;GenericDeclaration&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;反射相关的类和接口简介&lt;/h2&gt;
-&lt;p&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;java.lang.reflect&lt;/code&gt;包中定义了一些接口和类,简单记录下他们的作用&lt;/p&gt;
-
-&lt;h3 id=&quot;section-1&quot;&gt;相关类说明&lt;/h3&gt;
-&lt;p&gt;这些类都比较简单，对照API一看就懂，主要是平时用到的比较少，这里先简单说明下，不在此展开&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;类&lt;/th&gt;
-      &lt;th&gt;说明&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;AccessibleObject&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Field、Method&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;Constructor&lt;/code&gt;对象的基类&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Field&lt;/td&gt;
-      &lt;td&gt;final类, 对应类或接口的单个字段&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Method&lt;/td&gt;
-      &lt;td&gt;final类, 对应类或接口的单独某个方法&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Constructor&amp;lt;T&amp;gt;&lt;/code&gt;&lt;/td&gt;
-      &lt;td&gt;final类, 对应类的单个构造方法&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Modifier&lt;/td&gt;
-      &lt;td&gt;对应类和成员访问修饰符, 如&lt;code class=&quot;highlighter-rouge&quot;&gt;public,static,final,native,synchronized&lt;/code&gt;等&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Array&lt;/td&gt;
-      &lt;td&gt;final类, 对应数组&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Proxy&lt;/td&gt;
-      &lt;td&gt;提供用于创建动态代理类和实例的静态方法，它还是由这些方法创建的所有动态代理类的超类&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;ReflectPermission&lt;/td&gt;
-      &lt;td&gt;final类, 反射操作的&lt;code class=&quot;highlighter-rouge&quot;&gt;Permission&lt;/code&gt;类&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;另外反射机制还经常用到&lt;code class=&quot;highlighter-rouge&quot;&gt;java.lang&lt;/code&gt;中的类, 如&lt;code class=&quot;highlighter-rouge&quot;&gt;Class&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;Packate&lt;/code&gt;还有各种原始类型等&lt;/p&gt;
-
-&lt;h3 id=&quot;section-2&quot;&gt;相关接口继承关系图&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&quot;/static/images/reflect_interface.png&quot; alt=&quot;反射相关接口继承关系图&quot; title=&quot;反射相关接口继承关系图&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;section-3&quot;&gt;相关接口说明&lt;/h3&gt;
-&lt;p&gt;这里先简单介绍下，后文还会详细说明这些接口&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;接口&lt;/th&gt;
-      &lt;th&gt;说明&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;AnnotatedElement&lt;/td&gt;
-      &lt;td&gt;被注解标注的元素都实现的接口&lt;br /&gt; 实现类有&lt;code class=&quot;highlighter-rouge&quot;&gt;AccessibleObject&lt;/code&gt;及其子类,&lt;code class=&quot;highlighter-rouge&quot;&gt;Class&lt;/code&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Package&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Member&lt;/td&gt;
-      &lt;td&gt;成员接口, 反映字段、方法、构造函数的信息&lt;br /&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;Type&lt;/td&gt;
-      &lt;td&gt;所有类型的父接口, 之后的文章会详细介绍&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;GenericDeclaration&lt;/td&gt;
-      &lt;td&gt;各种声明类型的父接口, 如&lt;code class=&quot;highlighter-rouge&quot;&gt;Class,Constructor,Method&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;TypeVariable&amp;lt;D extends GenericDeclaration&amp;gt;&lt;/code&gt;&lt;/td&gt;
-      &lt;td&gt;类型变量类型&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;ParameterizedType&lt;/td&gt;
-      &lt;td&gt;参数化类型, 如&lt;code class=&quot;highlighter-rouge&quot;&gt;Collection&amp;lt;String&amp;gt;&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;GenericArrayType&lt;/td&gt;
-      &lt;td&gt;数组类型, 它里面的元素为参数化类型或类型变量(上面那俩)&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;WildcardType&lt;/td&gt;
-      &lt;td&gt;通配符类型, 如&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;?&amp;gt;, &amp;lt;? extends Number&amp;gt;, &amp;lt;? super Integer&amp;gt;&lt;/code&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;InvocationHandler&lt;/td&gt;
-      &lt;td&gt;代理处理器接口&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;object-classtype&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Object&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;Class&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;Type&lt;/code&gt;的关系和区别&lt;/h2&gt;
-
-&lt;p&gt;所有的类都继承&lt;code class=&quot;highlighter-rouge&quot;&gt;Object&lt;/code&gt;是毫无疑问的, &lt;code class=&quot;highlighter-rouge&quot;&gt;Class&lt;/code&gt;也是类，也继承&lt;code class=&quot;highlighter-rouge&quot;&gt;Object&lt;/code&gt;&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;Class&lt;/code&gt;类特殊的地方是它在运行时用来描述类的各种元信息,对象是类的实例,而类在运行时的描述就是&lt;code class=&quot;highlighter-rouge&quot;&gt;Class&lt;/code&gt;&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;Type&lt;/code&gt;是个接口,用来表示某个对象是什么类型的,&lt;code class=&quot;highlighter-rouge&quot;&gt;Class&lt;/code&gt;类实现了好几个接口,其中一个就是&lt;code class=&quot;highlighter-rouge&quot;&gt;Type&lt;/code&gt;&lt;br /&gt;
-后面的文章内容更能体现出区别来&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section-4&quot;&gt;反射的具体功能&lt;/h2&gt;
-&lt;p&gt;反射作用挺多, 比如反编译, 通过反射机制访问对象的属性、方法、构造方法等, 先简单给出一些示例&lt;/p&gt;
-
-&lt;h3 id=&quot;section-5&quot;&gt;获取类&lt;/h3&gt;
-&lt;p&gt;有如下三种方法:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;Class.forName()&lt;/code&gt;, 如:&lt;code class=&quot;highlighter-rouge&quot;&gt;Class clazz = Class.forName(&quot;java.lang.String&quot;);&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;通过类的&lt;code class=&quot;highlighter-rouge&quot;&gt;class&lt;/code&gt;属性, 如:&lt;code class=&quot;highlighter-rouge&quot;&gt;Class clazz = String.class;&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;通过实例对象的&lt;code class=&quot;highlighter-rouge&quot;&gt;getClass&lt;/code&gt;方法, 如: &lt;code class=&quot;highlighter-rouge&quot;&gt;Class clazz = user.getClass();&lt;/code&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&quot;section-6&quot;&gt;获取对象实例&lt;/h3&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;Class&lt;/code&gt;实例的&lt;code class=&quot;highlighter-rouge&quot;&gt;newInstance()&lt;/code&gt;, 如:&lt;code class=&quot;highlighter-rouge&quot;&gt;String str = (String)clazz.newInstance();&lt;/code&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;section-7&quot;&gt;反射相关接口的详细说明&lt;/h2&gt;
-&lt;p&gt;这些接口的关系可参考上面那幅图, 这里只详细说明&lt;code class=&quot;highlighter-rouge&quot;&gt;AnnotatedElement、Member、InvocationHandler、GenericDeclaration&lt;/code&gt;这几个接口&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;Type&lt;/code&gt;接口及其字类在&lt;a href=&quot;/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-02-16-Type%E8%AF%A6%E8%A7%A3.html&quot;&gt;Type详解&lt;/a&gt;中详细说明&lt;/p&gt;
-
-&lt;h3 id=&quot;annotatedelement&quot;&gt;AnnotatedElement&lt;/h3&gt;
-&lt;p&gt;这个接口最简单, 实现了该接口的类都能添加注解, 其实现类有: &lt;code class=&quot;highlighter-rouge&quot;&gt;AccessibleObject, Class, Constructor, Field, Method, Package&lt;/code&gt;&lt;br /&gt;
-它有如下方法:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;boolean isAnnotationPresent(Class&amp;lt;? extends Annotation&amp;gt; annotationClass)&lt;/code&gt;: 该类上是否存在&lt;code class=&quot;highlighter-rouge&quot;&gt;annotationClass&lt;/code&gt;这个注解&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Annotation[] getAnnotations()&lt;/code&gt;: 获取这个元素上的所有注解(包括父类上被&lt;code class=&quot;highlighter-rouge&quot;&gt;@Inherited&lt;/code&gt;标记的注解)&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;A extends Annotation&amp;gt; A getAnnotation(Class&amp;lt;A&amp;gt; annotationClass)&lt;/code&gt;: 获取这个元素上指定类型的注解, 没有返回null&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Annotation[] getDeclaredAnnotations()&lt;/code&gt;: 获取直接标注在这个元素上的注解&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&quot;member&quot;&gt;Member&lt;/h3&gt;
-&lt;p&gt;表示组成类的成员, 其实现类有: &lt;code class=&quot;highlighter-rouge&quot;&gt;Constructor, Field, Method&lt;/code&gt;
-它有如下方法:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;boolean isSynthetic()&lt;/code&gt;: 是否是复合类&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;int getModifiers()&lt;/code&gt;: 以数字形式返回修饰符&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;String getName()&lt;/code&gt;: 返回成员的简单名, 如: 属性名字, 方法名字(只有名字,不包括参数), 构造器名字&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Class&amp;lt;?&amp;gt; getDeclaringClass()&lt;/code&gt;: 返回声明该成员的声明类&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// getName方法的测试&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;com&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TestMember&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;              &lt;span class=&quot;c1&quot;&gt;// 属性名为: name&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hello&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 方法名(不包括参数)为: hello&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TestMember&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 构造器名为: com.test.TestMember&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TestMember&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getDeclaredField&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;name&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;                    &lt;span class=&quot;c1&quot;&gt;// name&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TestMember&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getDeclaredMethod&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;hello&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;// hello&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TestMember&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getDeclaredConstructor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;//com.test.TestMember&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TestMember&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getDeclaredField&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;name&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getDeclaringClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;//com.test.TestMember&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;invocationhandler&quot;&gt;InvocationHandler&lt;/h3&gt;
-&lt;p&gt;代理处理器类的实例需要实现的接口, 只有一个方法:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Object invoke(Object proxy, Method method, Object[] args)&lt;/code&gt;: 代理对象执行方法时真正调用的函数&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;其中:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Object proxy&lt;/code&gt;: 表示代理对象(比如通过&lt;code class=&quot;highlighter-rouge&quot;&gt;Proxy.newProxyInstance()&lt;/code&gt;得到的对象), 不是实现了该接口的代理处理器对象&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Method method&lt;/code&gt;: 被代理对象的方法, 就是接口原来实现类里的方法, 代理对象执行的时候会调用被代理对象的方法(取决于代码怎么写)&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Object[] args&lt;/code&gt;: 上面那个方法需要的参数&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;通常代理处理器类的实例&lt;code class=&quot;highlighter-rouge&quot;&gt;handler&lt;/code&gt;会作为参数传到java代理类&lt;code class=&quot;highlighter-rouge&quot;&gt;Proxy&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;newProxyInstance&lt;/code&gt;方法中来产生一个代理对象(与被代理对象实现了同一接口)&lt;br /&gt;
-调用代理对象的方法时, 真正调用的就是上面的invoke函数.&lt;br /&gt;
-还是来个例子吧(&lt;code class=&quot;highlighter-rouge&quot;&gt;HelloImpl&lt;/code&gt;实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;Hello&lt;/code&gt;接口, 并实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;sayHello()&lt;/code&gt;方法)  &lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// 代理处理器类&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AOPHandler&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;InvocationHandler&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 这个用来表示被代理的对象&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AOPHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;target&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;invoke&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;proxy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Method&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;method&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Throwable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;proxy:&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;proxy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;// proxy:com.sun.proxy.$Proxy0&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;method:&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;method&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// proxy:java.lang.reflect.Method&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;method&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;invoke&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 调用被代理对象的的方法, 即 target 的 method&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// 测试类&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ProxyTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;forName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;com.test.HelloImpl&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;newInstance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;InvocationHandler&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;handler&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AOPHandler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 创建代理处理器对象的时候把被代理的对象传进去&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 这里生成代理类对象, 参数依次为: 被代理对象的ClassLoader, 被代理对象实现的所有接口, 代理处理器&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Hello&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;proxy&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Hello&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Proxy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;newProxyInstance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getClassLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getClass&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getInterfaces&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;handler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;proxy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sayHello&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 这就调用了那个invoke方法&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;genericdeclaration&quot;&gt;GenericDeclaration&lt;/h3&gt;
-&lt;p&gt;可以声明类型变量的实体的公共接口, 就是那些能够声明范型类型&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;T&amp;gt;&lt;/code&gt;的地方, 注意是声明而不是使用.其实现类有: &lt;code class=&quot;highlighter-rouge&quot;&gt;Class, Constructor, Method&lt;/code&gt;&lt;br /&gt;
-它就一个方法:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;TypeVariable&amp;lt;?&amp;gt;[] getTypeParameters()&lt;/code&gt;: 按照声明顺序返回声明的类型变量&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;对它可以这么理解:&lt;br /&gt;
-在定义类或方法时, 我们一般可以声明范型, 如&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;T&amp;gt; T getData()&lt;/code&gt;, 因此可以声明这些&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;T&amp;gt;、&amp;lt;F&amp;gt;&lt;/code&gt;的实体, 都实现了该接口;&lt;br /&gt;
-而那些声明出来的&lt;code class=&quot;highlighter-rouge&quot;&gt;T、F&lt;/code&gt;叫类型变量(&lt;code class=&quot;highlighter-rouge&quot;&gt;TypeVariable&lt;/code&gt;), 后面会说到.&lt;/p&gt;
-
-&lt;hr /&gt;
-</description>
-        <pubDate>Thu, 14 Jan 2016 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-01-14-java%E4%B8%AD%E7%9A%84%E5%8F%8D%E5%B0%84.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-01-14-java%E4%B8%AD%E7%9A%84%E5%8F%8D%E5%B0%84.html</guid>
-        
-        <category>Java</category>
-        
-        
-        <category>编程技术</category>
         
       </item>
     
