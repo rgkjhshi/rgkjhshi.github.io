@@ -5,22 +5,23 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 14 Apr 2016 09:57:40 +0800</pubDate>
-    <lastBuildDate>Thu, 14 Apr 2016 09:57:40 +0800</lastBuildDate>
+    <pubDate>Fri, 15 Apr 2016 17:46:05 +0800</pubDate>
+    <lastBuildDate>Fri, 15 Apr 2016 17:46:05 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
         <title>HBase Shell命令总结</title>
-        <description>&lt;p&gt;SpringMVC项目中通过GET方式传递的参数中有中文时, 有可能产生乱码.&lt;/p&gt;
+        <description>&lt;p&gt;HBase Shell命令总结&lt;/p&gt;
 
 &lt;hr /&gt;
 
 &lt;ul id=&quot;markdown-toc&quot;&gt;
   &lt;li&gt;&lt;a href=&quot;#namespace&quot;&gt;namespace&lt;/a&gt;    &lt;ul&gt;
       &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;常用命令&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#api&quot;&gt;API&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#namespace-1&quot;&gt;基于namespace的授权操作&lt;/a&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#shell-&quot;&gt;shell 命令总结表&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;hr /&gt;
@@ -31,7 +32,7 @@
 HBase系统默认定义了两个缺省的namespace&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;hbase&lt;/code&gt;: 系统内建表，包括namespace和meta表&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;hbase&lt;/code&gt;: 系统命名空间, 用于包含hbase的内部表, 包括namespace和meta表&lt;/li&gt;
   &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;default&lt;/code&gt;: 用户建表时未指定namespace的表都创建在此&lt;/li&gt;
 &lt;/ul&gt;
 
@@ -46,26 +47,135 @@ HBase系统默认定义了两个缺省的namespace&lt;/p&gt;
   &lt;li&gt;查看某个: &lt;code class=&quot;highlighter-rouge&quot;&gt;describe_namespace &#39;ns&#39;&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;查看namespace下的表: &lt;code class=&quot;highlighter-rouge&quot;&gt;list_namespace_tables &#39;ns&#39;&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;在namespace下创建表: &lt;code class=&quot;highlighter-rouge&quot;&gt;create &#39;ns:testtable&#39;, &#39;fm1&#39;&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;修改属性: &lt;code class=&quot;highlighter-rouge&quot;&gt;alter_namespace &#39;ns&#39;, {METHOD =&amp;gt; &#39;set&#39;, &#39;PROPERTY_NAME&#39; =&amp;gt; &#39;PROPERTY_VALUE&#39;}&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&quot;api&quot;&gt;API&lt;/h3&gt;
+&lt;h3 id=&quot;namespace-1&quot;&gt;基于namespace的授权操作&lt;/h3&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;Configuration&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conf&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HBaseConfiguration&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;HBaseAdmin&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;admin&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HBaseAdmin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;conf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;//create namespace named &quot;my_ns&quot;&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;admin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;createNamespace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;NamespaceDescriptor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;my_ns&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+&lt;p&gt;具备Create权限的namespace Admin可以对表创建和删除、生成和恢复快照&lt;br /&gt;
+具备Admin权限的namespace Admin可以对表splits或major compactions&lt;br /&gt;
+RWXCA&lt;/p&gt;
 
-&lt;span class=&quot;c1&quot;&gt;//create tableDesc, with namespace name &quot;my_ns&quot; and table name &quot;mytable&quot;&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;//HTableDescriptor tableDesc = new HTableDescriptor(TableName.valueOf(&quot;my_ns:mytable&quot;));&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;//tableDesc.setDurability(Durability.SYNC_WAL);&lt;/span&gt;
+&lt;ul&gt;
+  &lt;li&gt;授权&lt;code class=&quot;highlighter-rouge&quot;&gt;userA&lt;/code&gt;用户对&lt;code class=&quot;highlighter-rouge&quot;&gt;test_ns&lt;/code&gt;的写权限: &lt;code class=&quot;highlighter-rouge&quot;&gt;grant &#39;userA&#39; &#39;W&#39; &#39;@test_ns&#39;&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;回收&lt;code class=&quot;highlighter-rouge&quot;&gt;userA&lt;/code&gt;用户对&lt;code class=&quot;highlighter-rouge&quot;&gt;test_ns&lt;/code&gt;的所有权限: &lt;code class=&quot;highlighter-rouge&quot;&gt;revoke &#39;userA&#39;&#39;@test_ns&#39;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;span class=&quot;c1&quot;&gt;//add a column family &quot;mycf&quot;&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;//HColumnDescriptor hcd = new HColumnDescriptor(&quot;mycf&quot;);&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;//tableDesc.addFamily(hcd);&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;//admin.createTable(tableDesc);&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;admin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;close&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;p&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;hbase-site.xml&lt;/code&gt;在HBase中启用授权机制:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;property&amp;gt;&lt;/span&gt;
+     &lt;span class=&quot;nt&quot;&gt;&amp;lt;name&amp;gt;&lt;/span&gt;hbase.security.authorization&lt;span class=&quot;nt&quot;&gt;&amp;lt;/name&amp;gt;&lt;/span&gt;
+     &lt;span class=&quot;nt&quot;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;true&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;property&amp;gt;&lt;/span&gt;
+     &lt;span class=&quot;nt&quot;&gt;&amp;lt;name&amp;gt;&lt;/span&gt;hbase.coprocessor.master.classes&lt;span class=&quot;nt&quot;&gt;&amp;lt;/name&amp;gt;&lt;/span&gt;
+     &lt;span class=&quot;nt&quot;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;org.apache.hadoop.hbase.security.access.AccessController&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;property&amp;gt;&lt;/span&gt;
+     &lt;span class=&quot;nt&quot;&gt;&amp;lt;name&amp;gt;&lt;/span&gt;hbase.coprocessor.region.classes&lt;span class=&quot;nt&quot;&gt;&amp;lt;/name&amp;gt;&lt;/span&gt;
+     &lt;span class=&quot;nt&quot;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;org.apache.hadoop.hbase.security.token.TokenProvider,org.apache.hadoop.hbase.security.access.AccessController&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
+
+&lt;h2 id=&quot;shell-&quot;&gt;shell 命令总结表&lt;/h2&gt;
+
+&lt;p&gt;在hbase shell中直接敲命令会给出说明，并有很多例子, 一看就知道怎么用了&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;shell 命令&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;描述&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;list&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;查看所有表&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;describe&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;描述表&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;count&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;统计表中行数&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;create&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;创建表&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;alter&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;修改列族模式&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;drop&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;删除表&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;exists&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;测试表是否存在&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;disable&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;使表无效&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;enable&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;使表有效&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;put&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;插入数据&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;incr&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;增加表、行或列的值&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;get&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;查看数据&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;scan&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;查看批量数据&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;delete&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;删除表行列对应的值&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;deleteall&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;删除指定行的所有元素&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;shutdown&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;关闭HBase集群(不同于exit)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;truncate&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;重新创建指定表&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;tools&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;列出HBase支持的工具&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;status&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;返回HBase集群状态&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;version&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;查看hbase版本&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;exit&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;推出HBase shell&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
 
 &lt;hr /&gt;
 </description>

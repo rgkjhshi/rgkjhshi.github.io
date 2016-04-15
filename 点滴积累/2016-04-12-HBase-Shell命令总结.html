@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="keywords" content="HBase Shell命令总结, 点滴积累, HBase, 逆水行舟" />
-    <meta name="description" content="HBase Shell命令总结, 点滴积累, HBase, SpringMVC项目中通过GET方式传递的参数中有中文时, 有可能产生乱码." />
+    <meta name="description" content="HBase Shell命令总结, 点滴积累, HBase, HBase Shell命令总结" />
 
     <title>逆水行舟</title>
 
@@ -99,16 +99,17 @@ jQuery(function(){
     <div class="uk-grid">
         <div  class="uk-width-4-4">
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
-            <p>SpringMVC项目中通过GET方式传递的参数中有中文时, 有可能产生乱码.</p>
+            <p>HBase Shell命令总结</p>
 
 <hr />
 
 <ul id="markdown-toc">
   <li><a href="#namespace">namespace</a>    <ul>
       <li><a href="#section">常用命令</a></li>
-      <li><a href="#api">API</a></li>
+      <li><a href="#namespace-1">基于namespace的授权操作</a></li>
     </ul>
   </li>
+  <li><a href="#shell-">shell 命令总结表</a></li>
 </ul>
 
 <hr />
@@ -119,7 +120,7 @@ jQuery(function(){
 HBase系统默认定义了两个缺省的namespace</p>
 
 <ul>
-  <li><code class="highlighter-rouge">hbase</code>: 系统内建表，包括namespace和meta表</li>
+  <li><code class="highlighter-rouge">hbase</code>: 系统命名空间, 用于包含hbase的内部表, 包括namespace和meta表</li>
   <li><code class="highlighter-rouge">default</code>: 用户建表时未指定namespace的表都创建在此</li>
 </ul>
 
@@ -134,26 +135,135 @@ HBase系统默认定义了两个缺省的namespace</p>
   <li>查看某个: <code class="highlighter-rouge">describe_namespace 'ns'</code></li>
   <li>查看namespace下的表: <code class="highlighter-rouge">list_namespace_tables 'ns'</code></li>
   <li>在namespace下创建表: <code class="highlighter-rouge">create 'ns:testtable', 'fm1'</code></li>
+  <li>修改属性: <code class="highlighter-rouge">alter_namespace 'ns', {METHOD =&gt; 'set', 'PROPERTY_NAME' =&gt; 'PROPERTY_VALUE'}</code></li>
 </ul>
 
-<h3 id="api">API</h3>
+<h3 id="namespace-1">基于namespace的授权操作</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Configuration</span> <span class="n">conf</span> <span class="o">=</span> <span class="n">HBaseConfiguration</span><span class="o">.</span><span class="na">create</span><span class="o">();</span>
-<span class="n">HBaseAdmin</span> <span class="n">admin</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HBaseAdmin</span><span class="o">(</span><span class="n">conf</span><span class="o">);</span>
-<span class="c1">//create namespace named "my_ns"</span>
-<span class="n">admin</span><span class="o">.</span><span class="na">createNamespace</span><span class="o">(</span><span class="n">NamespaceDescriptor</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="s">"my_ns"</span><span class="o">).</span><span class="na">build</span><span class="o">());</span>
+<p>具备Create权限的namespace Admin可以对表创建和删除、生成和恢复快照<br />
+具备Admin权限的namespace Admin可以对表splits或major compactions<br />
+RWXCA</p>
 
-<span class="c1">//create tableDesc, with namespace name "my_ns" and table name "mytable"</span>
-<span class="c1">//HTableDescriptor tableDesc = new HTableDescriptor(TableName.valueOf("my_ns:mytable"));</span>
-<span class="c1">//tableDesc.setDurability(Durability.SYNC_WAL);</span>
+<ul>
+  <li>授权<code class="highlighter-rouge">userA</code>用户对<code class="highlighter-rouge">test_ns</code>的写权限: <code class="highlighter-rouge">grant 'userA' 'W' '@test_ns'</code></li>
+  <li>回收<code class="highlighter-rouge">userA</code>用户对<code class="highlighter-rouge">test_ns</code>的所有权限: <code class="highlighter-rouge">revoke 'userA''@test_ns'</code></li>
+</ul>
 
-<span class="c1">//add a column family "mycf"</span>
-<span class="c1">//HColumnDescriptor hcd = new HColumnDescriptor("mycf");</span>
-<span class="c1">//tableDesc.addFamily(hcd);</span>
-<span class="c1">//admin.createTable(tableDesc);</span>
-<span class="n">admin</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+<p>通过<code class="highlighter-rouge">hbase-site.xml</code>在HBase中启用授权机制:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;property&gt;</span>
+     <span class="nt">&lt;name&gt;</span>hbase.security.authorization<span class="nt">&lt;/name&gt;</span>
+     <span class="nt">&lt;value&gt;</span>true<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property&gt;</span>
+     <span class="nt">&lt;name&gt;</span>hbase.coprocessor.master.classes<span class="nt">&lt;/name&gt;</span>
+     <span class="nt">&lt;value&gt;</span>org.apache.hadoop.hbase.security.access.AccessController<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;property&gt;</span>
+     <span class="nt">&lt;name&gt;</span>hbase.coprocessor.region.classes<span class="nt">&lt;/name&gt;</span>
+     <span class="nt">&lt;value&gt;</span>org.apache.hadoop.hbase.security.token.TokenProvider,org.apache.hadoop.hbase.security.access.AccessController<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
 </code></pre>
 </div>
+
+<h2 id="shell-">shell 命令总结表</h2>
+
+<p>在hbase shell中直接敲命令会给出说明，并有很多例子, 一看就知道怎么用了</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">shell 命令</th>
+      <th style="text-align: left">描述</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">list</td>
+      <td style="text-align: left">查看所有表</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">describe</td>
+      <td style="text-align: left">描述表</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">count</td>
+      <td style="text-align: left">统计表中行数</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">create</td>
+      <td style="text-align: left">创建表</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">alter</td>
+      <td style="text-align: left">修改列族模式</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">drop</td>
+      <td style="text-align: left">删除表</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">exists</td>
+      <td style="text-align: left">测试表是否存在</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">disable</td>
+      <td style="text-align: left">使表无效</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">enable</td>
+      <td style="text-align: left">使表有效</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">put</td>
+      <td style="text-align: left">插入数据</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">incr</td>
+      <td style="text-align: left">增加表、行或列的值</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">get</td>
+      <td style="text-align: left">查看数据</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">scan</td>
+      <td style="text-align: left">查看批量数据</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">delete</td>
+      <td style="text-align: left">删除表行列对应的值</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">deleteall</td>
+      <td style="text-align: left">删除指定行的所有元素</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">shutdown</td>
+      <td style="text-align: left">关闭HBase集群(不同于exit)</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">truncate</td>
+      <td style="text-align: left">重新创建指定表</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">tools</td>
+      <td style="text-align: left">列出HBase支持的工具</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">status</td>
+      <td style="text-align: left">返回HBase集群状态</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">version</td>
+      <td style="text-align: left">查看hbase版本</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">exit</td>
+      <td style="text-align: left">推出HBase shell</td>
+    </tr>
+  </tbody>
+</table>
 
 <hr />
 
