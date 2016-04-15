@@ -5,7 +5,7 @@ date:   2016-04-12
 category: 点滴积累
 tag: HBase
 ---
-HBase Shell命令总结
+HBase Shell命令总结, 便于查阅
 
 
 
