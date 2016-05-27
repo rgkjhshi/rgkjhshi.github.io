@@ -104,6 +104,7 @@ jQuery(function(){
 <ul id="markdown-toc">
   <li><a href="#section">等额本金</a></li>
   <li><a href="#section-1">等额本息</a></li>
+  <li><a href="#section-2">信用卡分期</a></li>
 </ul>
 
 <hr />
@@ -213,6 +214,24 @@ jQuery(function(){
 </ul>
 
 <hr />
+
+<h2 id="section-2">信用卡分期</h2>
+
+<p>最具欺骗性的就是信用卡分期了. 信用卡分期是直接按照借款总额和利率一次性计算出利息, 平均到每个月还款. 但实际上占用的银行本金随着每个月的还款已经逐渐变少了, 所以还一开始计算出的利息对于借款人来说并不划算.</p>
+
+<p>举个例子, 比如信用卡月利率是<code class="highlighter-rouge">0.6%</code>, 即年利率<code class="highlighter-rouge">7.2%</code>, 借了10w, 分12个月还, 则每个月还款为: <code class="highlighter-rouge">10000*(1+0.072)/12=8933.33</code>,
+其中利息有<code class="highlighter-rouge">10000*0.6%=600</code>, 本金有<code class="highlighter-rouge">10000/12=8333.33</code>.</p>
+
+<p>实际年利率应该这么计算, 第一个<code class="highlighter-rouge">8333.33</code>用了一个月, 第二个<code class="highlighter-rouge">8333.33</code>用了2个月, … , 第十二个<code class="highlighter-rouge">8333.33</code>用了12个月, 相当于<code class="highlighter-rouge">8333.33</code>总共借用了78个月, 实际月利率为<code class="highlighter-rouge">100000*7.2%/78/8333.33=1.1%</code>, 实际年利率大约为:<code class="highlighter-rouge">13.29%</code>.</p>
+
+<p>设信用卡分期总金额为<code class="highlighter-rouge">a</code>, 月利率为<code class="highlighter-rouge">i</code>, 分期期数为<code class="highlighter-rouge">n</code>, 则:</p>
+
+<ul>
+  <li>还款总利息<code class="highlighter-rouge">Y</code>=<code class="highlighter-rouge">a*i*n</code></li>
+  <li>每月还款额(包括本息)<code class="highlighter-rouge">b</code>=<code class="highlighter-rouge">a/n+a*i</code></li>
+  <li>实际月利率<code class="highlighter-rouge">r</code>=<code class="highlighter-rouge">a*i*n/(n*(n+1)/2)/(a/n)</code>=<code class="highlighter-rouge">2*n*i/(n+1)</code></li>
+  <li>实际年利率<code class="highlighter-rouge">R</code>=<code class="highlighter-rouge">12*r</code></li>
+</ul>
 
 <hr />
 
