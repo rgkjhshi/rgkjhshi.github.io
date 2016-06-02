@@ -19,7 +19,7 @@ deploy:
 	git add -A
 	git commit -m "deploy blog"
 	# 推送到 github gh-pages 分支
-	git push github gh-pages
+	# git push github gh-pages
 	# 推送到 gitcafe gh-pages 分支
 	git push gitcafe gh-pages
 	# 切换到本地 master 分支
@@ -27,5 +27,5 @@ deploy:
 	# 推送到 github master 分支
 	git push github master
 	# 推送到 gitcafe master 分支
-	git push gitcafe master
+	# git push gitcafe master
  
