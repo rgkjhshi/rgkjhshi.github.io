@@ -104,10 +104,27 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
+  <li><a href="#grep">抓取命令 <em>grep</em></a></li>
   <li><a href="#ln">链接命令 <em>ln</em></a></li>
   <li><a href="#tar">打包命令 <em>tar</em></a></li>
   <li><a href="#scp">远程拷贝 <em>scp</em></a></li>
   <li><a href="#chmod">修改权限 <em>chmod</em></a></li>
+</ul>
+
+<hr />
+
+<h2 id="grep">抓取命令 <em>grep</em></h2>
+
+<p>命令形式: <code class="highlighter-rouge">grep [-acinv] [--color[=auto]] "搜寻内容" filename</code>, 其中搜索串可以是正则表达式</p>
+
+<p>常用参数:</p>
+
+<ul>
+  <li>-a: 将 binary 文件以 text 文件的方式搜寻数据</li>
+  <li>-c: 计算找到 ‘搜寻内容’ 的次数</li>
+  <li>-i: 忽略大小写的不同</li>
+  <li>-n: 顺便输出行号</li>
+  <li>-v: 反向选择，亦即显示出没有”搜寻内容”内容的那一行, 配合管道使用很方便</li>
 </ul>
 
 <hr />
