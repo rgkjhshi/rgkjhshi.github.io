@@ -5,15 +5,15 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="keywords" content="linux命令积累, 点滴积累, linux, 逆水行舟" />
-    <meta name="description" content="linux命令积累, 点滴积累, linux, 记录一些常用的linux shell命令, 做个备忘" />
+    <meta name="keywords" content="Linux命令积累, 点滴积累, linux, 逆水行舟" />
+    <meta name="description" content="Linux命令积累, 点滴积累, linux, 记录一些常用的linux shell命令, 做个备忘" />
 
     <title>逆水行舟</title>
 
     <!-- ico图标 -->
     <link rel="shortcut icon" type="image/x-icon" media="screen" href="/static/favicon.ico" />
     <!-- 搜索引擎收入相关 -->
-    <link rel="canonical" href="http://loveshisong.cn/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-12-15-linux%E5%91%BD%E4%BB%A4%E7%A7%AF%E7%B4%AF.html" />
+    <link rel="canonical" href="http://loveshisong.cn/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-12-15-Linux%E5%91%BD%E4%BB%A4%E7%A7%AF%E7%B4%AF.html" />
     <!-- rss输出源 -->
     <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
     <!-- jquery -->
@@ -87,14 +87,14 @@ jQuery(function(){
 	jQuery('#qrcode').qrcode({
         width: 150,
         height: 150,
-        text: "http://loveshisong.cn/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-12-15-linux%E5%91%BD%E4%BB%A4%E7%A7%AF%E7%B4%AF.html"
+        text: "http://loveshisong.cn/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-12-15-Linux%E5%91%BD%E4%BB%A4%E7%A7%AF%E7%B4%AF.html"
     });
 })
 </script>
 <!-- 日志默认模板 -->
 <div class="uk-container content">
     <div class="page-title">
-        <h1>linux命令积累</h1>
+        <h1>Linux命令积累</h1>
     </div>
     <div class="uk-grid">
         <div  class="uk-width-4-4">
@@ -125,7 +125,16 @@ jQuery(function(){
   <li>-i: 忽略大小写的不同</li>
   <li>-n: 顺便输出行号</li>
   <li>-v: 反向选择，亦即显示出没有”搜寻内容”内容的那一行, 配合管道使用很方便</li>
+  <li>-A: 多显示后面的num行</li>
+  <li>-B: 多显示前面的num行</li>
+  <li>-C: 多显示前面和后面的num行, 相当于AB合起来</li>
 </ul>
+
+<p>常用示例:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>向前显示5行: grep "2016-6-23 12:00:00" -B5 --color access.log
+</code></pre>
+</div>
 
 <hr />
 
@@ -192,7 +201,7 @@ find ./mydir -type d | xargs chmod 755
     </div>
 
     <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-    <div class="ds-thread" data-thread-key="/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/linux命令积累" data-title="linux命令积累" data-url="/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-12-15-linux%E5%91%BD%E4%BB%A4%E7%A7%AF%E7%B4%AF.html"></div>
+    <div class="ds-thread" data-thread-key="/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/Linux命令积累" data-title="Linux命令积累" data-url="/%E7%82%B9%E6%BB%B4%E7%A7%AF%E7%B4%AF/2015-12-15-Linux%E5%91%BD%E4%BB%A4%E7%A7%AF%E7%B4%AF.html"></div>
     <!-- 多说评论框 end -->
 </div>
 
