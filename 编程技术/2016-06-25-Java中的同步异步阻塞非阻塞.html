@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="Java中的同步异步阻塞非阻塞, 编程技术, Java, 逆水行舟" />
+    <meta name="description" content="Java中的同步异步阻塞非阻塞, 编程技术, Java, 内容涉及OS的IO模型, Java的同步与异步, 阻塞与非阻塞, BIO、NIO、AIO" />
+
+    <title>逆水行舟</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-06-25-Java%E4%B8%AD%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E9%98%BB%E5%A1%9E%E9%9D%9E%E9%98%BB%E5%A1%9E.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="/static/js/jquery.qrcode.min.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="/static/js/uikit.min.js"></script>
+    <!-- quietflow -->
+    <!-- <script type="text/javascript" src="http://loveshisong.cn/static/js/quietflow.min.js"></script> -->
+    <!-- UK sticky -->
+    <script type="text/javascript" src="/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "shisong"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" data-uk-sticky>
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <script type="text/javascript">
+jQuery(function(){
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-06-25-Java%E4%B8%AD%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E9%98%BB%E5%A1%9E%E9%9D%9E%E9%98%BB%E5%A1%9E.html"
+    });
+})
+</script>
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>Java中的同步异步阻塞非阻塞</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <p>内容涉及OS的IO模型, Java的同步与异步, 阻塞与非阻塞, BIO、NIO、AIO</p>
+
+<hr />
+
+<ul id="markdown-toc">
+  <li><a href="#section">同步与异步</a></li>
+  <li><a href="#io">IO模型</a></li>
+  <li><a href="#section-1">阻塞与非阻塞</a>    <ul>
+      <li><a href="#bio">BIO</a></li>
+      <li><a href="#nio">NIO</a></li>
+      <li><a href="#io-1">多路复用IO</a></li>
+      <li><a href="#section-2">小结</a></li>
+      <li><a href="#aio">AIO</a></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="section">同步与异步</h2>
+
+<p>同步就是一直在做某件事儿, 调用某个功能时, 这个功能没有结果之前, 这个调用就不返回。 比如洗衣服, 把衣服放在洗衣机里没有洗好之前就一直在那里看着它洗, 这就是同步(这个例子并不好, 人和洗衣机是两个主体, 我觉得同步应该是要洗一堆衣服, 自己动手洗, 没洗好之前就一直洗, 直到洗完才能做别的事情, 这样理解同步更好)</p>
+
+<p>异步就是做某件事儿的同时也做了其他事, 调用某个功能时, 不用立即得到结果, 可以先处理别的功能, 有结果之后被调用方通知调用者来处理这个结果。 比如洗衣服, 把衣服放到洗衣机里洗, 自己可以先做别的事情, 衣服洗好了, 洗衣机会响铃通知, 这个时候就可以再去把衣服拿出来</p>
+
+<hr />
+
+<h2 id="io">IO模型</h2>
+
+<p>要理解阻塞和非阻塞, 可以先了解下IO操作机制。IO机制是操作系统层面的, Java可以通过JVM发起系统调用进行IO操作.</p>
+
+<p>先介绍下Linux OS中常见的IO模型:select, poll, epoll</p>
+
+<ul>
+  <li>select模型: 网络通信被linux操作系统抽象成文件读写, 通常由设备驱动程序提供, 驱动知道自身数据是否可用. 这些设备描述符由一个数组管理, 数组是有长度的, 32位机上限1024, 64位机上限2048. 每次select请求时都会线性遍历数组看是否有可用的文件描述符, 若一个也没有则睡眠, 直到超时或有可用资源后被唤醒, 然后重新遍历select数组找到可用的文件描述符.</li>
+  <li>poll模型: 与select类似, 把select数组采用链表实现, 因此没了最大数量的限制</li>
+  <li>epoll模型: 基于事件回调机制, 回调时直接通知进程, 无须使用某种方式来查看状态.</li>
+</ul>
+
+<h2 id="section-1">阻塞与非阻塞</h2>
+
+<p><code class="highlighter-rouge">阻塞与非阻塞</code>貌似很容易和<code class="highlighter-rouge">同步与异步</code>混淆。我们可以这么来看.</p>
+
+<p>阻塞的线程通常是处于<code class="highlighter-rouge">BLOCKED</code>状态(BIO中的<code class="highlighter-rouge">read()</code>操作时, 线程阻塞是JVM配合OS完成的, 此时Java获取到线程的状态仍是<code class="highlighter-rouge">RUNNABLE</code>但它确实已经被阻塞了)
+同步是指步骤需要一步步来完成, 像代码一条条执行, 而异步可以没执行完当前代码之前就执行下一行代码, 即做当前任务的同时也能做别的任务(当前任务可以交给别的线程同时执行). 不过关键要注意的是, 同步异步中的同步跟多线程同步使用<code class="highlighter-rouge">synchronized</code>进行同步, 这俩词虽然是一样的, 但说的完全不是一会儿事儿.</p>
+
+<p>所以<code class="highlighter-rouge">阻塞与非阻塞</code>说的是怎么通信, 是挂起还是不挂起, 有没有回调; <code class="highlighter-rouge">同步与异步</code>说的是怎么干活, 按部就班顺序干, 还是不按顺序一起同时干.</p>
+
+<p>传统的IO发起后线程被挂起, IO返回时接收结果的时间比运行的时间还要长. 所以可以用一个线程专门监视IO的返回状况(通过system call 获取一些状态), 发现IO的数据准备好时采用某种方式来处理(可以分配一个线程处理, 若处理比较简单可以也使用这个线程处理). JDK1.4 提供了NIO(New I/O), 使用<code class="highlighter-rouge">SocketChannel</code>代替原来的<code class="highlighter-rouge">Socket</code>, 它就是非阻塞IO, 它通过select选择器来进行系统调用。
+不过这样的处理, 中间有一个将数据从内核区拷贝到进程内的过程是同步的, 即这个过程是程序自己处理的(占用了本身线程的时间), 所以NIO是同步非阻塞的。如果这个拷贝数据到程序空间的过程也是别人来做, 不占用本身线程的时间, 这就是异步模型了.</p>
+
+<h3 id="bio">BIO</h3>
+
+<p><code class="highlighter-rouge">BIO</code>即<code class="highlighter-rouge">Blocking I/O</code>(阻塞 I/O), 这种模型中程序先通过系统调用(System Call)发送请求给内核(Kernel), 然后由内核去进行通信, 如果系统调用是读操作的话, 在内核准备好数据之前这个线程是被挂起的, 直到数据在内核中准备好.</p>
+
+<p>整个过程可分为两个阶段:</p>
+
+<ol>
+  <li>等待I/O数据返回. 这取决于IO目标返回数据的速度, 如网络IO时看网速和数据本身的大小</li>
+  <li>返回的数据先被填充到内核(Kernel)缓冲区里, 然后从内核区拷贝到进程内. 这个过程完成后程序才能向下执行.</li>
+</ol>
+
+<p>BIO整个过程如下图:</p>
+
+<p><img src="/static/images/BIO.png" alt="BIO" title="BIO" /></p>
+
+<ul>
+  <li>BIO的特点就是在IO执行的两个阶段都被block了</li>
+</ul>
+
+<h3 id="nio">NIO</h3>
+
+<p><code class="highlighter-rouge">NIO</code>即<code class="highlighter-rouge">Non-Blocking I/O</code>(非阻塞 I/O), 与BIO的明显区别是, 发起第一次System Call请求后, 线程并没有被阻塞, 它反复检查数据是否准备好, 把原来大块不能用的阻塞时间分成了许多”小阻塞”(检查), 所以进程不断有机会被执行.这个检查有没有准备好数据的过程有点类似于”轮询”.</p>
+
+<p>线程一直在反复查看有没有数据准备好, 这似乎在空耗CPU, 看起来效率更低, 这就要看到底怎么使用了. 实际上每次查看的动作比较简单, 可以只用一个专门的线程对很多事件进行监听, 设计好检测频率就能达到高效且节省资源的目的.</p>
+
+<p>NIO整个过程如下图:</p>
+
+<p><img src="/static/images/NIO.png" alt="NIO" title="NIO" /></p>
+
+<ul>
+  <li>NIO的特点就是程序需要不断的主动询问内核数据是否准备好。第一个阶段非阻塞, 第二个阶段阻塞</li>
+</ul>
+
+<h3 id="io-1">多路复用IO</h3>
+
+<p>NIO中轮询操作是用户线程进行的, 如果把这个任务交给其他线程, 则用户线程就不用这么费劲的查询状态了. 多路复用(<code class="highlighter-rouge">Multiplexing I/O</code>)调用系统级别的<code class="highlighter-rouge">select</code>或<code class="highlighter-rouge">poll</code>模型, 由系统进行监控IO状态. select轮询可以监控许多socket的IO请求, 当有一个socket的数据准备好时就可以返回可读状态. 用户线程有一段时间是阻塞的, 与普通非阻塞IO不一样的是, select不是等到所有数据准备好才返回, 而是只要有一个准备好就返回.</p>
+
+<p>Java 1.4提供的的NIO就是采用了这种方式, 在套接字上提供selector选择机制, 当发起<code class="highlighter-rouge">select()</code>时会阻塞等待至少一个事件返回.</p>
+
+<p>多路复用IO过程图:</p>
+
+<p><img src="/static/images/Multiplexing_IO.png" alt="Multiplexing_IO" title="Multiplexing_IO" /></p>
+
+<ul>
+  <li>多路复用IO的特点是用户进程能同时等待多个IO请求,系统来监控IO状态,其中的任意一个进入读就绪状态,select函数就可以返回.</li>
+</ul>
+
+<h3 id="section-2">小结</h3>
+
+<p>上面这三种模式, 用户进程发起系统调用, 等待数据到来的过程中, 直接等待、轮询 或 select轮询。第一个过程有的阻塞, 有的不阻塞, 有的可以阻塞又可以不阻塞. 第二个过程都是阻塞的。从整个IO过程来看, 他们都是顺序执行的, 因此都属于同步模型.</p>
+
+<h3 id="aio">AIO</h3>
+<p><code class="highlighter-rouge">AIO</code>即<code class="highlighter-rouge">Asynchronous I/O</code>(异步 I/O), 这是Java1.7引入的<code class="highlighter-rouge">NIO 2.0</code>中用到的. 整个过程中, 用户线程发起一个系统调用之后无须等待, 可以处理别的事情. 由操作系统等待接收内容, 接收后把数据拷贝到用户进程中, 最后通知用户程序已经可以使用数据了, 整个过程都是非阻塞的. 相当于数据”送货上门”了. 这个过程中系统帮我们处理IO, 用户线程可以同时处理别的事情, 这属于异步模型.</p>
+
+<p>AIO整个过程如下图:</p>
+
+<p><img src="/static/images/AIO.png" alt="AIO" title="AIO" /></p>
+
+<p>AIO是异步的, 我们怎么进一步加工处理结果呢? Java在这个模型中提供了两种方法:</p>
+
+<ol>
+  <li>一种是基于”回调”, 我们可以实现<code class="highlighter-rouge">CompletionHandler</code>接口, 在调用时把回调函数传递给对应的API即可</li>
+  <li>另一种是返回一个<code class="highlighter-rouge">Future</code>. <code class="highlighter-rouge">isDone()</code>可查看是否已经准备好数据, 这有点类似于NIO查询的意思； <code class="highlighter-rouge">get()</code>方法是等到数据完成返回数据, 有点类似于BIO的意思.</li>
+</ol>
+
+<hr />
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/Java中的同步异步阻塞非阻塞" data-title="Java中的同步异步阻塞非阻塞" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-06-25-Java%E4%B8%AD%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E9%98%BB%E5%A1%9E%E9%9D%9E%E9%98%BB%E5%A1%9E.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
+
+</body>
+
+</html>
