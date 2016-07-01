@@ -134,6 +134,8 @@ jQuery(function(){
         <span class="n">dateTime</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DateTime</span><span class="o">(</span><span class="mi">2016</span><span class="o">,</span> <span class="mi">6</span><span class="o">,</span> <span class="mi">6</span><span class="o">,</span> <span class="mi">12</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">999</span><span class="o">);</span>
         <span class="c1">// 通过系统毫秒数创建当前时间</span>
         <span class="n">dateTime</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DateTime</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">());</span>
+        <span class="c1">// 通过格式化字符串创建时间</span>
+        <span class="n">dateTime</span> <span class="o">=</span> <span class="n">DateTime</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span><span class="s">"2016-06-30 12:01:01"</span><span class="o">,</span> <span class="n">DateTimeFormat</span><span class="o">.</span><span class="na">forPattern</span><span class="o">(</span><span class="s">"yyyy-MM-dd HH:mm:ss"</span><span class="o">));</span>
 
         <span class="c1">// 与JDK 的 Date 相互转换</span>
         <span class="n">dateTime</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DateTime</span><span class="o">(</span><span class="k">new</span> <span class="n">Date</span><span class="o">());</span>
@@ -160,6 +162,10 @@ jQuery(function(){
         <span class="n">dateTime</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DateTime</span><span class="o">(</span><span class="mi">2016</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">12</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="mi">10</span><span class="o">);</span>  <span class="c1">// 2016-01-01 12:10:10.010</span>
         <span class="n">dateTime</span> <span class="o">=</span> <span class="n">dateTime</span><span class="o">.</span><span class="na">dayOfWeek</span><span class="o">().</span><span class="na">withMinimumValue</span><span class="o">();</span>   <span class="c1">// 2015-12-28 12:10:10.010</span>
         <span class="c1">// 类似的有 yearOfCentury dayOfYear monthOfYear dayOfMonth dayOfWeek</span>
+
+        <span class="c1">// 距离今天多少天</span>
+        <span class="n">dateTime</span> <span class="o">=</span> <span class="n">DateTime</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span><span class="s">"2016-06-30 12:01:01"</span><span class="o">,</span> <span class="n">DateTimeFormat</span><span class="o">.</span><span class="na">forPattern</span><span class="o">(</span><span class="s">"yyyy-MM-dd HH:mm:ss"</span><span class="o">));</span>
+        <span class="kt">int</span> <span class="n">days</span> <span class="o">=</span> <span class="n">Days</span><span class="o">.</span><span class="na">daysBetween</span><span class="o">(</span><span class="n">dateTime</span><span class="o">,</span> <span class="n">DateTime</span><span class="o">.</span><span class="na">now</span><span class="o">()).</span><span class="na">getDays</span><span class="o">();</span>  <span class="c1">// 后面早则为负数</span>
     <span class="o">}</span>
 </code></pre>
 </div>
