@@ -42,6 +42,8 @@ tag: Java
         dateTime = new DateTime(2016, 6, 6, 12, 1, 1, 999);
         // 通过系统毫秒数创建当前时间
         dateTime = new DateTime(System.currentTimeMillis());
+        // 通过格式化字符串创建时间
+        dateTime = DateTime.parse("2016-06-30 12:01:01", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"));
 
         // 与JDK 的 Date 相互转换
         dateTime = new DateTime(new Date());
@@ -68,6 +70,10 @@ tag: Java
         dateTime = new DateTime(2016, 1, 1, 12, 10, 10, 10);  // 2016-01-01 12:10:10.010
         dateTime = dateTime.dayOfWeek().withMinimumValue();   // 2015-12-28 12:10:10.010
         // 类似的有 yearOfCentury dayOfYear monthOfYear dayOfMonth dayOfWeek
+
+        // 距离今天多少天
+        dateTime = DateTime.parse("2016-06-30 12:01:01", DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"));
+        int days = Days.daysBetween(dateTime, DateTime.now()).getDays();  // 后面早则为负数
     }
 ~~~
 
