@@ -163,9 +163,11 @@ jQuery(function(){
   <li>明确使用索引的，会使用行锁(Row Lock)，不使用索引或索引不明确(如id&gt;2)，会使用表锁(Table Lock)</li>
 </ol>
 
-<p>我们来测试一下,通过两个终端分别进行操作，如图:<br />
-<img src="/static/images/lock1.png" alt="测试图片1" />
-<img src="/static/images/lock2.png" alt="测试图片2" /></p>
+<p>我们来测试一下,通过两个终端分别进行操作，如图:  </p>
+
+<p><img src="/static/images/lock1.png" alt="测试图片1" /></p>
+
+<p><img src="/static/images/lock2.png" alt="测试图片2" /></p>
 
 <p>我们在第一个终端中开启事务使用了行锁，但未<code class="highlighter-rouge">commit</code>，第二个终端中再查询该行则会被阻塞，处于等待状态。
 直到第一个终端<code class="highlighter-rouge">commit</code>之后，第二个终端才会读取到被锁住的那一行的数据。
