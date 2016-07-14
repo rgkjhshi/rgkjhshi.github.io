@@ -5,9 +5,97 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 11 Jul 2016 16:48:12 +0800</pubDate>
-    <lastBuildDate>Mon, 11 Jul 2016 16:48:12 +0800</lastBuildDate>
+    <pubDate>Thu, 14 Jul 2016 20:26:56 +0800</pubDate>
+    <lastBuildDate>Thu, 14 Jul 2016 20:26:56 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>Docker学习笔记(一):初步了解</title>
+        <description>&lt;p&gt;本文是学习Docker的过程记录, 有些内容是自己的理解, 所以可能理解的不到位甚至不正确, 随着学习的深入我会慢慢更正。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;写在最前面&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#docker&quot;&gt;初识Docker&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#docker-1&quot;&gt;Docker与传统虚拟机技术的对比&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#docker-engine&quot;&gt;Docker Engine&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#docker-&quot;&gt;Docker 架构&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;写在最前面&lt;/h2&gt;
+
+&lt;p&gt;学习Docker最好的方式就是看官方文档, 不过有时候官网的解释非常官方, 所以我把学习中用到的资料全都列在下面&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.docker.com/&quot;&gt;官方文档&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.docker.org.cn/index.html&quot;&gt;docker中文社区&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://wiki.jikexueyuan.com/list/docker/&quot;&gt;极客学院教程&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;docker&quot;&gt;初识Docker&lt;/h2&gt;
+
+&lt;p&gt;Docker是什么其实不太好定义, 它是个新的东西, 原来没有. 官方是这么说的, Docker是一个开发、装载、运行程序的开源的平台, 致力于快速发布你的程序, 缩短了从写代码到发布上线之间的这个周期.&lt;/p&gt;
+
+&lt;p&gt;Docker容器可以把程序运行所需要的一切软件, 包括代码、运行时环境、系统工具、系统库等直接打包进一个完整的文件系统里. 容器运行时可保证程序运行的环境都是一致的.&lt;/p&gt;
+
+&lt;p&gt;Docker是一个开源项目, Go语言实现, 遵从 Apache 2.0 协议. Docker在Linux容器技术(LXC)上进一步封装, 使用户操作更简单, 像是操作一个轻量级的虚拟机.&lt;/p&gt;
+
+&lt;h2 id=&quot;docker-1&quot;&gt;Docker与传统虚拟机技术的对比&lt;/h2&gt;
+
+&lt;p&gt;一般都会拿Docker跟传统的虚拟机技术做比较, 下图是官网上的对比图:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/docker_VM.png&quot; alt=&quot;Virtural Machine&quot; title=&quot;Virtural Machine&quot; /&gt;
+&lt;img src=&quot;/static/images/docker_container.png&quot; alt=&quot;Container&quot; title=&quot;Container&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;在infrastructure(硬件)之上是我们的宿主机的操作系统, 传统虚拟机需要通过一层HyperVisor进行模拟硬件, 然后再安装虚拟机操你工作系统, 在虚拟机中跑各种程序; Docker是在宿主机的操作系统上直接装了Docker引擎(硬件模拟Docker帮我们屏蔽了,虚拟机也不需要了), 直接在Docker引擎上可以跑各种程序.&lt;/p&gt;
+
+&lt;h2 id=&quot;docker-engine&quot;&gt;Docker Engine&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Docker Engine&lt;/code&gt;是&lt;code class=&quot;highlighter-rouge&quot;&gt;Docker platform&lt;/code&gt;中最核心的部分. &lt;code class=&quot;highlighter-rouge&quot;&gt;Docker Engine&lt;/code&gt;是一个&lt;code class=&quot;highlighter-rouge&quot;&gt;client-server&lt;/code&gt;形式的程序, 它包括三部分:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;server : 一个一直运行的进程, 可叫做守护进程(daemon process)&lt;/li&gt;
+  &lt;li&gt;REST API : 跟&lt;code class=&quot;highlighter-rouge&quot;&gt;daemon&lt;/code&gt;进行交互的API&lt;/li&gt;
+  &lt;li&gt;client: 客户端工具, 给用户使用的命令行接口, &lt;code class=&quot;highlighter-rouge&quot;&gt;command line interface(CLI)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/docker_engine.png&quot; alt=&quot;docker_engine&quot; title=&quot;docker_engine&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;命令行脚本或命令通过&lt;code class=&quot;highlighter-rouge&quot;&gt;REST API&lt;/code&gt;跟&lt;code class=&quot;highlighter-rouge&quot;&gt;demon&lt;/code&gt;进行交互, 许多其他的docker组件, 也使用&lt;code class=&quot;highlighter-rouge&quot;&gt;REST API&lt;/code&gt;或者&lt;code class=&quot;highlighter-rouge&quot;&gt;CLI&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;docker-&quot;&gt;Docker 架构&lt;/h2&gt;
+
+&lt;p&gt;Docker是&lt;code class=&quot;highlighter-rouge&quot;&gt;client-server&lt;/code&gt;架构, &lt;code class=&quot;highlighter-rouge&quot;&gt;Docker client&lt;/code&gt;与&lt;code class=&quot;highlighter-rouge&quot;&gt;Docker daemon&lt;/code&gt;交互来控制编译、运行、发布容器. &lt;code class=&quot;highlighter-rouge&quot;&gt;client&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;daemon&lt;/code&gt;运行在同一个系统里, 也可以把&lt;code class=&quot;highlighter-rouge&quot;&gt;client&lt;/code&gt;连接到远程的&lt;code class=&quot;highlighter-rouge&quot;&gt;daemon&lt;/code&gt;上, 它们可以通过&lt;code class=&quot;highlighter-rouge&quot;&gt;socket&lt;/code&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;RESTful API&lt;/code&gt;交互&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/docker_architecture.png&quot; alt=&quot;docker_architecture&quot; title=&quot;docker_architecture&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;上图中有三个新内容: &lt;code class=&quot;highlighter-rouge&quot;&gt;image registry container&lt;/code&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Docker image&lt;/code&gt; : 一个只读模板, 比如, Ubuntu的操作系统上装了apache, 上面放了你自己的web应用, 这整个被创建成了一个镜像文件. 你可以自己制作镜像, 也可以下载别人的镜像.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Docker registry&lt;/code&gt;: registry用于保存&lt;code class=&quot;highlighter-rouge&quot;&gt;image&lt;/code&gt;. 存储镜像的形式可以是&lt;code class=&quot;highlighter-rouge&quot;&gt;public&lt;/code&gt;的也可以是&lt;code class=&quot;highlighter-rouge&quot;&gt;private&lt;/code&gt;的. 官方提供了一个&lt;code class=&quot;highlighter-rouge&quot;&gt;public&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;Docker registry&lt;/code&gt;, 叫做&lt;code class=&quot;highlighter-rouge&quot;&gt;Docker Hub&lt;/code&gt;. &lt;code class=&quot;highlighter-rouge&quot;&gt;Docker Hub&lt;/code&gt;是官方提供的, 最大的一个镜像仓库.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Docker container&lt;/code&gt;: &lt;code class=&quot;highlighter-rouge&quot;&gt;container&lt;/code&gt;是通过&lt;code class=&quot;highlighter-rouge&quot;&gt;image&lt;/code&gt;来创建的. 容器里面包含了程序运行的所有东西. 容器可以被&lt;code class=&quot;highlighter-rouge&quot;&gt;run&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;started&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;stopped&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;moved&lt;/code&gt;, 和 &lt;code class=&quot;highlighter-rouge&quot;&gt;deleted&lt;/code&gt;, 每个容器都是相互独立的.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;这些基本上就是Docker经常用到的东西了. 上面的大部分内容都来自官网,更多内容可以去官网看看.&lt;/p&gt;
+
+&lt;hr /&gt;
+</description>
+        <pubDate>Mon, 11 Jul 2016 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-07-11-Docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%B8%80)-%E5%88%9D%E6%AD%A5%E4%BA%86%E8%A7%A3.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-07-11-Docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%B8%80)-%E5%88%9D%E6%AD%A5%E4%BA%86%E8%A7%A3.html</guid>
+        
+        <category>Java</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
     
       <item>
         <title>Java日期处理工具JodaTime</title>
@@ -1014,74 +1102,6 @@ Cache5~Cache4之间部分原来映射到Cache4, 现在还是映射到Cache4, 不
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-03-25-%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C.html</guid>
         
         <category>一致性哈希</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>Java中的弱引用</title>
-        <description>&lt;p&gt;第一次接触到弱引用&lt;code class=&quot;highlighter-rouge&quot;&gt;WeakReference&lt;/code&gt;是在&lt;code class=&quot;highlighter-rouge&quot;&gt;ThreadLocal&lt;/code&gt;中, 于是就把相关知识梳理了下&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;引用简介&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;强引用&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;弱引用&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-3&quot;&gt;软引用&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-4&quot;&gt;虚引用&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-5&quot;&gt;引用队列&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;引用简介&lt;/h2&gt;
-
-&lt;p&gt;引用跟垃圾回收相关, 关于引用的类位于&lt;code class=&quot;highlighter-rouge&quot;&gt;java.long.ref&lt;/code&gt;包中, 他们的继承关系图如下(蓝色表示抽象类):&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/static/images/reference.png&quot; alt=&quot;引用相关的类&quot; title=&quot;引用相关的类&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;按照他们阻止被回收的能力强弱可以分为:
-&lt;code class=&quot;highlighter-rouge&quot;&gt;强引用 &amp;gt; 软引用(SoftReference) &amp;gt; 弱引用(WeakReference) &amp;gt; 虚引用(PhantomReference)&lt;/code&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;section-1&quot;&gt;强引用&lt;/h2&gt;
-
-&lt;p&gt;就是我们平时使用的对象的引用, 比如:&lt;code class=&quot;highlighter-rouge&quot;&gt;Object o = new Object()&lt;/code&gt;, 那个&lt;code class=&quot;highlighter-rouge&quot;&gt;o&lt;/code&gt;就是一个强引用.&lt;br /&gt;
-如果一个对象通过强引用链可到达, 它是不会被回收的, 不可达时才有可能被回收.&lt;/p&gt;
-
-&lt;h2 id=&quot;section-2&quot;&gt;弱引用&lt;/h2&gt;
-
-&lt;p&gt;先说下弱引用(&lt;code class=&quot;highlighter-rouge&quot;&gt;WeakReference&lt;/code&gt;),  它阻止被回收的能力不太强,  由JVM决定何时回收. 可以这样创建一个弱引用对象:
-&lt;code class=&quot;highlighter-rouge&quot;&gt;WeakReference&amp;lt;Object&amp;gt; weakObject = new WeakReference&amp;lt;Object&amp;gt;(o);&lt;/code&gt;, 通过&lt;code class=&quot;highlighter-rouge&quot;&gt;weakObject.get()&lt;/code&gt;就可以得到引用的对象了.&lt;br /&gt;
-因为弱引用不能阻止回收, 所以如果没有其他强引用指向这个对象时, 当使用get方法时说不准就返回&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;了.&lt;br /&gt;
-如果一个对象是弱引用可到达, 那么这个对象会JVM的下一个回收周期销毁.&lt;br /&gt;
-有一个&lt;code class=&quot;highlighter-rouge&quot;&gt;WeakHashMap&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;HashMap&lt;/code&gt;几乎一样, 唯一的区别就是它的键(key)使用&lt;code class=&quot;highlighter-rouge&quot;&gt;WeakReference&lt;/code&gt;引用, 当它里面的某个key被标记为垃圾时, 对应的这个&lt;code class=&quot;highlighter-rouge&quot;&gt;Entry&lt;/code&gt;就被自动移除了&lt;/p&gt;
-
-&lt;h2 id=&quot;section-3&quot;&gt;软引用&lt;/h2&gt;
-
-&lt;p&gt;软引用(&lt;code class=&quot;highlighter-rouge&quot;&gt;SoftReference&lt;/code&gt;)比弱引用稍微强一些, 当内存不足时(即将&lt;code class=&quot;highlighter-rouge&quot;&gt;OutOfMemory&lt;/code&gt;)垃圾回收器才会回收这些软引用可到达的对象.&lt;/p&gt;
-
-&lt;h2 id=&quot;section-4&quot;&gt;虚引用&lt;/h2&gt;
-&lt;p&gt;虚引用(PhantomReference)指向的对象十分脆弱,我们不能用get方法来得到其指向的对象(get总返回&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;).&lt;br /&gt;
-它的唯一作用就是当其指向的对象被回收之后，自己被加入到引用队列，用作记录该引用指向的对象已被销毁。&lt;/p&gt;
-
-&lt;h2 id=&quot;section-5&quot;&gt;引用队列&lt;/h2&gt;
-
-&lt;p&gt;各种引用的父类&lt;code class=&quot;highlighter-rouge&quot;&gt;Reference&lt;/code&gt;中有个字段&lt;code class=&quot;highlighter-rouge&quot;&gt;queue&lt;/code&gt;, 它就是引用队列&lt;code class=&quot;highlighter-rouge&quot;&gt;ReferenceQueue&lt;/code&gt;.&lt;br /&gt;
-一旦弱引用对象开始返回&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;, 该引用指向的对象就被标记成了垃圾.&lt;br /&gt;
-当构造时传入一个&lt;code class=&quot;highlighter-rouge&quot;&gt;ReferenceQueue&lt;/code&gt;对象, 则当引用只想的对象被标记为垃圾时, 这个引用对象会自动地加入到引用队列里面.&lt;br /&gt;
-我们可以处理传入的引用队列来主动清理一些已经不用的引用.&lt;br /&gt;
-软引用和弱引用被放入引用队列时, 并不能保证此时引用对象已经被销毁了(对象可以在&lt;code class=&quot;highlighter-rouge&quot;&gt;finalize&lt;/code&gt;方法里再生), 虚引用放入引用队列时, 可保证引用对象已经被销毁了.  &lt;/p&gt;
-
-&lt;hr /&gt;
-</description>
-        <pubDate>Fri, 04 Mar 2016 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-03-04-java%E4%B8%AD%E7%9A%84%E5%BC%B1%E5%BC%95%E7%94%A8.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-03-04-java%E4%B8%AD%E7%9A%84%E5%BC%B1%E5%BC%95%E7%94%A8.html</guid>
-        
-        <category>Java</category>
         
         
         <category>编程技术</category>
