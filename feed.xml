@@ -5,9 +5,421 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 14 Jul 2016 20:34:44 +0800</pubDate>
-    <lastBuildDate>Thu, 14 Jul 2016 20:34:44 +0800</lastBuildDate>
+    <pubDate>Wed, 20 Jul 2016 18:48:25 +0800</pubDate>
+    <lastBuildDate>Wed, 20 Jul 2016 18:48:25 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>Docker学习笔记(二):简单使用</title>
+        <description>&lt;p&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;Docker&lt;/code&gt;命令行客户端使用&lt;code class=&quot;highlighter-rouge&quot;&gt;Docker&lt;/code&gt;的一些例子&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;命令格式&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;简单使用&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#hello-world&quot;&gt;hello world&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;交互式运行&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-3&quot;&gt;后台运行&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-4&quot;&gt;查看容器&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-5&quot;&gt;查看容器的输出&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-6&quot;&gt;停止/启动容器&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-7&quot;&gt;删除容器&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#web&quot;&gt;运行web程序(使用端口)&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-8&quot;&gt;查看端口&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-9&quot;&gt;查看程序日志&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-10&quot;&gt;检查容器&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-11&quot;&gt;镜像操作&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-12&quot;&gt;显示本地镜像&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-13&quot;&gt;获取镜像&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-14&quot;&gt;搜索镜像&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-15&quot;&gt;制作镜像&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#tag&quot;&gt;镜像的tag&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-16&quot;&gt;提交镜像&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-17&quot;&gt;删除镜像&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#image-digests&quot;&gt;Image Digests&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;命令格式&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Docker&lt;/code&gt;安装过程参考&lt;a href=&quot;https://docs.docker.com/&quot;&gt;官网&lt;/a&gt;, 安装成功后我们可以通过命令行接口(CLI)来使用&lt;code class=&quot;highlighter-rouge&quot;&gt;Docker&lt;/code&gt;, 每个命令都可能会包含一些标记(&lt;code class=&quot;highlighter-rouge&quot;&gt;flags&lt;/code&gt;)和参数(&lt;code class=&quot;highlighter-rouge&quot;&gt;arguments&lt;/code&gt;), 命令的格式大致如下:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sudo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;docker&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;subcommand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;flags&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;arguments&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;..&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;比如刚安装完成可以查看&lt;code class=&quot;highlighter-rouge&quot;&gt;Docker&lt;/code&gt;的版本信息:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker version
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;我们可以通过&lt;code class=&quot;highlighter-rouge&quot;&gt;--help&lt;/code&gt;标记来获取帮助, 比如列出&lt;code class=&quot;highlighter-rouge&quot;&gt;docker&lt;/code&gt;命令的所有选项(子命令)和用法、查看子命令的用法&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker --help
+&lt;span class=&quot;c&quot;&gt;# 查看 attach 子命令的用法&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker attach --help
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;简单使用&lt;/h2&gt;
+
+&lt;p&gt;常用的命令使用方式示例以及一些解释&lt;/p&gt;
+
+&lt;h3 id=&quot;hello-world&quot;&gt;hello world&lt;/h3&gt;
+
+&lt;p&gt;镜像好比类, 容器好比实例, 镜像被&lt;code class=&quot;highlighter-rouge&quot;&gt;run&lt;/code&gt;就形成了容器, 运行容器可以通过&lt;code class=&quot;highlighter-rouge&quot;&gt;docker run&lt;/code&gt;命令&lt;/p&gt;
+
+&lt;p&gt;先来个简单例子:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker run hello-world
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;当运行镜像&lt;code class=&quot;highlighter-rouge&quot;&gt;hello-world&lt;/code&gt;时, 会先检查本地是否有这个镜像, 没有则会去仓库(默认是docker hub)下载&lt;/p&gt;
+
+&lt;p&gt;其他例子:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker run ubuntu /bin/echo &#39;Hello world&#39;
+Hello world
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;交互式运行&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker run -t -i ubuntu /bin/bash
+root@a98895ac1616:/#
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-t&lt;/code&gt; flag: 给容器分配一个tty终端&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-i&lt;/code&gt; flag: 可通过&lt;code class=&quot;highlighter-rouge&quot;&gt;STDIN&lt;/code&gt;与容器交互&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;/bin/bash&lt;/code&gt;: 在容器里运行的&lt;code class=&quot;highlighter-rouge&quot;&gt;bash shell&lt;/code&gt;, 可用shell命令&lt;code class=&quot;highlighter-rouge&quot;&gt;exit&lt;/code&gt;退出容器&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;后台运行&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker run -d ubuntu /bin/sh -c &quot;while true; do echo hello world; sleep 1; done&quot;
+28f3adccbae408573bbe6ecc03ad621d4257fbf1a79c672cc8d83ad327266807
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-d&lt;/code&gt; flag: 后台运行容器(daemonize)&lt;/li&gt;
+  &lt;li&gt;输出的那一长串是&lt;code class=&quot;highlighter-rouge&quot;&gt;container ID&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-4&quot;&gt;查看容器&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+28f3adccbae4        ubuntu              &quot;/bin/sh -c &#39;while tr&quot;   4 minutes ago       Up 4 minutes                            zen_curran
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;container ID&lt;/code&gt;: 前面那一长串的缩写&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;NAMES&lt;/code&gt;: 自动给容器起的名字, 每个容器的名字都是不一样的
+另外:&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker ps&lt;/code&gt;: 仅查看运行中的容器&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker ps -l&lt;/code&gt;: 查看最后一次运行的容器(last)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker ps -a&lt;/code&gt;: 查看所有运行过的容器&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-5&quot;&gt;查看容器的输出&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker logs zen_curran
+hello world
+hello world
+...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-6&quot;&gt;停止/启动容器&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker stop zen_curran
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;可以再次运行某个容器&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker start zen_curran
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-7&quot;&gt;删除容器&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker rm zen_curran
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;web&quot;&gt;运行web程序(使用端口)&lt;/h2&gt;
+&lt;p&gt;新下载一个镜像&lt;code class=&quot;highlighter-rouge&quot;&gt;training/webapp&lt;/code&gt;, 运行&lt;code class=&quot;highlighter-rouge&quot;&gt;python app.py&lt;/code&gt;可运行python写的web程序, 通过下面的命令运行容器&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker run -d -P training/webapp python app.py
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;查看该容器的信息:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker ps -l
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS                     NAMES
+9b32553a8272        training/webapp     &quot;python app.py&quot;     12 minutes ago      Up 12 minutes       0.0.0.0:32768-&amp;gt;5000/tcp   admiring_mayer
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;其中有个与其他程序不一样的地方:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;PORTS
+0.0.0.0:32768-&amp;gt;5000/tcp
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;这就是&lt;code class=&quot;highlighter-rouge&quot;&gt;-P&lt;/code&gt;的作用, 上面描述的意思是&lt;code class=&quot;highlighter-rouge&quot;&gt;Dcoker&lt;/code&gt;容器里的端口是&lt;code class=&quot;highlighter-rouge&quot;&gt;5000(Python Flask的默认端口)&lt;/code&gt;暴露到了属主机的&lt;code class=&quot;highlighter-rouge&quot;&gt;32768&lt;/code&gt;端口.&lt;br /&gt;
+上面&lt;code class=&quot;highlighter-rouge&quot;&gt;-P&lt;/code&gt;的作用等同于&lt;code class=&quot;highlighter-rouge&quot;&gt;-p 5000&lt;/code&gt;, 将暴露容器中的端口&lt;code class=&quot;highlighter-rouge&quot;&gt;5000&lt;/code&gt;到一个更大的宿主机端口上(临时端口映射范围一般为&lt;code class=&quot;highlighter-rouge&quot;&gt;32768~61000&lt;/code&gt;).&lt;br /&gt;
+也可以自己指定使用某个具体的端口:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker run -d -p 80:5000 training/webapp python app.py
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;访问容器运行起来的web程序地址为:&lt;code class=&quot;highlighter-rouge&quot;&gt;127.0.0.1:32768&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;section-8&quot;&gt;查看端口&lt;/h3&gt;
+&lt;p&gt;上面的&lt;code class=&quot;highlighter-rouge&quot;&gt;docker ps&lt;/code&gt;可以看到容器的端口信息, 还有个更简单的命令&lt;code class=&quot;highlighter-rouge&quot;&gt;docker port&lt;/code&gt;, 指定要查看的容器的&lt;code class=&quot;highlighter-rouge&quot;&gt;name&lt;/code&gt;或&lt;code class=&quot;highlighter-rouge&quot;&gt;ID&lt;/code&gt;即可:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker port 9b32553a8272
+5000/tcp -&amp;gt; 0.0.0.0:32768
+$ docker port admiring_mayer 5000
+0.0.0.0:32768
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-9&quot;&gt;查看程序日志&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker logs -f admiring_mayer
+ * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+172.17.0.1 - - [19/Jul/2016 09:10:49] &quot;GET / HTTP/1.1&quot; 200 -
+172.17.0.1 - - [19/Jul/2016 09:10:49] &quot;GET /favicon.ico HTTP/1.1&quot; 404 -
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-f&lt;/code&gt;: 类似与&lt;code class=&quot;highlighter-rouge&quot;&gt;tail -f&lt;/code&gt;的形式查看&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-10&quot;&gt;检查容器&lt;/h3&gt;
+
+&lt;p&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;docker inspect&lt;/code&gt;命令可以获取一些信息, 如:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker inspect admiring_mayer
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;可以看到一些json格式的信息:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;s2&quot;&gt;&quot;Id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;9b32553a82729a012b33b157abefb7639f1a59007042454f7ea543982a888466&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s2&quot;&gt;&quot;Created&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;2016-07-19T08:40:01.882402323Z&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s2&quot;&gt;&quot;Path&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;python&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s2&quot;&gt;&quot;Args&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+            &lt;span class=&quot;s2&quot;&gt;&quot;app.py&quot;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+        &lt;span class=&quot;s2&quot;&gt;&quot;State&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;s2&quot;&gt;&quot;Status&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;running&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;s2&quot;&gt;&quot;Running&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;...&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section-11&quot;&gt;镜像操作&lt;/h2&gt;
+
+&lt;h3 id=&quot;section-12&quot;&gt;显示本地镜像&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+ubuntu              latest              cf62323fa025        11 days ago         125 MB
+hello-world         latest              c54a2cc56cbb        2 weeks ago         1.848 kB
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;REPOSITORY&lt;/code&gt;: 镜像来自哪个仓库, 如&lt;code class=&quot;highlighter-rouge&quot;&gt;ubuntu&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;TAG&lt;/code&gt;: 镜像的版本, 如&lt;code class=&quot;highlighter-rouge&quot;&gt;14.04&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;latest&lt;/code&gt;表示最新版本&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;IMAGE ID&lt;/code&gt;: 镜像的id&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;每个镜像都有很多版本, 你可以指定某个版本, 如&lt;code class=&quot;highlighter-rouge&quot;&gt;$ docker run -t -i ubuntu:14.04 /bin/bash&lt;/code&gt;, 当不指定时, 默认都是&lt;code class=&quot;highlighter-rouge&quot;&gt;latest&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;section-13&quot;&gt;获取镜像&lt;/h3&gt;
+&lt;p&gt;之前都是直接&lt;code class=&quot;highlighter-rouge&quot;&gt;run&lt;/code&gt;的, 会自动获取镜像, 也可以仅获取, 不运行:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker pull ubuntu:14.04
+$ docker pull centos
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-14&quot;&gt;搜索镜像&lt;/h3&gt;
+&lt;p&gt;可以去&lt;a href=&quot;https://hub.docker.com/&quot;&gt;Docker Hub&lt;/a&gt;搜索镜像, 也可以在命令行搜索&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker search ubuntu
+NAME                              DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED
+ubuntu                            Ubuntu is a Debian-based Linux operating s...   4293      [OK]       
+ubuntu-upstart                    Upstart is an event-based replacement for ...   65        [OK]       
+rastasheep/ubuntu-sshd            Dockerized SSH service, built on top of of...   29                   [OK]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;STARS&lt;/code&gt;: 表示该镜像的受欢迎程度&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;OFFICIAL&lt;/code&gt;: 表示是官方制作的镜像&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;AUTOMATED&lt;/code&gt;: 表示是用户制作的镜像,&lt;code class=&quot;highlighter-rouge&quot;&gt;/&lt;/code&gt;前面就是用户名&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-15&quot;&gt;制作镜像&lt;/h3&gt;
+&lt;p&gt;我们可以通过两种方式来制作镜像&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;可以更新镜像运行起来的容器, 在运行的容器中做修改, 然后提交这个修改得到新的镜像&lt;/li&gt;
+  &lt;li&gt;可以写&lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt;来指定具体如何创建某个镜像.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;先来看看第一种方法.&lt;/p&gt;
+
+&lt;p&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;training/sinatra&lt;/code&gt;镜像运行起来一个容器:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker run -t -i training/sinatra /bin/bash
+root@0b2616b0e5a8:/#
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;记住这个容器的id:&lt;code class=&quot;highlighter-rouge&quot;&gt;0b2616b0e5a8&lt;/code&gt;,一会儿会用. 然后通过bash在容器中安装&lt;code class=&quot;highlighter-rouge&quot;&gt;json&lt;/code&gt; gem&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@0b2616b0e5a8:/# gem install json
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;完成之后退出容器就可以了&lt;/p&gt;
+
+&lt;p&gt;最后我们用&lt;code class=&quot;highlighter-rouge&quot;&gt;docker commit&lt;/code&gt;命令, 把刚才已经改变了的容器提交一个副本制作成镜像&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker commit -m &quot;Added json gem&quot; -a &quot;Kate Smith&quot; 0b2616b0e5a8 ouruser/sinatra:v2
+4f177bd27a9ff0f6dc2a830403925b5360bfe0b93d476f7fc3231110e7f71b1c
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-m&lt;/code&gt;: 添加描述信息, 类似于&lt;code class=&quot;highlighter-rouge&quot;&gt;git commit -m&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-a&lt;/code&gt;: 作者信息&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;0b2616b0e5a8&lt;/code&gt;: 要制作成镜像的拿个容器的id&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ouruser/sinatra:v2&lt;/code&gt;: 目标镜像, 用户为&lt;code class=&quot;highlighter-rouge&quot;&gt;ouruser&lt;/code&gt;, 镜像名为&lt;code class=&quot;highlighter-rouge&quot;&gt;sinatra&lt;/code&gt;, 版本(tag)为&lt;code class=&quot;highlighter-rouge&quot;&gt;v2&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;第一种方法比较麻烦而且不利于团队间的合作分享, 下面看看第二种方法:&lt;/p&gt;
+
+&lt;p&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;docker build&lt;/code&gt;命令编译&lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt;来制作镜像, 首先创建一个目录和一个&lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt;文件:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ mkdir sinatra
+$ cd sinatra
+$ touch Dockerfile
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;然后在&lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt;文件里添加类似于下面的内容:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# This is a comment&lt;/span&gt;
+FROM ubuntu:14.04
+MAINTAINER Kate Smith &amp;lt;ksmith@example.com&amp;gt;
+RUN apt-get update &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; apt-get install -y ruby ruby-dev
+RUN gem install sinatra
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;上面&lt;code class=&quot;highlighter-rouge&quot;&gt;#&lt;/code&gt;开头的是注释, 下面是指令, 指令的格式类似于&lt;code class=&quot;highlighter-rouge&quot;&gt;INSTRUCTION statement&lt;/code&gt;, 每条指令都会创建镜像的一层&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;FROM&lt;/code&gt;: 告诉&lt;code class=&quot;highlighter-rouge&quot;&gt;Docker&lt;/code&gt;源镜像, 即我们是基于哪个镜像进行修改的&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;MAINTAINER&lt;/code&gt;: 用来说明是谁维护的这个镜像&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;RUN&lt;/code&gt;: 要在源镜像上做那些修改&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;最后我们编译&lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker build -t ouruser/sinatra:v2 .
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-t&lt;/code&gt;: 来指定一个新的&lt;code class=&quot;highlighter-rouge&quot;&gt;tag&lt;/code&gt;, 形式为:&lt;code class=&quot;highlighter-rouge&quot;&gt;name:tag&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;.&lt;/code&gt;: 注意后面有个&lt;code class=&quot;highlighter-rouge&quot;&gt;.&lt;/code&gt;, 用来表示编译当前目录里的&lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt;文件, 也可以自己指定&lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt;文件的位置&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;tag&quot;&gt;镜像的tag&lt;/h3&gt;
+&lt;p&gt;我们可以给已经存在的镜像添加新的&lt;code class=&quot;highlighter-rouge&quot;&gt;tag&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker tag ubuntu:14.04 rgkjhshi/ubuntu:newtag
+docker tag b2f1fdd93175 rgkjhshi/ubuntu:newtag2
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-16&quot;&gt;提交镜像&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker push rgkjhshi/ubuntu:newtag
+&lt;span class=&quot;c&quot;&gt;# 提交所有tag&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker push rgkjhshi/ubuntu
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-17&quot;&gt;删除镜像&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker rmi rgkjhshi/ubuntu:newtag2
+&lt;span class=&quot;c&quot;&gt;# 不写tag 默认删除 latest&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker rmi rgkjhshi/ubuntu
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;image-digests&quot;&gt;Image Digests&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;v2&lt;/code&gt;或之后的格式的镜像, 有个唯一标识符叫做&lt;code class=&quot;highlighter-rouge&quot;&gt;digest&lt;/code&gt;, 如果用于生成镜像的输入没有变,则&lt;code class=&quot;highlighter-rouge&quot;&gt;digest&lt;/code&gt;值也是一样的&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker images --digests
+REPOSITORY          TAG                 DIGEST                                                                    IMAGE ID            CREATED             SIZE
+rgkjhshi/ubuntu     newtag              sha256:8d0f6d13291273ad6271c3c55b222ad08e28ff71a40c27487c79dbe80cce184f   b2f1fdd93175        40 hours ago        188.4 MB
+rgkjhshi/ubuntu     newtag2             sha256:8d0f6d13291273ad6271c3c55b222ad08e28ff71a40c27487c79dbe80cce184f   b2f1fdd93175        40 hours ago        188.4 MB
+ubuntu              14.04               sha256:b2c8a4d46473ab082200880391ddf8c06f2a67da4fa905ce2747dcd95d8d7af7   b2f1fdd93175        40 hours ago        188.4 MB
+ubuntu              latest              sha256:ba1688fec34f66d8a7ff5b42e6971625d8232c72bf0e38ad06dda10cad157293   cf62323fa025        11 days ago         125 MB
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;2.0&lt;/code&gt;的仓库使用&lt;code class=&quot;highlighter-rouge&quot;&gt;push&lt;/code&gt;或&lt;code class=&quot;highlighter-rouge&quot;&gt;pull&lt;/code&gt;命令时都会显示镜像的&lt;code class=&quot;highlighter-rouge&quot;&gt;digest&lt;/code&gt;, 我们也可以直接像这样使用&lt;code class=&quot;highlighter-rouge&quot;&gt;digest&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker pull rgkjhshi/ubuntu@sha256:8d0f6d13291273ad6271c3c55b222ad08e28ff71a40c27487c79dbe80cce184f
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;若同一个&lt;code class=&quot;highlighter-rouge&quot;&gt;digest&lt;/code&gt;有不同的&lt;code class=&quot;highlighter-rouge&quot;&gt;tag&lt;/code&gt;, 则&lt;code class=&quot;highlighter-rouge&quot;&gt;pull&lt;/code&gt;下来的镜像没有&lt;code class=&quot;highlighter-rouge&quot;&gt;tag&lt;/code&gt;(显示的是&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;none&amp;gt;&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;create&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;run&lt;/code&gt;,  &lt;code class=&quot;highlighter-rouge&quot;&gt;rmi&lt;/code&gt;命令甚至&lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile&lt;/code&gt;中的&lt;code class=&quot;highlighter-rouge&quot;&gt;FROM&lt;/code&gt;都可以使用&lt;code class=&quot;highlighter-rouge&quot;&gt;digest&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+</description>
+        <pubDate>Tue, 19 Jul 2016 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-07-19-Docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%BA%8C)-%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-07-19-Docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%BA%8C)-%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8.html</guid>
+        
+        <category>Docker</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
     
       <item>
         <title>Docker学习笔记(一):初步了解</title>
@@ -90,7 +502,7 @@
         <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-07-11-Docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%B8%80)-%E5%88%9D%E6%AD%A5%E4%BA%86%E8%A7%A3.html</link>
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-07-11-Docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%B8%80)-%E5%88%9D%E6%AD%A5%E4%BA%86%E8%A7%A3.html</guid>
         
-        <category>Java</category>
+        <category>Docker</category>
         
         
         <category>编程技术</category>
@@ -1012,96 +1424,6 @@ RWXCA&lt;/p&gt;
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-04-11-SpringMVC%E8%A7%A3%E5%86%B3GET%E5%8F%82%E6%95%B0%E4%B9%B1%E7%A0%81.html</guid>
         
         <category>Spring</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>一致性哈希</title>
-        <description>&lt;p&gt;一致性哈希在哈希算法基础上, 适用于动态变化的Cache环境中&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;场景&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;使用一致性哈希解决上述场景&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;算法步骤&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#cache&quot;&gt;新增Cache服务器的情景&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#cache-1&quot;&gt;删除Cache服务器的情景&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#cache-2&quot;&gt;虚拟Cache服务器&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;场景&lt;/h2&gt;
-
-&lt;p&gt;如果我们有4台Cache服务器来存放一些对象, 可以用简单的办法来分配:&lt;code class=&quot;highlighter-rouge&quot;&gt;object.hashCode() % 4&lt;/code&gt;.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Cache0: &lt;code class=&quot;highlighter-rouge&quot;&gt;object.hashCode() % 4 == 0&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;Cache1: &lt;code class=&quot;highlighter-rouge&quot;&gt;object.hashCode() % 4 == 1&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;Cache2: &lt;code class=&quot;highlighter-rouge&quot;&gt;object.hashCode() % 4 == 2&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;Cache3: &lt;code class=&quot;highlighter-rouge&quot;&gt;object.hashCode() % 4 == 3&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;动态变化体现在, 如果因为某些原因Cache服务器少了一台或者多了一台, 我们怎么处理对象与服务器的关系呢?&lt;br /&gt;
-少了一台应该&lt;code class=&quot;highlighter-rouge&quot;&gt;%3&lt;/code&gt;, 多了一台应该&lt;code class=&quot;highlighter-rouge&quot;&gt;%5&lt;/code&gt;, 这样服务器上原来存放的对象与服务器的对应关系就全乱了&lt;/p&gt;
-
-&lt;h2 id=&quot;section-1&quot;&gt;使用一致性哈希解决上述场景&lt;/h2&gt;
-
-&lt;h3 id=&quot;section-2&quot;&gt;算法步骤&lt;/h3&gt;
-
-&lt;p&gt;一致性哈希算法采用一种新的方式来解决问题，不再仅仅依赖object.hashCode()本身，而且将Cache的配置也进行哈希运算。具体步骤如下:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;先求出每个Cache的哈希值, 并将其配置到一个0~2^32的圆环区间上(为啥是32?哈希值一般不超过32位)&lt;/li&gt;
-  &lt;li&gt;求出需要存储对象的哈希值, 也将其配置到这个圆环上&lt;/li&gt;
-  &lt;li&gt;从对象所映射到的位置顺时针开始找, 把对象保存在第一个找到的Cache节点上&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;img src=&quot;/static/images/hash01.png&quot; alt=&quot;一致性哈希算法&quot; title=&quot;一致性哈希算法&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;cache&quot;&gt;新增Cache服务器的情景&lt;/h3&gt;
-
-&lt;p&gt;假设在这个环形哈希空间中, Cache5被映射在Cache3和Cache4之间, 那么受影响的将仅是沿Cache5逆时针遍历, 直到下一个Cache(Cache3)之间的对象. 只对这些对象进行转移即可.
-Cache3~Cache5之间部分原来映射到Cache4, 现在应该映射到Cache5;&lt;br /&gt;
-Cache5~Cache4之间部分原来映射到Cache4, 现在还是映射到Cache4, 不受影响;  &lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/static/images/hash02.png&quot; alt=&quot;新增Cache服务器的情景&quot; title=&quot;新增Cache服务器的情景&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;cache-1&quot;&gt;删除Cache服务器的情景&lt;/h3&gt;
-
-&lt;p&gt;假设在这个环形哈希空间中, Cache3被移除, 那么受影响的将仅是沿Cache3逆时针遍历直到下一个Cache(Cache2)之间的对象&lt;/p&gt;
-
-&lt;p&gt;原来Cache2~Cache3之间部分原来映射到Cache3, 现在应该映射到Cache4;&lt;br /&gt;
-原来Cache3~Cache4之间部分原来映射到Cache4, 现在还是映射到Cache4, 不受影响;  &lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/static/images/hash03.png&quot; alt=&quot;删除Cache服务器的情景&quot; title=&quot;删除Cache服务器的情景&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;cache-2&quot;&gt;虚拟Cache服务器&lt;/h2&gt;
-
-&lt;p&gt;考虑到哈希算法并不是保证绝对的平衡, 尤其Cache较少的话, 对象并不能被均匀的映射到Cache上. 为了解决这种情况引入了”虚拟节点”的概念.&lt;br /&gt;
-虚拟节点是实际节点在环形空间的复制品, 一个实际节点对应了若干个”虚拟节点”, 这个对应个数也称为”复制个数”, “虚拟节点”在哈希空间中以哈希值排列.&lt;/p&gt;
-
-&lt;p&gt;仍以4台Cache服务器为例,设置”复制个数”为2后, 共有8个“虚拟节点”分部在环形区域上, 会如下图一样:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/static/images/hash04.png&quot; alt=&quot;虚拟节点&quot; title=&quot;虚拟节点&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;引入了”虚拟节点”后，映射关系就从&lt;code class=&quot;highlighter-rouge&quot;&gt;对象--&amp;gt;Cache服务器&lt;/code&gt;转换成了&lt;code class=&quot;highlighter-rouge&quot;&gt;对象--&amp;gt;虚拟节点--&amp;gt;Cache服务器&lt;/code&gt;. 当然虚拟节点与真正的服务器之间也有对应关系. 查询对象所在Cache服务器的映射关系整个流程如下图所示:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/static/images/hash05.png&quot; alt=&quot;映射关系&quot; title=&quot;映射关系&quot; /&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-</description>
-        <pubDate>Fri, 25 Mar 2016 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-03-25-%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-03-25-%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C.html</guid>
-        
-        <category>一致性哈希</category>
         
         
         <category>编程技术</category>
