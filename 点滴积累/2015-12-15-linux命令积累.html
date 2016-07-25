@@ -104,7 +104,10 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#grep">抓取命令 <em>grep</em></a></li>
+  <li><a href="#grep">抓取命令 <em>grep</em></a>    <ul>
+      <li><a href="#section">抓去时间大于某个值</a></li>
+    </ul>
+  </li>
   <li><a href="#ln">链接命令 <em>ln</em></a></li>
   <li><a href="#tar">打包命令 <em>tar</em></a></li>
   <li><a href="#scp">远程拷贝 <em>scp</em></a></li>
@@ -135,6 +138,15 @@ jQuery(function(){
 <div class="highlighter-rouge"><pre class="highlight"><code>向前显示5行: grep "2016-6-23 12:00:00" -B5 --color access.log
 </code></pre>
 </div>
+
+<h3 id="section">抓去时间大于某个值</h3>
+<p>配合<code class="highlighter-rouge">sed</code>命令和<code class="highlighter-rouge">awk</code>命令</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ grep "运行时间为" qcredit.log  | sed 's/ms//' | awk -F ':' '{if($5&gt;100) print}'
+</code></pre>
+</div>
+
+<p>通过<code class="highlighter-rouge">sed</code>命令把字符串里的<code class="highlighter-rouge">ms</code>换成空串, <code class="highlighter-rouge">awk</code>命令 <code class="highlighter-rouge">-F ':'</code> 表示用<code class="highlighter-rouge">:</code>对文本分割, <code class="highlighter-rouge">$5</code>对应分割后的时间那一列</p>
 
 <hr />
 

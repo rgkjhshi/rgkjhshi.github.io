@@ -5,8 +5,8 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 21 Jul 2016 22:09:07 +0800</pubDate>
-    <lastBuildDate>Thu, 21 Jul 2016 22:09:07 +0800</lastBuildDate>
+    <pubDate>Mon, 25 Jul 2016 17:55:25 +0800</pubDate>
+    <lastBuildDate>Mon, 25 Jul 2016 17:55:25 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
@@ -23,6 +23,10 @@
   &lt;li&gt;&lt;a href=&quot;#section-6&quot;&gt;数据卷&lt;/a&gt;    &lt;ul&gt;
       &lt;li&gt;&lt;a href=&quot;#section-7&quot;&gt;添加数据卷&lt;/a&gt;&lt;/li&gt;
       &lt;li&gt;&lt;a href=&quot;#section-8&quot;&gt;挂载本地目录&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-9&quot;&gt;挂载文件&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-10&quot;&gt;挂载容器中的数据卷&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-11&quot;&gt;查看删除数据卷&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#volume&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;volume&lt;/code&gt;的其他用法&lt;/a&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
@@ -246,6 +250,83 @@ $ docker run -d -P --name web -v /src/webapp:/opt/webapp:ro training/webapp pyth
     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;...&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-9&quot;&gt;挂载文件&lt;/h3&gt;
+
+&lt;p&gt;我们可以挂载某个文件到容器中:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker run --rm -it -v ~/.bash_history:/root/.bash_history ubuntu /bin/bash
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;--rm&lt;/code&gt;: 容器退出时自动删除容器&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;上面就挂载了&lt;code class=&quot;highlighter-rouge&quot;&gt;bash_history&lt;/code&gt;到容器中, 在容器里查看到原来本地机上的历史命令, 当退出容器的时候, 本地机会有刚才在容器里使用过的命令的历史.&lt;br /&gt;
+不过需要注意的是, 若是挂在了文件, 在容器里使用&lt;code class=&quot;highlighter-rouge&quot;&gt;vi&lt;/code&gt;等编辑该挂在文件时, 会引起错误. 因此挂载这个文件的父目录是更好的选择.&lt;/p&gt;
+
+&lt;h3 id=&quot;section-10&quot;&gt;挂载容器中的数据卷&lt;/h3&gt;
+&lt;p&gt;挂载数据卷, 可以是匿名的也可以是命名的, 可以挂载本地目录也可以挂载本地文件, 还能挂载另一个容器中的数据卷. 我们可以通过参数&lt;code class=&quot;highlighter-rouge&quot;&gt;--volumes-from&lt;/code&gt;指定数据卷来自于哪个容器, 可以多次使用&lt;code class=&quot;highlighter-rouge&quot;&gt;--volumes-from&lt;/code&gt;来挂载多个数据卷&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 先创建一个叫 dbstore 的容器, 这个容器添加了数据卷&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker create -v /dbdata --name dbstore training/postgres /bin/true
+&lt;span class=&quot;c&quot;&gt;# 创建容器 db1, 指明数据卷来自于 dbstore&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker run -d --volumes-from dbstore --name db1 training/postgres
+&lt;span class=&quot;c&quot;&gt;# 创建容器 db2, 指明数据卷来自于 db1&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker run -d --volumes-from db1 --name db2 training/postgres
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-11&quot;&gt;查看删除数据卷&lt;/h3&gt;
+&lt;p&gt;上面例子中, 删除挂载数据卷的容器, 并不会删除挂载的数据卷, 除非在删除最后一个引用该数据卷的容器时指定&lt;code class=&quot;highlighter-rouge&quot;&gt;-v&lt;/code&gt;标记&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 删除容器不会删除数据卷&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker rm db1
+&lt;span class=&quot;c&quot;&gt;# 添加 -v 由于不是最后一个引用数据卷的容器, 所以数据卷仍没被删除&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker rm -v dbstore
+&lt;span class=&quot;c&quot;&gt;# 删除最后一个引用数据卷的容器时,添加 -v , 数据卷被删除&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker rm -v db2
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;如果删除了最后一个引用数据卷的容器时没有加&lt;code class=&quot;highlighter-rouge&quot;&gt;-v&lt;/code&gt;, 将会出现&lt;code class=&quot;highlighter-rouge&quot;&gt;dangling&lt;/code&gt;状态(悬挂,没人用了)的&lt;code class=&quot;highlighter-rouge&quot;&gt;volume&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;volume&lt;/code&gt;有匿名和命名之分, 我们可以在创建容器时通过参数&lt;code class=&quot;highlighter-rouge&quot;&gt;--rm&lt;/code&gt;指定, 当容器删除时, 对应的所有匿名&lt;code class=&quot;highlighter-rouge&quot;&gt;volume&lt;/code&gt;也随着删除&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ $ docker run --rm -v /foo -v awesome:/bar --name test ubuntu
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;我们通过&lt;code class=&quot;highlighter-rouge&quot;&gt;-v&lt;/code&gt;指定了一个匿名&lt;code class=&quot;highlighter-rouge&quot;&gt;volume&lt;/code&gt;, 挂载到容器的&lt;code class=&quot;highlighter-rouge&quot;&gt;/foo&lt;/code&gt;下, 还指定了一个命名为&lt;code class=&quot;highlighter-rouge&quot;&gt;awesome&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;volume&lt;/code&gt;挂在到了&lt;code class=&quot;highlighter-rouge&quot;&gt;/bar&lt;/code&gt;下, 容器运行完自动删除镜像(&lt;code class=&quot;highlighter-rouge&quot;&gt;--rm&lt;/code&gt;)时, 匿名数据卷会被删除,而&lt;code class=&quot;highlighter-rouge&quot;&gt;awesome&lt;/code&gt;并没有被删除.&lt;/p&gt;
+
+&lt;p&gt;另外我们可以通过 &lt;code class=&quot;highlighter-rouge&quot;&gt;docker volume&lt;/code&gt;命令来查看管理所有的数据卷&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 查看所有 volume&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker volume ls
+&lt;span class=&quot;c&quot;&gt;# 查看 dangling 的 volume&lt;/span&gt;
+volume ls -f &lt;span class=&quot;nv&quot;&gt;dangling&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 删除 volume&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker volume rm &amp;lt;volume name&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;volume&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;volume&lt;/code&gt;的其他用法&lt;/h3&gt;
+&lt;p&gt;我们可以使用数据卷进行数据的备份、存储以及迁移等工作&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker run --rm --volumes-from dbstore -v $(pwd):/backup ubuntu tar cvf /backup/backup.tar /dbdata
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;从&lt;code class=&quot;highlighter-rouge&quot;&gt;dbstore&lt;/code&gt;挂载了一个数据卷, 并且把本地目录挂在到了&lt;code class=&quot;highlighter-rouge&quot;&gt;/backup&lt;/code&gt;下, 最后传递了一个&lt;code class=&quot;highlighter-rouge&quot;&gt;tar&lt;/code&gt;命令, 把&lt;code class=&quot;highlighter-rouge&quot;&gt;dbdata volume&lt;/code&gt;备份到&lt;code class=&quot;highlighter-rouge&quot;&gt;/backup&lt;/code&gt;目录下的&lt;code class=&quot;highlighter-rouge&quot;&gt;backup.tar&lt;/code&gt;文件里. 命令执行完, 容器停止并被自动移除了, 但是&lt;code class=&quot;highlighter-rouge&quot;&gt;dbdata volume&lt;/code&gt;的数据被备份了.&lt;/p&gt;
+
+&lt;p&gt;然后我们可以创建一个新容器, 添加了一个匿名的&lt;code class=&quot;highlighter-rouge&quot;&gt;volume&lt;/code&gt;在容器的&lt;code class=&quot;highlighter-rouge&quot;&gt;/dbdata&lt;/code&gt;目录下:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker run -v /dbdata --name dbstore2 ubuntu /bin/bash
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;下面我们可以把刚才的备份文件解压到&lt;code class=&quot;highlighter-rouge&quot;&gt;dbstore2&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;volume&lt;/code&gt;中, 从而达到转移的目的&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker run --rm --volumes-from dbstore2 -v $(pwd):/backup ubuntu bash -c &quot;cd /dbdata &amp;amp;&amp;amp; tar xvf /backup/backup.tar --strip 1&quot;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 

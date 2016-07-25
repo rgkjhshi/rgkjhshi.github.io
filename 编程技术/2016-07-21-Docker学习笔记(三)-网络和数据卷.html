@@ -111,6 +111,10 @@ jQuery(function(){
   <li><a href="#section-6">数据卷</a>    <ul>
       <li><a href="#section-7">添加数据卷</a></li>
       <li><a href="#section-8">挂载本地目录</a></li>
+      <li><a href="#section-9">挂载文件</a></li>
+      <li><a href="#section-10">挂载容器中的数据卷</a></li>
+      <li><a href="#section-11">查看删除数据卷</a></li>
+      <li><a href="#volume"><code class="highlighter-rouge">volume</code>的其他用法</a></li>
     </ul>
   </li>
 </ul>
@@ -334,6 +338,83 @@ $ docker run -d -P --name web -v /src/webapp:/opt/webapp:ro training/webapp pyth
     <span class="p">}</span>
 <span class="p">]</span>
 <span class="p">...</span>
+</code></pre>
+</div>
+
+<h3 id="section-9">挂载文件</h3>
+
+<p>我们可以挂载某个文件到容器中:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ docker run --rm -it -v ~/.bash_history:/root/.bash_history ubuntu /bin/bash
+</code></pre>
+</div>
+
+<ul>
+  <li><code class="highlighter-rouge">--rm</code>: 容器退出时自动删除容器</li>
+</ul>
+
+<p>上面就挂载了<code class="highlighter-rouge">bash_history</code>到容器中, 在容器里查看到原来本地机上的历史命令, 当退出容器的时候, 本地机会有刚才在容器里使用过的命令的历史.<br />
+不过需要注意的是, 若是挂在了文件, 在容器里使用<code class="highlighter-rouge">vi</code>等编辑该挂在文件时, 会引起错误. 因此挂载这个文件的父目录是更好的选择.</p>
+
+<h3 id="section-10">挂载容器中的数据卷</h3>
+<p>挂载数据卷, 可以是匿名的也可以是命名的, 可以挂载本地目录也可以挂载本地文件, 还能挂载另一个容器中的数据卷. 我们可以通过参数<code class="highlighter-rouge">--volumes-from</code>指定数据卷来自于哪个容器, 可以多次使用<code class="highlighter-rouge">--volumes-from</code>来挂载多个数据卷</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># 先创建一个叫 dbstore 的容器, 这个容器添加了数据卷</span>
+<span class="gp">$ </span>docker create -v /dbdata --name dbstore training/postgres /bin/true
+<span class="c"># 创建容器 db1, 指明数据卷来自于 dbstore</span>
+<span class="gp">$ </span>docker run -d --volumes-from dbstore --name db1 training/postgres
+<span class="c"># 创建容器 db2, 指明数据卷来自于 db1</span>
+<span class="gp">$ </span>docker run -d --volumes-from db1 --name db2 training/postgres
+</code></pre>
+</div>
+
+<h3 id="section-11">查看删除数据卷</h3>
+<p>上面例子中, 删除挂载数据卷的容器, 并不会删除挂载的数据卷, 除非在删除最后一个引用该数据卷的容器时指定<code class="highlighter-rouge">-v</code>标记</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># 删除容器不会删除数据卷</span>
+<span class="gp">$ </span>docker rm db1
+<span class="c"># 添加 -v 由于不是最后一个引用数据卷的容器, 所以数据卷仍没被删除</span>
+<span class="gp">$ </span>docker rm -v dbstore
+<span class="c"># 删除最后一个引用数据卷的容器时,添加 -v , 数据卷被删除</span>
+<span class="gp">$ </span>docker rm -v db2
+</code></pre>
+</div>
+<p>如果删除了最后一个引用数据卷的容器时没有加<code class="highlighter-rouge">-v</code>, 将会出现<code class="highlighter-rouge">dangling</code>状态(悬挂,没人用了)的<code class="highlighter-rouge">volume</code>.</p>
+
+<p><code class="highlighter-rouge">volume</code>有匿名和命名之分, 我们可以在创建容器时通过参数<code class="highlighter-rouge">--rm</code>指定, 当容器删除时, 对应的所有匿名<code class="highlighter-rouge">volume</code>也随着删除</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ $ docker run --rm -v /foo -v awesome:/bar --name test ubuntu
+</code></pre>
+</div>
+<p>我们通过<code class="highlighter-rouge">-v</code>指定了一个匿名<code class="highlighter-rouge">volume</code>, 挂载到容器的<code class="highlighter-rouge">/foo</code>下, 还指定了一个命名为<code class="highlighter-rouge">awesome</code>的<code class="highlighter-rouge">volume</code>挂在到了<code class="highlighter-rouge">/bar</code>下, 容器运行完自动删除镜像(<code class="highlighter-rouge">--rm</code>)时, 匿名数据卷会被删除,而<code class="highlighter-rouge">awesome</code>并没有被删除.</p>
+
+<p>另外我们可以通过 <code class="highlighter-rouge">docker volume</code>命令来查看管理所有的数据卷</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># 查看所有 volume</span>
+<span class="gp">$ </span>docker volume ls
+<span class="c"># 查看 dangling 的 volume</span>
+volume ls -f <span class="nv">dangling</span><span class="o">=</span><span class="nb">true</span>
+<span class="c"># 删除 volume</span>
+<span class="gp">$ </span>docker volume rm &lt;volume name&gt;
+</code></pre>
+</div>
+
+<h3 id="volume"><code class="highlighter-rouge">volume</code>的其他用法</h3>
+<p>我们可以使用数据卷进行数据的备份、存储以及迁移等工作</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ docker run --rm --volumes-from dbstore -v $(pwd):/backup ubuntu tar cvf /backup/backup.tar /dbdata
+</code></pre>
+</div>
+<p>从<code class="highlighter-rouge">dbstore</code>挂载了一个数据卷, 并且把本地目录挂在到了<code class="highlighter-rouge">/backup</code>下, 最后传递了一个<code class="highlighter-rouge">tar</code>命令, 把<code class="highlighter-rouge">dbdata volume</code>备份到<code class="highlighter-rouge">/backup</code>目录下的<code class="highlighter-rouge">backup.tar</code>文件里. 命令执行完, 容器停止并被自动移除了, 但是<code class="highlighter-rouge">dbdata volume</code>的数据被备份了.</p>
+
+<p>然后我们可以创建一个新容器, 添加了一个匿名的<code class="highlighter-rouge">volume</code>在容器的<code class="highlighter-rouge">/dbdata</code>目录下:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ docker run -v /dbdata --name dbstore2 ubuntu /bin/bash
+</code></pre>
+</div>
+<p>下面我们可以把刚才的备份文件解压到<code class="highlighter-rouge">dbstore2</code>的<code class="highlighter-rouge">volume</code>中, 从而达到转移的目的</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ docker run --rm --volumes-from dbstore2 -v $(pwd):/backup ubuntu bash -c "cd /dbdata &amp;&amp; tar xvf /backup/backup.tar --strip 1"
 </code></pre>
 </div>
 
