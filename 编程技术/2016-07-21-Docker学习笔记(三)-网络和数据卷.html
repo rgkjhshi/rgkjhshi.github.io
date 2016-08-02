@@ -383,7 +383,7 @@ $ docker run -d -P --name web -v /src/webapp:/opt/webapp:ro training/webapp pyth
 
 <p><code class="highlighter-rouge">volume</code>有匿名和命名之分, 我们可以在创建容器时通过参数<code class="highlighter-rouge">--rm</code>指定, 当容器删除时, 对应的所有匿名<code class="highlighter-rouge">volume</code>也随着删除</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ $ docker run --rm -v /foo -v awesome:/bar --name test ubuntu
+<div class="highlighter-rouge"><pre class="highlight"><code>$ docker run --rm -v /foo -v awesome:/bar --name test ubuntu
 </code></pre>
 </div>
 <p>我们通过<code class="highlighter-rouge">-v</code>指定了一个匿名<code class="highlighter-rouge">volume</code>, 挂载到容器的<code class="highlighter-rouge">/foo</code>下, 还指定了一个命名为<code class="highlighter-rouge">awesome</code>的<code class="highlighter-rouge">volume</code>挂在到了<code class="highlighter-rouge">/bar</code>下, 容器运行完自动删除镜像(<code class="highlighter-rouge">--rm</code>)时, 匿名数据卷会被删除,而<code class="highlighter-rouge">awesome</code>并没有被删除.</p>
@@ -393,7 +393,7 @@ $ docker run -d -P --name web -v /src/webapp:/opt/webapp:ro training/webapp pyth
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># 查看所有 volume</span>
 <span class="gp">$ </span>docker volume ls
 <span class="c"># 查看 dangling 的 volume</span>
-volume ls -f <span class="nv">dangling</span><span class="o">=</span><span class="nb">true</span>
+<span class="gp">$ </span>docker volume ls -f <span class="nv">dangling</span><span class="o">=</span><span class="nb">true</span>
 <span class="c"># 删除 volume</span>
 <span class="gp">$ </span>docker volume rm &lt;volume name&gt;
 </code></pre>

@@ -5,8 +5,8 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 25 Jul 2016 17:55:25 +0800</pubDate>
-    <lastBuildDate>Mon, 25 Jul 2016 17:55:25 +0800</lastBuildDate>
+    <pubDate>Tue, 02 Aug 2016 22:36:07 +0800</pubDate>
+    <lastBuildDate>Tue, 02 Aug 2016 22:36:07 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
@@ -295,7 +295,7 @@ $ docker run -d -P --name web -v /src/webapp:/opt/webapp:ro training/webapp pyth
 
 &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;volume&lt;/code&gt;有匿名和命名之分, 我们可以在创建容器时通过参数&lt;code class=&quot;highlighter-rouge&quot;&gt;--rm&lt;/code&gt;指定, 当容器删除时, 对应的所有匿名&lt;code class=&quot;highlighter-rouge&quot;&gt;volume&lt;/code&gt;也随着删除&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ $ docker run --rm -v /foo -v awesome:/bar --name test ubuntu
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker run --rm -v /foo -v awesome:/bar --name test ubuntu
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 &lt;p&gt;我们通过&lt;code class=&quot;highlighter-rouge&quot;&gt;-v&lt;/code&gt;指定了一个匿名&lt;code class=&quot;highlighter-rouge&quot;&gt;volume&lt;/code&gt;, 挂载到容器的&lt;code class=&quot;highlighter-rouge&quot;&gt;/foo&lt;/code&gt;下, 还指定了一个命名为&lt;code class=&quot;highlighter-rouge&quot;&gt;awesome&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;volume&lt;/code&gt;挂在到了&lt;code class=&quot;highlighter-rouge&quot;&gt;/bar&lt;/code&gt;下, 容器运行完自动删除镜像(&lt;code class=&quot;highlighter-rouge&quot;&gt;--rm&lt;/code&gt;)时, 匿名数据卷会被删除,而&lt;code class=&quot;highlighter-rouge&quot;&gt;awesome&lt;/code&gt;并没有被删除.&lt;/p&gt;
@@ -305,7 +305,7 @@ $ docker run -d -P --name web -v /src/webapp:/opt/webapp:ro training/webapp pyth
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 查看所有 volume&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker volume ls
 &lt;span class=&quot;c&quot;&gt;# 查看 dangling 的 volume&lt;/span&gt;
-volume ls -f &lt;span class=&quot;nv&quot;&gt;dangling&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker volume ls -f &lt;span class=&quot;nv&quot;&gt;dangling&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# 删除 volume&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker volume rm &amp;lt;volume name&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
