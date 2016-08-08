@@ -132,7 +132,7 @@ public interface JoinPoint {
     String toLongString();      // execution(public java.lang.String com.test.spring.bean.Hello.hello(java.lang.String))
     // 上面这几个toString, 是打印切点相关信息, 注意上面是用 within声明 而打印出来的是 execution.
     Object getThis();           //返回AOP代理对象  
-    Object getTarget();         //返回目标对象  
+    Object getTarget();         //返回目标对象(被代理的对象)  
     Object[] getArgs();         //返回被通知方法参数列表  
     Signature getSignature();   //返回当前连接点签名  
     SourceLocation getSourceLocation();//返回连接点方法所在类文件中的位置  
