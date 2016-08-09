@@ -5,8 +5,8 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 08 Aug 2016 21:50:56 +0800</pubDate>
-    <lastBuildDate>Mon, 08 Aug 2016 21:50:56 +0800</lastBuildDate>
+    <pubDate>Tue, 09 Aug 2016 10:30:40 +0800</pubDate>
+    <lastBuildDate>Tue, 09 Aug 2016 10:30:40 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
@@ -22,7 +22,7 @@
   &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;属性和方法调用&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#section-3&quot;&gt;类型&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#section-4&quot;&gt;操作符&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-5&quot;&gt;安全导航操作&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-5&quot;&gt;避免空指针&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#this&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;#this&lt;/code&gt;变量&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#section-6&quot;&gt;集合选择&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#section-7&quot;&gt;模板表达式&lt;/a&gt;&lt;/li&gt;
@@ -44,9 +44,7 @@
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
 &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Test&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;#{itemBean.name}&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;// 访问对象的属性&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;itemName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;#{&#39;Tom&#39;.toUpperCase()}&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 访问对象的方法&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@Value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;#{&#39;Tom&#39;.toUpperCase()}&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
@@ -177,8 +175,8 @@
 
 &lt;hr /&gt;
 
-&lt;h2 id=&quot;section-5&quot;&gt;安全导航操作&lt;/h2&gt;
-&lt;p&gt;该操作是为避免空指针异常, 当访问一个对象的属性或方法时, 若该对象为&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;, 就会出现空指针异常. 安全导航会判断对象是否为&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;,如果是的话, 就返回&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;而不是抛出空指针异常. 使用方式就是在对象后面加个&lt;code class=&quot;highlighter-rouge&quot;&gt;?&lt;/code&gt;. 如下:&lt;/p&gt;
+&lt;h2 id=&quot;section-5&quot;&gt;避免空指针&lt;/h2&gt;
+&lt;p&gt;当访问一个对象的属性或方法时, 若该对象为&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;, 就会出现空指针异常. 安全导航会判断对象是否为&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;,如果是的话, 就返回&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;而不是抛出空指针异常. 使用方式就是在对象后面加个&lt;code class=&quot;highlighter-rouge&quot;&gt;?&lt;/code&gt;. 如下:&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// 使用这种表达式可以避免抛出空指针异常&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;parser&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;parseExpression&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;#name?.toUpperCase()&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// null&lt;/span&gt;
