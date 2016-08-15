@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="Drools简单使用示例, 编程技术, Drools, 逆水行舟" />
+    <meta name="description" content="Drools简单使用示例, 编程技术, Drools, 本文不涉及Drools的原理和介绍, 仅通过简单例子演示怎么使用Drools.另外, 各版本的文档可查看官方资料" />
+
+    <title>逆水行舟</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-08-14-Drools%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="/static/js/jquery.qrcode.min.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="/static/js/uikit.min.js"></script>
+    <!-- quietflow -->
+    <!-- <script type="text/javascript" src="http://loveshisong.cn/static/js/quietflow.min.js"></script> -->
+    <!-- UK sticky -->
+    <script type="text/javascript" src="/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "shisong"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" data-uk-sticky>
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <script type="text/javascript">
+jQuery(function(){
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-08-14-Drools%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B.html"
+    });
+})
+</script>
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>Drools简单使用示例</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <p>本文不涉及<code class="highlighter-rouge">Drools</code>的原理和介绍, 仅通过简单例子演示怎么使用<code class="highlighter-rouge">Drools</code>.<br />
+另外, 各版本的文档可查看<a href="http://docs.jboss.org/drools/release/">官方资料</a></p>
+
+<hr />
+
+<ul id="markdown-toc">
+  <li><a href="#section">包依赖和目录结构</a></li>
+  <li><a href="#section-1">简单示例</a></li>
+  <li><a href="#kmodulexml">kmodule.xml</a></li>
+  <li><a href="#kie">KIE</a></li>
+  <li><a href="#kmodule">编码方式实现kmodule定义</a></li>
+</ul>
+
+<hr />
+
+<h2 id="section">包依赖和目录结构</h2>
+<p><code class="highlighter-rouge">Drools</code>也提供了一个<code class="highlighter-rouge">bom</code>文件进行相关的包管理, 在maven项目中, <code class="highlighter-rouge">pom</code>文件可以这样写:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependencyManagement&gt;</span>
+    <span class="nt">&lt;dependencies&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.drools<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>drools-bom<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;type&gt;</span>pom<span class="nt">&lt;/type&gt;</span>
+            <span class="nt">&lt;version&gt;</span>...<span class="nt">&lt;/version&gt;</span>
+            <span class="nt">&lt;scope&gt;</span>import<span class="nt">&lt;/scope&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+    <span class="nt">&lt;/dependencies&gt;</span>
+<span class="nt">&lt;/dependencyManagement&gt;</span>
+<span class="nt">&lt;dependencies&gt;</span>
+    <span class="nt">&lt;dependency&gt;</span>
+        <span class="nt">&lt;groupId&gt;</span>org.kie<span class="nt">&lt;/groupId&gt;</span>
+        <span class="nt">&lt;artifactId&gt;</span>kie-api<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;/dependency&gt;</span>
+    <span class="nt">&lt;dependency&gt;</span>
+        <span class="nt">&lt;groupId&gt;</span>org.drools<span class="nt">&lt;/groupId&gt;</span>
+        <span class="nt">&lt;artifactId&gt;</span>drools-compiler<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;scope&gt;</span>runtime<span class="nt">&lt;/scope&gt;</span>
+    <span class="nt">&lt;/dependency&gt;</span>
+<span class="nt">&lt;dependencies&gt;</span>
+</code></pre>
+</div>
+
+<p>项目的目录结构是下面这样子的</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    src
+    |--com.test.drools
+    |  |--DroolsTest.java
+    resources
+    |--META-INF
+    |  |--kmodule.xml
+    |--rules
+    |  |--test.drl
+</code></pre>
+</div>
+
+<ul>
+  <li><code class="highlighter-rouge">Drools</code>默认会加载<code class="highlighter-rouge">classpath</code>路径下的<code class="highlighter-rouge">META-INF/kmodule.xml</code>文件(稍后详述)</li>
+  <li><code class="highlighter-rouge">resources</code>下面的<code class="highlighter-rouge">rules/test.drl</code>是规则文件, 也支持<code class="highlighter-rouge">Excel</code>即<code class="highlighter-rouge">xsl</code>文件</li>
+</ul>
+
+<hr />
+
+<h2 id="section-1">简单示例</h2>
+<p>下面是一个简单的例子</p>
+
+<p><code class="highlighter-rouge">DroolsTest.java</code>内容如下:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">DroolsTest</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// 获取 drools 实现的 KieServices 实例</span>
+        <span class="n">KieServices</span> <span class="n">kieServices</span> <span class="o">=</span> <span class="n">KieServices</span><span class="o">.</span><span class="na">Factory</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+        <span class="c1">// kieServices 默认加载 classpath:META-INF/kmodule.xml 得到 KieContainer</span>
+        <span class="n">KieContainer</span> <span class="n">kContainer</span> <span class="o">=</span> <span class="n">kieServices</span><span class="o">.</span><span class="na">getKieClasspathContainer</span><span class="o">();</span>
+        <span class="c1">// 通过 kContainer 获取 kmodule.xml 中定义的 ksession</span>
+        <span class="n">KieSession</span> <span class="n">kieSession</span> <span class="o">=</span> <span class="n">kContainer</span><span class="o">.</span><span class="na">newKieSession</span><span class="o">(</span><span class="s">"ksession-rules"</span><span class="o">);</span>
+        <span class="c1">// 向 workingMemory 中加入一个对象</span>
+        <span class="n">kieSession</span><span class="o">.</span><span class="na">insert</span><span class="o">(</span><span class="s">"Tom"</span><span class="o">);</span>
+        <span class="c1">// 通知规则引擎执行规则</span>
+        <span class="n">kieSession</span><span class="o">.</span><span class="na">fireAllRules</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">META-INF/kmodule.xml</code>内容如下:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;kmodule</span> <span class="na">xmlns=</span><span class="s">"http://jboss.org/kie/6.0.0/kmodule"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;kbase</span> <span class="na">name=</span><span class="s">"kbase-rules"</span> <span class="na">packages=</span><span class="s">"rules"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;ksession</span> <span class="na">name=</span><span class="s">"ksession-rules"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/kbase&gt;</span>
+    <span class="nt">&lt;kbase</span> <span class="na">name=</span><span class="s">"kbase-process"</span> <span class="na">packages=</span><span class="s">"process"</span><span class="nt">&gt;</span>  <span class="c">&lt;!-- 这个没用到 --&gt;</span>
+        <span class="nt">&lt;ksession</span> <span class="na">name=</span><span class="s">"ksession-process"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/kbase&gt;</span>
+<span class="nt">&lt;/kmodule&gt;</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">rules/test.drl</code>内容如下:</p>
+
+<pre><code class="language-drl">package com.test.drools
+
+rule "hello"
+    when
+        $name:String()
+    then
+        System.out.println("hello " + $name);
+end
+</code></pre>
+
+<p>这个例子运行的结果为在控制台输入:<code class="highlighter-rouge">hello Tom</code></p>
+
+<hr />
+
+<h2 id="kmodulexml">kmodule.xml</h2>
+<p>这个<code class="highlighter-rouge">kmodule.xml</code>的文件的定义非常简单, 下面解释下里面的内容</p>
+
+<ul>
+  <li><code class="highlighter-rouge">kmodule</code>: 里面可以包含多个<code class="highlighter-rouge">kbase</code>, 例子中只包含了2个</li>
+  <li><code class="highlighter-rouge">kbase</code>: 有个<code class="highlighter-rouge">name</code>属性, 全局不能重名; <code class="highlighter-rouge">packages</code>指定规则所在的包,对应<code class="highlighter-rouge">resources</code>下面的文件夹名. 多个包可以用逗号分开;</li>
+  <li><code class="highlighter-rouge">kbase</code>下面可以有多个<code class="highlighter-rouge">ksession</code>子节点</li>
+  <li><code class="highlighter-rouge">ksession</code>: 有个<code class="highlighter-rouge">name</code>属性, 全局不能重名</li>
+  <li><code class="highlighter-rouge">kbase</code>和<code class="highlighter-rouge">ksession</code>还有其他属性, 不太常用</li>
+</ul>
+
+<p>文件体现了<code class="highlighter-rouge">kmodule</code>, <code class="highlighter-rouge">kbase</code>和<code class="highlighter-rouge">ksession</code>的定义和从上到下的包含关系. 项目会根据<code class="highlighter-rouge">kmodule.xml</code>的定义将其解析成<code class="highlighter-rouge">KieModuleModel</code>, <code class="highlighter-rouge">KieBaseModel</code>, <code class="highlighter-rouge">KieSessionModel</code>对象, 在运行时<code class="highlighter-rouge">KieContainer</code>会根据<code class="highlighter-rouge">XXModel</code>来创建<code class="highlighter-rouge">KieModule</code>, <code class="highlighter-rouge">KieBase</code>, <code class="highlighter-rouge">KieSession</code>对象, 其中<code class="highlighter-rouge">KieModule</code>和<code class="highlighter-rouge">KieBase</code>只会创建一次, 而<code class="highlighter-rouge">KieSession</code>则有可能创建多次, 因为<code class="highlighter-rouge">KieSession</code>的创建成本很低, 同时<code class="highlighter-rouge">KieSession</code>包含了运行时的数据, 所以可以销毁、创建若干次.</p>
+
+<p>我们可以通过<code class="highlighter-rouge">kmodule.xml</code>文件来定义<code class="highlighter-rouge">KieModule</code>, 项目会自动解析<code class="highlighter-rouge">classpath</code>下面的所有<code class="highlighter-rouge">META-INF/kmodule.xml</code>文件，然后解析成<code class="highlighter-rouge">KieModule</code>对象供<code class="highlighter-rouge">Drools</code>引擎使用; 我们也可以不定义<code class="highlighter-rouge">kmodule.xml</code>, 直接通过编码的方式来创建<code class="highlighter-rouge">KieModule</code>等对象, 后面将会介绍.</p>
+
+<hr />
+
+<h2 id="kie">KIE</h2>
+<p>我们发现在<code class="highlighter-rouge">Drools</code>中经常接触到<code class="highlighter-rouge">KIE</code>, 这个<code class="highlighter-rouge">KIE</code>是<code class="highlighter-rouge">JBoss</code>里面一些相关项目的统称, 可以理解为, <code class="highlighter-rouge">JBoss</code>有很多项目, 使用方式比较统一, 都可以通过<code class="highlighter-rouge">KIE API</code>来使用. 这些通用的API一般都会使用<code class="highlighter-rouge">Kie</code>作为前缀, 比如<code class="highlighter-rouge">KieServices</code>, <code class="highlighter-rouge">KieContainer</code>, <code class="highlighter-rouge">KieSession</code>等这些类都是KIE的公共API.</p>
+
+<p>比较熟悉的<code class="highlighter-rouge">JBoss</code>项目<code class="highlighter-rouge">jBPM</code>和<code class="highlighter-rouge">Drools</code>等, 通过<code class="highlighter-rouge">KIE</code>统一了他们的使用方式, 在<code class="highlighter-rouge">Drools</code>中这么用, 在<code class="highlighter-rouge">jBPM</code>也这么用. 下面是来自官网的一张关于KIE的图:</p>
+
+<p><img src="/static/images/kie.png" alt="KIE API" title="KIE API" /></p>
+
+<p>KIE API有一些常用的类, 比如上例中, 我们通过<code class="highlighter-rouge">KieServices</code>对象得到一个<code class="highlighter-rouge">KieContainer</code>, 然后<code class="highlighter-rouge">KieContainer</code>根据<code class="highlighter-rouge">session name</code>来新建一个<code class="highlighter-rouge">KieSession</code>, 最后通过<code class="highlighter-rouge">KieSession</code>来运行规则</p>
+
+<ul>
+  <li><code class="highlighter-rouge">KieSession</code>: 该接口提供了很多方法, 可以通过这些方法访问KIE关于构建和运行的相关对象, 比如可以获取<code class="highlighter-rouge">KieContainer</code>, 利用<code class="highlighter-rouge">KieContainer</code>来访问<code class="highlighter-rouge">KBase</code>和<code class="highlighter-rouge">KSession</code>等信息; 可以获取<code class="highlighter-rouge">KieRepository</code>对象, 利用<code class="highlighter-rouge">KieRepository</code>来管理<code class="highlighter-rouge">KieModule</code>等. <code class="highlighter-rouge">KieServices</code>就是一个中心, 通过它来获取的各种对象来完成规则构建、管理和执行等操作</li>
+  <li><code class="highlighter-rouge">KieContainer</code>: 就是一个<code class="highlighter-rouge">KieBase</code>的容器</li>
+  <li><code class="highlighter-rouge">KieBase</code>: 一个知识仓库, 包含了若干的规则、流程、方法等, 在<code class="highlighter-rouge">Drools</code>中主要就是规则和方法, <code class="highlighter-rouge">KieBase</code>不包含运行时的数据, 如果需要执行规则<code class="highlighter-rouge">KieBase</code>中的规则, 就需要根据<code class="highlighter-rouge">KieBase</code>创建<code class="highlighter-rouge">KieSession</code>. 一般创建<code class="highlighter-rouge">KieBase</code>成本较高, 只会创建一次</li>
+  <li><code class="highlighter-rouge">KieSession</code>: 一个跟<code class="highlighter-rouge">Drools</code>引擎交互的会话, 基于<code class="highlighter-rouge">KieBase</code>创建, 它会包含运行时数据(事实<code class="highlighter-rouge">Fact</code>). 我们通过<code class="highlighter-rouge">KieContainer</code>创建<code class="highlighter-rouge">KieSession</code>是一种较为方便的做法, 其实他本质上是从<code class="highlighter-rouge">KieBase</code>中创建出来的</li>
+  <li><code class="highlighter-rouge">KieRepository</code>: 一个单例对象, 它是一个存放<code class="highlighter-rouge">KieModule</code>的仓库, <code class="highlighter-rouge">KieModule</code>可以由<code class="highlighter-rouge">kmodule.xml</code>文件定义</li>
+  <li><code class="highlighter-rouge">KieProject</code>: <code class="highlighter-rouge">KieContainer</code>通过<code class="highlighter-rouge">KieProject</code>来创建<code class="highlighter-rouge">KieModule</code>, 并将<code class="highlighter-rouge">KieModule</code>放到<code class="highlighter-rouge">KieRepository</code>中, 然后<code class="highlighter-rouge">KieContainer</code>可以通过<code class="highlighter-rouge">KieProject</code>来查找<code class="highlighter-rouge">KieModule</code>定义的信息, 并根据这些信息构造<code class="highlighter-rouge">KieBase</code>和<code class="highlighter-rouge">KieSession</code></li>
+  <li><code class="highlighter-rouge">ClasspathKieProject</code>: 它实现了<code class="highlighter-rouge">KieProject</code>接口, 它提供了根据类路径中的<code class="highlighter-rouge">META-INF/kmodule.xml</code>文件构造<code class="highlighter-rouge">KieModule</code>的能力, 也就是我们能够基于Maven构造Drools组件的基本保障之一</li>
+</ul>
+
+<p>另外, KIE也提供了一种策略, 能够让应用程序在运行时, 动态监测<code class="highlighter-rouge">Maven</code>仓库中<code class="highlighter-rouge">Drools</code>项目<code class="highlighter-rouge">jar</code>组件的版本更新情况, 然后可以根据配置动态更新<code class="highlighter-rouge">Drools</code>发布包, 实现热插拔功能, 这个是通过<code class="highlighter-rouge">KieScanner API</code>实现的</p>
+
+<hr />
+
+<h2 id="kmodule">编码方式实现kmodule定义</h2>
+<p>前面的例子都是默认读取<code class="highlighter-rouge">classpath</code>下的<code class="highlighter-rouge">META-INF/kmodule.xml</code>文件的, 接下来我们通过<code class="highlighter-rouge">KieFileSystem</code>定义<code class="highlighter-rouge">KieModule</code>, 这样就不需要<code class="highlighter-rouge">META-INF/kmodule.xml</code>配置文件了.</p>
+
+<p>还是类似的例子, 目录结构将变为</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    src
+    |--com.test.drools
+    |  |--KieFileSystemTest.java
+    resources
+    |--rules
+    |  |--test.drl
+</code></pre>
+</div>
+
+<p>其中 <code class="highlighter-rouge">KKieFileSystemTest.java</code>内容为:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">KieFileSystemTest</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// 获取 drools 实现的 KieServices 实例</span>
+        <span class="n">KieServices</span> <span class="n">kieServices</span> <span class="o">=</span> <span class="n">KieServices</span><span class="o">.</span><span class="na">Factory</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+        <span class="c1">// 创建一个 KieFileSystem</span>
+        <span class="n">KieFileSystem</span> <span class="n">fileSystem</span> <span class="o">=</span> <span class="n">kieServices</span><span class="o">.</span><span class="na">newKieFileSystem</span><span class="o">();</span>
+        <span class="c1">// 创建一个 KieResources 对象</span>
+        <span class="n">KieResources</span> <span class="n">resources</span> <span class="o">=</span> <span class="n">kieServices</span><span class="o">.</span><span class="na">getResources</span><span class="o">();</span>
+        <span class="c1">// 1. 先创建 KieModuleModel, 类似于xml中的 kmodule 节点</span>
+        <span class="n">KieModuleModel</span> <span class="n">kieModuleModel</span> <span class="o">=</span> <span class="n">kieServices</span><span class="o">.</span><span class="na">newKieModuleModel</span><span class="o">();</span>
+        <span class="c1">// 2. 再创建 KieBaseModel, 类似于xml中的 kbase节点, name=kbase-rules, package=rules</span>
+        <span class="n">KieBaseModel</span> <span class="n">baseModel</span> <span class="o">=</span> <span class="n">kieModuleModel</span><span class="o">.</span><span class="na">newKieBaseModel</span><span class="o">(</span><span class="s">"kbase-rules"</span><span class="o">).</span><span class="na">addPackage</span><span class="o">(</span><span class="s">"rules"</span><span class="o">);</span>
+        <span class="c1">// 3. 再创建 KieSessionModel, 类似于xml中的 ksession 节点, name=ksession-rules</span>
+        <span class="n">baseModel</span><span class="o">.</span><span class="na">newKieSessionModel</span><span class="o">(</span><span class="s">"ksession-rules"</span><span class="o">);</span>
+        <span class="c1">// 4. 生产一个xml文件，就是kmodule.xml文件</span>
+        <span class="n">String</span> <span class="n">xml</span> <span class="o">=</span> <span class="n">kieModuleModel</span><span class="o">.</span><span class="na">toXML</span><span class="o">();</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">xml</span><span class="o">);</span> <span class="c1">// 打印出来看看内容</span>
+        <span class="c1">// 5. 将这个xml文件写入到KieFileSystem中</span>
+        <span class="n">fileSystem</span><span class="o">.</span><span class="na">writeKModuleXML</span><span class="o">(</span><span class="n">xml</span><span class="o">);</span>
+        <span class="c1">// 6. 然后将规则文件等写入到 KieFileSystem 中</span>
+        <span class="n">fileSystem</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="s">"src/main/resources/rules/test.drl"</span><span class="o">,</span> <span class="n">resources</span><span class="o">.</span><span class="na">newClassPathResource</span><span class="o">(</span><span class="s">"rules/test.drl"</span><span class="o">));</span><span class="c1">//6</span>
+        <span class="c1">// 7. 最后通过 KieBuilder 进行构建就将该 kmodule 加入到 KieRepository 中, 这样就将自定义的kmodule加入到引擎中了</span>
+        <span class="n">KieBuilder</span> <span class="n">kb</span> <span class="o">=</span> <span class="n">kieServices</span><span class="o">.</span><span class="na">newKieBuilder</span><span class="o">(</span><span class="n">fileSystem</span><span class="o">);</span>
+        <span class="n">kb</span><span class="o">.</span><span class="na">buildAll</span><span class="o">();</span>  <span class="c1">// 编译</span>
+        <span class="c1">// 下面就可以向原来一样使用了</span>
+        <span class="c1">// 得到 KieContainer</span>
+        <span class="n">KieContainer</span> <span class="n">kieContainer</span> <span class="o">=</span> <span class="n">kieServices</span><span class="o">.</span><span class="na">newKieContainer</span><span class="o">(</span><span class="n">kieServices</span><span class="o">.</span><span class="na">getRepository</span><span class="o">().</span><span class="na">getDefaultReleaseId</span><span class="o">());</span>
+        <span class="c1">// 通过 kContainer 获取 kmodule.xml 中定义的 ksession</span>
+        <span class="n">KieSession</span> <span class="n">kieSession</span> <span class="o">=</span> <span class="n">kieContainer</span><span class="o">.</span><span class="na">newKieSession</span><span class="o">(</span><span class="s">"ksession-rules"</span><span class="o">);</span>
+        <span class="c1">// 向 workingMemory 中加入一个对象</span>
+        <span class="n">kieSession</span><span class="o">.</span><span class="na">insert</span><span class="o">(</span><span class="s">"Tom"</span><span class="o">);</span>
+        <span class="c1">// 通知规则引擎执行规则</span>
+        <span class="n">kieSession</span><span class="o">.</span><span class="na">fireAllRules</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<hr />
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/Drools简单使用示例" data-title="Drools简单使用示例" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-08-14-Drools%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
+
+</body>
+
+</html>
