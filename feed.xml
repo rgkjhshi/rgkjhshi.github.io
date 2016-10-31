@@ -5,9 +5,267 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 28 Sep 2016 14:15:03 +0800</pubDate>
-    <lastBuildDate>Wed, 28 Sep 2016 14:15:03 +0800</lastBuildDate>
+    <pubDate>Mon, 31 Oct 2016 12:08:46 +0800</pubDate>
+    <lastBuildDate>Mon, 31 Oct 2016 12:08:46 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>使用Spring Boot构建应用</title>
+        <description>&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot&lt;/code&gt;于2014年4月发布1.0.0版本, 用于创建&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring 4.0&lt;/code&gt;项目, 简化了Spring中繁琐的配置, 提高了开发效率&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#spring-boot&quot;&gt;Spring Boot简介&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#cligroovy&quot;&gt;CLI和Groovy示例&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;快速创建一个应用&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;运行容器的方式&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;依赖管理&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-3&quot;&gt;目录结构及配置&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;spring-boot&quot;&gt;Spring Boot简介&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot&lt;/code&gt;致力于快速构建应用, 去掉了&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;的繁琐配置, 使创建Spring应用就像写一个&lt;code class=&quot;highlighter-rouge&quot;&gt;main&lt;/code&gt;函数一样方便.&lt;/li&gt;
+  &lt;li&gt;直接嵌入&lt;code class=&quot;highlighter-rouge&quot;&gt;Tomcat&lt;/code&gt;或&lt;code class=&quot;highlighter-rouge&quot;&gt;Jetty&lt;/code&gt;服务器, 不需要部署 WAR 文件, 可以直接&lt;code class=&quot;highlighter-rouge&quot;&gt;run&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;无&lt;code class=&quot;highlighter-rouge&quot;&gt;XML&lt;/code&gt;配置(也支持导入XML配置)&lt;/li&gt;
+  &lt;li&gt;构建&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring4&lt;/code&gt;应用, 最好使用高版本环境(&lt;code class=&quot;highlighter-rouge&quot;&gt;JDK8&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;Maven3.2+&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet3.0+&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;提供了maven插件, 可把应用及所需要的所有依赖包内嵌到一个jar包中&lt;/li&gt;
+  &lt;li&gt;提供了一个命令行工具&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot CLI&lt;/code&gt;(&lt;a href=&quot;http://docs.spring.io/spring-boot/docs/1.4.1.RELEASE/reference/htmlsingle/#getting-started-installing-spring-boot&quot;&gt;安装方法&lt;/a&gt;)&lt;/li&gt;
+  &lt;li&gt;支持&lt;code class=&quot;highlighter-rouge&quot;&gt;Groovy&lt;/code&gt;编程语言&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;cligroovy&quot;&gt;CLI和Groovy示例&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot CLI&lt;/code&gt;是一个命令行工具, 可以快速搭建Spring原型, 支持&lt;code class=&quot;highlighter-rouge&quot;&gt;Groovy&lt;/code&gt;脚本.&lt;br /&gt;
+我们通过&lt;code class=&quot;highlighter-rouge&quot;&gt;CLI&lt;/code&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;Groovy&lt;/code&gt;脚本创建一个最简单的&lt;code class=&quot;highlighter-rouge&quot;&gt;Web&lt;/code&gt;应用, 创建一个&lt;code class=&quot;highlighter-rouge&quot;&gt;app.groovy&lt;/code&gt;文件, 内容如下:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@RestController&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThisWillActuallyRun&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@RequestMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;home&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;Hello World!&quot;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;然后在shell中运行下面命令:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ spring run app.groovy
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;则已经运行了一个Spring web应用(首次运行需要下载依赖包, 比较慢), 访问&lt;code class=&quot;highlighter-rouge&quot;&gt;127.0.0.1:8080&lt;/code&gt;就会看到输出内容&lt;code class=&quot;highlighter-rouge&quot;&gt;Hello World!&lt;/code&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;快速创建一个应用&lt;/h2&gt;
+&lt;p&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;Maven&lt;/code&gt;创建一个&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot&lt;/code&gt;应用, &lt;code class=&quot;highlighter-rouge&quot;&gt;pom.xml&lt;/code&gt;内容如下:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;project&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://maven.apache.org/POM/4.0.0&quot;&lt;/span&gt;
+         &lt;span class=&quot;na&quot;&gt;xmlns:xsi=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&lt;/span&gt;
+         &lt;span class=&quot;na&quot;&gt;xsi:schemaLocation=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;modelVersion&amp;gt;&lt;/span&gt;4.0.0&lt;span class=&quot;nt&quot;&gt;&amp;lt;/modelVersion&amp;gt;&lt;/span&gt;
+
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;com.example.project&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring_boot&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;1.0&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 继承spring-boot-starter-parent是最快的方式, 后面有不继承该怎么写 --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;parent&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.boot&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-boot-starter-parent&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;1.4.1.RELEASE&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/parent&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 这一个依赖就够了 --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependencies&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.boot&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-boot-starter-web&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependencies&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/project&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;可以通过&lt;code class=&quot;highlighter-rouge&quot;&gt;mvn dependency:tree&lt;/code&gt;来看看都用到了哪些jar包  &lt;/p&gt;
+
+&lt;p&gt;从&lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/java/&lt;/code&gt;目录下创建一个类&lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/java/Example.java&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@RestController&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@EnableAutoConfiguration&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Example&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@RequestMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;home&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Hello World!&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;SpringApplication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Example&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;到此整个应用就创建完毕, 可以直接运行&lt;code class=&quot;highlighter-rouge&quot;&gt;main&lt;/code&gt;方法启动容器, 访问&lt;code class=&quot;highlighter-rouge&quot;&gt;127.0.0.1:8080&lt;/code&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;运行容器的方式&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;像上面那样直接运行&lt;code class=&quot;highlighter-rouge&quot;&gt;main&lt;/code&gt;方法&lt;/li&gt;
+  &lt;li&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;mvn spring-boot:run&lt;/code&gt;命令运行&lt;/li&gt;
+  &lt;li&gt;创建可执行&lt;code class=&quot;highlighter-rouge&quot;&gt;jar&lt;/code&gt;包运行&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;通过插件&lt;code class=&quot;highlighter-rouge&quot;&gt;spring-boot-maven-plugin&lt;/code&gt;可将应用及依赖打成&lt;code class=&quot;highlighter-rouge&quot;&gt;jar&lt;/code&gt;包, 如果没有继承&lt;code class=&quot;highlighter-rouge&quot;&gt;spring-boot-starter-parent&lt;/code&gt;则需要主动添加一下这个插件, 并且parent中的&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;executions&amp;gt;&lt;/code&gt;需要自己进行配置&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;build&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;plugins&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;plugin&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.boot&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-boot-maven-plugin&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+                &lt;span class=&quot;nt&quot;&gt;&amp;lt;executions&amp;gt;&lt;/span&gt;
+                    &lt;span class=&quot;nt&quot;&gt;&amp;lt;execution&amp;gt;&lt;/span&gt;
+                        &lt;span class=&quot;nt&quot;&gt;&amp;lt;goals&amp;gt;&lt;/span&gt;
+                            &lt;span class=&quot;nt&quot;&gt;&amp;lt;goal&amp;gt;&lt;/span&gt;repackage&lt;span class=&quot;nt&quot;&gt;&amp;lt;/goal&amp;gt;&lt;/span&gt;
+                        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/goals&amp;gt;&lt;/span&gt;
+                    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/execution&amp;gt;&lt;/span&gt;
+                &lt;span class=&quot;nt&quot;&gt;&amp;lt;/executions&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/plugin&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/plugins&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/build&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;通过命令&lt;code class=&quot;highlighter-rouge&quot;&gt;mvn package&lt;/code&gt;打包, 将会得到&lt;code class=&quot;highlighter-rouge&quot;&gt;target/spring_boot-1.0.jar&lt;/code&gt;文件, 可通过命令&lt;code class=&quot;highlighter-rouge&quot;&gt;jar tvf target/myproject-1.0.jar&lt;/code&gt;查看该jar包的结构. 除此之外, 还有个文件&lt;code class=&quot;highlighter-rouge&quot;&gt;target/spring_boot-1.0.jar.original&lt;/code&gt;, 这是&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot&lt;/code&gt;重新打包之前, &lt;code class=&quot;highlighter-rouge&quot;&gt;Maven&lt;/code&gt;创建的原始jar文件&lt;/p&gt;
+
+&lt;p&gt;使用命令&lt;code class=&quot;highlighter-rouge&quot;&gt;java -jar target/spring_boot-1.0.jar&lt;/code&gt;即可运行&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;依赖管理&lt;/h2&gt;
+&lt;p&gt;上面都是以继承&lt;code class=&quot;highlighter-rouge&quot;&gt;spring-boot-starter-parent&lt;/code&gt;的形式进行一来管理, 这个&lt;code class=&quot;highlighter-rouge&quot;&gt;parent&lt;/code&gt;里有如下内容:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;指定了Java的版本, 和编码(不继承parent可自己指定)&lt;/li&gt;
+  &lt;li&gt;
+    &lt;resource.delimiter&gt;配置, 除了接受原有的Spring形式的`${…​}`, 还支持了Maven的`@..@`形式(不继承parent可自己指定)
+&lt;/resource.delimiter&gt;
+  &lt;/li&gt;
+  &lt;li&gt;包依赖管理, 继承自&lt;code class=&quot;highlighter-rouge&quot;&gt;spring-boot-dependencies&lt;/code&gt;(不继承parent的形式就是引入这个pom)&lt;/li&gt;
+  &lt;li&gt;插件配置(不继承parent需要自己配置)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;因此, 如果不继承&lt;code class=&quot;highlighter-rouge&quot;&gt;spring-boot-starter-parent&lt;/code&gt;, 我们的pom文件可以这么写:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;nt&quot;&gt;&amp;lt;properties&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;java.version&amp;gt;&lt;/span&gt;1.8&lt;span class=&quot;nt&quot;&gt;&amp;lt;/java.version&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;resource.delimiter&amp;gt;&lt;/span&gt;@&lt;span class=&quot;nt&quot;&gt;&amp;lt;/resource.delimiter&amp;gt;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- delimiter that doesn&#39;t clash with Spring ${} placeholders --&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;project.build.sourceEncoding&amp;gt;&lt;/span&gt;UTF-8&lt;span class=&quot;nt&quot;&gt;&amp;lt;/project.build.sourceEncoding&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;project.reporting.outputEncoding&amp;gt;&lt;/span&gt;UTF-8&lt;span class=&quot;nt&quot;&gt;&amp;lt;/project.reporting.outputEncoding&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;maven.compiler.source&amp;gt;&lt;/span&gt;${java.version}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/maven.compiler.source&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;maven.compiler.target&amp;gt;&lt;/span&gt;${java.version}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/maven.compiler.target&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;tomcat.version&amp;gt;&lt;/span&gt;7.0.57&lt;span class=&quot;nt&quot;&gt;&amp;lt;/tomcat.version&amp;gt;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 配置你的tomcat版本 --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/properties&amp;gt;&lt;/span&gt;
+
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependencyManagement&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependencies&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+                &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.boot&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+                &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-boot-dependencies&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+                &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;1.4.1.RELEASE&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+                &lt;span class=&quot;nt&quot;&gt;&amp;lt;type&amp;gt;&lt;/span&gt;pom&lt;span class=&quot;nt&quot;&gt;&amp;lt;/type&amp;gt;&lt;/span&gt;
+                &lt;span class=&quot;nt&quot;&gt;&amp;lt;scope&amp;gt;&lt;/span&gt;import&lt;span class=&quot;nt&quot;&gt;&amp;lt;/scope&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependencies&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependencyManagement&amp;gt;&lt;/span&gt;
+
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependencies&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.boot&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-boot-starter-web&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependencies&amp;gt;&lt;/span&gt;
+
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;build&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;plugins&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 如果是通过parent方式继承spring-boot-starter-parent则不用配置此插件 --&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;plugin&amp;gt;&lt;/span&gt;
+                &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.boot&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+                &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-boot-maven-plugin&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+                &lt;span class=&quot;nt&quot;&gt;&amp;lt;executions&amp;gt;&lt;/span&gt;
+                    &lt;span class=&quot;nt&quot;&gt;&amp;lt;execution&amp;gt;&lt;/span&gt;
+                        &lt;span class=&quot;nt&quot;&gt;&amp;lt;goals&amp;gt;&lt;/span&gt;
+                            &lt;span class=&quot;nt&quot;&gt;&amp;lt;goal&amp;gt;&lt;/span&gt;repackage&lt;span class=&quot;nt&quot;&gt;&amp;lt;/goal&amp;gt;&lt;/span&gt;
+                        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/goals&amp;gt;&lt;/span&gt;
+                    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/execution&amp;gt;&lt;/span&gt;
+                &lt;span class=&quot;nt&quot;&gt;&amp;lt;/executions&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;/plugin&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/plugins&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/build&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section-3&quot;&gt;目录结构及配置&lt;/h2&gt;
+&lt;p&gt;官方建议项目有一个标准的目录结构, 就像其他Spring项目一样, 包名采用一个反转的域名, 结构类似于下面这样:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;com.example.myproject
+         +- Application.java
+         |
+         +- service
+         |   +- CustomerService.java
+         |
+         +- controller
+             +- CustomerController.java
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;其中&lt;code class=&quot;highlighter-rouge&quot;&gt;Application.java&lt;/code&gt;的内容如下:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Configuration&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@EnableAutoConfiguration&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@ComponentScan&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Application&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;SpringApplication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Application&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;该项目中&lt;code class=&quot;highlighter-rouge&quot;&gt;Application.java&lt;/code&gt;为main类, 将main类放到其他类所在包的顶层(&lt;code class=&quot;highlighter-rouge&quot;&gt;root package&lt;/code&gt;), 并将&lt;code class=&quot;highlighter-rouge&quot;&gt;@EnableAutoConfiguration&lt;/code&gt;注解加main类上, 这样就隐式地定义了一个基础包扫描路径, 所以采用&lt;code class=&quot;highlighter-rouge&quot;&gt;root package&lt;/code&gt;时, &lt;code class=&quot;highlighter-rouge&quot;&gt;@ComponentScan&lt;/code&gt;注解就不需要添加&lt;code class=&quot;highlighter-rouge&quot;&gt;basePackage&lt;/code&gt;属性了&lt;/p&gt;
+
+&lt;p&gt;解释下这几个注解的意思:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@Configuration&lt;/code&gt;: 表示一个配置类, 类似于原来的一个&lt;code class=&quot;highlighter-rouge&quot;&gt;xml&lt;/code&gt;文件&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@EnableAutoConfiguration&lt;/code&gt;: Spring Boot的自动配置会根据所添加的jar包依赖自动配置Spring应用, 通常项目中只有一个&lt;code class=&quot;highlighter-rouge&quot;&gt;@EnableAutoConfiguration&lt;/code&gt;注解, 并建议将它加到主配置类(&lt;code class=&quot;highlighter-rouge&quot;&gt;primary @Configuration&lt;/code&gt;)上&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@ComponentScan&lt;/code&gt;: 包扫描路径, 采用&lt;code class=&quot;highlighter-rouge&quot;&gt;root package&lt;/code&gt;形式会自动收集&lt;code class=&quot;highlighter-rouge&quot;&gt;root package&lt;/code&gt;包下所有组件, 包括配置类(&lt;code class=&quot;highlighter-rouge&quot;&gt;@Configuration&lt;/code&gt;类)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;由于平时配置&lt;code class=&quot;highlighter-rouge&quot;&gt;main类&lt;/code&gt;时, 频繁的一起使用&lt;code class=&quot;highlighter-rouge&quot;&gt;@Configuration、@EnableAutoConfiguration、@ComponentScan&lt;/code&gt;这三个注解, 因此Spring Boot提供了一个简单的注解&lt;code class=&quot;highlighter-rouge&quot;&gt;SpringBootApplication&lt;/code&gt;来代替这三个注解, 其效果与这三个注解一起使用的效果完全一样&lt;/p&gt;
+
+&lt;p&gt;另外, 还有几个有用的用法:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@Import&lt;/code&gt;: 导入其他配置类&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@ImportResource&lt;/code&gt;: 引入&lt;code class=&quot;highlighter-rouge&quot;&gt;XML&lt;/code&gt;形式的配置&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@EnableAutoConfiguration(exclude={XXXConfiguration.class})&lt;/code&gt;排除某些配置, 若配置类不在&lt;code class=&quot;highlighter-rouge&quot;&gt;classpath&lt;/code&gt;中, 可以使用&lt;code class=&quot;highlighter-rouge&quot;&gt;excludeName&lt;/code&gt;属性指定全限定名&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+</description>
+        <pubDate>Sun, 30 Oct 2016 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-10-30-%E4%BD%BF%E7%94%A8Spring-Boot%E6%9E%84%E5%BB%BA%E5%BA%94%E7%94%A8.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-10-30-%E4%BD%BF%E7%94%A8Spring-Boot%E6%9E%84%E5%BB%BA%E5%BA%94%E7%94%A8.html</guid>
+        
+        <category>Spring</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
     
       <item>
         <title>动态代理</title>
@@ -1869,74 +2127,6 @@ ubuntu              latest              sha256:ba1688fec34f66d8a7ff5b42e6971625d
         <pubDate>Sat, 25 Jun 2016 00:00:00 +0800</pubDate>
         <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-06-25-Java%E4%B8%AD%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E9%98%BB%E5%A1%9E%E9%9D%9E%E9%98%BB%E5%A1%9E.html</link>
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-06-25-Java%E4%B8%AD%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E9%98%BB%E5%A1%9E%E9%9D%9E%E9%98%BB%E5%A1%9E.html</guid>
-        
-        <category>Java</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>Java线程状态</title>
-        <description>&lt;p&gt;java线程状态详解&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;进程三态模型&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#java&quot;&gt;Java线程状态&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;线程状态解释&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;状态转换图&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;进程三态模型&lt;/h2&gt;
-
-&lt;p&gt;操作系统中有比较经典的进程三态模型, 各状态之间的转换关系如下图:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/static/images/system_thread.png&quot; alt=&quot;进程三态模型&quot; title=&quot;进程三态模型&quot; /&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;java&quot;&gt;Java线程状态&lt;/h2&gt;
-
-&lt;p&gt;类&lt;code class=&quot;highlighter-rouge&quot;&gt;java.long.Thread&lt;/code&gt;中有个内部的枚举类&lt;code class=&quot;highlighter-rouge&quot;&gt;State&lt;/code&gt;用来表示线程的状态, 它的定义如下:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;enum&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;State&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;NEW&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;      &lt;span class=&quot;c1&quot;&gt;// 刚创建, 还没启动&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;RUNNABLE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 可运行状态&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;BLOCKED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 阻塞态, 或被挂起&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;WAITING&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 等待锁的状态&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;TIMED_WAITING&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 等待时间的状态, 如sleep就在等待时间&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;TERMINATED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 终止态&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;section-1&quot;&gt;线程状态解释&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;NEW&lt;/code&gt;: 线程还没被&lt;code class=&quot;highlighter-rouge&quot;&gt;start()&lt;/code&gt;启动. 调用了&lt;code class=&quot;highlighter-rouge&quot;&gt;start()&lt;/code&gt;状态也不一定会立即改变, 中间还有一些步骤.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;RUNNABLE&lt;/code&gt;: &lt;code class=&quot;highlighter-rouge&quot;&gt;NEW&lt;/code&gt;状态的线程&lt;code class=&quot;highlighter-rouge&quot;&gt;start()&lt;/code&gt;结束后会进入&lt;code class=&quot;highlighter-rouge&quot;&gt;RUNNABLE&lt;/code&gt;状态. 正在运行的线程一定处于&lt;code class=&quot;highlighter-rouge&quot;&gt;RUNNABLE&lt;/code&gt;状态, 使用&lt;code class=&quot;highlighter-rouge&quot;&gt;Thread.currentThread().getState()&lt;/code&gt;只会得到&lt;code class=&quot;highlighter-rouge&quot;&gt;RUNNABLE&lt;/code&gt;. 处于&lt;code class=&quot;highlighter-rouge&quot;&gt;RUNNABLE&lt;/code&gt;状态的线程并不一定在&lt;code class=&quot;highlighter-rouge&quot;&gt;运行&lt;/code&gt;. 比如当线程发生了&lt;code class=&quot;highlighter-rouge&quot;&gt;yield()&lt;/code&gt;操作时, 该线程仍然是&lt;code class=&quot;highlighter-rouge&quot;&gt;RUNNABLE&lt;/code&gt;状态, 要是对应到操作系统中的三态模型就该算是&lt;code class=&quot;highlighter-rouge&quot;&gt;就绪&lt;/code&gt;了; 再比如, 在BIO中, 线程正在网络等待时, 现成的状态仍然时&lt;code class=&quot;highlighter-rouge&quot;&gt;RUNNABLE&lt;/code&gt;, 而在底层实际上已经被阻塞了.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;BLOCKED&lt;/code&gt;: 阻塞态, 原因通常是在等待某个&lt;code class=&quot;highlighter-rouge&quot;&gt;锁&lt;/code&gt;, 当某个&lt;code class=&quot;highlighter-rouge&quot;&gt;synchronized&lt;/code&gt;正好有线程正在使用, 另一个线程尝试进入该&lt;code class=&quot;highlighter-rouge&quot;&gt;临界区&lt;/code&gt;的时候就会被阻塞. 得到锁(比如另一个线程走完了临界区或发生了相应锁对象的&lt;code class=&quot;highlighter-rouge&quot;&gt;wait()&lt;/code&gt;操作)之后状态会由&lt;code class=&quot;highlighter-rouge&quot;&gt;BLOCKED&lt;/code&gt;恢复到&lt;code class=&quot;highlighter-rouge&quot;&gt;RUNNABLE&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;WAITING&lt;/code&gt;: 这种状态通常是调用某个&lt;code class=&quot;highlighter-rouge&quot;&gt;锁对象&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;wait()&lt;/code&gt;方法的结果, 类似的有&lt;code class=&quot;highlighter-rouge&quot;&gt;Thread.join()&lt;/code&gt;. 跟&lt;code class=&quot;highlighter-rouge&quot;&gt;BLOCKED&lt;/code&gt;不同, &lt;code class=&quot;highlighter-rouge&quot;&gt;BLOCKED&lt;/code&gt;是表示不能进入临界区, 所以在等待; &lt;code class=&quot;highlighter-rouge&quot;&gt;WAITING&lt;/code&gt;是已经进入了临界区, 或者可理解为已经在运行了, 然后发现缺少某些资源(锁对象), 放弃运行权, 等待资源准备好. 对某个锁对象&lt;code class=&quot;highlighter-rouge&quot;&gt;notify()&lt;/code&gt;时, 将从等待池中唤醒一个&lt;code class=&quot;highlighter-rouge&quot;&gt;WAITING&lt;/code&gt;状态的线程恢复到&lt;code class=&quot;highlighter-rouge&quot;&gt;RUNNABLE&lt;/code&gt;状态&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;TIMED_WAITING&lt;/code&gt;: 跟&lt;code class=&quot;highlighter-rouge&quot;&gt;WAITING&lt;/code&gt;不一样的地方是, &lt;code class=&quot;highlighter-rouge&quot;&gt;WAITING&lt;/code&gt;等待锁对象,它等待的是时间, 比如使用&lt;code class=&quot;highlighter-rouge&quot;&gt;Thread.sleep()&lt;/code&gt;相当于把时间资源作为所对象. 时间到达时触发线程回到工作状态.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;TERMINATED&lt;/code&gt;: 线程结束了,&lt;code class=&quot;highlighter-rouge&quot;&gt;run()&lt;/code&gt;方法跑完了. 这是Java的一种状态,在操作系统内部可能线程已经注销了.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;section-2&quot;&gt;状态转换图&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&quot;/static/images/java_thread.png&quot; alt=&quot;进程三态模型&quot; title=&quot;进程三态模型&quot; /&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-</description>
-        <pubDate>Mon, 20 Jun 2016 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-06-20-Java%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-06-20-Java%E7%BA%BF%E7%A8%8B%E7%8A%B6%E6%80%81.html</guid>
         
         <category>Java</category>
         
