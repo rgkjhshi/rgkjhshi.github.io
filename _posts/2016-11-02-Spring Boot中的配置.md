@@ -1,7 +1,7 @@
 ---
 layout: blog
 title:  Spring Boot中的配置
-date:   2016-10-31
+date:   2016-11-02
 category: 编程技术
 tag: Spring
 ---
