@@ -1,6 +1,6 @@
 ---
 layout: blog
-title:  使用Spring Boot构建应用
+title:  使用Spring Boot快速构建应用
 date:   2016-10-30
 category: 编程技术
 tag: Spring
