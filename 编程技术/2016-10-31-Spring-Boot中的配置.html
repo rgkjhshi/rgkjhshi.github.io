@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="Spring Boot中的配置, 编程技术, Spring, 逆水行舟" />
+    <meta name="description" content="Spring Boot中的配置, 编程技术, Spring, 这里所说的配置是指properties文件这样的配置" />
+
+    <title>逆水行舟</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-10-31-Spring-Boot%E4%B8%AD%E7%9A%84%E9%85%8D%E7%BD%AE.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="/static/js/jquery.qrcode.min.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="/static/js/uikit.min.js"></script>
+    <!-- quietflow -->
+    <!-- <script type="text/javascript" src="http://loveshisong.cn/static/js/quietflow.min.js"></script> -->
+    <!-- UK sticky -->
+    <script type="text/javascript" src="/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "shisong"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" data-uk-sticky>
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <script type="text/javascript">
+jQuery(function(){
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-10-31-Spring-Boot%E4%B8%AD%E7%9A%84%E9%85%8D%E7%BD%AE.html"
+    });
+})
+</script>
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>Spring Boot中的配置</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <p>这里所说的配置是指<code class="highlighter-rouge">properties</code>文件这样的配置</p>
+
+<hr />
+
+<ul id="markdown-toc">
+  <li><a href="#section">配置的方式及优先级</a>    <ul>
+      <li><a href="#section-1">优先级举例</a></li>
+      <li><a href="#section-2">命令行参数</a></li>
+      <li><a href="#springapplicationjson">SPRING_APPLICATION_JSON</a></li>
+    </ul>
+  </li>
+  <li><a href="#applicationproperties">配置文件:<code class="highlighter-rouge">application.properties</code></a>    <ul>
+      <li><a href="#section-3">随机变量</a></li>
+      <li><a href="#section-4">变量引用</a></li>
+    </ul>
+  </li>
+  <li><a href="#section-5">多环境配置</a></li>
+  <li><a href="#section-6">自定义配置</a>    <ul>
+      <li><a href="#section-7">传统的配置加载方式</a></li>
+      <li><a href="#section-8">类型安全的配置加载方式</a></li>
+      <li><a href="#configurationproperties"><code class="highlighter-rouge">@ConfigurationProperties</code>的优缺点</a></li>
+    </ul>
+  </li>
+  <li><a href="#yaml">使用YAML配置</a>    <ul>
+      <li><a href="#applicationyml">加载<code class="highlighter-rouge">application.yml</code></a></li>
+      <li><a href="#yaml-1">加载自定义<code class="highlighter-rouge">YAML</code>配置</a></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="section">配置的方式及优先级</h2>
+<p><code class="highlighter-rouge">Spring Boot</code>允许通过<code class="highlighter-rouge">properties</code>文件, <code class="highlighter-rouge">YAML</code>文件, <code class="highlighter-rouge">Environment</code>变量, 命令行参数等进行配置. 属性值可以通过<code class="highlighter-rouge">@Value</code>注入到bean中并通过Spring的<code class="highlighter-rouge">Environment</code>访问, 或通过<code class="highlighter-rouge">@ConfigurationProperties</code>直接绑定到对象上.</p>
+
+<p><code class="highlighter-rouge">Spring Boot</code>所提供的配置优先级从高到低如下所示:</p>
+
+<ol>
+  <li>Spring的<code class="highlighter-rouge">devtools</code>的全局配置(<code class="highlighter-rouge">~/.spring-boot-devtools.properties</code>文件)(当使用了<code class="highlighter-rouge">devtools</code>时)</li>
+  <li>Test类上通过<code class="highlighter-rouge">@TestPropertySource</code>声明的属性文件</li>
+  <li>Test类上通过<code class="highlighter-rouge">@SpringBootTest#properties</code>声明的属性</li>
+  <li>命令行参数</li>
+  <li><code class="highlighter-rouge">SPRING_APPLICATION_JSON</code>属性, 环境变量或系统属性中的JSON</li>
+  <li><code class="highlighter-rouge">ServletConfig</code>初始化参数</li>
+  <li><code class="highlighter-rouge">ServletContext</code>初始化参数</li>
+  <li>来自于<code class="highlighter-rouge">java:comp/env</code>的JNDI属性</li>
+  <li>Java系统属性(<code class="highlighter-rouge">System.getProperties()</code>)</li>
+  <li>操作系统环境变量</li>
+  <li>通过<code class="highlighter-rouge">RandomValuePropertySource</code>生成的<code class="highlighter-rouge">random.*</code>属性</li>
+  <li>jar包外的<code class="highlighter-rouge">profile</code>配置文件(<code class="highlighter-rouge">application-{profile}.properties</code>和<code class="highlighter-rouge">YAML</code>配置)</li>
+  <li>jar包内的<code class="highlighter-rouge">profile</code>配置文件(<code class="highlighter-rouge">application-{profile}.properties</code>和<code class="highlighter-rouge">YAML</code>配置)</li>
+  <li>jar包外的应用程序配置文件(<code class="highlighter-rouge">application.properties</code>和<code class="highlighter-rouge">YAML</code>配置)</li>
+  <li>jar包内的应用程序配置文件(<code class="highlighter-rouge">application.properties</code>和<code class="highlighter-rouge">YAML</code>配置)</li>
+  <li>配置类(<code class="highlighter-rouge">@Configuration</code>类)上的通过<code class="highlighter-rouge">@PropertySource</code>注解声明的属性文件</li>
+  <li>通过<code class="highlighter-rouge">SpringApplication.setDefaultProperties</code>声明的默认属性</li>
+</ol>
+
+<h3 id="section-1">优先级举例</h3>
+<p>在<code class="highlighter-rouge">classpath:application.properties</code>文件里有个<code class="highlighter-rouge">name</code>变量(假设将它打成了jar包), 当在一个新的环境中运行时,
+可以通过在jar包外(即新环境的的<code class="highlighter-rouge">classpath</code>下)提供一个<code class="highlighter-rouge">application.properties</code>文件, 重新设置<code class="highlighter-rouge">name</code>变量的值.
+甚至在测试的时候,可以通过优先级更高的命令行参数指定<code class="highlighter-rouge">name</code>的值(<code class="highlighter-rouge">java -jar app.jar --name="Spring"</code>)</p>
+
+<h3 id="section-2">命令行参数</h3>
+<p><code class="highlighter-rouge">SpringApplication</code>会把所有的命令行参数(以<code class="highlighter-rouge">--</code>开头, 如<code class="highlighter-rouge">--server.port=9000</code>)转化为属性加载到Spring的<code class="highlighter-rouge">Environment</code>中, 命令行参数的优先级高于配置文件</p>
+
+<p>如果不想让命令行参数添加到<code class="highlighter-rouge">Environment</code>中, 可通过<code class="highlighter-rouge">SpringApplication.setAddCommandLineProperties(false)</code>设置</p>
+
+<h3 id="springapplicationjson">SPRING_APPLICATION_JSON</h3>
+<p>上面第5条中说的<code class="highlighter-rouge">SPRING_APPLICATION_JSON</code>属性, 可以在命令行中指定</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ SPRING_APPLICATION_JSON='{"foo":{"bar":"spam"}}' java -jar myapp.jar  // 环境变量形式
+</code></pre>
+</div>
+<p>这样就相当于在Spring的<code class="highlighter-rouge">Environment</code>中添加了<code class="highlighter-rouge">foo.bar=spam</code>.<br />
+也可以像下面这些方式提供:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ java -Dspring.application.json='{"foo":"bar"}' -jar myapp.jar   // 系统变量
+$ java -jar myapp.jar --spring.application.json='{"foo":"bar"}'   // 命令行参数
+</code></pre>
+</div>
+<p>或以JNDI变量<code class="highlighter-rouge">java:comp/env/spring.application.json</code>提供</p>
+
+<p>其实上面介绍的这几条优先级比较高的配置, 实际并不太常用. 命令行在测试的时候用的还算比较多</p>
+
+<hr />
+
+<h2 id="applicationproperties">配置文件:<code class="highlighter-rouge">application.properties</code></h2>
+<p><code class="highlighter-rouge">SpringApplication</code>默认会加载配置文件<code class="highlighter-rouge">application.properties</code>中的配置并加到Spring <code class="highlighter-rouge">Environment</code>中, 该文件的加载有个优先级: <code class="highlighter-rouge">classpath:/config/application.properties</code> &gt; <code class="highlighter-rouge">classpath:/application.properties</code>即在<code class="highlighter-rouge">classpath:/config/</code>下的配置文件优先级比较高. 也可以使用YAML文件(<code class="highlighter-rouge">application.yml</code>)来替代properties文件.</p>
+
+<p><code class="highlighter-rouge">application.properties</code>文件中默认有很多属性, 比如<code class="highlighter-rouge">server.port=8080</code>等; 你可以覆盖这些默认配置, 当然也可以把自己的配置放到这个默认加载的配置文件里.</p>
+
+<p>配置文件的名字和位置, 也可自定义, 可通过<code class="highlighter-rouge">spring.config.name</code>和<code class="highlighter-rouge">spring.config.location</code>环境属性来指定, 这两个属性使用的时期非常早, 所以一般会在命令行或者系统属性或环境变量中来指定, 如:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ java -jar myproject.jar --spring.config.name=myproject
+$ java -jar myproject.jar --spring.config.location=classpath:/default.properties,classpath:/override.properties
+</code></pre>
+</div>
+<p>若<code class="highlighter-rouge">spring.config.location</code>指定的是一个目录, 则应该以<code class="highlighter-rouge">/</code>结尾, 并且使用该目录下<code class="highlighter-rouge">spring.config.name</code>指定的配置文件</p>
+
+<h3 id="section-3">随机变量</h3>
+<p><code class="highlighter-rouge">RandomValuePropertySource</code>可以注入一些随机变量, 可产生<code class="highlighter-rouge">integer, long, string, uuid</code>等类型的随机值, 例如</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>my.secret=${random.value}
+my.number=${random.int}
+my.bignumber=${random.long}
+my.uuid=${random.uuid}
+my.number.less.than.ten=${random.int(10)}
+my.number.in.range=${random.int[1024,65536]}
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">random.int*</code>的语法为<code class="highlighter-rouge">OPEN value (,max) CLOSE</code>, <code class="highlighter-rouge">OPEN,CLOSE</code>是字符, <code class="highlighter-rouge">value,max</code>是整数. 如果有<code class="highlighter-rouge">max</code>则最小值是<code class="highlighter-rouge">value</code>最大值是<code class="highlighter-rouge">max</code>(不包括max).</p>
+
+<h3 id="section-4">变量引用</h3>
+<p><code class="highlighter-rouge">application.properties</code>中定义的变量已经被<code class="highlighter-rouge">Environment</code>过滤, 所以可以引用前面定义过的变量, 比如:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>app.name=MyApp
+app.description=${app.name} is a Spring Boot application
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="section-5">多环境配置</h2>
+<ul>
+  <li>从配置的优先级的第12~15条可以看出, <code class="highlighter-rouge">application-{profile}.properties</code>的优先级要高于<code class="highlighter-rouge">application.properties</code>.</li>
+  <li>这个<code class="highlighter-rouge">profile</code>就用于区分是<code class="highlighter-rouge">dev</code>环境还是<code class="highlighter-rouge">beta</code>环境还是<code class="highlighter-rouge">prod</code>环境. 如果没有被指定, 默认会使用<code class="highlighter-rouge">application-default.properties</code>配置.</li>
+  <li>至于到底启用哪个<code class="highlighter-rouge">profile</code>, 可以在<code class="highlighter-rouge">application.properties</code>中通过属性<code class="highlighter-rouge">spring.profiles.active=profile</code>来指定, 在<code class="highlighter-rouge">profile</code>配置文件中指定该属性不起作用.</li>
+</ul>
+
+<p>举个例子, <code class="highlighter-rouge">application.properties</code>中有个默认属性<code class="highlighter-rouge">server.port=8080</code>用于指定服务的端口. 假设有下面的文件, 文件内容如下:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// application.properties</span>
+<span class="n">server</span><span class="o">.</span><span class="na">port</span><span class="o">=</span><span class="mi">8080</span>
+<span class="n">spring</span><span class="o">.</span><span class="na">profiles</span><span class="o">.</span><span class="na">active</span><span class="o">=</span><span class="n">dev</span>
+<span class="c1">// application-default.properties</span>
+<span class="n">server</span><span class="o">.</span><span class="na">port</span><span class="o">=</span><span class="mi">8081</span>
+<span class="c1">// application-dev.properties</span>
+<span class="n">server</span><span class="o">.</span><span class="na">port</span><span class="o">=</span><span class="mi">8082</span>
+<span class="c1">// application-prod.properties</span>
+<span class="n">server</span><span class="o">.</span><span class="na">port</span><span class="o">=</span><span class="mi">8083</span>
+</code></pre>
+</div>
+
+<p>假设<code class="highlighter-rouge">application.properties</code>中不指定<code class="highlighter-rouge">spring.profiles.active</code>属性, 则<code class="highlighter-rouge">application-default.properties</code>中的8081端口生效, 若指定<code class="highlighter-rouge">spring.profiles.active=prod</code>, 则8083端口生效. 访问8080端口都会找不到服务</p>
+
+<hr />
+
+<h2 id="section-6">自定义配置</h2>
+<p><code class="highlighter-rouge">Spring Boot</code>默认加载<code class="highlighter-rouge">application.properties</code>中的配置, 这个文件中的默认属性相当多…<br />
+如果我们要加载自己的配置, 比如下面的数据库配置:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>db.driver=MySQL
+db.username=username
+db.password=123456
+db.tables[0]=table1
+db.tables[1]=table2
+</code></pre>
+</div>
+<p>可以把这些属性直接放到<code class="highlighter-rouge">application.properties</code>中, 但极力不推荐这样.</p>
+
+<h3 id="section-7">传统的配置加载方式</h3>
+<p>我们一般都是定义自己的配置文件, 比如把这些属性放到<code class="highlighter-rouge">db.properties</code>文件. 然后通过<code class="highlighter-rouge">@PropertySource</code>加载配置文件, 然后通过<code class="highlighter-rouge">@Value("${key:defaultVlaue}")</code>的形式进行配置, 如下:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Component</span>
+<span class="nd">@PropertySource</span><span class="o">(</span><span class="s">"db.properties"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DBConfig</span> <span class="o">{</span>
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${db.driver}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">driver</span><span class="o">;</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${db.username}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">username</span><span class="o">;</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${db.password}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">password</span><span class="o">;</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${db.tables[0]}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">table1</span><span class="o">;</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${db.tables[1]}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">table2</span><span class="o">;</span>
+
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<h3 id="section-8">类型安全的配置加载方式</h3>
+<p>上面这种方式在<code class="highlighter-rouge">Spring Framework</code>普遍使用, 但是 <code class="highlighter-rouge">Spring Boot</code>提供了更高级的使用配置的方式,类似于<code class="highlighter-rouge">Spring</code>中的<code class="highlighter-rouge">DataBinder</code>工具. 还是<code class="highlighter-rouge">db.properties</code>文件, 我们可以这样进行数据绑定:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="nd">@Data</span>
+<span class="nd">@Component</span>
+<span class="nd">@ConfigurationProperties</span><span class="o">(</span><span class="n">prefix</span><span class="o">=</span><span class="s">"db"</span><span class="o">,</span> <span class="n">locations</span> <span class="o">=</span> <span class="s">"classpath:db.properties"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DBConfig</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">driver</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">username</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">password</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">tables</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+<p>最上面的<code class="highlighter-rouge">@Data</code>是<code class="highlighter-rouge">Lombok</code>包中用于生成<code class="highlighter-rouge">getter, setter</code>等的注解, pom依赖为:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.projectlombok<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>lombok<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.16.10<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre>
+</div>
+<p>不用这个包也可以, 那就需要自己写 <code class="highlighter-rouge">getter</code>和<code class="highlighter-rouge">setter</code>方法了</p>
+
+<p>另外注意此时该类上是加了<code class="highlighter-rouge">@Component</code>注解的, 这样才会被当作Spring的Bean.</p>
+
+<p>其实不在<code class="highlighter-rouge">DBConfig</code>上加<code class="highlighter-rouge">@Component</code>注解也有办法, 通常<code class="highlighter-rouge">@ConfigurationProperties</code>是和<code class="highlighter-rouge">@EnableConfigurationProperties</code>一起使用的, <code class="highlighter-rouge">@EnableConfigurationProperties</code>注解需要加到配置类上.
+像下面这样使用:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 配置类</span>
+<span class="nd">@SpringBootApplication</span>
+<span class="nd">@EnableConfigurationProperties</span><span class="o">({</span><span class="n">DBConfig</span><span class="o">.</span><span class="na">class</span><span class="o">})</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Application</span> <span class="o">{</span>
+  <span class="c1">// 代码</span>
+<span class="o">}</span>
+<span class="c1">// 加载属性的类(主意这个类没有加 @Component 注解)</span>
+<span class="nd">@ConfigurationProperties</span><span class="o">(</span><span class="n">prefix</span><span class="o">=</span><span class="s">"db"</span><span class="o">,</span> <span class="n">locations</span> <span class="o">=</span> <span class="s">"classpath:db.properties"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DBConfig</span> <span class="o">{</span>
+  <span class="c1">// 代码</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>这种形式, <code class="highlighter-rouge">@ConfigurationProperties</code>bean将会以名字<code class="highlighter-rouge">&lt;prefix&gt;-&lt;fqn&gt;</code>注册, <code class="highlighter-rouge">&lt;prefix&gt;</code>就是注解中指定的前缀, <code class="highlighter-rouge">&lt;fqn&gt;</code>是该类的全类名. 上面的<code class="highlighter-rouge">DBConfig</code>将会被注册成名字为<code class="highlighter-rouge">db-com.example.myproject.config.DBConfig</code>的bean</p>
+
+<h3 id="configurationproperties"><code class="highlighter-rouge">@ConfigurationProperties</code>的优缺点</h3>
+<p>优点:</p>
+
+<ul>
+  <li>结构化, 对于结构化的配置, 优势明显</li>
+  <li>松散绑定, <code class="highlighter-rouge">Environment</code>属性名和<code class="highlighter-rouge">@ConfigurationProperties Beans</code>属性名不需要精确匹配, 比如驼峰<code class="highlighter-rouge">person.firstName</code>, 虚线<code class="highlighter-rouge">pserson.first-name</code>, 下划线<code class="highlighter-rouge">person.first_name</code>, 大写<code class="highlighter-rouge">PERSON_FIRST_NAME</code>都能正确区分绑定</li>
+  <li>可校验, 可以在属性上添加<code class="highlighter-rouge">@NotNull</code>, <code class="highlighter-rouge">@NotEmpty</code>等(JSR-303)注解进行校验</li>
+  <li>可生成<code class="highlighter-rouge">meta-data</code>文件(可被IDE使用)</li>
+</ul>
+
+<p>缺点:</p>
+
+<ul>
+  <li>不支持<code class="highlighter-rouge">SpEL</code>表达式</li>
+</ul>
+
+<h2 id="yaml">使用YAML配置</h2>
+<p><code class="highlighter-rouge">YAML</code>是<code class="highlighter-rouge">JSON</code>的超集, 有一定的结构, <code class="highlighter-rouge">SpringApplication</code>提供了对<code class="highlighter-rouge">YAML</code>的支持.
+使用<code class="highlighter-rouge">YAML</code>配置文件需要确保在classpath中引入了<code class="highlighter-rouge">SnakeYAML</code>包, <code class="highlighter-rouge">spring-boot-starter</code>中已经包含了<code class="highlighter-rouge">SnakeYAML</code>包, 也可以主动显式地添加pom依赖:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+	  <span class="nt">&lt;groupId&gt;</span>org.yaml<span class="nt">&lt;/groupId&gt;</span>
+		<span class="nt">&lt;artifactId&gt;</span>snakeyaml<span class="nt">&lt;/artifactId&gt;</span>
+		<span class="nt">&lt;version&gt;</span>1.17<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre>
+</div>
+
+<h3 id="applicationyml">加载<code class="highlighter-rouge">application.yml</code></h3>
+<p><code class="highlighter-rouge">Spring Boot</code>会自动加载这个配置, 因此效果跟<code class="highlighter-rouge">application.properties</code>一样。<br />
+Spring 提供了两个方便的类加载<code class="highlighter-rouge">YAML</code>, <code class="highlighter-rouge">YamlPropertiesFactoryBean</code>把<code class="highlighter-rouge">YAML</code>作为<code class="highlighter-rouge">Properties</code>加载, <code class="highlighter-rouge">YamlMapFactoryBean</code>把<code class="highlighter-rouge">YAML</code>作为<code class="highlighter-rouge">Map</code>加载;<br />
+ <code class="highlighter-rouge">YamlPropertySourceLoader</code>可以把<code class="highlighter-rouge">YAML</code>作为<code class="highlighter-rouge">PropertySource</code>加到Spring <code class="highlighter-rouge">Environment</code>中, 这样就可以用<code class="highlighter-rouge">@Value</code>的方式进行注入了.</p>
+
+<p>比如下面的写法是一样的</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>// yml文件
+environments:
+    dev:
+        url: http://dev.bar.com
+        name: Developer Setup
+    prod:
+        url: http://foo.bar.com
+        name: My Cool App
+my:
+    servers:
+        - dev.bar.com
+        - foo.bar.com
+// properties文件
+environments.dev.url=http://dev.bar.com
+environments.dev.name=Developer Setup
+environments.prod.url=http://foo.bar.com
+environments.prod.name=My Cool App
+my.servers[0]=dev.bar.com
+my.servers[1]=foo.bar.com
+</code></pre>
+</div>
+
+<h3 id="yaml-1">加载自定义<code class="highlighter-rouge">YAML</code>配置</h3>
+<p>遗憾的是, <code class="highlighter-rouge">YAML</code>不能像<code class="highlighter-rouge">properties</code>文件一样使用<code class="highlighter-rouge">@PropertySource</code>注解的方式加载.<br />
+加载自定义的<code class="highlighter-rouge">YAML</code>文件可以通过<code class="highlighter-rouge">@ConfigurationProperties</code>注解来加载, 如:<code class="highlighter-rouge">@ConfigurationProperties(prefix="db", locations = "classpath:db.yml")</code></p>
+
+<hr />
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/Spring Boot中的配置" data-title="Spring Boot中的配置" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-10-31-Spring-Boot%E4%B8%AD%E7%9A%84%E9%85%8D%E7%BD%AE.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
+
+</body>
+
+</html>
