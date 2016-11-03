@@ -188,7 +188,7 @@ $ java -jar myapp.jar --spring.application.json='{"foo":"bar"}'   // 命令行�
 <h2 id="applicationproperties">配置文件:<code class="highlighter-rouge">application.properties</code></h2>
 <p><code class="highlighter-rouge">SpringApplication</code>默认会加载配置文件<code class="highlighter-rouge">application.properties</code>中的配置并加到Spring <code class="highlighter-rouge">Environment</code>中, 该文件的加载有个优先级: <code class="highlighter-rouge">classpath:/config/application.properties</code> &gt; <code class="highlighter-rouge">classpath:/application.properties</code>即在<code class="highlighter-rouge">classpath:/config/</code>下的配置文件优先级比较高. 也可以使用YAML文件(<code class="highlighter-rouge">application.yml</code>)来替代properties文件.</p>
 
-<p><code class="highlighter-rouge">application.properties</code>文件中默认有很多属性, 比如<code class="highlighter-rouge">server.port=8080</code>等; 你可以覆盖这些默认配置, 当然也可以把自己的配置放到这个默认加载的配置文件里.</p>
+<p><code class="highlighter-rouge">application.properties</code>被称为<code class="highlighter-rouge">Spring Boot</code>的外露配置, 文件中有很多属性可用来配置整个应用, 比如<code class="highlighter-rouge">server.port=8080</code>等; 你可以通过指定这些属性值来配置应用.</p>
 
 <p>配置文件的名字和位置, 也可自定义, 可通过<code class="highlighter-rouge">spring.config.name</code>和<code class="highlighter-rouge">spring.config.location</code>环境属性来指定, 这两个属性使用的时期非常早, 所以一般会在命令行或者系统属性或环境变量中来指定, 如:</p>
 
@@ -284,6 +284,8 @@ db.tables[1]=table2
 <span class="o">}</span>
 </code></pre>
 </div>
+
+<p>注: <code class="highlighter-rouge">properties</code>文件默认是按照unicode加载, 若有中文, 一定要指定编码<code class="highlighter-rouge">@PropertySource(value = "db.properties", encoding = "UTF-8")</code></p>
 
 <h3 id="section-8">类型安全的配置加载方式</h3>
 <p>上面这种方式在<code class="highlighter-rouge">Spring Framework</code>普遍使用, 但是 <code class="highlighter-rouge">Spring Boot</code>提供了更高级的使用配置的方式,类似于<code class="highlighter-rouge">Spring</code>中的<code class="highlighter-rouge">DataBinder</code>工具. 还是<code class="highlighter-rouge">db.properties</code>文件, 我们可以这样进行数据绑定:</p>

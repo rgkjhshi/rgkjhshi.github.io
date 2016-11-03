@@ -5,9 +5,227 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 02 Nov 2016 17:05:22 +0800</pubDate>
-    <lastBuildDate>Wed, 02 Nov 2016 17:05:22 +0800</lastBuildDate>
+    <pubDate>Thu, 03 Nov 2016 16:36:49 +0800</pubDate>
+    <lastBuildDate>Thu, 03 Nov 2016 16:36:49 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>Spring Boot中的日志</title>
+        <description>&lt;p&gt;这里所说的配置是指&lt;code class=&quot;highlighter-rouge&quot;&gt;properties&lt;/code&gt;文件这样的配置&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;日志的配置&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;日志配置文件&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;输出到日志文件&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-3&quot;&gt;日志级别&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-4&quot;&gt;日志格式&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-5&quot;&gt;如何写自己的日志配置文件&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;日志的配置&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot&lt;/code&gt;支持各种日志工具, 最常用的是&lt;code class=&quot;highlighter-rouge&quot;&gt;Logback&lt;/code&gt;. 我们可以对日志进行配置, 由于日志是在&lt;code class=&quot;highlighter-rouge&quot;&gt;ApplicationContext&lt;/code&gt;创建之前初始化的, 所以对日志的配置不能通过在&lt;code class=&quot;highlighter-rouge&quot;&gt;@Configuration&lt;/code&gt;配置类上使用&lt;code class=&quot;highlighter-rouge&quot;&gt;@PropertySources&lt;/code&gt;注解加载进来. 可以使用系统变量或者外部配置&lt;code class=&quot;highlighter-rouge&quot;&gt;application.properties&lt;/code&gt;来加载.  配置文件中可以指定这些属性:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;logging.config=&lt;/code&gt;: 配置文件的位置, 比如:&lt;code class=&quot;highlighter-rouge&quot;&gt;classpath:logback.xml&lt;/code&gt;(logback的配置文件)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;logging.file=&lt;/code&gt;: 日志文件名, 如:&lt;code class=&quot;highlighter-rouge&quot;&gt;myapp.log&lt;/code&gt;, 输出日志到当前目录的&lt;code class=&quot;highlighter-rouge&quot;&gt;myapp.log&lt;/code&gt;文件&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;logging.path=&lt;/code&gt;: 日志文件位置, 如:&lt;code class=&quot;highlighter-rouge&quot;&gt;/var/log&lt;/code&gt;, 输出日志到&lt;code class=&quot;highlighter-rouge&quot;&gt;/var/log/spring.log&lt;/code&gt;文件&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;logging.level.*=&lt;/code&gt;: 日志等级, 如:&lt;code class=&quot;highlighter-rouge&quot;&gt;logging.level.org.springframework=DEBUG&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;logging.pattern.console=&lt;/code&gt;: 输出到&lt;code class=&quot;highlighter-rouge&quot;&gt;console&lt;/code&gt;的日志格式, 只有logback有效&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;logging.pattern.file=&lt;/code&gt;: 输出到文件的日志格式, 只有logback有效&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;logging.pattern.level=&lt;/code&gt;: 日志级别的格式, 默认是&lt;code class=&quot;highlighter-rouge&quot;&gt;%5p&lt;/code&gt;. 只有logback有效&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;logging.exception-conversion-word=%wEx&lt;/code&gt;: log异常时使用哪个格式转换器(&lt;code class=&quot;highlighter-rouge&quot;&gt;base.xml&lt;/code&gt;中定义了三个&lt;code class=&quot;highlighter-rouge&quot;&gt;conversionRule&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;logging.register-shutdown-hook=false&lt;/code&gt; # Register a shutdown hook for the logging system when it is initialized(没用过)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;上面这些属性配置, 一般写在&lt;code class=&quot;highlighter-rouge&quot;&gt;application.properties&lt;/code&gt;中, 这样会被加载到&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Environment&lt;/code&gt;中, 为了方便其他地方使用, &lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Environment&lt;/code&gt;中的一些属性也被转换到了系统属性(&lt;code class=&quot;highlighter-rouge&quot;&gt;System property&lt;/code&gt;)里, 下面是这些属性于系统属性的对应关系:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Spring Environment&lt;/th&gt;
+      &lt;th&gt;System Property&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;logging.exception-conversion-word&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;LOG_EXCEPTION_CONVERSION_WORD&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;logging.file&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;LOG_FILE&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;logging.path&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;LOG_PATH&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;logging.pattern.console&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;CONSOLE_LOG_PATTERN&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;logging.pattern.file&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;FILE_LOG_PATTERN&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;logging.pattern.level&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;LOG_LEVEL_PATTERN&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;PID&lt;/code&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;PID&lt;/code&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;日志配置文件&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;logging.config&lt;/code&gt;属性用于指定日志配置文件的位置, 以&lt;code class=&quot;highlighter-rouge&quot;&gt;logback&lt;/code&gt;为例.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;如果不指定该属性, &lt;code class=&quot;highlighter-rouge&quot;&gt;logback&lt;/code&gt;本身会默认寻找&lt;code class=&quot;highlighter-rouge&quot;&gt;classpath&lt;/code&gt;下的配置文件, 寻找顺序为:
+&lt;code class=&quot;highlighter-rouge&quot;&gt;logback.groovy &amp;gt; logback-test.xml &amp;gt; logback.xml&lt;/code&gt;;  &lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot&lt;/code&gt;又加了俩默认的配置文件:&lt;code class=&quot;highlighter-rouge&quot;&gt;logback-spring.groovy &amp;gt; logback-spring.xml&lt;/code&gt;, 这俩优先级低于上面的那三个. 推荐指定使用&lt;code class=&quot;highlighter-rouge&quot;&gt;logback-spring.xml&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;不指定配置文件时, 寻找上面的配置文件, 制定了则加载指定的配置文件. 如:&lt;code class=&quot;highlighter-rouge&quot;&gt;logging.config=classpath:logback-abc.xml&lt;/code&gt;, 则会加载&lt;code class=&quot;highlighter-rouge&quot;&gt;classpath&lt;/code&gt;下的&lt;code class=&quot;highlighter-rouge&quot;&gt;logback-abc.xml&lt;/code&gt;文件&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;groovy&lt;/code&gt;需要添加&lt;code class=&quot;highlighter-rouge&quot;&gt;groovy&lt;/code&gt;的包依赖:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.codehaus.groovy&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;groovy&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;2.4.7&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;输出到日志文件&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;logging.file&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;logging.path&lt;/code&gt;这俩属性用于指定日志文件输出的位置. 默认情况下&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot&lt;/code&gt;只会把日志输出到&lt;code class=&quot;highlighter-rouge&quot;&gt;console&lt;/code&gt;, 添加了这两个属性(任意一个即可), 才会把日志输出到文件里.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;两个属性都不指定, 只输出到控制台, 不输出到文件&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;logging.file&lt;/code&gt;指定文件, 可以是相对路径, 可以是绝对路径.  &lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;logging.path&lt;/code&gt;指定目录, 若制定了目录, 则会输出日志到指定目录下的&lt;code class=&quot;highlighter-rouge&quot;&gt;spring.log&lt;/code&gt;文件中&lt;/li&gt;
+  &lt;li&gt;两个同时指定, 以&lt;code class=&quot;highlighter-rouge&quot;&gt;logging.file&lt;/code&gt;为准&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;spring-boot&lt;/code&gt;包里关于&lt;code class=&quot;highlighter-rouge&quot;&gt;logback&lt;/code&gt;的配置&lt;code class=&quot;highlighter-rouge&quot;&gt;file-appender.xml&lt;/code&gt;中定义了文件输出到&lt;code class=&quot;highlighter-rouge&quot;&gt;${LOG_FILE}&lt;/code&gt;, 在同一包下的&lt;code class=&quot;highlighter-rouge&quot;&gt;base.xml&lt;/code&gt;文件里有这么一句:&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;property name=&quot;LOG_FILE&quot; value=&quot;${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/spring.log}&quot;/&amp;gt;&lt;/code&gt;. 稍微分析下就知道为什么以&lt;code class=&quot;highlighter-rouge&quot;&gt;logging.file&lt;/code&gt;为主, 指定&lt;code class=&quot;highlighter-rouge&quot;&gt;logging.path&lt;/code&gt;时会输出到该目录下的&lt;code class=&quot;highlighter-rouge&quot;&gt;spring.log&lt;/code&gt;文件里了.&lt;br /&gt;
+注意上面语句中多次嵌套使用了&lt;code class=&quot;highlighter-rouge&quot;&gt;${key:-defaultVlaue}&lt;/code&gt;形式&lt;/p&gt;
+
+&lt;h3 id=&quot;section-3&quot;&gt;日志级别&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;logging.level.*&lt;/code&gt;用于指定日志级别, 比如:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;logging.level.root=WARN
+logging.level.org.springframework.web=DEBUG
+logging.level.org.hibernate=ERROR
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;注意: 该属性配置的日志级别优先级要高于日志配置文件(如&lt;code class=&quot;highlighter-rouge&quot;&gt;logback.xml&lt;/code&gt;), 即日志配置文件中与该属性定义的日志级别不一致时, 以该属性定义的级别为准.&lt;/p&gt;
+
+&lt;h3 id=&quot;section-4&quot;&gt;日志格式&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ogging.pattern.console&lt;/code&gt;指定在控制台输出的日志格式;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ogging.pattern.file&lt;/code&gt;指定在文件输出的日志格式;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ogging.pattern.level&lt;/code&gt;指定日之级别(&lt;code class=&quot;highlighter-rouge&quot;&gt;DEBUG, INFO, ERROR&lt;/code&gt;等)的格式, 默认为&lt;code class=&quot;highlighter-rouge&quot;&gt;%5p&lt;/code&gt;;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;这些属性不指定时, 默认的格式在&lt;code class=&quot;highlighter-rouge&quot;&gt;spring-boot&lt;/code&gt;包中的&lt;code class=&quot;highlighter-rouge&quot;&gt;DefaultLogbackConfiguration&lt;/code&gt;类里有定义, 在&lt;code class=&quot;highlighter-rouge&quot;&gt;defaults.xml&lt;/code&gt;里也有定义&lt;br /&gt;
+格式大致为:&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;2016-11-02 21:59:11.366  INFO 11969 --- [           main] o.apache.catalina.core.StandardService   : Starting service Tomcat&lt;/code&gt;&lt;br /&gt;
+依次为: &lt;code class=&quot;highlighter-rouge&quot;&gt;时间 日志级别 PID --- [线程名] 日志名 : 日志内容&lt;/code&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section-5&quot;&gt;如何写自己的日志配置文件&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;spring-boot&lt;/code&gt;包里有四个相关的&lt;code class=&quot;highlighter-rouge&quot;&gt;xml&lt;/code&gt;文件:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;console-appender.xml&lt;/code&gt;: 定义了控制台输出的日志格式&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;file-appender.xml&lt;/code&gt;: 定义了一个日志的文件输出格式(指定每个文件&lt;code class=&quot;highlighter-rouge&quot;&gt;10M&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;defaults.xml&lt;/code&gt;: 定义了一些日志级别&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;base.xml&lt;/code&gt;: 包含了上面3个文件, 并指定了&lt;code class=&quot;highlighter-rouge&quot;&gt;root&lt;/code&gt;的输出级别和输出方式&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;我们的日志配置线上不需要输出到&lt;code class=&quot;highlighter-rouge&quot;&gt;console&lt;/code&gt;, 日志文件的大小一般也不会是&lt;code class=&quot;highlighter-rouge&quot;&gt;10M&lt;/code&gt;, 所以上面那几个文件, 我们可以参考.&lt;/p&gt;
+
+&lt;p&gt;比如我们可以这样定义&lt;code class=&quot;highlighter-rouge&quot;&gt;logback.xml&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;configuration&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 这里面定义了 CONSOLE_LOG_PATTERN, FILE_LOG_PATTERN 等日志格式, 还定义了一些日志级别 --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;include&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resource=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;org/springframework/boot/logging/logback/defaults.xml&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 命令行输出, 一般线上不用 --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;CONSOLE&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.core.ConsoleAppender&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;encoder&lt;/span&gt;  &lt;span class=&quot;na&quot;&gt;charset=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;UTF-8&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;pattern&amp;gt;&lt;/span&gt;${CONSOLE_LOG_PATTERN}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/pattern&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/encoder&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/appender&amp;gt;&lt;/span&gt;
+
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;LOG_FILE_NAME&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;myLog&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 定义一个属性, 下面用 --&amp;gt;&lt;/span&gt;
+
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 输出格式 appender --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;FILE&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;file&amp;gt;&lt;/span&gt;${catalina.base}/logs/${LOG_FILE_NAME}.log&lt;span class=&quot;nt&quot;&gt;&amp;lt;/file&amp;gt;&lt;/span&gt;  &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 可自己定义 --&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;encoder&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;pattern&amp;gt;&lt;/span&gt;${FILE_LOG_PATTERN}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/pattern&amp;gt;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 输出格式也可自己定义 --&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/encoder&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;rollingPolicy&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;fileNamePattern&amp;gt;&lt;/span&gt;${catalina.base}/logs/${LOG_FILE_NAME}.%d{yyyy-MM-dd}.log&lt;span class=&quot;nt&quot;&gt;&amp;lt;/fileNamePattern&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/rollingPolicy&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/appender&amp;gt;&lt;/span&gt;
+
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- error 日志 appender --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ERROR_FILE&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;file&amp;gt;&lt;/span&gt;${catalina.base}/logs/${LOG_FILE_NAME}_error.log&lt;span class=&quot;nt&quot;&gt;&amp;lt;/file&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;filter&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.classic.filter.ThresholdFilter&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;level&amp;gt;&lt;/span&gt;ERROR&lt;span class=&quot;nt&quot;&gt;&amp;lt;/level&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/filter&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;encoder&lt;/span&gt;  &lt;span class=&quot;na&quot;&gt;charset=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;UTF-8&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;pattern&amp;gt;&lt;/span&gt;${FILE_LOG_PATTERN}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/pattern&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/encoder&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;rollingPolicy&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;fileNamePattern&amp;gt;&lt;/span&gt;${catalina.base}/logs/${LOG_FILE_NAME}_error.%d{yyyy-MM-dd}.log&lt;span class=&quot;nt&quot;&gt;&amp;lt;/fileNamePattern&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/rollingPolicy&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/appender&amp;gt;&lt;/span&gt;
+
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 定义日志级别, 也可在应用配置中指定 --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;logger&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name =&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;com.example.project&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;level=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;INFO&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;logger&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;org.springframework.web&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;level=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;DEBUG&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;root&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;level=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ERROR&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender-ref&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;CONSOLE&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 线上不需要输出到 CONSOLE --&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender-ref&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;FILE&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender-ref&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ERROR_FILE&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/root&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/configuration&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;上例中, 日志会输出到文件&lt;code class=&quot;highlighter-rouge&quot;&gt;XXX.log&lt;/code&gt;, 错误日志单独输出到一个&lt;code class=&quot;highlighter-rouge&quot;&gt;XXX_error.log&lt;/code&gt;文件, 日志文件并每天打包一次.  &lt;/li&gt;
+  &lt;li&gt;上例中, 应用配置(&lt;code class=&quot;highlighter-rouge&quot;&gt;application.properties&lt;/code&gt;)里用于指定日志文件名文件位置的属性(&lt;code class=&quot;highlighter-rouge&quot;&gt;logging.file&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;logging.path&lt;/code&gt;)将不起作用, 因为例子里没有用到这些属性, 其他配置(比如日志级别)仍有作用.&lt;/li&gt;
+  &lt;li&gt;上例中的哪个&lt;code class=&quot;highlighter-rouge&quot;&gt;${catalina.base}&lt;/code&gt;算是一个系统变量, 表示应用所在目录, 文件名(位置)完全可以自己指定, 也可参考&lt;code class=&quot;highlighter-rouge&quot;&gt;spring-boot&lt;/code&gt;包里的使用方式.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+</description>
+        <pubDate>Thu, 03 Nov 2016 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-03-Spring-Boot%E4%B8%AD%E7%9A%84%E6%97%A5%E5%BF%97.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-03-Spring-Boot%E4%B8%AD%E7%9A%84%E6%97%A5%E5%BF%97.html</guid>
+        
+        <category>Spring</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
     
       <item>
         <title>Spring Boot中的配置</title>
@@ -100,7 +318,7 @@ $ java -jar myapp.jar --spring.application.json=&#39;{&quot;foo&quot;:&quot;bar&
 &lt;h2 id=&quot;applicationproperties&quot;&gt;配置文件:&lt;code class=&quot;highlighter-rouge&quot;&gt;application.properties&lt;/code&gt;&lt;/h2&gt;
 &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SpringApplication&lt;/code&gt;默认会加载配置文件&lt;code class=&quot;highlighter-rouge&quot;&gt;application.properties&lt;/code&gt;中的配置并加到Spring &lt;code class=&quot;highlighter-rouge&quot;&gt;Environment&lt;/code&gt;中, 该文件的加载有个优先级: &lt;code class=&quot;highlighter-rouge&quot;&gt;classpath:/config/application.properties&lt;/code&gt; &amp;gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;classpath:/application.properties&lt;/code&gt;即在&lt;code class=&quot;highlighter-rouge&quot;&gt;classpath:/config/&lt;/code&gt;下的配置文件优先级比较高. 也可以使用YAML文件(&lt;code class=&quot;highlighter-rouge&quot;&gt;application.yml&lt;/code&gt;)来替代properties文件.&lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;application.properties&lt;/code&gt;文件中默认有很多属性, 比如&lt;code class=&quot;highlighter-rouge&quot;&gt;server.port=8080&lt;/code&gt;等; 你可以覆盖这些默认配置, 当然也可以把自己的配置放到这个默认加载的配置文件里.&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;application.properties&lt;/code&gt;被称为&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot&lt;/code&gt;的外露配置, 文件中有很多属性可用来配置整个应用, 比如&lt;code class=&quot;highlighter-rouge&quot;&gt;server.port=8080&lt;/code&gt;等; 你可以通过指定这些属性值来配置应用.&lt;/p&gt;
 
 &lt;p&gt;配置文件的名字和位置, 也可自定义, 可通过&lt;code class=&quot;highlighter-rouge&quot;&gt;spring.config.name&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;spring.config.location&lt;/code&gt;环境属性来指定, 这两个属性使用的时期非常早, 所以一般会在命令行或者系统属性或环境变量中来指定, 如:&lt;/p&gt;
 
@@ -196,6 +414,8 @@ db.tables[1]=table2
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
+
+&lt;p&gt;注: &lt;code class=&quot;highlighter-rouge&quot;&gt;properties&lt;/code&gt;文件默认是按照unicode加载, 若有中文, 一定要指定编码&lt;code class=&quot;highlighter-rouge&quot;&gt;@PropertySource(value = &quot;db.properties&quot;, encoding = &quot;UTF-8&quot;)&lt;/code&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;section-8&quot;&gt;类型安全的配置加载方式&lt;/h3&gt;
 &lt;p&gt;上面这种方式在&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Framework&lt;/code&gt;普遍使用, 但是 &lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot&lt;/code&gt;提供了更高级的使用配置的方式,类似于&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;中的&lt;code class=&quot;highlighter-rouge&quot;&gt;DataBinder&lt;/code&gt;工具. 还是&lt;code class=&quot;highlighter-rouge&quot;&gt;db.properties&lt;/code&gt;文件, 我们可以这样进行数据绑定:&lt;/p&gt;
@@ -2219,94 +2439,6 @@ ubuntu              latest              sha256:ba1688fec34f66d8a7ff5b42e6971625d
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-07-11-Docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%B8%80)-%E5%88%9D%E6%AD%A5%E4%BA%86%E8%A7%A3.html</guid>
         
         <category>Docker</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>Java日期处理工具JodaTime</title>
-        <description>&lt;p&gt;主要是介绍下有这么一个好用的工具包, 简单写几个使用的例子&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#maven&quot;&gt;maven依赖&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;使用示例&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;maven&quot;&gt;maven依赖&lt;/h2&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;joda-time&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;joda-time&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;2.9.4&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;使用示例&lt;/h2&gt;
-
-&lt;p&gt;最常用的一个类就是&lt;code class=&quot;highlighter-rouge&quot;&gt;DateTime&lt;/code&gt;类, 它有很多构造方法和时间的操作方法&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;DateTime&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dateTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 创建当前时间&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;dateTime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DateTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;now&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 创建某一时刻的时间&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;dateTime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DateTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2016&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;999&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 通过系统毫秒数创建当前时间&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;dateTime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DateTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;currentTimeMillis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 通过格式化字符串创建时间&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;dateTime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DateTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;parse&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;2016-06-30 12:01:01&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DateTimeFormat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;forPattern&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;yyyy-MM-dd HH:mm:ss&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
-
-        &lt;span class=&quot;c1&quot;&gt;// 与JDK 的 Date 相互转换&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;dateTime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DateTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Date&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;jdkDate&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dateTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toDate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-
-        &lt;span class=&quot;c1&quot;&gt;// 默认输出格式&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dateTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 2016-06-29T15:36:41.591+08:00&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 格式化输出&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dateTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;yyyy-MM-dd HH:mm:ss.SSS&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 2016-06-06 12:01:01.999&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 输出星期几&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dateTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;E yyyy-MM-dd HH:mm:ss&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 星期三 2016-06-29 15:38:47&lt;/span&gt;
-
-        &lt;span class=&quot;c1&quot;&gt;// 时间操作, 注意每个返回都是一个新对象&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 33天后&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;dateTime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DateTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2016&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 2016-01-01 12:10:10.010&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;dateTime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dateTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;plusDays&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;33&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 2016-02-03 12:10:10.010&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 年月日时分秒 还有毫秒, 都能加&lt;/span&gt;
-
-        &lt;span class=&quot;c1&quot;&gt;// 某月最后一天&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;dateTime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DateTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2016&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 2016-01-01 12:10:10.010&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;dateTime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dateTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;dayOfMonth&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;withMaximumValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 2016-01-31 12:10:10.010&lt;/span&gt;
-
-        &lt;span class=&quot;c1&quot;&gt;// 某周第一天&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;dateTime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DateTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2016&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 2016-01-01 12:10:10.010&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;dateTime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dateTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;dayOfWeek&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;withMinimumValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;// 2015-12-28 12:10:10.010&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 类似的有 yearOfCentury dayOfYear monthOfYear dayOfMonth dayOfWeek&lt;/span&gt;
-
-        &lt;span class=&quot;c1&quot;&gt;// 距离今天多少天&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;dateTime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DateTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;parse&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;2016-06-30 12:01:01&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DateTimeFormat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;forPattern&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;yyyy-MM-dd HH:mm:ss&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;days&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Days&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;daysBetween&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dateTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DateTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;now&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getDays&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 后面早则为负数&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;其实创建&lt;code class=&quot;highlighter-rouge&quot;&gt;DateTime&lt;/code&gt;对象时也能传&lt;code class=&quot;highlighter-rouge&quot;&gt;ISODateTimeFormat&lt;/code&gt;格式化的字符串, 如:”2006-01-26T13:30:00-06:00”, 但要确保给出的字符串格式正确, 可以参考&lt;a href=&quot;http://joda-time.sourceforge.net/api-release/index.html&quot;&gt;Joda API文档&lt;/a&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-</description>
-        <pubDate>Wed, 29 Jun 2016 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-06-29-Java%E6%97%A5%E6%9C%9F%E5%A4%84%E7%90%86%E5%B7%A5%E5%85%B7JodaTime.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-06-29-Java%E6%97%A5%E6%9C%9F%E5%A4%84%E7%90%86%E5%B7%A5%E5%85%B7JodaTime.html</guid>
-        
-        <category>Java</category>
         
         
         <category>编程技术</category>

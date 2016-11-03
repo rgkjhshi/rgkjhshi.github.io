@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="Spring Boot中的日志, 编程技术, Spring, 逆水行舟" />
+    <meta name="description" content="Spring Boot中的日志, 编程技术, Spring, 这里所说的配置是指properties文件这样的配置" />
+
+    <title>逆水行舟</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-02-Spring-Boot%E4%B8%AD%E7%9A%84%E6%97%A5%E5%BF%97.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="/static/js/jquery.qrcode.min.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="/static/js/uikit.min.js"></script>
+    <!-- quietflow -->
+    <!-- <script type="text/javascript" src="http://loveshisong.cn/static/js/quietflow.min.js"></script> -->
+    <!-- UK sticky -->
+    <script type="text/javascript" src="/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "shisong"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" data-uk-sticky>
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <script type="text/javascript">
+jQuery(function(){
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-02-Spring-Boot%E4%B8%AD%E7%9A%84%E6%97%A5%E5%BF%97.html"
+    });
+})
+</script>
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>Spring Boot中的日志</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <p>这里所说的配置是指<code class="highlighter-rouge">properties</code>文件这样的配置</p>
+
+<hr />
+
+<ul id="markdown-toc">
+  <li><a href="#section">日志的配置</a>    <ul>
+      <li><a href="#section-1">日志配置文件</a></li>
+      <li><a href="#section-2">输出到日志文件</a></li>
+      <li><a href="#section-3">日志级别</a></li>
+      <li><a href="#section-4">日志格式</a></li>
+    </ul>
+  </li>
+  <li><a href="#section-5">如何写自己的日志配置文件</a>    <ul>
+      <li><a href="#spring-boot">spring-boot包下的配置</a></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="section">日志的配置</h2>
+<p><code class="highlighter-rouge">Spring Boot</code>支持各种日志工具, 最常用的是<code class="highlighter-rouge">Logback</code>. 我们可以对日志进行配置, 由于日志是在<code class="highlighter-rouge">ApplicationContext</code>创建之前初始化的, 所以对日志的配置不能通过在<code class="highlighter-rouge">@Configuration</code>配置类上使用<code class="highlighter-rouge">@PropertySources</code>注解加载进来. 可以使用系统变量或者外部配置<code class="highlighter-rouge">application.properties</code>来加载.  配置文件中可以指定这些属性:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">logging.config=</code>: 配置文件的位置, 比如:<code class="highlighter-rouge">classpath:logback.xml</code>(logback的配置文件)</li>
+  <li><code class="highlighter-rouge">logging.file=</code>: 日志文件名, 如:<code class="highlighter-rouge">myapp.log</code>, 输出日志到当前目录的<code class="highlighter-rouge">myapp.log</code>文件</li>
+  <li><code class="highlighter-rouge">logging.path=</code>: 日志文件位置, 如:<code class="highlighter-rouge">/var/log</code>, 输出日志到<code class="highlighter-rouge">/var/log/spring.log</code>文件</li>
+  <li><code class="highlighter-rouge">logging.level.*=</code>: 日志等级, 如:<code class="highlighter-rouge">logging.level.org.springframework=DEBUG</code></li>
+  <li><code class="highlighter-rouge">logging.pattern.console=</code>: 输出到<code class="highlighter-rouge">console</code>的日志格式, 只有logback有效</li>
+  <li><code class="highlighter-rouge">logging.pattern.file=</code>: 输出到文件的日志格式, 只有logback有效</li>
+  <li><code class="highlighter-rouge">logging.pattern.level=</code>: 日志级别的格式, 默认是<code class="highlighter-rouge">%5p</code>. 只有logback有效</li>
+  <li><code class="highlighter-rouge">logging.exception-conversion-word=%wEx</code>: log异常时使用哪个<code class="highlighter-rouge">conversionRule</code>(<code class="highlighter-rouge">base.xml</code>中定义了三个<code class="highlighter-rouge">conversionRule</code>)</li>
+  <li><code class="highlighter-rouge">logging.register-shutdown-hook=false</code> # Register a shutdown hook for the logging system when it is initialized(没用过)</li>
+</ul>
+
+<p>上面这些属性配置, 一般写在<code class="highlighter-rouge">application.properties</code>中, 这样会被加载到<code class="highlighter-rouge">Spring Environment</code>中, 为了方便其他地方使用, <code class="highlighter-rouge">Spring Environment</code>中的一些属性也被转换到了系统属性(<code class="highlighter-rouge">System property</code>)里, 下面是这些属性于系统属性的对应关系:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Spring Environment</th>
+      <th>System Property</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">logging.exception-conversion-word</code></td>
+      <td><code class="highlighter-rouge">LOG_EXCEPTION_CONVERSION_WORD</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">logging.file</code></td>
+      <td><code class="highlighter-rouge">LOG_FILE</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">logging.path</code></td>
+      <td><code class="highlighter-rouge">LOG_PATH</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">logging.pattern.console</code></td>
+      <td><code class="highlighter-rouge">CONSOLE_LOG_PATTERN</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">logging.pattern.file</code></td>
+      <td><code class="highlighter-rouge">FILE_LOG_PATTERN</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">logging.pattern.level</code></td>
+      <td><code class="highlighter-rouge">LOG_LEVEL_PATTERN</code></td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">PID</code></td>
+      <td><code class="highlighter-rouge">PID</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="section-1">日志配置文件</h3>
+<p><code class="highlighter-rouge">logging.config</code>属性用于指定日志配置文件的位置, 以<code class="highlighter-rouge">logback</code>为例.</p>
+
+<ul>
+  <li>如果不指定该属性, <code class="highlighter-rouge">logback</code>本身会默认寻找<code class="highlighter-rouge">classpath</code>下的配置文件, 寻找顺序为:
+<code class="highlighter-rouge">logback.groovy &gt; logback-test.xml &gt; logback.xml</code>;  </li>
+  <li><code class="highlighter-rouge">Spring Boot</code>又加了俩默认的配置文件:<code class="highlighter-rouge">logback-spring.groovy &gt; logback-spring.xml</code>, 这俩优先级低于上面的那三个. 推荐指定使用<code class="highlighter-rouge">logback-spring.xml</code>.</li>
+  <li>不指定配置文件时, 寻找上面的配置文件, 制定了则加载指定的配置文件. 如:<code class="highlighter-rouge">logging.config=classpath:logback-abc.xml</code>, 则会加载<code class="highlighter-rouge">classpath</code>下的<code class="highlighter-rouge">logback-abc.xml</code>文件</li>
+</ul>
+
+<p>使用<code class="highlighter-rouge">groovy</code>需要添加<code class="highlighter-rouge">groovy</code>的包依赖:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.codehaus.groovy<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>groovy<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.4.7<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre>
+</div>
+
+<h3 id="section-2">输出到日志文件</h3>
+<p><code class="highlighter-rouge">logging.file</code>和<code class="highlighter-rouge">logging.path</code>这俩属性用于指定日志文件输出的位置. 默认情况下<code class="highlighter-rouge">Spring Boot</code>只会把日志输出到<code class="highlighter-rouge">console</code>, 添加了这两个属性(任意一个即可), 才会把日志输出到文件里.</p>
+
+<ul>
+  <li>两个属性都不指定, 只输出到控制台, 不输出到文件</li>
+  <li><code class="highlighter-rouge">logging.file</code>指定文件, 可以是相对路径, 可以是绝对路径.  </li>
+  <li><code class="highlighter-rouge">logging.path</code>指定目录, 若制定了目录, 则会输出日志到指定目录下的<code class="highlighter-rouge">spring.log</code>文件中</li>
+  <li>两个同时指定, 以<code class="highlighter-rouge">logging.file</code>为准</li>
+</ul>
+
+<p>在<code class="highlighter-rouge">spring-boot</code>包里关于<code class="highlighter-rouge">logback</code>的配置<code class="highlighter-rouge">file-appender.xml</code>中定义了文件输出到<code class="highlighter-rouge">${LOG_FILE}</code>, 在同一包下的<code class="highlighter-rouge">base.xml</code>文件里有这么一句:<code class="highlighter-rouge">&lt;property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/spring.log}"/&gt;</code>. 稍微分析下就知道为什么以<code class="highlighter-rouge">logging.file</code>为主, 指定<code class="highlighter-rouge">logging.path</code>时会输出到该目录下的<code class="highlighter-rouge">spring.log</code>文件里了.<br />
+注意上面语句中多次嵌套使用了<code class="highlighter-rouge">${key:-defaultVlaue}</code>形式</p>
+
+<h3 id="section-3">日志级别</h3>
+<p><code class="highlighter-rouge">logging.level.*</code>用于指定日志级别, 比如:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>logging.level.root=WARN
+logging.level.org.springframework.web=DEBUG
+logging.level.org.hibernate=ERROR
+</code></pre>
+</div>
+
+<p>注意: 该属性配置的日志级别优先级要高于日志配置文件(如<code class="highlighter-rouge">logback.xml</code>), 即日志配置文件中与该属性定义的日志级别不一致时, 以该属性定义的级别为准.</p>
+
+<h3 id="section-4">日志格式</h3>
+
+<ul>
+  <li><code class="highlighter-rouge">ogging.pattern.console</code>指定在控制台输出的日志格式;</li>
+  <li><code class="highlighter-rouge">ogging.pattern.file</code>指定在文件输出的日志格式;</li>
+  <li><code class="highlighter-rouge">ogging.pattern.level</code>指定日之级别(<code class="highlighter-rouge">DEBUG, INFO, ERROR</code>等)的格式, 默认为<code class="highlighter-rouge">%5p</code>;</li>
+</ul>
+
+<p>这些属性不指定时, 默认的格式在<code class="highlighter-rouge">spring-boot</code>包中的<code class="highlighter-rouge">DefaultLogbackConfiguration</code>类里有定义, 在<code class="highlighter-rouge">defaults.xml</code>里也有定义<br />
+格式大致为:<br />
+<code class="highlighter-rouge">2016-11-02 21:59:11.366  INFO 11969 --- [           main] o.apache.catalina.core.StandardService   : Starting service Tomcat</code><br />
+依次为: <code class="highlighter-rouge">时间 日志级别 PID --- [线程名] 日志名 : 日志内容</code></p>
+
+<hr />
+
+<h2 id="section-5">如何写自己的日志配置文件</h2>
+
+<h3 id="spring-boot">spring-boot包下的配置</h3>
+
+<hr />
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/Spring Boot中的日志" data-title="Spring Boot中的日志" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-02-Spring-Boot%E4%B8%AD%E7%9A%84%E6%97%A5%E5%BF%97.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
+
+</body>
+
+</html>

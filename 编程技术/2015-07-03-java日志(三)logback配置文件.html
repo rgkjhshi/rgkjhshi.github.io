@@ -432,19 +432,31 @@ root级别为OFF，但是logger扩散过来的日志级别仍为继承的info.<b
 <p>日志行产生的行号。</p>
 
 <ul>
+  <li><strong>日志级别 : %p / %le / %level</strong></li>
+</ul>
+
+<p>日志级别</p>
+
+<ul>
+  <li><strong>线程名 : %t / %thread</strong></li>
+</ul>
+
+<p>线程名</p>
+
+<ul>
   <li><strong>日志内容 : %m / %msg / %message</strong></li>
 </ul>
 
 <p>日志中输出的信息</p>
 
 <ul>
-  <li><strong>时间 : %d{pattern} / %date{pattern} / %message</strong></li>
+  <li><strong>时间 : %d{pattern} / %date{pattern}</strong></li>
 </ul>
 
 <p>产生日志的时间。日志的格式如下:</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="o">%</span><span class="n">d</span>	                   <span class="o">:</span> <span class="mi">2015</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">07</span> <span class="mi">22</span><span class="o">:</span><span class="mi">45</span><span class="o">:</span><span class="mi">25</span><span class="o">,</span><span class="mi">665</span>
-<span class="o">%</span><span class="n">date</span>	               <span class="o">:</span> <span class="mi">2015</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">07</span> <span class="mi">22</span><span class="o">:</span><span class="mi">45</span><span class="o">:</span><span class="mi">25</span><span class="o">,</span><span class="mi">665</span>
+<span class="o">%</span><span class="n">date</span>	                 <span class="o">:</span> <span class="mi">2015</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">07</span> <span class="mi">22</span><span class="o">:</span><span class="mi">45</span><span class="o">:</span><span class="mi">25</span><span class="o">,</span><span class="mi">665</span>
 <span class="o">%</span><span class="n">date</span><span class="o">{</span><span class="nl">HH:mm:</span><span class="n">ss</span><span class="o">.</span><span class="na">SSS</span><span class="o">}</span>	   <span class="o">:</span> <span class="mi">22</span><span class="o">:</span><span class="mi">45</span><span class="o">:</span><span class="mf">25.665</span>
 <span class="o">%</span><span class="n">date</span><span class="o">{</span><span class="n">yyyy</span><span class="o">-</span><span class="n">MM</span><span class="o">-</span><span class="n">dd</span> <span class="nl">HH:mm:</span><span class="n">ss</span><span class="o">.</span><span class="na">SSS</span><span class="o">}</span>	<span class="mi">2015</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">07</span> <span class="mi">22</span><span class="o">:</span><span class="mi">45</span><span class="o">:</span><span class="mf">25.665</span>
 <span class="err">注意那个毫秒前一定要写成点</span><span class="o">(.)</span>
