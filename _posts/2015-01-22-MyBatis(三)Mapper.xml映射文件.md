@@ -104,7 +104,7 @@ ORDER BY ${columnName}
 
 *****
 
-<h2 id="ResultMap"> ResultMap
+## ResultMap
 `resultMap` 元素是MyBatis中最重要最强大的元素，resultMap元素本身有一些属性，如下代码，`id`用于标识该`resultMap`，`type`用于指定该`resultMap`映射到哪个`JavaBean`
 
 ~~~xml
@@ -127,7 +127,7 @@ ORDER BY ${columnName}
   * case – 基于某某些值的结果映射
     * 嵌入结果映射 – 这种情形结果也映射它本身,因此可以包含很多相 同的元素,或者它可以参照一个外部的结果映射
 
-**注意**由于DTD的限制，这些元素出现的顺序必须按照上面的顺序  
+**注意** 由于DTD的限制，这些元素出现的顺序必须按照上面的顺序  
 
 下面详细说明`resultMap`的每个子元素
 
