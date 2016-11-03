@@ -107,6 +107,13 @@ jQuery(function(){
   <li><a href="#select-">select 语句简介</a></li>
   <li><a href="#insert-update--delete-">insert, update 和 delete 简介</a></li>
   <li><a href="#parameters-">Parameters 参数</a></li>
+  <li><a href="#resultmap">ResultMap</a>    <ul>
+      <li><a href="#idresult">id和result</a></li>
+      <li><a href="#constructor">构造方法constructor</a></li>
+      <li><a href="#association">关联association</a></li>
+      <li><a href="#collection">集合collection</a></li>
+    </ul>
+  </li>
 </ul>
 
 <hr />
@@ -199,148 +206,166 @@ keyColumn         | 通过生成的键值设置表中的列名,当主键列不�
 
 <hr />
 
-<h2 id="ResultMap"> ResultMap
-`resultMap` 元素是MyBatis中最重要最强大的元素，resultMap元素本身有一些属性，如下代码，`id`用于标识该`resultMap`，`type`用于指定该`resultMap`映射到哪个`JavaBean`
+<h2 id="resultmap">ResultMap</h2>
+<p><code class="highlighter-rouge">resultMap</code> 元素是MyBatis中最重要最强大的元素，resultMap元素本身有一些属性，如下代码，<code class="highlighter-rouge">id</code>用于标识该<code class="highlighter-rouge">resultMap</code>，<code class="highlighter-rouge">type</code>用于指定该<code class="highlighter-rouge">resultMap</code>映射到哪个<code class="highlighter-rouge">JavaBean</code></p>
 
-~~~xml
-<resultmap id="blogResultMap" type="Blog">...</resultmap>
-~~~
-它还有很多子元素，下面是`resultMap`元素的概念图
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">"blogResultMap"</span> <span class="na">type=</span><span class="s">"Blog"</span><span class="nt">&gt;</span>...<span class="nt">&lt;/resultMap&gt;</span>
+</code></pre>
+</div>
+<p>它还有很多子元素，下面是<code class="highlighter-rouge">resultMap</code>元素的概念图</p>
 
-**resultMap**
+<p><strong>resultMap</strong></p>
 
-* constructor - 类在实例化时,用来注入结果到构造方法中
-  * idArg - ID 参数;标记结果作为 ID 可以帮助提高整体效能
-  * arg - 注入到构造方法的一个普通结果
-* id – 一个 ID 结果;标记结果作为 ID 可以帮助提高整体效能
-* result – 注入到字段或 JavaBean 属性的普通结果
-* association – 一个复杂的类型关联;许多结果将包成这种类型
-  * 嵌入结果映射 – 结果映射自身的关联,或者参考一个
-* collection – 复杂类型的集
-  * 嵌入结果映射 – 结果映射自身的集,或者参考一个
-* discriminator – 使用结果值来决定使用哪个结果映射
-  * case – 基于某某些值的结果映射
-    * 嵌入结果映射 – 这种情形结果也映射它本身,因此可以包含很多相 同的元素,或者它可以参照一个外部的结果映射
+<ul>
+  <li>constructor - 类在实例化时,用来注入结果到构造方法中
+    <ul>
+      <li>idArg - ID 参数;标记结果作为 ID 可以帮助提高整体效能</li>
+      <li>arg - 注入到构造方法的一个普通结果</li>
+    </ul>
+  </li>
+  <li>id – 一个 ID 结果;标记结果作为 ID 可以帮助提高整体效能</li>
+  <li>result – 注入到字段或 JavaBean 属性的普通结果</li>
+  <li>association – 一个复杂的类型关联;许多结果将包成这种类型
+    <ul>
+      <li>嵌入结果映射 – 结果映射自身的关联,或者参考一个</li>
+    </ul>
+  </li>
+  <li>collection – 复杂类型的集
+    <ul>
+      <li>嵌入结果映射 – 结果映射自身的集,或者参考一个</li>
+    </ul>
+  </li>
+  <li>discriminator – 使用结果值来决定使用哪个结果映射
+    <ul>
+      <li>case – 基于某某些值的结果映射
+        <ul>
+          <li>嵌入结果映射 – 这种情形结果也映射它本身,因此可以包含很多相 同的元素,或者它可以参照一个外部的结果映射</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
 
-**注意**由于DTD的限制，这些元素出现的顺序必须按照上面的顺序  
+<p><strong>注意</strong> 由于DTD的限制，这些元素出现的顺序必须按照上面的顺序  </p>
 
-下面详细说明`resultMap`的每个子元素
+<p>下面详细说明<code class="highlighter-rouge">resultMap</code>的每个子元素</p>
 
-### id和result
-这是最基本的内容，这两者之间的唯一不同是`id`所指定属性将是能够唯一标识对象的属性，这能提高效率，特别是有联合映射时。  
-`id`和`reslut`元素有`column, property, javaType, jdbcType, typeHandler`等属性，其中`column`用于指定数据库中的列名，`property`用于指定`JavaBean`对应的属性，其他属性则与之前讲的一样。
+<h3 id="idresult">id和result</h3>
+<p>这是最基本的内容，这两者之间的唯一不同是<code class="highlighter-rouge">id</code>所指定属性将是能够唯一标识对象的属性，这能提高效率，特别是有联合映射时。<br />
+<code class="highlighter-rouge">id</code>和<code class="highlighter-rouge">reslut</code>元素有<code class="highlighter-rouge">column, property, javaType, jdbcType, typeHandler</code>等属性，其中<code class="highlighter-rouge">column</code>用于指定数据库中的列名，<code class="highlighter-rouge">property</code>用于指定<code class="highlighter-rouge">JavaBean</code>对应的属性，其他属性则与之前讲的一样。</p>
 
-~~~xml
-<id column="id" property="id" />
-<result column="user_name" property="username" />
-~~~
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;id</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">property=</span><span class="s">"id"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">"user_name"</span> <span class="na">property=</span><span class="s">"username"</span><span class="nt">/&gt;</span>
+</code></pre>
+</div>
 
-### 构造方法constructor
-如果`resultMap`所映射的`JavaBean`的构造方法需要提供参数，则`constructor`就不能缺少了  
-`constructor`有`idArg`和`arg`两个子元素，意义差不多(参见`id`和`result`的区别)，都是给构造方法提供参数。他们的属性也同`id`和`result`一样  
-`constructor`常用的形式如下：
+<h3 id="constructor">构造方法constructor</h3>
+<p>如果<code class="highlighter-rouge">resultMap</code>所映射的<code class="highlighter-rouge">JavaBean</code>的构造方法需要提供参数，则<code class="highlighter-rouge">constructor</code>就不能缺少了<br />
+<code class="highlighter-rouge">constructor</code>有<code class="highlighter-rouge">idArg</code>和<code class="highlighter-rouge">arg</code>两个子元素，意义差不多(参见<code class="highlighter-rouge">id</code>和<code class="highlighter-rouge">result</code>的区别)，都是给构造方法提供参数。他们的属性也同<code class="highlighter-rouge">id</code>和<code class="highlighter-rouge">result</code>一样<br />
+<code class="highlighter-rouge">constructor</code>常用的形式如下：</p>
 
-~~~xml
-<constructor>
-  <idarg column="id" javatype="int" />
-  <arg column="username" javatype="String" />
-</constructor>
-~~~
-**注意** Java 没有自查(反射)参数名的方法，所以要保证这里的参数顺序同`JavaBean`定义的顺序一致，而且数据类型也是确定的。
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;constructor&gt;</span>
+  <span class="nt">&lt;idArg</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">javaType=</span><span class="s">"int"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;arg</span> <span class="na">column=</span><span class="s">"username"</span> <span class="na">javaType=</span><span class="s">"String"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/constructor&gt;</span>
+</code></pre>
+</div>
+<p><strong>注意</strong> Java 没有自查(反射)参数名的方法，所以要保证这里的参数顺序同<code class="highlighter-rouge">JavaBean</code>定义的顺序一致，而且数据类型也是确定的。</p>
 
-### 关联association
-关联元素处理“有一个”类型的关系。比如,一个博客有一个作者，就像下面这样
+<h3 id="association">关联association</h3>
+<p>关联元素处理“有一个”类型的关系。比如,一个博客有一个作者，就像下面这样</p>
 
-~~~java
-//来自 Author.java
-public class Author {
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">//来自 Author.java</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Author</span> <span class="o">{</span>
 
-    private Integer id;
-    private String name;
-    private Integer age;
-    ...
-}
-//来自 Blog.java
-public class Blog {
+    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">age</span><span class="o">;</span>
+    <span class="o">...</span>
+<span class="o">}</span>
+<span class="c1">//来自 Blog.java</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Blog</span> <span class="o">{</span>
 
-    private Integer id;
-    private String title;
-    private String content;
-    private Author author; //数据库中对应的字段是 author_id int类型
-    ...
-}
-~~~
-可以这样做级联查询
+    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">title</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">content</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">Author</span> <span class="n">author</span><span class="o">;</span> <span class="c1">//数据库中对应的字段是 author_id int类型</span>
+    <span class="o">...</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+<p>可以这样做级联查询</p>
 
-~~~xml
-<resultmap id="BlogResultMap" type="Blog">
-    <id column="id" property="id" />
-    <result column="title" property="title" />
-    <result column="content" property="content" />
-    <!-- 只要提供了返回类型，像上面的id和result指定的字段，即使不指定MyBatis也能自动封装 -->
-    <association column="author_id" property="author" javatype="Author" select="com.test.mybatis.mapper.AuthorMapper.selectAuthorById" />
-                 <!-- 这里如果起了别名也可使用 -->
-</resultmap>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">"BlogResultMap"</span> <span class="na">type=</span><span class="s">"Blog"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;id</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">property=</span><span class="s">"id"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">"title"</span> <span class="na">property=</span><span class="s">"title"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">"content"</span> <span class="na">property=</span><span class="s">"content"</span><span class="nt">/&gt;</span>
+    <span class="c">&lt;!-- 只要提供了返回类型，像上面的id和result指定的字段，即使不指定MyBatis也能自动封装 --&gt;</span>
+    <span class="nt">&lt;association</span> <span class="na">column=</span><span class="s">"author_id"</span> <span class="na">property=</span><span class="s">"author"</span> <span class="na">javaType=</span><span class="s">"Author"</span>
+                 <span class="na">select=</span><span class="s">"com.test.mybatis.mapper.AuthorMapper.selectAuthorById"</span><span class="nt">/&gt;</span>
+                 <span class="c">&lt;!-- 这里如果起了别名也可使用 --&gt;</span>
+<span class="nt">&lt;/resultMap&gt;</span>
 
-<select id="selectBlogById" parametertype="int" resultmap="BlogResultMap">
+<span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">"selectBlogById"</span> <span class="na">parameterType=</span><span class="s">"int"</span> <span class="na">resultMap=</span><span class="s">"BlogResultMap"</span><span class="nt">&gt;</span>
     SELECT * FROM blog WHERE id = #{id}
-</select>
+<span class="nt">&lt;/select&gt;</span>
 
-<!-- 来自 AuthorMapper.xml -->
-<select id="selectAuthorById" parametertype="int" resulttype="Author">
+<span class="c">&lt;!-- 来自 AuthorMapper.xml --&gt;</span>
+<span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">"selectAuthorById"</span> <span class="na">parameterType=</span><span class="s">"int"</span> <span class="na">resultType=</span><span class="s">"Author"</span><span class="nt">&gt;</span>
     SELECT * FROM author WHERE id = #{id}
-</select>
-~~~
-`association`是通过把column指定的字段作为参数，传给select子查询的。
+<span class="nt">&lt;/select&gt;</span>
+</code></pre>
+</div>
+<p><code class="highlighter-rouge">association</code>是通过把column指定的字段作为参数，传给select子查询的。</p>
 
-### 集合collection
-如果博客有了许多评论，则会出现“一对多”的情形，比如上面的`Blog`会多出一个属性
+<h3 id="collection">集合collection</h3>
+<p>如果博客有了许多评论，则会出现“一对多”的情形，比如上面的<code class="highlighter-rouge">Blog</code>会多出一个属性</p>
 
-~~~java
-    //Blog.java新增的属性
-    private List<comment> comments;
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">//Blog.java新增的属性</span>
+    <span class="kd">private</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Comment</span><span class="o">&gt;</span> <span class="n">comments</span><span class="o">;</span>
 
-//Comment.java
-public class Comment {
+<span class="c1">//Comment.java</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Comment</span> <span class="o">{</span>
 
-    private Integer id;
-    private String content;
-    private Blog blog;
-    ...
-}
-~~~
-那么对于`Blog`的查询将变成这样
+    <span class="kd">private</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">content</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">Blog</span> <span class="n">blog</span><span class="o">;</span>
+    <span class="o">...</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+<p>那么对于<code class="highlighter-rouge">Blog</code>的查询将变成这样</p>
 
-~~~xml
-<resultmap id="BlogResultMap" type="Blog">
-    <id column="id" property="id" />
-    <result column="title" property="title" />
-    <result column="content" property="content" />
-    <!-- 只要提供了返回类型，像上面的id和result指定的字段，即使不指定MyBatis也能自动封装 -->
-    <association column="author_id" property="author" javatype="Author" select="com.test.mybatis.mapper.AuthorMapper.selectAuthorById" />
-                 <!-- 这里如果起了别名也可使用 -->
-    <collection property="comments" javatype="ArrayList" column="id" oftype="Comment" select="com.test.mybatis.mapper.CommentMapper.selectCommentForBlog" />
-</resultmap>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">"BlogResultMap"</span> <span class="na">type=</span><span class="s">"Blog"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;id</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">property=</span><span class="s">"id"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">"title"</span> <span class="na">property=</span><span class="s">"title"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">"content"</span> <span class="na">property=</span><span class="s">"content"</span><span class="nt">/&gt;</span>
+    <span class="c">&lt;!-- 只要提供了返回类型，像上面的id和result指定的字段，即使不指定MyBatis也能自动封装 --&gt;</span>
+    <span class="nt">&lt;association</span> <span class="na">column=</span><span class="s">"author_id"</span> <span class="na">property=</span><span class="s">"author"</span> <span class="na">javaType=</span><span class="s">"Author"</span>
+                 <span class="na">select=</span><span class="s">"com.test.mybatis.mapper.AuthorMapper.selectAuthorById"</span><span class="nt">/&gt;</span>
+                 <span class="c">&lt;!-- 这里如果起了别名也可使用 --&gt;</span>
+    <span class="nt">&lt;collection</span> <span class="na">property=</span><span class="s">"comments"</span> <span class="na">javaType=</span><span class="s">"ArrayList"</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">ofType=</span><span class="s">"Comment"</span>
+                <span class="na">select=</span><span class="s">"com.test.mybatis.mapper.CommentMapper.selectCommentForBlog"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/resultMap&gt;</span>
 
-<select id="selectBlogById" parametertype="int" resultmap="BlogResultMap">
+<span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">"selectBlogById"</span> <span class="na">parameterType=</span><span class="s">"int"</span> <span class="na">resultMap=</span><span class="s">"BlogResultMap"</span><span class="nt">&gt;</span>
     SELECT * FROM blog WHERE id = #{id}
-</select>
+<span class="nt">&lt;/select&gt;</span>
 
-<!-- 来自 AuthorMapper.xml -->
-<select id="selectAuthorById" parametertype="int" resulttype="Author">
+<span class="c">&lt;!-- 来自 AuthorMapper.xml --&gt;</span>
+<span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">"selectAuthorById"</span> <span class="na">parameterType=</span><span class="s">"int"</span> <span class="na">resultType=</span><span class="s">"Author"</span><span class="nt">&gt;</span>
     SELECT * FROM author WHERE id = #{id}
-</select>
+<span class="nt">&lt;/select&gt;</span>
 
-<!-- 来自 CommentMapper.xml -->
-<select id="selectCommentForBlog" parametertype="int" resulttype="Comment">
+<span class="c">&lt;!-- 来自 CommentMapper.xml --&gt;</span>
+<span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">"selectCommentForBlog"</span> <span class="na">parameterType=</span><span class="s">"int"</span> <span class="na">resultType=</span><span class="s">"Comment"</span><span class="nt">&gt;</span>
     SELECT * FROM comment WHERE blog_id = #{id}
-</select>
-~~~
-其中的`ofType`用于表示集合中所存放的类型，上面可以理解为产生了一个`ArrayList<comment> comments`，`javaType`属性可以省略；`column`指定了id作为传入参数
+<span class="nt">&lt;/select&gt;</span>
+</code></pre>
+</div>
+<p>其中的<code class="highlighter-rouge">ofType</code>用于表示集合中所存放的类型，上面可以理解为产生了一个<code class="highlighter-rouge">ArrayList&lt;Comment&gt; comments</code>，<code class="highlighter-rouge">javaType</code>属性可以省略；<code class="highlighter-rouge">column</code>指定了id作为传入参数</p>
 
-
-*****
-</comment></comment></h2>
+<hr />
 
         </div>
     </div>
