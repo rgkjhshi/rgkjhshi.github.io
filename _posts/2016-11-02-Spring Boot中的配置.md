@@ -72,7 +72,7 @@ $ java -jar myapp.jar --spring.application.json='{"foo":"bar"}'   // 命令行�
 ## 配置文件:`application.properties`
 `SpringApplication`默认会加载配置文件`application.properties`中的配置并加到Spring `Environment`中, 该文件的加载有个优先级: `classpath:/config/application.properties` > `classpath:/application.properties`即在`classpath:/config/`下的配置文件优先级比较高. 也可以使用YAML文件(`application.yml`)来替代properties文件.
 
-`application.properties`文件中默认有很多属性, 比如`server.port=8080`等; 你可以覆盖这些默认配置, 当然也可以把自己的配置放到这个默认加载的配置文件里.
+`application.properties`被称为`Spring Boot`的外露配置, 文件中有很多属性可用来配置整个应用, 比如`server.port=8080`等; 你可以通过指定这些属性值来配置应用.
 
 配置文件的名字和位置, 也可自定义, 可通过`spring.config.name`和`spring.config.location`环境属性来指定, 这两个属性使用的时期非常早, 所以一般会在命令行或者系统属性或环境变量中来指定, 如:
 
@@ -166,6 +166,8 @@ public class DBConfig {
 
 }
 ~~~
+
+注: `properties`文件默认是按照unicode加载, 若有中文, 一定要指定编码`@PropertySource(value = "db.properties", encoding = "UTF-8")`
 
 ### 类型安全的配置加载方式
 上面这种方式在`Spring Framework`普遍使用, 但是 `Spring Boot`提供了更高级的使用配置的方式,类似于`Spring`中的`DataBinder`工具. 还是`db.properties`文件, 我们可以这样进行数据绑定:

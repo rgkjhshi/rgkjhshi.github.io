@@ -234,17 +234,25 @@ private static final Logger logger = LoggerFactory.getLogger("Aaaaa.Bbbbb.TestLe
 
 日志行产生的行号。
 
+* **日志级别 : %p / %le / %level**
+
+日志级别
+
+* **线程名 : %t / %thread**
+
+线程名
+
 * **日志内容 : %m / %msg / %message**
 
 日志中输出的信息
 
-* **时间 : %d{pattern} / %date{pattern} / %message**
+* **时间 : %d{pattern} / %date{pattern}**
 
 产生日志的时间。日志的格式如下:
 
 ~~~java
 %d	                   : 2015-07-07 22:45:25,665
-%date	               : 2015-07-07 22:45:25,665
+%date	                 : 2015-07-07 22:45:25,665
 %date{HH:mm:ss.SSS}	   : 22:45:25.665
 %date{yyyy-MM-dd HH:mm:ss.SSS}	2015-07-07 22:45:25.665
 注意那个毫秒前一定要写成点(.)
