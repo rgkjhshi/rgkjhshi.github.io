@@ -201,12 +201,12 @@ $ java -jar myproject.jar --spring.config.location=classpath:/default.properties
 <h3 id="section-3">随机变量</h3>
 <p><code class="highlighter-rouge">RandomValuePropertySource</code>可以注入一些随机变量, 可产生<code class="highlighter-rouge">integer, long, string, uuid</code>等类型的随机值, 例如</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>my.secret=${random.value}
-my.number=${random.int}
-my.bignumber=${random.long}
-my.uuid=${random.uuid}
-my.number.less.than.ten=${random.int(10)}
-my.number.in.range=${random.int[1024,65536]}
+<div class="highlighter-rouge"><pre class="highlight"><code>my.secret<span class="o">=</span><span class="k">${</span><span class="nv">random</span><span class="p">.value</span><span class="k">}</span>
+my.number<span class="o">=</span><span class="k">${</span><span class="nv">random</span><span class="p">.int</span><span class="k">}</span>
+my.bignumber<span class="o">=</span><span class="k">${</span><span class="nv">random</span><span class="p">.long</span><span class="k">}</span>
+my.uuid<span class="o">=</span><span class="k">${</span><span class="nv">random</span><span class="p">.uuid</span><span class="k">}</span>
+my.number.less.than.ten<span class="o">=</span><span class="k">${</span><span class="nv">random</span><span class="p">.int(10)</span><span class="k">}</span>
+my.number.in.range<span class="o">=</span><span class="k">${</span><span class="nv">random</span><span class="p">.int[1024,65536]</span><span class="k">}</span>
 </code></pre>
 </div>
 
@@ -215,8 +215,8 @@ my.number.in.range=${random.int[1024,65536]}
 <h3 id="section-4">变量引用</h3>
 <p><code class="highlighter-rouge">application.properties</code>中定义的变量已经被<code class="highlighter-rouge">Environment</code>过滤, 所以可以引用前面定义过的变量, 比如:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>app.name=MyApp
-app.description=${app.name} is a Spring Boot application
+<div class="highlighter-rouge"><pre class="highlight"><code>app.name<span class="o">=</span>MyApp
+app.description<span class="o">=</span><span class="k">${</span><span class="nv">app</span><span class="p">.name</span><span class="k">}</span> is a Spring Boot application
 </code></pre>
 </div>
 
@@ -251,11 +251,11 @@ app.description=${app.name} is a Spring Boot application
 <p><code class="highlighter-rouge">Spring Boot</code>默认加载<code class="highlighter-rouge">application.properties</code>中的配置, 这个文件中的默认属性相当多…<br />
 如果我们要加载自己的配置, 比如下面的数据库配置:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>db.driver=MySQL
-db.username=username
-db.password=123456
-db.tables[0]=table1
-db.tables[1]=table2
+<div class="highlighter-rouge"><pre class="highlight"><code>db.driver<span class="o">=</span>MySQL
+db.username<span class="o">=</span>username
+db.password<span class="o">=</span>123456
+db.tables[0]<span class="o">=</span>table1
+db.tables[1]<span class="o">=</span>table2
 </code></pre>
 </div>
 <p>可以把这些属性直接放到<code class="highlighter-rouge">application.properties</code>中, 但极力不推荐这样.</p>
