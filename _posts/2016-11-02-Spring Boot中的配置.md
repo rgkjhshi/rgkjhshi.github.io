@@ -85,7 +85,7 @@ $ java -jar myproject.jar --spring.config.location=classpath:/default.properties
 ### 随机变量
 `RandomValuePropertySource`可以注入一些随机变量, 可产生`integer, long, string, uuid`等类型的随机值, 例如
 
-~~~
+~~~sh
 my.secret=${random.value}
 my.number=${random.int}
 my.bignumber=${random.long}
@@ -99,7 +99,7 @@ my.number.in.range=${random.int[1024,65536]}
 ### 变量引用
 `application.properties`中定义的变量已经被`Environment`过滤, 所以可以引用前面定义过的变量, 比如:
 
-~~~
+~~~sh
 app.name=MyApp
 app.description=${app.name} is a Spring Boot application
 ~~~
@@ -133,7 +133,7 @@ server.port=8083
 `Spring Boot`默认加载`application.properties`中的配置, 这个文件中的默认属性相当多...  
 如果我们要加载自己的配置, 比如下面的数据库配置:
 
-~~~
+~~~sh
 db.driver=MySQL
 db.username=username
 db.password=123456

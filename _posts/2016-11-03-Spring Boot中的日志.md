@@ -5,7 +5,7 @@ date:   2016-11-03
 category: 编程技术
 tag: Spring
 ---
-这里所说的配置是指`properties`文件这样的配置
+
 
 
 
@@ -74,7 +74,7 @@ tag: Spring
 ### 日志级别
 `logging.level.*`用于指定日志级别, 比如:
 
-~~~
+~~~sh
 logging.level.root=WARN
 logging.level.org.springframework.web=DEBUG
 logging.level.org.hibernate=ERROR
