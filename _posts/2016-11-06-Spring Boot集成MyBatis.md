@@ -51,9 +51,9 @@ Java的`javax.sql.DataSource`接口提供了标准的使用数据库连接的方
 
 ~~~xml
 <dependency>
-    <groupId>mysql</groupId>
-    <artifactId>mysql-connector-java</artifactId>
-    <scope>runtime</scope>
+    <groupId>com.alibaba</groupId>
+    <artifactId>druid</artifactId>
+    <version>1.0.18</version>
 </dependency>
 ~~~
 
