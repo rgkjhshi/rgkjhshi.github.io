@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="关于单元测试, 编程技术, Spring, 逆水行舟" />
+    <meta name="description" content="关于单元测试, 编程技术, Spring, " />
+
+    <title>逆水行舟</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-09-%E5%85%B3%E4%BA%8E%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="/static/js/jquery.qrcode.min.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="/static/js/uikit.min.js"></script>
+    <!-- quietflow -->
+    <!-- <script type="text/javascript" src="http://loveshisong.cn/static/js/quietflow.min.js"></script> -->
+    <!-- UK sticky -->
+    <script type="text/javascript" src="/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "shisong"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" data-uk-sticky>
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <script type="text/javascript">
+jQuery(function(){
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-09-%E5%85%B3%E4%BA%8E%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95.html"
+    });
+})
+</script>
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>关于单元测试</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <hr />
+
+<ul id="markdown-toc">
+  <li><a href="#section">前言</a>    <ul>
+      <li><a href="#section-1">关于测试工具</a></li>
+    </ul>
+  </li>
+  <li><a href="#junit"><code class="highlighter-rouge">Junit</code>使用详解</a></li>
+  <li><a href="#mockito"><code class="highlighter-rouge">Mockito</code>使用详解</a>    <ul>
+      <li><a href="#section-2">参数匹配器</a></li>
+    </ul>
+  </li>
+  <li><a href="#spring-boot-test">Spring Boot Test</a>    <ul>
+      <li><a href="#section-3">模仿和侦查</a></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="section">前言</h2>
+<p>测试是开发过程中必不可少的, 但是实际工作中严格按照标准, 测试用例能够覆盖大部分业务逻辑的, 估计连一半都不到.</p>
+
+<p>每天的工作流程应该是这样的:</p>
+
+<ol>
+  <li>从<code class="highlighter-rouge">git</code>上把代码更新到本地, 跑通所有单元测试, 确保代码修改前是正确的</li>
+  <li>新增代码</li>
+  <li>对新增代码进行单元测试, 保证新增代码没有问题</li>
+  <li>提交到<code class="highlighter-rouge">git</code></li>
+</ol>
+
+<h3 id="section-1">关于测试工具</h3>
+<p>单元测试主要使用<code class="highlighter-rouge">Junit</code>工具, 已经是很古老的技术了, 现在的<code class="highlighter-rouge">Junit4</code>直接通过注解就可以实现, 特别方便.</p>
+
+<p>另一个测试的必备利器就是数据模拟工具<code class="highlighter-rouge">Mockito</code>. 假设我们在代码中有如下的调用关系:</p>
+
+<p><img src="/static/images/unit_test_01.png" alt="类调用关系" title="类调用关系" />
+我们要对<code class="highlighter-rouge">A</code>进行单元测试的时候需要整个调用树都构建出来, 即<code class="highlighter-rouge">BCDE</code>的示例都需要, 但是显然我们只关心<code class="highlighter-rouge">A</code>, 这个时候我们可以使用<code class="highlighter-rouge">Mockito</code>模拟<code class="highlighter-rouge">BC</code>的返回, 使用<code class="highlighter-rouge">mock对象</code>来代替<code class="highlighter-rouge">BC</code>.</p>
+
+<hr />
+
+<h2 id="junit"><code class="highlighter-rouge">Junit</code>使用详解</h2>
+<p><code class="highlighter-rouge">Junit4</code>使用方式特别简单, 只需要加一些注解就可以. 下面对一些常用的注解进行简单说明:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">@Test</code>: 标识一个普通的测试方法, <code class="highlighter-rouge">@Test(timeout = 1000)</code>表示测试方法执行超过1000毫秒后算超时, 测试将失败; <code class="highlighter-rouge">@Test(expected = Exception.class)</code>表示测试方法期望得到的异常类, 如果方法执行没有抛出指定的异常, 则测试失败</li>
+  <li><code class="highlighter-rouge">@Before</code>: 初始化方法, 对每一个方法都执行一次</li>
+  <li><code class="highlighter-rouge">@BeforeClass</code>: 在所有测试方法前执行一次</li>
+  <li><code class="highlighter-rouge">@After</code>: 在每个测试方法后执行一次</li>
+  <li><code class="highlighter-rouge">@AfterClass</code>: 在所有测试方法后执行一次</li>
+  <li><code class="highlighter-rouge">@Ignore("not ready yet")</code>: 表示暂时不执行该测试方法</li>
+  <li><code class="highlighter-rouge">@RunWith</code>: 在JUnit中有很多个<code class="highlighter-rouge">Runner</code>, 他们负责调用你的测试代码, 该注解用于指定一个<code class="highlighter-rouge">Runner</code></li>
+  <li><code class="highlighter-rouge">@Suite.SuiteClasses</code>: 打包测试, 需要与<code class="highlighter-rouge">@RunWith(Suite.class)</code>联合使用, 比如下面的例子:</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@RunWith</span><span class="o">(</span><span class="n">Suite</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="nd">@SuiteClasses</span><span class="o">({</span><span class="n">ATest</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">BTest</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">CTest</span><span class="o">.</span><span class="na">class</span><span class="o">})</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ABCSuite</span> <span class="o">{</span>
+    <span class="c1">// 类中不需要编写代码</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<ul>
+  <li><code class="highlighter-rouge">Parameterized.Parameters</code>: 参数化测试, 这个稍微复杂一些, 一般有这么几个条件:
+    <ul>
+      <li>该类被注解为<code class="highlighter-rouge">@RunWith(Parameterized.class)</code></li>
+      <li>这个类有一个构造函数, 存储测试数据</li>
+      <li>这个类有一个静态方法生成并返回测试数据, 并注明<code class="highlighter-rouge">@Parameters</code>注解</li>
+      <li>这个类有一个测试, 它需要注解<code class="highlighter-rouge">@Test</code>到方法</li>
+    </ul>
+  </li>
+</ul>
+
+<p>下面是参数化测试的一个例子:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@RunWith</span><span class="o">(</span><span class="n">Parameterized</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ParameterTest</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="n">result</span><span class="o">;</span>
+
+    <span class="cm">/**
+     * 该构造方法的参数与下面@Parameters注解的方法中的Object数组中值的顺序对应
+     */</span>
+    <span class="kd">public</span> <span class="n">ParameterTest</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">();</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c1">// 将对参数构建出的每个对象都执行一遍, 即本例中将会执行三遍</span>
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">test</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">Assert</span><span class="o">.</span><span class="na">assertTrue</span><span class="o">(</span><span class="n">name</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="s">"小"</span><span class="o">)</span> <span class="o">==</span> <span class="n">result</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 相当于通过不通参数构建出了三个对象
+     */</span>
+    <span class="nd">@Parameterized</span><span class="o">.</span><span class="na">Parameters</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Collection</span><span class="o">&lt;?&gt;</span> <span class="n">data</span><span class="o">(){</span>
+        <span class="c1">// Object 数组中值的顺序注意要和上面的构造方法ParameterTest的参数对应</span>
+        <span class="k">return</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="n">Object</span><span class="o">[][]{</span>
+                <span class="o">{</span><span class="s">"小明2"</span><span class="o">,</span> <span class="kc">true</span><span class="o">},</span>
+                <span class="o">{</span><span class="s">"坏"</span><span class="o">,</span> <span class="kc">false</span><span class="o">},</span>
+                <span class="o">{</span><span class="s">"莉莉"</span><span class="o">,</span> <span class="kc">false</span><span class="o">},</span>
+        <span class="o">});</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>另外单测中还常用到一些断言方法, 比较简单, 不再介绍.</p>
+
+<hr />
+
+<h2 id="mockito"><code class="highlighter-rouge">Mockito</code>使用详解</h2>
+<p>使用<code class="highlighter-rouge">Mockito</code>可以设定当调用哪个对象的哪个方法时, 返回什么数据; 还可以验证调用了某对象的某方法几次.<br />
+创建mock对象不能对<code class="highlighter-rouge">final, Anonymous, primitive类</code>进行mock</p>
+
+<p>下面是一个简单的例子及相关说明</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">testMock</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// 创建mock对象，参数可以是类，也可以是接口</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="n">mock</span><span class="o">(</span><span class="n">List</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="c1">// 设置方法的预期返回值</span>
+        <span class="n">when</span><span class="o">(</span><span class="n">list</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">)).</span><span class="na">thenReturn</span><span class="o">(</span><span class="s">"helloworld"</span><span class="o">);</span>
+        <span class="c1">// 当调用 list.get(0) 时, 将返回之前设置的值</span>
+        <span class="n">String</span> <span class="n">result</span> <span class="o">=</span> <span class="n">list</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+        <span class="c1">// junit 测试</span>
+        <span class="n">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="s">"helloworld"</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>
+
+        <span class="c1">// 设定方法返回某异常</span>
+        <span class="n">when</span><span class="o">(</span><span class="n">list</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">)).</span><span class="na">thenThrow</span><span class="o">(</span><span class="k">new</span> <span class="n">RuntimeException</span><span class="o">(</span><span class="s">"test excpetion"</span><span class="o">));</span>
+
+        <span class="c1">// stubbing 形式, doXXX 返回的是一个 Stubber 对象</span>
+        <span class="n">doReturn</span><span class="o">(</span><span class="s">"helloworld"</span><span class="o">).</span><span class="na">when</span><span class="o">(</span><span class="n">list</span><span class="o">).</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>  <span class="c1">// 效果与最上面那个when一样</span>
+        <span class="n">doNothing</span><span class="o">().</span><span class="na">doThrow</span><span class="o">(</span><span class="k">new</span> <span class="n">RuntimeException</span><span class="o">(</span><span class="s">"void exception"</span><span class="o">)).</span><span class="na">when</span><span class="o">(</span><span class="n">list</span><span class="o">).</span><span class="na">clear</span><span class="o">();</span> <span class="c1">// 返回 void 的方法</span>
+
+        <span class="cm">/**
+         * 验证方法调用, 不关心返回值, 只关心调用了几次
+         */</span>
+        <span class="n">verify</span><span class="o">(</span><span class="n">list</span><span class="o">).</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>  <span class="c1">// 验证是否调用了 list.get(0)</span>
+        <span class="n">verify</span><span class="o">(</span><span class="n">list</span><span class="o">,</span> <span class="n">times</span><span class="o">(</span><span class="mi">1</span><span class="o">)).</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>  <span class="c1">// 默认调用一次,times(1)可以省略</span>
+        <span class="n">verify</span><span class="o">(</span><span class="n">list</span><span class="o">,</span> <span class="n">times</span><span class="o">(</span><span class="mi">3</span><span class="o">)).</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>  <span class="c1">// 验证调用三次</span>
+        <span class="n">verify</span><span class="o">(</span><span class="n">list</span><span class="o">,</span> <span class="n">times</span><span class="o">(</span><span class="mi">0</span><span class="o">)).</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>  <span class="c1">// 一次也没调用</span>
+        <span class="n">verify</span><span class="o">(</span><span class="n">list</span><span class="o">,</span> <span class="n">never</span><span class="o">()).</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>       <span class="c1">// 一次也没调用, 同上</span>
+        <span class="n">verify</span><span class="o">(</span><span class="n">list</span><span class="o">,</span> <span class="n">atLeastOnce</span><span class="o">()).</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span> <span class="c1">// 至少一次</span>
+        <span class="n">verify</span><span class="o">(</span><span class="n">list</span><span class="o">,</span> <span class="n">atLeast</span><span class="o">(</span><span class="mi">2</span><span class="o">)).</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>    <span class="c1">// 至少两次</span>
+        <span class="n">verify</span><span class="o">(</span><span class="n">list</span><span class="o">,</span> <span class="n">atMost</span><span class="o">(</span><span class="mi">5</span><span class="o">)).</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>     <span class="c1">// 最多5次</span>
+    <span class="o">}</span>
+</code></pre>
+</div>
+
+<h3 id="section-2">参数匹配器</h3>
+<ul>
+  <li><code class="highlighter-rouge">Mockito</code>类继承于<code class="highlighter-rouge">Matchers</code></li>
+  <li><code class="highlighter-rouge">Matchers</code>类中有许多参数匹配器用于匹配一种类型, 比如<code class="highlighter-rouge">anyInt, anyString, anyMap...</code>  </li>
+  <li>如果使用参数匹配器, 那么所有的参数都要使用参数匹配器, 不能即有<code class="highlighter-rouge">get(0)</code>又有<code class="highlighter-rouge">get(anyInt())</code></li>
+</ul>
+
+<p>如下例子:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>        <span class="n">when</span><span class="o">(</span><span class="n">list</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">anyInt</span><span class="o">())).</span><span class="na">thenReturn</span><span class="o">(</span><span class="s">"helloworld"</span><span class="o">);</span>
+        <span class="n">when</span><span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">anyString</span><span class="o">())).</span><span class="na">thenReturn</span><span class="o">(</span><span class="s">"hello"</span><span class="o">);</span>
+        <span class="n">when</span><span class="o">(</span><span class="n">list</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">)).</span><span class="na">thenReturn</span><span class="o">(</span><span class="s">"helloworld"</span><span class="o">);</span>  <span class="c1">// 再这么用, 就会报错</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="spring-boot-test">Spring Boot Test</h2>
+<p>与单元测试不通, 在Spring中需要初始化完整的应用程序上下文, 因此这种测试常称为集成测试.<br />
+Spring Boot提供了一个测试相关的starter:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-test<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+</code></pre>
+</div>
+<p>我们在之前的Spring项目中使用<code class="highlighter-rouge">JUnit</code>测试时, 测试类是这样写的:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@RunWith</span><span class="o">(</span><span class="n">SpringJUnit4ClassRunner</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>  <span class="c1">// Spring JUnit支持</span>
+<span class="nd">@ContextConfiguration</span><span class="o">(</span><span class="n">classes</span> <span class="o">=</span> <span class="n">Application</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>  <span class="c1">// 指定启动类</span>
+<span class="nd">@WebAppConfiguration</span> <span class="c1">// 如果是Web项目, Junit需要模拟ServletContext, 因此需要加上这个注解</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ExampleServiceTest</span> <span class="o">{</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>而在<code class="highlighter-rouge">Spring Boot 1.4</code>已经做了优化, 变成了这样:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@RunWith</span><span class="o">(</span><span class="n">SpringRunner</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="nd">@SpringBootTest</span><span class="o">(</span><span class="n">classes</span> <span class="o">=</span> <span class="n">Application</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ExampleServiceTest</span> <span class="o">{</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<ul>
+  <li><code class="highlighter-rouge">SpringRunner</code>是<code class="highlighter-rouge">SpringJUnit4ClassRunner</code>的新名字, 这个名字只是让名字看起来简单些.</li>
+  <li><code class="highlighter-rouge">SpringBootTest</code>将使用你的<code class="highlighter-rouge">SpringApplication</code>来创建<code class="highlighter-rouge">ApplicationContext</code>, <code class="highlighter-rouge">classes</code>属性可以不指定,会自动发现, 另外还有一个<code class="highlighter-rouge">webEnvironment</code>属性用于指定web的测试环境</li>
+  <li>在<code class="highlighter-rouge">Spring Boot 1.3</code>中的<code class="highlighter-rouge">@SpringApplicationConfiguration</code>和<code class="highlighter-rouge">@WebIntegrationTest</code>已经被废弃掉了, 被<code class="highlighter-rouge">@SpringBootTest</code>替代了</li>
+</ul>
+
+<h3 id="section-3">模仿和侦查</h3>
+<p>在Spring项目中做测试的时候会发现大部分情况下都需要模拟特定的bean, 使某个bean的特定方法返回你想要的数据. 在Spring Boot中变的特别简单, 比如:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@RunWith</span><span class="o">(</span><span class="n">SpringRunner</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="nd">@SpringBootTest</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyTests</span> <span class="o">{</span>
+    <span class="nd">@MockBean</span>
+    <span class="kd">private</span> <span class="n">RemoteService</span> <span class="n">remoteService</span><span class="o">;</span>  <span class="c1">// 这个bean是被mock出来的, 会替换掉spring中的那个bean</span>
+    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="n">Reverser</span> <span class="n">reverser</span><span class="o">;</span>  <span class="c1">// 这个bean是spring中的</span>
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">exampleTest</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// RemoteService 已经被注入到了 reverser bean里了</span>
+        <span class="n">when</span><span class="o">(</span><span class="n">remoteService</span><span class="o">.</span><span class="na">someCall</span><span class="o">()).</span><span class="na">thenReturn</span><span class="o">(</span><span class="s">"mock"</span><span class="o">);</span>
+        <span class="n">String</span> <span class="n">reverse</span> <span class="o">=</span> <span class="n">reverser</span><span class="o">.</span><span class="na">reverseSomeCall</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">@MockBean</code>是把原来的bean用mock的bean整个替换掉了, 而<code class="highlighter-rouge">@SpyBean</code>还会执行原来bean的方法, 但是后面可以mock想要的方法</p>
+
+<hr />
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/关于单元测试" data-title="关于单元测试" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-09-%E5%85%B3%E4%BA%8E%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
+
+</body>
+
+</html>

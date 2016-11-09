@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="keywords" content="Java中的同步异步阻塞非阻塞, 编程技术, Java, 逆水行舟" />
-    <meta name="description" content="Java中的同步异步阻塞非阻塞, 编程技术, Java, 内容涉及OS的IO模型, Java的同步与异步, 阻塞与非阻塞, BIO、NIO、AIO" />
+    <meta name="description" content="Java中的同步异步阻塞非阻塞, 编程技术, Java, 本文内容涉及同步与异步, 阻塞与非阻塞, BIO、NIO、AIO等概念" />
 
     <title>逆水行舟</title>
 
@@ -99,19 +99,19 @@ jQuery(function(){
     <div class="uk-grid">
         <div  class="uk-width-4-4">
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
-            <p>内容涉及OS的IO模型, Java的同步与异步, 阻塞与非阻塞, BIO、NIO、AIO</p>
+            <p>本文内容涉及同步与异步, 阻塞与非阻塞, BIO、NIO、AIO等概念</p>
 
 <hr />
 
 <ul id="markdown-toc">
   <li><a href="#section">同步与异步</a></li>
-  <li><a href="#io">IO模型</a></li>
-  <li><a href="#section-1">阻塞与非阻塞</a>    <ul>
+  <li><a href="#section-1">阻塞与非阻塞</a></li>
+  <li><a href="#io">IO模型</a>    <ul>
       <li><a href="#bio">BIO</a></li>
       <li><a href="#nio">NIO</a></li>
       <li><a href="#io-1">多路复用IO</a></li>
-      <li><a href="#section-2">小结</a></li>
       <li><a href="#aio">AIO</a></li>
+      <li><a href="#section-2">小结</a></li>
     </ul>
   </li>
 </ul>
@@ -119,51 +119,56 @@ jQuery(function(){
 <hr />
 
 <h2 id="section">同步与异步</h2>
+<p><code class="highlighter-rouge">同步与异步</code>的概念, 关注的是 <strong>消息通信机制</strong></p>
 
-<p>同步就是一直在做某件事儿, 调用某个功能时, 这个功能没有结果之前, 这个调用就不返回。 比如洗衣服, 把衣服放在洗衣机里没有洗好之前就一直在那里看着它洗, 这就是同步(这个例子并不好, 人和洗衣机是两个主体, 我觉得同步应该是要洗一堆衣服, 自己动手洗, 没洗好之前就一直洗, 直到洗完才能做别的事情, 这样理解同步更好)</p>
+<ul>
+  <li><code class="highlighter-rouge">同步</code>是指发出一个请求, 在没有的到结果之前该请求就不返回结果, 请求返回时, 也就得到结果了.</li>
+</ul>
 
-<p>异步就是做某件事儿的同时也做了其他事, 调用某个功能时, 不用立即得到结果, 可以先处理别的功能, 有结果之后被调用方通知调用者来处理这个结果。 比如洗衣服, 把衣服放到洗衣机里洗, 自己可以先做别的事情, 衣服洗好了, 洗衣机会响铃通知, 这个时候就可以再去把衣服拿出来</p>
+<p>比如洗衣服, 把衣服放在洗衣机里, 没有洗好之前我们一直看着, 直到洗好了才拿出来晾晒.</p>
+
+<ul>
+  <li><code class="highlighter-rouge">异步</code>是指发出一个请求后, 立刻得到了回应, 但没有返回结果. 这时我们可以再处理别的事情(发送其他请求), 所以这种方式需要我们通过状态主动查看是否有了结果, 或者可以设置一个回调来通知调用者.</li>
+</ul>
+
+<p>比如洗衣服时, 把衣服放到洗衣机里, 我们就可以去做别的事情, 过会儿来看看有没有洗好(通过状态查询); <br />
+或者我们设置洗衣机洗完后响铃来通知我们洗好了(回调通知)</p>
+
+<hr />
+
+<h2 id="section-1">阻塞与非阻塞</h2>
+
+<p><code class="highlighter-rouge">阻塞与非阻塞</code>很容易和<code class="highlighter-rouge">同步与异步</code>混淆, 但两者关注点是不一样的. <code class="highlighter-rouge">阻塞与非阻塞</code>关注的是 <strong>程序在等待调用结果时的状态</strong></p>
+
+<ul>
+  <li><code class="highlighter-rouge">阻塞</code>是指请求结果返回之前, 当前线程会被挂起(被阻塞), 这时线程什么也做不了</li>
+  <li><code class="highlighter-rouge">非阻塞</code>是指请求结果返回之前, 当前线程没有被阻塞, 仍然可以做其他事情.</li>
+</ul>
+
+<p><code class="highlighter-rouge">阻塞</code>有个明显的特征就是线程通常是处于<code class="highlighter-rouge">BLOCKED</code>状态(BIO中的<code class="highlighter-rouge">read()</code>操作时, 线程阻塞是JVM配合OS完成的, 此时Java获取到线程的状态仍是<code class="highlighter-rouge">RUNNABLE</code>但它确实已经被阻塞了)</p>
+
+<p>如果要拿<code class="highlighter-rouge">同步</code>来做比较的话, 同步通信方式中的线程在发送请求之后等待结果这个过程中应该处于<code class="highlighter-rouge">RUNNABLE</code>状态, 同步必须一步一步来完成, 就像是代码必须执行完一行才能执行下一行, 所以必须等待这个请求返回之后才可进行下一个请求, 即使等待结果的时间长, 也是在执行这个请求的过程中. 而<code class="highlighter-rouge">异步</code>则不用等上一条执行完, 可以先执行别的代码, 等请求有了结果再来获取结果.</p>
 
 <hr />
 
 <h2 id="io">IO模型</h2>
 
-<p>要理解阻塞和非阻塞, 可以先了解下IO操作机制。IO机制是操作系统层面的, Java可以通过JVM发起系统调用进行IO操作.</p>
+<p>Java中的IO操作是JVM配合操作系统来完成的. 对于一个IO的读操作, 数据会先被拷贝到操作系统内核的缓冲区中, 然后从操作系统内核的缓冲区拷贝到应用程序的地址空间. 所以整个过程可分为两个阶段:</p>
 
-<p>先介绍下Linux OS中常见的IO模型:select, poll, epoll</p>
+<ol>
+  <li>等待I/O数据准备好. 这取决于IO目标返回数据的速度, 如网络IO时看网速和数据本身的大小.</li>
+  <li>数据从内核缓冲区拷贝到进程内.</li>
+</ol>
 
-<ul>
-  <li>select模型: 网络通信被linux操作系统抽象成文件读写, 通常由设备驱动程序提供, 驱动知道自身数据是否可用. 这些设备描述符由一个数组管理, 数组是有长度的, 32位机上限1024, 64位机上限2048. 每次select请求时都会线性遍历数组看是否有可用的文件描述符, 若一个也没有则睡眠, 直到超时或有可用资源后被唤醒, 然后重新遍历select数组找到可用的文件描述符.</li>
-  <li>poll模型: 与select类似, 把select数组采用链表实现, 因此没了最大数量的限制</li>
-  <li>epoll模型: 基于事件回调机制, 回调时直接通知进程, 无须使用某种方式来查看状态.</li>
-</ul>
-
-<h2 id="section-1">阻塞与非阻塞</h2>
-
-<p><code class="highlighter-rouge">阻塞与非阻塞</code>貌似很容易和<code class="highlighter-rouge">同步与异步</code>混淆。我们可以这么来看.</p>
-
-<p>阻塞的线程通常是处于<code class="highlighter-rouge">BLOCKED</code>状态(BIO中的<code class="highlighter-rouge">read()</code>操作时, 线程阻塞是JVM配合OS完成的, 此时Java获取到线程的状态仍是<code class="highlighter-rouge">RUNNABLE</code>但它确实已经被阻塞了)
-同步是指步骤需要一步步来完成, 像代码一条条执行, 而异步可以没执行完当前代码之前就执行下一行代码, 即做当前任务的同时也能做别的任务(当前任务可以交给别的线程同时执行). 不过关键要注意的是, 同步异步中的同步跟多线程同步使用<code class="highlighter-rouge">synchronized</code>进行同步, 这俩词虽然是一样的, 但说的完全不是一会儿事儿.</p>
-
-<p>所以<code class="highlighter-rouge">阻塞与非阻塞</code>说的是怎么通信, 是挂起还是不挂起, 有没有回调; <code class="highlighter-rouge">同步与异步</code>说的是怎么干活, 按部就班顺序干, 还是不按顺序一起同时干.</p>
-
-<p>传统的IO发起后线程被挂起, IO返回时接收结果的时间比运行的时间还要长. 所以可以用一个线程专门监视IO的返回状况(通过system call 获取一些状态), 发现IO的数据准备好时采用某种方式来处理(可以分配一个线程处理, 若处理比较简单可以也使用这个线程处理). JDK1.4 提供了NIO(New I/O), 使用<code class="highlighter-rouge">SocketChannel</code>代替原来的<code class="highlighter-rouge">Socket</code>, 它就是非阻塞IO, 它通过select选择器来进行系统调用。
-不过这样的处理, 中间有一个将数据从内核区拷贝到进程内的过程是同步的, 即这个过程是程序自己处理的(占用了本身线程的时间), 所以NIO是同步非阻塞的。如果这个拷贝数据到程序空间的过程也是别人来做, 不占用本身线程的时间, 这就是异步模型了.</p>
+<p>根据这两个阶段, 产生了常见的几种不同的IO模型: <code class="highlighter-rouge">BIO</code>, <code class="highlighter-rouge">NIO</code>, <code class="highlighter-rouge">多路复用IO</code>和<code class="highlighter-rouge">AIO</code>.</p>
 
 <h3 id="bio">BIO</h3>
 
-<p><code class="highlighter-rouge">BIO</code>即<code class="highlighter-rouge">Blocking I/O</code>(阻塞 I/O), 这种模型中程序先通过系统调用(System Call)发送请求给内核(Kernel), 然后由内核去进行通信, 如果系统调用是读操作的话, 在内核准备好数据之前这个线程是被挂起的, 直到数据在内核中准备好.</p>
-
-<p>整个过程可分为两个阶段:</p>
-
-<ol>
-  <li>等待I/O数据返回. 这取决于IO目标返回数据的速度, 如网络IO时看网速和数据本身的大小</li>
-  <li>返回的数据先被填充到内核(Kernel)缓冲区里, 然后从内核区拷贝到进程内. 这个过程完成后程序才能向下执行.</li>
-</ol>
-
-<p>BIO整个过程如下图:</p>
+<p><code class="highlighter-rouge">BIO</code>即<code class="highlighter-rouge">Blocking I/O</code>(阻塞 I/O), BIO整个过程如下图:</p>
 
 <p><img src="/static/images/BIO.png" alt="BIO" title="BIO" /></p>
+
+<p>程序发送请求给内核, 然后由内核去进行通信, 在内核准备好数据之前这个线程是被挂起的, 所以在两个阶段程序都处于挂起状态.</p>
 
 <ul>
   <li>BIO的特点就是在IO执行的两个阶段都被block了</li>
@@ -171,13 +176,11 @@ jQuery(function(){
 
 <h3 id="nio">NIO</h3>
 
-<p><code class="highlighter-rouge">NIO</code>即<code class="highlighter-rouge">Non-Blocking I/O</code>(非阻塞 I/O), 与BIO的明显区别是, 发起第一次System Call请求后, 线程并没有被阻塞, 它反复检查数据是否准备好, 把原来大块不能用的阻塞时间分成了许多”小阻塞”(检查), 所以进程不断有机会被执行.这个检查有没有准备好数据的过程有点类似于”轮询”.</p>
-
-<p>线程一直在反复查看有没有数据准备好, 这似乎在空耗CPU, 看起来效率更低, 这就要看到底怎么使用了. 实际上每次查看的动作比较简单, 可以只用一个专门的线程对很多事件进行监听, 设计好检测频率就能达到高效且节省资源的目的.</p>
-
-<p>NIO整个过程如下图:</p>
+<p><code class="highlighter-rouge">NIO</code>即<code class="highlighter-rouge">Non-Blocking I/O</code>(非阻塞 I/O), NIO整个过程如下图:</p>
 
 <p><img src="/static/images/NIO.png" alt="NIO" title="NIO" /></p>
+
+<p>与BIO的明显区别是, 发起第一次请求后, 线程并没有被阻塞, 它反复检查数据是否准备好, 把原来大块不能用的阻塞时间分成了许多”小阻塞”(检查), 所以进程不断有机会被执行. 这个检查有没有准备好数据的过程有点类似于”轮询”.</p>
 
 <ul>
   <li>NIO的特点就是程序需要不断的主动询问内核数据是否准备好。第一个阶段非阻塞, 第二个阶段阻塞</li>
@@ -185,35 +188,43 @@ jQuery(function(){
 
 <h3 id="io-1">多路复用IO</h3>
 
-<p>NIO中轮询操作是用户线程进行的, 如果把这个任务交给其他线程, 则用户线程就不用这么费劲的查询状态了. 多路复用(<code class="highlighter-rouge">Multiplexing I/O</code>)调用系统级别的<code class="highlighter-rouge">select</code>或<code class="highlighter-rouge">poll</code>模型, 由系统进行监控IO状态. select轮询可以监控许多socket的IO请求, 当有一个socket的数据准备好时就可以返回可读状态. 用户线程有一段时间是阻塞的, 与普通非阻塞IO不一样的是, select不是等到所有数据准备好才返回, 而是只要有一个准备好就返回.</p>
+<p>多路复用IO(<code class="highlighter-rouge">Multiplexing I/O</code>)有<code class="highlighter-rouge">select</code>, <code class="highlighter-rouge">poll</code>, <code class="highlighter-rouge">epoll</code>等不同方式, 它的优点在于单个线程可以同时处理多个网络IO.</p>
 
-<p>Java 1.4提供的的NIO就是采用了这种方式, 在套接字上提供selector选择机制, 当发起<code class="highlighter-rouge">select()</code>时会阻塞等待至少一个事件返回.</p>
+<p><code class="highlighter-rouge">NIO</code>中轮询操作是用户线程进行的, 如果把这个任务交给其他线程, 则用户线程就不用这么费劲的查询状态了. <code class="highlighter-rouge">多路复用IO</code>调用系统级别的<code class="highlighter-rouge">select</code>或<code class="highlighter-rouge">poll</code>模型, 由系统进行监控IO状态. select轮询可以监控许多socket的IO请求, 当有一个socket的数据准备好时就可以返回.</p>
+
+<ul>
+  <li>select: 注册事件由数组管理, 数组是有长度的, 32位机上限1024, 64位机上限2048. 轮询查找时需要遍历数组.</li>
+  <li>poll: 把select的数组采用链表实现, 因此没了最大数量的限制</li>
+  <li>epoll方式: 基于事件回调机制, 回调时直接通知进程, 无须使用某种方式来查看状态.</li>
+</ul>
 
 <p>多路复用IO过程图:</p>
 
 <p><img src="/static/images/Multiplexing_IO.png" alt="Multiplexing_IO" title="Multiplexing_IO" /></p>
 
+<p>用户线程有一段时间是阻塞的, 从上图来看, 与<code class="highlighter-rouge">NIO</code>很像, 但与NIO不一样的是, select不是等到所有数据准备好才返回, 而是只要有一个准备好就返回, 它的优势在于可以同时处理多个连接. 若连接不是很多的话, 它的效率不一定高, 可能还会更差.</p>
+
+<p><code class="highlighter-rouge">Java 1.4</code>提供的的<code class="highlighter-rouge">NIO</code>就是采用了这种方式, 在套接字上提供<code class="highlighter-rouge">selector</code>选择机制, 当发起<code class="highlighter-rouge">select()</code>时会阻塞等待至少一个事件返回.</p>
+
 <ul>
-  <li>多路复用IO的特点是用户进程能同时等待多个IO请求,系统来监控IO状态,其中的任意一个进入读就绪状态,select函数就可以返回.</li>
+  <li>多路复用IO的特点是用户进程能同时等待多个IO请求, 系统来监控IO状态, 其中的任意一个进入读就绪状态, select函数就可以返回.</li>
 </ul>
 
-<h3 id="section-2">小结</h3>
-
-<p>上面这三种模式, 用户进程发起系统调用, 等待数据到来的过程中, 直接等待、轮询 或 select轮询。第一个过程有的阻塞, 有的不阻塞, 有的可以阻塞又可以不阻塞. 第二个过程都是阻塞的。从整个IO过程来看, 他们都是顺序执行的, 因此都属于同步模型.</p>
-
 <h3 id="aio">AIO</h3>
-<p><code class="highlighter-rouge">AIO</code>即<code class="highlighter-rouge">Asynchronous I/O</code>(异步 I/O), 这是Java1.7引入的<code class="highlighter-rouge">NIO 2.0</code>中用到的. 整个过程中, 用户线程发起一个系统调用之后无须等待, 可以处理别的事情. 由操作系统等待接收内容, 接收后把数据拷贝到用户进程中, 最后通知用户程序已经可以使用数据了, 整个过程都是非阻塞的. 相当于数据”送货上门”了. 这个过程中系统帮我们处理IO, 用户线程可以同时处理别的事情, 这属于异步模型.</p>
-
-<p>AIO整个过程如下图:</p>
+<p><code class="highlighter-rouge">AIO</code>即<code class="highlighter-rouge">Asynchronous I/O</code>(异步 I/O), 这是<code class="highlighter-rouge">Java 1.7</code>引入的<code class="highlighter-rouge">NIO 2.0</code>中用到的. 整个过程中, 用户线程发起一个系统调用之后无须等待, 可以处理别的事情. 由操作系统等待接收内容, 接收后把数据拷贝到用户进程中, 最后通知用户程序已经可以使用数据了, 两个阶段都是非阻塞的. AIO整个过程如下图:</p>
 
 <p><img src="/static/images/AIO.png" alt="AIO" title="AIO" /></p>
 
-<p>AIO是异步的, 我们怎么进一步加工处理结果呢? Java在这个模型中提供了两种方法:</p>
+<p><code class="highlighter-rouge">AIO</code>属于异步模型, 用户线程可以同时处理别的事情, 我们怎么进一步加工处理结果呢? Java在这个模型中提供了两种方法:</p>
 
 <ol>
   <li>一种是基于”回调”, 我们可以实现<code class="highlighter-rouge">CompletionHandler</code>接口, 在调用时把回调函数传递给对应的API即可</li>
-  <li>另一种是返回一个<code class="highlighter-rouge">Future</code>. <code class="highlighter-rouge">isDone()</code>可查看是否已经准备好数据, 这有点类似于NIO查询的意思； <code class="highlighter-rouge">get()</code>方法是等到数据完成返回数据, 有点类似于BIO的意思.</li>
+  <li>另一种是返回一个<code class="highlighter-rouge">Future</code>. 处理完别的事情, 可以通过<code class="highlighter-rouge">isDone()</code>可查看是否已经准备好数据, 通过<code class="highlighter-rouge">get()</code>方法等待返回数据.</li>
 </ol>
+
+<h3 id="section-2">小结</h3>
+
+<p>上面这几种模式, <code class="highlighter-rouge">BIO</code>整个过程都等待返回, <code class="highlighter-rouge">NIO</code>和<code class="highlighter-rouge">多路复用IO</code>在第二个阶段等待返回, 因此从整个过程来看, 这三个模式都属于同步方式. <code class="highlighter-rouge">AIO</code>在整个过程中没有等待返回, 属于异步方式.</p>
 
 <hr />
 
