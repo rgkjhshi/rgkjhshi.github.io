@@ -5,15 +5,15 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="keywords" content="Java中的同步异步阻塞非阻塞, 编程技术, Java, 逆水行舟" />
-    <meta name="description" content="Java中的同步异步阻塞非阻塞, 编程技术, Java, 本文内容涉及同步与异步, 阻塞与非阻塞, BIO、NIO、AIO等概念" />
+    <meta name="keywords" content="十分钟了解BIO、NIO、AIO, 编程技术, Java, 逆水行舟" />
+    <meta name="description" content="十分钟了解BIO、NIO、AIO, 编程技术, Java, 本文内容涉及同步与异步, 阻塞与非阻塞, BIO、NIO、AIO等概念" />
 
     <title>逆水行舟</title>
 
     <!-- ico图标 -->
     <link rel="shortcut icon" type="image/x-icon" media="screen" href="/static/favicon.ico" />
     <!-- 搜索引擎收入相关 -->
-    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-06-25-Java%E4%B8%AD%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E9%98%BB%E5%A1%9E%E9%9D%9E%E9%98%BB%E5%A1%9E.html" />
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-06-25-%E5%8D%81%E5%88%86%E9%92%9F%E4%BA%86%E8%A7%A3BIO-NIO-AIO.html" />
     <!-- rss输出源 -->
     <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
     <!-- jquery -->
@@ -87,14 +87,14 @@ jQuery(function(){
 	jQuery('#qrcode').qrcode({
         width: 150,
         height: 150,
-        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-06-25-Java%E4%B8%AD%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E9%98%BB%E5%A1%9E%E9%9D%9E%E9%98%BB%E5%A1%9E.html"
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-06-25-%E5%8D%81%E5%88%86%E9%92%9F%E4%BA%86%E8%A7%A3BIO-NIO-AIO.html"
     });
 })
 </script>
 <!-- 日志默认模板 -->
 <div class="uk-container content">
     <div class="page-title">
-        <h1>Java中的同步异步阻塞非阻塞</h1>
+        <h1>十分钟了解BIO、NIO、AIO</h1>
     </div>
     <div class="uk-grid">
         <div  class="uk-width-4-4">
@@ -188,7 +188,7 @@ jQuery(function(){
 
 <h3 id="io-1">IO多路复用</h3>
 
-<p>IO多路复用(<code class="highlighter-rouge">I/OMultiplexing</code>)有<code class="highlighter-rouge">select</code>, <code class="highlighter-rouge">poll</code>, <code class="highlighter-rouge">epoll</code>等不同方式, 它的优点在于单个线程可以同时处理多个网络IO.</p>
+<p>IO多路复用(<code class="highlighter-rouge">I/O Multiplexing</code>)有<code class="highlighter-rouge">select</code>, <code class="highlighter-rouge">poll</code>, <code class="highlighter-rouge">epoll</code>等不同方式, 它的优点在于单个线程可以同时处理多个网络IO.</p>
 
 <p><code class="highlighter-rouge">NIO</code>中轮询操作是用户线程进行的, 如果把这个任务交给其他线程, 则用户线程就不用这么费劲的查询状态了. <code class="highlighter-rouge">IO多路复用</code>调用系统级别的<code class="highlighter-rouge">select</code>或<code class="highlighter-rouge">poll</code>模型, 由系统进行监控IO状态. select轮询可以监控许多socket的IO请求, 当有一个socket的数据准备好时就可以返回.</p>
 
@@ -224,7 +224,7 @@ jQuery(function(){
 
 <h3 id="section-2">小结</h3>
 
-<p>上面这几种模式, <code class="highlighter-rouge">BIO</code>整个过程都等待返回, <code class="highlighter-rouge">NIO</code>和<code class="highlighter-rouge">多路复用IO</code>在第二个阶段等待返回, 因此从整个过程来看, 这三个模式都属于同步方式. <code class="highlighter-rouge">AIO</code>在整个过程中没有等待返回, 属于异步方式.</p>
+<p>上面这几种模式, <code class="highlighter-rouge">BIO</code>整个过程都等待返回, <code class="highlighter-rouge">NIO</code>和<code class="highlighter-rouge">IO多路复用</code>在第二个阶段等待返回, 因此从整个过程来看, 这三个模式都属于同步方式. <code class="highlighter-rouge">AIO</code>在整个过程中没有等待返回, 属于异步方式.</p>
 
 <hr />
 
@@ -232,7 +232,7 @@ jQuery(function(){
     </div>
 
     <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/Java中的同步异步阻塞非阻塞" data-title="Java中的同步异步阻塞非阻塞" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-06-25-Java%E4%B8%AD%E7%9A%84%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5%E9%98%BB%E5%A1%9E%E9%9D%9E%E9%98%BB%E5%A1%9E.html"></div>
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/十分钟了解BIO、NIO、AIO" data-title="十分钟了解BIO、NIO、AIO" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-06-25-%E5%8D%81%E5%88%86%E9%92%9F%E4%BA%86%E8%A7%A3BIO-NIO-AIO.html"></div>
     <!-- 多说评论框 end -->
 </div>
 
