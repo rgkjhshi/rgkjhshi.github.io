@@ -5,9 +5,159 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 16 Nov 2016 10:44:07 +0800</pubDate>
-    <lastBuildDate>Wed, 16 Nov 2016 10:44:07 +0800</lastBuildDate>
+    <pubDate>Thu, 17 Nov 2016 17:37:09 +0800</pubDate>
+    <lastBuildDate>Thu, 17 Nov 2016 17:37:09 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>Servlet详解</title>
+        <description>&lt;hr /&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#servlet&quot;&gt;Servlet&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#servlet-1&quot;&gt;Servlet生命周期&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#servlet-2&quot;&gt;Servlet配置&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#servletconfig&quot;&gt;ServletConfig&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#servletcontext&quot;&gt;ServletContext&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#filter&quot;&gt;Filter&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#filter-1&quot;&gt;Filter生命周期&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#decorator&quot;&gt;装饰器模式(decorator)&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#listener&quot;&gt;Listener&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#servlet-3&quot;&gt;Servlet监听器&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;servlet&quot;&gt;Servlet&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;是Sun公司提供的用于web开发的接口, 我们一般把实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;接口的程序称为&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;程序&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;应该由web服务器调用(比如通过配置&lt;code class=&quot;highlighter-rouge&quot;&gt;web.xml&lt;/code&gt;), 自己不能独立运行&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;接口有两个实现类&lt;code class=&quot;highlighter-rouge&quot;&gt;HttpServlet --&amp;gt; GenericServlet&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;HttpServlet&lt;/code&gt;重写了&lt;code class=&quot;highlighter-rouge&quot;&gt;service&lt;/code&gt;方法, 根据请求方式自动调用&lt;code class=&quot;highlighter-rouge&quot;&gt;doGet&lt;/code&gt;或&lt;code class=&quot;highlighter-rouge&quot;&gt;doPost&lt;/code&gt;方法, 我们一般继承这个类, 重写&lt;code class=&quot;highlighter-rouge&quot;&gt;doGet、doPost&lt;/code&gt;即可.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;servlet-1&quot;&gt;Servlet生命周期&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/servlet.png&quot; alt=&quot;Servlet生命周期&quot; title=&quot;Servlet生命周期&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如图:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;图中画出的是第一次请求&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;的情况, 若对应的&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;对象还没被创建, 则创建&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;对象&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;对象只初始化一次, 只会执行一次&lt;code class=&quot;highlighter-rouge&quot;&gt;init()&lt;/code&gt;方法, &lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;初始化好之后, 新请求将直接到第5步&lt;/li&gt;
+  &lt;li&gt;第2步中解析出的应用对应&lt;code class=&quot;highlighter-rouge&quot;&gt;getContextPath&lt;/code&gt;, 资源对应&lt;code class=&quot;highlighter-rouge&quot;&gt;getServletPath&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;图中没画出&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;的消亡, &lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;对象被创建后常驻内存, 继续为其他请求服务; web应用停止前调用&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;destroy()&lt;/code&gt;方法, &lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;生命周期才结束&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;servlet-2&quot;&gt;Servlet配置&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;上面的&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;是有第一个请求时被创建, 可以在&lt;code class=&quot;highlighter-rouge&quot;&gt;web.xml&lt;/code&gt;中通过&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;load-on-startup&amp;gt;&lt;/code&gt;元素指定在web容器启动时就直接初始化&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;所映射的URL由&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;servlet-mapping&amp;gt;&lt;/code&gt;里的&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;url-pattern&amp;gt;&lt;/code&gt;指定, 它只有两个固定格式:
+    &lt;ol&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;*.扩展名&lt;/code&gt;, 如: &lt;code class=&quot;highlighter-rouge&quot;&gt;*.do&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;以&lt;code class=&quot;highlighter-rouge&quot;&gt;/&lt;/code&gt;开头(并以&lt;code class=&quot;highlighter-rouge&quot;&gt;/*&lt;/code&gt;结尾), 如: &lt;code class=&quot;highlighter-rouge&quot;&gt;/abc&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;/abc/*&lt;/code&gt;&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;URL映射以最精确的为准, 请求&lt;code class=&quot;highlighter-rouge&quot;&gt;/abc&lt;/code&gt;时, 映射&lt;code class=&quot;highlighter-rouge&quot;&gt;/abc&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;/abc/*&lt;/code&gt;都可以匹配, 但优先选择&lt;code class=&quot;highlighter-rouge&quot;&gt;/abc&lt;/code&gt;; 请求&lt;code class=&quot;highlighter-rouge&quot;&gt;/a.do&lt;/code&gt;时,
+&lt;code class=&quot;highlighter-rouge&quot;&gt;/*&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;*.do&lt;/code&gt;都可以匹配, 但优先选择&lt;code class=&quot;highlighter-rouge&quot;&gt;/*&lt;/code&gt;(即&lt;code class=&quot;highlighter-rouge&quot;&gt;/*&lt;/code&gt;优先级高于&lt;code class=&quot;highlighter-rouge&quot;&gt;*.do&lt;/code&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;servletconfig&quot;&gt;ServletConfig&lt;/h3&gt;
+&lt;p&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;web.xml&lt;/code&gt;中可以使用&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;init-param&amp;gt;&lt;/code&gt;标签为&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;配置一些参数. &lt;code class=&quot;highlighter-rouge&quot;&gt;HttpServlet&lt;/code&gt;类也实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletConfig&lt;/code&gt;接口, 在创建&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;对象时先把参数封装到&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletConfig&lt;/code&gt;对象中, 在调用&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;init&lt;/code&gt;方法时把&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletConfig&lt;/code&gt;对象传给&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;类中, 我们可以获取&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletConfig&lt;/code&gt;中的参数&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;ServletConfig&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;config&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getServletConfig&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 这个方法继承自GenericServlet&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getInitParameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;charset&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 这可获取我们配置的参数&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;servletcontext&quot;&gt;ServletContext&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletContext&lt;/code&gt;表示应用的上下文, 在Web容器在启动时, 会为每个Web应用程序都创建一个对应的&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletContext&lt;/code&gt;对象, 一个应用只有一个&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletContext&lt;/code&gt;对象, 被所有的&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;共享.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletContext&lt;/code&gt;的属性可以通过&lt;code class=&quot;highlighter-rouge&quot;&gt;web.xml&lt;/code&gt;中的&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;context-param&amp;gt;&lt;/code&gt;标签来指定, 在程序中可以这样获取这些属性:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// ServletConfig 里维护了 ServletContext 对象的引用&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;ServletContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getServletConfig&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getServletContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 因为 Servlet类实现了 ServletConfig 接口, 所以也可以直接获取&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;ServletContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getServletContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 获取属性&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getAttribute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;data&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 获取 &amp;lt;display-name&amp;gt; 标签配置的应用名&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getServletContextName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;filter&quot;&gt;Filter&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet API&lt;/code&gt;中提供了一个&lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;接口, 称为过滤器, 所有的请求要先经过过滤器. web服务器在调用&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;service()&lt;/code&gt;方法之前会调用&lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;doFilter()&lt;/code&gt;方法.&lt;/p&gt;
+
+&lt;p&gt;web服务器把所有的&lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;按注册顺序组成一个&lt;code class=&quot;highlighter-rouge&quot;&gt;filterChain&lt;/code&gt;, 在调用&lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;doFilter()&lt;/code&gt;方法时, 会传递&lt;code class=&quot;highlighter-rouge&quot;&gt;filterChain&lt;/code&gt;对象进来. &lt;code class=&quot;highlighter-rouge&quot;&gt;filterChain&lt;/code&gt;也有个&lt;code class=&quot;highlighter-rouge&quot;&gt;doFilter&lt;/code&gt;方法, 当调用&lt;code class=&quot;highlighter-rouge&quot;&gt;filterChain.doFilter()&lt;/code&gt;时, web服务器会检查&lt;code class=&quot;highlighter-rouge&quot;&gt;filterChain&lt;/code&gt;中是否还有&lt;code class=&quot;highlighter-rouge&quot;&gt;filter&lt;/code&gt;, 如果有, 则调用下一个&lt;code class=&quot;highlighter-rouge&quot;&gt;filter&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;filter-1&quot;&gt;Filter生命周期&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;的创建和销毁由web服务器负责. web服务器启动时创建&lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;实例对象, 并调用其&lt;code class=&quot;highlighter-rouge&quot;&gt;init&lt;/code&gt;方法, 完成对象的初始化, 为用户请求作好拦截的准备. &lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;对象只创建一次, &lt;code class=&quot;highlighter-rouge&quot;&gt;init&lt;/code&gt;方法只执行一次. &lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;也有初始化参数, 被封装到&lt;code class=&quot;highlighter-rouge&quot;&gt;FilterConfig&lt;/code&gt;中, 它有个方法&lt;code class=&quot;highlighter-rouge&quot;&gt;getServletContext()&lt;/code&gt;可获取&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletContext&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;decorator&quot;&gt;装饰器模式(decorator)&lt;/h3&gt;
+&lt;p&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet API&lt;/code&gt;中体现了一种设计模式: 装饰器模式&lt;/p&gt;
+
+&lt;p&gt;装饰器模式的实现步骤:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;先看需要被增强对象实现了什么接口或继承了什么父类, 编写一个类也去继承这些接口或父类&lt;/li&gt;
+  &lt;li&gt;内部定义一个变量, 类型为被包装类的类型, 并提供一个构造函数用于接收被包装对象&lt;/li&gt;
+  &lt;li&gt;覆盖需要增强的方法, 添加增强内容&lt;/li&gt;
+  &lt;li&gt;实现接口中其他方法, 调用被包装对象的对应方法.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet API&lt;/code&gt; 提供了一个&lt;code class=&quot;highlighter-rouge&quot;&gt;HttpServletRequestWrapper&lt;/code&gt;类, 该类就是采用装饰器模式对&lt;code class=&quot;highlighter-rouge&quot;&gt;HttpServletRequest&lt;/code&gt;进行了增强(实际上在内部仅调用了一下所包装的对象的对应方法).&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;listener&quot;&gt;Listener&lt;/h2&gt;
+&lt;p&gt;全称是事件监听器&lt;code class=&quot;highlighter-rouge&quot;&gt;EventListener&lt;/code&gt;, 全类名是&lt;code class=&quot;highlighter-rouge&quot;&gt;java.util.EventListener&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet API&lt;/code&gt;中的监听器也是继承这个接口.&lt;/p&gt;
+
+&lt;p&gt;监听器是典型的 &lt;strong&gt;观察者模式&lt;/strong&gt; , 使用监听器要了解三个概念:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;事件源: 就是被监听的对象&lt;/li&gt;
+  &lt;li&gt;事件对象: 就是被监听的对象发生的动作, 封装成了一个事件对象. 比如增加了一个属性&lt;/li&gt;
+  &lt;li&gt;监听器: 对事件源发生的动作做出反应的对象. 由开发人员编写, 在事件监听器中, 可通过事件对象拿到事件源, 从而对事件源上的操作进行处理.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;servlet-3&quot;&gt;Servlet监听器&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;中的监听器不是直接注册在事件源上的, 而是由由WEB容器负责注册.&lt;/p&gt;
+
+&lt;p&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;规范中定义了多种类型的监听器, 它们用于监听的事件源分别为&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletContext&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;HttpSession&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletRequest&lt;/code&gt;这三个对象.&lt;/p&gt;
+
+&lt;p&gt;根据监听的类型不同, 又可分为:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;监听事件源对象创建和销毁的事件监听器, 如: &lt;code class=&quot;highlighter-rouge&quot;&gt;ServletContextListener, HttpSessionListener, ServletRequestListener&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;监听事件源对象属性添加和删除的事件监听器, 如: &lt;code class=&quot;highlighter-rouge&quot;&gt;ServletContextAttributeListener, HttpSessionAttributeListener, ServletRequestAttributeListener&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;监听绑定到&lt;code class=&quot;highlighter-rouge&quot;&gt;HttpSession&lt;/code&gt;中的对象的状态的事件监听器, 如: &lt;code class=&quot;highlighter-rouge&quot;&gt;HttpSessionBindingListener, HttpSessionActivationListener&lt;/code&gt;, 这俩监听器比较特殊, 不需要在&lt;code class=&quot;highlighter-rouge&quot;&gt;web.xml&lt;/code&gt;中进行注册&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+</description>
+        <pubDate>Thu, 17 Nov 2016 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-17-Servlet%E8%AF%A6%E8%A7%A3.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-17-Servlet%E8%AF%A6%E8%A7%A3.html</guid>
+        
+        <category>Spring</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
     
       <item>
         <title>关于单元测试</title>
@@ -2097,340 +2247,6 @@ end
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-08-08-Spring%E7%9A%84EL%E8%A1%A8%E8%BE%BE%E5%BC%8F.html</guid>
         
         <category>Spring</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>Docker学习笔记(三):网络和数据卷</title>
-        <description>&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;网络&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;列出网络&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;查看网络信息&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-3&quot;&gt;断开网络&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-4&quot;&gt;创建网络&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-5&quot;&gt;使用自定义网络创建容器&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-6&quot;&gt;数据卷&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-7&quot;&gt;添加数据卷&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-8&quot;&gt;挂载本地目录&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-9&quot;&gt;挂载文件&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-10&quot;&gt;挂载容器中的数据卷&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-11&quot;&gt;查看删除数据卷&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#volume&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;volume&lt;/code&gt;的其他用法&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;网络&lt;/h2&gt;
-
-&lt;p&gt;之前有个web程序的例子已经介绍过了端口, 这里说下网络&lt;/p&gt;
-
-&lt;h3 id=&quot;section-1&quot;&gt;列出网络&lt;/h3&gt;
-
-&lt;p&gt;每个&lt;code class=&quot;highlighter-rouge&quot;&gt;Docker&lt;/code&gt;引擎默认都会包含三个默认的网络, 我们可以这样查看:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker network ls
-NETWORK ID          NAME                DRIVER              SCOPE
-5fa52100eeb6        bridge              bridge              local
-e3b7da4f14e9        host                host                local
-6ddc3eda6788        none                null                local
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;NAME&lt;/code&gt;为&lt;code class=&quot;highlighter-rouge&quot;&gt;bridge&lt;/code&gt;的网络比较特殊, 新运行的容器默认都是在这个网络中, 除非指定是用别的网络&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;section-2&quot;&gt;查看网络信息&lt;/h3&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker run -itd --name=networktest ubuntu
-408cf6d9f25b9757c5d5fdfcd8c9a7133c7b888095c02b7b85d46f8df404b847
-$ docker network inspect bridge
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;我们会得到类似于下面的描述&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;s2&quot;&gt;&quot;Name&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;bridge&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;s2&quot;&gt;&quot;Id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;5fa52100eeb64d58d5ec97b2f2267c78d700265d310030b0bc61e203367172d2&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;s2&quot;&gt;&quot;Scope&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;local&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;s2&quot;&gt;&quot;Driver&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;bridge&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;s2&quot;&gt;&quot;EnableIPv6&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;s2&quot;&gt;&quot;IPAM&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;s2&quot;&gt;&quot;Driver&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;default&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;s2&quot;&gt;&quot;Options&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;s2&quot;&gt;&quot;Config&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
-                &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-                    &lt;span class=&quot;s2&quot;&gt;&quot;Subnet&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;172.17.0.0/16&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-                    &lt;span class=&quot;s2&quot;&gt;&quot;Gateway&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;172.17.0.1&quot;&lt;/span&gt;
-                &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-        &lt;span class=&quot;s2&quot;&gt;&quot;Internal&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;s2&quot;&gt;&quot;Containers&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;s2&quot;&gt;&quot;408cf6d9f25b9757c5d5fdfcd8c9a7133c7b888095c02b7b85d46f8df404b847&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;s2&quot;&gt;&quot;Name&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;networktest&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-                &lt;span class=&quot;s2&quot;&gt;&quot;EndpointID&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;87625c710a97b0e40dd79119d5002edd4c44f162ff1c2d4b85d9c87b0f43968e&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-                &lt;span class=&quot;s2&quot;&gt;&quot;MacAddress&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;02:42:ac:11:00:02&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-                &lt;span class=&quot;s2&quot;&gt;&quot;IPv4Address&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;172.17.0.2/16&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-                &lt;span class=&quot;s2&quot;&gt;&quot;IPv6Address&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-        &lt;span class=&quot;s2&quot;&gt;&quot;Options&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;s2&quot;&gt;&quot;com.docker.network.bridge.default_bridge&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;true&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;s2&quot;&gt;&quot;com.docker.network.bridge.enable_icc&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;true&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;s2&quot;&gt;&quot;com.docker.network.bridge.enable_ip_masquerade&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;true&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;s2&quot;&gt;&quot;com.docker.network.bridge.host_binding_ipv4&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;0.0.0.0&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;s2&quot;&gt;&quot;com.docker.network.bridge.name&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;docker0&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-            &lt;span class=&quot;s2&quot;&gt;&quot;com.docker.network.driver.mtu&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;1500&quot;&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-        &lt;span class=&quot;s2&quot;&gt;&quot;Labels&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;我们可以这样检查容器的信息, 其中就有网络信息&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;花括号之间没有空格!!&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 查看网络信息&lt;/span&gt;
-&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker inspect --format&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;{ {json .NetworkSettings.Networks}}&#39;&lt;/span&gt; networktest
-&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;bridge&quot;&lt;/span&gt;:&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;IPAMConfig&quot;&lt;/span&gt;:null,&lt;span class=&quot;s2&quot;&gt;&quot;Links&quot;&lt;/span&gt;:null,&lt;span class=&quot;s2&quot;&gt;&quot;Aliases&quot;&lt;/span&gt;:null,&lt;span class=&quot;s2&quot;&gt;&quot;NetworkID&quot;&lt;/span&gt;:&lt;span class=&quot;s2&quot;&gt;&quot;5fa52100eeb64d58d5ec97b2f2267c78d700265d310030b0bc61e203367172d2&quot;&lt;/span&gt;,&lt;span class=&quot;s2&quot;&gt;&quot;EndpointID&quot;&lt;/span&gt;:&lt;span class=&quot;s2&quot;&gt;&quot;87625c710a97b0e40dd79119d5002edd4c44f162ff1c2d4b85d9c87b0f43968e&quot;&lt;/span&gt;,&lt;span class=&quot;s2&quot;&gt;&quot;Gateway&quot;&lt;/span&gt;:&lt;span class=&quot;s2&quot;&gt;&quot;172.17.0.1&quot;&lt;/span&gt;,&lt;span class=&quot;s2&quot;&gt;&quot;IPAddress&quot;&lt;/span&gt;:&lt;span class=&quot;s2&quot;&gt;&quot;172.17.0.2&quot;&lt;/span&gt;,&lt;span class=&quot;s2&quot;&gt;&quot;IPPrefixLen&quot;&lt;/span&gt;:16,&lt;span class=&quot;s2&quot;&gt;&quot;IPv6Gateway&quot;&lt;/span&gt;:&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;,&lt;span class=&quot;s2&quot;&gt;&quot;GlobalIPv6Address&quot;&lt;/span&gt;:&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;,&lt;span class=&quot;s2&quot;&gt;&quot;GlobalIPv6PrefixLen&quot;&lt;/span&gt;:0,&lt;span class=&quot;s2&quot;&gt;&quot;MacAddress&quot;&lt;/span&gt;:&lt;span class=&quot;s2&quot;&gt;&quot;02:42:ac:11:00:02&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}}&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# 直接查看IP地址&lt;/span&gt;
-&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker inspect --format&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;{ {range .NetworkSettings.Networks}}{ {.IPAddress}}{ {end}}&#39;&lt;/span&gt; networktest
-172.17.0.2
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;section-3&quot;&gt;断开网络&lt;/h3&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker network disconnect bridge networktest
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;把&lt;code class=&quot;highlighter-rouge&quot;&gt;networktest&lt;/code&gt;这个容器从&lt;code class=&quot;highlighter-rouge&quot;&gt;bridge&lt;/code&gt;网络中断开, 再次查看IP地址就没没有ip了&lt;/p&gt;
-
-&lt;p&gt;当然也可以重新连接&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker network connect bridge networktest
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;section-4&quot;&gt;创建网络&lt;/h3&gt;
-&lt;p&gt;我们可以这样创建一个&lt;code class=&quot;highlighter-rouge&quot;&gt;bridge&lt;/code&gt;网络&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker network create -d bridge my-bridge
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-d&lt;/code&gt;: driver value, 可以不写, 默认就是&lt;code class=&quot;highlighter-rouge&quot;&gt;bridge&lt;/code&gt;; 最后面跟自己的driver名字&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;section-5&quot;&gt;使用自定义网络创建容器&lt;/h3&gt;
-
-&lt;p&gt;在运行容器的时候可以通过传递参数&lt;code class=&quot;highlighter-rouge&quot;&gt;--network=my-bridge&lt;/code&gt;来指定使用那个网络, 不传默认使用&lt;code class=&quot;highlighter-rouge&quot;&gt;bridge&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;花括号之间没有空格!!&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker run -d --network&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;my-bridge --name db training/postgres
-&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker run -d --name web training/webapp python app.py
-&lt;span class=&quot;c&quot;&gt;# db 使用的网络是 my-bridge&lt;/span&gt;
-&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker inspect --format&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;{ {range .NetworkSettings.Networks}}{ {.IPAddress}}{ {end}}&#39;&lt;/span&gt; db
-172.18.0.2
-&lt;span class=&quot;c&quot;&gt;# web 使用的网络是 bridge&lt;/span&gt;
-&lt;span class=&quot;gp&quot;&gt;shisong$ &lt;/span&gt;docker inspect --format&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;{ {range .NetworkSettings.Networks}}{ {.IPAddress}}{ {end}}&#39;&lt;/span&gt; web
-172.17.0.2
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;我们可以打开容器&lt;code class=&quot;highlighter-rouge&quot;&gt;db&lt;/code&gt;的终端, &lt;code class=&quot;highlighter-rouge&quot;&gt;ping&lt;/code&gt;一下看看网是否通&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker exec -it db bash
-root@822d3512fe8d:/# ping 172.17.0.2
-PING 172.18.0.2 (172.18.0.2) 56(84) bytes of data.
-64 bytes from 172.18.0.2: icmp_seq=1 ttl=64 time=0.114 ms
-64 bytes from 172.18.0.2: icmp_seq=2 ttl=64 time=0.070 ms
-^C
---- 172.18.0.2 ping statistics ---
-2 packets transmitted, 2 received, 0% packet loss, time 1006ms
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;如果我们把&lt;code class=&quot;highlighter-rouge&quot;&gt;web&lt;/code&gt;容器也连接到&lt;code class=&quot;highlighter-rouge&quot;&gt;my-bridge&lt;/code&gt;网络中, 则网络就通了&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker network connect my-bridge web
-&lt;span class=&quot;c&quot;&gt;# 查看新的IP地址, 刚才的网络没断开, 所以会看到有两个网络, 两个IP地址(新的是172.18.0.3)&lt;/span&gt;
-&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker inspect web
-&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; -it db bash
-&lt;span class=&quot;gp&quot;&gt;root@822d3512fe8d:/# &lt;/span&gt;ping 172.18.0.3
-PING 172.18.0.3 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;172.18.0.3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 56&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;84&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; bytes of data.
-64 bytes from 172.18.0.3: &lt;span class=&quot;nv&quot;&gt;icmp_seq&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1 &lt;span class=&quot;nv&quot;&gt;ttl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;64 &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0.298 ms
-64 bytes from 172.18.0.3: &lt;span class=&quot;nv&quot;&gt;icmp_seq&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2 &lt;span class=&quot;nv&quot;&gt;ttl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;64 &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0.112 ms
-^C
---- 172.18.0.3 ping statistics ---
-2 packets transmitted, 2 received, 0% packet loss, &lt;span class=&quot;nb&quot;&gt;time &lt;/span&gt;999ms
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;section-6&quot;&gt;数据卷&lt;/h2&gt;
-&lt;p&gt;数据卷(&lt;code class=&quot;highlighter-rouge&quot;&gt;data volume&lt;/code&gt;)类似于linux系统中的挂载点&lt;/p&gt;
-
-&lt;h3 id=&quot;section-7&quot;&gt;添加数据卷&lt;/h3&gt;
-&lt;p&gt;我们在使用&lt;code class=&quot;highlighter-rouge&quot;&gt;docker create&lt;/code&gt;或&lt;code class=&quot;highlighter-rouge&quot;&gt;docker run&lt;/code&gt;时可以通过&lt;code class=&quot;highlighter-rouge&quot;&gt;-v&lt;/code&gt; flag来添加数据卷, 甚至可以多次使用&lt;code class=&quot;highlighter-rouge&quot;&gt;-v&lt;/code&gt;来添加多个数据卷&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker run -d -P --name web -v /webapp training/webapp python app.py
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;上面是挂载了一个数据卷到容器的&lt;code class=&quot;highlighter-rouge&quot;&gt;/webapp&lt;/code&gt;目录(必须是绝对路径), &lt;code class=&quot;highlighter-rouge&quot;&gt;/webapp&lt;/code&gt;不存在则创建, 存在则覆盖(但不会删除原有的, 卸载时恢复原有的)&lt;/p&gt;
-
-&lt;p&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;docker inspect web&lt;/code&gt;命令来查看添加数据卷的信息, 会有一段如下:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;...&lt;/span&gt;
-&lt;span class=&quot;s2&quot;&gt;&quot;Mounts&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;s2&quot;&gt;&quot;Name&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;e30f9d5c1c8ffe1d02c8f1d758c5b0663c73ba46e8469e1e6ee14a9e5ee1784a&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;s2&quot;&gt;&quot;Source&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/var/lib/docker/volumes/e30f9d5c1c8ffe1d02c8f1d758c5b0663c73ba46e8469e1e6ee14a9e5ee1784a/_data&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;s2&quot;&gt;&quot;Destination&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/webapp&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;s2&quot;&gt;&quot;Driver&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;local&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;s2&quot;&gt;&quot;Mode&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;s2&quot;&gt;&quot;RW&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;s2&quot;&gt;&quot;Propagation&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;...&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;其中的&lt;code class=&quot;highlighter-rouge&quot;&gt;Source&lt;/code&gt;就是我们挂载的数据卷,&lt;code class=&quot;highlighter-rouge&quot;&gt;Destination&lt;/code&gt;是我们挂载到容器中的位置,&lt;code class=&quot;highlighter-rouge&quot;&gt;RW&lt;/code&gt;是否可读写, 默认就是可读写&lt;/p&gt;
-
-&lt;h3 id=&quot;section-8&quot;&gt;挂载本地目录&lt;/h3&gt;
-&lt;p&gt;我们可以挂载本地目录, 也可以指定是只读还是可读写模式, &lt;code class=&quot;highlighter-rouge&quot;&gt;-v&lt;/code&gt;后面的格式为&lt;code class=&quot;highlighter-rouge&quot;&gt;[local_path:]container-dir[:ro]&lt;/code&gt;, 除了上面的那种形式, 还可以像下面这样:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker run -d -P --name web -v /src/webapp:/opt/webapp training/webapp python app.py
-$ docker run -d -P --name web -v /src/webapp:/opt/webapp:ro training/webapp python app.py
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;不过在&lt;code class=&quot;highlighter-rouge&quot;&gt;OS X&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;windows&lt;/code&gt;中, &lt;code class=&quot;highlighter-rouge&quot;&gt;Docker Engine&lt;/code&gt;只有&lt;code class=&quot;highlighter-rouge&quot;&gt;/Users (OS X)&lt;/code&gt;或&lt;code class=&quot;highlighter-rouge&quot;&gt;C:\Users (Windows)&lt;/code&gt;的访问权限, 所以只能这样使用了:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# os x&lt;/span&gt;
-&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker run -v /Users/&amp;lt;path&amp;gt;:/&amp;lt;container path&amp;gt; ...
-&lt;span class=&quot;c&quot;&gt;# windows&lt;/span&gt;
-&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker run -v /c/Users/&amp;lt;path&amp;gt;:/&amp;lt;container path&amp;gt; ...
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;另外, 还可以挂载某个名字的数据卷, &lt;code class=&quot;highlighter-rouge&quot;&gt;Docker&lt;/code&gt;会创建一个给定名字的数据卷, 如:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker run -d -P --name web -v foo:/opt/webapp:ro training/webapp python app.py
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;docker inspect web&lt;/code&gt;得到的描述如下:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;...&lt;/span&gt;
-&lt;span class=&quot;s2&quot;&gt;&quot;Mounts&quot;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;s2&quot;&gt;&quot;Name&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;foo&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;s2&quot;&gt;&quot;Source&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/var/lib/docker/volumes/foo/_data&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;s2&quot;&gt;&quot;Destination&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/opt/webapp&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;s2&quot;&gt;&quot;Driver&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;local&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;s2&quot;&gt;&quot;Mode&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;ro&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;s2&quot;&gt;&quot;RW&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;s2&quot;&gt;&quot;Propagation&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;rprivate&quot;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;...&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;section-9&quot;&gt;挂载文件&lt;/h3&gt;
-
-&lt;p&gt;我们可以挂载某个文件到容器中:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker run --rm -it -v ~/.bash_history:/root/.bash_history ubuntu /bin/bash
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;--rm&lt;/code&gt;: 容器退出时自动删除容器&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;上面就挂载了&lt;code class=&quot;highlighter-rouge&quot;&gt;bash_history&lt;/code&gt;到容器中, 在容器里查看到原来本地机上的历史命令, 当退出容器的时候, 本地机会有刚才在容器里使用过的命令的历史.&lt;br /&gt;
-不过需要注意的是, 若是挂在了文件, 在容器里使用&lt;code class=&quot;highlighter-rouge&quot;&gt;vi&lt;/code&gt;等编辑该挂在文件时, 会引起错误. 因此挂载这个文件的父目录是更好的选择.&lt;/p&gt;
-
-&lt;h3 id=&quot;section-10&quot;&gt;挂载容器中的数据卷&lt;/h3&gt;
-&lt;p&gt;挂载数据卷, 可以是匿名的也可以是命名的, 可以挂载本地目录也可以挂载本地文件, 还能挂载另一个容器中的数据卷. 我们可以通过参数&lt;code class=&quot;highlighter-rouge&quot;&gt;--volumes-from&lt;/code&gt;指定数据卷来自于哪个容器, 可以多次使用&lt;code class=&quot;highlighter-rouge&quot;&gt;--volumes-from&lt;/code&gt;来挂载多个数据卷&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 先创建一个叫 dbstore 的容器, 这个容器添加了数据卷&lt;/span&gt;
-&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker create -v /dbdata --name dbstore training/postgres /bin/true
-&lt;span class=&quot;c&quot;&gt;# 创建容器 db1, 指明数据卷来自于 dbstore&lt;/span&gt;
-&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker run -d --volumes-from dbstore --name db1 training/postgres
-&lt;span class=&quot;c&quot;&gt;# 创建容器 db2, 指明数据卷来自于 db1&lt;/span&gt;
-&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker run -d --volumes-from db1 --name db2 training/postgres
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;section-11&quot;&gt;查看删除数据卷&lt;/h3&gt;
-&lt;p&gt;上面例子中, 删除挂载数据卷的容器, 并不会删除挂载的数据卷, 除非在删除最后一个引用该数据卷的容器时指定&lt;code class=&quot;highlighter-rouge&quot;&gt;-v&lt;/code&gt;标记&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 删除容器不会删除数据卷&lt;/span&gt;
-&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker rm db1
-&lt;span class=&quot;c&quot;&gt;# 添加 -v 由于不是最后一个引用数据卷的容器, 所以数据卷仍没被删除&lt;/span&gt;
-&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker rm -v dbstore
-&lt;span class=&quot;c&quot;&gt;# 删除最后一个引用数据卷的容器时,添加 -v , 数据卷被删除&lt;/span&gt;
-&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker rm -v db2
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;如果删除了最后一个引用数据卷的容器时没有加&lt;code class=&quot;highlighter-rouge&quot;&gt;-v&lt;/code&gt;, 将会出现&lt;code class=&quot;highlighter-rouge&quot;&gt;dangling&lt;/code&gt;状态(悬挂,没人用了)的&lt;code class=&quot;highlighter-rouge&quot;&gt;volume&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;volume&lt;/code&gt;有匿名和命名之分, 我们可以在创建容器时通过参数&lt;code class=&quot;highlighter-rouge&quot;&gt;--rm&lt;/code&gt;指定, 当容器删除时, 对应的所有匿名&lt;code class=&quot;highlighter-rouge&quot;&gt;volume&lt;/code&gt;也随着删除&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker run --rm -v /foo -v awesome:/bar --name test ubuntu
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;我们通过&lt;code class=&quot;highlighter-rouge&quot;&gt;-v&lt;/code&gt;指定了一个匿名&lt;code class=&quot;highlighter-rouge&quot;&gt;volume&lt;/code&gt;, 挂载到容器的&lt;code class=&quot;highlighter-rouge&quot;&gt;/foo&lt;/code&gt;下, 还指定了一个命名为&lt;code class=&quot;highlighter-rouge&quot;&gt;awesome&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;volume&lt;/code&gt;挂在到了&lt;code class=&quot;highlighter-rouge&quot;&gt;/bar&lt;/code&gt;下, 容器运行完自动删除镜像(&lt;code class=&quot;highlighter-rouge&quot;&gt;--rm&lt;/code&gt;)时, 匿名数据卷会被删除,而&lt;code class=&quot;highlighter-rouge&quot;&gt;awesome&lt;/code&gt;并没有被删除.&lt;/p&gt;
-
-&lt;p&gt;另外我们可以通过 &lt;code class=&quot;highlighter-rouge&quot;&gt;docker volume&lt;/code&gt;命令来查看管理所有的数据卷&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 查看所有 volume&lt;/span&gt;
-&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker volume ls
-&lt;span class=&quot;c&quot;&gt;# 查看 dangling 的 volume&lt;/span&gt;
-&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker volume ls -f &lt;span class=&quot;nv&quot;&gt;dangling&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# 删除 volume&lt;/span&gt;
-&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;docker volume rm &amp;lt;volume name&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;volume&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;volume&lt;/code&gt;的其他用法&lt;/h3&gt;
-&lt;p&gt;我们可以使用数据卷进行数据的备份、存储以及迁移等工作&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker run --rm --volumes-from dbstore -v $(pwd):/backup ubuntu tar cvf /backup/backup.tar /dbdata
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;从&lt;code class=&quot;highlighter-rouge&quot;&gt;dbstore&lt;/code&gt;挂载了一个数据卷, 并且把本地目录挂在到了&lt;code class=&quot;highlighter-rouge&quot;&gt;/backup&lt;/code&gt;下, 最后传递了一个&lt;code class=&quot;highlighter-rouge&quot;&gt;tar&lt;/code&gt;命令, 把&lt;code class=&quot;highlighter-rouge&quot;&gt;dbdata volume&lt;/code&gt;备份到&lt;code class=&quot;highlighter-rouge&quot;&gt;/backup&lt;/code&gt;目录下的&lt;code class=&quot;highlighter-rouge&quot;&gt;backup.tar&lt;/code&gt;文件里. 命令执行完, 容器停止并被自动移除了, 但是&lt;code class=&quot;highlighter-rouge&quot;&gt;dbdata volume&lt;/code&gt;的数据被备份了.&lt;/p&gt;
-
-&lt;p&gt;然后我们可以创建一个新容器, 添加了一个匿名的&lt;code class=&quot;highlighter-rouge&quot;&gt;volume&lt;/code&gt;在容器的&lt;code class=&quot;highlighter-rouge&quot;&gt;/dbdata&lt;/code&gt;目录下:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker run -v /dbdata --name dbstore2 ubuntu /bin/bash
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;下面我们可以把刚才的备份文件解压到&lt;code class=&quot;highlighter-rouge&quot;&gt;dbstore2&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;volume&lt;/code&gt;中, 从而达到转移的目的&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ docker run --rm --volumes-from dbstore2 -v $(pwd):/backup ubuntu bash -c &quot;cd /dbdata &amp;amp;&amp;amp; tar xvf /backup/backup.tar --strip 1&quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;hr /&gt;
-</description>
-        <pubDate>Thu, 21 Jul 2016 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-07-21-Docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%B8%89)-%E7%BD%91%E7%BB%9C%E5%92%8C%E6%95%B0%E6%8D%AE%E5%8D%B7.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-07-21-Docker%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(%E4%B8%89)-%E7%BD%91%E7%BB%9C%E5%92%8C%E6%95%B0%E6%8D%AE%E5%8D%B7.html</guid>
-        
-        <category>Docker</category>
         
         
         <category>编程技术</category>
