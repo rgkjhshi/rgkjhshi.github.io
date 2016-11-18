@@ -16,7 +16,7 @@ tag: Spring
 *****
 
 ## HandlerInterceptor
-`Spring`提供的拦截器`Interceptor`与`Servlet`中的`Filter`不同的是, `Interceptor`采用`AOP`的方式在`Servlet`的`service`方法执行之前进行拦截.
+`Spring`提供的拦截器`Interceptor`与`Servlet`中的`Filter`不同的是, `Interceptor`采用`AOP`的方式在`Servlet`的`service`方法执行之前进行拦截, 可以进行更精细的控制.
 
 在`Spring`中定义一个`Interceptor`只需要实现`HandlerInterceptor`接口, `Spring`已经为我们提供了一个`HandlerInterceptorAdapter`, 我们只需要继承它, 覆盖想要重写的方法.
 
