@@ -5,9 +5,141 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 18 Nov 2016 14:26:33 +0800</pubDate>
-    <lastBuildDate>Fri, 18 Nov 2016 14:26:33 +0800</lastBuildDate>
+    <pubDate>Fri, 18 Nov 2016 19:15:33 +0800</pubDate>
+    <lastBuildDate>Fri, 18 Nov 2016 19:15:33 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>Spring boot与Servlet组件</title>
+        <description>&lt;hr /&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#servlet&quot;&gt;Servlet组件注册&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#filter&quot;&gt;注册Filter&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;方式一&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;方式二&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;方式三&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#listener&quot;&gt;注册Listener&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#servlet-1&quot;&gt;注册Servlet&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;servlet&quot;&gt;Servlet组件注册&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;的组件包括&lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;Listener&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;, 具体详情可参考&lt;a href=&quot;http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-16-Servlet%E8%AF%A6%E8%A7%A3.html&quot;&gt;Servlet详解&lt;/a&gt;.&lt;br /&gt;
+普通的web项目都是从&lt;code class=&quot;highlighter-rouge&quot;&gt;web.xml&lt;/code&gt;中配置, &lt;code class=&quot;highlighter-rouge&quot;&gt;Spring boot&lt;/code&gt;中为我们提供了很多注册的方式. 我们先以&lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;举例, 然后再介绍&lt;code class=&quot;highlighter-rouge&quot;&gt;Listener&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;的注册, 他们的注册方式基本一致.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;filter&quot;&gt;注册Filter&lt;/h2&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;方式一&lt;/h3&gt;
+&lt;p&gt;直接作为一个&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;注册.&lt;br /&gt;
+自定义&lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;通常可以实现&lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;接口, 或者可以继承&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;提供的&lt;code class=&quot;highlighter-rouge&quot;&gt;GenericFilterBean&lt;/code&gt;.&lt;br /&gt;
+当&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot&lt;/code&gt;监测到有&lt;code class=&quot;highlighter-rouge&quot;&gt;javax.servlet.Filter&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;bean&lt;/code&gt;时就会自动加入过滤器调用链.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;优点: 简单&lt;/li&gt;
+  &lt;li&gt;缺点: 不可控(比如无法配置要过滤的URL等), 所以这种方式基本不用&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;代码如下:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyFilter&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GenericFilterBean&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;doFilter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ServletRequest&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ServletResponse&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FilterChain&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;chain&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ServletException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//  some code&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;方式二&lt;/h3&gt;
+&lt;p&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;FilterRegistrationBean&lt;/code&gt;注册, 这个类实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletContextInitializer&lt;/code&gt;接口&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;优点: 简单, 可控&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;比如还是注册上面写的那个&lt;code class=&quot;highlighter-rouge&quot;&gt;MyFilter&lt;/code&gt;, 注册及配置的代码如下:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Configuration&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;WebMvcConfig&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WebMvcConfigurerAdapter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@Bean&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FilterRegistrationBean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;registMyFilter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;FilterRegistrationBean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;registrationBean&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FilterRegistrationBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;registrationBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setFilter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MyFilter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;registrationBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;myFilter&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;registrationBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setUrlPatterns&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Sets&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;newHashSet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/*&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;registrationBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setOrder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;registrationBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;方式三&lt;/h3&gt;
+&lt;p&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;@ServletComponentScan&lt;/code&gt;扫描&lt;code class=&quot;highlighter-rouge&quot;&gt;@WebFilter&lt;/code&gt;注解自动注册&lt;/p&gt;
+
+&lt;p&gt;这种方式需要在 &lt;strong&gt;主配置类&lt;/strong&gt; 上加&lt;code class=&quot;highlighter-rouge&quot;&gt;@ServletComponentScan&lt;/code&gt;注解, 在我们的&lt;code class=&quot;highlighter-rouge&quot;&gt;MyFilter&lt;/code&gt;类上加&lt;code class=&quot;highlighter-rouge&quot;&gt;@WebFilter&lt;/code&gt;注解. 代码如下:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// 主配置类&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@SpringBootApplication&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@ServletComponentScan&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Application&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 自定义的过滤器类&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@WebFilter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filterName&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;myFilter&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;urlPatterns&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;/*&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyFilter&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GenericFilterBean&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;doFilter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ServletRequest&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ServletResponse&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FilterChain&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;chain&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ServletException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//  some code&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;listener&quot;&gt;注册Listener&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Listener&lt;/code&gt;的注册方式跟&lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;一样, 只是继承或实现的接口, 添加的注解不一样.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;比如实现&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletContextListener&lt;/code&gt;接口&lt;/li&gt;
+  &lt;li&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletListenerRegistrationBean&lt;/code&gt;注册&lt;/li&gt;
+  &lt;li&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;@WebServlet&lt;/code&gt;注解注册.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;servlet-1&quot;&gt;注册Servlet&lt;/h2&gt;
+&lt;p&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;项目中, 都是通过&lt;code class=&quot;highlighter-rouge&quot;&gt;DispatcherServlet&lt;/code&gt;分发, 基本不需要自定义&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;. 下面仅介绍使用方式&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;注意不要使用方式一, 一定要指定相应的URL&lt;/li&gt;
+  &lt;li&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletRegistrationBean&lt;/code&gt;注册&lt;/li&gt;
+  &lt;li&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;@WebServlet(name = &quot;myServlet&quot;, urlPatterns = &quot;/abc/*&quot;)&lt;/code&gt;注解注册.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+</description>
+        <pubDate>Fri, 18 Nov 2016 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-18-Spring-boot%E4%B8%8EServlet%E7%BB%84%E4%BB%B6.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-18-Spring-boot%E4%B8%8EServlet%E7%BB%84%E4%BB%B6.html</guid>
+        
+        <category>Spring</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
     
       <item>
         <title>Spring boot与HandlerInterceptor</title>
@@ -24,7 +156,7 @@
 &lt;hr /&gt;
 
 &lt;h2 id=&quot;handlerinterceptor&quot;&gt;HandlerInterceptor&lt;/h2&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;提供的拦截器&lt;code class=&quot;highlighter-rouge&quot;&gt;Interceptor&lt;/code&gt;与&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;中的&lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;不同的是, &lt;code class=&quot;highlighter-rouge&quot;&gt;Interceptor&lt;/code&gt;采用&lt;code class=&quot;highlighter-rouge&quot;&gt;AOP&lt;/code&gt;的方式在&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;service&lt;/code&gt;方法执行之前进行拦截.&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;提供的拦截器&lt;code class=&quot;highlighter-rouge&quot;&gt;Interceptor&lt;/code&gt;与&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;中的&lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;不同的是, &lt;code class=&quot;highlighter-rouge&quot;&gt;Interceptor&lt;/code&gt;采用&lt;code class=&quot;highlighter-rouge&quot;&gt;AOP&lt;/code&gt;的方式在&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;service&lt;/code&gt;方法执行之前进行拦截, 可以进行更精细的控制.&lt;/p&gt;
 
 &lt;p&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;中定义一个&lt;code class=&quot;highlighter-rouge&quot;&gt;Interceptor&lt;/code&gt;只需要实现&lt;code class=&quot;highlighter-rouge&quot;&gt;HandlerInterceptor&lt;/code&gt;接口, &lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;已经为我们提供了一个&lt;code class=&quot;highlighter-rouge&quot;&gt;HandlerInterceptorAdapter&lt;/code&gt;, 我们只需要继承它, 覆盖想要重写的方法.&lt;/p&gt;
 
@@ -1814,231 +1946,6 @@ CGLib创建的动态代理对象性能比JDK创建的动态代理对象的性能
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-08-31-%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86.html</guid>
         
         <category>Java</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>Drools简单使用示例</title>
-        <description>&lt;p&gt;本文不涉及&lt;code class=&quot;highlighter-rouge&quot;&gt;Drools&lt;/code&gt;的原理和介绍, 仅通过简单例子演示怎么使用&lt;code class=&quot;highlighter-rouge&quot;&gt;Drools&lt;/code&gt;.&lt;br /&gt;
-另外, 各版本的文档可查看&lt;a href=&quot;http://docs.jboss.org/drools/release/&quot;&gt;官方资料&lt;/a&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;包依赖和目录结构&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;简单示例&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#kmodulexml&quot;&gt;kmodule.xml&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#kie&quot;&gt;KIE&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#kmodule&quot;&gt;编码方式实现kmodule定义&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;包依赖和目录结构&lt;/h2&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Drools&lt;/code&gt;也提供了一个&lt;code class=&quot;highlighter-rouge&quot;&gt;bom&lt;/code&gt;文件进行相关的包管理, 在maven项目中, &lt;code class=&quot;highlighter-rouge&quot;&gt;pom&lt;/code&gt;文件可以这样写:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependencyManagement&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependencies&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.drools&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;drools-bom&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;type&amp;gt;&lt;/span&gt;pom&lt;span class=&quot;nt&quot;&gt;&amp;lt;/type&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;...&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;scope&amp;gt;&lt;/span&gt;import&lt;span class=&quot;nt&quot;&gt;&amp;lt;/scope&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependencies&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependencyManagement&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependencies&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.kie&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;kie-api&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.drools&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;drools-compiler&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;scope&amp;gt;&lt;/span&gt;runtime&lt;span class=&quot;nt&quot;&gt;&amp;lt;/scope&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependencies&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;项目的目录结构是下面这样子的&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    src
-    |--com.test.drools
-    |  |--DroolsTest.java
-    resources
-    |--META-INF
-    |  |--kmodule.xml
-    |--rules
-    |  |--test.drl
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Drools&lt;/code&gt;默认会加载&lt;code class=&quot;highlighter-rouge&quot;&gt;classpath&lt;/code&gt;路径下的&lt;code class=&quot;highlighter-rouge&quot;&gt;META-INF/kmodule.xml&lt;/code&gt;文件(稍后详述)&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;resources&lt;/code&gt;下面的&lt;code class=&quot;highlighter-rouge&quot;&gt;rules/test.drl&lt;/code&gt;是规则文件, 也支持&lt;code class=&quot;highlighter-rouge&quot;&gt;Excel&lt;/code&gt;即&lt;code class=&quot;highlighter-rouge&quot;&gt;xsl&lt;/code&gt;文件&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section-1&quot;&gt;简单示例&lt;/h2&gt;
-&lt;p&gt;下面是一个简单的例子&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;DroolsTest.java&lt;/code&gt;内容如下:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DroolsTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 获取 drools 实现的 KieServices 实例&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;KieServices&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kieServices&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;KieServices&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Factory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// kieServices 默认加载 classpath:META-INF/kmodule.xml 得到 KieContainer&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;KieContainer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kContainer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kieServices&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getKieClasspathContainer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 通过 kContainer 获取 kmodule.xml 中定义的 ksession&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;KieSession&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kieSession&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kContainer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;newKieSession&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ksession-rules&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 向 workingMemory 中加入一个对象&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;kieSession&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;insert&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Tom&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 通知规则引擎执行规则&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;kieSession&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;fireAllRules&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;META-INF/kmodule.xml&lt;/code&gt;内容如下:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;kmodule&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://jboss.org/kie/6.0.0/kmodule&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;kbase&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;kbase-rules&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;packages=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;rules&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;ksession&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ksession-rules&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/kbase&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;kbase&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;kbase-process&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;packages=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;process&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;  &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 这个没用到 --&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;ksession&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ksession-process&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/kbase&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/kmodule&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;rules/test.drl&lt;/code&gt;内容如下:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-drl&quot;&gt;package com.test.drools
-
-rule &quot;hello&quot;
-    when
-        $name:String()
-    then
-        System.out.println(&quot;hello &quot; + $name);
-end
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;这个例子运行的结果为在控制台输入:&lt;code class=&quot;highlighter-rouge&quot;&gt;hello Tom&lt;/code&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;kmodulexml&quot;&gt;kmodule.xml&lt;/h2&gt;
-&lt;p&gt;这个&lt;code class=&quot;highlighter-rouge&quot;&gt;kmodule.xml&lt;/code&gt;的文件的定义非常简单, 下面解释下里面的内容&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;kmodule&lt;/code&gt;: 里面可以包含多个&lt;code class=&quot;highlighter-rouge&quot;&gt;kbase&lt;/code&gt;, 例子中只包含了2个&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;kbase&lt;/code&gt;: 有个&lt;code class=&quot;highlighter-rouge&quot;&gt;name&lt;/code&gt;属性, 全局不能重名; &lt;code class=&quot;highlighter-rouge&quot;&gt;packages&lt;/code&gt;指定规则所在的包,对应&lt;code class=&quot;highlighter-rouge&quot;&gt;resources&lt;/code&gt;下面的文件夹名. 多个包可以用逗号分开;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;kbase&lt;/code&gt;下面可以有多个&lt;code class=&quot;highlighter-rouge&quot;&gt;ksession&lt;/code&gt;子节点&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ksession&lt;/code&gt;: 有个&lt;code class=&quot;highlighter-rouge&quot;&gt;name&lt;/code&gt;属性, 全局不能重名&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;kbase&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;ksession&lt;/code&gt;还有其他属性, 不太常用&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;文件体现了&lt;code class=&quot;highlighter-rouge&quot;&gt;kmodule&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;kbase&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;ksession&lt;/code&gt;的定义和从上到下的包含关系. 项目会根据&lt;code class=&quot;highlighter-rouge&quot;&gt;kmodule.xml&lt;/code&gt;的定义将其解析成&lt;code class=&quot;highlighter-rouge&quot;&gt;KieModuleModel&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;KieBaseModel&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;KieSessionModel&lt;/code&gt;对象, 在运行时&lt;code class=&quot;highlighter-rouge&quot;&gt;KieContainer&lt;/code&gt;会根据&lt;code class=&quot;highlighter-rouge&quot;&gt;XXModel&lt;/code&gt;来创建&lt;code class=&quot;highlighter-rouge&quot;&gt;KieModule&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;KieBase&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;KieSession&lt;/code&gt;对象, 其中&lt;code class=&quot;highlighter-rouge&quot;&gt;KieModule&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;KieBase&lt;/code&gt;只会创建一次, 而&lt;code class=&quot;highlighter-rouge&quot;&gt;KieSession&lt;/code&gt;则有可能创建多次, 因为&lt;code class=&quot;highlighter-rouge&quot;&gt;KieSession&lt;/code&gt;的创建成本很低, 同时&lt;code class=&quot;highlighter-rouge&quot;&gt;KieSession&lt;/code&gt;包含了运行时的数据, 所以可以销毁、创建若干次.&lt;/p&gt;
-
-&lt;p&gt;我们可以通过&lt;code class=&quot;highlighter-rouge&quot;&gt;kmodule.xml&lt;/code&gt;文件来定义&lt;code class=&quot;highlighter-rouge&quot;&gt;KieModule&lt;/code&gt;, 项目会自动解析&lt;code class=&quot;highlighter-rouge&quot;&gt;classpath&lt;/code&gt;下面的所有&lt;code class=&quot;highlighter-rouge&quot;&gt;META-INF/kmodule.xml&lt;/code&gt;文件，然后解析成&lt;code class=&quot;highlighter-rouge&quot;&gt;KieModule&lt;/code&gt;对象供&lt;code class=&quot;highlighter-rouge&quot;&gt;Drools&lt;/code&gt;引擎使用; 我们也可以不定义&lt;code class=&quot;highlighter-rouge&quot;&gt;kmodule.xml&lt;/code&gt;, 直接通过编码的方式来创建&lt;code class=&quot;highlighter-rouge&quot;&gt;KieModule&lt;/code&gt;等对象, 后面将会介绍.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;kie&quot;&gt;KIE&lt;/h2&gt;
-&lt;p&gt;我们发现在&lt;code class=&quot;highlighter-rouge&quot;&gt;Drools&lt;/code&gt;中经常接触到&lt;code class=&quot;highlighter-rouge&quot;&gt;KIE&lt;/code&gt;, 这个&lt;code class=&quot;highlighter-rouge&quot;&gt;KIE&lt;/code&gt;是&lt;code class=&quot;highlighter-rouge&quot;&gt;JBoss&lt;/code&gt;里面一些相关项目的统称, 可以理解为, &lt;code class=&quot;highlighter-rouge&quot;&gt;JBoss&lt;/code&gt;有很多项目, 使用方式比较统一, 都可以通过&lt;code class=&quot;highlighter-rouge&quot;&gt;KIE API&lt;/code&gt;来使用. 这些通用的API一般都会使用&lt;code class=&quot;highlighter-rouge&quot;&gt;Kie&lt;/code&gt;作为前缀, 比如&lt;code class=&quot;highlighter-rouge&quot;&gt;KieServices&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;KieContainer&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;KieSession&lt;/code&gt;等这些类都是KIE的公共API.&lt;/p&gt;
-
-&lt;p&gt;比较熟悉的&lt;code class=&quot;highlighter-rouge&quot;&gt;JBoss&lt;/code&gt;项目&lt;code class=&quot;highlighter-rouge&quot;&gt;jBPM&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;Drools&lt;/code&gt;等, 通过&lt;code class=&quot;highlighter-rouge&quot;&gt;KIE&lt;/code&gt;统一了他们的使用方式, 在&lt;code class=&quot;highlighter-rouge&quot;&gt;Drools&lt;/code&gt;中这么用, 在&lt;code class=&quot;highlighter-rouge&quot;&gt;jBPM&lt;/code&gt;也这么用. 下面是来自官网的一张关于KIE的图:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/static/images/kie.png&quot; alt=&quot;KIE API&quot; title=&quot;KIE API&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;KIE API有一些常用的类, 比如上例中, 我们通过&lt;code class=&quot;highlighter-rouge&quot;&gt;KieServices&lt;/code&gt;对象得到一个&lt;code class=&quot;highlighter-rouge&quot;&gt;KieContainer&lt;/code&gt;, 然后&lt;code class=&quot;highlighter-rouge&quot;&gt;KieContainer&lt;/code&gt;根据&lt;code class=&quot;highlighter-rouge&quot;&gt;session name&lt;/code&gt;来新建一个&lt;code class=&quot;highlighter-rouge&quot;&gt;KieSession&lt;/code&gt;, 最后通过&lt;code class=&quot;highlighter-rouge&quot;&gt;KieSession&lt;/code&gt;来运行规则&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;KieSession&lt;/code&gt;: 该接口提供了很多方法, 可以通过这些方法访问KIE关于构建和运行的相关对象, 比如可以获取&lt;code class=&quot;highlighter-rouge&quot;&gt;KieContainer&lt;/code&gt;, 利用&lt;code class=&quot;highlighter-rouge&quot;&gt;KieContainer&lt;/code&gt;来访问&lt;code class=&quot;highlighter-rouge&quot;&gt;KBase&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;KSession&lt;/code&gt;等信息; 可以获取&lt;code class=&quot;highlighter-rouge&quot;&gt;KieRepository&lt;/code&gt;对象, 利用&lt;code class=&quot;highlighter-rouge&quot;&gt;KieRepository&lt;/code&gt;来管理&lt;code class=&quot;highlighter-rouge&quot;&gt;KieModule&lt;/code&gt;等. &lt;code class=&quot;highlighter-rouge&quot;&gt;KieServices&lt;/code&gt;就是一个中心, 通过它来获取的各种对象来完成规则构建、管理和执行等操作&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;KieContainer&lt;/code&gt;: 就是一个&lt;code class=&quot;highlighter-rouge&quot;&gt;KieBase&lt;/code&gt;的容器&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;KieBase&lt;/code&gt;: 一个知识仓库, 包含了若干的规则、流程、方法等, 在&lt;code class=&quot;highlighter-rouge&quot;&gt;Drools&lt;/code&gt;中主要就是规则和方法, &lt;code class=&quot;highlighter-rouge&quot;&gt;KieBase&lt;/code&gt;不包含运行时的数据, 如果需要执行规则&lt;code class=&quot;highlighter-rouge&quot;&gt;KieBase&lt;/code&gt;中的规则, 就需要根据&lt;code class=&quot;highlighter-rouge&quot;&gt;KieBase&lt;/code&gt;创建&lt;code class=&quot;highlighter-rouge&quot;&gt;KieSession&lt;/code&gt;. 一般创建&lt;code class=&quot;highlighter-rouge&quot;&gt;KieBase&lt;/code&gt;成本较高, 只会创建一次&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;KieSession&lt;/code&gt;: 一个跟&lt;code class=&quot;highlighter-rouge&quot;&gt;Drools&lt;/code&gt;引擎交互的会话, 基于&lt;code class=&quot;highlighter-rouge&quot;&gt;KieBase&lt;/code&gt;创建, 它会包含运行时数据(事实&lt;code class=&quot;highlighter-rouge&quot;&gt;Fact&lt;/code&gt;). 我们通过&lt;code class=&quot;highlighter-rouge&quot;&gt;KieContainer&lt;/code&gt;创建&lt;code class=&quot;highlighter-rouge&quot;&gt;KieSession&lt;/code&gt;是一种较为方便的做法, 其实他本质上是从&lt;code class=&quot;highlighter-rouge&quot;&gt;KieBase&lt;/code&gt;中创建出来的&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;KieRepository&lt;/code&gt;: 一个单例对象, 它是一个存放&lt;code class=&quot;highlighter-rouge&quot;&gt;KieModule&lt;/code&gt;的仓库, &lt;code class=&quot;highlighter-rouge&quot;&gt;KieModule&lt;/code&gt;可以由&lt;code class=&quot;highlighter-rouge&quot;&gt;kmodule.xml&lt;/code&gt;文件定义&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;KieProject&lt;/code&gt;: &lt;code class=&quot;highlighter-rouge&quot;&gt;KieContainer&lt;/code&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;KieProject&lt;/code&gt;来创建&lt;code class=&quot;highlighter-rouge&quot;&gt;KieModule&lt;/code&gt;, 并将&lt;code class=&quot;highlighter-rouge&quot;&gt;KieModule&lt;/code&gt;放到&lt;code class=&quot;highlighter-rouge&quot;&gt;KieRepository&lt;/code&gt;中, 然后&lt;code class=&quot;highlighter-rouge&quot;&gt;KieContainer&lt;/code&gt;可以通过&lt;code class=&quot;highlighter-rouge&quot;&gt;KieProject&lt;/code&gt;来查找&lt;code class=&quot;highlighter-rouge&quot;&gt;KieModule&lt;/code&gt;定义的信息, 并根据这些信息构造&lt;code class=&quot;highlighter-rouge&quot;&gt;KieBase&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;KieSession&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ClasspathKieProject&lt;/code&gt;: 它实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;KieProject&lt;/code&gt;接口, 它提供了根据类路径中的&lt;code class=&quot;highlighter-rouge&quot;&gt;META-INF/kmodule.xml&lt;/code&gt;文件构造&lt;code class=&quot;highlighter-rouge&quot;&gt;KieModule&lt;/code&gt;的能力, 也就是我们能够基于Maven构造Drools组件的基本保障之一&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;另外, KIE也提供了一种策略, 能够让应用程序在运行时, 动态监测&lt;code class=&quot;highlighter-rouge&quot;&gt;Maven&lt;/code&gt;仓库中&lt;code class=&quot;highlighter-rouge&quot;&gt;Drools&lt;/code&gt;项目&lt;code class=&quot;highlighter-rouge&quot;&gt;jar&lt;/code&gt;组件的版本更新情况, 然后可以根据配置动态更新&lt;code class=&quot;highlighter-rouge&quot;&gt;Drools&lt;/code&gt;发布包, 实现热插拔功能, 这个是通过&lt;code class=&quot;highlighter-rouge&quot;&gt;KieScanner API&lt;/code&gt;实现的&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;kmodule&quot;&gt;编码方式实现kmodule定义&lt;/h2&gt;
-&lt;p&gt;前面的例子都是默认读取&lt;code class=&quot;highlighter-rouge&quot;&gt;classpath&lt;/code&gt;下的&lt;code class=&quot;highlighter-rouge&quot;&gt;META-INF/kmodule.xml&lt;/code&gt;文件的, 接下来我们通过&lt;code class=&quot;highlighter-rouge&quot;&gt;KieFileSystem&lt;/code&gt;定义&lt;code class=&quot;highlighter-rouge&quot;&gt;KieModule&lt;/code&gt;, 这样就不需要&lt;code class=&quot;highlighter-rouge&quot;&gt;META-INF/kmodule.xml&lt;/code&gt;配置文件了.&lt;/p&gt;
-
-&lt;p&gt;还是类似的例子, 目录结构将变为&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    src
-    |--com.test.drools
-    |  |--KieFileSystemTest.java
-    resources
-    |--rules
-    |  |--test.drl
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;其中 &lt;code class=&quot;highlighter-rouge&quot;&gt;KKieFileSystemTest.java&lt;/code&gt;内容为:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;KieFileSystemTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 获取 drools 实现的 KieServices 实例&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;KieServices&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kieServices&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;KieServices&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Factory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 创建一个 KieFileSystem&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;KieFileSystem&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fileSystem&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kieServices&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;newKieFileSystem&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 创建一个 KieResources 对象&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;KieResources&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;resources&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kieServices&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getResources&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 1. 先创建 KieModuleModel, 类似于xml中的 kmodule 节点&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;KieModuleModel&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kieModuleModel&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kieServices&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;newKieModuleModel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 2. 再创建 KieBaseModel, 类似于xml中的 kbase节点, name=kbase-rules, package=rules&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;KieBaseModel&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;baseModel&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kieModuleModel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;newKieBaseModel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;kbase-rules&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addPackage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;rules&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 3. 再创建 KieSessionModel, 类似于xml中的 ksession 节点, name=ksession-rules&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;baseModel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;newKieSessionModel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ksession-rules&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 4. 生产一个xml文件，就是kmodule.xml文件&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kieModuleModel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toXML&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 打印出来看看内容&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 5. 将这个xml文件写入到KieFileSystem中&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;fileSystem&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;writeKModuleXML&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;xml&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 6. 然后将规则文件等写入到 KieFileSystem 中&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// fileSystem.write(&quot;src/main/resources/rules/test.drl&quot;, resources.newClassPathResource(&quot;rules/test.drl&quot;));&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;fileSystem&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;resources&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;newClassPathResource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;rules/test.drl&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 跟上面等效&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 7. 最后通过 KieBuilder 进行构建就将该 kmodule 加入到 KieRepository 中, 这样就将自定义的kmodule加入到引擎中了&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;KieBuilder&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kb&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kieServices&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;newKieBuilder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fileSystem&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;kb&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;buildAll&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 编译&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 下面就可以向原来一样使用了&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 得到 KieContainer&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;KieContainer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kieContainer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kieServices&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;newKieContainer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kieServices&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getRepository&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getDefaultReleaseId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 通过 kContainer 获取 kmodule.xml 中定义的 ksession&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;KieSession&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kieSession&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kieContainer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;newKieSession&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ksession-rules&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 向 workingMemory 中加入一个对象&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;kieSession&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;insert&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Tom&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 通知规则引擎执行规则&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;kieSession&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;fireAllRules&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;hr /&gt;
-</description>
-        <pubDate>Sun, 14 Aug 2016 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-08-14-Drools%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-08-14-Drools%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B.html</guid>
-        
-        <category>Drools</category>
         
         
         <category>编程技术</category>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="Spring boot与Filter, 编程技术, Spring, 逆水行舟" />
+    <meta name="description" content="Spring boot与Filter, 编程技术, Spring, " />
+
+    <title>逆水行舟</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-18-Spring-boot%E4%B8%8EFilter.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="/static/js/jquery.qrcode.min.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="/static/js/uikit.min.js"></script>
+    <!-- quietflow -->
+    <!-- <script type="text/javascript" src="http://loveshisong.cn/static/js/quietflow.min.js"></script> -->
+    <!-- UK sticky -->
+    <script type="text/javascript" src="/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "shisong"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" data-uk-sticky>
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <script type="text/javascript">
+jQuery(function(){
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-18-Spring-boot%E4%B8%8EFilter.html"
+    });
+})
+</script>
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>Spring boot与Filter</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <hr />
+
+<ul id="markdown-toc">
+  <li><a href="#filter">Filter</a>    <ul>
+      <li><a href="#section">方式一</a></li>
+      <li><a href="#section-1">方式二</a></li>
+      <li><a href="#section-2">方式三</a></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="filter">Filter</h2>
+<p><code class="highlighter-rouge">Filter</code>是<code class="highlighter-rouge">Servlet</code>中概念. 普通的web项目都是从<code class="highlighter-rouge">web.xml</code>中配置, <code class="highlighter-rouge">Spring boot</code>也为我们提供了很多注册的方式.</p>
+
+<h3 id="section">方式一</h3>
+<p>直接作为一个<code class="highlighter-rouge">Bean</code>注册.<br />
+自定义<code class="highlighter-rouge">Filter</code>通常可以实现<code class="highlighter-rouge">Filter</code>接口, 或者可以继承<code class="highlighter-rouge">Spring</code>提供的<code class="highlighter-rouge">GenericFilterBean</code>.<br />
+当<code class="highlighter-rouge">Spring Boot</code>监测到有<code class="highlighter-rouge">javax.servlet.Filter</code>的<code class="highlighter-rouge">bean</code>时就会自动加入过滤器调用链.</p>
+
+<ul>
+  <li>优点: 简单</li>
+  <li>缺点: 不可控(比如过滤的URL等), 其实这种方式基本不用</li>
+</ul>
+
+<p>代码如下:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyFilter</span> <span class="kd">extends</span> <span class="n">GenericFilterBean</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">doFilter</span><span class="o">(</span><span class="n">ServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">ServletResponse</span> <span class="n">response</span><span class="o">,</span> <span class="n">FilterChain</span> <span class="n">chain</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">ServletException</span> <span class="o">{</span>
+        <span class="c1">//  some code</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<h3 id="section-1">方式二</h3>
+<p>通过<code class="highlighter-rouge">FilterRegistrationBean</code>注册, 这个类实现了<code class="highlighter-rouge">ServletContextInitializer</code>接口</p>
+
+<ul>
+  <li>优点: 简单, 可控</li>
+</ul>
+
+<p>比如还是注册上面写的那个<code class="highlighter-rouge">MyFilter</code>, 注册及配置的代码如下:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Configuration</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">WebMvcConfig</span> <span class="kd">extends</span> <span class="n">WebMvcConfigurerAdapter</span> <span class="o">{</span>
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">FilterRegistrationBean</span> <span class="n">registMyFilter</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">FilterRegistrationBean</span> <span class="n">registrationBean</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FilterRegistrationBean</span><span class="o">();</span>
+        <span class="n">registrationBean</span><span class="o">.</span><span class="na">setFilter</span><span class="o">(</span><span class="k">new</span> <span class="n">MyFilter</span><span class="o">());</span>
+        <span class="n">registrationBean</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"myFilter"</span><span class="o">);</span>
+        <span class="n">registrationBean</span><span class="o">.</span><span class="na">setUrlPatterns</span><span class="o">(</span><span class="n">Sets</span><span class="o">.</span><span class="na">newHashSet</span><span class="o">(</span><span class="s">"/*"</span><span class="o">));</span>
+        <span class="n">registrationBean</span><span class="o">.</span><span class="na">setOrder</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">registrationBean</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<h3 id="section-2">方式三</h3>
+<p>使用<code class="highlighter-rouge">@ServletComponentScan</code>扫描<code class="highlighter-rouge">@WebFilter</code>注解自动注册</p>
+
+<p>这种方式需要在 <strong>主配置类</strong> 上加<code class="highlighter-rouge">@ServletComponentScan</code>注解, 在我们的<code class="highlighter-rouge">MyFilter</code>类上加<code class="highlighter-rouge">@WebFilter</code>注解. 代码如下:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 主配置类</span>
+<span class="nd">@SpringBootApplication</span>
+<span class="nd">@ServletComponentScan</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Application</span> <span class="o">{</span>
+    <span class="c1">// ...</span>
+<span class="o">}</span>
+<span class="c1">// 自定义的过滤器类</span>
+<span class="nd">@WebFilter</span><span class="o">(</span><span class="n">filterName</span> <span class="o">=</span> <span class="s">"myFilter"</span><span class="o">,</span> <span class="n">urlPatterns</span> <span class="o">=</span> <span class="s">"/*"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyFilter</span> <span class="kd">extends</span> <span class="n">GenericFilterBean</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">doFilter</span><span class="o">(</span><span class="n">ServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">ServletResponse</span> <span class="n">response</span><span class="o">,</span> <span class="n">FilterChain</span> <span class="n">chain</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">ServletException</span> <span class="o">{</span>
+        <span class="c1">//  some code</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<hr />
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/Spring boot与Filter" data-title="Spring boot与Filter" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-18-Spring-boot%E4%B8%8EFilter.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
+
+</body>
+
+</html>
