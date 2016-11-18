@@ -5,12 +5,100 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 18 Nov 2016 12:08:46 +0800</pubDate>
-    <lastBuildDate>Fri, 18 Nov 2016 12:08:46 +0800</lastBuildDate>
+    <pubDate>Fri, 18 Nov 2016 14:26:33 +0800</pubDate>
+    <lastBuildDate>Fri, 18 Nov 2016 14:26:33 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
-        <title>Spring boot定制HttpMessageConverter</title>
+        <title>Spring boot与HandlerInterceptor</title>
+        <description>&lt;hr /&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#handlerinterceptor&quot;&gt;HandlerInterceptor&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;拦截器中的方法&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#spring-boot--interceptor&quot;&gt;Spring boot 定制 Interceptor&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;handlerinterceptor&quot;&gt;HandlerInterceptor&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;提供的拦截器&lt;code class=&quot;highlighter-rouge&quot;&gt;Interceptor&lt;/code&gt;与&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;中的&lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;不同的是, &lt;code class=&quot;highlighter-rouge&quot;&gt;Interceptor&lt;/code&gt;采用&lt;code class=&quot;highlighter-rouge&quot;&gt;AOP&lt;/code&gt;的方式在&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;service&lt;/code&gt;方法执行之前进行拦截.&lt;/p&gt;
+
+&lt;p&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;中定义一个&lt;code class=&quot;highlighter-rouge&quot;&gt;Interceptor&lt;/code&gt;只需要实现&lt;code class=&quot;highlighter-rouge&quot;&gt;HandlerInterceptor&lt;/code&gt;接口, &lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;已经为我们提供了一个&lt;code class=&quot;highlighter-rouge&quot;&gt;HandlerInterceptorAdapter&lt;/code&gt;, 我们只需要继承它, 覆盖想要重写的方法.&lt;/p&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;拦截器中的方法&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Interceptor&lt;/code&gt;中有如下方法:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;preHandle&lt;/code&gt;: 在&lt;code class=&quot;highlighter-rouge&quot;&gt;Controller&lt;/code&gt;处理之前调用, 返回&lt;code class=&quot;highlighter-rouge&quot;&gt;false&lt;/code&gt;时整个请求结束&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;postHandle&lt;/code&gt;: 在&lt;code class=&quot;highlighter-rouge&quot;&gt;Controller&lt;/code&gt;调用之后执行, 但它会在&lt;code class=&quot;highlighter-rouge&quot;&gt;DispatcherServlet&lt;/code&gt;进行视图的渲染之前执行, 也就是说在这个方法中你可以对&lt;code class=&quot;highlighter-rouge&quot;&gt;ModelAndView&lt;/code&gt;进行操作&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;afterCompletion&lt;/code&gt;: 在整个请求完成之后执行, 也就是&lt;code class=&quot;highlighter-rouge&quot;&gt;DispatcherServlet&lt;/code&gt;已经渲染了视图之后执行; 这个方法的主要作用是用于清理资源的&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;afterConcurrentHandlingStarted&lt;/code&gt;: 这个方法是&lt;code class=&quot;highlighter-rouge&quot;&gt;AsyncHandlerInterceptor&lt;/code&gt;接口中添加的. 当&lt;code class=&quot;highlighter-rouge&quot;&gt;Controller&lt;/code&gt;中有异步请求方法的时候会触发该方法, 异步请求先支持&lt;code class=&quot;highlighter-rouge&quot;&gt;preHandle&lt;/code&gt;、然后执行&lt;code class=&quot;highlighter-rouge&quot;&gt;afterConcurrentHandlingStarted&lt;/code&gt;, 异步线程完成之后执行会再执行&lt;code class=&quot;highlighter-rouge&quot;&gt;preHandle、postHandle、afterCompletion&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;关于最后那个方法, 举个列子:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@RestController&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ExampleController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@RequestMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;DeferredResult&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;home&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;DeferredResult&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DeferredResult&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;dr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setResult&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;成功&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;上面这样的&lt;code class=&quot;highlighter-rouge&quot;&gt;Controller&lt;/code&gt;里面有个异步结果, 则拦截器的执行顺序将是: &lt;code class=&quot;highlighter-rouge&quot;&gt;preHandle -&amp;gt; afterConcurrentHandlingStarted -&amp;gt; preHandle -&amp;gt; postHandle -&amp;gt; afterCompletion&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;如果把&lt;code class=&quot;highlighter-rouge&quot;&gt;dr.setResult(&quot;成功&quot;);&lt;/code&gt; 这句删掉, 将只执行&lt;code class=&quot;highlighter-rouge&quot;&gt;preHandle -&amp;gt; afterConcurrentHandlingStarted&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;可以认为, &lt;code class=&quot;highlighter-rouge&quot;&gt;afterConcurrentHandlingStarted&lt;/code&gt;是返回异步结果时调用(此时异步结果里不需要有数据), 而&lt;code class=&quot;highlighter-rouge&quot;&gt;postHandle&lt;/code&gt;必须是返回的结果执行完, 异步结果中有数据了(&lt;code class=&quot;highlighter-rouge&quot;&gt;dr.setResult&lt;/code&gt;)才调用.&lt;/p&gt;
+
+&lt;h2 id=&quot;spring-boot--interceptor&quot;&gt;Spring boot 定制 Interceptor&lt;/h2&gt;
+
+&lt;p&gt;首先我们先定义我们自己的拦截器, 方式还是继承&lt;code class=&quot;highlighter-rouge&quot;&gt;HandlerInterceptorAdapter&lt;/code&gt;, 覆盖想要的方法:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyInterceptor&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HandlerInterceptorAdapter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;preHandle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HttpServletRequest&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HttpServletResponse&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;handler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;像这样我们把&lt;code class=&quot;highlighter-rouge&quot;&gt;MyInterceptor&lt;/code&gt;作为一个&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;Spring boot&lt;/code&gt;并不会帮我们注册到拦截器列表中. 就像添加消息转换器一样, 我们可以在继承&lt;code class=&quot;highlighter-rouge&quot;&gt;WebMvcConfigurerAdapter&lt;/code&gt;的配置类里, 通过覆盖方法来添加:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Configuration&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;WebMvcConfig&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WebMvcConfigurerAdapter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;// 拦截器需要手动加入到调用链中&lt;/span&gt;
+      &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+      &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;addInterceptors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;InterceptorRegistry&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;registry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;registry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addInterceptor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MyInterceptor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+</description>
+        <pubDate>Fri, 18 Nov 2016 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-18-Spring-boot%E4%B8%8EHandlerInterceptor.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-18-Spring-boot%E4%B8%8EHandlerInterceptor.html</guid>
+        
+        <category>Spring</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
+    
+      <item>
+        <title>Spring boot与HttpMessageConverter</title>
         <description>&lt;hr /&gt;
 
 &lt;ul id=&quot;markdown-toc&quot;&gt;
@@ -125,9 +213,9 @@
 
 &lt;hr /&gt;
 </description>
-        <pubDate>Fri, 18 Nov 2016 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-18-Spring-Boot%E4%B8%8EHttpMessageConverter.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-18-Spring-Boot%E4%B8%8EHttpMessageConverter.html</guid>
+        <pubDate>Thu, 17 Nov 2016 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-17-Spring-boot%E4%B8%8EHttpMessageConverter.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-17-Spring-boot%E4%B8%8EHttpMessageConverter.html</guid>
         
         <category>Spring</category>
         
@@ -275,9 +363,9 @@
 
 &lt;hr /&gt;
 </description>
-        <pubDate>Thu, 17 Nov 2016 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-17-Servlet%E8%AF%A6%E8%A7%A3.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-17-Servlet%E8%AF%A6%E8%A7%A3.html</guid>
+        <pubDate>Wed, 16 Nov 2016 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-16-Servlet%E8%AF%A6%E8%A7%A3.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-16-Servlet%E8%AF%A6%E8%A7%A3.html</guid>
         
         <category>Spring</category>
         
@@ -1949,190 +2037,6 @@ end
         <pubDate>Sun, 14 Aug 2016 00:00:00 +0800</pubDate>
         <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-08-14-Drools%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B.html</link>
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-08-14-Drools%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B.html</guid>
-        
-        <category>Drools</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>Drools语法详解</title>
-        <description>&lt;p&gt;本文仅包含&lt;code class=&quot;highlighter-rouge&quot;&gt;Drools&lt;/code&gt;的语法介绍, 不涉及如何使用,规则引擎介绍,算法介绍等方面.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;语法全貌概览&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#package&quot;&gt;package&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#import&quot;&gt;import&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#global&quot;&gt;global&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#functon&quot;&gt;functon&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#rule&quot;&gt;rule&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;规则属性&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#when&quot;&gt;when&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#then&quot;&gt;then&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;语法全貌概览&lt;/h2&gt;
-
-&lt;p&gt;规则文件一般都是&lt;code class=&quot;highlighter-rouge&quot;&gt;.drl&lt;/code&gt;文件, 也可以是&lt;code class=&quot;highlighter-rouge&quot;&gt;xml&lt;/code&gt;文件. 我们默认都是用&lt;code class=&quot;highlighter-rouge&quot;&gt;.drl&lt;/code&gt;文件. 一个规则文件大致会有这样的结构:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kr&quot;&gt;package&lt;/span&gt;   &lt;span class=&quot;cm&quot;&gt;/* 包名, 必须, 逻辑上的管理, 不对应物理位置 */&lt;/span&gt;
-&lt;span class=&quot;kr&quot;&gt;import&lt;/span&gt;    &lt;span class=&quot;cm&quot;&gt;/* 导入类或方法, 与java中的import类似 */&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;global&lt;/span&gt;    &lt;span class=&quot;cm&quot;&gt;/* 全局变量 */&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;  &lt;span class=&quot;cm&quot;&gt;/* 定义函数 */&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;query&lt;/span&gt;     &lt;span class=&quot;cm&quot;&gt;/* 查询 */&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;rule&lt;/span&gt;      &lt;span class=&quot;cm&quot;&gt;/* 规则, 可以由多个; 这是规则文件的主要部分 */&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;来个具体的规则文件的例子:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kr&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;com&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;drools&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;showName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;我是&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;nx&quot;&gt;rule&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;rule1&quot;&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;when&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;eval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;then&lt;/span&gt;
-        &lt;span class=&quot;nx&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;hello drools&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nx&quot;&gt;showName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;test&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;package&quot;&gt;package&lt;/h3&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;package&lt;/code&gt;有以下几点&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;package&lt;/code&gt;是必须的, 且必须放在规则文件第一行;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;package&lt;/code&gt;的名字是随意的, 不必对应物理路径;&lt;/li&gt;
-  &lt;li&gt;跟&lt;code class=&quot;highlighter-rouge&quot;&gt;java&lt;/code&gt;中&lt;code class=&quot;highlighter-rouge&quot;&gt;package&lt;/code&gt;的概念不同,这里只是逻辑上的一种区分,同样的&lt;code class=&quot;highlighter-rouge&quot;&gt;package&lt;/code&gt;下定义的&lt;code class=&quot;highlighter-rouge&quot;&gt;function&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;query&lt;/code&gt;等可以直接使用。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;import&quot;&gt;import&lt;/h3&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;import&lt;/code&gt;跟&lt;code class=&quot;highlighter-rouge&quot;&gt;java&lt;/code&gt;中类似, 可以导入类, 也可以直接导入静态方法&lt;/p&gt;
-
-&lt;h3 id=&quot;global&quot;&gt;global&lt;/h3&gt;
-
-&lt;p&gt;定义全局变量,通常用于返回数据和提供服务; 全局变量与fact不通,引擎不能知道全局变量的改变,必须在插入fact之前,设置global变量&lt;/p&gt;
-
-&lt;h3 id=&quot;functon&quot;&gt;functon&lt;/h3&gt;
-
-&lt;p&gt;定义函数, 为了提高代码复用, 使用&lt;code class=&quot;highlighter-rouge&quot;&gt;java&lt;/code&gt;语法书写&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;rule&quot;&gt;rule&lt;/h2&gt;
-
-&lt;p&gt;定义一个规则, 格式大致为:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;rule&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;规则名&quot;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;属性&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;值&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;when&lt;/span&gt;
-        &lt;span class=&quot;err&quot;&gt;条件&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;也叫&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Left&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Hand&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Side&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;简称&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;LHS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;then&lt;/span&gt;
-        &lt;span class=&quot;err&quot;&gt;结果&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;也叫&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Right&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Hand&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Side&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;简称&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;RHS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;end&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;主要包含三部分:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;属性部分: 定义当前规则执行的一些属性等,比如是否可被重复执行、过期时间、生效时间等&lt;/li&gt;
-  &lt;li&gt;条件部分: 即&lt;code class=&quot;highlighter-rouge&quot;&gt;LHS&lt;/code&gt;, 定义当前规则的条件; 如 &lt;code class=&quot;highlighter-rouge&quot;&gt;when Message();&lt;/code&gt; 判断当前&lt;code class=&quot;highlighter-rouge&quot;&gt;workingMemory&lt;/code&gt;中是否存在&lt;code class=&quot;highlighter-rouge&quot;&gt;Message&lt;/code&gt;对象&lt;/li&gt;
-  &lt;li&gt;结果部分: 即&lt;code class=&quot;highlighter-rouge&quot;&gt;RHS&lt;/code&gt;, 即当前规则条件满足后执行的操作,可以直接调用&lt;code class=&quot;highlighter-rouge&quot;&gt;Fact&lt;/code&gt;对象的方法来操作应用,可写java代码&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section-1&quot;&gt;规则属性&lt;/h2&gt;
-&lt;p&gt;属性有这些内容: &lt;code class=&quot;highlighter-rouge&quot;&gt;activation-group&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;agenda-group&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;auto-focus&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;date-effective&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;date-expires&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;dialect&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;duration&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;duration-value&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;enabled&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;lock-on-active&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;no-loop&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;ruleflow-group&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;salience&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;下面挨个解释:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;salience&lt;/code&gt;: 优先级, 属性值是一个数字, 数值越大越先执行, 可以是负数, 默认为&lt;code class=&quot;highlighter-rouge&quot;&gt;0&lt;/code&gt;. 这个可以控制规则的执行顺序&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;date-effective&lt;/code&gt;: 设置规则的生效时间, &lt;code class=&quot;highlighter-rouge&quot;&gt;当前系统时间&amp;gt;=date-effective&lt;/code&gt;时才会触发执行, 值是一个日期格式的字符串, 推荐用法是手动在java代码中设置当前系统的时间格式, 然后按照格式指定时间. 比如: &lt;code class=&quot;highlighter-rouge&quot;&gt;date-expires &quot;2016-01-31 23:59:59&quot;&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;date-expires&lt;/code&gt;: 设置规则的过期时间, 跟上面正好相反.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;enabled&lt;/code&gt;: 表示该规则是否可用, 值为布尔类型, 默认是&lt;code class=&quot;highlighter-rouge&quot;&gt;true&lt;/code&gt;, 设置成&lt;code class=&quot;highlighter-rouge&quot;&gt;false&lt;/code&gt;则该规则就不会被执行了&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;dialect&lt;/code&gt;: 设置语言类型, 值为字符串, 一般有两种语言,&lt;code class=&quot;highlighter-rouge&quot;&gt;mvel&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;java&lt;/code&gt;, 默认为&lt;code class=&quot;highlighter-rouge&quot;&gt;java&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;duration&lt;/code&gt;: 规则定时, 值为长整型, 单位为毫秒, 如 &lt;code class=&quot;highlighter-rouge&quot;&gt;duration 3000&lt;/code&gt;, 表示规则在3秒后执行(另外的线程中执行)&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;no-loop&lt;/code&gt;: 是否允许规则多次执行, 值为布尔类型, 默认是&lt;code class=&quot;highlighter-rouge&quot;&gt;false&lt;/code&gt;, 即当前的规则只要满足条件, 可以无限次执行; 对当前传入&lt;code class=&quot;highlighter-rouge&quot;&gt;workingMemory&lt;/code&gt;中的&lt;code class=&quot;highlighter-rouge&quot;&gt;Fact&lt;/code&gt;对象进行修改或者个数的增减时, 就会触发规则重新匹配执行; 设置属性&lt;code class=&quot;highlighter-rouge&quot;&gt;no-loop true&lt;/code&gt;, 表示当前规则只执行一次, 即使&lt;code class=&quot;highlighter-rouge&quot;&gt;RHS&lt;/code&gt;中更新了当前&lt;code class=&quot;highlighter-rouge&quot;&gt;Fact&lt;/code&gt;对象也不会再次执行该规则了. 不过当其他规则里更新了&lt;code class=&quot;highlighter-rouge&quot;&gt;Fact&lt;/code&gt;对象时, 即使有&lt;code class=&quot;highlighter-rouge&quot;&gt;no-loop true&lt;/code&gt;也会触发, 即&lt;code class=&quot;highlighter-rouge&quot;&gt;no-loop true&lt;/code&gt;仅表示本规的&lt;code class=&quot;highlighter-rouge&quot;&gt;RHS&lt;/code&gt;中有更新时不重复执行.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;lock-on-active&lt;/code&gt;: 是&lt;code class=&quot;highlighter-rouge&quot;&gt;no-loop&lt;/code&gt;的增强版, 与其他属性配合使用;规则的重复执行不一定是本身触发的, 也可能是其他规则触发的, 当在规则上使用&lt;code class=&quot;highlighter-rouge&quot;&gt;ruleflow-group&lt;/code&gt;属性或&lt;code class=&quot;highlighter-rouge&quot;&gt;agenda-group&lt;/code&gt;属性时, 将&lt;code class=&quot;highlighter-rouge&quot;&gt;lock-on-active&lt;/code&gt;属性值设置为&lt;code class=&quot;highlighter-rouge&quot;&gt;true&lt;/code&gt;，可避免因某些&lt;code class=&quot;highlighter-rouge&quot;&gt;Fact&lt;/code&gt;对象被修改而使已经执行过的规则再次被激活执行.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;activation-group&lt;/code&gt;: 作用是将规则分组, 值为字符串表示组名,这样在执行的时候,具有相同&lt;code class=&quot;highlighter-rouge&quot;&gt;activation-group&lt;/code&gt;属性的规则中只要有一个会被执行,其它的规则都将不再执行。即在具有相同&lt;code class=&quot;highlighter-rouge&quot;&gt;activation-group&lt;/code&gt;属性的规则当中,只有一个规则会被执行,其它规则都将不会被执行.相同&lt;code class=&quot;highlighter-rouge&quot;&gt;activation-group&lt;/code&gt;属性的规则中哪一个会先执行,则可以用&lt;code class=&quot;highlighter-rouge&quot;&gt;salience&lt;/code&gt;之类的属性来实现&lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;agenda-group&lt;/code&gt;: 将规则分成若干个&lt;code class=&quot;highlighter-rouge&quot;&gt;Agenda Group&lt;/code&gt;, 默认情况下, 引擎在调用这些设置了&lt;code class=&quot;highlighter-rouge&quot;&gt;agenda-group&lt;/code&gt;属性的规则时需要显示的指定某个&lt;code class=&quot;highlighter-rouge&quot;&gt;Agenda Group&lt;/code&gt;得到&lt;code class=&quot;highlighter-rouge&quot;&gt;Focus(焦点)&lt;/code&gt;,这样位于该&lt;code class=&quot;highlighter-rouge&quot;&gt;Agenda Group&lt;/code&gt;中的规则才会触发执行,否则将不执行&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ruleflow-group&lt;/code&gt;: 使用规则流的时候会用到该属性, 作用是将规则分组，然后在规则流当中通过使用&lt;code class=&quot;highlighter-rouge&quot;&gt;ruleflow-group&lt;/code&gt;属性的值，从而使用对应的规则&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;when&quot;&gt;when&lt;/h2&gt;
-&lt;p&gt;条件部分(Conditions/LHS)用于匹配条件, 也叫匹配模式(Pattern)  &lt;/p&gt;
-
-&lt;p&gt;条件可以是单个, 也可以有多个, 下面是一些例子&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;when&lt;/span&gt;
-    &lt;span class=&quot;nb&quot;&gt;eval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;            &lt;span class=&quot;c1&quot;&gt;// 是一个默认的api, 类似于 while(true)&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;Person&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;              &lt;span class=&quot;c1&quot;&gt;// 当前的 workingMemory 中存在 Pserson 类型的 Fact 对象&lt;/span&gt;
-    &lt;span class=&quot;nl&quot;&gt;$person&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Person&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;      &lt;span class=&quot;c1&quot;&gt;// 同上, $person 是给对象起的名字&lt;/span&gt;
-    &lt;span class=&quot;nl&quot;&gt;$bob&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Person&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;bob&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 字段绑定, 存在 Person 类型且属性 name 值为bob的对象&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;Person&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;$name&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;bob&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 与上面类似, 只是把名字放到了 $name 变量里&lt;/span&gt;
-    &lt;span class=&quot;nx&quot;&gt;Person&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;$name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 与上面类似, 只是把名字放到了 $name 变量里&lt;/span&gt;
-    &lt;span class=&quot;nl&quot;&gt;$tom&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Person&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;tom&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Tom&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 条件组合&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;then&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;...&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 上面起的变量这里可以直接使用&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;注意:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;上例中的&lt;code class=&quot;highlighter-rouge&quot;&gt;$person&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;$bob&lt;/code&gt;等代表着符合条件的变量的引用, 在后面的条件部分和&lt;code class=&quot;highlighter-rouge&quot;&gt;RHS&lt;/code&gt;部分中可直接使用&lt;/li&gt;
-  &lt;li&gt;条件可以有组合, 如&lt;code class=&quot;highlighter-rouge&quot;&gt;Person(age == 18 &amp;amp;&amp;amp; (name == &quot;tom&quot; || name == &quot;Tom&quot;))&lt;/code&gt;, 若条件全是&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;amp;&amp;amp;&lt;/code&gt;关系, 可以使用&lt;code class=&quot;highlighter-rouge&quot;&gt;,&lt;/code&gt;代替, 但两者不能混用.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Fact&lt;/code&gt;对象(即输入的数据,类似于java bean)的private属性, 在&lt;code class=&quot;highlighter-rouge&quot;&gt;LHS&lt;/code&gt;中必须用&lt;code class=&quot;highlighter-rouge&quot;&gt;.&lt;/code&gt;引用, 如&lt;code class=&quot;highlighter-rouge&quot;&gt;($person.name == &quot;tom&quot;)&lt;/code&gt;, 而&lt;code class=&quot;highlighter-rouge&quot;&gt;RHS&lt;/code&gt;中必须使用 &lt;code class=&quot;highlighter-rouge&quot;&gt;getter&lt;/code&gt; 和 &lt;code class=&quot;highlighter-rouge&quot;&gt;setter&lt;/code&gt; 方法&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;另外&lt;code class=&quot;highlighter-rouge&quot;&gt;drools&lt;/code&gt;提供了十二种比较操作符, 有:&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;gt;&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;gt;=&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;=&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;==&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;!=&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;contains&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;not contains&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;memberOf&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;not memberOf&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;matches&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;not matches&lt;/code&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;contains&lt;/code&gt;: 是否包含, 被比较对象可以是一个复杂对象也可以是一个简单的值&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;memberOf&lt;/code&gt;: 是否在某个集合中, 与&lt;code class=&quot;highlighter-rouge&quot;&gt;contains&lt;/code&gt;不同的是他被比较的对象是一个集合, 而&lt;code class=&quot;highlighter-rouge&quot;&gt;contains&lt;/code&gt;被比较的对象是单个值或者对象&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;matches&lt;/code&gt;: 正则表达式匹配&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;then&quot;&gt;then&lt;/h2&gt;
-&lt;p&gt;RHS, 这部分是普通的&lt;code class=&quot;highlighter-rouge&quot;&gt;java&lt;/code&gt;代码, 记得加&lt;code class=&quot;highlighter-rouge&quot;&gt;;&lt;/code&gt;.&lt;br /&gt;
-另外&lt;code class=&quot;highlighter-rouge&quot;&gt;drools&lt;/code&gt;提供了几个方法:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;insert&lt;/code&gt;: 往当前&lt;code class=&quot;highlighter-rouge&quot;&gt;workingMemory&lt;/code&gt;中插入一个新的&lt;code class=&quot;highlighter-rouge&quot;&gt;Fact&lt;/code&gt;对象, 会触发规则的再次执行,除非使用no-loop限定&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;update&lt;/code&gt;: 更新&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;modify&lt;/code&gt;: 修改, 与&lt;code class=&quot;highlighter-rouge&quot;&gt;update&lt;/code&gt;语法不同, 效果一样, 结果都是更新操作&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;retract&lt;/code&gt;: 删除&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-</description>
-        <pubDate>Fri, 12 Aug 2016 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-08-12-Drools%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-08-12-Drools%E8%AF%AD%E6%B3%95%E8%AF%A6%E8%A7%A3.html</guid>
         
         <category>Drools</category>
         

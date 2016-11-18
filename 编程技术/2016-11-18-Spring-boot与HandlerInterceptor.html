@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="Spring boot与HandlerInterceptor, 编程技术, Spring, 逆水行舟" />
+    <meta name="description" content="Spring boot与HandlerInterceptor, 编程技术, Spring, " />
+
+    <title>逆水行舟</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-18-Spring-boot%E4%B8%8EHandlerInterceptor.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="/static/js/jquery.qrcode.min.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="/static/js/uikit.min.js"></script>
+    <!-- quietflow -->
+    <!-- <script type="text/javascript" src="http://loveshisong.cn/static/js/quietflow.min.js"></script> -->
+    <!-- UK sticky -->
+    <script type="text/javascript" src="/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "shisong"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" data-uk-sticky>
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <script type="text/javascript">
+jQuery(function(){
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-18-Spring-boot%E4%B8%8EHandlerInterceptor.html"
+    });
+})
+</script>
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>Spring boot与HandlerInterceptor</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <hr />
+
+<ul id="markdown-toc">
+  <li><a href="#handlerinterceptor">HandlerInterceptor</a>    <ul>
+      <li><a href="#section">拦截器中的方法</a></li>
+    </ul>
+  </li>
+  <li><a href="#spring-boot--interceptor">Spring boot 定制 Interceptor</a></li>
+</ul>
+
+<hr />
+
+<h2 id="handlerinterceptor">HandlerInterceptor</h2>
+<p><code class="highlighter-rouge">Spring</code>提供的拦截器<code class="highlighter-rouge">Interceptor</code>与<code class="highlighter-rouge">Servlet</code>中的<code class="highlighter-rouge">Filter</code>不同的是, <code class="highlighter-rouge">Interceptor</code>采用<code class="highlighter-rouge">AOP</code>的方式在<code class="highlighter-rouge">Servlet</code>的<code class="highlighter-rouge">service</code>方法执行之前进行拦截.</p>
+
+<p>在<code class="highlighter-rouge">Spring</code>中定义一个<code class="highlighter-rouge">Interceptor</code>只需要实现<code class="highlighter-rouge">HandlerInterceptor</code>接口, <code class="highlighter-rouge">Spring</code>已经为我们提供了一个<code class="highlighter-rouge">HandlerInterceptorAdapter</code>, 我们只需要继承它, 覆盖想要重写的方法.</p>
+
+<h3 id="section">拦截器中的方法</h3>
+<p><code class="highlighter-rouge">Interceptor</code>中有如下方法:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">preHandle</code>: 在<code class="highlighter-rouge">Controller</code>处理之前调用, 返回<code class="highlighter-rouge">false</code>时整个请求结束</li>
+  <li><code class="highlighter-rouge">postHandle</code>: 在<code class="highlighter-rouge">Controller</code>调用之后执行, 但它会在<code class="highlighter-rouge">DispatcherServlet</code>进行视图的渲染之前执行, 也就是说在这个方法中你可以对<code class="highlighter-rouge">ModelAndView</code>进行操作</li>
+  <li><code class="highlighter-rouge">afterCompletion</code>: 在整个请求完成之后执行, 也就是<code class="highlighter-rouge">DispatcherServlet</code>已经渲染了视图之后执行; 这个方法的主要作用是用于清理资源的</li>
+  <li><code class="highlighter-rouge">afterConcurrentHandlingStarted</code>: 这个方法是<code class="highlighter-rouge">AsyncHandlerInterceptor</code>接口中添加的. 当<code class="highlighter-rouge">Controller</code>中有异步请求方法的时候会触发该方法, 异步请求先支持<code class="highlighter-rouge">preHandle</code>、然后执行<code class="highlighter-rouge">afterConcurrentHandlingStarted</code>, 异步线程完成之后执行会再执行<code class="highlighter-rouge">preHandle、postHandle、afterCompletion</code></li>
+</ul>
+
+<p>关于最后那个方法, 举个列子:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@RestController</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ExampleController</span> <span class="o">{</span>
+    <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span>
+    <span class="n">DeferredResult</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">home</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">DeferredResult</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">dr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DeferredResult</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;();</span>
+        <span class="n">dr</span><span class="o">.</span><span class="na">setResult</span><span class="o">(</span><span class="s">"成功"</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">dr</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+<p>上面这样的<code class="highlighter-rouge">Controller</code>里面有个异步结果, 则拦截器的执行顺序将是: <code class="highlighter-rouge">preHandle -&gt; afterConcurrentHandlingStarted -&gt; preHandle -&gt; postHandle -&gt; afterCompletion</code>.</p>
+
+<p>如果把<code class="highlighter-rouge">dr.setResult("成功");</code> 这句删掉, 将只执行<code class="highlighter-rouge">preHandle -&gt; afterConcurrentHandlingStarted</code></p>
+
+<p>可以认为, <code class="highlighter-rouge">afterConcurrentHandlingStarted</code>是返回异步结果时调用(此时异步结果里不需要有数据), 而<code class="highlighter-rouge">postHandle</code>必须是返回的结果执行完, 异步结果中有数据了(<code class="highlighter-rouge">dr.setResult</code>)才调用.</p>
+
+<h2 id="spring-boot--interceptor">Spring boot 定制 Interceptor</h2>
+
+<p>首先我们先定义我们自己的拦截器, 方式还是继承<code class="highlighter-rouge">HandlerInterceptorAdapter</code>, 覆盖想要的方法:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyInterceptor</span> <span class="kd">extends</span> <span class="n">HandlerInterceptorAdapter</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="n">preHandle</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">,</span> <span class="n">Object</span> <span class="n">handler</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="c1">// ...</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+<p>像这样我们把<code class="highlighter-rouge">MyInterceptor</code>作为一个<code class="highlighter-rouge">Bean</code>, <code class="highlighter-rouge">Spring boot</code>并不会帮我们注册到拦截器列表中. 就像添加消息转换器一样, 我们可以在继承<code class="highlighter-rouge">WebMvcConfigurerAdapter</code>的配置类里, 通过覆盖方法来添加:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Configuration</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">WebMvcConfig</span> <span class="kd">extends</span> <span class="n">WebMvcConfigurerAdapter</span> <span class="o">{</span>
+      <span class="c1">// 拦截器需要手动加入到调用链中</span>
+      <span class="nd">@Override</span>
+      <span class="kd">public</span> <span class="kt">void</span> <span class="n">addInterceptors</span><span class="o">(</span><span class="n">InterceptorRegistry</span> <span class="n">registry</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">registry</span><span class="o">.</span><span class="na">addInterceptor</span><span class="o">(</span><span class="k">new</span> <span class="n">MyInterceptor</span><span class="o">());</span>
+      <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<hr />
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/Spring boot与HandlerInterceptor" data-title="Spring boot与HandlerInterceptor" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-18-Spring-boot%E4%B8%8EHandlerInterceptor.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
+
+</body>
+
+</html>
