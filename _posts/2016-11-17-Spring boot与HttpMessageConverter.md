@@ -1,7 +1,7 @@
 ---
 layout: blog
-title:  Spring boot定制HttpMessageConverter
-date:   2016-11-18
+title:  Spring boot与HttpMessageConverter
+date:   2016-11-17
 category: 编程技术
 tag: Spring
 ---
