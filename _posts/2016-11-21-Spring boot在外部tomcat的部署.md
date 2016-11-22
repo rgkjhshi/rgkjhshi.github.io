@@ -34,7 +34,7 @@ public class Application extends SpringBootServletInitializer {
 }
 ~~~
 
-第三步, 修改pom, 把内嵌tomcat改成`provided`. 这样我们在本地仍然可以通过`main`方法来启动应用.
+第三步, 修改pom, 把内嵌tomcat改成`provided`. 这样我们可以很方便的切换成在本地通过`main`方法来启动应用(去掉`provided`就可以了).
 
 ~~~xml
 <dependency>
