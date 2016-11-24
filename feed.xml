@@ -5,9 +5,188 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 22 Nov 2016 11:31:16 +0800</pubDate>
-    <lastBuildDate>Tue, 22 Nov 2016 11:31:16 +0800</lastBuildDate>
+    <pubDate>Thu, 24 Nov 2016 21:01:49 +0800</pubDate>
+    <lastBuildDate>Thu, 24 Nov 2016 21:01:49 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>Spring的扩展点</title>
+        <description>&lt;hr /&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#beanfactorypostprocessor&quot;&gt;BeanFactoryPostProcessor&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#beandefinitionregistrypostprocessor&quot;&gt;BeanDefinitionRegistryPostProcessor&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#beanpostprocessor&quot;&gt;BeanPostProcessor&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;一些例子&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#applicationcontextaware&quot;&gt;ApplicationContextAware&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#applicationlistener&quot;&gt;ApplicationListener&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;启动的过程中, 会自动调用一些方法, 我们通过这些方法可以做一些特殊的操作. &lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;中提供了几个常用的&lt;code class=&quot;highlighter-rouge&quot;&gt;Hook&lt;/code&gt;类, 我们只需要实现这些类并覆盖其方法, 并注入到&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;中, &lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;就会在恰当的时机调用我们定义的这些类. 下面就介绍几个常用的接口.&lt;/p&gt;
+
+&lt;h2 id=&quot;beanfactorypostprocessor&quot;&gt;BeanFactoryPostProcessor&lt;/h2&gt;
+&lt;p&gt;从名字上看, 它是&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactory&lt;/code&gt;的后处理类, 我们先了解下&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactory&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactory&lt;/code&gt;的地位相当高, 它是各种&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;的工厂, 提供了一系列的&lt;code class=&quot;highlighter-rouge&quot;&gt;getBean&lt;/code&gt;方法. 常用的&lt;code class=&quot;highlighter-rouge&quot;&gt;ApplicationContext&lt;/code&gt;就继承了它.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactoryPostProcessor&lt;/code&gt;就是&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactory&lt;/code&gt;的后处理类, 我们可以在&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactory&lt;/code&gt;初始化之后做一些操作. 它提供了个&lt;code class=&quot;highlighter-rouge&quot;&gt;postProcessBeanFactory()&lt;/code&gt;方法, 这个方法被调用的时候, 所有的&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;已经被创建, 但是还没有被初始化.
+也就是说, 通过它我们可以在初始化任何&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;之前, 做各种操作, 甚至读取并修改&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanDefinition&lt;/code&gt;(bean定义的元数据).&lt;/p&gt;
+
+&lt;h2 id=&quot;beandefinitionregistrypostprocessor&quot;&gt;BeanDefinitionRegistryPostProcessor&lt;/h2&gt;
+&lt;p&gt;这个接口继承了&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactoryPostProcessor&lt;/code&gt;. 从名字上来看, 这个接口是&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanDefinitionRegistry&lt;/code&gt;的后处理器, 我们先介绍下&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanDefinitionRegistry&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanDefinitionRegistry&lt;/code&gt;是用来注册&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanDefinition&lt;/code&gt;的. &lt;code class=&quot;highlighter-rouge&quot;&gt;BeanDefinition&lt;/code&gt;就是&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;的配置元数据或&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;的描述信息, 比如&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;的属性值, 构造方法的参数值等. 上面的&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactory&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanDefinition&lt;/code&gt;也是由它注册的.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanDefinitionRegistryPostProcessor&lt;/code&gt;是&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactoryPostProcessor&lt;/code&gt;的扩展, 允许在&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactoryPostProcessor&lt;/code&gt;被调用之前对&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanDefinition&lt;/code&gt;做一些操作, 尤其是它可以注册&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactoryPostProcessor&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanDefinition&lt;/code&gt;. 它提供了一个方法&lt;code class=&quot;highlighter-rouge&quot;&gt;postProcessBeanDefinitionRegistry()&lt;/code&gt;, 这个方法被调用的时候, 所有的&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanDefinition&lt;/code&gt;已经被加载了, 但是所有的&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;还没被创建.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;所有的&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;生成都有个顺序: &lt;code class=&quot;highlighter-rouge&quot;&gt;定义 --&amp;gt; 创建 --&amp;gt; 初始化&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanDefinitionRegistryPostProcessor&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;postProcessBeanDefinitionRegistry&lt;/code&gt;方法在&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;被&lt;code class=&quot;highlighter-rouge&quot;&gt;定义&lt;/code&gt;但还没被&lt;code class=&quot;highlighter-rouge&quot;&gt;创建&lt;/code&gt;的时候执行.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactoryPostProcessor&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;postProcessBeanFactory&lt;/code&gt;方法在&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;被&lt;code class=&quot;highlighter-rouge&quot;&gt;创建&lt;/code&gt;但还没被&lt;code class=&quot;highlighter-rouge&quot;&gt;初始化&lt;/code&gt;的时候执行&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;beanpostprocessor&quot;&gt;BeanPostProcessor&lt;/h2&gt;
+&lt;p&gt;从名字上来看, 这个接口是&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;的后处理器, 通过它我们可以在&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;初始化前后做一些操作. 它提供了两个方法:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;postProcessBeforeInitialization&lt;/code&gt;: 在&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;初始化之 &lt;strong&gt;前&lt;/strong&gt; 做一些操作&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;postProcessAfterInitialization&lt;/code&gt;: 在&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;初始化之 &lt;strong&gt;后&lt;/strong&gt; 做一些操作&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;注意这两个方法都有两个参数: &lt;code class=&quot;highlighter-rouge&quot;&gt;bean&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;beanName&lt;/code&gt;, 并需要返回一个对象. 所有的&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;在被初始化前后都会调用这两个方法, 我们可以过滤出所关心的&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;对其进行一些操作, 比如把某个&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;替换成代理对象等.&lt;/p&gt;
+
+&lt;p&gt;另外, 在&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;中可以通过&lt;code class=&quot;highlighter-rouge&quot;&gt;@PostConstruct&lt;/code&gt;注解来指定在被&lt;code class=&quot;highlighter-rouge&quot;&gt;Construct&lt;/code&gt;之后紧接着做一些初始化操作, 上面的&lt;code class=&quot;highlighter-rouge&quot;&gt;postProcessAfterInitialization&lt;/code&gt;方法是在&lt;code class=&quot;highlighter-rouge&quot;&gt;@PostConstruct&lt;/code&gt;之后被调用的.&lt;/p&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;一些例子&lt;/h2&gt;
+&lt;p&gt;我们通过一些简单例子来熟悉下上面的几个接口:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// 一个普通的 Bean&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TestA&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@PostConstruct&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;init&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;TestA PostConstruct&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@Resource&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TestB&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;testB&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 另一个普通的 Bean. 没看错, 就是循环依赖.&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TestB&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@PostConstruct&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;init&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;TestB PostConstruct&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@Resource&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TestA&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;testA&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 后处理器&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyBeanDefinitionRegistryPostProcessor&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeanDefinitionRegistryPostProcessor&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// 这个方法来自 BeanDefinitionRegistryPostProcessor&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;postProcessBeanDefinitionRegistry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BeanDefinitionRegistry&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;registry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeansException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;postProcessBeanDefinitionRegistry&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// 这个方法来自 BeanFactoryPostProcessor&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;postProcessBeanFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ConfigurableListableBeanFactory&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;beanFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeansException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;postProcessBeanFactory&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// Bean后处理器&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyBeanPostProcessor&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeanPostProcessor&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;postProcessBeforeInitialization&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;beanName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeansException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bean&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TestA&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bean&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;TestB&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;beforeInitialization&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;postProcessAfterInitialization&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;beanName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeansException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bean&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TestA&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bean&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;TestB&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;afterInitialization&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;用法就类似于上面, 那几条数据语句的顺序如下:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;postProcessBeanDefinitionRegistry
+postProcessBeanFactory
+setApplicationContext
+beforeInitialization
+TestB PostConstruct
+afterInitialization
+beforeInitialization
+TestA PostConstruct
+afterInitialization
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;applicationcontextaware&quot;&gt;ApplicationContextAware&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;提供了很多&lt;code class=&quot;highlighter-rouge&quot;&gt;Aware&lt;/code&gt;接口, 比如&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactoryAware&lt;/code&gt;、 &lt;code class=&quot;highlighter-rouge&quot;&gt;ApplicationContextAware&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;ResourceLoaderAware&lt;/code&gt;、 &lt;code class=&quot;highlighter-rouge&quot;&gt;ServletContextAware&lt;/code&gt;等等. 这些接口一般都有个&lt;code class=&quot;highlighter-rouge&quot;&gt;setXXX&lt;/code&gt;来设置对应的组件. 如果我们的&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;实现了这些&lt;code class=&quot;highlighter-rouge&quot;&gt;Aware的时候&lt;/code&gt;就可以获取对应的资源.&lt;/p&gt;
+
+&lt;h2 id=&quot;applicationlistener&quot;&gt;ApplicationListener&lt;/h2&gt;
+&lt;p&gt;这跟&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;中的监听器一样, 采用了观察者模式. 监听器往往都是监听某些事件源, 下面是配合&lt;code class=&quot;highlighter-rouge&quot;&gt;ApplicationContextAware&lt;/code&gt;一起使用的例子.&lt;/p&gt;
+
+&lt;p&gt;我们定义一个事件, 在实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;ApplicationContextAware&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;中触发事件, 在实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;ApplicationListener&lt;/code&gt;的类中对事件做出反应.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// 自定义事件&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyEvent&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ApplicationEvent&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MyEvent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;source&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;source&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 自定义 Bean 实现 ApplicationContextAware 接口&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;HelloBean&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ApplicationContextAware&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ApplicationContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;applicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;setApplicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ApplicationContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;applicationContext&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// 当调用 setName 时, 触发事件&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;setName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;applicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;publishEvent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MyEvent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 这行代码执行完会立即被监听到&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 自定义监听器, 监听上面的事件&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyApplicationListener&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ApplicationListener&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;onApplicationEvent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ApplicationEvent&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MyEvent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HelloBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getSource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+</description>
+        <pubDate>Tue, 22 Nov 2016 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-22-Spring%E7%9A%84%E6%89%A9%E5%B1%95%E7%82%B9.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-22-Spring%E7%9A%84%E6%89%A9%E5%B1%95%E7%82%B9.html</guid>
+        
+        <category>Spring</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
     
       <item>
         <title>Spring boot在外部tomcat的部署</title>
@@ -1584,264 +1763,6 @@ my.servers[1]=foo.bar.com
         <pubDate>Wed, 02 Nov 2016 00:00:00 +0800</pubDate>
         <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-02-Spring-Boot%E4%B8%AD%E7%9A%84%E9%85%8D%E7%BD%AE.html</link>
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-02-Spring-Boot%E4%B8%AD%E7%9A%84%E9%85%8D%E7%BD%AE.html</guid>
-        
-        <category>Spring</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>使用Spring Boot快速构建应用</title>
-        <description>&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot&lt;/code&gt;于2014年4月发布1.0.0版本, 用于创建&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring 4.0&lt;/code&gt;项目, 简化了Spring中繁琐的配置, 提高了开发效率&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#spring-boot&quot;&gt;Spring Boot简介&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#cligroovy&quot;&gt;CLI和Groovy示例&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;快速创建一个应用&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;运行容器的方式&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;依赖管理&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-3&quot;&gt;目录结构及配置&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;spring-boot&quot;&gt;Spring Boot简介&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot&lt;/code&gt;致力于快速构建应用, 去掉了&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;的繁琐配置, 使创建Spring应用就像写一个&lt;code class=&quot;highlighter-rouge&quot;&gt;main&lt;/code&gt;函数一样方便.&lt;/li&gt;
-  &lt;li&gt;直接嵌入&lt;code class=&quot;highlighter-rouge&quot;&gt;Tomcat&lt;/code&gt;或&lt;code class=&quot;highlighter-rouge&quot;&gt;Jetty&lt;/code&gt;服务器, 不需要部署 WAR 文件, 可以直接&lt;code class=&quot;highlighter-rouge&quot;&gt;run&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;无&lt;code class=&quot;highlighter-rouge&quot;&gt;XML&lt;/code&gt;配置(也支持导入XML配置)&lt;/li&gt;
-  &lt;li&gt;构建&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring4&lt;/code&gt;应用, 最好使用高版本环境(&lt;code class=&quot;highlighter-rouge&quot;&gt;JDK8&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;Maven3.2+&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet3.0+&lt;/code&gt;)&lt;/li&gt;
-  &lt;li&gt;提供了maven插件, 可把应用及所需要的所有依赖包内嵌到一个jar包中&lt;/li&gt;
-  &lt;li&gt;提供了一个命令行工具&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot CLI&lt;/code&gt;(&lt;a href=&quot;http://docs.spring.io/spring-boot/docs/1.4.1.RELEASE/reference/htmlsingle/#getting-started-installing-spring-boot&quot;&gt;安装方法&lt;/a&gt;)&lt;/li&gt;
-  &lt;li&gt;支持&lt;code class=&quot;highlighter-rouge&quot;&gt;Groovy&lt;/code&gt;编程语言&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;cligroovy&quot;&gt;CLI和Groovy示例&lt;/h2&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot CLI&lt;/code&gt;是一个命令行工具, 可以快速搭建Spring原型, 支持&lt;code class=&quot;highlighter-rouge&quot;&gt;Groovy&lt;/code&gt;脚本.&lt;br /&gt;
-我们通过&lt;code class=&quot;highlighter-rouge&quot;&gt;CLI&lt;/code&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;Groovy&lt;/code&gt;脚本创建一个最简单的&lt;code class=&quot;highlighter-rouge&quot;&gt;Web&lt;/code&gt;应用, 创建一个&lt;code class=&quot;highlighter-rouge&quot;&gt;app.groovy&lt;/code&gt;文件, 内容如下:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@RestController&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThisWillActuallyRun&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@RequestMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;home&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;&quot;Hello World!&quot;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;然后在shell中运行下面命令:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ spring run app.groovy
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;则已经运行了一个Spring web应用(首次运行需要下载依赖包, 比较慢), 访问&lt;code class=&quot;highlighter-rouge&quot;&gt;127.0.0.1:8080&lt;/code&gt;就会看到输出内容&lt;code class=&quot;highlighter-rouge&quot;&gt;Hello World!&lt;/code&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;快速创建一个应用&lt;/h2&gt;
-&lt;p&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;Maven&lt;/code&gt;创建一个&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot&lt;/code&gt;应用, &lt;code class=&quot;highlighter-rouge&quot;&gt;pom.xml&lt;/code&gt;内容如下:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;project&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://maven.apache.org/POM/4.0.0&quot;&lt;/span&gt;
-         &lt;span class=&quot;na&quot;&gt;xmlns:xsi=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&lt;/span&gt;
-         &lt;span class=&quot;na&quot;&gt;xsi:schemaLocation=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;modelVersion&amp;gt;&lt;/span&gt;4.0.0&lt;span class=&quot;nt&quot;&gt;&amp;lt;/modelVersion&amp;gt;&lt;/span&gt;
-
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;com.example.project&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring_boot&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;1.0&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
-
-    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 继承spring-boot-starter-parent是最快的方式, 后面有不继承该怎么写 --&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;parent&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.boot&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-boot-starter-parent&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;1.4.1.RELEASE&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/parent&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 这一个依赖就够了 --&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependencies&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.boot&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-boot-starter-web&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependencies&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/project&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;可以通过&lt;code class=&quot;highlighter-rouge&quot;&gt;mvn dependency:tree&lt;/code&gt;来看看都用到了哪些jar包  &lt;/p&gt;
-
-&lt;p&gt;从&lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/java/&lt;/code&gt;目录下创建一个类&lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/java/Example.java&lt;/code&gt;:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@RestController&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@EnableAutoConfiguration&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Example&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@RequestMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;home&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Hello World!&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;SpringApplication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Example&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;到此整个应用就创建完毕, 可以直接运行&lt;code class=&quot;highlighter-rouge&quot;&gt;main&lt;/code&gt;方法启动容器, 访问&lt;code class=&quot;highlighter-rouge&quot;&gt;127.0.0.1:8080&lt;/code&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section-1&quot;&gt;运行容器的方式&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;像上面那样直接运行&lt;code class=&quot;highlighter-rouge&quot;&gt;main&lt;/code&gt;方法&lt;/li&gt;
-  &lt;li&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;mvn spring-boot:run&lt;/code&gt;命令运行&lt;/li&gt;
-  &lt;li&gt;创建可执行&lt;code class=&quot;highlighter-rouge&quot;&gt;jar&lt;/code&gt;包运行&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;通过插件&lt;code class=&quot;highlighter-rouge&quot;&gt;spring-boot-maven-plugin&lt;/code&gt;可将应用及依赖打成&lt;code class=&quot;highlighter-rouge&quot;&gt;jar&lt;/code&gt;包, 如果没有继承&lt;code class=&quot;highlighter-rouge&quot;&gt;spring-boot-starter-parent&lt;/code&gt;则需要主动添加一下这个插件, 并且parent中的&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;executions&amp;gt;&lt;/code&gt;需要自己进行配置&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;build&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;plugins&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;plugin&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.boot&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-boot-maven-plugin&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-                &lt;span class=&quot;nt&quot;&gt;&amp;lt;executions&amp;gt;&lt;/span&gt;
-                    &lt;span class=&quot;nt&quot;&gt;&amp;lt;execution&amp;gt;&lt;/span&gt;
-                        &lt;span class=&quot;nt&quot;&gt;&amp;lt;goals&amp;gt;&lt;/span&gt;
-                            &lt;span class=&quot;nt&quot;&gt;&amp;lt;goal&amp;gt;&lt;/span&gt;repackage&lt;span class=&quot;nt&quot;&gt;&amp;lt;/goal&amp;gt;&lt;/span&gt;
-                        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/goals&amp;gt;&lt;/span&gt;
-                    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/execution&amp;gt;&lt;/span&gt;
-                &lt;span class=&quot;nt&quot;&gt;&amp;lt;/executions&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/plugin&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/plugins&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/build&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;通过命令&lt;code class=&quot;highlighter-rouge&quot;&gt;mvn package&lt;/code&gt;打包, 将会得到&lt;code class=&quot;highlighter-rouge&quot;&gt;target/spring_boot-1.0.jar&lt;/code&gt;文件, 可通过命令&lt;code class=&quot;highlighter-rouge&quot;&gt;jar tvf target/myproject-1.0.jar&lt;/code&gt;查看该jar包的结构. 除此之外, 还有个文件&lt;code class=&quot;highlighter-rouge&quot;&gt;target/spring_boot-1.0.jar.original&lt;/code&gt;, 这是&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot&lt;/code&gt;重新打包之前, &lt;code class=&quot;highlighter-rouge&quot;&gt;Maven&lt;/code&gt;创建的原始jar文件&lt;/p&gt;
-
-&lt;p&gt;使用命令&lt;code class=&quot;highlighter-rouge&quot;&gt;java -jar target/spring_boot-1.0.jar&lt;/code&gt;即可运行&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section-2&quot;&gt;依赖管理&lt;/h2&gt;
-&lt;p&gt;上面都是以继承&lt;code class=&quot;highlighter-rouge&quot;&gt;spring-boot-starter-parent&lt;/code&gt;的形式进行一来管理, 这个&lt;code class=&quot;highlighter-rouge&quot;&gt;parent&lt;/code&gt;里有如下内容:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;指定了Java的版本, 和编码(不继承parent可自己指定)&lt;/li&gt;
-  &lt;li&gt;
-    &lt;resource.delimiter&gt;配置, 除了接受原有的Spring形式的`${…​}`, 还支持了Maven的`@..@`形式(不继承parent可自己指定)
-&lt;/resource.delimiter&gt;
-  &lt;/li&gt;
-  &lt;li&gt;包依赖管理, 继承自&lt;code class=&quot;highlighter-rouge&quot;&gt;spring-boot-dependencies&lt;/code&gt;(不继承parent的形式就是引入这个pom)&lt;/li&gt;
-  &lt;li&gt;插件配置(不继承parent需要自己配置)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;因此, 如果不继承&lt;code class=&quot;highlighter-rouge&quot;&gt;spring-boot-starter-parent&lt;/code&gt;, 我们的pom文件可以这么写:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;nt&quot;&gt;&amp;lt;properties&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;java.version&amp;gt;&lt;/span&gt;1.8&lt;span class=&quot;nt&quot;&gt;&amp;lt;/java.version&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;resource.delimiter&amp;gt;&lt;/span&gt;@&lt;span class=&quot;nt&quot;&gt;&amp;lt;/resource.delimiter&amp;gt;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- delimiter that doesn&#39;t clash with Spring ${} placeholders --&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;project.build.sourceEncoding&amp;gt;&lt;/span&gt;UTF-8&lt;span class=&quot;nt&quot;&gt;&amp;lt;/project.build.sourceEncoding&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;project.reporting.outputEncoding&amp;gt;&lt;/span&gt;UTF-8&lt;span class=&quot;nt&quot;&gt;&amp;lt;/project.reporting.outputEncoding&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;maven.compiler.source&amp;gt;&lt;/span&gt;${java.version}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/maven.compiler.source&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;maven.compiler.target&amp;gt;&lt;/span&gt;${java.version}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/maven.compiler.target&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;tomcat.version&amp;gt;&lt;/span&gt;7.0.57&lt;span class=&quot;nt&quot;&gt;&amp;lt;/tomcat.version&amp;gt;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 配置你的tomcat版本 --&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/properties&amp;gt;&lt;/span&gt;
-
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependencyManagement&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependencies&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
-                &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.boot&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-                &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-boot-dependencies&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-                &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;1.4.1.RELEASE&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
-                &lt;span class=&quot;nt&quot;&gt;&amp;lt;type&amp;gt;&lt;/span&gt;pom&lt;span class=&quot;nt&quot;&gt;&amp;lt;/type&amp;gt;&lt;/span&gt;
-                &lt;span class=&quot;nt&quot;&gt;&amp;lt;scope&amp;gt;&lt;/span&gt;import&lt;span class=&quot;nt&quot;&gt;&amp;lt;/scope&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependencies&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependencyManagement&amp;gt;&lt;/span&gt;
-
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependencies&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.boot&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-boot-starter-web&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependencies&amp;gt;&lt;/span&gt;
-
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;build&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;plugins&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 如果是通过parent方式继承spring-boot-starter-parent则不用配置此插件 --&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;plugin&amp;gt;&lt;/span&gt;
-                &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.springframework.boot&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-                &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;spring-boot-maven-plugin&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-                &lt;span class=&quot;nt&quot;&gt;&amp;lt;executions&amp;gt;&lt;/span&gt;
-                    &lt;span class=&quot;nt&quot;&gt;&amp;lt;execution&amp;gt;&lt;/span&gt;
-                        &lt;span class=&quot;nt&quot;&gt;&amp;lt;goals&amp;gt;&lt;/span&gt;
-                            &lt;span class=&quot;nt&quot;&gt;&amp;lt;goal&amp;gt;&lt;/span&gt;repackage&lt;span class=&quot;nt&quot;&gt;&amp;lt;/goal&amp;gt;&lt;/span&gt;
-                        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/goals&amp;gt;&lt;/span&gt;
-                    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/execution&amp;gt;&lt;/span&gt;
-                &lt;span class=&quot;nt&quot;&gt;&amp;lt;/executions&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;/plugin&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/plugins&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/build&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section-3&quot;&gt;目录结构及配置&lt;/h2&gt;
-&lt;p&gt;官方建议项目有一个标准的目录结构, 就像其他Spring项目一样, 包名采用一个反转的域名, 结构类似于下面这样:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;com.example.myproject
-         +- Application.java
-         |
-         +- service
-         |   +- CustomerService.java
-         |
-         +- controller
-             +- CustomerController.java
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;其中&lt;code class=&quot;highlighter-rouge&quot;&gt;Application.java&lt;/code&gt;的内容如下:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Configuration&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@EnableAutoConfiguration&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@ComponentScan&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Application&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;SpringApplication&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Application&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;该项目中&lt;code class=&quot;highlighter-rouge&quot;&gt;Application.java&lt;/code&gt;为main类, 将main类放到其他类所在包的顶层(&lt;code class=&quot;highlighter-rouge&quot;&gt;root package&lt;/code&gt;), 并将&lt;code class=&quot;highlighter-rouge&quot;&gt;@EnableAutoConfiguration&lt;/code&gt;注解加main类上, 这样就隐式地定义了一个基础包扫描路径, 所以采用&lt;code class=&quot;highlighter-rouge&quot;&gt;root package&lt;/code&gt;时, &lt;code class=&quot;highlighter-rouge&quot;&gt;@ComponentScan&lt;/code&gt;注解就不需要添加&lt;code class=&quot;highlighter-rouge&quot;&gt;basePackage&lt;/code&gt;属性了&lt;/p&gt;
-
-&lt;p&gt;解释下这几个注解的意思:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@Configuration&lt;/code&gt;: 表示一个配置类, 类似于原来的一个&lt;code class=&quot;highlighter-rouge&quot;&gt;xml&lt;/code&gt;文件&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@EnableAutoConfiguration&lt;/code&gt;: Spring Boot的自动配置会根据所添加的jar包依赖自动配置Spring应用, 通常项目中只有一个&lt;code class=&quot;highlighter-rouge&quot;&gt;@EnableAutoConfiguration&lt;/code&gt;注解, 并建议将它加到主配置类(&lt;code class=&quot;highlighter-rouge&quot;&gt;primary @Configuration&lt;/code&gt;)上&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@ComponentScan&lt;/code&gt;: 包扫描路径, 采用&lt;code class=&quot;highlighter-rouge&quot;&gt;root package&lt;/code&gt;形式会自动收集&lt;code class=&quot;highlighter-rouge&quot;&gt;root package&lt;/code&gt;包下所有组件, 包括配置类(&lt;code class=&quot;highlighter-rouge&quot;&gt;@Configuration&lt;/code&gt;类)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;由于平时配置&lt;code class=&quot;highlighter-rouge&quot;&gt;main类&lt;/code&gt;时, 频繁的一起使用&lt;code class=&quot;highlighter-rouge&quot;&gt;@Configuration、@EnableAutoConfiguration、@ComponentScan&lt;/code&gt;这三个注解, 因此Spring Boot提供了一个简单的注解&lt;code class=&quot;highlighter-rouge&quot;&gt;SpringBootApplication&lt;/code&gt;来代替这三个注解, 其效果与这三个注解一起使用的效果完全一样&lt;/p&gt;
-
-&lt;p&gt;另外, 还有几个有用的用法:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@Import&lt;/code&gt;: 导入其他配置类&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@ImportResource&lt;/code&gt;: 引入&lt;code class=&quot;highlighter-rouge&quot;&gt;XML&lt;/code&gt;形式的配置&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@EnableAutoConfiguration(exclude={XXXConfiguration.class})&lt;/code&gt;排除某些配置, 若配置类不在&lt;code class=&quot;highlighter-rouge&quot;&gt;classpath&lt;/code&gt;中, 可以使用&lt;code class=&quot;highlighter-rouge&quot;&gt;excludeName&lt;/code&gt;属性指定全限定名&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-</description>
-        <pubDate>Sun, 30 Oct 2016 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-10-30-%E4%BD%BF%E7%94%A8Spring-Boot%E5%BF%AB%E9%80%9F%E6%9E%84%E5%BB%BA%E5%BA%94%E7%94%A8.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-10-30-%E4%BD%BF%E7%94%A8Spring-Boot%E5%BF%AB%E9%80%9F%E6%9E%84%E5%BB%BA%E5%BA%94%E7%94%A8.html</guid>
         
         <category>Spring</category>
         
