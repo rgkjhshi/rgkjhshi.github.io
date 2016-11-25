@@ -106,6 +106,7 @@ jQuery(function(){
   <li><a href="#beandefinitionregistrypostprocessor">BeanDefinitionRegistryPostProcessor</a></li>
   <li><a href="#beanpostprocessor">BeanPostProcessor</a></li>
   <li><a href="#section">一些例子</a></li>
+  <li><a href="#initializingbean">InitializingBean</a></li>
   <li><a href="#applicationcontextaware">ApplicationContextAware</a></li>
   <li><a href="#applicationlistener">ApplicationListener</a></li>
 </ul>
@@ -209,7 +210,6 @@ jQuery(function(){
 
 <div class="highlighter-rouge"><pre class="highlight"><code>postProcessBeanDefinitionRegistry
 postProcessBeanFactory
-setApplicationContext
 beforeInitialization
 TestB PostConstruct
 afterInitialization
@@ -218,6 +218,9 @@ TestA PostConstruct
 afterInitialization
 </code></pre>
 </div>
+
+<h2 id="initializingbean">InitializingBean</h2>
+<p>这个接口有一个方法:<code class="highlighter-rouge">afterPropertiesSet</code>, 该方法在所有的属性都被赋值后调用. 属性被赋值是在初始化的时候做的, 与<code class="highlighter-rouge">BeanPostProcessor</code>结合来看, <code class="highlighter-rouge">afterPropertiesSet</code>方法将在<code class="highlighter-rouge">postProcessBeforeInitialization</code>和<code class="highlighter-rouge">postProcessAfterInitialization</code>之间被调用.</p>
 
 <h2 id="applicationcontextaware">ApplicationContextAware</h2>
 <p><code class="highlighter-rouge">Spring</code>提供了很多<code class="highlighter-rouge">Aware</code>接口, 比如<code class="highlighter-rouge">BeanFactoryAware</code>、 <code class="highlighter-rouge">ApplicationContextAware</code>、<code class="highlighter-rouge">ResourceLoaderAware</code>、 <code class="highlighter-rouge">ServletContextAware</code>等等. 这些接口一般都有个<code class="highlighter-rouge">setXXX</code>来设置对应的组件. 如果我们的<code class="highlighter-rouge">Bean</code>实现了这些<code class="highlighter-rouge">Aware的时候</code>就可以获取对应的资源.</p>

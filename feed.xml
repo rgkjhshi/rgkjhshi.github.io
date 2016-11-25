@@ -5,8 +5,8 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 24 Nov 2016 21:01:49 +0800</pubDate>
-    <lastBuildDate>Thu, 24 Nov 2016 21:01:49 +0800</lastBuildDate>
+    <pubDate>Fri, 25 Nov 2016 11:06:13 +0800</pubDate>
+    <lastBuildDate>Fri, 25 Nov 2016 11:06:13 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
@@ -18,6 +18,7 @@
   &lt;li&gt;&lt;a href=&quot;#beandefinitionregistrypostprocessor&quot;&gt;BeanDefinitionRegistryPostProcessor&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#beanpostprocessor&quot;&gt;BeanPostProcessor&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;一些例子&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#initializingbean&quot;&gt;InitializingBean&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#applicationcontextaware&quot;&gt;ApplicationContextAware&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#applicationlistener&quot;&gt;ApplicationListener&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -121,7 +122,6 @@
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;postProcessBeanDefinitionRegistry
 postProcessBeanFactory
-setApplicationContext
 beforeInitialization
 TestB PostConstruct
 afterInitialization
@@ -130,6 +130,9 @@ TestA PostConstruct
 afterInitialization
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
+
+&lt;h2 id=&quot;initializingbean&quot;&gt;InitializingBean&lt;/h2&gt;
+&lt;p&gt;这个接口有一个方法:&lt;code class=&quot;highlighter-rouge&quot;&gt;afterPropertiesSet&lt;/code&gt;, 该方法在所有的属性都被赋值后调用. 属性被赋值是在初始化的时候做的, 与&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanPostProcessor&lt;/code&gt;结合来看, &lt;code class=&quot;highlighter-rouge&quot;&gt;afterPropertiesSet&lt;/code&gt;方法将在&lt;code class=&quot;highlighter-rouge&quot;&gt;postProcessBeforeInitialization&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;postProcessAfterInitialization&lt;/code&gt;之间被调用.&lt;/p&gt;
 
 &lt;h2 id=&quot;applicationcontextaware&quot;&gt;ApplicationContextAware&lt;/h2&gt;
 &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;提供了很多&lt;code class=&quot;highlighter-rouge&quot;&gt;Aware&lt;/code&gt;接口, 比如&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactoryAware&lt;/code&gt;、 &lt;code class=&quot;highlighter-rouge&quot;&gt;ApplicationContextAware&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;ResourceLoaderAware&lt;/code&gt;、 &lt;code class=&quot;highlighter-rouge&quot;&gt;ServletContextAware&lt;/code&gt;等等. 这些接口一般都有个&lt;code class=&quot;highlighter-rouge&quot;&gt;setXXX&lt;/code&gt;来设置对应的组件. 如果我们的&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;实现了这些&lt;code class=&quot;highlighter-rouge&quot;&gt;Aware的时候&lt;/code&gt;就可以获取对应的资源.&lt;/p&gt;
