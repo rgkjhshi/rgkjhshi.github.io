@@ -106,7 +106,10 @@ jQuery(function(){
 <ul id="markdown-toc">
   <li><a href="#select-">select 语句简介</a></li>
   <li><a href="#insert-update--delete-">insert, update 和 delete 简介</a></li>
-  <li><a href="#parameters-">Parameters 参数</a></li>
+  <li><a href="#parameters-">Parameters 参数</a>    <ul>
+      <li><a href="#section">字符串替换</a></li>
+    </ul>
+  </li>
   <li><a href="#resultmap">ResultMap</a>    <ul>
       <li><a href="#idresult">id和result</a></li>
       <li><a href="#constructor">构造方法constructor</a></li>
@@ -195,9 +198,10 @@ keyColumn         | 通过生成的键值设置表中的列名,当主键列不�
 
 <p>~~~xml
  #{age,javaType=int,jdbcType=NUMERIC,typeHandler=MyTypeHandler}
- ~~~
-### 字符串替换
-默认情况下,使用#{}格式的语法会创建预处理语句属性并安全地设置值（比如?）。不过有时只想直接在 SQL 语句中插入一个不改变的字符串，就可以这样使用参数：</p>
+ ~~~</p>
+
+<h3 id="section">字符串替换</h3>
+<p>默认情况下,使用#{}格式的语法会创建预处理语句属性并安全地设置值（比如?）。不过有时只想直接在 SQL 语句中插入一个不改变的字符串，就可以这样使用参数：</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>ORDER BY ${columnName}
 </code></pre>
