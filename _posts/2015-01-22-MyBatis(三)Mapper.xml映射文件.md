@@ -94,6 +94,7 @@ keyColumn         | 通过生成的键值设置表中的列名,当主键列不�
  ~~~xml
  #{age,javaType=int,jdbcType=NUMERIC,typeHandler=MyTypeHandler}
  ~~~
+
 ### 字符串替换
 默认情况下,使用#{}格式的语法会创建预处理语句属性并安全地设置值（比如?）。不过有时只想直接在 SQL 语句中插入一个不改变的字符串，就可以这样使用参数：
 
