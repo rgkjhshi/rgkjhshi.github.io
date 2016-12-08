@@ -40,7 +40,6 @@ public class MyFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         //  some code
-        return true;
     }
 }
 ~~~
@@ -85,7 +84,6 @@ public class MyFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         //  some code
-        return true;
     }
 }
 ~~~
