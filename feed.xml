@@ -5,9 +5,46 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 08 Dec 2016 11:14:19 +0800</pubDate>
-    <lastBuildDate>Thu, 08 Dec 2016 11:14:19 +0800</lastBuildDate>
+    <pubDate>Fri, 09 Dec 2016 15:08:49 +0800</pubDate>
+    <lastBuildDate>Fri, 09 Dec 2016 15:08:49 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>Spring Bean的初始化顺序</title>
+        <description>&lt;hr /&gt;
+
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/bean_init.png&quot; alt=&quot;Bean生命周期&quot; title=&quot;Bean生命周期&quot; /&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;对&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;进行实例化, 相当于调用构造函数, &lt;code class=&quot;highlighter-rouge&quot;&gt;new&lt;/code&gt; 出一个对象&lt;/li&gt;
+  &lt;li&gt;若实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanNameAware&lt;/code&gt;接口, 则会调用其&lt;code class=&quot;highlighter-rouge&quot;&gt;setBeanName(String name)&lt;/code&gt;方法, 用于获取Bean的ID.&lt;/li&gt;
+  &lt;li&gt;若实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactoryAware&lt;/code&gt;接口, 则调用其&lt;code class=&quot;highlighter-rouge&quot;&gt;setBeanFactory(BeanFactory beanFactory)&lt;/code&gt;方法, 用于拿到Spring容器, 如通过容器发布一些事件等.&lt;/li&gt;
+  &lt;li&gt;若实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;ApplicationContextAware&lt;/code&gt;接口, 则调用其&lt;code class=&quot;highlighter-rouge&quot;&gt;setApplicationContext(ApplicationContext applicationContext)&lt;/code&gt;方法, 作用与&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactoryAware&lt;/code&gt;类似都是为了获取Spring容器, 不同的是Spring容器在调用&lt;code class=&quot;highlighter-rouge&quot;&gt;setApplicationContext&lt;/code&gt;方法时会把它自己(&lt;code class=&quot;highlighter-rouge&quot;&gt;this&lt;/code&gt;)作为参数传入，而Spring容器在调用&lt;code class=&quot;highlighter-rouge&quot;&gt;setBeanDactory&lt;/code&gt;前需要程序员自己指定&lt;code class=&quot;highlighter-rouge&quot;&gt;setBeanDactory&lt;/code&gt;里的参数&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactory&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;若有&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanPostProcessor&lt;/code&gt;接口的实现类, 则调用其&lt;code class=&quot;highlighter-rouge&quot;&gt;postProcessBeforeInitialization(Object bean, String beanName)&lt;/code&gt;方法.&lt;/li&gt;
+  &lt;li&gt;调用自定义初始化方法, 即自己通过&lt;code class=&quot;highlighter-rouge&quot;&gt;@PostConstruct&lt;/code&gt;注解的定义方法, 该方法必须为&lt;code class=&quot;highlighter-rouge&quot;&gt;public&lt;/code&gt;或&lt;code class=&quot;highlighter-rouge&quot;&gt;protected&lt;/code&gt;, 不能抛受检查异常, 返回值必须为&lt;code class=&quot;highlighter-rouge&quot;&gt;void&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;若实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;InitializingBean&lt;/code&gt;接口, 则调用其&lt;code class=&quot;highlighter-rouge&quot;&gt;afterPropertiesSet()&lt;/code&gt;方法&lt;/li&gt;
+  &lt;li&gt;若有&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanPostProcessor&lt;/code&gt;接口的实现类, 则调用其&lt;code class=&quot;highlighter-rouge&quot;&gt;postProcessAfterInitialization(Object bean, String beanName)&lt;/code&gt;方法.&lt;/li&gt;
+  &lt;li&gt;调用自定义销毁方法, 即自己通过&lt;code class=&quot;highlighter-rouge&quot;&gt;@PreDestroy&lt;/code&gt;注解定义的方法&lt;/li&gt;
+  &lt;li&gt;若实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;DisposableBean&lt;/code&gt;接口, 则调用其&lt;code class=&quot;highlighter-rouge&quot;&gt;destroy()&lt;/code&gt;方法.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;的整个生命周期历程为: &lt;code class=&quot;highlighter-rouge&quot;&gt;定义 --&amp;gt; 创建(构造并填充属性) --&amp;gt; 初始化 --&amp;gt; 准备就绪 --&amp;gt; 销毁&lt;/code&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+</description>
+        <pubDate>Fri, 09 Dec 2016 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-12-09-Spring-Bean%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E9%A1%BA%E5%BA%8F.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-12-09-Spring-Bean%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E9%A1%BA%E5%BA%8F.html</guid>
+        
+        <category>Spring</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
     
       <item>
         <title>Spring的扩展点</title>
@@ -1453,317 +1490,6 @@ logging.level.org.hibernate&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;ERROR
         <pubDate>Thu, 03 Nov 2016 00:00:00 +0800</pubDate>
         <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-03-Spring-Boot%E4%B8%AD%E7%9A%84%E6%97%A5%E5%BF%97.html</link>
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-03-Spring-Boot%E4%B8%AD%E7%9A%84%E6%97%A5%E5%BF%97.html</guid>
-        
-        <category>Spring</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>Spring Boot中的配置</title>
-        <description>&lt;p&gt;这里所说的配置是指&lt;code class=&quot;highlighter-rouge&quot;&gt;properties&lt;/code&gt;文件这样的配置&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;配置的方式及优先级&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;优先级举例&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;命令行参数&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#springapplicationjson&quot;&gt;SPRING_APPLICATION_JSON&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#applicationproperties&quot;&gt;配置文件:&lt;code class=&quot;highlighter-rouge&quot;&gt;application.properties&lt;/code&gt;&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-3&quot;&gt;随机变量&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-4&quot;&gt;变量引用&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-5&quot;&gt;多环境配置&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-6&quot;&gt;自定义配置&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-7&quot;&gt;传统的配置加载方式&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-8&quot;&gt;类型安全的配置加载方式&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#configurationproperties&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@ConfigurationProperties&lt;/code&gt;的优缺点&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#yaml&quot;&gt;使用YAML配置&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#applicationyml&quot;&gt;加载&lt;code class=&quot;highlighter-rouge&quot;&gt;application.yml&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#yaml-1&quot;&gt;加载自定义&lt;code class=&quot;highlighter-rouge&quot;&gt;YAML&lt;/code&gt;配置&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;配置的方式及优先级&lt;/h2&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot&lt;/code&gt;允许通过&lt;code class=&quot;highlighter-rouge&quot;&gt;properties&lt;/code&gt;文件, &lt;code class=&quot;highlighter-rouge&quot;&gt;YAML&lt;/code&gt;文件, &lt;code class=&quot;highlighter-rouge&quot;&gt;Environment&lt;/code&gt;变量, 命令行参数等进行配置. 属性值可以通过&lt;code class=&quot;highlighter-rouge&quot;&gt;@Value&lt;/code&gt;注入到bean中并通过Spring的&lt;code class=&quot;highlighter-rouge&quot;&gt;Environment&lt;/code&gt;访问, 或通过&lt;code class=&quot;highlighter-rouge&quot;&gt;@ConfigurationProperties&lt;/code&gt;直接绑定到对象上.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot&lt;/code&gt;所提供的配置优先级从高到低如下所示:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Spring的&lt;code class=&quot;highlighter-rouge&quot;&gt;devtools&lt;/code&gt;的全局配置(&lt;code class=&quot;highlighter-rouge&quot;&gt;~/.spring-boot-devtools.properties&lt;/code&gt;文件)(当使用了&lt;code class=&quot;highlighter-rouge&quot;&gt;devtools&lt;/code&gt;时)&lt;/li&gt;
-  &lt;li&gt;Test类上通过&lt;code class=&quot;highlighter-rouge&quot;&gt;@TestPropertySource&lt;/code&gt;声明的属性文件&lt;/li&gt;
-  &lt;li&gt;Test类上通过&lt;code class=&quot;highlighter-rouge&quot;&gt;@SpringBootTest#properties&lt;/code&gt;声明的属性&lt;/li&gt;
-  &lt;li&gt;命令行参数&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SPRING_APPLICATION_JSON&lt;/code&gt;属性, 环境变量或系统属性中的JSON&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletConfig&lt;/code&gt;初始化参数&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletContext&lt;/code&gt;初始化参数&lt;/li&gt;
-  &lt;li&gt;来自于&lt;code class=&quot;highlighter-rouge&quot;&gt;java:comp/env&lt;/code&gt;的JNDI属性&lt;/li&gt;
-  &lt;li&gt;Java系统属性(&lt;code class=&quot;highlighter-rouge&quot;&gt;System.getProperties()&lt;/code&gt;)&lt;/li&gt;
-  &lt;li&gt;操作系统环境变量&lt;/li&gt;
-  &lt;li&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;RandomValuePropertySource&lt;/code&gt;生成的&lt;code class=&quot;highlighter-rouge&quot;&gt;random.*&lt;/code&gt;属性&lt;/li&gt;
-  &lt;li&gt;jar包外的&lt;code class=&quot;highlighter-rouge&quot;&gt;profile&lt;/code&gt;配置文件(&lt;code class=&quot;highlighter-rouge&quot;&gt;application-{profile}.properties&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;YAML&lt;/code&gt;配置)&lt;/li&gt;
-  &lt;li&gt;jar包内的&lt;code class=&quot;highlighter-rouge&quot;&gt;profile&lt;/code&gt;配置文件(&lt;code class=&quot;highlighter-rouge&quot;&gt;application-{profile}.properties&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;YAML&lt;/code&gt;配置)&lt;/li&gt;
-  &lt;li&gt;jar包外的应用程序配置文件(&lt;code class=&quot;highlighter-rouge&quot;&gt;application.properties&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;YAML&lt;/code&gt;配置)&lt;/li&gt;
-  &lt;li&gt;jar包内的应用程序配置文件(&lt;code class=&quot;highlighter-rouge&quot;&gt;application.properties&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;YAML&lt;/code&gt;配置)&lt;/li&gt;
-  &lt;li&gt;配置类(&lt;code class=&quot;highlighter-rouge&quot;&gt;@Configuration&lt;/code&gt;类)上的通过&lt;code class=&quot;highlighter-rouge&quot;&gt;@PropertySource&lt;/code&gt;注解声明的属性文件&lt;/li&gt;
-  &lt;li&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;SpringApplication.setDefaultProperties&lt;/code&gt;声明的默认属性&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&quot;section-1&quot;&gt;优先级举例&lt;/h3&gt;
-&lt;p&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;classpath:application.properties&lt;/code&gt;文件里有个&lt;code class=&quot;highlighter-rouge&quot;&gt;name&lt;/code&gt;变量(假设将它打成了jar包), 当在一个新的环境中运行时,
-可以通过在jar包外(即新环境的的&lt;code class=&quot;highlighter-rouge&quot;&gt;classpath&lt;/code&gt;下)提供一个&lt;code class=&quot;highlighter-rouge&quot;&gt;application.properties&lt;/code&gt;文件, 重新设置&lt;code class=&quot;highlighter-rouge&quot;&gt;name&lt;/code&gt;变量的值.
-甚至在测试的时候,可以通过优先级更高的命令行参数指定&lt;code class=&quot;highlighter-rouge&quot;&gt;name&lt;/code&gt;的值(&lt;code class=&quot;highlighter-rouge&quot;&gt;java -jar app.jar --name=&quot;Spring&quot;&lt;/code&gt;)&lt;/p&gt;
-
-&lt;h3 id=&quot;section-2&quot;&gt;命令行参数&lt;/h3&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SpringApplication&lt;/code&gt;会把所有的命令行参数(以&lt;code class=&quot;highlighter-rouge&quot;&gt;--&lt;/code&gt;开头, 如&lt;code class=&quot;highlighter-rouge&quot;&gt;--server.port=9000&lt;/code&gt;)转化为属性加载到Spring的&lt;code class=&quot;highlighter-rouge&quot;&gt;Environment&lt;/code&gt;中, 命令行参数的优先级高于配置文件&lt;/p&gt;
-
-&lt;p&gt;如果不想让命令行参数添加到&lt;code class=&quot;highlighter-rouge&quot;&gt;Environment&lt;/code&gt;中, 可通过&lt;code class=&quot;highlighter-rouge&quot;&gt;SpringApplication.setAddCommandLineProperties(false)&lt;/code&gt;设置&lt;/p&gt;
-
-&lt;h3 id=&quot;springapplicationjson&quot;&gt;SPRING_APPLICATION_JSON&lt;/h3&gt;
-&lt;p&gt;上面第5条中说的&lt;code class=&quot;highlighter-rouge&quot;&gt;SPRING_APPLICATION_JSON&lt;/code&gt;属性, 可以在命令行中指定&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ SPRING_APPLICATION_JSON=&#39;{&quot;foo&quot;:{&quot;bar&quot;:&quot;spam&quot;}}&#39; java -jar myapp.jar  // 环境变量形式
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;这样就相当于在Spring的&lt;code class=&quot;highlighter-rouge&quot;&gt;Environment&lt;/code&gt;中添加了&lt;code class=&quot;highlighter-rouge&quot;&gt;foo.bar=spam&lt;/code&gt;.&lt;br /&gt;
-也可以像下面这些方式提供:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ java -Dspring.application.json=&#39;{&quot;foo&quot;:&quot;bar&quot;}&#39; -jar myapp.jar   // 系统变量
-$ java -jar myapp.jar --spring.application.json=&#39;{&quot;foo&quot;:&quot;bar&quot;}&#39;   // 命令行参数
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;或以JNDI变量&lt;code class=&quot;highlighter-rouge&quot;&gt;java:comp/env/spring.application.json&lt;/code&gt;提供&lt;/p&gt;
-
-&lt;p&gt;其实上面介绍的这几条优先级比较高的配置, 实际并不太常用. 命令行在测试的时候用的还算比较多&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;applicationproperties&quot;&gt;配置文件:&lt;code class=&quot;highlighter-rouge&quot;&gt;application.properties&lt;/code&gt;&lt;/h2&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SpringApplication&lt;/code&gt;默认会加载配置文件&lt;code class=&quot;highlighter-rouge&quot;&gt;application.properties&lt;/code&gt;中的配置并加到Spring &lt;code class=&quot;highlighter-rouge&quot;&gt;Environment&lt;/code&gt;中, 该文件的加载有个优先级: &lt;code class=&quot;highlighter-rouge&quot;&gt;classpath:/config/application.properties&lt;/code&gt; &amp;gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;classpath:/application.properties&lt;/code&gt;即在&lt;code class=&quot;highlighter-rouge&quot;&gt;classpath:/config/&lt;/code&gt;下的配置文件优先级比较高. 也可以使用YAML文件(&lt;code class=&quot;highlighter-rouge&quot;&gt;application.yml&lt;/code&gt;)来替代properties文件.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;application.properties&lt;/code&gt;被称为&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot&lt;/code&gt;的外露配置, 文件中有很多属性可用来配置整个应用, 比如&lt;code class=&quot;highlighter-rouge&quot;&gt;server.port=8080&lt;/code&gt;等; 你可以通过指定这些属性值来配置应用.&lt;/p&gt;
-
-&lt;p&gt;配置文件的名字和位置, 也可自定义, 可通过&lt;code class=&quot;highlighter-rouge&quot;&gt;spring.config.name&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;spring.config.location&lt;/code&gt;环境属性来指定, 这两个属性使用的时期非常早, 所以一般会在命令行或者系统属性或环境变量中来指定, 如:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ java -jar myproject.jar --spring.config.name=myproject
-$ java -jar myproject.jar --spring.config.location=classpath:/default.properties,classpath:/override.properties
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;若&lt;code class=&quot;highlighter-rouge&quot;&gt;spring.config.location&lt;/code&gt;指定的是一个目录, 则应该以&lt;code class=&quot;highlighter-rouge&quot;&gt;/&lt;/code&gt;结尾, 并且使用该目录下&lt;code class=&quot;highlighter-rouge&quot;&gt;spring.config.name&lt;/code&gt;指定的配置文件&lt;/p&gt;
-
-&lt;h3 id=&quot;section-3&quot;&gt;随机变量&lt;/h3&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;RandomValuePropertySource&lt;/code&gt;可以注入一些随机变量, 可产生&lt;code class=&quot;highlighter-rouge&quot;&gt;integer, long, string, uuid&lt;/code&gt;等类型的随机值, 例如&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;my.secret&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;random&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.value&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
-my.number&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;random&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.int&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
-my.bignumber&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;random&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.long&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
-my.uuid&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;random&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.uuid&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
-my.number.less.than.ten&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;random&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.int(10)&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
-my.number.in.range&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;random&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.int[1024,65536]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;random.int*&lt;/code&gt;的语法为&lt;code class=&quot;highlighter-rouge&quot;&gt;OPEN value (,max) CLOSE&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;OPEN,CLOSE&lt;/code&gt;是字符, &lt;code class=&quot;highlighter-rouge&quot;&gt;value,max&lt;/code&gt;是整数. 如果有&lt;code class=&quot;highlighter-rouge&quot;&gt;max&lt;/code&gt;则最小值是&lt;code class=&quot;highlighter-rouge&quot;&gt;value&lt;/code&gt;最大值是&lt;code class=&quot;highlighter-rouge&quot;&gt;max&lt;/code&gt;(不包括max).&lt;/p&gt;
-
-&lt;h3 id=&quot;section-4&quot;&gt;变量引用&lt;/h3&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;application.properties&lt;/code&gt;中定义的变量已经被&lt;code class=&quot;highlighter-rouge&quot;&gt;Environment&lt;/code&gt;过滤, 所以可以引用前面定义过的变量, 比如:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;app.name&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;MyApp
-app.description&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.name&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt; is a Spring Boot application
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section-5&quot;&gt;多环境配置&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;从配置的优先级的第12~15条可以看出, &lt;code class=&quot;highlighter-rouge&quot;&gt;application-{profile}.properties&lt;/code&gt;的优先级要高于&lt;code class=&quot;highlighter-rouge&quot;&gt;application.properties&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;这个&lt;code class=&quot;highlighter-rouge&quot;&gt;profile&lt;/code&gt;就用于区分是&lt;code class=&quot;highlighter-rouge&quot;&gt;dev&lt;/code&gt;环境还是&lt;code class=&quot;highlighter-rouge&quot;&gt;beta&lt;/code&gt;环境还是&lt;code class=&quot;highlighter-rouge&quot;&gt;prod&lt;/code&gt;环境. 如果没有被指定, 默认会使用&lt;code class=&quot;highlighter-rouge&quot;&gt;application-default.properties&lt;/code&gt;配置.&lt;/li&gt;
-  &lt;li&gt;至于到底启用哪个&lt;code class=&quot;highlighter-rouge&quot;&gt;profile&lt;/code&gt;, 可以在&lt;code class=&quot;highlighter-rouge&quot;&gt;application.properties&lt;/code&gt;中通过属性&lt;code class=&quot;highlighter-rouge&quot;&gt;spring.profiles.active=profile&lt;/code&gt;来指定, 在&lt;code class=&quot;highlighter-rouge&quot;&gt;profile&lt;/code&gt;配置文件中指定该属性不起作用.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;举个例子, &lt;code class=&quot;highlighter-rouge&quot;&gt;application.properties&lt;/code&gt;中有个默认属性&lt;code class=&quot;highlighter-rouge&quot;&gt;server.port=8080&lt;/code&gt;用于指定服务的端口. 假设有下面的文件, 文件内容如下:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// application.properties&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;server&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;port&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8080&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;spring&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;profiles&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;active&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dev&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// application-default.properties&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;server&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;port&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8081&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// application-dev.properties&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;server&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;port&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8082&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// application-prod.properties&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;server&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;port&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8083&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;假设&lt;code class=&quot;highlighter-rouge&quot;&gt;application.properties&lt;/code&gt;中不指定&lt;code class=&quot;highlighter-rouge&quot;&gt;spring.profiles.active&lt;/code&gt;属性, 则&lt;code class=&quot;highlighter-rouge&quot;&gt;application-default.properties&lt;/code&gt;中的8081端口生效, 若指定&lt;code class=&quot;highlighter-rouge&quot;&gt;spring.profiles.active=prod&lt;/code&gt;, 则8083端口生效. 访问8080端口都会找不到服务&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section-6&quot;&gt;自定义配置&lt;/h2&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot&lt;/code&gt;默认加载&lt;code class=&quot;highlighter-rouge&quot;&gt;application.properties&lt;/code&gt;中的配置, 这个文件中的默认属性相当多…&lt;br /&gt;
-如果我们要加载自己的配置, 比如下面的数据库配置:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;db.driver&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;MySQL
-db.username&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;username
-db.password&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;123456
-db.tables[0]&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;table1
-db.tables[1]&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;table2
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;可以把这些属性直接放到&lt;code class=&quot;highlighter-rouge&quot;&gt;application.properties&lt;/code&gt;中, 但极力不推荐这样.&lt;/p&gt;
-
-&lt;h3 id=&quot;section-7&quot;&gt;传统的配置加载方式&lt;/h3&gt;
-&lt;p&gt;我们一般都是定义自己的配置文件, 比如把这些属性放到&lt;code class=&quot;highlighter-rouge&quot;&gt;db.properties&lt;/code&gt;文件. 然后通过&lt;code class=&quot;highlighter-rouge&quot;&gt;@PropertySource&lt;/code&gt;加载配置文件, 然后通过&lt;code class=&quot;highlighter-rouge&quot;&gt;@Value(&quot;${key:defaultVlaue}&quot;)&lt;/code&gt;的形式进行配置, 如下:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@PropertySource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;db.properties&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DBConfig&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;${db.driver}&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@Value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;${db.username}&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@Value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;${db.password}&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@Value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;${db.tables[0]}&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@Value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;${db.tables[1]}&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;注: &lt;code class=&quot;highlighter-rouge&quot;&gt;properties&lt;/code&gt;文件默认是按照unicode加载, 若有中文, 一定要指定编码&lt;code class=&quot;highlighter-rouge&quot;&gt;@PropertySource(value = &quot;db.properties&quot;, encoding = &quot;UTF-8&quot;)&lt;/code&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;section-8&quot;&gt;类型安全的配置加载方式&lt;/h3&gt;
-&lt;p&gt;上面这种方式在&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Framework&lt;/code&gt;普遍使用, 但是 &lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot&lt;/code&gt;提供了更高级的使用配置的方式,类似于&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;中的&lt;code class=&quot;highlighter-rouge&quot;&gt;DataBinder&lt;/code&gt;工具. 还是&lt;code class=&quot;highlighter-rouge&quot;&gt;db.properties&lt;/code&gt;文件, 我们可以这样进行数据绑定:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-&lt;span class=&quot;nd&quot;&gt;@Data&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@ConfigurationProperties&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;prefix&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;db&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;locations&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;classpath:db.properties&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DBConfig&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tables&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;最上面的&lt;code class=&quot;highlighter-rouge&quot;&gt;@Data&lt;/code&gt;是&lt;code class=&quot;highlighter-rouge&quot;&gt;Lombok&lt;/code&gt;包中用于生成&lt;code class=&quot;highlighter-rouge&quot;&gt;getter, setter&lt;/code&gt;等的注解, pom依赖为:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.projectlombok&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;lombok&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;1.16.10&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;不用这个包也可以, 那就需要自己写 &lt;code class=&quot;highlighter-rouge&quot;&gt;getter&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;setter&lt;/code&gt;方法了&lt;/p&gt;
-
-&lt;p&gt;另外注意此时该类上是加了&lt;code class=&quot;highlighter-rouge&quot;&gt;@Component&lt;/code&gt;注解的, 这样才会被当作Spring的Bean.&lt;/p&gt;
-
-&lt;p&gt;其实不在&lt;code class=&quot;highlighter-rouge&quot;&gt;DBConfig&lt;/code&gt;上加&lt;code class=&quot;highlighter-rouge&quot;&gt;@Component&lt;/code&gt;注解也有办法, 通常&lt;code class=&quot;highlighter-rouge&quot;&gt;@ConfigurationProperties&lt;/code&gt;是和&lt;code class=&quot;highlighter-rouge&quot;&gt;@EnableConfigurationProperties&lt;/code&gt;一起使用的, &lt;code class=&quot;highlighter-rouge&quot;&gt;@EnableConfigurationProperties&lt;/code&gt;注解需要加到配置类上.
-像下面这样使用:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// 配置类&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@SpringBootApplication&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@EnableConfigurationProperties&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;({&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DBConfig&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;})&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Application&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;c1&quot;&gt;// 代码&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// 加载属性的类(主意这个类没有加 @Component 注解)&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@ConfigurationProperties&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;prefix&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;db&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;locations&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;classpath:db.properties&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DBConfig&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;c1&quot;&gt;// 代码&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;这种形式, &lt;code class=&quot;highlighter-rouge&quot;&gt;@ConfigurationProperties&lt;/code&gt;bean将会以名字&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;prefix&amp;gt;-&amp;lt;fqn&amp;gt;&lt;/code&gt;注册, &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;prefix&amp;gt;&lt;/code&gt;就是注解中指定的前缀, &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;fqn&amp;gt;&lt;/code&gt;是该类的全类名. 上面的&lt;code class=&quot;highlighter-rouge&quot;&gt;DBConfig&lt;/code&gt;将会被注册成名字为&lt;code class=&quot;highlighter-rouge&quot;&gt;db-com.example.myproject.config.DBConfig&lt;/code&gt;的bean&lt;/p&gt;
-
-&lt;h3 id=&quot;configurationproperties&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;@ConfigurationProperties&lt;/code&gt;的优缺点&lt;/h3&gt;
-&lt;p&gt;优点:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;结构化, 对于结构化的配置, 优势明显&lt;/li&gt;
-  &lt;li&gt;松散绑定, &lt;code class=&quot;highlighter-rouge&quot;&gt;Environment&lt;/code&gt;属性名和&lt;code class=&quot;highlighter-rouge&quot;&gt;@ConfigurationProperties Beans&lt;/code&gt;属性名不需要精确匹配, 比如驼峰&lt;code class=&quot;highlighter-rouge&quot;&gt;person.firstName&lt;/code&gt;, 虚线&lt;code class=&quot;highlighter-rouge&quot;&gt;pserson.first-name&lt;/code&gt;, 下划线&lt;code class=&quot;highlighter-rouge&quot;&gt;person.first_name&lt;/code&gt;, 大写&lt;code class=&quot;highlighter-rouge&quot;&gt;PERSON_FIRST_NAME&lt;/code&gt;都能正确区分绑定&lt;/li&gt;
-  &lt;li&gt;可校验, 可以在属性上添加&lt;code class=&quot;highlighter-rouge&quot;&gt;@NotNull&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;@NotEmpty&lt;/code&gt;等(JSR-303)注解进行校验&lt;/li&gt;
-  &lt;li&gt;可生成&lt;code class=&quot;highlighter-rouge&quot;&gt;meta-data&lt;/code&gt;文件(可被IDE使用)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;缺点:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;不支持&lt;code class=&quot;highlighter-rouge&quot;&gt;SpEL&lt;/code&gt;表达式&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;yaml&quot;&gt;使用YAML配置&lt;/h2&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;YAML&lt;/code&gt;是&lt;code class=&quot;highlighter-rouge&quot;&gt;JSON&lt;/code&gt;的超集, 有一定的结构, &lt;code class=&quot;highlighter-rouge&quot;&gt;SpringApplication&lt;/code&gt;提供了对&lt;code class=&quot;highlighter-rouge&quot;&gt;YAML&lt;/code&gt;的支持.
-使用&lt;code class=&quot;highlighter-rouge&quot;&gt;YAML&lt;/code&gt;配置文件需要确保在classpath中引入了&lt;code class=&quot;highlighter-rouge&quot;&gt;SnakeYAML&lt;/code&gt;包, &lt;code class=&quot;highlighter-rouge&quot;&gt;spring-boot-starter&lt;/code&gt;中已经包含了&lt;code class=&quot;highlighter-rouge&quot;&gt;SnakeYAML&lt;/code&gt;包, 也可以主动显式地添加pom依赖:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
-	  &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.yaml&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;snakeyaml&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;1.17&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;applicationyml&quot;&gt;加载&lt;code class=&quot;highlighter-rouge&quot;&gt;application.yml&lt;/code&gt;&lt;/h3&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot&lt;/code&gt;会自动加载这个配置, 因此效果跟&lt;code class=&quot;highlighter-rouge&quot;&gt;application.properties&lt;/code&gt;一样。&lt;br /&gt;
-Spring 提供了两个方便的类加载&lt;code class=&quot;highlighter-rouge&quot;&gt;YAML&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;YamlPropertiesFactoryBean&lt;/code&gt;把&lt;code class=&quot;highlighter-rouge&quot;&gt;YAML&lt;/code&gt;作为&lt;code class=&quot;highlighter-rouge&quot;&gt;Properties&lt;/code&gt;加载, &lt;code class=&quot;highlighter-rouge&quot;&gt;YamlMapFactoryBean&lt;/code&gt;把&lt;code class=&quot;highlighter-rouge&quot;&gt;YAML&lt;/code&gt;作为&lt;code class=&quot;highlighter-rouge&quot;&gt;Map&lt;/code&gt;加载;&lt;br /&gt;
- &lt;code class=&quot;highlighter-rouge&quot;&gt;YamlPropertySourceLoader&lt;/code&gt;可以把&lt;code class=&quot;highlighter-rouge&quot;&gt;YAML&lt;/code&gt;作为&lt;code class=&quot;highlighter-rouge&quot;&gt;PropertySource&lt;/code&gt;加到Spring &lt;code class=&quot;highlighter-rouge&quot;&gt;Environment&lt;/code&gt;中, 这样就可以用&lt;code class=&quot;highlighter-rouge&quot;&gt;@Value&lt;/code&gt;的方式进行注入了.&lt;/p&gt;
-
-&lt;p&gt;比如下面的写法是一样的&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// yml文件
-environments:
-    dev:
-        url: http://dev.bar.com
-        name: Developer Setup
-    prod:
-        url: http://foo.bar.com
-        name: My Cool App
-my:
-    servers:
-        - dev.bar.com
-        - foo.bar.com
-// properties文件
-environments.dev.url=http://dev.bar.com
-environments.dev.name=Developer Setup
-environments.prod.url=http://foo.bar.com
-environments.prod.name=My Cool App
-my.servers[0]=dev.bar.com
-my.servers[1]=foo.bar.com
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;yaml-1&quot;&gt;加载自定义&lt;code class=&quot;highlighter-rouge&quot;&gt;YAML&lt;/code&gt;配置&lt;/h3&gt;
-&lt;p&gt;遗憾的是, &lt;code class=&quot;highlighter-rouge&quot;&gt;YAML&lt;/code&gt;不能像&lt;code class=&quot;highlighter-rouge&quot;&gt;properties&lt;/code&gt;文件一样使用&lt;code class=&quot;highlighter-rouge&quot;&gt;@PropertySource&lt;/code&gt;注解的方式加载.&lt;br /&gt;
-加载自定义的&lt;code class=&quot;highlighter-rouge&quot;&gt;YAML&lt;/code&gt;文件可以通过&lt;code class=&quot;highlighter-rouge&quot;&gt;@ConfigurationProperties&lt;/code&gt;注解来加载, 如:&lt;code class=&quot;highlighter-rouge&quot;&gt;@ConfigurationProperties(prefix=&quot;db&quot;, locations = &quot;classpath:db.yml&quot;)&lt;/code&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-</description>
-        <pubDate>Wed, 02 Nov 2016 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-02-Spring-Boot%E4%B8%AD%E7%9A%84%E9%85%8D%E7%BD%AE.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-02-Spring-Boot%E4%B8%AD%E7%9A%84%E9%85%8D%E7%BD%AE.html</guid>
         
         <category>Spring</category>
         
