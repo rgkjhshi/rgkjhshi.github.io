@@ -5,8 +5,8 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 13 Dec 2016 17:18:43 +0800</pubDate>
-    <lastBuildDate>Tue, 13 Dec 2016 17:18:43 +0800</lastBuildDate>
+    <pubDate>Tue, 13 Dec 2016 17:58:27 +0800</pubDate>
+    <lastBuildDate>Tue, 13 Dec 2016 17:58:27 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
@@ -269,43 +269,6 @@ custom.datasource.ds2.driver-class-name&lt;span class=&quot;o&quot;&gt;=&lt;/spa
         <pubDate>Mon, 12 Dec 2016 00:00:00 +0800</pubDate>
         <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-12-12-Spring-Boot%E5%A4%9A%E6%95%B0%E6%8D%AE%E6%BA%90%E9%85%8D%E7%BD%AE.html</link>
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-12-12-Spring-Boot%E5%A4%9A%E6%95%B0%E6%8D%AE%E6%BA%90%E9%85%8D%E7%BD%AE.html</guid>
-        
-        <category>Spring</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>Spring Bean的初始化顺序</title>
-        <description>&lt;hr /&gt;
-
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;img src=&quot;/static/images/bean_init.png&quot; alt=&quot;Bean生命周期&quot; title=&quot;Bean生命周期&quot; /&gt;&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;对&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;进行实例化, 相当于调用构造函数, &lt;code class=&quot;highlighter-rouge&quot;&gt;new&lt;/code&gt; 出一个对象&lt;/li&gt;
-  &lt;li&gt;若实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanNameAware&lt;/code&gt;接口, 则会调用其&lt;code class=&quot;highlighter-rouge&quot;&gt;setBeanName(String name)&lt;/code&gt;方法, 用于获取Bean的ID.&lt;/li&gt;
-  &lt;li&gt;若实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactoryAware&lt;/code&gt;接口, 则调用其&lt;code class=&quot;highlighter-rouge&quot;&gt;setBeanFactory(BeanFactory beanFactory)&lt;/code&gt;方法, 用于拿到Spring容器, 如通过容器发布一些事件等.&lt;/li&gt;
-  &lt;li&gt;若实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;ApplicationContextAware&lt;/code&gt;接口, 则调用其&lt;code class=&quot;highlighter-rouge&quot;&gt;setApplicationContext(ApplicationContext applicationContext)&lt;/code&gt;方法, 作用与&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactoryAware&lt;/code&gt;类似都是为了获取Spring容器, 不同的是Spring容器在调用&lt;code class=&quot;highlighter-rouge&quot;&gt;setApplicationContext&lt;/code&gt;方法时会把它自己(&lt;code class=&quot;highlighter-rouge&quot;&gt;this&lt;/code&gt;)作为参数传入，而Spring容器在调用&lt;code class=&quot;highlighter-rouge&quot;&gt;setBeanDactory&lt;/code&gt;前需要程序员自己指定&lt;code class=&quot;highlighter-rouge&quot;&gt;setBeanDactory&lt;/code&gt;里的参数&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactory&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;若有&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanPostProcessor&lt;/code&gt;接口的实现类, 则调用其&lt;code class=&quot;highlighter-rouge&quot;&gt;postProcessBeforeInitialization(Object bean, String beanName)&lt;/code&gt;方法.&lt;/li&gt;
-  &lt;li&gt;调用自定义初始化方法, 即自己通过&lt;code class=&quot;highlighter-rouge&quot;&gt;@PostConstruct&lt;/code&gt;注解的定义方法, 该方法必须为&lt;code class=&quot;highlighter-rouge&quot;&gt;public&lt;/code&gt;或&lt;code class=&quot;highlighter-rouge&quot;&gt;protected&lt;/code&gt;, 不能抛受检查异常, 返回值必须为&lt;code class=&quot;highlighter-rouge&quot;&gt;void&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;若实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;InitializingBean&lt;/code&gt;接口, 则调用其&lt;code class=&quot;highlighter-rouge&quot;&gt;afterPropertiesSet()&lt;/code&gt;方法&lt;/li&gt;
-  &lt;li&gt;若有&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanPostProcessor&lt;/code&gt;接口的实现类, 则调用其&lt;code class=&quot;highlighter-rouge&quot;&gt;postProcessAfterInitialization(Object bean, String beanName)&lt;/code&gt;方法.&lt;/li&gt;
-  &lt;li&gt;调用自定义销毁方法, 即自己通过&lt;code class=&quot;highlighter-rouge&quot;&gt;@PreDestroy&lt;/code&gt;注解定义的方法&lt;/li&gt;
-  &lt;li&gt;若实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;DisposableBean&lt;/code&gt;接口, 则调用其&lt;code class=&quot;highlighter-rouge&quot;&gt;destroy()&lt;/code&gt;方法.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;的整个生命周期历程为: &lt;code class=&quot;highlighter-rouge&quot;&gt;定义 --&amp;gt; 创建(构造并填充属性) --&amp;gt; 初始化 --&amp;gt; 准备就绪 --&amp;gt; 销毁&lt;/code&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-</description>
-        <pubDate>Fri, 09 Dec 2016 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-12-09-Spring-Bean%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E9%A1%BA%E5%BA%8F0.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-12-09-Spring-Bean%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E9%A1%BA%E5%BA%8F0.html</guid>
         
         <category>Spring</category>
         
@@ -1317,6 +1280,268 @@ Spring Boot提供了一个测试相关的starter:&lt;/p&gt;
         <pubDate>Wed, 09 Nov 2016 00:00:00 +0800</pubDate>
         <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-09-%E5%85%B3%E4%BA%8E%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95.html</link>
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-09-%E5%85%B3%E4%BA%8E%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95.html</guid>
+        
+        <category>Spring</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
+    
+      <item>
+        <title>Spring Boot集成MyBatis</title>
+        <description>&lt;p&gt;本文先介绍&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot&lt;/code&gt;的数据源的配置, 然后介绍如何集成&lt;code class=&quot;highlighter-rouge&quot;&gt;MyBatis&lt;/code&gt;(有两种方式)&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;配置数据源&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;连接池&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#mybatis&quot;&gt;集成MyBatis&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#mybatis-spring&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;mybatis-spring&lt;/code&gt;方式&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#mybatis-spring-boot-starter&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;mybatis-spring-boot-starter&lt;/code&gt;方式&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;配置数据源&lt;/h2&gt;
+
+&lt;p&gt;Java的&lt;code class=&quot;highlighter-rouge&quot;&gt;javax.sql.DataSource&lt;/code&gt;接口提供了标准的使用数据库连接的方法. 建立数据库连接只需要提供&lt;code class=&quot;highlighter-rouge&quot;&gt;URL&lt;/code&gt;等相关参数, &lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot&lt;/code&gt;就可以创建数据源. 当然我们必须提供相应的包:&lt;code class=&quot;highlighter-rouge&quot;&gt;spring-boot-starter-data-jpa&lt;/code&gt;, 这个包已经把&lt;code class=&quot;highlighter-rouge&quot;&gt;spring-boot-starter-jdbc&lt;/code&gt;包含进来了.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;提供了内嵌数据库的支持(包括&lt;code class=&quot;highlighter-rouge&quot;&gt;H2, HSQL, Derby&lt;/code&gt;), 当我们使用内嵌数据库的时候, 连&lt;code class=&quot;highlighter-rouge&quot;&gt;URL&lt;/code&gt;等这些配置都不需要了, 直接导入相应的数据库依赖包就可以, 比如使用&lt;code class=&quot;highlighter-rouge&quot;&gt;HSQL&lt;/code&gt;, 只需添加pom依赖:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.hsqldb&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;hsqldb&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;scope&amp;gt;&lt;/span&gt;runtime&lt;span class=&quot;nt&quot;&gt;&amp;lt;/scope&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;如果不用内嵌数据库, 而是用&lt;code class=&quot;highlighter-rouge&quot;&gt;Mysql&lt;/code&gt;的话, 就需要&lt;code class=&quot;highlighter-rouge&quot;&gt;URL&lt;/code&gt;等配置, 然后在把&lt;code class=&quot;highlighter-rouge&quot;&gt;Mysql&lt;/code&gt;相关的包依赖添加进来:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;mysql&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;mysql-connector-java&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;scope&amp;gt;&lt;/span&gt;runtime&lt;span class=&quot;nt&quot;&gt;&amp;lt;/scope&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;连接池&lt;/h3&gt;
+&lt;p&gt;线上使用数据库通常都会通过数据库连接池, &lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot&lt;/code&gt;会按照下面的策略选取一个:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Tomcat 连接池性能较高, &lt;code class=&quot;highlighter-rouge&quot;&gt;tomcat-jdbc&lt;/code&gt;可用时优先选择(&lt;code class=&quot;highlighter-rouge&quot;&gt;spring-boot-starter-jdbc&lt;/code&gt;里已经包含了&lt;code class=&quot;highlighter-rouge&quot;&gt;tomcat-jdbc&lt;/code&gt;包)&lt;/li&gt;
+  &lt;li&gt;如果&lt;code class=&quot;highlighter-rouge&quot;&gt;HikariCP&lt;/code&gt;可用则选择它&lt;/li&gt;
+  &lt;li&gt;如果&lt;code class=&quot;highlighter-rouge&quot;&gt;Commons DBCP&lt;/code&gt;可用则使用它, 但不推荐&lt;/li&gt;
+  &lt;li&gt;最后, 如果&lt;code class=&quot;highlighter-rouge&quot;&gt;Commons DBCP2&lt;/code&gt;可用, 则使用它&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;我们可以通过在应用配置的参数&lt;code class=&quot;highlighter-rouge&quot;&gt;spring.datasource.type&lt;/code&gt;指定一个连接池, 比如使用阿里的德鲁伊(&lt;code class=&quot;highlighter-rouge&quot;&gt;Druid&lt;/code&gt;):&lt;code class=&quot;highlighter-rouge&quot;&gt;spring.datasource.type=com.alibaba.druid.pool.DruidDataSource&lt;/code&gt;, 这个需要添加依赖:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;com.alibaba&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;druid&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;1.0.18&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;关于数据源的配置, 可在应用配置文件&lt;code class=&quot;highlighter-rouge&quot;&gt;application.properties&lt;/code&gt;中进行配置&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;spring.datasource.url&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;jdbc:mysql://localhost/test
+spring.datasource.username&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;dbuser
+spring.datasource.password&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;dbpass
+spring.datasource.driver-class-name&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;com.mysql.jdbc.Drive
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;对于不同连接池还有一些其他参数(&lt;code class=&quot;highlighter-rouge&quot;&gt;spring.datasource.tomcat.*&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;spring.datasource.hikari.*&lt;/code&gt;), 比如:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# Number of ms to wait before throwing an exception if no connection is available.&lt;/span&gt;
+spring.datasource.tomcat.max-wait&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;10000
+&lt;span class=&quot;c&quot;&gt;# Maximum number of active connections that can be allocated from this pool at the same time.&lt;/span&gt;
+spring.datasource.tomcat.max-active&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;50
+&lt;span class=&quot;c&quot;&gt;# Validate the connection before borrowing it from the pool.&lt;/span&gt;
+spring.datasource.tomcat.test-on-borrow&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;关于数据源, 我们仅需要配置一下参数, &lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot&lt;/code&gt;已经自动帮我们配置了, 使用的时候直接注入就可以.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;mybatis&quot;&gt;集成MyBatis&lt;/h2&gt;
+
+&lt;p&gt;我们可以使用传统的&lt;code class=&quot;highlighter-rouge&quot;&gt;mybatis-spring&lt;/code&gt;的方式, 引入&lt;code class=&quot;highlighter-rouge&quot;&gt;mybatis&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;mybatis-spring&lt;/code&gt;包, 手动配置&lt;code class=&quot;highlighter-rouge&quot;&gt;MyBatis&lt;/code&gt;, 这种方式跟原来使用&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;框架时比较类似, 比较灵活, 可自行配置&lt;code class=&quot;highlighter-rouge&quot;&gt;SqlSessionFactoryBean&lt;/code&gt;. 这是我们将用的第一种方式.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;MyBatis&lt;/code&gt;官方也提供了一个&lt;code class=&quot;highlighter-rouge&quot;&gt;starter&lt;/code&gt;形式的包(&lt;a href=&quot;https://github.com/mybatis/spring-boot-starter&quot;&gt;GitHub地址&lt;/a&gt;), 这个&lt;code class=&quot;highlighter-rouge&quot;&gt;starter&lt;/code&gt;里已经包含了&lt;code class=&quot;highlighter-rouge&quot;&gt;mybatis&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;mybatis-spring&lt;/code&gt;. 这是第二种方式, 这种方式更简单, 只需要在应用配置&lt;code class=&quot;highlighter-rouge&quot;&gt;application.yml&lt;/code&gt;中添加配置即可.&lt;/p&gt;
+
+&lt;p&gt;不管哪种方式, 包依赖和数据源的配置少不了, 因此先把数据源配置(在&lt;code class=&quot;highlighter-rouge&quot;&gt;application.yml&lt;/code&gt;中)贴出来:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# 数据库配置&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;spring&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;datasource&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;jdbc:mysql://10.90.187.120:3306/test?useUnicode=true&amp;amp;characterEncoding=UTF-8&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;dbname&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;dbpass&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;driver-class-name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;com.mysql.jdbc.Driver&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;包依赖(第一种方式只要包含&lt;code class=&quot;highlighter-rouge&quot;&gt;mybatis&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;mybatis-spring&lt;/code&gt;即可):&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;org.mybatis.spring.boot&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;mybatis-spring-boot-starter&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;1.0.0&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;mybatis-spring&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;mybatis-spring&lt;/code&gt;方式&lt;/h3&gt;
+&lt;p&gt;这种方式不再需要额外的配置, 主配置类该怎么写还是怎么写, 另外我们专门为&lt;code class=&quot;highlighter-rouge&quot;&gt;MyBatis&lt;/code&gt;添加两个配置类:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// com.example.project.config.MyBatisConfig.java 这个类是MyBatis的配置类&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Configuration&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 不要忘记加配置注解&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@EnableTransactionManagement&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 事务管理&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyBatisConfig&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TransactionManagementConfigurer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Logger&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LoggerFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MyBatisConfig&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Resource&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;DataSource&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dataSource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 这个数据源, Spring boot 会自动注入&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Bean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;sqlSessionFactory&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SqlSessionFactory&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sqlSessionFactoryBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;SqlSessionFactoryBean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sqlSessionFactory&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SqlSessionFactoryBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// 设置数据源&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;sqlSessionFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setDataSource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dataSource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// 自动重命名&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;sqlSessionFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setTypeAliasesPackage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;com.example.project.entity&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// 设置 typeHandler&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;sqlSessionFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setTypeHandlersPackage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;com.example.project.typeHandler&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// 添加拦截器插件 (如果有的话, 分页插件, 分表插件等)&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;//        sqlSessionFactory.setPlugins(new Interceptor[]{pageHelper});&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// 设置 mapper 文件&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;ResourcePatternResolver&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;resolver&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PathMatchingResourcePatternResolver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;sqlSessionFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setMapperLocations&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;resolver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getResources&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;classpath:sqlmaps/*.xml&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sqlSessionFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getObject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;初始化SqlSessionFactory失败&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RuntimeException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Bean&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SqlSessionTemplate&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sqlSessionTemplate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SqlSessionFactory&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sqlSessionFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SqlSessionTemplate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sqlSessionFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Bean&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PlatformTransactionManager&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;annotationDrivenTransactionManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DataSourceTransactionManager&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dataSource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// com.example.project.config.MyBatisMapperScannerConfig.java 这个类用来设置自动扫描的路径&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Configuration&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// MapperScannerConfigurer 执行的比较早, 所以要加下面这个注释, 不然其他 bean 还没初始化&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@AutoConfigureAfter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MyBatisConfig&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 确保在 MyBatisConfig 初始化之后初始化&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyBatisMapperScannerConfig&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Bean&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MapperScannerConfigurer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mapperScannerConfigurer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;MapperScannerConfigurer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mapperScannerConfigurer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MapperScannerConfigurer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// 设置自动扫描包, 该包下的Mapper(Dao)将会被mybatis自动注册, 不用写实现类&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;mapperScannerConfigurer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setBasePackage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;com.example.project.dao&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;mapperScannerConfigurer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setSqlSessionFactoryBeanName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;sqlSessionFactory&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mapperScannerConfigurer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;这种方式, &lt;code class=&quot;highlighter-rouge&quot;&gt;MyBatis&lt;/code&gt;就配置完了, 剩下的就是写实体和对应的Mapper(&lt;code class=&quot;highlighter-rouge&quot;&gt;Dao&lt;/code&gt;)了.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// com.example.project.entity.User.java&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Data&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UserCreditRecord&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;age&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// com.example.project.dao.UserDao.java&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Repository&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UserDao&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+   &lt;span class=&quot;nd&quot;&gt;@Select&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;select * from user where id = #{id}&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getById&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@Param&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;当实体跟数据库中字段名字一致的时候没啥问题, 但实体字段跟数据库字段不一致时(比如一个驼峰, 一个用下划线)就比较麻烦了, 这种情况我们可以不使用注解形式, 而使用&lt;code class=&quot;highlighter-rouge&quot;&gt;User.xml&lt;/code&gt;文件, 在文件中可以&lt;code class=&quot;highlighter-rouge&quot;&gt;select user_name as userName&lt;/code&gt;也可以通过&lt;code class=&quot;highlighter-rouge&quot;&gt;resultMap&lt;/code&gt;来制定数据库字段名&lt;code class=&quot;highlighter-rouge&quot;&gt;column&lt;/code&gt;与实体属性名&lt;code class=&quot;highlighter-rouge&quot;&gt;property&lt;/code&gt;的映射关系;&lt;/p&gt;
+
+&lt;p&gt;还有一个第三方&lt;code class=&quot;highlighter-rouge&quot;&gt;Mapper&lt;/code&gt;插件, 可以完美解决这个问题, 参考&lt;a href=&quot;https://github.com/abel533/Mapper&quot;&gt;这里&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;mybatis-spring-boot-starter&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;mybatis-spring-boot-starter&lt;/code&gt;方式&lt;/h3&gt;
+&lt;p&gt;这种方式就更简单了, 仅仅需要在应用配置文件&lt;code class=&quot;highlighter-rouge&quot;&gt;application.yml&lt;/code&gt;添加一些配置:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# mybatis 配置&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;mybatis&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;typeAliasesPackage&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;com.example.project.entity&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;typeHandlersPackage&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;com.example.project.handler&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# 如果有 typeHandler&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;mapperLocations&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;classpath:sqlmaps/*.xml&lt;/span&gt;          &lt;span class=&quot;c1&quot;&gt;# mapper 文件&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;configLocation&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;classpath:mybatis-config.xml&lt;/span&gt;      &lt;span class=&quot;c1&quot;&gt;# 可以不设置&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;然后从 main类 上添加注解:&lt;code class=&quot;highlighter-rouge&quot;&gt;@MapperScan(&quot;com.example.project.dao&quot;)&lt;/code&gt;, 扫描Mapper(&lt;code class=&quot;highlighter-rouge&quot;&gt;Dao&lt;/code&gt;)的位置即可. 其他的&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot&lt;/code&gt;都帮我们做了, 接下来就专注于写&lt;code class=&quot;highlighter-rouge&quot;&gt;Dao&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;entity&lt;/code&gt;就可以了.&lt;/p&gt;
+
+&lt;p&gt;注意上面的mybatis的配置文件&lt;code class=&quot;highlighter-rouge&quot;&gt;classpath:mybatis-config.xml&lt;/code&gt;, 如果没有这个文件就不要配置, 要是配置了就保证存在, 网上找了个例子:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;&amp;lt;!DOCTYPE configuration PUBLIC &quot;-//mybatis.org//DTD Config 3.0//EN&quot; &quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;&amp;gt;&lt;/span&gt;
+
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;configuration&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;settings&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 这个配置使全局的映射器启用或禁用缓存。系统默认值是true --&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;setting&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;cacheEnabled&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;true&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 全局启用或禁用延迟加载。当禁用时，所有关联对象都会即时加载。 系统默认值是true --&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;setting&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;lazyLoadingEnabled&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;true&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 允许或不允许多种结果集从一个单独的语句中返回(需要适合的驱动)。 系统默认值是true --&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;setting&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;multipleResultSetsEnabled&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;true&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;&amp;lt;!--使用列标签代替列名。不同的驱动在这方便表现不同。参考驱动文档或充分测试两种方法来决定所使用的驱动。 系统默认值是true --&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;setting&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;useColumnLabel&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;true&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;&amp;lt;!--允许 JDBC 支持生成的键。需要适合的驱动。如果设置为 true 则这个设置强制生成的键被使用，尽管一些驱动拒绝兼容但仍然有效（比如Derby）。 系统默认值是false --&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;setting&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;useGeneratedKeys&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;false&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;&amp;lt;!--配置默认的执行器。SIMPLE 执行器没有什么特别之处。REUSE 执行器重用预处理语句。BATCH 执行器重用语句和批量更新 系统默认值是SIMPLE --&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;setting&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;defaultExecutorType&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;SIMPLE&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;&amp;lt;!--设置超时时间，它决定驱动等待一个数据库响应的时间。 系统默认值是null --&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;setting&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;defaultStatementTimeout&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;25000&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/settings&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 设置插件 --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;plugins&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;plugin&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;interceptor=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;com.github.pagehelper.PageHelper&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 这是一个第三方的分页插件 --&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;reasonable&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;true&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;offsetAsPageNum&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;true&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;rowBoundsWithCount&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;true&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;pageSizeZero&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;true&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/plugin&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/plugins&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/configuration&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+</description>
+        <pubDate>Sun, 06 Nov 2016 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-06-Spring-Boot%E9%9B%86%E6%88%90MyBatis.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-06-Spring-Boot%E9%9B%86%E6%88%90MyBatis.html</guid>
         
         <category>Spring</category>
         
