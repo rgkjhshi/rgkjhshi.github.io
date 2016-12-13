@@ -42,10 +42,10 @@ custom.datasource.ds2.driver-class-name=com.mysql.jdbc.Driver
 ~~~java
 @Configuration
 public class DataSourceConfig {
-    @Bean("ds0")
+    @Bean("datasource")
     @Primary  // 这个注解表示主数据源
     @ConfigurationProperties(prefix = "spring.datasource")
-    public DataSource ds0() {
+    public DataSource datasource() {
         // 这里也可以使用其他连接池, 比如 DruidDataSource
         return new DruidDataSource();
     }
@@ -145,6 +145,118 @@ public class DS1Config {
 ~~~
 
 上面这样, 把`MyBatis`配置好之后, 特别是通过`MapperScan`指定`dao`扫描路径之后, 就可以像之前一样直接在spring中注入对应的`Dao`操作数据库了.
+
+*****
+
+## 自动注册多数据源
+如果数据源比较多, 我们可以把多个数据源通过其它方式注入到Spring容器中, 使用时可以直接通过名字注入使用.  
+假设有如下配置:
+
+~~~sh
+# 默认数据源
+spring.datasource.url=jdbc:mysql://127.0.0.1:3306/db0
+spring.datasource.username=root
+spring.datasource.password=123123
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+# 数据源db1配置
+custom.datasource.names=ds1, ds2    # 这个属性表示数据源名字列表
+custom.datasource.ds1.url=jdbc:mysql://127.0.0.1:3306/db1
+custom.datasource.ds1.username=root
+custom.datasource.ds1.password=123123
+custom.datasource.ds1.driver-class-name=com.mysql.jdbc.Driver
+# 数据源db2配置
+custom.datasource.ds2.url=jdbc:mysql://127.0.0.1:3306/db2
+custom.datasource.ds2.username=root
+custom.datasource.ds2.password=123123
+custom.datasource.ds2.driver-class-name=com.mysql.jdbc.Driver
+~~~
+
+上面的数据源, 我们可以直接拿来使用:
+
+~~~java
+// 这个是注入默认的数据源
+@Resource
+private DataSource dataSource
+// 注入ds1数据源
+@Resource("ds1")
+private DataSource ds1
+// 在方法里注入ds2数据源
+@Bean
+public SqlSessionFactory sqlSessionFactory(@Qualifier("ds2") DataSource dataSource) {
+    ....
+}
+~~~
+
+要实现多数据源的自动注册, 我们需要借助`BeanDefinitionRegistryPostProcessor`和`EnvironmentAware`两个接口. 下面是自动注册多数据源的方法:
+
+~~~java
+
+@Component
+public class MultiDataSourceRegister implements BeanDefinitionRegistryPostProcessor, EnvironmentAware {
+    private static final Logger logger = LoggerFactory.getLogger(MultiDataSourceRegister.class);
+    // 存放DataSource配置的集合, <dsName, dbProperties>
+    private Map<String, PropertyValues> dataSourceMap = Maps.newHashMap();
+
+    /**
+     * 这个方法主要用于加载多数据源配置, 添加到dataSourceMap中, 之后在postProcessBeanDefinitionRegistry进行注册。
+     */
+    @Override
+    public void setEnvironment(Environment environment) {
+        // 获取到前缀是 "custom.datasource." 的属性列表值
+        RelaxedPropertyResolver propertyResolver = new RelaxedPropertyResolver(environment, "custom.datasource.");
+        // 获取到所有数据源的名称列表
+        String dsNames = propertyResolver.getProperty("names"); // 拿到 custom.datasource.names 定义的数据源列表
+        for (String dsName : Splitter.on(",").omitEmptyStrings().splitToList(dsNames)) {
+            // 把数据源的配置(url, username, password, driver-class-name, type等)咱存到 dsMap 中
+            Map<String, Object> dsMap = propertyResolver.getSubProperties(dsName + ".");
+            if (CollectionUtils.isEmpty(dsMap)) {
+                logger.warn("未找到数据源{}的属性配置", dsName);
+            } else {
+                PropertyValues propertyValues = new MutablePropertyValues(dsMap);
+                dataSourceMap.put(dsName, propertyValues);  // 数据源 dsName 的所有配置
+            }
+        }
+    }
+
+    /**
+     * 自动注册 dataSourceMap 中的所有数据源
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
+        for (String dsName : dataSourceMap.keySet()) {
+            PropertyValues pv = dataSourceMap.get(dsName);
+            DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();  // 这里并没有创建数据源, 只是依靠Spring拿到数据源类型
+            if (pv.contains("type")) {
+                String type = pv.getPropertyValue("type").getValue().toString();  // 如果指定了type, 则使用指定的数据源类型
+                try {
+                    dataSourceBuilder.type((Class<? extends DataSource>) Class.forName(type));
+                } catch (ClassNotFoundException e) {
+                    logger.error("加载数据源{}失败, 使用默认数据源");
+                }
+            }
+            // 注册
+            AnnotatedGenericBeanDefinition definition = new AnnotatedGenericBeanDefinition(dataSourceBuilder.findType());
+            registry.registerBeanDefinition(dsName, definition);
+        }
+    }
+
+    /**
+     * 把自定义数据源的属性绑定到对应的bean上
+     */
+    @Override
+    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+        // 把默认数据源设置为主数据源;
+        beanFactory.getBeanDefinition("dataSource").setPrimary(true);
+        // 设置自定义数据源的属性绑定
+        for (String dsName : dataSourceMap.keySet()) {
+            DataSource customDS = beanFactory.getBean(dsName, DataSource.class);
+            RelaxedDataBinder dataBinder = new RelaxedDataBinder(customDS);
+            dataBinder.bind(dataSourceMap.get(dsName));
+        }
+    }
+}
+~~~
 
 
 *****
