@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="对maven依赖的一些看法, 编程技术, maven, 逆水行舟" />
+    <meta name="description" content="对maven依赖的一些看法, 编程技术, maven, " />
+
+    <title>逆水行舟</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-12-23-%E5%AF%B9maven%E4%BE%9D%E8%B5%96%E7%9A%84%E4%B8%80%E4%BA%9B%E7%9C%8B%E6%B3%95.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="/static/js/jquery.qrcode.min.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="/static/js/uikit.min.js"></script>
+    <!-- quietflow -->
+    <!-- <script type="text/javascript" src="http://loveshisong.cn/static/js/quietflow.min.js"></script> -->
+    <!-- UK sticky -->
+    <script type="text/javascript" src="/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "shisong"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" data-uk-sticky>
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <script type="text/javascript">
+jQuery(function(){
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-12-23-%E5%AF%B9maven%E4%BE%9D%E8%B5%96%E7%9A%84%E4%B8%80%E4%BA%9B%E7%9C%8B%E6%B3%95.html"
+    });
+})
+</script>
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>对maven依赖的一些看法</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <hr />
+
+<ul id="markdown-toc">
+  <li><a href="#section">同一个包依赖声明两次</a></li>
+  <li><a href="#section-1">完全没有用到的包依赖</a></li>
+  <li><a href="#dependencymanagement">没有使用<code class="highlighter-rouge">dependencyManagement</code>进行包管理</a></li>
+  <li><a href="#section-2">版本管理直接声明而不是采用变量形式</a></li>
+  <li><a href="#dependencymanagementexecution">直接在<code class="highlighter-rouge">dependencyManagement</code>进行<code class="highlighter-rouge">execution</code></a></li>
+  <li><a href="#api">提供的API依赖过于庞大</a></li>
+  <li><a href="#section-3">版本管理的变量名不一致问题</a></li>
+</ul>
+
+<hr />
+
+<p>目前我们的项目大多使用<code class="highlighter-rouge">Maven</code>进行包依赖管理, 而像<code class="highlighter-rouge">pom</code>里依赖该怎么写, 我总认为这是不值得单独拿出来说, 因为这是基本功, 就像是程序员的基本素养, 大家都很熟悉, 实在没啥可说的了. 然而做过如此多的项目之后, 我发现这里却有着非常严重的问题, 写法真是千奇百怪, 简直辣眼睛, 我实在看不下去了, 就把我看到的一些现象晒出来看看, 另附上我的一些看法.</p>
+
+<h2 id="section">同一个包依赖声明两次</h2>
+
+<p><strong>现象描述</strong></p>
+
+<p>同一个<code class="highlighter-rouge">groupId</code>同一个<code class="highlighter-rouge">artifactId</code>同一个<code class="highlighter-rouge">version</code>的包在同一个pom文件里被硬生生的声明了两次!</p>
+
+<p><strong>个人看法</strong></p>
+
+<p>虽然这不会引起什么大的问题, 但显然是开发者的态度问题, 估计内容都是copy过来的, 连看都不看, copy完就不管了</p>
+
+<h2 id="section-1">完全没有用到的包依赖</h2>
+
+<p><strong>现象描述</strong></p>
+
+<p>这个没用到不是传递依赖进来的, 而是直接在<code class="highlighter-rouge">pom</code>里声明了, 但是没有使用.</p>
+
+<p><strong>个人看法</strong></p>
+
+<p>产生的原因, 有可能有以下几点:</p>
+
+<ol>
+  <li>传递依赖中版本不一致, 为了统一版本而声明; 这种产生原因是可以接受的, 但我认为也是可以避免的(比如所有的包都采用变量声明来进行版本管理, 就不会出现这样的局面).</li>
+  <li>原来使用过该包提供的功能, 后来相关代码删掉了, 忘了修改<code class="highlighter-rouge">pom</code>里的包依赖; 这种情况就尽量避免吧</li>
+  <li>不知道这个包有什么用或不知道是否能用到, 加进来再说; 呵呵, 这种情况还真有!</li>
+</ol>
+
+<h2 id="dependencymanagement">没有使用<code class="highlighter-rouge">dependencyManagement</code>进行包管理</h2>
+
+<p><strong>现象描述</strong></p>
+
+<p>完全没用<code class="highlighter-rouge">dependencyManagement</code>的情况很少, 大部分情况都是个别的包直接在<code class="highlighter-rouge">dependencies</code>中声明了依赖</p>
+
+<p><strong>个人看法</strong></p>
+
+<p>虽然看似省事儿, 但不便于管理</p>
+
+<h2 id="section-2">版本管理直接声明而不是采用变量形式</h2>
+
+<p><strong>现象描述</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">&lt;!-- 直接声明版本 --&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.google.guava<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>guava<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>20.0<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre>
+</div>
+
+<p><strong>个人看法</strong></p>
+
+<p>推荐使用变量控制版本, 强烈推荐参考<code class="highlighter-rouge">Sprint Boot</code>提供的各种<code class="highlighter-rouge">starter</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">&lt;!-- 版本通过变量统一管理 --&gt;</span>
+<span class="nt">&lt;guava.version&gt;</span>20.0<span class="nt">&lt;/guava.version&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.google.guava<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>guava<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>${guava.version}<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre>
+</div>
+
+<p>不过这样有可能引发一个问题, 用于版本管理的变量名可能不一样. 变量名尽量向<code class="highlighter-rouge">Spring Boot</code>看齐, 后面还会说到.</p>
+
+<h2 id="dependencymanagementexecution">直接在<code class="highlighter-rouge">dependencyManagement</code>进行<code class="highlighter-rouge">execution</code></h2>
+
+<p><strong>现象描述</strong></p>
+
+<p>需要排除掉某些包的时候, 直接在<code class="highlighter-rouge">dependencyManagement</code>中进行<code class="highlighter-rouge">execution</code>.</p>
+
+<p><strong>个人看法</strong></p>
+
+<p>这种情况是真是存在的, 并且我认为这是非常严重的 <strong>错误</strong>. <br />
+通常项目中有可能包含多个子模块, 我们可以统一在父<code class="highlighter-rouge">pom</code>中进行包版本管理, 在各个子模块中直接依赖某包.<br />
+假设在子模块1中因为某包的传递依赖包存在冲突而在父<code class="highlighter-rouge">pom</code>的<code class="highlighter-rouge">dependencyManagement</code>中直接把冲突的包进行<code class="highlighter-rouge">execution</code>, 那么在子模块2中使用这个包时, 就是不完整的.</p>
+
+<h2 id="api">提供的API依赖过于庞大</h2>
+
+<p><strong>现象描述</strong></p>
+
+<p>现实中总会遇到需要与其他系统交互的场景, 比如进行<code class="highlighter-rouge">RPC</code>通信. 通常情况下我们需要引入其他系统提供的<code class="highlighter-rouge">API</code>, 而不关注对方具体怎么实现. <br />
+但是所依赖的的这个第三方<code class="highlighter-rouge">API</code>的<code class="highlighter-rouge">pom</code>依赖过于庞大, 有图为证:
+<img src="/static/images/maven-api.png" alt="垃圾的API" title="垃圾的API" /></p>
+
+<p>上面那一坨东西全都是所依赖的API传递依赖进来的</p>
+
+<p><strong>个人看法</strong></p>
+
+<p>我只想说, API提供方估计是跟使用方有什么深仇大恨. 如果API里依赖了一两个其他包勉强还能接受, 但是依赖这么多, 实在是让使用方太痛苦了. <br />
+<code class="highlighter-rouge">maven</code>提供了一个可选依赖的属性<code class="highlighter-rouge">optional</code>, 值为<code class="highlighter-rouge">true</code>时表示该依赖是可选的, 不强制引入, 如果使用方要用到某包功能时, 需要自行引入.</p>
+
+<h2 id="section-3">版本管理的变量名不一致问题</h2>
+
+<p><strong>现象描述</strong></p>
+
+<p>继承某父pom是很常见的, 在<code class="highlighter-rouge">dependencyManagement</code>中<code class="highlighter-rouge">import</code>其他pom文件做版本统一管理也是一个避免依赖冲突的常用方法. 但当两个文件同时采用变量控制版本, 而变量名字不一样时, 就会出现问题. 比如, 父pom中有<code class="highlighter-rouge">&lt;com.google.guava.version&gt;18.0&lt;/com.google.guava.version&gt;</code>, 而<code class="highlighter-rouge">import</code>进来的pom文件有<code class="highlighter-rouge">&lt;guava.version&gt;20.0&lt;/guava.version&gt;</code>, 这个时候起作用的是哪个?</p>
+
+<p><strong>个人看法</strong></p>
+
+<p>对于版本控制变量的名字, 希望都向<code class="highlighter-rouge">Spring Boot</code>看齐, 如果真出现了上面的情况, 优先级是:<code class="highlighter-rouge">父pom &gt; import</code>, 也就是上面的情况实用的<code class="highlighter-rouge">guava</code>版本为18.0. 若想改成20.0, 需要使用父pom中的变量重新声明下其值;<br />
+即使父pom中为<code class="highlighter-rouge">&lt;guava.version&gt;18.0&lt;/guava.version&gt;</code>, 变量名一样, 版本不一样时, 仍是父pom起作用.</p>
+
+<hr />
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/对maven依赖的一些看法" data-title="对maven依赖的一些看法" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-12-23-%E5%AF%B9maven%E4%BE%9D%E8%B5%96%E7%9A%84%E4%B8%80%E4%BA%9B%E7%9C%8B%E6%B3%95.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
+
+</body>
+
+</html>
