@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="事务的隔离级别, 编程技术, sql, 逆水行舟" />
+    <meta name="description" content="事务的隔离级别, 编程技术, sql, " />
+
+    <title>逆水行舟</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-03-03-%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="/static/js/jquery.qrcode.min.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="/static/js/uikit.min.js"></script>
+    <!-- quietflow -->
+    <!-- <script type="text/javascript" src="http://loveshisong.cn/static/js/quietflow.min.js"></script> -->
+    <!-- UK sticky -->
+    <script type="text/javascript" src="/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "shisong"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" data-uk-sticky>
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <script type="text/javascript">
+jQuery(function(){
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-03-03-%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB.html"
+    });
+})
+</script>
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>事务的隔离级别</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <hr />
+
+<ul id="markdown-toc">
+  <li><a href="#ru">未授权读取(RU)</a></li>
+  <li><a href="#rc">授权读取(RC)</a></li>
+  <li><a href="#rr">可重复读取(RR)</a></li>
+  <li><a href="#s">串行化(S)</a></li>
+</ul>
+
+<hr />
+<p>在标准的SQL规范中，定义了4个事务隔离级别。</p>
+
+<h2 id="ru">未授权读取(RU)</h2>
+<p>未授权读取也被称作读未提交(<code class="highlighter-rouge">Read Uncommitted</code>)，这种隔离级别允许读取未提交的数据，隔离级别最低。<br />
+<code class="highlighter-rouge">RU</code>这种隔离级别中允许出现<code class="highlighter-rouge">脏读</code>(当然下面说的<code class="highlighter-rouge">不可重复读</code>和<code class="highlighter-rouge">幻读</code>更会出现)。</p>
+
+<p><code class="highlighter-rouge">脏读</code>的解释: 事务A把一数据从1<code class="highlighter-rouge">update</code>成2,<code class="highlighter-rouge">update</code>成3直到<code class="highlighter-rouge">update</code>成9, 事务B每次<code class="highlighter-rouge">select</code>都能看到事务A的中间值(比如2,3或7)，对B来说这些就是脏数据。</p>
+
+<h2 id="rc">授权读取(RC)</h2>
+<p>授权读取也被称为读已提交(<code class="highlighter-rouge">Read Committed</code>)，这种隔离级别只允许读取已经被提交的数据。<br />
+<code class="highlighter-rouge">RC</code>这种隔离级别中允许出现<code class="highlighter-rouge">不可重复读</code>  </p>
+
+<p><code class="highlighter-rouge">不可重复读</code>的解释: 事务A操作数据1, 要把它<code class="highlighter-rouge">update</code>成9, 事务B第一次<code class="highlighter-rouge">select</code>发现是1, 此时事务A提交了, 事务B再次<code class="highlighter-rouge">select</code>发现变成了9, 这种现象叫做<code class="highlighter-rouge">不可重复读</code>。 <br />
+它的危害也很明显, 因为B第一次读取的时候是1, 若果要对它进行+1在更新回去, 就会变成2, 但实际上这是不对的。(这里你不能用mysql做实验, 因为mysql不再这个隔离级别, 所以这种情况在mysql中不会发生)</p>
+
+<h2 id="rr">可重复读取(RR)</h2>
+<p>可重复读取(Repeatable Read), 这种隔离级别保证在一个事务中，多次读取到的数据都是和事务开始时是一样的。<br />
+<code class="highlighter-rouge">RR</code>这种隔离级别禁止了<code class="highlighter-rouge">脏读</code>和<code class="highlighter-rouge">不可重复读</code>, 但允许出现<code class="highlighter-rouge">幻读</code>。</p>
+
+<p><code class="highlighter-rouge">幻读</code>的解释: 其实<code class="highlighter-rouge">幻读</code>和<code class="highlighter-rouge">不可重复读</code>都属于脏数据, 只不过对<code class="highlighter-rouge">脏读</code>进行了更细一步的划分。而<code class="highlighter-rouge">幻读</code>也属于<code class="highlighter-rouge">不可重复读</code>, 只不过又进行了进一步的划分。 <code class="highlighter-rouge">幻读</code>是指在同一个事务中不同时间对同一个数据的读取可能出现不一致的结果(这貌似跟<code class="highlighter-rouge">不可重复读</code>差不多,但<code class="highlighter-rouge">不可重复读</code>说的是同一个数据的值改变了)。在<code class="highlighter-rouge">RR</code>中, 事务B读取到的数据值都是跟事务开始时一致(所以可以重复读), 但若事务A新<code class="highlighter-rouge">insert</code>了一条数据, 事务B是可见的,因此对于事务B来说，开始时没有这个数据，但是过了一会儿却多出来一条数据(数据不一致了)，因此对于事务B来说就很莫名其妙。  </p>
+
+<p>MySql就是在<code class="highlighter-rouge">RR</code>隔离级别上的, 但它在此基础上又加了<code class="highlighter-rouge">gap</code>锁, 保证了不会出现<code class="highlighter-rouge">幻读</code>。其实MySql中并没有区分<code class="highlighter-rouge">不可重复读</code>和<code class="highlighter-rouge">幻读</code>,MySql统称为<code class="highlighter-rouge">幻读</code>并且禁止了<code class="highlighter-rouge">幻读</code>现象的出现。</p>
+
+<h2 id="s">串行化(S)</h2>
+<p>串行化(Serializable)是最严格的事务隔离级别，它要求所有的事务都被串行执行。</p>
+
+<hr />
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/事务的隔离级别" data-title="事务的隔离级别" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-03-03-%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
+
+</body>
+
+</html>
