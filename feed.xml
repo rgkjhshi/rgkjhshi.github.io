@@ -5,8 +5,8 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 07 Mar 2017 15:54:54 +0800</pubDate>
-    <lastBuildDate>Tue, 07 Mar 2017 15:54:54 +0800</lastBuildDate>
+    <pubDate>Wed, 08 Mar 2017 11:58:15 +0800</pubDate>
+    <lastBuildDate>Wed, 08 Mar 2017 11:58:15 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
@@ -23,9 +23,11 @@
 &lt;hr /&gt;
 &lt;p&gt;在标准的SQL规范中，定义了4个事务隔离级别。&lt;/p&gt;
 
+&lt;p&gt;&lt;img src=&quot;/static/images/isolation.png&quot; alt=&quot;隔离级别&quot; title=&quot;隔离级别&quot; /&gt;&lt;/p&gt;
+
 &lt;h2 id=&quot;ru&quot;&gt;未授权读取(RU)&lt;/h2&gt;
 &lt;p&gt;未授权读取也被称作读未提交(&lt;code class=&quot;highlighter-rouge&quot;&gt;Read Uncommitted&lt;/code&gt;)，这种隔离级别允许读取未提交的数据，隔离级别最低。&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;RU&lt;/code&gt;这种隔离级别中允许出现&lt;code class=&quot;highlighter-rouge&quot;&gt;脏读&lt;/code&gt;(当然下面说的&lt;code class=&quot;highlighter-rouge&quot;&gt;不可重复读&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;幻读&lt;/code&gt;更会出现)。&lt;/p&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;RU&lt;/code&gt;这种隔离级别中允许出现&lt;code class=&quot;highlighter-rouge&quot;&gt;脏读&lt;/code&gt;。&lt;/p&gt;
 
 &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;脏读&lt;/code&gt;的解释: 事务A把一数据从1&lt;code class=&quot;highlighter-rouge&quot;&gt;update&lt;/code&gt;成2,&lt;code class=&quot;highlighter-rouge&quot;&gt;update&lt;/code&gt;成3直到&lt;code class=&quot;highlighter-rouge&quot;&gt;update&lt;/code&gt;成9, 事务B每次&lt;code class=&quot;highlighter-rouge&quot;&gt;select&lt;/code&gt;都能看到事务A的中间值(比如2,3或7)，对B来说这些就是脏数据。&lt;/p&gt;
 

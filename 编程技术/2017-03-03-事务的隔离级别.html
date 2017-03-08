@@ -111,9 +111,11 @@ jQuery(function(){
 <hr />
 <p>在标准的SQL规范中，定义了4个事务隔离级别。</p>
 
+<p><img src="/static/images/isolation.png" alt="隔离级别" title="隔离级别" /></p>
+
 <h2 id="ru">未授权读取(RU)</h2>
 <p>未授权读取也被称作读未提交(<code class="highlighter-rouge">Read Uncommitted</code>)，这种隔离级别允许读取未提交的数据，隔离级别最低。<br />
-<code class="highlighter-rouge">RU</code>这种隔离级别中允许出现<code class="highlighter-rouge">脏读</code>(当然下面说的<code class="highlighter-rouge">不可重复读</code>和<code class="highlighter-rouge">幻读</code>更会出现)。</p>
+<code class="highlighter-rouge">RU</code>这种隔离级别中允许出现<code class="highlighter-rouge">脏读</code>。</p>
 
 <p><code class="highlighter-rouge">脏读</code>的解释: 事务A把一数据从1<code class="highlighter-rouge">update</code>成2,<code class="highlighter-rouge">update</code>成3直到<code class="highlighter-rouge">update</code>成9, 事务B每次<code class="highlighter-rouge">select</code>都能看到事务A的中间值(比如2,3或7)，对B来说这些就是脏数据。</p>
 
