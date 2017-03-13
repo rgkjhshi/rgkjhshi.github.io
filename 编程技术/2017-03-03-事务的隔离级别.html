@@ -115,22 +115,23 @@ jQuery(function(){
 
 <h2 id="ru">未授权读取(RU)</h2>
 <p>未授权读取也被称作读未提交(<code class="highlighter-rouge">Read Uncommitted</code>)，这种隔离级别允许读取未提交的数据，隔离级别最低。<br />
-<code class="highlighter-rouge">RU</code>这种隔离级别中允许出现<code class="highlighter-rouge">脏读</code>。</p>
+<code class="highlighter-rouge">RU</code>这种隔离级别中，允许<code class="highlighter-rouge">脏读</code>, 但不允许出现<code class="highlighter-rouge">丢失更新</code>。  </p>
 
-<p><code class="highlighter-rouge">脏读</code>的解释: 事务A把一数据从1<code class="highlighter-rouge">update</code>成2,<code class="highlighter-rouge">update</code>成3直到<code class="highlighter-rouge">update</code>成9, 事务B每次<code class="highlighter-rouge">select</code>都能看到事务A的中间值(比如2,3或7)，对B来说这些就是脏数据。</p>
+<p><code class="highlighter-rouge">丢失更新</code>: 两个事务同时更新统一数据时, 会发生更新丢失。<br />
+<code class="highlighter-rouge">脏读</code>: 一个事务读取到另一个事务未提交的修改时, 会产生脏读。如:事务A把一数据从1<code class="highlighter-rouge">update</code>成2,<code class="highlighter-rouge">update</code>成3直到<code class="highlighter-rouge">update</code>成9, 事务B每次<code class="highlighter-rouge">select</code>都能看到事务A的中间值(比如2,3或7)，对B来说这些就是脏数据。</p>
 
 <h2 id="rc">授权读取(RC)</h2>
 <p>授权读取也被称为读已提交(<code class="highlighter-rouge">Read Committed</code>)，这种隔离级别只允许读取已经被提交的数据。<br />
-<code class="highlighter-rouge">RC</code>这种隔离级别中允许出现<code class="highlighter-rouge">不可重复读</code>  </p>
+<code class="highlighter-rouge">RC</code>这种隔离级别中允许出现<code class="highlighter-rouge">不可重复读</code>, 但不允许<code class="highlighter-rouge">脏读</code>  </p>
 
-<p><code class="highlighter-rouge">不可重复读</code>的解释: 事务A操作数据1, 要把它<code class="highlighter-rouge">update</code>成9, 事务B第一次<code class="highlighter-rouge">select</code>发现是1, 此时事务A提交了, 事务B再次<code class="highlighter-rouge">select</code>发现变成了9, 这种现象叫做<code class="highlighter-rouge">不可重复读</code>。 <br />
+<p><code class="highlighter-rouge">不可重复读</code>: 同一查询在同一事务中多次进行，由于其他提交事务所做的 <strong>修改或删除</strong>，每次返回不同的结果集，这就发生非重复读。 如:事务A操作数据1, 要把它<code class="highlighter-rouge">update</code>成9, 事务B第一次<code class="highlighter-rouge">select</code>发现是1, 此时事务A提交了, 事务B再次<code class="highlighter-rouge">select</code>发现变成了9, 这种现象叫做<code class="highlighter-rouge">不可重复读</code>。 <br />
 它的危害也很明显, 因为B第一次读取的时候是1, 若果要对它进行+1在更新回去, 就会变成2, 但实际上这是不对的。(这里你不能用mysql做实验, 因为mysql不再这个隔离级别, 所以这种情况在mysql中不会发生)</p>
 
 <h2 id="rr">可重复读取(RR)</h2>
 <p>可重复读取(Repeatable Read), 这种隔离级别保证在一个事务中，多次读取到的数据都是和事务开始时是一样的。<br />
-<code class="highlighter-rouge">RR</code>这种隔离级别禁止了<code class="highlighter-rouge">脏读</code>和<code class="highlighter-rouge">不可重复读</code>, 但允许出现<code class="highlighter-rouge">幻读</code>。</p>
+<code class="highlighter-rouge">RR</code>这种隔离级别允许出现<code class="highlighter-rouge">幻读</code>，但不允许<code class="highlighter-rouge">不可重复读</code>。</p>
 
-<p><code class="highlighter-rouge">幻读</code>的解释: 其实<code class="highlighter-rouge">幻读</code>和<code class="highlighter-rouge">不可重复读</code>都属于脏数据, 只不过对<code class="highlighter-rouge">脏读</code>进行了更细一步的划分。而<code class="highlighter-rouge">幻读</code>也属于<code class="highlighter-rouge">不可重复读</code>, 只不过又进行了进一步的划分。 <code class="highlighter-rouge">幻读</code>是指在同一个事务中不同时间对同一个数据的读取可能出现不一致的结果(这貌似跟<code class="highlighter-rouge">不可重复读</code>差不多,但<code class="highlighter-rouge">不可重复读</code>说的是同一个数据的值改变了)。在<code class="highlighter-rouge">RR</code>中, 事务B读取到的数据值都是跟事务开始时一致(所以可以重复读), 但若事务A新<code class="highlighter-rouge">insert</code>了一条数据, 事务B是可见的,因此对于事务B来说，开始时没有这个数据，但是过了一会儿却多出来一条数据(数据不一致了)，因此对于事务B来说就很莫名其妙。  </p>
+<p><code class="highlighter-rouge">幻读</code>: 同一查询在同一事务中多次进行，由于其他提交事务所做的 <strong>插入</strong> 操作，每次返回不同的结果集，此时发生幻像读。在<code class="highlighter-rouge">RR</code>中, 事务B读取到的数据值都是跟事务开始时一致(所以可以重复读), 但若事务A新<code class="highlighter-rouge">insert</code>了一条数据, 事务B是可见的, 因此对于事务B来说，开始时没有这个数据，但是过了一会儿却多出来一条数据(数据不一致了)，因此对于事务B来说就很莫名其妙。  </p>
 
 <p>MySql就是在<code class="highlighter-rouge">RR</code>隔离级别上的, 但它在此基础上又加了<code class="highlighter-rouge">gap</code>锁, 保证了不会出现<code class="highlighter-rouge">幻读</code>。其实MySql中并没有区分<code class="highlighter-rouge">不可重复读</code>和<code class="highlighter-rouge">幻读</code>,MySql统称为<code class="highlighter-rouge">幻读</code>并且禁止了<code class="highlighter-rouge">幻读</code>现象的出现。</p>
 

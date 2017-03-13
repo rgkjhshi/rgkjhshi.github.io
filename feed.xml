@@ -5,9 +5,210 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 08 Mar 2017 11:58:15 +0800</pubDate>
-    <lastBuildDate>Wed, 08 Mar 2017 11:58:15 +0800</lastBuildDate>
+    <pubDate>Mon, 13 Mar 2017 14:26:18 +0800</pubDate>
+    <lastBuildDate>Mon, 13 Mar 2017 14:26:18 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>HashMap详解</title>
+        <description>&lt;p&gt;本文是以&lt;code class=&quot;highlighter-rouge&quot;&gt;JDK7&lt;/code&gt;中的&lt;code class=&quot;highlighter-rouge&quot;&gt;HashMap&lt;/code&gt;进行介绍, 先整体介绍, 再单独介绍一些具体的点&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;存储结构&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;构造函数&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;需要知道的概念&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#hash&quot;&gt;关于hash&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#bucketindex&quot;&gt;计算桶坐标:bucketIndex&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#put&quot;&gt;添加元素 put&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#modcount&quot;&gt;关于 modCount&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;存储结构&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;HashMap&lt;/code&gt;的数据结构是数组加链表的形式。结构大体如下:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/HashMap.png&quot; alt=&quot;HashMap结构图&quot; title=&quot;HashMap结构图&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;HashMap&lt;/code&gt;类中有个&lt;code class=&quot;highlighter-rouge&quot;&gt;table&lt;/code&gt;属性, 是一个数组, 数组元素类型为&lt;code class=&quot;highlighter-rouge&quot;&gt;Entry&lt;/code&gt;(内部类), 而&lt;code class=&quot;highlighter-rouge&quot;&gt;Entry&lt;/code&gt;有&lt;code class=&quot;highlighter-rouge&quot;&gt;key, value, next, hash&lt;/code&gt;四个属性。&lt;br /&gt;
+一般&lt;code class=&quot;highlighter-rouge&quot;&gt;table&lt;/code&gt;数组的每个位置我们称为&lt;code class=&quot;highlighter-rouge&quot;&gt;bucket&lt;/code&gt;, 下标称为&lt;code class=&quot;highlighter-rouge&quot;&gt;bucketIndex&lt;/code&gt;, 即每一个位置表示一个&lt;code class=&quot;highlighter-rouge&quot;&gt;桶&lt;/code&gt;, 同一个桶中的&lt;code class=&quot;highlighter-rouge&quot;&gt;Entry&lt;/code&gt;元素&lt;code class=&quot;highlighter-rouge&quot;&gt;hash&lt;/code&gt;值相同(&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;除外, 后面说)&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;构造函数&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;HashMap(int initialCapacity, float loadFactor)&lt;/code&gt;: 指定初始容量和负载因子&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;HashMap(int initialCapacity)&lt;/code&gt;: 指定初始容量, 使用默认负载因子&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;HashMap()&lt;/code&gt;: 使用默认初始容量和负载因子&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;HashMap(Map&amp;lt;? extends K, ? extends V&amp;gt; m)&lt;/code&gt;: 通过另一个map初始化, 容量取&lt;code class=&quot;highlighter-rouge&quot;&gt;m.size() / DEFAULT_LOAD_FACTOR) + 1&lt;/code&gt;与默认初始容量两者较大的那个,使用默认负载因子&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;需要知道的概念&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;HashMap&lt;/code&gt;中有几个概念, 还有几个&lt;code class=&quot;highlighter-rouge&quot;&gt;成员属性&lt;/code&gt;, 需要了解它们的意义:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;容量&lt;/code&gt;: &lt;code class=&quot;highlighter-rouge&quot;&gt;table&lt;/code&gt;数组的大小(&lt;code class=&quot;highlighter-rouge&quot;&gt;table.length&lt;/code&gt;), 并没有一个属性来描述, 内部用&lt;code class=&quot;highlighter-rouge&quot;&gt;capacity()&lt;/code&gt;函数来获取数组大小. 默认初始容量&lt;code class=&quot;highlighter-rouge&quot;&gt;DEFAULT_INITIAL_CAPACITY&lt;/code&gt;为16, 每次扩容都扩大2倍.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;size&lt;/code&gt;: 该属性表示&lt;code class=&quot;highlighter-rouge&quot;&gt;key-value&lt;/code&gt;对的元素个数, 即每新增一个&lt;code class=&quot;highlighter-rouge&quot;&gt;Entry&lt;/code&gt;会加1, 每减少一个 &lt;code class=&quot;highlighter-rouge&quot;&gt;Entry&lt;/code&gt;会减1&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;loadFactor&lt;/code&gt;: 负载因子, 这相当于一个系数, 用于计算&lt;code class=&quot;highlighter-rouge&quot;&gt;threshold&lt;/code&gt;. 默认负载因子&lt;code class=&quot;highlighter-rouge&quot;&gt;DEFAULT_LOAD_FACTOR&lt;/code&gt;为0.75&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;threshold&lt;/code&gt;: 阈值, 当&lt;code class=&quot;highlighter-rouge&quot;&gt;size&lt;/code&gt;达到该阈值, 就需要扩容. 该阈值由&lt;code class=&quot;highlighter-rouge&quot;&gt;capacity * loadFactor&lt;/code&gt;计算得到.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;modCount&lt;/code&gt;: 该属性可理解为对该map所做的修改次数, 比如增加或者减少一个&lt;code class=&quot;highlighter-rouge&quot;&gt;Entry&lt;/code&gt;都会加1(&lt;code class=&quot;highlighter-rouge&quot;&gt;size&lt;/code&gt;会变少, &lt;code class=&quot;highlighter-rouge&quot;&gt;modCount&lt;/code&gt;只会变大)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;hash&quot;&gt;关于hash&lt;/h2&gt;
+&lt;p&gt;既然是&lt;code class=&quot;highlighter-rouge&quot;&gt;HashMap&lt;/code&gt;, 一定避免不了hash. &lt;code class=&quot;highlighter-rouge&quot;&gt;Object&lt;/code&gt;都有&lt;code class=&quot;highlighter-rouge&quot;&gt;hashCode()&lt;/code&gt;函数, 但在&lt;code class=&quot;highlighter-rouge&quot;&gt;HashMap&lt;/code&gt;又提供了一个辅助哈希函数&lt;code class=&quot;highlighter-rouge&quot;&gt;hash(Object k)&lt;/code&gt;, 这个函数在&lt;code class=&quot;highlighter-rouge&quot;&gt;JDK7&lt;/code&gt;与&lt;code class=&quot;highlighter-rouge&quot;&gt;JDK8&lt;/code&gt;中不同. 当&lt;code class=&quot;highlighter-rouge&quot;&gt;key&lt;/code&gt;为&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;时, 是没有&lt;code class=&quot;highlighter-rouge&quot;&gt;hashCode()&lt;/code&gt;的, 因此要单独处理. &lt;code class=&quot;highlighter-rouge&quot;&gt;JDK7&lt;/code&gt;中有专门的&lt;code class=&quot;highlighter-rouge&quot;&gt;putForNullKey()&lt;/code&gt;函数来把&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;放在下标为0的&lt;code class=&quot;highlighter-rouge&quot;&gt;bucket&lt;/code&gt;中; 而&lt;code class=&quot;highlighter-rouge&quot;&gt;JDK8&lt;/code&gt;直接在辅助哈希函数&lt;code class=&quot;highlighter-rouge&quot;&gt;hash()&lt;/code&gt;中把&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;的哈希值设置为0.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;c1&quot;&gt;// JDK7&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hashSeed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sun&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;misc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Hashing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;stringHash32&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+        &lt;span class=&quot;n&quot;&gt;h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;^=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;hashCode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+
+        &lt;span class=&quot;c1&quot;&gt;// This function ensures that hashCodes that differ only by&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// constant multiples at each bit position have a bounded&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// number of collisions (approximately 8 at default load factor).&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;^=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;^&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;^&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;^&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+   &lt;span class=&quot;c1&quot;&gt;// JDK8&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;h&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;hashCode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;^&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;bucketindex&quot;&gt;计算桶坐标:bucketIndex&lt;/h2&gt;
+&lt;p&gt;这一步是用来计算数组下标(即应放到那个&lt;code class=&quot;highlighter-rouge&quot;&gt;bucket&lt;/code&gt;中)的。 但是这一步很关键，也正好解释了很多问题，如:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;为什么初始容量&lt;code class=&quot;highlighter-rouge&quot;&gt;DEFAULT_INITIAL_CAPACITY&lt;/code&gt;为16?&lt;/li&gt;
+  &lt;li&gt;为什么扩容的时候是2倍扩容?&lt;/li&gt;
+  &lt;li&gt;为什么容量总是2的次幂?(构造函数里传的初始容量为40, 最后得到的容量为64, 必须是2的次幂)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;计算数组下标的函数如下:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hash&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 辅助哈希函数&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;indexFor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 求桶坐标的函数&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// 具体实现&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;indexFor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;h&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// assert Integer.bitCount(length) == 1 : &quot;length must be a non-zero power of 2&quot;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;h&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;正常来讲, 哈希值的索引一般通过&lt;code class=&quot;highlighter-rouge&quot;&gt;index = h % length&lt;/code&gt;计算, 但是若&lt;code class=&quot;highlighter-rouge&quot;&gt;length&lt;/code&gt;总是2的整数次幂, 就可以通过位运算&lt;code class=&quot;highlighter-rouge&quot;&gt;h &amp;amp; (length-1)&lt;/code&gt;来优化.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;put&quot;&gt;添加元素 put&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;刚创建的&lt;code class=&quot;highlighter-rouge&quot;&gt;HashMap&lt;/code&gt;中的&lt;code class=&quot;highlighter-rouge&quot;&gt;table&lt;/code&gt;是空的(&lt;code class=&quot;highlighter-rouge&quot;&gt;EMPTY_TABLE&lt;/code&gt;), 真正添加元素的时候才回分配空间&lt;/li&gt;
+  &lt;li&gt;添加元素时, 如果&lt;code class=&quot;highlighter-rouge&quot;&gt;key&lt;/code&gt;一样, 会替换掉原来&lt;code class=&quot;highlighter-rouge&quot;&gt;Entry&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;value&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;添加元素时, 有可能涉及到扩容&lt;/li&gt;
+  &lt;li&gt;新添加的元素位于链表头, 即&lt;code class=&quot;highlighter-rouge&quot;&gt;table[bucketIndex]&lt;/code&gt;的位置&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;c1&quot;&gt;// JDK7 put方法&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;V&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;K&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;V&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// 如果数组是空的, 需要根据初始容量来扩张. 默认构造函数中, threshold=initialCapacity&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;table&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;EMPTY_TABLE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;inflateTable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;threshold&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// table大小为: a power of 2 &amp;gt;= threshold&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;putForNullKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// null 放到 table[0] 的位置&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hash&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;indexFor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 通过位运算得到桶的位置&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Entry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 这个循环里, 处理该key已经存在的情况&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;hash&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hash&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;equals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;V&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;oldValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;recordAccess&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;oldValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 返回被替换掉的值&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;modCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 修改次数增加&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;addEntry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 真正的添加元素&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// 添加元素的函数&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;addEntry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;K&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;V&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bucketIndex&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// 这就是需要扩容的条件(扩容的条件有2个)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;threshold&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bucketIndex&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;resize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 扩容是在这里进行的&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;hash&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;bucketIndex&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;indexFor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 扩容后重新计算桶的位置&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// 新创建一个元素并添加到 bucketIndex 位置&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;createEntry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bucketIndex&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;createEntry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;K&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;V&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bucketIndex&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Entry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bucketIndex&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bucketIndex&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Entry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 放到链表头&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 元素数量+1&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;modcount&quot;&gt;关于 modCount&lt;/h2&gt;
+&lt;p&gt;平时使用&lt;code class=&quot;highlighter-rouge&quot;&gt;HashMap&lt;/code&gt;遇到过的一个异常是&lt;code class=&quot;highlighter-rouge&quot;&gt;ConcurrentModificationException&lt;/code&gt;. 这种情况是因为在使用迭代器的过程中, 增加或者删除了元素, 导致&lt;code class=&quot;highlighter-rouge&quot;&gt;modCount&lt;/code&gt;变化导致的. 原因就在迭代器中:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// 迭代器构造方法&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;HashIterator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;expectedModCount&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;modCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 创建迭代器的时候expectedModCount=modCount, 不相等的时候快速失败&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// advance to first entry&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Entry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;next&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 这里第一个有元素的桶(index为桶坐标)&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 迭代器找下一个元素方法&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Entry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nextEntry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;modCount&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expectedModCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 在这里抛出异常, 快速失败&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ConcurrentModificationException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Entry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;NoSuchElementException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;next&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 如果 e.next是null, 就到了链表尾, 此时应该找下一个桶中的元素&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;Entry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;next&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 下一个有元素的桶&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;current&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;hr /&gt;
+</description>
+        <pubDate>Wed, 08 Mar 2017 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-03-08-HashMap%E8%AF%A6%E8%A7%A3.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-03-08-HashMap%E8%AF%A6%E8%A7%A3.html</guid>
+        
+        <category>Java</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
     
       <item>
         <title>事务的隔离级别</title>
@@ -27,22 +228,23 @@
 
 &lt;h2 id=&quot;ru&quot;&gt;未授权读取(RU)&lt;/h2&gt;
 &lt;p&gt;未授权读取也被称作读未提交(&lt;code class=&quot;highlighter-rouge&quot;&gt;Read Uncommitted&lt;/code&gt;)，这种隔离级别允许读取未提交的数据，隔离级别最低。&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;RU&lt;/code&gt;这种隔离级别中允许出现&lt;code class=&quot;highlighter-rouge&quot;&gt;脏读&lt;/code&gt;。&lt;/p&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;RU&lt;/code&gt;这种隔离级别中，允许&lt;code class=&quot;highlighter-rouge&quot;&gt;脏读&lt;/code&gt;, 但不允许出现&lt;code class=&quot;highlighter-rouge&quot;&gt;丢失更新&lt;/code&gt;。  &lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;脏读&lt;/code&gt;的解释: 事务A把一数据从1&lt;code class=&quot;highlighter-rouge&quot;&gt;update&lt;/code&gt;成2,&lt;code class=&quot;highlighter-rouge&quot;&gt;update&lt;/code&gt;成3直到&lt;code class=&quot;highlighter-rouge&quot;&gt;update&lt;/code&gt;成9, 事务B每次&lt;code class=&quot;highlighter-rouge&quot;&gt;select&lt;/code&gt;都能看到事务A的中间值(比如2,3或7)，对B来说这些就是脏数据。&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;丢失更新&lt;/code&gt;: 两个事务同时更新统一数据时, 会发生更新丢失。&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;脏读&lt;/code&gt;: 一个事务读取到另一个事务未提交的修改时, 会产生脏读。如:事务A把一数据从1&lt;code class=&quot;highlighter-rouge&quot;&gt;update&lt;/code&gt;成2,&lt;code class=&quot;highlighter-rouge&quot;&gt;update&lt;/code&gt;成3直到&lt;code class=&quot;highlighter-rouge&quot;&gt;update&lt;/code&gt;成9, 事务B每次&lt;code class=&quot;highlighter-rouge&quot;&gt;select&lt;/code&gt;都能看到事务A的中间值(比如2,3或7)，对B来说这些就是脏数据。&lt;/p&gt;
 
 &lt;h2 id=&quot;rc&quot;&gt;授权读取(RC)&lt;/h2&gt;
 &lt;p&gt;授权读取也被称为读已提交(&lt;code class=&quot;highlighter-rouge&quot;&gt;Read Committed&lt;/code&gt;)，这种隔离级别只允许读取已经被提交的数据。&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;RC&lt;/code&gt;这种隔离级别中允许出现&lt;code class=&quot;highlighter-rouge&quot;&gt;不可重复读&lt;/code&gt;  &lt;/p&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;RC&lt;/code&gt;这种隔离级别中允许出现&lt;code class=&quot;highlighter-rouge&quot;&gt;不可重复读&lt;/code&gt;, 但不允许&lt;code class=&quot;highlighter-rouge&quot;&gt;脏读&lt;/code&gt;  &lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;不可重复读&lt;/code&gt;的解释: 事务A操作数据1, 要把它&lt;code class=&quot;highlighter-rouge&quot;&gt;update&lt;/code&gt;成9, 事务B第一次&lt;code class=&quot;highlighter-rouge&quot;&gt;select&lt;/code&gt;发现是1, 此时事务A提交了, 事务B再次&lt;code class=&quot;highlighter-rouge&quot;&gt;select&lt;/code&gt;发现变成了9, 这种现象叫做&lt;code class=&quot;highlighter-rouge&quot;&gt;不可重复读&lt;/code&gt;。 &lt;br /&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;不可重复读&lt;/code&gt;: 同一查询在同一事务中多次进行，由于其他提交事务所做的 &lt;strong&gt;修改或删除&lt;/strong&gt;，每次返回不同的结果集，这就发生非重复读。 如:事务A操作数据1, 要把它&lt;code class=&quot;highlighter-rouge&quot;&gt;update&lt;/code&gt;成9, 事务B第一次&lt;code class=&quot;highlighter-rouge&quot;&gt;select&lt;/code&gt;发现是1, 此时事务A提交了, 事务B再次&lt;code class=&quot;highlighter-rouge&quot;&gt;select&lt;/code&gt;发现变成了9, 这种现象叫做&lt;code class=&quot;highlighter-rouge&quot;&gt;不可重复读&lt;/code&gt;。 &lt;br /&gt;
 它的危害也很明显, 因为B第一次读取的时候是1, 若果要对它进行+1在更新回去, 就会变成2, 但实际上这是不对的。(这里你不能用mysql做实验, 因为mysql不再这个隔离级别, 所以这种情况在mysql中不会发生)&lt;/p&gt;
 
 &lt;h2 id=&quot;rr&quot;&gt;可重复读取(RR)&lt;/h2&gt;
 &lt;p&gt;可重复读取(Repeatable Read), 这种隔离级别保证在一个事务中，多次读取到的数据都是和事务开始时是一样的。&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;RR&lt;/code&gt;这种隔离级别禁止了&lt;code class=&quot;highlighter-rouge&quot;&gt;脏读&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;不可重复读&lt;/code&gt;, 但允许出现&lt;code class=&quot;highlighter-rouge&quot;&gt;幻读&lt;/code&gt;。&lt;/p&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;RR&lt;/code&gt;这种隔离级别允许出现&lt;code class=&quot;highlighter-rouge&quot;&gt;幻读&lt;/code&gt;，但不允许&lt;code class=&quot;highlighter-rouge&quot;&gt;不可重复读&lt;/code&gt;。&lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;幻读&lt;/code&gt;的解释: 其实&lt;code class=&quot;highlighter-rouge&quot;&gt;幻读&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;不可重复读&lt;/code&gt;都属于脏数据, 只不过对&lt;code class=&quot;highlighter-rouge&quot;&gt;脏读&lt;/code&gt;进行了更细一步的划分。而&lt;code class=&quot;highlighter-rouge&quot;&gt;幻读&lt;/code&gt;也属于&lt;code class=&quot;highlighter-rouge&quot;&gt;不可重复读&lt;/code&gt;, 只不过又进行了进一步的划分。 &lt;code class=&quot;highlighter-rouge&quot;&gt;幻读&lt;/code&gt;是指在同一个事务中不同时间对同一个数据的读取可能出现不一致的结果(这貌似跟&lt;code class=&quot;highlighter-rouge&quot;&gt;不可重复读&lt;/code&gt;差不多,但&lt;code class=&quot;highlighter-rouge&quot;&gt;不可重复读&lt;/code&gt;说的是同一个数据的值改变了)。在&lt;code class=&quot;highlighter-rouge&quot;&gt;RR&lt;/code&gt;中, 事务B读取到的数据值都是跟事务开始时一致(所以可以重复读), 但若事务A新&lt;code class=&quot;highlighter-rouge&quot;&gt;insert&lt;/code&gt;了一条数据, 事务B是可见的,因此对于事务B来说，开始时没有这个数据，但是过了一会儿却多出来一条数据(数据不一致了)，因此对于事务B来说就很莫名其妙。  &lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;幻读&lt;/code&gt;: 同一查询在同一事务中多次进行，由于其他提交事务所做的 &lt;strong&gt;插入&lt;/strong&gt; 操作，每次返回不同的结果集，此时发生幻像读。在&lt;code class=&quot;highlighter-rouge&quot;&gt;RR&lt;/code&gt;中, 事务B读取到的数据值都是跟事务开始时一致(所以可以重复读), 但若事务A新&lt;code class=&quot;highlighter-rouge&quot;&gt;insert&lt;/code&gt;了一条数据, 事务B是可见的, 因此对于事务B来说，开始时没有这个数据，但是过了一会儿却多出来一条数据(数据不一致了)，因此对于事务B来说就很莫名其妙。  &lt;/p&gt;
 
 &lt;p&gt;MySql就是在&lt;code class=&quot;highlighter-rouge&quot;&gt;RR&lt;/code&gt;隔离级别上的, 但它在此基础上又加了&lt;code class=&quot;highlighter-rouge&quot;&gt;gap&lt;/code&gt;锁, 保证了不会出现&lt;code class=&quot;highlighter-rouge&quot;&gt;幻读&lt;/code&gt;。其实MySql中并没有区分&lt;code class=&quot;highlighter-rouge&quot;&gt;不可重复读&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;幻读&lt;/code&gt;,MySql统称为&lt;code class=&quot;highlighter-rouge&quot;&gt;幻读&lt;/code&gt;并且禁止了&lt;code class=&quot;highlighter-rouge&quot;&gt;幻读&lt;/code&gt;现象的出现。&lt;/p&gt;
 
@@ -1070,156 +1272,6 @@ afterInitialization
         <pubDate>Thu, 17 Nov 2016 00:00:00 +0800</pubDate>
         <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-17-Spring-boot%E4%B8%8EHttpMessageConverter.html</link>
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-17-Spring-boot%E4%B8%8EHttpMessageConverter.html</guid>
-        
-        <category>Spring</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>Servlet详解</title>
-        <description>&lt;hr /&gt;
-
-&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#servlet&quot;&gt;Servlet&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#servlet-1&quot;&gt;Servlet生命周期&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#servlet-2&quot;&gt;Servlet配置&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#servletconfig&quot;&gt;ServletConfig&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#servletcontext&quot;&gt;ServletContext&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#filter&quot;&gt;Filter&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#filter-1&quot;&gt;Filter生命周期&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#decorator&quot;&gt;装饰器模式(decorator)&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#listener&quot;&gt;Listener&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#servlet-3&quot;&gt;Servlet监听器&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;servlet&quot;&gt;Servlet&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;是Sun公司提供的用于web开发的接口, 我们一般把实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;接口的程序称为&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;程序&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;应该由web服务器调用(比如通过配置&lt;code class=&quot;highlighter-rouge&quot;&gt;web.xml&lt;/code&gt;), 自己不能独立运行&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;接口有两个实现类&lt;code class=&quot;highlighter-rouge&quot;&gt;HttpServlet --&amp;gt; GenericServlet&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;HttpServlet&lt;/code&gt;重写了&lt;code class=&quot;highlighter-rouge&quot;&gt;service&lt;/code&gt;方法, 根据请求方式自动调用&lt;code class=&quot;highlighter-rouge&quot;&gt;doGet&lt;/code&gt;或&lt;code class=&quot;highlighter-rouge&quot;&gt;doPost&lt;/code&gt;方法, 我们一般继承这个类, 重写&lt;code class=&quot;highlighter-rouge&quot;&gt;doGet、doPost&lt;/code&gt;即可.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;servlet-1&quot;&gt;Servlet生命周期&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&quot;/static/images/servlet.png&quot; alt=&quot;Servlet生命周期&quot; title=&quot;Servlet生命周期&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;如图:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;图中画出的是第一次请求&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;的情况, 若对应的&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;对象还没被创建, 则创建&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;对象&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;对象只初始化一次, 只会执行一次&lt;code class=&quot;highlighter-rouge&quot;&gt;init()&lt;/code&gt;方法, &lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;初始化好之后, 新请求将直接到第5步&lt;/li&gt;
-  &lt;li&gt;第2步中解析出的应用对应&lt;code class=&quot;highlighter-rouge&quot;&gt;getContextPath&lt;/code&gt;, 资源对应&lt;code class=&quot;highlighter-rouge&quot;&gt;getServletPath&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;图中没画出&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;的消亡, &lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;对象被创建后常驻内存, 继续为其他请求服务; web应用停止前调用&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;destroy()&lt;/code&gt;方法, &lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;生命周期才结束&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;servlet-2&quot;&gt;Servlet配置&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;上面的&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;是有第一个请求时被创建, 可以在&lt;code class=&quot;highlighter-rouge&quot;&gt;web.xml&lt;/code&gt;中通过&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;load-on-startup&amp;gt;&lt;/code&gt;元素指定在web容器启动时就直接初始化&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;所映射的URL由&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;servlet-mapping&amp;gt;&lt;/code&gt;里的&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;url-pattern&amp;gt;&lt;/code&gt;指定, 它只有两个固定格式:
-    &lt;ol&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;*.扩展名&lt;/code&gt;, 如: &lt;code class=&quot;highlighter-rouge&quot;&gt;*.do&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;以&lt;code class=&quot;highlighter-rouge&quot;&gt;/&lt;/code&gt;开头(并以&lt;code class=&quot;highlighter-rouge&quot;&gt;/*&lt;/code&gt;结尾), 如: &lt;code class=&quot;highlighter-rouge&quot;&gt;/abc&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;/abc/*&lt;/code&gt;&lt;/li&gt;
-    &lt;/ol&gt;
-  &lt;/li&gt;
-  &lt;li&gt;URL映射以最精确的为准, 请求&lt;code class=&quot;highlighter-rouge&quot;&gt;/abc&lt;/code&gt;时, 映射&lt;code class=&quot;highlighter-rouge&quot;&gt;/abc&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;/abc/*&lt;/code&gt;都可以匹配, 但优先选择&lt;code class=&quot;highlighter-rouge&quot;&gt;/abc&lt;/code&gt;; 请求&lt;code class=&quot;highlighter-rouge&quot;&gt;/a.do&lt;/code&gt;时,
-&lt;code class=&quot;highlighter-rouge&quot;&gt;/*&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;*.do&lt;/code&gt;都可以匹配, 但优先选择&lt;code class=&quot;highlighter-rouge&quot;&gt;/*&lt;/code&gt;(即&lt;code class=&quot;highlighter-rouge&quot;&gt;/*&lt;/code&gt;优先级高于&lt;code class=&quot;highlighter-rouge&quot;&gt;*.do&lt;/code&gt;)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;servletconfig&quot;&gt;ServletConfig&lt;/h3&gt;
-&lt;p&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;web.xml&lt;/code&gt;中可以使用&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;init-param&amp;gt;&lt;/code&gt;标签为&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;配置一些参数. &lt;code class=&quot;highlighter-rouge&quot;&gt;HttpServlet&lt;/code&gt;类也实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletConfig&lt;/code&gt;接口, 在创建&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;对象时先把参数封装到&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletConfig&lt;/code&gt;对象中, 在调用&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;init&lt;/code&gt;方法时把&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletConfig&lt;/code&gt;对象传给&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;类中, 我们可以获取&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletConfig&lt;/code&gt;中的参数&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;ServletConfig&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;config&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getServletConfig&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 这个方法继承自GenericServlet&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getInitParameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;charset&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 这可获取我们配置的参数&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;servletcontext&quot;&gt;ServletContext&lt;/h3&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletContext&lt;/code&gt;表示应用的上下文, 在Web容器在启动时, 会为每个Web应用程序都创建一个对应的&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletContext&lt;/code&gt;对象, 一个应用只有一个&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletContext&lt;/code&gt;对象, 被所有的&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;共享.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletContext&lt;/code&gt;的属性可以通过&lt;code class=&quot;highlighter-rouge&quot;&gt;web.xml&lt;/code&gt;中的&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;context-param&amp;gt;&lt;/code&gt;标签来指定, 在程序中可以这样获取这些属性:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// ServletConfig 里维护了 ServletContext 对象的引用&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;ServletContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getServletConfig&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getServletContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// 因为 Servlet类实现了 ServletConfig 接口, 所以也可以直接获取&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;ServletContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getServletContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// 获取属性&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getAttribute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;data&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// 获取 &amp;lt;display-name&amp;gt; 标签配置的应用名&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getServletContextName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;filter&quot;&gt;Filter&lt;/h2&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet API&lt;/code&gt;中提供了一个&lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;接口, 称为过滤器, 所有的请求要先经过过滤器. web服务器在调用&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;service()&lt;/code&gt;方法之前会调用&lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;doFilter()&lt;/code&gt;方法.&lt;/p&gt;
-
-&lt;p&gt;web服务器把所有的&lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;按注册顺序组成一个&lt;code class=&quot;highlighter-rouge&quot;&gt;filterChain&lt;/code&gt;, 在调用&lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;doFilter()&lt;/code&gt;方法时, 会传递&lt;code class=&quot;highlighter-rouge&quot;&gt;filterChain&lt;/code&gt;对象进来. &lt;code class=&quot;highlighter-rouge&quot;&gt;filterChain&lt;/code&gt;也有个&lt;code class=&quot;highlighter-rouge&quot;&gt;doFilter&lt;/code&gt;方法, 当调用&lt;code class=&quot;highlighter-rouge&quot;&gt;filterChain.doFilter()&lt;/code&gt;时, web服务器会检查&lt;code class=&quot;highlighter-rouge&quot;&gt;filterChain&lt;/code&gt;中是否还有&lt;code class=&quot;highlighter-rouge&quot;&gt;filter&lt;/code&gt;, 如果有, 则调用下一个&lt;code class=&quot;highlighter-rouge&quot;&gt;filter&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h3 id=&quot;filter-1&quot;&gt;Filter生命周期&lt;/h3&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;的创建和销毁由web服务器负责. web服务器启动时创建&lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;实例对象, 并调用其&lt;code class=&quot;highlighter-rouge&quot;&gt;init&lt;/code&gt;方法, 完成对象的初始化, 为用户请求作好拦截的准备. &lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;对象只创建一次, &lt;code class=&quot;highlighter-rouge&quot;&gt;init&lt;/code&gt;方法只执行一次. &lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;也有初始化参数, 被封装到&lt;code class=&quot;highlighter-rouge&quot;&gt;FilterConfig&lt;/code&gt;中, 它有个方法&lt;code class=&quot;highlighter-rouge&quot;&gt;getServletContext()&lt;/code&gt;可获取&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletContext&lt;/code&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;decorator&quot;&gt;装饰器模式(decorator)&lt;/h3&gt;
-&lt;p&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet API&lt;/code&gt;中体现了一种设计模式: 装饰器模式&lt;/p&gt;
-
-&lt;p&gt;装饰器模式的实现步骤:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;先看需要被增强对象实现了什么接口或继承了什么父类, 编写一个类也去继承这些接口或父类&lt;/li&gt;
-  &lt;li&gt;内部定义一个变量, 类型为被包装类的类型, 并提供一个构造函数用于接收被包装对象&lt;/li&gt;
-  &lt;li&gt;覆盖需要增强的方法, 添加增强内容&lt;/li&gt;
-  &lt;li&gt;实现接口中其他方法, 调用被包装对象的对应方法.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet API&lt;/code&gt; 提供了一个&lt;code class=&quot;highlighter-rouge&quot;&gt;HttpServletRequestWrapper&lt;/code&gt;类, 该类就是采用装饰器模式对&lt;code class=&quot;highlighter-rouge&quot;&gt;HttpServletRequest&lt;/code&gt;进行了增强(实际上在内部仅调用了一下所包装的对象的对应方法).&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;listener&quot;&gt;Listener&lt;/h2&gt;
-&lt;p&gt;全称是事件监听器&lt;code class=&quot;highlighter-rouge&quot;&gt;EventListener&lt;/code&gt;, 全类名是&lt;code class=&quot;highlighter-rouge&quot;&gt;java.util.EventListener&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet API&lt;/code&gt;中的监听器也是继承这个接口.&lt;/p&gt;
-
-&lt;p&gt;监听器是典型的 &lt;strong&gt;观察者模式&lt;/strong&gt; , 使用监听器要了解三个概念:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;事件源: 就是被监听的对象&lt;/li&gt;
-  &lt;li&gt;事件对象: 就是被监听的对象发生的动作, 封装成了一个事件对象. 比如增加了一个属性&lt;/li&gt;
-  &lt;li&gt;监听器: 对事件源发生的动作做出反应的对象. 由开发人员编写, 在事件监听器中, 可通过事件对象拿到事件源, 从而对事件源上的操作进行处理.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;servlet-3&quot;&gt;Servlet监听器&lt;/h3&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;中的监听器不是直接注册在事件源上的, 而是由由WEB容器负责注册.&lt;/p&gt;
-
-&lt;p&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;规范中定义了多种类型的监听器, 它们用于监听的事件源分别为&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletContext&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;HttpSession&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletRequest&lt;/code&gt;这三个对象.&lt;/p&gt;
-
-&lt;p&gt;根据监听的类型不同, 又可分为:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;监听事件源对象创建和销毁的事件监听器, 如: &lt;code class=&quot;highlighter-rouge&quot;&gt;ServletContextListener, HttpSessionListener, ServletRequestListener&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;监听事件源对象属性添加和删除的事件监听器, 如: &lt;code class=&quot;highlighter-rouge&quot;&gt;ServletContextAttributeListener, HttpSessionAttributeListener, ServletRequestAttributeListener&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;监听绑定到&lt;code class=&quot;highlighter-rouge&quot;&gt;HttpSession&lt;/code&gt;中的对象的状态的事件监听器, 如: &lt;code class=&quot;highlighter-rouge&quot;&gt;HttpSessionBindingListener, HttpSessionActivationListener&lt;/code&gt;, 这俩监听器比较特殊, 不需要在&lt;code class=&quot;highlighter-rouge&quot;&gt;web.xml&lt;/code&gt;中进行注册&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-</description>
-        <pubDate>Wed, 16 Nov 2016 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-16-Servlet%E8%AF%A6%E8%A7%A3.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-16-Servlet%E8%AF%A6%E8%A7%A3.html</guid>
         
         <category>Spring</category>
         
