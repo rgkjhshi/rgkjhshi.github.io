@@ -5,8 +5,8 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 13 Mar 2017 14:28:20 +0800</pubDate>
-    <lastBuildDate>Mon, 13 Mar 2017 14:28:20 +0800</lastBuildDate>
+    <pubDate>Thu, 16 Mar 2017 09:48:05 +0800</pubDate>
+    <lastBuildDate>Thu, 16 Mar 2017 09:48:05 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
@@ -21,8 +21,10 @@
   &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;需要知道的概念&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#hash&quot;&gt;关于hash&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#bucketindex&quot;&gt;计算桶坐标:bucketIndex&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#put&quot;&gt;添加元素 put&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#modcount&quot;&gt;关于 modCount&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#put&quot;&gt;添加元素put&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#modcount&quot;&gt;关于modCount&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-3&quot;&gt;关于扩容&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-4&quot;&gt;关于并发&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;hr /&gt;
@@ -55,7 +57,7 @@
   &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;容量&lt;/code&gt;: &lt;code class=&quot;highlighter-rouge&quot;&gt;table&lt;/code&gt;数组的大小(&lt;code class=&quot;highlighter-rouge&quot;&gt;table.length&lt;/code&gt;), 并没有一个属性来描述, 内部用&lt;code class=&quot;highlighter-rouge&quot;&gt;capacity()&lt;/code&gt;函数来获取数组大小. 默认初始容量&lt;code class=&quot;highlighter-rouge&quot;&gt;DEFAULT_INITIAL_CAPACITY&lt;/code&gt;为16, 每次扩容都扩大2倍.&lt;/li&gt;
   &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;size&lt;/code&gt;: 该属性表示&lt;code class=&quot;highlighter-rouge&quot;&gt;key-value&lt;/code&gt;对的元素个数, 即每新增一个&lt;code class=&quot;highlighter-rouge&quot;&gt;Entry&lt;/code&gt;会加1, 每减少一个 &lt;code class=&quot;highlighter-rouge&quot;&gt;Entry&lt;/code&gt;会减1&lt;/li&gt;
   &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;loadFactor&lt;/code&gt;: 负载因子, 这相当于一个系数, 用于计算&lt;code class=&quot;highlighter-rouge&quot;&gt;threshold&lt;/code&gt;. 默认负载因子&lt;code class=&quot;highlighter-rouge&quot;&gt;DEFAULT_LOAD_FACTOR&lt;/code&gt;为0.75&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;threshold&lt;/code&gt;: 阈值, 当&lt;code class=&quot;highlighter-rouge&quot;&gt;size&lt;/code&gt;达到该阈值, 就需要扩容. 该阈值由&lt;code class=&quot;highlighter-rouge&quot;&gt;capacity * loadFactor&lt;/code&gt;计算得到.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;threshold&lt;/code&gt;: 阈值, 当&lt;code class=&quot;highlighter-rouge&quot;&gt;size&lt;/code&gt;达到该阈值, 就需要扩容. 该阈值由&lt;code class=&quot;highlighter-rouge&quot;&gt;capacity * loadFactor&lt;/code&gt;计算得到(构造函数里,直接&lt;code class=&quot;highlighter-rouge&quot;&gt;threshold = initialCapacity&lt;/code&gt;, 但构造函数中没有给&lt;code class=&quot;highlighter-rouge&quot;&gt;table&lt;/code&gt;分配空间, 分配空间时, 阈值由&lt;code class=&quot;highlighter-rouge&quot;&gt;Math.min(capacity * loadFactor, MAXIMUM_CAPACITY + 1)&lt;/code&gt;决定).&lt;/li&gt;
   &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;modCount&lt;/code&gt;: 该属性可理解为对该map所做的修改次数, 比如增加或者减少一个&lt;code class=&quot;highlighter-rouge&quot;&gt;Entry&lt;/code&gt;都会加1(&lt;code class=&quot;highlighter-rouge&quot;&gt;size&lt;/code&gt;会变少, &lt;code class=&quot;highlighter-rouge&quot;&gt;modCount&lt;/code&gt;只会变大)&lt;/li&gt;
 &lt;/ul&gt;
 
@@ -114,7 +116,7 @@
 
 &lt;hr /&gt;
 
-&lt;h2 id=&quot;put&quot;&gt;添加元素 put&lt;/h2&gt;
+&lt;h2 id=&quot;put&quot;&gt;添加元素put&lt;/h2&gt;
 
 &lt;ul&gt;
   &lt;li&gt;刚创建的&lt;code class=&quot;highlighter-rouge&quot;&gt;HashMap&lt;/code&gt;中的&lt;code class=&quot;highlighter-rouge&quot;&gt;table&lt;/code&gt;是空的(&lt;code class=&quot;highlighter-rouge&quot;&gt;EMPTY_TABLE&lt;/code&gt;), 真正添加元素的时候才回分配空间&lt;/li&gt;
@@ -167,7 +169,7 @@
 
 &lt;hr /&gt;
 
-&lt;h2 id=&quot;modcount&quot;&gt;关于 modCount&lt;/h2&gt;
+&lt;h2 id=&quot;modcount&quot;&gt;关于modCount&lt;/h2&gt;
 &lt;p&gt;平时使用&lt;code class=&quot;highlighter-rouge&quot;&gt;HashMap&lt;/code&gt;遇到过的一个异常是&lt;code class=&quot;highlighter-rouge&quot;&gt;ConcurrentModificationException&lt;/code&gt;. 这种情况是因为在使用迭代器的过程中, 增加或者删除了元素, 导致&lt;code class=&quot;highlighter-rouge&quot;&gt;modCount&lt;/code&gt;变化导致的. 原因就在迭代器中:&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// 迭代器构造方法&lt;/span&gt;
@@ -197,6 +199,61 @@
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section-3&quot;&gt;关于扩容&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;HashMap&lt;/code&gt;扩容是通过&lt;code class=&quot;highlighter-rouge&quot;&gt;resize(int newCapacity)&lt;/code&gt;函数实现的, 而扩容的时机, 则是在&lt;code class=&quot;highlighter-rouge&quot;&gt;put&lt;/code&gt;函数里真正添加元素时调用&lt;code class=&quot;highlighter-rouge&quot;&gt;addEntry&lt;/code&gt;来控制的.&lt;/p&gt;
+
+&lt;p&gt;扩容需要两个条件:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;size &amp;gt;= threshold&lt;/code&gt;: 元素个数达到阈值&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;null != table[bucketIndex]&lt;/code&gt;: 新元素要放的桶中有元素(该桶中没有元素不会扩容)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;扩容过程如下:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// 在 addEntry 中调用resize扩容&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;resize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 每次都是2倍扩容&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// resize函数&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;resize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newCapacity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// capacity MUST be a power of two&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Entry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;oldTable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;oldCapacity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;oldTable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;oldCapacity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MAXIMUM_CAPACITY&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 最大容量时就不再扩容了&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;threshold&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;MAX_VALUE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Entry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newTable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Entry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;newCapacity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;transfer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;newTable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;initHashSeedAsNeeded&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;newCapacity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 这里把原来的元素移动到新table中&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newTable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;threshold&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Math&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;min&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;newCapacity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loadFactor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MAXIMUM_CAPACITY&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 更新阈值&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 移动元素的 transfer 函数&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;transfer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Entry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newTable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rehash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newCapacity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newTable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Entry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;Entry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;next&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 头插法&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rehash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;hash&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;indexFor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;hash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newCapacity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 新的桶位置(通过位运算来计算)&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newTable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;newTable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section-4&quot;&gt;关于并发&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;HashMap&lt;/code&gt;不是线程安全的, 一般还会提到一个不常用的但是线程安全的对象&lt;code class=&quot;highlighter-rouge&quot;&gt;Hashtable&lt;/code&gt;, 它相当于&lt;code class=&quot;highlighter-rouge&quot;&gt;HashMap&lt;/code&gt;的方法(包括&lt;code class=&quot;highlighter-rouge&quot;&gt;toString&lt;/code&gt;)加锁(&lt;code class=&quot;highlighter-rouge&quot;&gt;synchronized&lt;/code&gt;)来控制并发.&lt;/p&gt;
+
+&lt;p&gt;若要考虑并发问题, 一般推荐使用&lt;code class=&quot;highlighter-rouge&quot;&gt;ConcurrentHashMap&lt;/code&gt;, 它通过&lt;code class=&quot;highlighter-rouge&quot;&gt;Segment&lt;/code&gt;来实现分段加锁。&lt;/p&gt;
 
 &lt;hr /&gt;
 </description>
