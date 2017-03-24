@@ -235,6 +235,17 @@ tag:
 
 ![FANCL无添加速净卸妆油]({{ "/static/images/jp/fancl.jpg"  | prepend: site.baseurl }})
 
+### 粉底霜
+
+* 品牌: 黛珂`Decorte`
+* 品名: 黛珂AQ粉底膏
+* 规格: `25g`
+* 色号: `302`
+* 价格: `318`
+* 参考图片:
+
+![黛珂AQ粉底膏]({{ "/static/images/jp/aq.jpg"  | prepend: site.baseurl }})
+
 ### 碧欧泉男士补水套装
 
 * 品牌: 碧欧泉`Biotherm`
