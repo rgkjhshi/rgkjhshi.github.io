@@ -162,8 +162,9 @@ java通过JVM进行内存管理，它的内存占用情况是怎样的？</p>
   <li>64位JVM未开启<code class="highlighter-rouge">UseCompressedOops</code>，引用为8B</li>
 </ul>
 
-<p>可通过<code class="highlighter-rouge">jinfo -flag UseCompressedOops &lt;pid&gt;</code>查看是否开启了指针压缩
-*****</p>
+<p>可通过<code class="highlighter-rouge">jinfo -flag UseCompressedOops &lt;pid&gt;</code>查看是否开启了指针压缩</p>
+
+<hr />
 
 <h2 id="section-2">关于对齐</h2>
 <p>CPU从内存中读取数据是以word为基本单位, 32位的系统中word宽度为32bits, 64位的系统中word宽度为64bits,
