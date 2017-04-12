@@ -5,9 +5,153 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 06 Apr 2017 17:16:10 +0800</pubDate>
-    <lastBuildDate>Thu, 06 Apr 2017 17:16:10 +0800</lastBuildDate>
+    <pubDate>Wed, 12 Apr 2017 11:45:35 +0800</pubDate>
+    <lastBuildDate>Wed, 12 Apr 2017 11:45:35 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>ES学习之全文检索原理</title>
+        <description>&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Elasticsearch&lt;/code&gt;是比较好用的全文搜索工具, 它是基于&lt;code class=&quot;highlighter-rouge&quot;&gt;Lucene&lt;/code&gt;的, 本文简单介绍下全文搜索的一些内容&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;关于搜索&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;全文搜索的方法&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;倒排索引&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-3&quot;&gt;创建索引&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-4&quot;&gt;搜索索引&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-5&quot;&gt;参考文章&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;关于搜索&lt;/h2&gt;
+&lt;p&gt;搜索就是从一堆数据里找我们想要的内容, 我们先对数据做个分类:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;结构化数据&lt;/code&gt;: 具有固定格式或长度限制的数据, 如数据库&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;非结构化数据&lt;/code&gt;: 也叫全文数据, 没有固定格式的数据, 如一篇作文, 一封邮件&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;此外还有半结构化数据, 如&lt;code class=&quot;highlighter-rouge&quot;&gt;XML&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;HTML&lt;/code&gt;等, 按不同的数据分类, 搜索也分两类:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;对结构化数据的搜索&lt;/code&gt;: 如数据库搜索, 使用SQL语句。&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;全文搜索&lt;/code&gt;: 如&lt;code class=&quot;highlighter-rouge&quot;&gt;grep&lt;/code&gt;命令, Google和百度对大量数据的搜索等。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;全文搜索的方法&lt;/h2&gt;
+
+&lt;p&gt;对全文数据进行搜索, 最简单的一种方式就是顺序扫描, 如果要找某个字符串, 则需要从头到尾开始找, 找到了则该文档就是我们要找的文档, 接下来再从下一个文档中搜索。这种方法最简单，单数据量大的时候效率十分低。&lt;/p&gt;
+
+&lt;p&gt;第二种方法是先把这些全文数据处理一下, 提取一部分信息重新组织, 让它变得有一定的结构。 这部分从非结构化数据中提取出的然后重新组织的信息，我们称之为索引。&lt;/p&gt;
+
+&lt;p&gt;因此通常全文检索分为两个过程: 创建索引(&lt;code class=&quot;highlighter-rouge&quot;&gt;Index&lt;/code&gt;)和搜索索引(&lt;code class=&quot;highlighter-rouge&quot;&gt;Search&lt;/code&gt;)。虽然创建索引的过程比较慢, 但索引创建之后可以多次使用，大大提高了搜索的效率。&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;倒排索引&lt;/h2&gt;
+
+&lt;p&gt;在顺序扫描中, 我们是匹配文档是否包含我们所查找的字符串, 即从文档中找字符串; 我们想要的结果是哪些文档中包含要找的字符串, 即找到字符串到文档的映射, 两者恰恰相反. 所以如果索引能够保存字符串到文档的映射关系, 搜索就会变快, 这种保存字符串到文档映射关系的索引, 被称作&lt;code class=&quot;highlighter-rouge&quot;&gt;反向索引&lt;/code&gt;或&lt;code class=&quot;highlighter-rouge&quot;&gt;倒排索引&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;假设我们有100篇文章, 三个字符串&lt;code class=&quot;highlighter-rouge&quot;&gt;lucene&lt;/code&gt;,&lt;code class=&quot;highlighter-rouge&quot;&gt;solr&lt;/code&gt;,&lt;code class=&quot;highlighter-rouge&quot;&gt;hadoop&lt;/code&gt;分别出现在不同的文章中, 我们创建的反向索引如下图:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/post_list.jpg&quot; alt=&quot;倒排索引&quot; title=&quot;倒排索引&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;左边的字符串一般称为词典, 右边是包含该字符串的文档(&lt;code class=&quot;highlighter-rouge&quot;&gt;Document&lt;/code&gt;)组成的链表, 成为倒排表(&lt;code class=&quot;highlighter-rouge&quot;&gt;Posting List&lt;/code&gt;)&lt;/p&gt;
+
+&lt;p&gt;我们利用反向索引查找即包含&lt;code class=&quot;highlighter-rouge&quot;&gt;lucene&lt;/code&gt;, 又包含&lt;code class=&quot;highlighter-rouge&quot;&gt;hadoop&lt;/code&gt;的文档, 只需要通过字典找到两个链表, 把链表中相同的文档取出即可.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section-3&quot;&gt;创建索引&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;第一步: 把文档(&lt;code class=&quot;highlighter-rouge&quot;&gt;Document&lt;/code&gt;)传给分词组件(&lt;code class=&quot;highlighter-rouge&quot;&gt;Tokenizer&lt;/code&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;这个过程会把文档&lt;code class=&quot;highlighter-rouge&quot;&gt;Document&lt;/code&gt;分割成一个个的单词, 去掉标点, 去掉停顿次(&lt;code class=&quot;highlighter-rouge&quot;&gt;the&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;this&lt;/code&gt;等), 经过分词得到的结果成为词元(&lt;code class=&quot;highlighter-rouge&quot;&gt;Token&lt;/code&gt;).&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;第二步: 把词元(&lt;code class=&quot;highlighter-rouge&quot;&gt;Token&lt;/code&gt;)交给语言处理组件(&lt;code class=&quot;highlighter-rouge&quot;&gt;linguistic processor&lt;/code&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;语言处理组件(&lt;code class=&quot;highlighter-rouge&quot;&gt;linguistic processor&lt;/code&gt;)主要是对得到的词元(&lt;code class=&quot;highlighter-rouge&quot;&gt;Token&lt;/code&gt;)做一些同语言相关的处理, 比如变为小写(&lt;code class=&quot;highlighter-rouge&quot;&gt;lowercase&lt;/code&gt;), 复数变为单数(&lt;code class=&quot;highlighter-rouge&quot;&gt;stemming&lt;/code&gt;), 过去式变为原型(&lt;code class=&quot;highlighter-rouge&quot;&gt;lemmatization&lt;/code&gt;)等。语言处理组件的结果被称为词(&lt;code class=&quot;highlighter-rouge&quot;&gt;Term&lt;/code&gt;).&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;第三步: 把词(&lt;code class=&quot;highlighter-rouge&quot;&gt;Term&lt;/code&gt;)传给索引组件(&lt;code class=&quot;highlighter-rouge&quot;&gt;Indexer&lt;/code&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;索引组件利用词(&lt;code class=&quot;highlighter-rouge&quot;&gt;Term&lt;/code&gt;)生成一个字典, 按字母顺序进行排序, 然后合并相同的&lt;code class=&quot;highlighter-rouge&quot;&gt;Term&lt;/code&gt;成为文档的倒排链表&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/post_list2.jpg&quot; alt=&quot;倒排索引&quot; title=&quot;倒排索引&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;其中:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Document Frequency&lt;/code&gt;: 文档频次，表示总共有多少文件包含此词(&lt;code class=&quot;highlighter-rouge&quot;&gt;Term&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Frequency&lt;/code&gt;: 词频率，表示此文件中包含了几个此词(&lt;code class=&quot;highlighter-rouge&quot;&gt;Term&lt;/code&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section-4&quot;&gt;搜索索引&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;第一步: 输入查询语句&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;查询语句一般会有一定的语法, 比如&lt;code class=&quot;highlighter-rouge&quot;&gt;lucene AND learned NOT hadoop&lt;/code&gt;, 表示搜索包含&lt;code class=&quot;highlighter-rouge&quot;&gt;lucene&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;learned&lt;/code&gt;但不包含&lt;code class=&quot;highlighter-rouge&quot;&gt;hadoop&lt;/code&gt;的文档&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;第二步: 对查询语句进行词法分析, 语法分析, 及语言处理&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;词法分析主要用来识别关键词和要搜索的单词, 比如例子中关键词有&lt;code class=&quot;highlighter-rouge&quot;&gt;AND&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;NOT&lt;/code&gt;;&lt;br /&gt;
+语法分析主要用来生成语法树, 不满足语法规则的则报错;&lt;br /&gt;
+语言处理跟创建索引中几乎一致, 比如&lt;code class=&quot;highlighter-rouge&quot;&gt;learned&lt;/code&gt;变为&lt;code class=&quot;highlighter-rouge&quot;&gt;learn&lt;/code&gt;;&lt;/p&gt;
+
+&lt;p&gt;经过第二步处理, 得到一个经过语言处理的语法树&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;第三步: 搜索索引, 得到符合语法树的文档&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;首先，在反向索引表中，分别找出包含&lt;code class=&quot;highlighter-rouge&quot;&gt;lucene, learn, hadoop&lt;/code&gt;的文档链表&lt;br /&gt;
+其次，对包含&lt;code class=&quot;highlighter-rouge&quot;&gt;lucene, learn&lt;/code&gt;的链表进行合并, 得到既包含&lt;code class=&quot;highlighter-rouge&quot;&gt;lucene&lt;/code&gt;又包含&lt;code class=&quot;highlighter-rouge&quot;&gt;learn&lt;/code&gt;的文档链表&lt;br /&gt;
+然后，将此链表与&lt;code class=&quot;highlighter-rouge&quot;&gt;hadoop&lt;/code&gt;的文档链表进行差操作, 去除包含&lt;code class=&quot;highlighter-rouge&quot;&gt;hadoop&lt;/code&gt;的文档&lt;br /&gt;
+最后, 此文档链表就是我们要找的文档&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;第四步: 根据文档和查询语句的相关性,对结果进行排序&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;这一步要先根据相关性进行打分, 得分高的排序靠前.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section-5&quot;&gt;参考文章&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.kailing.pub/article/index/arcid/72.html&quot;&gt;Lucene全文检索的基本原理&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.open-open.com/lib/view/open1410492056742.html&quot;&gt;Lucene和搜索技术&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+</description>
+        <pubDate>Tue, 11 Apr 2017 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-04-11-ES%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2%E5%8E%9F%E7%90%86.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-04-11-ES%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2%E5%8E%9F%E7%90%86.html</guid>
+        
+        <category>Java</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
     
       <item>
         <title>String补充</title>
@@ -1213,94 +1357,6 @@ afterInitialization
         <pubDate>Sat, 19 Nov 2016 00:00:00 +0800</pubDate>
         <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-19-Spring-boot%E4%B8%8EServlet%E7%BB%84%E4%BB%B6.html</link>
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-19-Spring-boot%E4%B8%8EServlet%E7%BB%84%E4%BB%B6.html</guid>
-        
-        <category>Spring</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>Spring boot与HandlerInterceptor</title>
-        <description>&lt;hr /&gt;
-
-&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#handlerinterceptor&quot;&gt;HandlerInterceptor&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;拦截器中的方法&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#spring-boot--interceptor&quot;&gt;Spring boot 定制 Interceptor&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;handlerinterceptor&quot;&gt;HandlerInterceptor&lt;/h2&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;提供的拦截器&lt;code class=&quot;highlighter-rouge&quot;&gt;Interceptor&lt;/code&gt;与&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;中的&lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;不同的是, &lt;code class=&quot;highlighter-rouge&quot;&gt;Interceptor&lt;/code&gt;采用&lt;code class=&quot;highlighter-rouge&quot;&gt;AOP&lt;/code&gt;的方式在&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;service&lt;/code&gt;方法执行之前进行拦截, 可以进行更精细的控制.&lt;/p&gt;
-
-&lt;p&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;中定义一个&lt;code class=&quot;highlighter-rouge&quot;&gt;Interceptor&lt;/code&gt;只需要实现&lt;code class=&quot;highlighter-rouge&quot;&gt;HandlerInterceptor&lt;/code&gt;接口, &lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;已经为我们提供了一个&lt;code class=&quot;highlighter-rouge&quot;&gt;HandlerInterceptorAdapter&lt;/code&gt;, 我们只需要继承它, 覆盖想要重写的方法.&lt;/p&gt;
-
-&lt;h3 id=&quot;section&quot;&gt;拦截器中的方法&lt;/h3&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Interceptor&lt;/code&gt;中有如下方法:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;preHandle&lt;/code&gt;: 在&lt;code class=&quot;highlighter-rouge&quot;&gt;Controller&lt;/code&gt;处理之前调用, 返回&lt;code class=&quot;highlighter-rouge&quot;&gt;false&lt;/code&gt;时整个请求结束&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;postHandle&lt;/code&gt;: 在&lt;code class=&quot;highlighter-rouge&quot;&gt;Controller&lt;/code&gt;调用之后执行, 但它会在&lt;code class=&quot;highlighter-rouge&quot;&gt;DispatcherServlet&lt;/code&gt;进行视图的渲染之前执行, 也就是说在这个方法中你可以对&lt;code class=&quot;highlighter-rouge&quot;&gt;ModelAndView&lt;/code&gt;进行操作&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;afterCompletion&lt;/code&gt;: 在整个请求完成之后执行, 也就是&lt;code class=&quot;highlighter-rouge&quot;&gt;DispatcherServlet&lt;/code&gt;已经渲染了视图之后执行; 这个方法的主要作用是用于清理资源的&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;afterConcurrentHandlingStarted&lt;/code&gt;: 这个方法是&lt;code class=&quot;highlighter-rouge&quot;&gt;AsyncHandlerInterceptor&lt;/code&gt;接口中添加的. 当&lt;code class=&quot;highlighter-rouge&quot;&gt;Controller&lt;/code&gt;中有异步请求方法的时候会触发该方法, 异步请求先支持&lt;code class=&quot;highlighter-rouge&quot;&gt;preHandle&lt;/code&gt;、然后执行&lt;code class=&quot;highlighter-rouge&quot;&gt;afterConcurrentHandlingStarted&lt;/code&gt;, 异步线程完成之后执行会再执行&lt;code class=&quot;highlighter-rouge&quot;&gt;preHandle、postHandle、afterCompletion&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;关于最后那个方法, 举个列子:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@RestController&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ExampleController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@RequestMapping&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;DeferredResult&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;home&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;DeferredResult&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DeferredResult&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;dr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setResult&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;成功&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;上面这样的&lt;code class=&quot;highlighter-rouge&quot;&gt;Controller&lt;/code&gt;里面有个异步结果, 则拦截器的执行顺序将是: &lt;code class=&quot;highlighter-rouge&quot;&gt;preHandle -&amp;gt; afterConcurrentHandlingStarted -&amp;gt; preHandle -&amp;gt; postHandle -&amp;gt; afterCompletion&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;如果把&lt;code class=&quot;highlighter-rouge&quot;&gt;dr.setResult(&quot;成功&quot;);&lt;/code&gt; 这句删掉, 将只执行&lt;code class=&quot;highlighter-rouge&quot;&gt;preHandle -&amp;gt; afterConcurrentHandlingStarted&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;可以认为, &lt;code class=&quot;highlighter-rouge&quot;&gt;afterConcurrentHandlingStarted&lt;/code&gt;是返回异步结果时调用(此时异步结果里不需要有数据), 而&lt;code class=&quot;highlighter-rouge&quot;&gt;postHandle&lt;/code&gt;必须是返回的结果执行完, 异步结果中有数据了(&lt;code class=&quot;highlighter-rouge&quot;&gt;dr.setResult&lt;/code&gt;)才调用.&lt;/p&gt;
-
-&lt;h2 id=&quot;spring-boot--interceptor&quot;&gt;Spring boot 定制 Interceptor&lt;/h2&gt;
-
-&lt;p&gt;首先我们先定义我们自己的拦截器, 方式还是继承&lt;code class=&quot;highlighter-rouge&quot;&gt;HandlerInterceptorAdapter&lt;/code&gt;, 覆盖想要的方法:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyInterceptor&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HandlerInterceptorAdapter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;preHandle&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HttpServletRequest&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HttpServletResponse&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;handler&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;像这样我们把&lt;code class=&quot;highlighter-rouge&quot;&gt;MyInterceptor&lt;/code&gt;作为一个&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;Spring boot&lt;/code&gt;并不会帮我们注册到拦截器列表中. 就像添加消息转换器一样, 我们可以在继承&lt;code class=&quot;highlighter-rouge&quot;&gt;WebMvcConfigurerAdapter&lt;/code&gt;的配置类里, 通过覆盖方法来添加:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Configuration&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;WebMvcConfig&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WebMvcConfigurerAdapter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;c1&quot;&gt;// 拦截器需要手动加入到调用链中&lt;/span&gt;
-      &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-      &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;addInterceptors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;InterceptorRegistry&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;registry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-          &lt;span class=&quot;n&quot;&gt;registry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addInterceptor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MyInterceptor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;hr /&gt;
-</description>
-        <pubDate>Fri, 18 Nov 2016 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-18-Spring-boot%E4%B8%8EHandlerInterceptor.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-18-Spring-boot%E4%B8%8EHandlerInterceptor.html</guid>
         
         <category>Spring</category>
         
