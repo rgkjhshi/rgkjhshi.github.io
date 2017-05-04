@@ -5,9 +5,93 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 12 Apr 2017 11:45:35 +0800</pubDate>
-    <lastBuildDate>Wed, 12 Apr 2017 11:45:35 +0800</lastBuildDate>
+    <pubDate>Thu, 04 May 2017 11:58:39 +0800</pubDate>
+    <lastBuildDate>Thu, 04 May 2017 11:58:39 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>Java中的并发之Future模式</title>
+        <description>&lt;p&gt;Java的多线程编程中经常用到&lt;code class=&quot;highlighter-rouge&quot;&gt;Future模式&lt;/code&gt;, 本文就简单介绍下&lt;code class=&quot;highlighter-rouge&quot;&gt;Future模式&lt;/code&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#future&quot;&gt;Future模式&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#jdkfuture-futuretask&quot;&gt;JDK中的Future模式: FutureTask&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;future&quot;&gt;Future模式&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Future模式&lt;/code&gt;的核心在于: 去除了主函数的等待时间，使原本需要等待的时间段可以用于处理其他业务逻辑.&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;Future模式&lt;/code&gt;的关键在于: 返回的数据并不是真实的处理结果&lt;code class=&quot;highlighter-rouge&quot;&gt;RealData&lt;/code&gt;, 而是一个代理数据&lt;code class=&quot;highlighter-rouge&quot;&gt;FutureData&lt;/code&gt;, 当调用代理数据的&lt;code class=&quot;highlighter-rouge&quot;&gt;get&lt;/code&gt;方法时(&lt;code class=&quot;highlighter-rouge&quot;&gt;FutureData.get()&lt;/code&gt;), 会阻塞等待获取真实数据&lt;code class=&quot;highlighter-rouge&quot;&gt;RealData&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;下面实现一个简易版的&lt;code class=&quot;highlighter-rouge&quot;&gt;Future模式&lt;/code&gt;, 这个例子很好的说明了&lt;code class=&quot;highlighter-rouge&quot;&gt;Future.get()&lt;/code&gt;时的阻塞的形成原理&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cm&quot;&gt;/**
+ * FutureData实际上是真实数据RealData的代理, 封装了获取RealData的等待过程
+ */&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;FutureData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Future&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;V&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;realData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;// FutureData是realData的封装&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;isReady&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 是否已经准备好&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;synchronized&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;setRealData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;realData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;isReady&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;realData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;realData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;isReady&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;notifyAll&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// realData已经被注入到FutureData中, 通知get()方法(因为get方法里在等待锁)&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;synchronized&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;V&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;InterruptedException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;isReady&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;wait&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;//一直等到realData注入到FutureData中&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;realData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// Future的其他接口略...&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;要使用我们自己实现的简易版&lt;code class=&quot;highlighter-rouge&quot;&gt;Future模式&lt;/code&gt;, 我们需要一个在一个方法里加工一些数据并最后返回我们的&lt;code class=&quot;highlighter-rouge&quot;&gt;FutureData&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Future&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;doSomething&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FutureData&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;futureData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FutureData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// 假设生成realData的过程特别慢, 所以放在单独的线程中运行&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Runnable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+            &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;realData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;假设生成realData的过程特别慢&quot;&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;futureData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setRealData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;realData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;futureData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 直接返回FutureData&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;这样当我们调用&lt;code class=&quot;highlighter-rouge&quot;&gt;Future futureData = doSomething()&lt;/code&gt;来处理数据的时候, 要加工的数据特别慢, 我们直接返回了&lt;code class=&quot;highlighter-rouge&quot;&gt;FutureData&lt;/code&gt;, 所以在调用&lt;code class=&quot;highlighter-rouge&quot;&gt;doSomething()&lt;/code&gt;的线程里并不被阻塞, 这个线程可以去做其他事情, 只有当这个线程通过&lt;code class=&quot;highlighter-rouge&quot;&gt;futureData.get()&lt;/code&gt;时, 线程才会被阻塞, 直到返回&lt;code class=&quot;highlighter-rouge&quot;&gt;realData&lt;/code&gt;.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;jdkfuture-futuretask&quot;&gt;JDK中的Future模式: FutureTask&lt;/h2&gt;
+
+&lt;p&gt;JDK中&lt;code class=&quot;highlighter-rouge&quot;&gt;Future模式&lt;/code&gt;的经典实现类为&lt;code class=&quot;highlighter-rouge&quot;&gt;FutureTask&lt;/code&gt;, 它除了实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;Future&lt;/code&gt;接口外还实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;Runnable&lt;/code&gt;接口, 它的实现比我们简易版的实现要复杂的多, 我们这里简单介绍下它的独特之处&lt;/p&gt;
+
+&lt;hr /&gt;
+</description>
+        <pubDate>Wed, 03 May 2017 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-03-Java%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E4%B9%8BFuture%E6%A8%A1%E5%BC%8F.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-03-Java%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E4%B9%8BFuture%E6%A8%A1%E5%BC%8F.html</guid>
+        
+        <category>Java</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
     
       <item>
         <title>ES学习之全文检索原理</title>
@@ -1227,136 +1311,6 @@ afterInitialization
         <pubDate>Mon, 21 Nov 2016 00:00:00 +0800</pubDate>
         <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-21-Spring-boot%E5%9C%A8%E5%A4%96%E9%83%A8tomcat%E7%9A%84%E9%83%A8%E7%BD%B2.html</link>
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-21-Spring-boot%E5%9C%A8%E5%A4%96%E9%83%A8tomcat%E7%9A%84%E9%83%A8%E7%BD%B2.html</guid>
-        
-        <category>Spring</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>Spring boot与Servlet组件</title>
-        <description>&lt;hr /&gt;
-
-&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#servlet&quot;&gt;Servlet组件注册&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#filter&quot;&gt;注册Filter&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;方式一&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;方式二&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;方式三&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#listener&quot;&gt;注册Listener&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#servlet-1&quot;&gt;注册Servlet&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;servlet&quot;&gt;Servlet组件注册&lt;/h2&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;的组件包括&lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;Listener&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;, 具体详情可参考&lt;a href=&quot;http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-16-Servlet%E8%AF%A6%E8%A7%A3.html&quot;&gt;Servlet详解&lt;/a&gt;.&lt;br /&gt;
-普通的web项目都是从&lt;code class=&quot;highlighter-rouge&quot;&gt;web.xml&lt;/code&gt;中配置, &lt;code class=&quot;highlighter-rouge&quot;&gt;Spring boot&lt;/code&gt;中为我们提供了很多注册的方式. 我们先以&lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;举例, 然后再介绍&lt;code class=&quot;highlighter-rouge&quot;&gt;Listener&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;的注册, 他们的注册方式基本一致.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;filter&quot;&gt;注册Filter&lt;/h2&gt;
-
-&lt;h3 id=&quot;section&quot;&gt;方式一&lt;/h3&gt;
-&lt;p&gt;直接作为一个&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;注册.&lt;br /&gt;
-自定义&lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;通常可以实现&lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;接口, 或者可以继承&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;提供的&lt;code class=&quot;highlighter-rouge&quot;&gt;GenericFilterBean&lt;/code&gt;.&lt;br /&gt;
-当&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot&lt;/code&gt;监测到有&lt;code class=&quot;highlighter-rouge&quot;&gt;javax.servlet.Filter&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;bean&lt;/code&gt;时就会自动加入过滤器调用链.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;优点: 简单&lt;/li&gt;
-  &lt;li&gt;缺点: 不可控(比如无法配置要过滤的URL等), 所以这种方式基本不用&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;代码如下:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyFilter&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GenericFilterBean&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;doFilter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ServletRequest&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ServletResponse&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FilterChain&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;chain&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ServletException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//  some code&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;section-1&quot;&gt;方式二&lt;/h3&gt;
-&lt;p&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;FilterRegistrationBean&lt;/code&gt;注册, 这个类实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletContextInitializer&lt;/code&gt;接口&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;优点: 简单, 可控&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;比如还是注册上面写的那个&lt;code class=&quot;highlighter-rouge&quot;&gt;MyFilter&lt;/code&gt;, 注册及配置的代码如下:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Configuration&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;WebMvcConfig&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WebMvcConfigurerAdapter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Bean&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FilterRegistrationBean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;registMyFilter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;FilterRegistrationBean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;registrationBean&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FilterRegistrationBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;registrationBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setFilter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MyFilter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;registrationBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;myFilter&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;registrationBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setUrlPatterns&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Sets&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;newHashSet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/*&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;registrationBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setOrder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;registrationBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;section-2&quot;&gt;方式三&lt;/h3&gt;
-&lt;p&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;@ServletComponentScan&lt;/code&gt;扫描&lt;code class=&quot;highlighter-rouge&quot;&gt;@WebFilter&lt;/code&gt;注解自动注册&lt;/p&gt;
-
-&lt;p&gt;这种方式需要在 &lt;strong&gt;主配置类&lt;/strong&gt; 上加&lt;code class=&quot;highlighter-rouge&quot;&gt;@ServletComponentScan&lt;/code&gt;注解, 在我们的&lt;code class=&quot;highlighter-rouge&quot;&gt;MyFilter&lt;/code&gt;类上加&lt;code class=&quot;highlighter-rouge&quot;&gt;@WebFilter&lt;/code&gt;注解. 代码如下:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// 主配置类&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@SpringBootApplication&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@ServletComponentScan&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Application&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// 自定义的过滤器类&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@WebFilter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filterName&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;myFilter&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;urlPatterns&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;/*&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyFilter&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GenericFilterBean&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;doFilter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ServletRequest&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ServletResponse&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FilterChain&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;chain&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ServletException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//  some code&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;listener&quot;&gt;注册Listener&lt;/h2&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Listener&lt;/code&gt;的注册方式跟&lt;code class=&quot;highlighter-rouge&quot;&gt;Filter&lt;/code&gt;一样, 只是继承或实现的接口, 添加的注解不一样.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;比如实现&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletContextListener&lt;/code&gt;接口&lt;/li&gt;
-  &lt;li&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletListenerRegistrationBean&lt;/code&gt;注册&lt;/li&gt;
-  &lt;li&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;@WebServlet&lt;/code&gt;注解注册.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;servlet-1&quot;&gt;注册Servlet&lt;/h2&gt;
-&lt;p&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;项目中, 都是通过&lt;code class=&quot;highlighter-rouge&quot;&gt;DispatcherServlet&lt;/code&gt;分发, 基本不需要自定义&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;. 下面仅介绍使用方式&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;注意不要使用方式一, 一定要指定相应的URL&lt;/li&gt;
-  &lt;li&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;ServletRegistrationBean&lt;/code&gt;注册&lt;/li&gt;
-  &lt;li&gt;通过&lt;code class=&quot;highlighter-rouge&quot;&gt;@WebServlet(name = &quot;myServlet&quot;, urlPatterns = &quot;/abc/*&quot;)&lt;/code&gt;注解注册.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-</description>
-        <pubDate>Sat, 19 Nov 2016 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-19-Spring-boot%E4%B8%8EServlet%E7%BB%84%E4%BB%B6.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-19-Spring-boot%E4%B8%8EServlet%E7%BB%84%E4%BB%B6.html</guid>
         
         <category>Spring</category>
         
