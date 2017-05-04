@@ -105,7 +105,12 @@ jQuery(function(){
 
 <ul id="markdown-toc">
   <li><a href="#future">Future模式</a></li>
-  <li><a href="#jdkfuture-futuretask">JDK中的Future模式: FutureTask</a></li>
+  <li><a href="#futuretask">FutureTask详解</a>    <ul>
+      <li><a href="#futuretask-1">FutureTask的结构</a></li>
+      <li><a href="#section">构造方法</a></li>
+      <li><a href="#run">run方法</a></li>
+    </ul>
+  </li>
 </ul>
 
 <hr />
@@ -164,10 +169,102 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="jdkfuture-futuretask">JDK中的Future模式: FutureTask</h2>
+<h2 id="futuretask">FutureTask详解</h2>
 
-<p>JDK中<code class="highlighter-rouge">Future模式</code>的经典实现类为<code class="highlighter-rouge">FutureTask</code>, 它除了实现了<code class="highlighter-rouge">Future</code>接口外还实现了<code class="highlighter-rouge">Runnable</code>接口, 它的实现比我们简易版的实现要复杂的多, 我们这里简单介绍下它的独特之处</p>
+<p>JDK中<code class="highlighter-rouge">Future模式</code>的经典实现类为<code class="highlighter-rouge">FutureTask</code>, 它除了实现了<code class="highlighter-rouge">Future</code>接口外还实现了<code class="highlighter-rouge">Runnable</code>接口, 它的实现比我们简易版的实现要复杂一些</p>
 
+<ul>
+  <li><code class="highlighter-rouge">FutureTask</code>本身实现了<code class="highlighter-rouge">Future</code>(就像上面的<code class="highlighter-rouge">FutureData</code>), 我们执行了这个<code class="highlighter-rouge">FutureTask</code>之后, 想要获取结果可以使用<code class="highlighter-rouge">FutureTask.get()</code>来获取真实数据</li>
+  <li><code class="highlighter-rouge">FutureTask</code>自己实现了<code class="highlighter-rouge">Runnable</code>接口, 也就是说我们我们不用再另起线程来执行某任务了(就像<code class="highlighter-rouge">doSomething()</code>里做的), 可以直接使用<code class="highlighter-rouge">Thread</code>去启动这个<code class="highlighter-rouge">FutureTask</code>或者把它交给一个<code class="highlighter-rouge">ExecutorService</code>去执行.</li>
+</ul>
+
+<h3 id="futuretask-1">FutureTask的结构</h3>
+
+<p><code class="highlighter-rouge">FutureTask</code>内部的主要成员如下:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="cm">/**
+     * 任务的状态
+     * 可能的状态转换:
+     * NEW -&gt; COMPLETING -&gt; NORMAL
+     * NEW -&gt; COMPLETING -&gt; EXCEPTIONAL
+     * NEW -&gt; CANCELLED
+     * NEW -&gt; INTERRUPTING -&gt; INTERRUPTED
+     */</span>
+    <span class="kd">private</span> <span class="kd">volatile</span> <span class="kt">int</span> <span class="n">state</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">NEW</span>          <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>  <span class="c1">// 初始化的状态(包括任务未启动, 任务执行中, 任务刚跑完)</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">COMPLETING</span>   <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>  <span class="c1">// 完成中, 这是个过渡状态, 任务跑完了但是还没给outcome赋值</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">NORMAL</span>       <span class="o">=</span> <span class="mi">2</span><span class="o">;</span>  <span class="c1">// 已完成</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">EXCEPTIONAL</span>  <span class="o">=</span> <span class="mi">3</span><span class="o">;</span>  <span class="c1">// 运行中出现了异常</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">CANCELLED</span>    <span class="o">=</span> <span class="mi">4</span><span class="o">;</span>  <span class="c1">// 已取消</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">INTERRUPTING</span> <span class="o">=</span> <span class="mi">5</span><span class="o">;</span>  <span class="c1">// 正在中断</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">INTERRUPTED</span>  <span class="o">=</span> <span class="mi">6</span><span class="o">;</span>  <span class="c1">// 已中断</span>
+
+    <span class="cm">/** 可执行的任务, 即最后的结果是由它计算出来的; 运行结束后将被设置为null */</span>
+    <span class="kd">private</span> <span class="n">Callable</span><span class="o">&lt;</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">callable</span><span class="o">;</span>
+    <span class="cm">/** 用于存放get()时要返回的结果或者异常 */</span>
+    <span class="kd">private</span> <span class="n">Object</span> <span class="n">outcome</span><span class="o">;</span>
+    <span class="cm">/** 执行callable的那个线程 */</span>
+    <span class="kd">private</span> <span class="kd">volatile</span> <span class="n">Thread</span> <span class="n">runner</span><span class="o">;</span>
+    <span class="cm">/** 用于存放等待任务结果的线程, 即调用get()的那些被阻塞的线程都用这个链表来保存, 以便于结果完成时把等待的线程唤醒 */</span>
+    <span class="kd">private</span> <span class="kd">volatile</span> <span class="n">WaitNode</span> <span class="n">waiters</span><span class="o">;</span>
+</code></pre>
+</div>
+
+<h3 id="section">构造方法</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="kd">public</span> <span class="nf">FutureTask</span><span class="p">(</span><span class="n">Callable</span><span class="o">&lt;</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">callable</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">callable</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="n">NullPointerException</span><span class="o">();</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">callable</span> <span class="o">=</span> <span class="n">callable</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">state</span> <span class="o">=</span> <span class="n">NEW</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="n">FutureTask</span><span class="o">(</span><span class="n">Runnable</span> <span class="n">runnable</span><span class="o">,</span> <span class="n">V</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">callable</span> <span class="o">=</span> <span class="n">Executors</span><span class="o">.</span><span class="na">callable</span><span class="o">(</span><span class="n">runnable</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>  <span class="c1">// 把runnable转成了callable</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">state</span> <span class="o">=</span> <span class="n">NEW</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre>
+</div>
+
+<p>我们看到成员变量里只有一个<code class="highlighter-rouge">callable</code>, 而构造方法里传入<code class="highlighter-rouge">Runnable 或 Callable</code>都可以, 在构造方法里已经把<code class="highlighter-rouge">Runnable</code>转化成了<code class="highlighter-rouge">Callable</code>. 我们也可以这样声明一个不需要返回值的task: <code class="highlighter-rouge">Future&lt;?&gt; f = new FutureTask&lt;Void&gt;(runnable, null)</code></p>
+
+<h3 id="run">run方法</h3>
+<p><code class="highlighter-rouge">run()</code>方法是真正执行任务获取最终数据的地方</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">state</span> <span class="o">!=</span> <span class="n">NEW</span> <span class="o">||</span>  <span class="c1">// 如果状态不是 NEW, 短路或就会直接返回, 只有状态 是NEW的时候才会执行后面的CAS</span>
+            <span class="o">!</span><span class="n">UNSAFE</span><span class="o">.</span><span class="na">compareAndSwapObject</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">runnerOffset</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">Thread</span><span class="o">.</span><span class="na">currentThread</span><span class="o">()))</span>
+            <span class="c1">// 这句CAS的意思为 this.runner == null ? (this.runner = 当前线程, 然后返回true) : (返回 false)</span>
+            <span class="c1">// CAS是一个原子操作, 整个if的意思是, 只有状态为NEW且头一回被线程执行(this.runner == null)才会把当前线程赋值给 this.runner</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">Callable</span><span class="o">&lt;</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">callable</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">state</span> <span class="o">==</span> <span class="n">NEW</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">V</span> <span class="n">result</span><span class="o">;</span>
+                <span class="kt">boolean</span> <span class="n">ran</span><span class="o">;</span>  <span class="c1">// 是否正常运行完得到结果的标识</span>
+                <span class="k">try</span> <span class="o">{</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="na">call</span><span class="o">();</span>  <span class="c1">// 处理过程, 获取最终结果的过程</span>
+                    <span class="n">ran</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>  <span class="c1">// 虽然此时已经处理完了获取了result, 但在调用 set 之前state一直是NEW</span>
+                <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Throwable</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span> <span class="c1">// 出了异常的情况</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+                    <span class="n">ran</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+                    <span class="n">setException</span><span class="o">(</span><span class="n">ex</span><span class="o">);</span> <span class="c1">// state状态变换 NEW -&gt; COMPLETING -&gt; EXCEPTIONAL</span>
+                <span class="o">}</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">ran</span><span class="o">)</span>
+                    <span class="n">set</span><span class="o">(</span><span class="n">result</span><span class="o">);</span>  <span class="c1">// state状态变换 NEW -&gt; COMPLETING -&gt; NORMAL</span>
+            <span class="o">}</span>
+        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+            <span class="c1">// runner must be non-null until state is settled to</span>
+            <span class="c1">// prevent concurrent calls to run()</span>
+            <span class="n">runner</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="c1">// state must be re-read after nulling runner to prevent</span>
+            <span class="c1">// leaked interrupts</span>
+            <span class="kt">int</span> <span class="n">s</span> <span class="o">=</span> <span class="n">state</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">s</span> <span class="o">&gt;=</span> <span class="n">INTERRUPTING</span><span class="o">)</span>
+                <span class="n">handlePossibleCancellationInterrupt</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre>
+</div>
 <hr />
 
         </div>
