@@ -109,6 +109,8 @@ jQuery(function(){
       <li><a href="#futuretask-1">FutureTask的结构</a></li>
       <li><a href="#section">构造方法</a></li>
       <li><a href="#run">run方法</a></li>
+      <li><a href="#set">set方法</a></li>
+      <li><a href="#get">get方法</a></li>
     </ul>
   </li>
 </ul>
@@ -207,6 +209,13 @@ jQuery(function(){
     <span class="kd">private</span> <span class="kd">volatile</span> <span class="n">Thread</span> <span class="n">runner</span><span class="o">;</span>
     <span class="cm">/** 用于存放等待任务结果的线程, 即调用get()的那些被阻塞的线程都用这个链表来保存, 以便于结果完成时把等待的线程唤醒 */</span>
     <span class="kd">private</span> <span class="kd">volatile</span> <span class="n">WaitNode</span> <span class="n">waiters</span><span class="o">;</span>
+    <span class="c1">// WaitNode 类定义</span>
+    <span class="kd">static</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">WaitNode</span> <span class="o">{</span>
+        <span class="kd">volatile</span> <span class="n">Thread</span> <span class="n">thread</span><span class="o">;</span>
+        <span class="kd">volatile</span> <span class="n">WaitNode</span> <span class="n">next</span><span class="o">;</span>
+        <span class="n">WaitNode</span><span class="o">()</span> <span class="o">{</span> <span class="n">thread</span> <span class="o">=</span> <span class="n">Thread</span><span class="o">.</span><span class="na">currentThread</span><span class="o">();</span> <span class="o">}</span>
+    <span class="o">}</span>
+
 </code></pre>
 </div>
 
@@ -265,6 +274,105 @@ jQuery(function(){
     <span class="o">}</span>
 </code></pre>
 </div>
+
+<h3 id="set">set方法</h3>
+<p>不管是<code class="highlighter-rouge">set()</code>还是<code class="highlighter-rouge">setException()</code>, 都大同小异, 他们两个都调用了<code class="highlighter-rouge">finishCompletion()</code>方法</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">set</span><span class="p">(</span><span class="n">V</span> <span class="n">v</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">UNSAFE</span><span class="o">.</span><span class="na">compareAndSwapInt</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">stateOffset</span><span class="o">,</span> <span class="n">NEW</span><span class="o">,</span> <span class="n">COMPLETING</span><span class="o">))</span> <span class="o">{</span>  <span class="c1">// 这里状态变成 COMPLETING</span>
+            <span class="n">outcome</span> <span class="o">=</span> <span class="n">v</span><span class="o">;</span> <span class="c1">// 把结果放在 outcome(出现异常时, 异常也放在outcome)</span>
+            <span class="n">UNSAFE</span><span class="o">.</span><span class="na">putOrderedInt</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">stateOffset</span><span class="o">,</span> <span class="n">NORMAL</span><span class="o">);</span> <span class="c1">// 把state改成NORMAL, 但不保证立即改过来(可理解为延时生效, 即不保证修改立即可见)</span>
+            <span class="n">finishCompletion</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="c1">// 这个方法很重要, 它用来唤醒所有的阻塞线程</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="n">finishCompletion</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// 外层是个循环, 很有必要</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">WaitNode</span> <span class="n">q</span><span class="o">;</span> <span class="o">(</span><span class="n">q</span> <span class="o">=</span> <span class="n">waiters</span><span class="o">)</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">;)</span> <span class="o">{</span>
+            <span class="c1">// 代码执行到这里是有可能产生 q != waiters 的情况的, 比如刚进入循环, 又有个地方因调用future.get()</span>
+            <span class="c1">// 而被加入到阻塞链表里, 这时if就不满足了, 所以外层必须是个循环才能继续执行唤醒工作</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">UNSAFE</span><span class="o">.</span><span class="na">compareAndSwapObject</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">waitersOffset</span><span class="o">,</span> <span class="n">q</span><span class="o">,</span> <span class="kc">null</span><span class="o">))</span> <span class="o">{</span> <span class="c1">// 原子操作 waiters = null</span>
+                <span class="k">for</span> <span class="o">(;;)</span> <span class="o">{</span>
+                    <span class="n">Thread</span> <span class="n">t</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="na">thread</span><span class="o">;</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">t</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">q</span><span class="o">.</span><span class="na">thread</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+                        <span class="n">LockSupport</span><span class="o">.</span><span class="na">unpark</span><span class="o">(</span><span class="n">t</span><span class="o">);</span>  <span class="c1">// 唤醒阻塞线程</span>
+                    <span class="o">}</span>
+                    <span class="n">WaitNode</span> <span class="n">next</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">next</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="c1">// 唤醒所有阻塞线程后跳出死循环</span>
+                        <span class="k">break</span><span class="o">;</span>
+                    <span class="n">q</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span> <span class="c1">// unlink to help gc</span>
+                    <span class="n">q</span> <span class="o">=</span> <span class="n">next</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="k">break</span><span class="o">;</span> <span class="c1">// 跳出外层循环(不用担心在唤醒的的时候又有新线程被添加到阻塞链表里, get方法中可以保证)</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="n">done</span><span class="o">();</span>
+        <span class="n">callable</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>   <span class="c1">// 清理执行足迹</span>
+    <span class="o">}</span>
+</code></pre>
+</div>
+
+<h3 id="get">get方法</h3>
+<p>不管是<code class="highlighter-rouge">get()</code>是获取最终结果的方法, 如果结果数据还没准备好, 则调用线程将被阻塞, 被记录在<code class="highlighter-rouge">FutureTask</code>的阻塞链表(<code class="highlighter-rouge">waiters</code>)里.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="kd">public</span> <span class="n">V</span> <span class="nf">get</span><span class="p">(</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">InterruptedException</span><span class="o">,</span> <span class="n">ExecutionException</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">s</span> <span class="o">=</span> <span class="n">state</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">s</span> <span class="o">&lt;=</span> <span class="n">COMPLETING</span><span class="o">)</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">awaitDone</span><span class="o">(</span><span class="kc">false</span><span class="o">,</span> <span class="mi">0L</span><span class="o">);</span>  <span class="c1">// 真正的阻塞发生在这里</span>
+        <span class="k">return</span> <span class="n">report</span><span class="o">(</span><span class="n">s</span><span class="o">);</span> <span class="c1">// 根据状态返回结果</span>
+    <span class="o">}</span>
+    <span class="c1">// 根据state返回结果, 结果或异常都在outcome里</span>
+    <span class="kd">private</span> <span class="n">V</span> <span class="n">report</span><span class="o">(</span><span class="kt">int</span> <span class="n">s</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ExecutionException</span> <span class="o">{</span>
+        <span class="n">Object</span> <span class="n">x</span> <span class="o">=</span> <span class="n">outcome</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">s</span> <span class="o">==</span> <span class="n">NORMAL</span><span class="o">)</span>  <span class="c1">// 正常结束返回结果</span>
+            <span class="k">return</span> <span class="o">(</span><span class="n">V</span><span class="o">)</span><span class="n">x</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">s</span> <span class="o">&gt;=</span> <span class="n">CANCELLED</span><span class="o">)</span>  <span class="c1">// 取消了抛异常</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="n">CancellationException</span><span class="o">();</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="n">ExecutionException</span><span class="o">((</span><span class="n">Throwable</span><span class="o">)</span><span class="n">x</span><span class="o">);</span> <span class="c1">// 执行过程中产生的异常直接抛出</span>
+    <span class="o">}</span>
+    <span class="c1">// 等待(可以等待一段时间, 时间到就不再等了)</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">awaitDone</span><span class="o">(</span><span class="kt">boolean</span> <span class="n">timed</span><span class="o">,</span> <span class="kt">long</span> <span class="n">nanos</span><span class="o">)</span>
+        <span class="kd">throws</span> <span class="n">InterruptedException</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="kt">long</span> <span class="n">deadline</span> <span class="o">=</span> <span class="n">timed</span> <span class="o">?</span> <span class="n">System</span><span class="o">.</span><span class="na">nanoTime</span><span class="o">()</span> <span class="o">+</span> <span class="n">nanos</span> <span class="o">:</span> <span class="mi">0L</span><span class="o">;</span>
+        <span class="n">WaitNode</span> <span class="n">q</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="kt">boolean</span> <span class="n">queued</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>  <span class="c1">// 这个变量表示有没有把当前线程加入到阻塞链表中去</span>
+        <span class="k">for</span> <span class="o">(;;)</span> <span class="o">{</span> <span class="c1">// 这个循环会被执行很多次, 每次都匹配到条件执行, 直到复合特定条件才直接返回结果</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">Thread</span><span class="o">.</span><span class="na">interrupted</span><span class="o">())</span> <span class="o">{</span>
+                <span class="n">removeWaiter</span><span class="o">(</span><span class="n">q</span><span class="o">);</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="n">InterruptedException</span><span class="o">();</span>
+            <span class="o">}</span>
+            <span class="kt">int</span> <span class="n">s</span> <span class="o">=</span> <span class="n">state</span><span class="o">;</span>  <span class="c1">// 这里注意跟set中同步, 有可能刚得到s, sate就被更改了</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">s</span> <span class="o">&gt;</span> <span class="n">COMPLETING</span><span class="o">)</span> <span class="o">{</span>  <span class="c1">// 这里保证只有 NEW 和 COMPLETING 才不会直接返回</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">q</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span>
+                    <span class="n">q</span><span class="o">.</span><span class="na">thread</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+                <span class="k">return</span> <span class="n">s</span><span class="o">;</span>  <span class="c1">// 这里的跳出循环并返回结果, 实际上只有任务完成(或被取消)才会执行到</span>
+            <span class="o">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">s</span> <span class="o">==</span> <span class="n">COMPLETING</span><span class="o">)</span> <span class="c1">// 这里把 COMPLETING 也排除掉了, 也就是说, 往下走的情况只有 s = NEW</span>
+                <span class="n">Thread</span><span class="o">.</span><span class="na">yield</span><span class="o">();</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">q</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
+                <span class="n">q</span> <span class="o">=</span> <span class="k">new</span> <span class="n">WaitNode</span><span class="o">();</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="o">(!</span><span class="n">queued</span><span class="o">)</span>
+                <span class="c1">// 头插法(q.next指向原表头, 并把q赋值给了waiters, 相当于q放在了链表头), 成功返回true表示已经加入到了阻塞链表.</span>
+                <span class="c1">// 这一切发生的前提是 waitersOffset == waiters, 这并不总是成立,</span>
+                <span class="c1">// 因为有可能刚好在q.next = waiters之后(此时得到了waiters, 假设用tmp表示),</span>
+                <span class="c1">// set方法里把futureTask.waiters改成了null. 这时就会出现waitersOffset != waiters(tmp)的情况</span>
+                <span class="n">queued</span> <span class="o">=</span> <span class="n">UNSAFE</span><span class="o">.</span><span class="na">compareAndSwapObject</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">waitersOffset</span><span class="o">,</span> <span class="n">q</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">waiters</span><span class="o">,</span> <span class="n">q</span><span class="o">);</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">timed</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">nanos</span> <span class="o">=</span> <span class="n">deadline</span> <span class="o">-</span> <span class="n">System</span><span class="o">.</span><span class="na">nanoTime</span><span class="o">();</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">nanos</span> <span class="o">&lt;=</span> <span class="mi">0L</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">removeWaiter</span><span class="o">(</span><span class="n">q</span><span class="o">);</span>
+                    <span class="k">return</span> <span class="n">state</span><span class="o">;</span>  <span class="c1">// 如果设置了等待时间, 时间到了也会跳出循环</span>
+                <span class="o">}</span>
+                <span class="n">LockSupport</span><span class="o">.</span><span class="na">parkNanos</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">nanos</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="k">else</span>
+                <span class="n">LockSupport</span><span class="o">.</span><span class="na">park</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre>
+</div>
+
 <hr />
 
         </div>

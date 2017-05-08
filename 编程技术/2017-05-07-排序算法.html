@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="排序算法, 编程技术, Java, 逆水行舟" />
+    <meta name="description" content="排序算法, 编程技术, Java, 基本的排序算法" />
+
+    <title>逆水行舟</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-07-%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="/static/js/jquery.qrcode.min.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="/static/js/uikit.min.js"></script>
+    <!-- quietflow -->
+    <!-- <script type="text/javascript" src="http://loveshisong.cn/static/js/quietflow.min.js"></script> -->
+    <!-- UK sticky -->
+    <script type="text/javascript" src="/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "shisong"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" data-uk-sticky>
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <script type="text/javascript">
+jQuery(function(){
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-07-%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95.html"
+    });
+})
+</script>
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>排序算法</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <p>基本的排序算法</p>
+
+<hr />
+
+<ul id="markdown-toc">
+  <li><a href="#section">插入类排序</a>    <ul>
+      <li><a href="#section-1">直接插入排序</a></li>
+      <li><a href="#section-2">折半插入排序</a></li>
+    </ul>
+  </li>
+  <li><a href="#section-3">交换类排序</a>    <ul>
+      <li><a href="#section-4">冒泡排序</a></li>
+      <li><a href="#section-5">快速排序</a></li>
+    </ul>
+  </li>
+  <li><a href="#section-6">选择类排序</a>    <ul>
+      <li><a href="#section-7">简单选择排序</a></li>
+      <li><a href="#section-8">堆排序</a></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="section">插入类排序</h2>
+<p>插入类排序基本思想在于, 每次将一个元素插入到前面已经排好序的子序列中, 包括<code class="highlighter-rouge">直接插入排序</code>、<code class="highlighter-rouge">折半插入排序</code>、<code class="highlighter-rouge">希尔排序</code></p>
+
+<h3 id="section-1">直接插入排序</h3>
+<ul>
+  <li>基本思想: 一个数组, 左边有序(起始只有一个元素), 把右边元素依次插入到左边的有序表</li>
+  <li>算法步骤:
+    <ol>
+      <li>找到元素<code class="highlighter-rouge">L[i]</code>在左边有序表<code class="highlighter-rouge">L[1 ~ i-1]</code>的插入位置<code class="highlighter-rouge">k</code></li>
+      <li>将<code class="highlighter-rouge">L[k ~ i-1]</code>所有元素全部后移一个位置(必须临时存放原来的<code class="highlighter-rouge">L[i]</code>)</li>
+      <li>把元素 <code class="highlighter-rouge">L(i)</code>复制到<code class="highlighter-rouge">L[k]</code></li>
+    </ol>
+  </li>
+  <li>算法描述:</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// 直接插入排序</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">insertSort</span><span class="o">(</span><span class="kt">int</span> <span class="n">A</span><span class="o">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">i</span><span class="o">,</span> <span class="n">j</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>    <span class="c1">// 依次将A[1]~A[n-1]插入到前面已排序序列(初始的有序表只有A[0])</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">A</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">A</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">])</span> <span class="o">{</span>        <span class="c1">// 若A[i]小于前驱, 需将A[i]插入有序表</span>
+                <span class="kt">int</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">A</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>           <span class="c1">// 临时存放待插入元素</span>
+                <span class="k">for</span> <span class="o">(</span><span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">tmp</span> <span class="o">&lt;</span> <span class="n">A</span><span class="o">[</span><span class="n">j</span><span class="o">];</span> <span class="o">--</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>  <span class="c1">// 向前查找待插入位置</span>
+                    <span class="n">A</span><span class="o">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">A</span><span class="o">[</span><span class="n">j</span><span class="o">];</span>      <span class="c1">// 向后挪位</span>
+                <span class="o">}</span>
+                <span class="n">A</span><span class="o">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">;</span>           <span class="c1">// 复制到插入位置</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre>
+</div>
+
+<ul>
+  <li>空间复杂度: <code class="highlighter-rouge">O(1)</code>, 借助于了一个临时存放单元</li>
+  <li>时间复杂度: <code class="highlighter-rouge">O(n^2)</code>, 最好情况下, 元素已经有序, 时间复杂度为<code class="highlighter-rouge">O(n)</code></li>
+  <li>稳定性: 稳定</li>
+  <li>适用场景: 基本有序</li>
+</ul>
+
+<h3 id="section-2">折半插入排序</h3>
+
+<ul>
+  <li>基本思想: 也是左边有序, 右边依次插入有序表, 不同的是找插入位置<code class="highlighter-rouge">k</code>时, 使用折半查找法</li>
+  <li>算法描述:</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// 折半插入排序(递增排序)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">insertSort</span><span class="o">(</span><span class="kt">int</span> <span class="n">A</span><span class="o">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>   <span class="c1">// 依次将A[1]~A[n-1]插入到前面已排序序列</span>
+            <span class="kt">int</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">A</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>                  <span class="c1">// 临时存放待插入元素</span>
+            <span class="kt">int</span> <span class="n">low</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>                     <span class="c1">// 折半查找的范围</span>
+            <span class="kt">int</span> <span class="n">high</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">low</span> <span class="o">&lt;=</span> <span class="n">high</span><span class="o">)</span> <span class="o">{</span>            <span class="c1">// 折半查找(low == high 总会发生)</span>
+                <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="o">(</span><span class="n">low</span> <span class="o">+</span> <span class="n">high</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">;</span>  <span class="c1">// 取中间点</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">A</span><span class="o">[</span><span class="n">mid</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">tmp</span><span class="o">)</span> <span class="o">{</span>          <span class="c1">// 查找左半子表</span>
+                    <span class="n">high</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>                     <span class="c1">// 查找右半子表</span>
+                    <span class="n">low</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="c1">// 程序到这里会出现 high + 1 == low</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="n">high</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span> <span class="o">--</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>  <span class="c1">// 统一移动元素, 空出插入位置</span>
+                <span class="n">A</span><span class="o">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">A</span><span class="o">[</span><span class="n">j</span><span class="o">];</span>  <span class="c1">// 向后挪位</span>
+            <span class="o">}</span>
+            <span class="n">A</span><span class="o">[</span><span class="n">high</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+</code></pre>
+</div>
+
+<ul>
+  <li>空间复杂度: <code class="highlighter-rouge">O(1)</code></li>
+  <li>时间复杂度: <code class="highlighter-rouge">O(n^2)</code>, 仅减少了比较次数, 大约为<code class="highlighter-rouge">O(nlogn)</code>(<code class="highlighter-rouge">log</code>表示以2为底的对数), 且比较次数与初始顺序无关</li>
+  <li>稳定性: 稳定</li>
+  <li>适用场景: 数据量不大</li>
+</ul>
+
+<hr />
+
+<h2 id="section-3">交换类排序</h2>
+<p>交换类排序的基本思想在于, 根据两个元素的比较结果来交换两个元素在序列中的位置, 包括<code class="highlighter-rouge">冒泡排序</code>和<code class="highlighter-rouge">快速排序</code></p>
+
+<h3 id="section-4">冒泡排序</h3>
+<ul>
+  <li>基本思想: 从后向前(也可从前向后)依次比较相邻两元素, 若为逆序则交换, 这样一趟冒泡会把最小的元素交换到第一个位置; 下一趟冒泡时, 第一个元素就不再参与了, 这样每次都把最小元素交换到前面, 总共进行<code class="highlighter-rouge">n-1</code>趟冒泡就可以了.</li>
+  <li>算法描述:</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// 冒泡排序(递增排序)</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">bubbleSort</span><span class="o">(</span><span class="kt">int</span> <span class="n">A</span><span class="o">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>       <span class="c1">// 总共需要n-1趟冒泡</span>
+            <span class="kt">boolean</span> <span class="n">flag</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>               <span class="c1">// 用于记录本趟是否发生了交换, 只要有一趟没发生交换, 就说明已经有序了</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="n">i</span><span class="o">;</span> <span class="n">j</span><span class="o">--)</span> <span class="o">{</span>   <span class="c1">// 一趟冒泡</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">A</span><span class="o">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">A</span><span class="o">[</span><span class="n">j</span><span class="o">])</span> <span class="o">{</span>          <span class="c1">// 相邻元素比较</span>
+                    <span class="n">swap</span><span class="o">(</span><span class="n">A</span><span class="o">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="o">],</span> <span class="n">A</span><span class="o">[</span><span class="n">j</span><span class="o">]);</span>         <span class="c1">// 交换</span>
+                    <span class="n">flag</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">flag</span><span class="o">)</span> <span class="o">{</span>  <span class="c1">// 如果这趟没发生交换, 说明已经有序了</span>
+                <span class="k">return</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre>
+</div>
+
+<ul>
+  <li>空间复杂度: <code class="highlighter-rouge">O(1)</code></li>
+  <li>时间复杂度: <code class="highlighter-rouge">O(n^2)</code>, 最好情况下, 元素已经有序, 时间复杂度为<code class="highlighter-rouge">O(n)</code></li>
+  <li>稳定性: 稳定</li>
+  <li>适用场景: 基本有序</li>
+  <li>另附关于交换两个单元的方法:</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// 借助临时单元</span>
+    <span class="kt">int</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">a</span><span class="o">;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">b</span><span class="o">;</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">;</span>
+    <span class="c1">// 直接交换</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="o">;</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="o">;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="o">;</span>
+    <span class="c1">// 位操作交换</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">^</span> <span class="n">b</span><span class="o">;</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">a</span> <span class="o">^</span> <span class="n">b</span><span class="o">;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">^</span> <span class="n">b</span><span class="o">;</span>
+</code></pre>
+</div>
+
+<h3 id="section-5">快速排序</h3>
+<ul>
+  <li>基本思想: 基于分治法, 在n个元素中任取一个元素<code class="highlighter-rouge">pivot</code>(一般为第一个元素)作为基准, 一趟排序后把数据分成两部分, 左边<code class="highlighter-rouge">L[0 ~ k-1]</code>和 右边<code class="highlighter-rouge">L[k+1 ~ n-1]</code>, 使得左边元素都小于<code class="highlighter-rouge">pivot</code>, 右边都大于<code class="highlighter-rouge">pivot</code>, 而<code class="highlighter-rouge">pivot</code>直接复制到<code class="highlighter-rouge">L[k]</code>上, 这个过程成为一趟快排; 然后对左子表和右子表分别进行上述过程, 直到每部分只有一个元素或为空为止, 即所有元素都放在了最终位置上.</li>
+  <li>算法描述:</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// 快速排序</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">quickSort</span><span class="o">(</span><span class="kt">int</span> <span class="n">A</span><span class="o">[],</span> <span class="kt">int</span> <span class="n">left</span><span class="o">,</span> <span class="kt">int</span> <span class="n">right</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span><span class="o">)</span> <span class="o">{</span>  <span class="c1">// 跳出递归的条件</span>
+            <span class="kt">int</span> <span class="n">pivotPos</span> <span class="o">=</span> <span class="n">partition</span><span class="o">(</span><span class="n">A</span><span class="o">,</span> <span class="n">left</span><span class="o">,</span> <span class="n">right</span><span class="o">);</span>  <span class="c1">// 划分函数, 找到pivot的位置</span>
+            <span class="n">quickSort</span><span class="o">(</span><span class="n">A</span><span class="o">,</span> <span class="n">left</span><span class="o">,</span> <span class="n">pivotPos</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>          <span class="c1">// 排序左子表</span>
+            <span class="n">quickSort</span><span class="o">(</span><span class="n">A</span><span class="o">,</span> <span class="n">pivotPos</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">right</span><span class="o">);</span>         <span class="c1">// 排序右子表</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="c1">// 划分函数, 一趟排序的过程</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">int</span> <span class="n">partition</span><span class="o">(</span><span class="kt">int</span> <span class="n">A</span><span class="o">[],</span> <span class="kt">int</span> <span class="n">left</span><span class="o">,</span> <span class="kt">int</span> <span class="n">right</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">pivot</span> <span class="o">=</span> <span class="n">A</span><span class="o">[</span><span class="n">left</span><span class="o">];</span>           <span class="c1">// 任取一个元素作为基准, 这里用第一个元素作为基准</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span><span class="o">)</span> <span class="o">{</span>         <span class="c1">// 循环跳出的条件</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span> <span class="o">&amp;&amp;</span> <span class="n">A</span><span class="o">[</span><span class="n">right</span><span class="o">]</span> <span class="o">&gt;=</span> <span class="n">pivot</span><span class="o">)</span> <span class="o">--</span><span class="n">right</span><span class="o">;</span>   <span class="c1">// 从后向前找到第一个小于pivot的元素</span>
+            <span class="n">A</span><span class="o">[</span><span class="n">left</span><span class="o">]</span> <span class="o">=</span> <span class="n">A</span><span class="o">[</span><span class="n">right</span><span class="o">];</span>        <span class="c1">// 把小于pivot的元素换到左边</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span> <span class="o">&amp;&amp;</span> <span class="n">A</span><span class="o">[</span><span class="n">left</span><span class="o">]</span> <span class="o">&lt;=</span> <span class="n">pivot</span><span class="o">)</span> <span class="o">++</span><span class="n">left</span><span class="o">;</span>     <span class="c1">// 从前向后找到第一个大于pivot的元素</span>
+            <span class="n">A</span><span class="o">[</span><span class="n">right</span><span class="o">]</span> <span class="o">=</span> <span class="n">A</span><span class="o">[</span><span class="n">left</span><span class="o">];</span>        <span class="c1">// 把大于pivot的元素换到右边</span>
+        <span class="o">}</span>
+        <span class="c1">// 跳出循环总会有 left == right</span>
+        <span class="n">A</span><span class="o">[</span><span class="n">left</span><span class="o">]</span> <span class="o">=</span> <span class="n">pivot</span><span class="o">;</span>
+        <span class="k">return</span> <span class="n">left</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre>
+</div>
+
+<ul>
+  <li>空间复杂度: <code class="highlighter-rouge">O(n)</code>, 栈深度最好为<code class="highlighter-rouge">log(n+1)</code>, 最坏为<code class="highlighter-rouge">n-1</code>, 平均栈深度<code class="highlighter-rouge">O(logn)</code></li>
+  <li>时间复杂度: 最好<code class="highlighter-rouge">O(nlogn)</code>, 最坏(有序时最坏)<code class="highlighter-rouge">O(n^2)</code>, 平均接近最好情况; <code class="highlighter-rouge">快排是是所有排序算法中平均性能最优的</code></li>
+  <li>稳定性: 不稳定</li>
+</ul>
+
+<hr />
+
+<h2 id="section-6">选择类排序</h2>
+<p>选择类排序的基本思想在于, 每趟都从待排序列中选取一个最小值作为序列的第i个元素,直到第<code class="highlighter-rouge">n-1</code>趟, 待排序列只剩下一个元素. 包括<code class="highlighter-rouge">简单选择排序</code>和<code class="highlighter-rouge">堆排序</code></p>
+
+<h3 id="section-7">简单选择排序</h3>
+<ul>
+  <li>基本思想: 第<code class="highlighter-rouge">i</code>趟从<code class="highlighter-rouge">L[i ~ n]</code>中选择关键字最小的元素与<code class="highlighter-rouge">L[i]</code>交换, 这样每趟都可确定一个元素的最终位置, 经过<code class="highlighter-rouge">n-1</code>趟就可以使整个序列有序.</li>
+  <li>算法描述:</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// 简单选择排序</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">selectSort</span><span class="o">(</span><span class="kt">int</span> <span class="n">A</span><span class="o">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>      <span class="c1">// 一共进行 n-1 趟</span>
+            <span class="kt">int</span> <span class="n">min</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>                       <span class="c1">// 记录最小元素位置</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span>  <span class="c1">// 从 A[i+1 ~ n-1]中选择最小元素</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">A</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">A</span><span class="o">[</span><span class="n">min</span><span class="o">])</span> <span class="o">{</span>           <span class="c1">// 更新最小元素位置</span>
+                    <span class="n">min</span> <span class="o">=</span> <span class="n">j</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">min</span> <span class="o">!=</span> <span class="n">i</span><span class="o">)</span> <span class="o">{</span>                    <span class="c1">// 最小的与第i个位置交换</span>
+                <span class="n">swap</span><span class="o">(</span><span class="n">A</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="n">A</span><span class="o">[</span><span class="n">min</span><span class="o">]);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre>
+</div>
+
+<ul>
+  <li>空间复杂度: <code class="highlighter-rouge">O(1)</code></li>
+  <li>时间复杂度: <code class="highlighter-rouge">O(n^2)</code></li>
+  <li>稳定性: 不稳定</li>
+</ul>
+
+<h3 id="section-8">堆排序</h3>
+<ul>
+  <li>特点: 在排序过程中, 把<code class="highlighter-rouge">L[1 ~ n]</code>看成是一颗<code class="highlighter-rouge">完全二叉树</code>的顺序存储结构, 利用完全二叉树中父节点和子节点的内在关系, 在当前无需区中选择关键字最大(或最小)的元素</li>
+  <li>完全二叉树: 若二叉树除最后一层外, 其它各层的结点数都达到最大个数, 最后一层所有的结点都连续集中在最左边, 这就是完全二叉树</li>
+  <li>小根堆: <code class="highlighter-rouge">L[1~n]</code>满足 <code class="highlighter-rouge">L[i]&lt;=L[2i]</code>且<code class="highlighter-rouge">L[i]&lt;=L[2i+1]</code></li>
+  <li>大根堆: <code class="highlighter-rouge">L[1~n]</code>满足 <code class="highlighter-rouge">L[i]&gt;=L[2i]</code>且<code class="highlighter-rouge">L[i]&gt;=L[2i+1]</code></li>
+  <li>示例:</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 序列为:</span>
+<span class="mi">16</span><span class="o">,</span> <span class="mi">14</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="mi">8</span><span class="o">,</span> <span class="mi">7</span> <span class="o">,</span> <span class="mi">9</span> <span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span>
+<span class="c1">// 表示的大根堆为:</span>
+          <span class="mi">16</span>
+        <span class="o">+</span>     <span class="o">+</span>
+     <span class="mi">14</span>         <span class="mi">10</span>
+    <span class="o">+</span>   <span class="o">+</span>     <span class="o">+</span>    <span class="o">+</span>  
+  <span class="mi">8</span>      <span class="mi">7</span>   <span class="mi">9</span>      <span class="mi">3</span>
+ <span class="o">+</span> <span class="o">+</span>
+<span class="mi">2</span>   <span class="mi">4</span>
+</code></pre>
+</div>
+<ul>
+  <li>算法思想: </li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code></code></pre>
+</div>
+
+<ul>
+  <li>空间复杂度: <code class="highlighter-rouge">O(1)</code></li>
+  <li>时间复杂度: <code class="highlighter-rouge">O(n^2)</code></li>
+  <li>稳定性: 不稳定</li>
+</ul>
+
+<hr />
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/排序算法" data-title="排序算法" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-07-%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
+
+</body>
+
+</html>
