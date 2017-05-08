@@ -107,6 +107,13 @@ JDK中`Future模式`的经典实现类为`FutureTask`, 它除了实现了`Future
     private volatile Thread runner;
     /** 用于存放等待任务结果的线程, 即调用get()的那些被阻塞的线程都用这个链表来保存, 以便于结果完成时把等待的线程唤醒 */
     private volatile WaitNode waiters;
+    // WaitNode 类定义
+    static final class WaitNode {
+        volatile Thread thread;
+        volatile WaitNode next;
+        WaitNode() { thread = Thread.currentThread(); }
+    }
+
 ~~~
 
 ### 构造方法
@@ -164,4 +171,105 @@ JDK中`Future模式`的经典实现类为`FutureTask`, 它除了实现了`Future
         }
     }
 ~~~
+
+
+### set方法
+不管是`set()`还是`setException()`, 都大同小异, 他们两个都调用了`finishCompletion()`方法
+
+~~~java
+    protected void set(V v) {
+        if (UNSAFE.compareAndSwapInt(this, stateOffset, NEW, COMPLETING)) {  // 这里状态变成 COMPLETING
+            outcome = v; // 把结果放在 outcome(出现异常时, 异常也放在outcome)
+            UNSAFE.putOrderedInt(this, stateOffset, NORMAL); // 把state改成NORMAL, 但不保证立即改过来(可理解为延时生效, 即不保证修改立即可见)
+            finishCompletion();
+        }
+    }
+    // 这个方法很重要, 它用来唤醒所有的阻塞线程
+    private void finishCompletion() {
+        // 外层是个循环, 很有必要
+        for (WaitNode q; (q = waiters) != null;) {
+            // 代码执行到这里是有可能产生 q != waiters 的情况的, 比如刚进入循环, 又有个地方因调用future.get()
+            // 而被加入到阻塞链表里, 这时if就不满足了, 所以外层必须是个循环才能继续执行唤醒工作
+            if (UNSAFE.compareAndSwapObject(this, waitersOffset, q, null)) { // 原子操作 waiters = null
+                for (;;) {
+                    Thread t = q.thread;
+                    if (t != null) {
+                        q.thread = null;
+                        LockSupport.unpark(t);  // 唤醒阻塞线程
+                    }
+                    WaitNode next = q.next;
+                    if (next == null) // 唤醒所有阻塞线程后跳出死循环
+                        break;
+                    q.next = null; // unlink to help gc
+                    q = next;
+                }
+                break; // 跳出外层循环(不用担心在唤醒的的时候又有新线程被添加到阻塞链表里, get方法中可以保证)
+            }
+        }
+        done();
+        callable = null;   // 清理执行足迹
+    }
+~~~
+
+
+### get方法
+不管是`get()`是获取最终结果的方法, 如果结果数据还没准备好, 则调用线程将被阻塞, 被记录在`FutureTask`的阻塞链表(`waiters`)里.
+
+~~~java
+    public V get() throws InterruptedException, ExecutionException {
+        int s = state;
+        if (s <= COMPLETING)
+            s = awaitDone(false, 0L);  // 真正的阻塞发生在这里
+        return report(s); // 根据状态返回结果
+    }
+    // 根据state返回结果, 结果或异常都在outcome里
+    private V report(int s) throws ExecutionException {
+        Object x = outcome;
+        if (s == NORMAL)  // 正常结束返回结果
+            return (V)x;
+        if (s >= CANCELLED)  // 取消了抛异常
+            throw new CancellationException();
+        throw new ExecutionException((Throwable)x); // 执行过程中产生的异常直接抛出
+    }
+    // 等待(可以等待一段时间, 时间到就不再等了)
+    private int awaitDone(boolean timed, long nanos)
+        throws InterruptedException {
+        final long deadline = timed ? System.nanoTime() + nanos : 0L;
+        WaitNode q = null;
+        boolean queued = false;  // 这个变量表示有没有把当前线程加入到阻塞链表中去
+        for (;;) { // 这个循环会被执行很多次, 每次都匹配到条件执行, 直到复合特定条件才直接返回结果
+            if (Thread.interrupted()) {
+                removeWaiter(q);
+                throw new InterruptedException();
+            }
+            int s = state;  // 这里注意跟set中同步, 有可能刚得到s, sate就被更改了
+            if (s > COMPLETING) {  // 这里保证只有 NEW 和 COMPLETING 才不会直接返回
+                if (q != null)
+                    q.thread = null;
+                return s;  // 这里的跳出循环并返回结果, 实际上只有任务完成(或被取消)才会执行到
+            }
+            else if (s == COMPLETING) // 这里把 COMPLETING 也排除掉了, 也就是说, 往下走的情况只有 s = NEW
+                Thread.yield();
+            else if (q == null)
+                q = new WaitNode();
+            else if (!queued)
+                // 头插法(q.next指向原表头, 并把q赋值给了waiters, 相当于q放在了链表头), 成功返回true表示已经加入到了阻塞链表.
+                // 这一切发生的前提是 waitersOffset == waiters, 这并不总是成立,
+                // 因为有可能刚好在q.next = waiters之后(此时得到了waiters, 假设用tmp表示),
+                // set方法里把futureTask.waiters改成了null. 这时就会出现waitersOffset != waiters(tmp)的情况
+                queued = UNSAFE.compareAndSwapObject(this, waitersOffset, q.next = waiters, q);
+            else if (timed) {
+                nanos = deadline - System.nanoTime();
+                if (nanos <= 0L) {
+                    removeWaiter(q);
+                    return state;  // 如果设置了等待时间, 时间到了也会跳出循环
+                }
+                LockSupport.parkNanos(this, nanos);
+            }
+            else
+                LockSupport.park(this);
+        }
+    }
+~~~
+
 ******
