@@ -36,26 +36,6 @@ tag: Java
 
 *****
 
-## 存储结构
-`HashMap`的数据结构是数组加链表的形式。结构大体如下:
-
-![ConcurrentHashMap结构图]({{ "/static/images/ConcurrentHashMap.png"  | prepend: site.baseurl }} "ConcurrentHashMap结构图")
-
-可以看出`ConcurrentHashMap`有点像把`HashTable`又包了一层, 把`table`放到了`segments`里, 这样同步锁是在每一个`segment`里的, 只要多个修改操作发生在不同的段上, 它们就可以并发进行. 我们为了区分, 把每个元素`segment`成为`段`(有的文章里称作`桶`), 把`segment`里面的`table`的单个元素成为`桶`.
-
-我们来看看`Segment`的结构, 跟`HashMap`里的结构非常类似:
-
-~~~java
-    static final class Segment<K,V> extends ReentrantLock implements Serializable {
-        transient volatile HashEntry<K,V>[] table; // 桶, 除了类型, 其他跟HashMap里的table一样
-        transient int count;     // HashEntry的总个数, 对应HashMap里的size
-        transient int modCount;  // 同HashMap
-        transient int threshold; // 同HashMap
-    }
-~~~
-
-******
-
 ## 需要知道的概念
 `ConcurrentHashMap`比`HashMap`多了一层, 新增了几个概念:
 
