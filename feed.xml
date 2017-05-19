@@ -5,8 +5,8 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 19 May 2017 12:09:30 +0800</pubDate>
-    <lastBuildDate>Fri, 19 May 2017 12:09:30 +0800</lastBuildDate>
+    <pubDate>Fri, 19 May 2017 17:08:50 +0800</pubDate>
+    <lastBuildDate>Fri, 19 May 2017 17:08:50 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
@@ -203,9 +203,8 @@
 
 &lt;ul id=&quot;markdown-toc&quot;&gt;
   &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;存储结构&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;存储结构&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;需要知道的概念&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-3&quot;&gt;构造方法&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;需要知道的概念&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;构造方法&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;hr /&gt;
@@ -230,27 +229,7 @@
 
 &lt;hr /&gt;
 
-&lt;h2 id=&quot;section-1&quot;&gt;存储结构&lt;/h2&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;HashMap&lt;/code&gt;的数据结构是数组加链表的形式。结构大体如下:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/static/images/ConcurrentHashMap.png&quot; alt=&quot;ConcurrentHashMap结构图&quot; title=&quot;ConcurrentHashMap结构图&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;可以看出&lt;code class=&quot;highlighter-rouge&quot;&gt;ConcurrentHashMap&lt;/code&gt;有点像把&lt;code class=&quot;highlighter-rouge&quot;&gt;HashTable&lt;/code&gt;又包了一层, 把&lt;code class=&quot;highlighter-rouge&quot;&gt;table&lt;/code&gt;放到了&lt;code class=&quot;highlighter-rouge&quot;&gt;segments&lt;/code&gt;里, 这样同步锁是在每一个&lt;code class=&quot;highlighter-rouge&quot;&gt;segment&lt;/code&gt;里的, 只要多个修改操作发生在不同的段上, 它们就可以并发进行. 我们为了区分, 把每个元素&lt;code class=&quot;highlighter-rouge&quot;&gt;segment&lt;/code&gt;成为&lt;code class=&quot;highlighter-rouge&quot;&gt;段&lt;/code&gt;(有的文章里称作&lt;code class=&quot;highlighter-rouge&quot;&gt;桶&lt;/code&gt;), 把&lt;code class=&quot;highlighter-rouge&quot;&gt;segment&lt;/code&gt;里面的&lt;code class=&quot;highlighter-rouge&quot;&gt;table&lt;/code&gt;的单个元素成为&lt;code class=&quot;highlighter-rouge&quot;&gt;桶&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;我们来看看&lt;code class=&quot;highlighter-rouge&quot;&gt;Segment&lt;/code&gt;的结构, 跟&lt;code class=&quot;highlighter-rouge&quot;&gt;HashMap&lt;/code&gt;里的结构非常类似:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Segment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ReentrantLock&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Serializable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;transient&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;volatile&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HashEntry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 桶, 除了类型, 其他跟HashMap里的table一样&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;transient&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;     &lt;span class=&quot;c1&quot;&gt;// HashEntry的总个数, 对应HashMap里的size&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;transient&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;modCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 同HashMap&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;transient&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;threshold&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 同HashMap&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section-2&quot;&gt;需要知道的概念&lt;/h2&gt;
+&lt;h2 id=&quot;section-1&quot;&gt;需要知道的概念&lt;/h2&gt;
 &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ConcurrentHashMap&lt;/code&gt;比&lt;code class=&quot;highlighter-rouge&quot;&gt;HashMap&lt;/code&gt;多了一层, 新增了几个概念:&lt;/p&gt;
 
 &lt;ul&gt;
@@ -262,7 +241,7 @@
 
 &lt;hr /&gt;
 
-&lt;h2 id=&quot;section-3&quot;&gt;构造方法&lt;/h2&gt;
+&lt;h2 id=&quot;section-2&quot;&gt;构造方法&lt;/h2&gt;
 &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ConcurrentHashMap&lt;/code&gt;有重载了5个构造方法, 实现都是类似的, 直接从代码中解释&lt;/p&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ConcurrentHashMap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;initialCapacity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;float&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loadFactor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;concurrencyLevel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;

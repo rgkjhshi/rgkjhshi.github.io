@@ -105,9 +105,8 @@ jQuery(function(){
 
 <ul id="markdown-toc">
   <li><a href="#section">存储结构</a></li>
-  <li><a href="#section-1">存储结构</a></li>
-  <li><a href="#section-2">需要知道的概念</a></li>
-  <li><a href="#section-3">构造方法</a></li>
+  <li><a href="#section-1">需要知道的概念</a></li>
+  <li><a href="#section-2">构造方法</a></li>
 </ul>
 
 <hr />
@@ -132,27 +131,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="section-1">存储结构</h2>
-<p><code class="highlighter-rouge">HashMap</code>的数据结构是数组加链表的形式。结构大体如下:</p>
-
-<p><img src="/static/images/ConcurrentHashMap.png" alt="ConcurrentHashMap结构图" title="ConcurrentHashMap结构图" /></p>
-
-<p>可以看出<code class="highlighter-rouge">ConcurrentHashMap</code>有点像把<code class="highlighter-rouge">HashTable</code>又包了一层, 把<code class="highlighter-rouge">table</code>放到了<code class="highlighter-rouge">segments</code>里, 这样同步锁是在每一个<code class="highlighter-rouge">segment</code>里的, 只要多个修改操作发生在不同的段上, 它们就可以并发进行. 我们为了区分, 把每个元素<code class="highlighter-rouge">segment</code>成为<code class="highlighter-rouge">段</code>(有的文章里称作<code class="highlighter-rouge">桶</code>), 把<code class="highlighter-rouge">segment</code>里面的<code class="highlighter-rouge">table</code>的单个元素成为<code class="highlighter-rouge">桶</code>.</p>
-
-<p>我们来看看<code class="highlighter-rouge">Segment</code>的结构, 跟<code class="highlighter-rouge">HashMap</code>里的结构非常类似:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="kd">static</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">Segment</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="kd">extends</span> <span class="n">ReentrantLock</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
-        <span class="kd">transient</span> <span class="kd">volatile</span> <span class="n">HashEntry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;[]</span> <span class="n">table</span><span class="o">;</span> <span class="c1">// 桶, 除了类型, 其他跟HashMap里的table一样</span>
-        <span class="kd">transient</span> <span class="kt">int</span> <span class="n">count</span><span class="o">;</span>     <span class="c1">// HashEntry的总个数, 对应HashMap里的size</span>
-        <span class="kd">transient</span> <span class="kt">int</span> <span class="n">modCount</span><span class="o">;</span>  <span class="c1">// 同HashMap</span>
-        <span class="kd">transient</span> <span class="kt">int</span> <span class="n">threshold</span><span class="o">;</span> <span class="c1">// 同HashMap</span>
-    <span class="o">}</span>
-</code></pre>
-</div>
-
-<hr />
-
-<h2 id="section-2">需要知道的概念</h2>
+<h2 id="section-1">需要知道的概念</h2>
 <p><code class="highlighter-rouge">ConcurrentHashMap</code>比<code class="highlighter-rouge">HashMap</code>多了一层, 新增了几个概念:</p>
 
 <ul>
@@ -164,7 +143,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="section-3">构造方法</h2>
+<h2 id="section-2">构造方法</h2>
 <p><code class="highlighter-rouge">ConcurrentHashMap</code>有重载了5个构造方法, 实现都是类似的, 直接从代码中解释</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>    <span class="kd">public</span> <span class="nf">ConcurrentHashMap</span><span class="p">(</span><span class="kt">int</span> <span class="n">initialCapacity</span><span class="o">,</span> <span class="kt">float</span> <span class="n">loadFactor</span><span class="o">,</span> <span class="kt">int</span> <span class="n">concurrencyLevel</span><span class="o">)</span> <span class="o">{</span>
