@@ -5,9 +5,311 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 08 May 2017 10:12:40 +0800</pubDate>
-    <lastBuildDate>Mon, 08 May 2017 10:12:40 +0800</lastBuildDate>
+    <pubDate>Fri, 19 May 2017 12:09:30 +0800</pubDate>
+    <lastBuildDate>Fri, 19 May 2017 12:09:30 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>查找算法</title>
+        <description>&lt;p&gt;基本的排序算法&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;折半查找&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#b&quot;&gt;B树&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;基本概念&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#b-1&quot;&gt;B树的查找&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#b-2&quot;&gt;B树的插入&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#b-3&quot;&gt;B树的删除&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#b-4&quot;&gt;B+树&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;基本概念&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#bb&quot;&gt;B+树与B树的区别&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;折半查找&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;折半查找&lt;/code&gt;也叫&lt;code class=&quot;highlighter-rouge&quot;&gt;二分查找&lt;/code&gt;, 前提是顺序表 &lt;strong&gt;有序&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;基本思想:
+    &lt;ol&gt;
+      &lt;li&gt;将给定值&lt;code class=&quot;highlighter-rouge&quot;&gt;key&lt;/code&gt;与中间元素比较, 若相等, 查找成功, 返回元素位置; 若不等, 根据大小查找左半部分或右半部分&lt;/li&gt;
+      &lt;li&gt;缩小范围, 在左边或右边进行同样的查找, 直到找到为止&lt;/li&gt;
+      &lt;li&gt;若最后都没找到, 查找失败&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;算法描述:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;c1&quot;&gt;// 折半查找&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;binarySearch&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[],&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;low&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;high&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;low&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;high&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;low&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;high&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 中间位置&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;         &lt;span class=&quot;c1&quot;&gt;// 查找成功则返回所在位置&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;// 查找前半部分&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;high&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;                     &lt;span class=&quot;c1&quot;&gt;// 查找右半部分&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;low&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 查找失败&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;时间复杂度: &lt;code class=&quot;highlighter-rouge&quot;&gt;O(nlogn)&lt;/code&gt;(&lt;code class=&quot;highlighter-rouge&quot;&gt;log&lt;/code&gt;表示以2为底的对数)&lt;/li&gt;
+  &lt;li&gt;适用场景: 必须有序&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;b&quot;&gt;B树&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;注意: 下面&lt;code class=&quot;highlighter-rouge&quot;&gt;[m/2]&lt;/code&gt;意思为向上取整&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;基本概念&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;又称&lt;code class=&quot;highlighter-rouge&quot;&gt;多路平衡查找树&lt;/code&gt;或&lt;code class=&quot;highlighter-rouge&quot;&gt;多路平衡查找树&lt;/code&gt;, 但一般把&lt;code class=&quot;highlighter-rouge&quot;&gt;二叉平衡排序树&lt;/code&gt;成为&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;, 把&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;多路: 几叉就是几路, 即一个结点最多有几个子结点&lt;/li&gt;
+  &lt;li&gt;平衡树: 左右子树高度差不超过1(以二叉平衡树为例说明)&lt;/li&gt;
+  &lt;li&gt;查找树: &lt;code class=&quot;highlighter-rouge&quot;&gt;排序树&lt;/code&gt;也叫&lt;code class=&quot;highlighter-rouge&quot;&gt;查找树&lt;/code&gt;, 以二叉平衡树为例说明, 左子树结点都小于根, 右子树结点都大于根&lt;/li&gt;
+  &lt;li&gt;一个&lt;code class=&quot;highlighter-rouge&quot;&gt;m&lt;/code&gt;阶的&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;最多有&lt;code class=&quot;highlighter-rouge&quot;&gt;m&lt;/code&gt;棵子树, 如下图为3阶B树示例:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/BTree.png&quot; alt=&quot;BTree&quot; title=&quot;BTree&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;m&lt;/code&gt;阶的&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;的每个结点最多包含&lt;code class=&quot;highlighter-rouge&quot;&gt;m-1&lt;/code&gt;个关键字, &lt;code class=&quot;highlighter-rouge&quot;&gt;m&lt;/code&gt;棵子树. 结点的结构类似于下图:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/BTreeNode.png&quot; alt=&quot;BTreeNode结构图&quot; title=&quot;BTreeNode结构图&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;关键字之间有一定关系:&lt;code class=&quot;highlighter-rouge&quot;&gt;K1&amp;lt;K2&amp;lt;...&amp;lt;Kn&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;P(i-1)&lt;/code&gt;子树的关键字都小于&lt;code class=&quot;highlighter-rouge&quot;&gt;Ki&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;P(i)&lt;/code&gt;子树的关键字都大于&lt;code class=&quot;highlighter-rouge&quot;&gt;Ki&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;根结点最少有1个关键字, 2棵子树&lt;/li&gt;
+  &lt;li&gt;除根结点外的结点最少有&lt;code class=&quot;highlighter-rouge&quot;&gt;[m/2]&lt;/code&gt;棵子树, &lt;code class=&quot;highlighter-rouge&quot;&gt;[m/2] -1&lt;/code&gt;个关键字(插入时分裂是从中间分裂的)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;b-1&quot;&gt;B树的查找&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;一般是保存在磁盘上的, &lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;的查找跟二叉树的查找很像, 只不过每个结点变成了一个多关键字的有序表.&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;的查找分个基本操作:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;中找结点, 把找到的&lt;code class=&quot;highlighter-rouge&quot;&gt;结点&lt;/code&gt;从磁盘读入内存&lt;/li&gt;
+  &lt;li&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;结点&lt;/code&gt;内找关键字, 这个操作在内存中进行, 相当于在一个有序表中查找关键字K, 可以使用顺序查找或二分查找&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;若在结点上找到与关键字K则查找成功, 否则按照对应的指针去下一个结点中找, 当指针为空还没找到, 则查找失败&lt;/p&gt;
+
+&lt;h3 id=&quot;b-2&quot;&gt;B树的插入&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;的插入操作比二叉查找树要复杂, 并不能简单的找到终端结点然后添加到进去, 因为有可能插入结点后就不再满足&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;的定义要求了. &lt;br /&gt;
+把关键字&lt;code class=&quot;highlighter-rouge&quot;&gt;key&lt;/code&gt;插入到&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;的过程如下:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;定位: 利用上面的B树查找算法, 找到该关键字该插入到的最底层的那个结点.&lt;/li&gt;
+  &lt;li&gt;插入: 由于每个结点的关键字个数最多为&lt;code class=&quot;highlighter-rouge&quot;&gt;m-1&lt;/code&gt;, 所以若插入后关键字个数小于&lt;code class=&quot;highlighter-rouge&quot;&gt;m&lt;/code&gt;则可以直接插入, 若等于&lt;code class=&quot;highlighter-rouge&quot;&gt;m&lt;/code&gt;则必须对结点进行&lt;code class=&quot;highlighter-rouge&quot;&gt;分裂&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;分裂&lt;/code&gt;的方法:
+    &lt;ol&gt;
+      &lt;li&gt;取一个新结点, 将插入&lt;code class=&quot;highlighter-rouge&quot;&gt;key&lt;/code&gt;后的原结点从中间位置(&lt;code class=&quot;highlighter-rouge&quot;&gt;[m/2]&lt;/code&gt;)分成两部分&lt;/li&gt;
+      &lt;li&gt;左半部分(不包括中间位置)仍留在原结点, 右半部分(不包括中间位置)放到新结点中&lt;/li&gt;
+      &lt;li&gt;中间位置(&lt;code class=&quot;highlighter-rouge&quot;&gt;[m/2]&lt;/code&gt;)的关键字插入到原结点的父结点中.&lt;/li&gt;
+      &lt;li&gt;若父结点关键字个数没超过上限, 则新结点挂在这个中间结点的后面; 若父结点关键字个数超过了上限, 对父结点也进行这样的分裂, 直至传到根结点, 这样将导致&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;的高度增1.&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;b-3&quot;&gt;B树的删除&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;的删除与插入类似, 但更复杂一些, 要涉及结点的&lt;code class=&quot;highlighter-rouge&quot;&gt;合并&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;当要删除的关键字&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;不在终端结点时:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;若&lt;code class=&quot;highlighter-rouge&quot;&gt;k的左边子树&lt;/code&gt;(&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;与&lt;code class=&quot;highlighter-rouge&quot;&gt;k-1&lt;/code&gt;之间的子树)关键字个数n有&lt;code class=&quot;highlighter-rouge&quot;&gt;n &amp;gt;= [m/2] -1&lt;/code&gt;, 则找出&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;的前驱值&lt;code class=&quot;highlighter-rouge&quot;&gt;k&#39;&lt;/code&gt;(&lt;code class=&quot;highlighter-rouge&quot;&gt;k的左边子树&lt;/code&gt;中最大的那个), 用&lt;code class=&quot;highlighter-rouge&quot;&gt;k&#39;&lt;/code&gt;取代&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;, 再递归地删除&lt;code class=&quot;highlighter-rouge&quot;&gt;k&#39;&lt;/code&gt;. 最终会传递下去转变成在终端结点的情况.&lt;/li&gt;
+  &lt;li&gt;若&lt;code class=&quot;highlighter-rouge&quot;&gt;k的右边子树&lt;/code&gt;(&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;与&lt;code class=&quot;highlighter-rouge&quot;&gt;k+1&lt;/code&gt;之间的子树)关键字个数n有&lt;code class=&quot;highlighter-rouge&quot;&gt;n &amp;gt;= [m/2] -1&lt;/code&gt;, 则找出&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;的后继值&lt;code class=&quot;highlighter-rouge&quot;&gt;k&#39;&lt;/code&gt;(&lt;code class=&quot;highlighter-rouge&quot;&gt;k的右边子树&lt;/code&gt;中最小的那个), 用&lt;code class=&quot;highlighter-rouge&quot;&gt;k&#39;&lt;/code&gt;取代&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;, 再递归地删除&lt;code class=&quot;highlighter-rouge&quot;&gt;k&#39;&lt;/code&gt;. 最终会传递下去转变成在终端结点的情况.&lt;/li&gt;
+  &lt;li&gt;若前后两个子树关键字个数均为&lt;code class=&quot;highlighter-rouge&quot;&gt;[m/2] -1&lt;/code&gt;, 则把左右两个子树合并成一个子树(这样合并后仍不会超过&lt;code class=&quot;highlighter-rouge&quot;&gt;m-1&lt;/code&gt;), 直接删除&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;即可&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;当要删除的关键字&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;在终端结点时:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;直接删除关键字的情况: 若该结点关键字个数n有&lt;code class=&quot;highlighter-rouge&quot;&gt;n &amp;gt; [m/2] -1&lt;/code&gt;, 则直接删除关键字&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;, 写入磁盘&lt;/li&gt;
+  &lt;li&gt;兄弟够借: 若该结点关键字个数n有&lt;code class=&quot;highlighter-rouge&quot;&gt;n = [m/2] -1&lt;/code&gt;, 但相邻的右兄弟结点关键字&lt;code class=&quot;highlighter-rouge&quot;&gt;n &amp;gt; [m/2] -1&lt;/code&gt;, 此时为兄弟够借的情况; 这时调整左兄弟, 右兄弟, 父结点, 具体做法是右兄弟的最小值调整到到父结点(左右兄弟中间那个值), 父结点那个关键字调整到到左兄弟&lt;/li&gt;
+  &lt;li&gt;兄弟不够借: 若该结点关键字个数n有&lt;code class=&quot;highlighter-rouge&quot;&gt;n = [m/2] -1&lt;/code&gt;, 但相邻的右兄弟结点关键字&lt;code class=&quot;highlighter-rouge&quot;&gt;n = [m/2] -1&lt;/code&gt;, 此时为兄弟不够借的情况; 这时删除关键字&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;后, 把左兄弟, 父结点, 右兄弟的关键字进行合并&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;b-4&quot;&gt;B+树&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;B+树&lt;/code&gt;广泛应用于数据库存储引擎&lt;/p&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;基本概念&lt;/h3&gt;
+&lt;p&gt;一棵&lt;code class=&quot;highlighter-rouge&quot;&gt;m&lt;/code&gt;阶的&lt;code class=&quot;highlighter-rouge&quot;&gt;B+树&lt;/code&gt;需满足谢列条件:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;每个分支最多有&lt;code class=&quot;highlighter-rouge&quot;&gt;m&lt;/code&gt;棵子树&lt;/li&gt;
+  &lt;li&gt;根结点最少有两颗子树, 其他结点最少有&lt;code class=&quot;highlighter-rouge&quot;&gt;[m/2]&lt;/code&gt;棵子树(&lt;code class=&quot;highlighter-rouge&quot;&gt;[]&lt;/code&gt;表示向上取整)&lt;/li&gt;
+  &lt;li&gt;结点的子树个数与关键字个数相等&lt;/li&gt;
+  &lt;li&gt;所有的叶子结点包含全部关键字(即所有的叶子结点就是全部数据的集合), 而且叶子结点中将关键字按大小排序, 并且相邻叶结点按大小顺序连接起来&lt;/li&gt;
+  &lt;li&gt;所有的分支结点(非叶子结点)中仅包含它的各个子结点中关键字的最大值及指向其子结点的指针.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;一个&lt;code class=&quot;highlighter-rouge&quot;&gt;B+树&lt;/code&gt;的例子:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/B+Tree.png&quot; alt=&quot;B+Tree&quot; title=&quot;B+Tree&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;bb&quot;&gt;B+树与B树的区别&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;B+树&lt;/code&gt;中一个结点有&lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt;个关键字就有&lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt;棵子树, 即每个关键字对应一颗子树; &lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;中有&lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt;个关键字的节点含有&lt;code class=&quot;highlighter-rouge&quot;&gt;n+1&lt;/code&gt;棵子树&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;B+树&lt;/code&gt;中非根结点关键字的个数&lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt;范围是&lt;code class=&quot;highlighter-rouge&quot;&gt;[m/2] &amp;lt;= n &amp;lt;= m&lt;/code&gt;; &lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;中为&lt;code class=&quot;highlighter-rouge&quot;&gt;[m/2]-1 &amp;lt;= n &amp;lt;= m&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;B+树&lt;/code&gt;中的非叶子节点仅起到索引的作用, 不包含关键字对应记录的存储地址; &lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;中是有存储数据的&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;B+树&lt;/code&gt;中叶子节点包含全部关键字; &lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;中叶子结点包含的关键字和其他结点是不重复的, 所有结点加起来才是全部关键字&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;hr /&gt;
+</description>
+        <pubDate>Thu, 18 May 2017 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-18-%E6%9F%A5%E6%89%BE%E7%AE%97%E6%B3%95.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-18-%E6%9F%A5%E6%89%BE%E7%AE%97%E6%B3%95.html</guid>
+        
+        <category>Java</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
+    
+      <item>
+        <title>ConcurrentHashMap详解</title>
+        <description>&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;HashMap&lt;/code&gt;是非线程安全的, 对应的线程安全版本是&lt;code class=&quot;highlighter-rouge&quot;&gt;HashTable&lt;/code&gt;, 但&lt;code class=&quot;highlighter-rouge&quot;&gt;HashTable&lt;/code&gt;加锁的粒度大,&lt;code class=&quot;highlighter-rouge&quot;&gt;synchronized&lt;/code&gt;是针对整个哈希表的, 效率低. 后来&lt;code class=&quot;highlighter-rouge&quot;&gt;JDK1.5&lt;/code&gt;出现了&lt;code class=&quot;highlighter-rouge&quot;&gt;ConcurrentHashMap&lt;/code&gt;, 通过引入&lt;code class=&quot;highlighter-rouge&quot;&gt;Segment&lt;/code&gt;进行分段加锁, 从而提高并发效率.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;存储结构&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;存储结构&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;需要知道的概念&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-3&quot;&gt;构造方法&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;存储结构&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;HashMap&lt;/code&gt;的数据结构是数组加链表的形式。结构大体如下:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/ConcurrentHashMap.png&quot; alt=&quot;ConcurrentHashMap结构图&quot; title=&quot;ConcurrentHashMap结构图&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;可以看出&lt;code class=&quot;highlighter-rouge&quot;&gt;ConcurrentHashMap&lt;/code&gt;有点像把&lt;code class=&quot;highlighter-rouge&quot;&gt;HashTable&lt;/code&gt;又包了一层, 把&lt;code class=&quot;highlighter-rouge&quot;&gt;table&lt;/code&gt;放到了&lt;code class=&quot;highlighter-rouge&quot;&gt;segments&lt;/code&gt;里, 这样同步锁是在每一个&lt;code class=&quot;highlighter-rouge&quot;&gt;segment&lt;/code&gt;里的, 只要多个修改操作发生在不同的段上, 它们就可以并发进行. 我们为了区分, 把每个元素&lt;code class=&quot;highlighter-rouge&quot;&gt;segment&lt;/code&gt;成为&lt;code class=&quot;highlighter-rouge&quot;&gt;段&lt;/code&gt;(有的文章里称作&lt;code class=&quot;highlighter-rouge&quot;&gt;桶&lt;/code&gt;), 把&lt;code class=&quot;highlighter-rouge&quot;&gt;segment&lt;/code&gt;里面的&lt;code class=&quot;highlighter-rouge&quot;&gt;table&lt;/code&gt;的单个元素成为&lt;code class=&quot;highlighter-rouge&quot;&gt;桶&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;我们来看看&lt;code class=&quot;highlighter-rouge&quot;&gt;Segment&lt;/code&gt;的结构, 跟&lt;code class=&quot;highlighter-rouge&quot;&gt;HashMap&lt;/code&gt;里的结构非常类似:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Segment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ReentrantLock&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Serializable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;transient&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;volatile&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HashEntry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 桶, 除了类型, 其他跟HashMap里的table一样&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;transient&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;     &lt;span class=&quot;c1&quot;&gt;// HashEntry的总个数, 对应HashMap里的size&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;transient&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;modCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 同HashMap&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;transient&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;threshold&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 同HashMap&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;存储结构&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;HashMap&lt;/code&gt;的数据结构是数组加链表的形式。结构大体如下:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/ConcurrentHashMap.png&quot; alt=&quot;ConcurrentHashMap结构图&quot; title=&quot;ConcurrentHashMap结构图&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;可以看出&lt;code class=&quot;highlighter-rouge&quot;&gt;ConcurrentHashMap&lt;/code&gt;有点像把&lt;code class=&quot;highlighter-rouge&quot;&gt;HashTable&lt;/code&gt;又包了一层, 把&lt;code class=&quot;highlighter-rouge&quot;&gt;table&lt;/code&gt;放到了&lt;code class=&quot;highlighter-rouge&quot;&gt;segments&lt;/code&gt;里, 这样同步锁是在每一个&lt;code class=&quot;highlighter-rouge&quot;&gt;segment&lt;/code&gt;里的, 只要多个修改操作发生在不同的段上, 它们就可以并发进行. 我们为了区分, 把每个元素&lt;code class=&quot;highlighter-rouge&quot;&gt;segment&lt;/code&gt;成为&lt;code class=&quot;highlighter-rouge&quot;&gt;段&lt;/code&gt;(有的文章里称作&lt;code class=&quot;highlighter-rouge&quot;&gt;桶&lt;/code&gt;), 把&lt;code class=&quot;highlighter-rouge&quot;&gt;segment&lt;/code&gt;里面的&lt;code class=&quot;highlighter-rouge&quot;&gt;table&lt;/code&gt;的单个元素成为&lt;code class=&quot;highlighter-rouge&quot;&gt;桶&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;我们来看看&lt;code class=&quot;highlighter-rouge&quot;&gt;Segment&lt;/code&gt;的结构, 跟&lt;code class=&quot;highlighter-rouge&quot;&gt;HashMap&lt;/code&gt;里的结构非常类似:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Segment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ReentrantLock&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Serializable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;transient&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;volatile&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HashEntry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 桶, 除了类型, 其他跟HashMap里的table一样&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;transient&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;     &lt;span class=&quot;c1&quot;&gt;// HashEntry的总个数, 对应HashMap里的size&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;transient&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;modCount&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 同HashMap&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;transient&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;threshold&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 同HashMap&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;需要知道的概念&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ConcurrentHashMap&lt;/code&gt;比&lt;code class=&quot;highlighter-rouge&quot;&gt;HashMap&lt;/code&gt;多了一层, 新增了几个概念:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;segments&lt;/code&gt;: 一个数组, 可称为&lt;code class=&quot;highlighter-rouge&quot;&gt;段&lt;/code&gt;, 该数组的大小总是&lt;code class=&quot;highlighter-rouge&quot;&gt;2的n次幂&lt;/code&gt;, 默认是16&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;concurrencyLevel&lt;/code&gt;: 并发等级, 实际上就是&lt;code class=&quot;highlighter-rouge&quot;&gt;segments&lt;/code&gt;数组的大小, 一旦确定就不再改变, 扩容时不会增加Segment的数量, 而只会增加&lt;code class=&quot;highlighter-rouge&quot;&gt;Segment&lt;/code&gt;中链表数组(&lt;code class=&quot;highlighter-rouge&quot;&gt;table&lt;/code&gt;)的容量大小&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;segmentShift&lt;/code&gt;: 假设&lt;code class=&quot;highlighter-rouge&quot;&gt;segments&lt;/code&gt;的大小是&lt;code class=&quot;highlighter-rouge&quot;&gt;2的n次方&lt;/code&gt;, 则&lt;code class=&quot;highlighter-rouge&quot;&gt;segmentShift = 32-n&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;segmentMask&lt;/code&gt;: 用于计算在&lt;code class=&quot;highlighter-rouge&quot;&gt;segments&lt;/code&gt;中下标的掩码, 假设&lt;code class=&quot;highlighter-rouge&quot;&gt;segments&lt;/code&gt;的大小是&lt;code class=&quot;highlighter-rouge&quot;&gt;2的n次方&lt;/code&gt;, 则&lt;code class=&quot;highlighter-rouge&quot;&gt;segmentMask = 2的n次方-1&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section-3&quot;&gt;构造方法&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;ConcurrentHashMap&lt;/code&gt;有重载了5个构造方法, 实现都是类似的, 直接从代码中解释&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ConcurrentHashMap&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;initialCapacity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;float&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loadFactor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;concurrencyLevel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+       &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(!(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;loadFactor&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;initialCapacity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;concurrencyLevel&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+           &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IllegalArgumentException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+       &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;concurrencyLevel&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MAX_SEGMENTS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+           &lt;span class=&quot;n&quot;&gt;concurrencyLevel&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MAX_SEGMENTS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+       &lt;span class=&quot;c1&quot;&gt;// Find power-of-two sizes best matching arguments&lt;/span&gt;
+       &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sshift&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+       &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ssize&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+       &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ssize&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;concurrencyLevel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+           &lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sshift&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;     &lt;span class=&quot;c1&quot;&gt;// 移位的次数&lt;/span&gt;
+           &lt;span class=&quot;n&quot;&gt;ssize&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// segments的size, 数值上为大于等于concurrencyLevel的最小的那个 2的n次幂&lt;/span&gt;
+       &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+       &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;segmentShift&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;32&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sshift&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+       &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;segmentMask&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ssize&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+       &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;initialCapacity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MAXIMUM_CAPACITY&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+           &lt;span class=&quot;n&quot;&gt;initialCapacity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MAXIMUM_CAPACITY&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+       &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;initialCapacity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ssize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+       &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ssize&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;initialCapacity&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+           &lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+       &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cap&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MIN_SEGMENT_TABLE_CAPACITY&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+       &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cap&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+           &lt;span class=&quot;n&quot;&gt;cap&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+       &lt;span class=&quot;c1&quot;&gt;// create segments and segments[0]&lt;/span&gt;
+       &lt;span class=&quot;n&quot;&gt;Segment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;
+           &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Segment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;loadFactor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cap&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loadFactor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+                            &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HashEntry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;[])&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HashEntry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]);&lt;/span&gt;
+       &lt;span class=&quot;n&quot;&gt;Segment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ss&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Segment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;K&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;[])&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Segment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ssize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
+       &lt;span class=&quot;n&quot;&gt;UNSAFE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;putOrderedObject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ss&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SBASE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// ordered write of segments[0]&lt;/span&gt;
+       &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;segments&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ss&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+   &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+</description>
+        <pubDate>Sun, 14 May 2017 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-14-ConcurrentHashMap%E8%AF%A6%E8%A7%A3.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-14-ConcurrentHashMap%E8%AF%A6%E8%A7%A3.html</guid>
+        
+        <category>Java</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
     
       <item>
         <title>排序算法</title>
@@ -1520,225 +1822,6 @@ custom.datasource.ds2.driver-class-name&lt;span class=&quot;o&quot;&gt;=&lt;/spa
         <pubDate>Mon, 12 Dec 2016 00:00:00 +0800</pubDate>
         <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-12-12-Spring-Boot%E5%A4%9A%E6%95%B0%E6%8D%AE%E6%BA%90%E9%85%8D%E7%BD%AE.html</link>
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-12-12-Spring-Boot%E5%A4%9A%E6%95%B0%E6%8D%AE%E6%BA%90%E9%85%8D%E7%BD%AE.html</guid>
-        
-        <category>Spring</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>Spring Bean的初始化顺序</title>
-        <description>&lt;hr /&gt;
-
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;img src=&quot;/static/images/bean_init.png&quot; alt=&quot;Bean生命周期&quot; title=&quot;Bean生命周期&quot; /&gt;&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;对&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;进行实例化, 相当于调用构造函数, &lt;code class=&quot;highlighter-rouge&quot;&gt;new&lt;/code&gt; 出一个对象&lt;/li&gt;
-  &lt;li&gt;若实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanNameAware&lt;/code&gt;接口, 则会调用其&lt;code class=&quot;highlighter-rouge&quot;&gt;setBeanName(String name)&lt;/code&gt;方法, 用于获取Bean的ID.&lt;/li&gt;
-  &lt;li&gt;若实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactoryAware&lt;/code&gt;接口, 则调用其&lt;code class=&quot;highlighter-rouge&quot;&gt;setBeanFactory(BeanFactory beanFactory)&lt;/code&gt;方法, 用于拿到Spring容器, 如通过容器发布一些事件等.&lt;/li&gt;
-  &lt;li&gt;若实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;ApplicationContextAware&lt;/code&gt;接口, 则调用其&lt;code class=&quot;highlighter-rouge&quot;&gt;setApplicationContext(ApplicationContext applicationContext)&lt;/code&gt;方法, 作用与&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactoryAware&lt;/code&gt;类似都是为了获取Spring容器, 不同的是Spring容器在调用&lt;code class=&quot;highlighter-rouge&quot;&gt;setApplicationContext&lt;/code&gt;方法时会把它自己(&lt;code class=&quot;highlighter-rouge&quot;&gt;this&lt;/code&gt;)作为参数传入，而Spring容器在调用&lt;code class=&quot;highlighter-rouge&quot;&gt;setBeanDactory&lt;/code&gt;前需要程序员自己指定&lt;code class=&quot;highlighter-rouge&quot;&gt;setBeanDactory&lt;/code&gt;里的参数&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactory&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;若有&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanPostProcessor&lt;/code&gt;接口的实现类, 则调用其&lt;code class=&quot;highlighter-rouge&quot;&gt;postProcessBeforeInitialization(Object bean, String beanName)&lt;/code&gt;方法.&lt;/li&gt;
-  &lt;li&gt;调用自定义初始化方法, 即自己通过&lt;code class=&quot;highlighter-rouge&quot;&gt;@PostConstruct&lt;/code&gt;注解的定义方法, 该方法必须为&lt;code class=&quot;highlighter-rouge&quot;&gt;public&lt;/code&gt;或&lt;code class=&quot;highlighter-rouge&quot;&gt;protected&lt;/code&gt;, 不能抛受检查异常, 返回值必须为&lt;code class=&quot;highlighter-rouge&quot;&gt;void&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;若实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;InitializingBean&lt;/code&gt;接口, 则调用其&lt;code class=&quot;highlighter-rouge&quot;&gt;afterPropertiesSet()&lt;/code&gt;方法&lt;/li&gt;
-  &lt;li&gt;若有&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanPostProcessor&lt;/code&gt;接口的实现类, 则调用其&lt;code class=&quot;highlighter-rouge&quot;&gt;postProcessAfterInitialization(Object bean, String beanName)&lt;/code&gt;方法.&lt;/li&gt;
-  &lt;li&gt;调用自定义销毁方法, 即自己通过&lt;code class=&quot;highlighter-rouge&quot;&gt;@PreDestroy&lt;/code&gt;注解定义的方法&lt;/li&gt;
-  &lt;li&gt;若实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;DisposableBean&lt;/code&gt;接口, 则调用其&lt;code class=&quot;highlighter-rouge&quot;&gt;destroy()&lt;/code&gt;方法.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;的整个生命周期历程为: &lt;code class=&quot;highlighter-rouge&quot;&gt;定义 --&amp;gt; 创建(构造并填充属性) --&amp;gt; 初始化 --&amp;gt; 准备就绪 --&amp;gt; 销毁&lt;/code&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-</description>
-        <pubDate>Fri, 09 Dec 2016 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-12-09-Spring-Bean%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E9%A1%BA%E5%BA%8F.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-12-09-Spring-Bean%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E9%A1%BA%E5%BA%8F.html</guid>
-        
-        <category>Spring</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>Spring的扩展点</title>
-        <description>&lt;hr /&gt;
-
-&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#beanfactorypostprocessor&quot;&gt;BeanFactoryPostProcessor&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#beandefinitionregistrypostprocessor&quot;&gt;BeanDefinitionRegistryPostProcessor&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#beanpostprocessor&quot;&gt;BeanPostProcessor&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;一些例子&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#initializingbean&quot;&gt;InitializingBean&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#applicationcontextaware&quot;&gt;ApplicationContextAware&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#applicationlistener&quot;&gt;ApplicationListener&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-&lt;p&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;启动的过程中, 会自动调用一些方法, 我们通过这些方法可以做一些特殊的操作. &lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;中提供了几个常用的&lt;code class=&quot;highlighter-rouge&quot;&gt;Hook&lt;/code&gt;类, 我们只需要实现这些类并覆盖其方法, 并注入到&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;中, &lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;就会在恰当的时机调用我们定义的这些类. 下面就介绍几个常用的接口.&lt;/p&gt;
-
-&lt;h2 id=&quot;beanfactorypostprocessor&quot;&gt;BeanFactoryPostProcessor&lt;/h2&gt;
-&lt;p&gt;从名字上看, 它是&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactory&lt;/code&gt;的后处理类, 我们先了解下&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactory&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactory&lt;/code&gt;的地位相当高, 它是各种&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;的工厂, 提供了一系列的&lt;code class=&quot;highlighter-rouge&quot;&gt;getBean&lt;/code&gt;方法. 常用的&lt;code class=&quot;highlighter-rouge&quot;&gt;ApplicationContext&lt;/code&gt;就继承了它.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactoryPostProcessor&lt;/code&gt;就是&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactory&lt;/code&gt;的后处理类, 我们可以在&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactory&lt;/code&gt;初始化之后做一些操作. 它提供了个&lt;code class=&quot;highlighter-rouge&quot;&gt;postProcessBeanFactory()&lt;/code&gt;方法, 这个方法被调用的时候, 所有的&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;已经被创建, 但是还没有被初始化.
-也就是说, 通过它我们可以在初始化任何&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;之前, 做各种操作, 甚至读取并修改&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanDefinition&lt;/code&gt;(bean定义的元数据).&lt;/p&gt;
-
-&lt;h2 id=&quot;beandefinitionregistrypostprocessor&quot;&gt;BeanDefinitionRegistryPostProcessor&lt;/h2&gt;
-&lt;p&gt;这个接口继承了&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactoryPostProcessor&lt;/code&gt;. 从名字上来看, 这个接口是&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanDefinitionRegistry&lt;/code&gt;的后处理器, 我们先介绍下&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanDefinitionRegistry&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanDefinitionRegistry&lt;/code&gt;是用来注册&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanDefinition&lt;/code&gt;的. &lt;code class=&quot;highlighter-rouge&quot;&gt;BeanDefinition&lt;/code&gt;就是&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;的配置元数据或&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;的描述信息, 比如&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;的属性值, 构造方法的参数值等. 上面的&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactory&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanDefinition&lt;/code&gt;也是由它注册的.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanDefinitionRegistryPostProcessor&lt;/code&gt;是&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactoryPostProcessor&lt;/code&gt;的扩展, 允许在&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactoryPostProcessor&lt;/code&gt;被调用之前对&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanDefinition&lt;/code&gt;做一些操作, 尤其是它可以注册&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactoryPostProcessor&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanDefinition&lt;/code&gt;. 它提供了一个方法&lt;code class=&quot;highlighter-rouge&quot;&gt;postProcessBeanDefinitionRegistry()&lt;/code&gt;, 这个方法被调用的时候, 所有的&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanDefinition&lt;/code&gt;已经被加载了, 但是所有的&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;还没被创建.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;所有的&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;生成都有个顺序: &lt;code class=&quot;highlighter-rouge&quot;&gt;定义 --&amp;gt; 创建 --&amp;gt; 初始化&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanDefinitionRegistryPostProcessor&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;postProcessBeanDefinitionRegistry&lt;/code&gt;方法在&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;被&lt;code class=&quot;highlighter-rouge&quot;&gt;定义&lt;/code&gt;但还没被&lt;code class=&quot;highlighter-rouge&quot;&gt;创建&lt;/code&gt;的时候执行.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactoryPostProcessor&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;postProcessBeanFactory&lt;/code&gt;方法在&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;被&lt;code class=&quot;highlighter-rouge&quot;&gt;创建&lt;/code&gt;但还没被&lt;code class=&quot;highlighter-rouge&quot;&gt;初始化&lt;/code&gt;的时候执行&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;beanpostprocessor&quot;&gt;BeanPostProcessor&lt;/h2&gt;
-&lt;p&gt;从名字上来看, 这个接口是&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;的后处理器, 通过它我们可以在&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;初始化前后做一些操作. 它提供了两个方法:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;postProcessBeforeInitialization&lt;/code&gt;: 在&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;初始化之 &lt;strong&gt;前&lt;/strong&gt; 做一些操作&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;postProcessAfterInitialization&lt;/code&gt;: 在&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;初始化之 &lt;strong&gt;后&lt;/strong&gt; 做一些操作&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;注意这两个方法都有两个参数: &lt;code class=&quot;highlighter-rouge&quot;&gt;bean&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;beanName&lt;/code&gt;, 并需要返回一个对象. 所有的&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;在被初始化前后都会调用这两个方法, 我们可以过滤出所关心的&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;对其进行一些操作, 比如把某个&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;替换成代理对象等.&lt;/p&gt;
-
-&lt;p&gt;另外, 在&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;中可以通过&lt;code class=&quot;highlighter-rouge&quot;&gt;@PostConstruct&lt;/code&gt;注解来指定在被&lt;code class=&quot;highlighter-rouge&quot;&gt;Construct&lt;/code&gt;之后紧接着做一些初始化操作, 上面的&lt;code class=&quot;highlighter-rouge&quot;&gt;postProcessAfterInitialization&lt;/code&gt;方法是在&lt;code class=&quot;highlighter-rouge&quot;&gt;@PostConstruct&lt;/code&gt;之后被调用的.&lt;/p&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;一些例子&lt;/h2&gt;
-&lt;p&gt;我们通过一些简单例子来熟悉下上面的几个接口:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// 一个普通的 Bean&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TestA&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@PostConstruct&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;init&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;TestA PostConstruct&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Resource&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TestB&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;testB&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// 另一个普通的 Bean. 没看错, 就是循环依赖.&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TestB&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@PostConstruct&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;init&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;TestB PostConstruct&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Resource&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TestA&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;testA&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// 后处理器&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyBeanDefinitionRegistryPostProcessor&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeanDefinitionRegistryPostProcessor&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// 这个方法来自 BeanDefinitionRegistryPostProcessor&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;postProcessBeanDefinitionRegistry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BeanDefinitionRegistry&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;registry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeansException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;postProcessBeanDefinitionRegistry&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// 这个方法来自 BeanFactoryPostProcessor&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;postProcessBeanFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ConfigurableListableBeanFactory&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;beanFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeansException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;postProcessBeanFactory&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// Bean后处理器&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyBeanPostProcessor&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeanPostProcessor&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;postProcessBeforeInitialization&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;beanName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeansException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bean&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TestA&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bean&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;TestB&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;beforeInitialization&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;postProcessAfterInitialization&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;beanName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeansException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bean&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TestA&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bean&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;TestB&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;afterInitialization&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;用法就类似于上面, 那几条数据语句的顺序如下:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;postProcessBeanDefinitionRegistry
-postProcessBeanFactory
-beforeInitialization
-TestB PostConstruct
-afterInitialization
-beforeInitialization
-TestA PostConstruct
-afterInitialization
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;initializingbean&quot;&gt;InitializingBean&lt;/h2&gt;
-&lt;p&gt;这个接口有一个方法:&lt;code class=&quot;highlighter-rouge&quot;&gt;afterPropertiesSet&lt;/code&gt;, 该方法在所有的属性都被赋值后调用. 属性被赋值是在初始化的时候做的, 与&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanPostProcessor&lt;/code&gt;结合来看, &lt;code class=&quot;highlighter-rouge&quot;&gt;afterPropertiesSet&lt;/code&gt;方法将在&lt;code class=&quot;highlighter-rouge&quot;&gt;postProcessBeforeInitialization&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;postProcessAfterInitialization&lt;/code&gt;之间被调用.&lt;/p&gt;
-
-&lt;h2 id=&quot;applicationcontextaware&quot;&gt;ApplicationContextAware&lt;/h2&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;提供了很多&lt;code class=&quot;highlighter-rouge&quot;&gt;Aware&lt;/code&gt;接口, 比如&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactoryAware&lt;/code&gt;、 &lt;code class=&quot;highlighter-rouge&quot;&gt;ApplicationContextAware&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;ResourceLoaderAware&lt;/code&gt;、 &lt;code class=&quot;highlighter-rouge&quot;&gt;ServletContextAware&lt;/code&gt;等等. 这些接口一般都有个&lt;code class=&quot;highlighter-rouge&quot;&gt;setXXX&lt;/code&gt;来设置对应的组件. 如果我们的&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;实现了这些&lt;code class=&quot;highlighter-rouge&quot;&gt;Aware的时候&lt;/code&gt;就可以获取对应的资源.&lt;/p&gt;
-
-&lt;h2 id=&quot;applicationlistener&quot;&gt;ApplicationListener&lt;/h2&gt;
-&lt;p&gt;这跟&lt;code class=&quot;highlighter-rouge&quot;&gt;Servlet&lt;/code&gt;中的监听器一样, 采用了观察者模式. 监听器往往都是监听某些事件源, 下面是配合&lt;code class=&quot;highlighter-rouge&quot;&gt;ApplicationContextAware&lt;/code&gt;一起使用的例子.&lt;/p&gt;
-
-&lt;p&gt;我们定义一个事件, 在实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;ApplicationContextAware&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;中触发事件, 在实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;ApplicationListener&lt;/code&gt;的类中对事件做出反应.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// 自定义事件&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyEvent&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ApplicationEvent&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MyEvent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;source&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;source&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// 自定义 Bean 实现 ApplicationContextAware 接口&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;HelloBean&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ApplicationContextAware&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ApplicationContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;applicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;setApplicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ApplicationContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;applicationContext&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// 当调用 setName 时, 触发事件&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;setName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;applicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;publishEvent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MyEvent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 这行代码执行完会立即被监听到&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// 自定义监听器, 监听上面的事件&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyApplicationListener&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ApplicationListener&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;onApplicationEvent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ApplicationEvent&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MyEvent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HelloBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getSource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;hr /&gt;
-</description>
-        <pubDate>Tue, 22 Nov 2016 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-22-Spring%E7%9A%84%E6%89%A9%E5%B1%95%E7%82%B9.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-22-Spring%E7%9A%84%E6%89%A9%E5%B1%95%E7%82%B9.html</guid>
         
         <category>Spring</category>
         

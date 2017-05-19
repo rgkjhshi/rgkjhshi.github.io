@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="查找算法, 编程技术, Java, 逆水行舟" />
+    <meta name="description" content="查找算法, 编程技术, Java, 基本的排序算法" />
+
+    <title>逆水行舟</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-18-%E6%9F%A5%E6%89%BE%E7%AE%97%E6%B3%95.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="/static/js/jquery.qrcode.min.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="/static/js/uikit.min.js"></script>
+    <!-- quietflow -->
+    <!-- <script type="text/javascript" src="http://loveshisong.cn/static/js/quietflow.min.js"></script> -->
+    <!-- UK sticky -->
+    <script type="text/javascript" src="/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "shisong"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" data-uk-sticky>
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <script type="text/javascript">
+jQuery(function(){
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-18-%E6%9F%A5%E6%89%BE%E7%AE%97%E6%B3%95.html"
+    });
+})
+</script>
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>查找算法</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <p>基本的排序算法</p>
+
+<hr />
+
+<ul id="markdown-toc">
+  <li><a href="#section">折半查找</a></li>
+  <li><a href="#b">B树</a>    <ul>
+      <li><a href="#section-1">基本概念</a></li>
+      <li><a href="#b-1">B树的查找</a></li>
+      <li><a href="#b-2">B树的插入</a></li>
+      <li><a href="#b-3">B树的删除</a></li>
+    </ul>
+  </li>
+  <li><a href="#b-4">B+树</a>    <ul>
+      <li><a href="#section-2">基本概念</a></li>
+      <li><a href="#bb">B+树与B树的区别</a></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="section">折半查找</h2>
+<p><code class="highlighter-rouge">折半查找</code>也叫<code class="highlighter-rouge">二分查找</code>, 前提是顺序表 <strong>有序</strong></p>
+
+<ul>
+  <li>基本思想:
+    <ol>
+      <li>将给定值<code class="highlighter-rouge">key</code>与中间元素比较, 若相等, 查找成功, 返回元素位置; 若不等, 根据大小查找左半部分或右半部分</li>
+      <li>缩小范围, 在左边或右边进行同样的查找, 直到找到为止</li>
+      <li>若最后都没找到, 查找失败</li>
+    </ol>
+  </li>
+  <li>算法描述:</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// 折半查找</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="n">binarySearch</span><span class="o">(</span><span class="kt">int</span> <span class="n">A</span><span class="o">[],</span> <span class="kt">int</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">low</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">high</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">low</span> <span class="o">&lt;=</span> <span class="n">high</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="o">(</span><span class="n">low</span> <span class="o">+</span> <span class="n">high</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">;</span>  <span class="c1">// 中间位置</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">key</span> <span class="o">==</span> <span class="n">A</span><span class="o">[</span><span class="n">mid</span><span class="o">])</span> <span class="o">{</span>         <span class="c1">// 查找成功则返回所在位置</span>
+                <span class="k">return</span> <span class="n">mid</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">key</span> <span class="o">&lt;</span> <span class="n">A</span><span class="o">[</span><span class="n">mid</span><span class="o">])</span> <span class="o">{</span>   <span class="c1">// 查找前半部分</span>
+                <span class="n">high</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>                     <span class="c1">// 查找右半部分</span>
+                <span class="n">low</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>  <span class="c1">// 查找失败</span>
+    <span class="o">}</span>
+</code></pre>
+</div>
+
+<ul>
+  <li>时间复杂度: <code class="highlighter-rouge">O(nlogn)</code>(<code class="highlighter-rouge">log</code>表示以2为底的对数)</li>
+  <li>适用场景: 必须有序</li>
+</ul>
+
+<h2 id="b">B树</h2>
+
+<ul>
+  <li>注意: 下面<code class="highlighter-rouge">[m/2]</code>意思为向上取整</li>
+</ul>
+
+<h3 id="section-1">基本概念</h3>
+<p><code class="highlighter-rouge">B树</code>又称<code class="highlighter-rouge">多路平衡查找树</code>或<code class="highlighter-rouge">多路平衡查找树</code>, 但一般把<code class="highlighter-rouge">二叉平衡排序树</code>成为<code class="highlighter-rouge">B树</code>, 把</p>
+
+<ul>
+  <li>多路: 几叉就是几路, 即一个结点最多有几个子结点</li>
+  <li>平衡树: 左右子树高度差不超过1(以二叉平衡树为例说明)</li>
+  <li>查找树: <code class="highlighter-rouge">排序树</code>也叫<code class="highlighter-rouge">查找树</code>, 以二叉平衡树为例说明, 左子树结点都小于根, 右子树结点都大于根</li>
+  <li>一个<code class="highlighter-rouge">m</code>阶的<code class="highlighter-rouge">B树</code>最多有<code class="highlighter-rouge">m</code>棵子树, 如下图为3阶B树示例:</li>
+</ul>
+
+<p><img src="/static/images/BTree.png" alt="BTree" title="BTree" /></p>
+
+<ul>
+  <li><code class="highlighter-rouge">m</code>阶的<code class="highlighter-rouge">B树</code>的每个结点最多包含<code class="highlighter-rouge">m-1</code>个关键字, <code class="highlighter-rouge">m</code>棵子树. 结点的结构类似于下图:</li>
+</ul>
+
+<p><img src="/static/images/BTreeNode.png" alt="BTreeNode结构图" title="BTreeNode结构图" /></p>
+
+<ul>
+  <li>关键字之间有一定关系:<code class="highlighter-rouge">K1&lt;K2&lt;...&lt;Kn</code>, <code class="highlighter-rouge">P(i-1)</code>子树的关键字都小于<code class="highlighter-rouge">Ki</code>, <code class="highlighter-rouge">P(i)</code>子树的关键字都大于<code class="highlighter-rouge">Ki</code></li>
+  <li>根结点最少有1个关键字, 2棵子树</li>
+  <li>除根结点外的结点最少有<code class="highlighter-rouge">[m/2]</code>棵子树, <code class="highlighter-rouge">[m/2] -1</code>个关键字(插入时分裂是从中间分裂的)</li>
+</ul>
+
+<h3 id="b-1">B树的查找</h3>
+<p><code class="highlighter-rouge">B树</code>一般是保存在磁盘上的, <code class="highlighter-rouge">B树</code>的查找跟二叉树的查找很像, 只不过每个结点变成了一个多关键字的有序表.<br />
+<code class="highlighter-rouge">B树</code>的查找分个基本操作:</p>
+
+<ol>
+  <li>在<code class="highlighter-rouge">B树</code>中找结点, 把找到的<code class="highlighter-rouge">结点</code>从磁盘读入内存</li>
+  <li>在<code class="highlighter-rouge">结点</code>内找关键字, 这个操作在内存中进行, 相当于在一个有序表中查找关键字K, 可以使用顺序查找或二分查找</li>
+</ol>
+
+<p>若在结点上找到与关键字K则查找成功, 否则按照对应的指针去下一个结点中找, 当指针为空还没找到, 则查找失败</p>
+
+<h3 id="b-2">B树的插入</h3>
+<p><code class="highlighter-rouge">B树</code>的插入操作比二叉查找树要复杂, 并不能简单的找到终端结点然后添加到进去, 因为有可能插入结点后就不再满足<code class="highlighter-rouge">B树</code>的定义要求了. <br />
+把关键字<code class="highlighter-rouge">key</code>插入到<code class="highlighter-rouge">B树</code>的过程如下:</p>
+
+<ol>
+  <li>定位: 利用上面的B树查找算法, 找到该关键字该插入到的最底层的那个结点.</li>
+  <li>插入: 由于每个结点的关键字个数最多为<code class="highlighter-rouge">m-1</code>, 所以若插入后关键字个数小于<code class="highlighter-rouge">m</code>则可以直接插入, 若等于<code class="highlighter-rouge">m</code>则必须对结点进行<code class="highlighter-rouge">分裂</code>.</li>
+</ol>
+
+<ul>
+  <li><code class="highlighter-rouge">分裂</code>的方法:
+    <ol>
+      <li>取一个新结点, 将插入<code class="highlighter-rouge">key</code>后的原结点从中间位置(<code class="highlighter-rouge">[m/2]</code>)分成两部分</li>
+      <li>左半部分(不包括中间位置)仍留在原结点, 右半部分(不包括中间位置)放到新结点中</li>
+      <li>中间位置(<code class="highlighter-rouge">[m/2]</code>)的关键字插入到原结点的父结点中.</li>
+      <li>若父结点关键字个数没超过上限, 则新结点挂在这个中间结点的后面; 若父结点关键字个数超过了上限, 对父结点也进行这样的分裂, 直至传到根结点, 这样将导致<code class="highlighter-rouge">B树</code>的高度增1.</li>
+    </ol>
+  </li>
+</ul>
+
+<h3 id="b-3">B树的删除</h3>
+<p><code class="highlighter-rouge">B树</code>的删除与插入类似, 但更复杂一些, 要涉及结点的<code class="highlighter-rouge">合并</code>.</p>
+
+<p>当要删除的关键字<code class="highlighter-rouge">k</code>不在终端结点时:</p>
+
+<ul>
+  <li>若<code class="highlighter-rouge">k的左边子树</code>(<code class="highlighter-rouge">k</code>与<code class="highlighter-rouge">k-1</code>之间的子树)关键字个数n有<code class="highlighter-rouge">n &gt;= [m/2] -1</code>, 则找出<code class="highlighter-rouge">k</code>的前驱值<code class="highlighter-rouge">k'</code>(<code class="highlighter-rouge">k的左边子树</code>中最大的那个), 用<code class="highlighter-rouge">k'</code>取代<code class="highlighter-rouge">k</code>, 再递归地删除<code class="highlighter-rouge">k'</code>. 最终会传递下去转变成在终端结点的情况.</li>
+  <li>若<code class="highlighter-rouge">k的右边子树</code>(<code class="highlighter-rouge">k</code>与<code class="highlighter-rouge">k+1</code>之间的子树)关键字个数n有<code class="highlighter-rouge">n &gt;= [m/2] -1</code>, 则找出<code class="highlighter-rouge">k</code>的后继值<code class="highlighter-rouge">k'</code>(<code class="highlighter-rouge">k的右边子树</code>中最小的那个), 用<code class="highlighter-rouge">k'</code>取代<code class="highlighter-rouge">k</code>, 再递归地删除<code class="highlighter-rouge">k'</code>. 最终会传递下去转变成在终端结点的情况.</li>
+  <li>若前后两个子树关键字个数均为<code class="highlighter-rouge">[m/2] -1</code>, 则把左右两个子树合并成一个子树(这样合并后仍不会超过<code class="highlighter-rouge">m-1</code>), 直接删除<code class="highlighter-rouge">k</code>即可</li>
+</ul>
+
+<p>当要删除的关键字<code class="highlighter-rouge">k</code>在终端结点时:</p>
+
+<ul>
+  <li>直接删除关键字的情况: 若该结点关键字个数n有<code class="highlighter-rouge">n &gt; [m/2] -1</code>, 则直接删除关键字<code class="highlighter-rouge">k</code>, 写入磁盘</li>
+  <li>兄弟够借: 若该结点关键字个数n有<code class="highlighter-rouge">n = [m/2] -1</code>, 但相邻的右兄弟结点关键字<code class="highlighter-rouge">n &gt; [m/2] -1</code>, 此时为兄弟够借的情况; 这时调整左兄弟, 右兄弟, 父结点, 具体做法是右兄弟的最小值调整到到父结点(左右兄弟中间那个值), 父结点那个关键字调整到到左兄弟</li>
+  <li>兄弟不够借: 若该结点关键字个数n有<code class="highlighter-rouge">n = [m/2] -1</code>, 但相邻的右兄弟结点关键字<code class="highlighter-rouge">n = [m/2] -1</code>, 此时为兄弟不够借的情况; 这时删除关键字<code class="highlighter-rouge">k</code>后, 把左兄弟, 父结点, 右兄弟的关键字进行合并</li>
+</ul>
+
+<hr />
+
+<h2 id="b-4">B+树</h2>
+<p><code class="highlighter-rouge">B+树</code>广泛应用于数据库存储引擎</p>
+
+<h3 id="section-2">基本概念</h3>
+<p>一棵<code class="highlighter-rouge">m</code>阶的<code class="highlighter-rouge">B+树</code>需满足谢列条件:</p>
+
+<ol>
+  <li>每个分支最多有<code class="highlighter-rouge">m</code>棵子树</li>
+  <li>根结点最少有两颗子树, 其他结点最少有<code class="highlighter-rouge">[m/2]</code>棵子树(<code class="highlighter-rouge">[]</code>表示向上取整)</li>
+  <li>结点的子树个数与关键字个数相等</li>
+  <li>所有的叶子结点包含全部关键字(即所有的叶子结点就是全部数据的集合), 而且叶子结点中将关键字按大小排序, 并且相邻叶结点按大小顺序连接起来</li>
+  <li>所有的分支结点(非叶子结点)中仅包含它的各个子结点中关键字的最大值及指向其子结点的指针.</li>
+</ol>
+
+<ul>
+  <li>一个<code class="highlighter-rouge">B+树</code>的例子:</li>
+</ul>
+
+<p><img src="/static/images/B+Tree.png" alt="B+Tree" title="B+Tree" /></p>
+
+<h3 id="bb">B+树与B树的区别</h3>
+
+<ol>
+  <li><code class="highlighter-rouge">B+树</code>中一个结点有<code class="highlighter-rouge">n</code>个关键字就有<code class="highlighter-rouge">n</code>棵子树, 即每个关键字对应一颗子树; <code class="highlighter-rouge">B树</code>中有<code class="highlighter-rouge">n</code>个关键字的节点含有<code class="highlighter-rouge">n+1</code>棵子树</li>
+  <li><code class="highlighter-rouge">B+树</code>中非根结点关键字的个数<code class="highlighter-rouge">n</code>范围是<code class="highlighter-rouge">[m/2] &lt;= n &lt;= m</code>; <code class="highlighter-rouge">B树</code>中为<code class="highlighter-rouge">[m/2]-1 &lt;= n &lt;= m</code></li>
+  <li><code class="highlighter-rouge">B+树</code>中的非叶子节点仅起到索引的作用, 不包含关键字对应记录的存储地址; <code class="highlighter-rouge">B树</code>中是有存储数据的</li>
+  <li><code class="highlighter-rouge">B+树</code>中叶子节点包含全部关键字; <code class="highlighter-rouge">B树</code>中叶子结点包含的关键字和其他结点是不重复的, 所有结点加起来才是全部关键字</li>
+</ol>
+
+<hr />
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/查找算法" data-title="查找算法" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-18-%E6%9F%A5%E6%89%BE%E7%AE%97%E6%B3%95.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
+
+</body>
+
+</html>
