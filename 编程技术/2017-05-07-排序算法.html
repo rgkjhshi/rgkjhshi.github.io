@@ -142,13 +142,13 @@ jQuery(function(){
 <div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// 直接插入排序</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="n">insertSort</span><span class="o">(</span><span class="kt">int</span> <span class="n">A</span><span class="o">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
         <span class="kt">int</span> <span class="n">i</span><span class="o">,</span> <span class="n">j</span><span class="o">;</span>
-        <span class="k">for</span> <span class="o">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>    <span class="c1">// 依次将A[1]~A[n-1]插入到前面已排序序列(初始的有序表只有A[0])</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">A</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">A</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">])</span> <span class="o">{</span>        <span class="c1">// 若A[i]小于前驱, 需将A[i]插入有序表</span>
-                <span class="kt">int</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">A</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>           <span class="c1">// 临时存放待插入元素</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>              <span class="c1">// 依次将A[1]~A[n-1]插入到前面已排序序列(初始的有序表只有A[0])</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">A</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">A</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">])</span> <span class="o">{</span>                  <span class="c1">// 若A[i]小于前驱, 需将A[i]插入有序表</span>
+                <span class="kt">int</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">A</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>                     <span class="c1">// 临时存放待插入元素</span>
                 <span class="k">for</span> <span class="o">(</span><span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">tmp</span> <span class="o">&lt;</span> <span class="n">A</span><span class="o">[</span><span class="n">j</span><span class="o">];</span> <span class="o">--</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>  <span class="c1">// 向前查找待插入位置</span>
-                    <span class="n">A</span><span class="o">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">A</span><span class="o">[</span><span class="n">j</span><span class="o">];</span>      <span class="c1">// 向后挪位</span>
+                    <span class="n">A</span><span class="o">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">A</span><span class="o">[</span><span class="n">j</span><span class="o">];</span>                <span class="c1">// 向后挪位</span>
                 <span class="o">}</span>
-                <span class="n">A</span><span class="o">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">;</span>           <span class="c1">// 复制到插入位置</span>
+                <span class="n">A</span><span class="o">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">;</span>                     <span class="c1">// 复制到插入位置</span>
             <span class="o">}</span>
         <span class="o">}</span>
     <span class="o">}</span>
@@ -190,7 +190,6 @@ jQuery(function(){
             <span class="n">A</span><span class="o">[</span><span class="n">high</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">;</span>
         <span class="o">}</span>
     <span class="o">}</span>
-
 </code></pre>
 </div>
 
@@ -213,12 +212,12 @@ jQuery(function(){
 </ul>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// 冒泡排序(递增排序)</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">bubbleSort</span><span class="o">(</span><span class="kt">int</span> <span class="n">A</span><span class="o">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">bubbleSort</span><span class="o">(</span><span class="kt">int</span> <span class="n">A</span><span class="o">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>       <span class="c1">// 总共需要n-1趟冒泡</span>
             <span class="kt">boolean</span> <span class="n">flag</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>               <span class="c1">// 用于记录本趟是否发生了交换, 只要有一趟没发生交换, 就说明已经有序了</span>
             <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="n">i</span><span class="o">;</span> <span class="n">j</span><span class="o">--)</span> <span class="o">{</span>   <span class="c1">// 一趟冒泡</span>
                 <span class="k">if</span> <span class="o">(</span><span class="n">A</span><span class="o">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">A</span><span class="o">[</span><span class="n">j</span><span class="o">])</span> <span class="o">{</span>          <span class="c1">// 相邻元素比较</span>
-                    <span class="n">swap</span><span class="o">(</span><span class="n">A</span><span class="o">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="o">],</span> <span class="n">A</span><span class="o">[</span><span class="n">j</span><span class="o">]);</span>         <span class="c1">// 交换</span>
+                    <span class="n">swap</span><span class="o">(</span><span class="n">A</span><span class="o">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">,</span> <span class="n">j</span><span class="o">);</span>          <span class="c1">// 交换</span>
                     <span class="n">flag</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
                 <span class="o">}</span>
             <span class="o">}</span>
@@ -243,7 +242,7 @@ jQuery(function(){
     <span class="n">a</span> <span class="o">=</span> <span class="n">b</span><span class="o">;</span>
     <span class="n">b</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">;</span>
     <span class="c1">// 直接交换</span>
-    <span class="n">a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="o">;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="o">;</span> <span class="c1">// 注意有可能溢出</span>
     <span class="n">b</span> <span class="o">=</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="o">;</span>
     <span class="n">a</span> <span class="o">=</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="o">;</span>
     <span class="c1">// 位操作交换</span>
@@ -310,7 +309,7 @@ jQuery(function(){
                 <span class="o">}</span>
             <span class="o">}</span>
             <span class="k">if</span> <span class="o">(</span><span class="n">min</span> <span class="o">!=</span> <span class="n">i</span><span class="o">)</span> <span class="o">{</span>                    <span class="c1">// 最小的与第i个位置交换</span>
-                <span class="n">swap</span><span class="o">(</span><span class="n">A</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="n">A</span><span class="o">[</span><span class="n">min</span><span class="o">]);</span>
+                <span class="n">swap</span><span class="o">(</span><span class="n">A</span><span class="o">,</span> <span class="n">i</span><span class="o">,</span> <span class="n">min</span><span class="o">);</span>
             <span class="o">}</span>
         <span class="o">}</span>
     <span class="o">}</span>
@@ -329,31 +328,110 @@ jQuery(function(){
   <li>完全二叉树: 若二叉树除最后一层外, 其它各层的结点数都达到最大个数, 最后一层所有的结点都连续集中在最左边, 这就是完全二叉树</li>
   <li>小根堆: <code class="highlighter-rouge">L[1~n]</code>满足 <code class="highlighter-rouge">L[i]&lt;=L[2i]</code>且<code class="highlighter-rouge">L[i]&lt;=L[2i+1]</code></li>
   <li>大根堆: <code class="highlighter-rouge">L[1~n]</code>满足 <code class="highlighter-rouge">L[i]&gt;=L[2i]</code>且<code class="highlighter-rouge">L[i]&gt;=L[2i+1]</code></li>
-  <li>示例:</li>
+  <li>大根堆示例:(左右兄弟结点没有大小关系)</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 序列为:</span>
-<span class="mi">16</span><span class="o">,</span> <span class="mi">14</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="mi">8</span><span class="o">,</span> <span class="mi">7</span> <span class="o">,</span> <span class="mi">9</span> <span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span>
-<span class="c1">// 表示的大根堆为:</span>
-          <span class="mi">16</span>
-        <span class="o">+</span>     <span class="o">+</span>
-     <span class="mi">14</span>         <span class="mi">10</span>
-    <span class="o">+</span>   <span class="o">+</span>     <span class="o">+</span>    <span class="o">+</span>  
-  <span class="mi">8</span>      <span class="mi">7</span>   <span class="mi">9</span>      <span class="mi">3</span>
- <span class="o">+</span> <span class="o">+</span>
-<span class="mi">2</span>   <span class="mi">4</span>
+<p><img src="/static/images/maxHeap.png" alt="maxHeap" title="maxHeap" /></p>
+
+<ul>
+  <li>算法思想: 堆排序主要包括两个步骤
+    <ol>
+      <li>创建初始堆: 堆排序的关键就是构造初始堆. <code class="highlighter-rouge">n</code>个结点的完全二叉树, 最后一个结点一定是<code class="highlighter-rouge">n/2</code>个结点的子结点, 所以我们从<code class="highlighter-rouge">n/2</code>结点开始保证它是一个堆, 然后不断向前调整, 保证每个结点都大于左右子结点(不大于则交换). 当然在过程中可能因为交换破坏了下一级的堆, 这时要继续调整下一级堆, 保证子树构造成堆为止. 反复调整直到根结点.</li>
+      <li>排序输出: 大根堆里堆顶元素一定是最大的, 因此每次输出堆顶元素, 然后把堆顶元素与堆底元素交换, 在把剩余的元素(刚才的堆顶元素已经在堆底, 可调整的元素个数-1)调整成堆, 再次输出堆顶元素, 依次类推, 就是按由大到小的顺序把元素全部输出了.</li>
+    </ol>
+  </li>
+  <li>算法描述:</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// 创建大根堆</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">buildMaxHeap</span><span class="o">(</span><span class="kt">int</span> <span class="n">A</span><span class="o">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>  <span class="c1">// n为参与建堆的元素个数</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="o">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">--)</span> <span class="o">{</span>      <span class="c1">// 从n/2到0, 依次调整</span>
+            <span class="n">adjustDown</span><span class="o">(</span><span class="n">A</span><span class="o">,</span> <span class="n">i</span><span class="o">,</span> <span class="n">n</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="c1">// 向下调整(可用于删除元素)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">adjustDown</span><span class="o">(</span><span class="kt">int</span> <span class="n">A</span><span class="o">[],</span> <span class="kt">int</span> <span class="n">k</span><span class="o">,</span> <span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span> <span class="c1">// k为要调整结点下标, n为要调整的元素个数</span>
+        <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">A</span><span class="o">[</span><span class="n">k</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">k</span> <span class="o">*</span> <span class="mi">2</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">2</span><span class="o">)</span> <span class="o">{</span>     <span class="c1">// 调整k为根的子树</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">k</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>                           <span class="c1">// 如果下标是从0开始的, 则0的左子结点下标为1</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">A</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">A</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">])</span> <span class="o">{</span>     <span class="c1">// 左右子结点中, 取较大的那个结点跟temp比</span>
+                <span class="n">i</span><span class="o">++;</span>
+            <span class="o">}</span>
+            <span class="c1">// i是左右子结点中较大的那个</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">temp</span> <span class="o">&gt;=</span> <span class="n">A</span><span class="o">[</span><span class="n">i</span><span class="o">])</span> <span class="o">{</span>                     <span class="c1">// temp &gt;= A[i]时, 此时的k是temp应该调整到的位置</span>
+                <span class="k">break</span><span class="o">;</span>                              <span class="c1">// 找到temp该在的位置时, 筛选结束</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>                                <span class="c1">// 没找到temp该在的位置时, 还要继续调整</span>
+                <span class="n">A</span><span class="o">[</span><span class="n">k</span><span class="o">]</span> <span class="o">=</span> <span class="n">A</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>                        <span class="c1">// 先把A[i]调整到父结点上</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>                              <span class="c1">// 修改k值, 以便继续向下筛选</span>
+            <span class="o">}</span>
+        <span class="o">}</span> <span class="c1">// 出了循环, k这颗子树就调整完毕了</span>
+        <span class="n">A</span><span class="o">[</span><span class="n">k</span><span class="o">]</span> <span class="o">=</span> <span class="n">temp</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="c1">// 堆排序</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">heapSort</span><span class="o">(</span><span class="kt">int</span> <span class="n">A</span><span class="o">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>   <span class="c1">// 对前n个元素建堆</span>
+        <span class="n">buildMaxHeap</span><span class="o">(</span><span class="n">A</span><span class="o">,</span> <span class="n">n</span><span class="o">);</span>                  <span class="c1">// 创建初始堆</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">--)</span> <span class="o">{</span>    <span class="c1">// n-1趟交换建堆过程</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">A</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>        <span class="c1">// 输出</span>
+            <span class="n">swap</span><span class="o">(</span><span class="n">A</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">i</span><span class="o">);</span>                   <span class="c1">// 交换堆顶和堆底元素, 为的是把堆底元素撇出去</span>
+            <span class="n">adjustDown</span><span class="o">(</span><span class="n">A</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>         <span class="c1">// 把剩余的 i-1 个元素调整成堆</span>
+        <span class="o">}</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">A</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>            <span class="c1">// 把最后一个元素输出</span>
+    <span class="o">}</span>
 </code></pre>
 </div>
+
 <ul>
-  <li>算法思想: </li>
+  <li>堆的删除和插入
+    <ol>
+      <li>堆顶删除, 把堆顶和堆底交换, 对根结点进行向下调整(剩余元素)</li>
+      <li>堆底插入, 再对这个结点进行向上调整. 向上调整的算法如下:</li>
+    </ol>
+  </li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code></code></pre>
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// 向上调整(可用于添加元素)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">adjustUp</span><span class="o">(</span><span class="kt">int</span> <span class="n">A</span><span class="o">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>  <span class="c1">// 添加元素只能从堆底添加, n为要调整的元素个数, 所以添加的元素下标k=n-1</span>
+        <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>                      <span class="c1">// 新添加元素的下标</span>
+        <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">A</span><span class="o">[</span><span class="n">k</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">p</span> <span class="o">=</span> <span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="o">;</span>                      <span class="c1">// p为双亲结点</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">p</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">A</span><span class="o">[</span><span class="n">p</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">temp</span><span class="o">)</span> <span class="o">{</span>     <span class="c1">// 若结点大于双亲结点, 则将双亲结点向下调, 并继续向上比较</span>
+            <span class="n">A</span><span class="o">[</span><span class="n">k</span><span class="o">]</span> <span class="o">=</span> <span class="n">A</span><span class="o">[</span><span class="n">p</span><span class="o">];</span>                    <span class="c1">// 双亲结点下调</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">p</span><span class="o">;</span>                          <span class="c1">// 记录调整到的节点位置</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">k</span> <span class="o">/</span> <span class="mi">2</span><span class="o">;</span>                      <span class="c1">// 继续向上比较</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">k</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>                   <span class="c1">// 下标从0开始的话, 必须有这一步, 不然会出现死循环</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span> <span class="c1">// 出循环时的n即为最终应该在的位置</span>
+        <span class="n">A</span><span class="o">[</span><span class="n">k</span><span class="o">]</span> <span class="o">=</span> <span class="n">temp</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre>
+</div>
+
+<ul>
+  <li>添加元素的一个例子:</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">mainTest</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">A</span><span class="o">[]</span> <span class="o">=</span> <span class="o">{</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">6</span><span class="o">,</span> <span class="mi">7</span><span class="o">,</span> <span class="mi">8</span><span class="o">,</span> <span class="mi">9</span><span class="o">};</span>  <span class="c1">// 一共10个元素</span>
+        <span class="n">buildMaxHeap</span><span class="o">(</span><span class="n">A</span><span class="o">,</span> <span class="n">A</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>             <span class="c1">// 前9个元素建堆</span>
+        <span class="n">adjustUp</span><span class="o">(</span><span class="n">A</span><span class="o">,</span> <span class="n">A</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>                     <span class="c1">// 添加第10个元素(下标为9)进去</span>
+        <span class="c1">// 排序输出</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">--)</span> <span class="o">{</span>   <span class="c1">// n-1趟交换建堆过程</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">A</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>              <span class="c1">// 输出</span>
+            <span class="n">swap</span><span class="o">(</span><span class="n">A</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">i</span><span class="o">);</span>                         <span class="c1">// 交换堆顶和堆底元素, 为的是把堆底元素撇出去</span>
+            <span class="n">adjustDown</span><span class="o">(</span><span class="n">A</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>               <span class="c1">// 把剩余的 i-1 个元素调整成堆</span>
+        <span class="o">}</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">A</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>                  <span class="c1">// 把最后一个元素输出</span>
+    <span class="o">}</span>
+</code></pre>
 </div>
 
 <ul>
   <li>空间复杂度: <code class="highlighter-rouge">O(1)</code></li>
-  <li>时间复杂度: <code class="highlighter-rouge">O(n^2)</code></li>
+  <li>时间复杂度: 建堆<code class="highlighter-rouge">O(n)</code>, 调整<code class="highlighter-rouge">O(h)</code>, 平均<code class="highlighter-rouge">O(nlogn)</code></li>
   <li>稳定性: 不稳定</li>
 </ul>
 
