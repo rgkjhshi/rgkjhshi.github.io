@@ -5,8 +5,8 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 23 May 2017 18:17:14 +0800</pubDate>
-    <lastBuildDate>Tue, 23 May 2017 18:17:14 +0800</lastBuildDate>
+    <pubDate>Tue, 23 May 2017 18:20:04 +0800</pubDate>
+    <lastBuildDate>Tue, 23 May 2017 18:20:04 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
@@ -93,195 +93,9 @@
 
 &lt;hr /&gt;
 </description>
-        <pubDate>Sun, 14 May 2017 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-14-ConcurrentHashMap%E8%AF%A6%E8%A7%A3.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-14-ConcurrentHashMap%E8%AF%A6%E8%A7%A3.html</guid>
-        
-        <category>Java</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>查找算法</title>
-        <description>&lt;p&gt;基本的排序算法&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;折半查找&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#b&quot;&gt;B树&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;基本概念&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#b-1&quot;&gt;B树的查找&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#b-2&quot;&gt;B树的插入&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#b-3&quot;&gt;B树的删除&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#b-4&quot;&gt;B+树&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;基本概念&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#bb&quot;&gt;B+树与B树的区别&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;折半查找&lt;/h2&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;折半查找&lt;/code&gt;也叫&lt;code class=&quot;highlighter-rouge&quot;&gt;二分查找&lt;/code&gt;, 前提是顺序表 &lt;strong&gt;有序&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;基本思想:
-    &lt;ol&gt;
-      &lt;li&gt;将给定值&lt;code class=&quot;highlighter-rouge&quot;&gt;key&lt;/code&gt;与中间元素比较, 若相等, 查找成功, 返回元素位置; 若不等, 根据大小查找左半部分或右半部分&lt;/li&gt;
-      &lt;li&gt;缩小范围, 在左边或右边进行同样的查找, 直到找到为止&lt;/li&gt;
-      &lt;li&gt;若最后都没找到, 查找失败&lt;/li&gt;
-    &lt;/ol&gt;
-  &lt;/li&gt;
-  &lt;li&gt;算法描述:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;c1&quot;&gt;// 折半查找&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;binarySearch&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[],&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;low&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;high&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;low&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;high&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;low&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;high&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 中间位置&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;         &lt;span class=&quot;c1&quot;&gt;// 查找成功则返回所在位置&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;// 查找前半部分&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;high&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;                     &lt;span class=&quot;c1&quot;&gt;// 查找右半部分&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;low&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 查找失败&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;时间复杂度: &lt;code class=&quot;highlighter-rouge&quot;&gt;O(nlogn)&lt;/code&gt;(&lt;code class=&quot;highlighter-rouge&quot;&gt;log&lt;/code&gt;表示以2为底的对数)&lt;/li&gt;
-  &lt;li&gt;适用场景: 必须有序&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;b&quot;&gt;B树&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;注意: 下面&lt;code class=&quot;highlighter-rouge&quot;&gt;[m/2]&lt;/code&gt;意思为向上取整&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;section-1&quot;&gt;基本概念&lt;/h3&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;又称&lt;code class=&quot;highlighter-rouge&quot;&gt;多路平衡查找树&lt;/code&gt;或&lt;code class=&quot;highlighter-rouge&quot;&gt;多路平衡查找树&lt;/code&gt;, 但一般把&lt;code class=&quot;highlighter-rouge&quot;&gt;二叉平衡排序树&lt;/code&gt;成为&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;, 把&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;多路: 几叉就是几路, 即一个结点最多有几个子结点&lt;/li&gt;
-  &lt;li&gt;平衡树: 左右子树高度差不超过1(以二叉平衡树为例说明)&lt;/li&gt;
-  &lt;li&gt;查找树: &lt;code class=&quot;highlighter-rouge&quot;&gt;排序树&lt;/code&gt;也叫&lt;code class=&quot;highlighter-rouge&quot;&gt;查找树&lt;/code&gt;, 以二叉平衡树为例说明, 左子树结点都小于根, 右子树结点都大于根&lt;/li&gt;
-  &lt;li&gt;一个&lt;code class=&quot;highlighter-rouge&quot;&gt;m&lt;/code&gt;阶的&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;最多有&lt;code class=&quot;highlighter-rouge&quot;&gt;m&lt;/code&gt;棵子树, 如下图为3阶B树示例:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;/static/images/BTree.png&quot; alt=&quot;BTree&quot; title=&quot;BTree&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;m&lt;/code&gt;阶的&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;的每个结点最多包含&lt;code class=&quot;highlighter-rouge&quot;&gt;m-1&lt;/code&gt;个关键字, &lt;code class=&quot;highlighter-rouge&quot;&gt;m&lt;/code&gt;棵子树. 结点的结构类似于下图:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;/static/images/BTreeNode.png&quot; alt=&quot;BTreeNode结构图&quot; title=&quot;BTreeNode结构图&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;关键字之间有一定关系:&lt;code class=&quot;highlighter-rouge&quot;&gt;K1&amp;lt;K2&amp;lt;...&amp;lt;Kn&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;P(i-1)&lt;/code&gt;子树的关键字都小于&lt;code class=&quot;highlighter-rouge&quot;&gt;Ki&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;P(i)&lt;/code&gt;子树的关键字都大于&lt;code class=&quot;highlighter-rouge&quot;&gt;Ki&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;根结点最少有1个关键字, 2棵子树&lt;/li&gt;
-  &lt;li&gt;除根结点外的结点最少有&lt;code class=&quot;highlighter-rouge&quot;&gt;[m/2]&lt;/code&gt;棵子树, &lt;code class=&quot;highlighter-rouge&quot;&gt;[m/2] -1&lt;/code&gt;个关键字(插入时分裂是从中间分裂的)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;b-1&quot;&gt;B树的查找&lt;/h3&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;一般是保存在磁盘上的, &lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;的查找跟二叉树的查找很像, 只不过每个结点变成了一个多关键字的有序表.&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;的查找分个基本操作:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;中找结点, 把找到的&lt;code class=&quot;highlighter-rouge&quot;&gt;结点&lt;/code&gt;从磁盘读入内存&lt;/li&gt;
-  &lt;li&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;结点&lt;/code&gt;内找关键字, 这个操作在内存中进行, 相当于在一个有序表中查找关键字K, 可以使用顺序查找或二分查找&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;若在结点上找到与关键字K则查找成功, 否则按照对应的指针去下一个结点中找, 当指针为空还没找到, 则查找失败&lt;/p&gt;
-
-&lt;h3 id=&quot;b-2&quot;&gt;B树的插入&lt;/h3&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;的插入操作比二叉查找树要复杂, 并不能简单的找到终端结点然后添加到进去, 因为有可能插入结点后就不再满足&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;的定义要求了. &lt;br /&gt;
-把关键字&lt;code class=&quot;highlighter-rouge&quot;&gt;key&lt;/code&gt;插入到&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;的过程如下:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;定位: 利用上面的B树查找算法, 找到该关键字该插入到的最底层的那个结点.&lt;/li&gt;
-  &lt;li&gt;插入: 由于每个结点的关键字个数最多为&lt;code class=&quot;highlighter-rouge&quot;&gt;m-1&lt;/code&gt;, 所以若插入后关键字个数小于&lt;code class=&quot;highlighter-rouge&quot;&gt;m&lt;/code&gt;则可以直接插入, 若等于&lt;code class=&quot;highlighter-rouge&quot;&gt;m&lt;/code&gt;则必须对结点进行&lt;code class=&quot;highlighter-rouge&quot;&gt;分裂&lt;/code&gt;.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;分裂&lt;/code&gt;的方法:
-    &lt;ol&gt;
-      &lt;li&gt;取一个新结点, 将插入&lt;code class=&quot;highlighter-rouge&quot;&gt;key&lt;/code&gt;后的原结点从中间位置(&lt;code class=&quot;highlighter-rouge&quot;&gt;[m/2]&lt;/code&gt;)分成两部分&lt;/li&gt;
-      &lt;li&gt;左半部分(不包括中间位置)仍留在原结点, 右半部分(不包括中间位置)放到新结点中&lt;/li&gt;
-      &lt;li&gt;中间位置(&lt;code class=&quot;highlighter-rouge&quot;&gt;[m/2]&lt;/code&gt;)的关键字插入到原结点的父结点中.&lt;/li&gt;
-      &lt;li&gt;若父结点关键字个数没超过上限, 则新结点挂在这个中间结点的后面; 若父结点关键字个数超过了上限, 对父结点也进行这样的分裂, 直至传到根结点, 这样将导致&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;的高度增1.&lt;/li&gt;
-    &lt;/ol&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;b-3&quot;&gt;B树的删除&lt;/h3&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;的删除与插入类似, 但更复杂一些, 要涉及结点的&lt;code class=&quot;highlighter-rouge&quot;&gt;合并&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;当要删除的关键字&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;不在终端结点时:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;若&lt;code class=&quot;highlighter-rouge&quot;&gt;k的左边子树&lt;/code&gt;(&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;与&lt;code class=&quot;highlighter-rouge&quot;&gt;k-1&lt;/code&gt;之间的子树)关键字个数n有&lt;code class=&quot;highlighter-rouge&quot;&gt;n &amp;gt;= [m/2] -1&lt;/code&gt;, 则找出&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;的前驱值&lt;code class=&quot;highlighter-rouge&quot;&gt;k&#39;&lt;/code&gt;(&lt;code class=&quot;highlighter-rouge&quot;&gt;k的左边子树&lt;/code&gt;中最大的那个), 用&lt;code class=&quot;highlighter-rouge&quot;&gt;k&#39;&lt;/code&gt;取代&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;, 再递归地删除&lt;code class=&quot;highlighter-rouge&quot;&gt;k&#39;&lt;/code&gt;. 最终会传递下去转变成在终端结点的情况.&lt;/li&gt;
-  &lt;li&gt;若&lt;code class=&quot;highlighter-rouge&quot;&gt;k的右边子树&lt;/code&gt;(&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;与&lt;code class=&quot;highlighter-rouge&quot;&gt;k+1&lt;/code&gt;之间的子树)关键字个数n有&lt;code class=&quot;highlighter-rouge&quot;&gt;n &amp;gt;= [m/2] -1&lt;/code&gt;, 则找出&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;的后继值&lt;code class=&quot;highlighter-rouge&quot;&gt;k&#39;&lt;/code&gt;(&lt;code class=&quot;highlighter-rouge&quot;&gt;k的右边子树&lt;/code&gt;中最小的那个), 用&lt;code class=&quot;highlighter-rouge&quot;&gt;k&#39;&lt;/code&gt;取代&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;, 再递归地删除&lt;code class=&quot;highlighter-rouge&quot;&gt;k&#39;&lt;/code&gt;. 最终会传递下去转变成在终端结点的情况.&lt;/li&gt;
-  &lt;li&gt;若前后两个子树关键字个数均为&lt;code class=&quot;highlighter-rouge&quot;&gt;[m/2] -1&lt;/code&gt;, 则把左右两个子树合并成一个子树(这样合并后仍不会超过&lt;code class=&quot;highlighter-rouge&quot;&gt;m-1&lt;/code&gt;), 直接删除&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;即可&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;当要删除的关键字&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;在终端结点时:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;直接删除关键字的情况: 若该结点关键字个数n有&lt;code class=&quot;highlighter-rouge&quot;&gt;n &amp;gt; [m/2] -1&lt;/code&gt;, 则直接删除关键字&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;, 写入磁盘&lt;/li&gt;
-  &lt;li&gt;兄弟够借: 若该结点关键字个数n有&lt;code class=&quot;highlighter-rouge&quot;&gt;n = [m/2] -1&lt;/code&gt;, 但相邻的右兄弟结点关键字&lt;code class=&quot;highlighter-rouge&quot;&gt;n &amp;gt; [m/2] -1&lt;/code&gt;, 此时为兄弟够借的情况; 这时调整左兄弟, 右兄弟, 父结点, 具体做法是右兄弟的最小值调整到到父结点(左右兄弟中间那个值), 父结点那个关键字调整到到左兄弟&lt;/li&gt;
-  &lt;li&gt;兄弟不够借: 若该结点关键字个数n有&lt;code class=&quot;highlighter-rouge&quot;&gt;n = [m/2] -1&lt;/code&gt;, 但相邻的右兄弟结点关键字&lt;code class=&quot;highlighter-rouge&quot;&gt;n = [m/2] -1&lt;/code&gt;, 此时为兄弟不够借的情况; 这时删除关键字&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;后, 把左兄弟, 父结点, 右兄弟的关键字进行合并&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;b-4&quot;&gt;B+树&lt;/h2&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;B+树&lt;/code&gt;广泛应用于数据库存储引擎&lt;/p&gt;
-
-&lt;h3 id=&quot;section-2&quot;&gt;基本概念&lt;/h3&gt;
-&lt;p&gt;一棵&lt;code class=&quot;highlighter-rouge&quot;&gt;m&lt;/code&gt;阶的&lt;code class=&quot;highlighter-rouge&quot;&gt;B+树&lt;/code&gt;需满足谢列条件:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;每个分支最多有&lt;code class=&quot;highlighter-rouge&quot;&gt;m&lt;/code&gt;棵子树&lt;/li&gt;
-  &lt;li&gt;根结点最少有两颗子树, 其他结点最少有&lt;code class=&quot;highlighter-rouge&quot;&gt;[m/2]&lt;/code&gt;棵子树(&lt;code class=&quot;highlighter-rouge&quot;&gt;[]&lt;/code&gt;表示向上取整)&lt;/li&gt;
-  &lt;li&gt;结点的子树个数与关键字个数相等&lt;/li&gt;
-  &lt;li&gt;所有的叶子结点包含全部关键字(即所有的叶子结点就是全部数据的集合), 而且叶子结点中将关键字按大小排序, 并且相邻叶结点按大小顺序连接起来&lt;/li&gt;
-  &lt;li&gt;所有的分支结点(非叶子结点)中仅包含它的各个子结点中关键字的最大值及指向其子结点的指针.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;一个&lt;code class=&quot;highlighter-rouge&quot;&gt;B+树&lt;/code&gt;的例子:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;/static/images/B+Tree.png&quot; alt=&quot;B+Tree&quot; title=&quot;B+Tree&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;bb&quot;&gt;B+树与B树的区别&lt;/h3&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;B+树&lt;/code&gt;中一个结点有&lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt;个关键字就有&lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt;棵子树, 即每个关键字对应一颗子树; &lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;中有&lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt;个关键字的节点含有&lt;code class=&quot;highlighter-rouge&quot;&gt;n+1&lt;/code&gt;棵子树&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;B+树&lt;/code&gt;中非根结点关键字的个数&lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt;范围是&lt;code class=&quot;highlighter-rouge&quot;&gt;[m/2] &amp;lt;= n &amp;lt;= m&lt;/code&gt;; &lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;中为&lt;code class=&quot;highlighter-rouge&quot;&gt;[m/2]-1 &amp;lt;= n &amp;lt;= m&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;B+树&lt;/code&gt;中的非叶子节点仅起到索引的作用, 不包含关键字对应记录的存储地址; &lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;中是有存储数据的&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;B+树&lt;/code&gt;中叶子节点包含全部关键字; &lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;中叶子结点包含的关键字和其他结点是不重复的, 所有结点加起来才是全部关键字&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;hr /&gt;
-</description>
-        <pubDate>Sun, 14 May 2017 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-14-%E6%9F%A5%E6%89%BE%E7%AE%97%E6%B3%95.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-14-%E6%9F%A5%E6%89%BE%E7%AE%97%E6%B3%95.html</guid>
+        <pubDate>Mon, 22 May 2017 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-22-ConcurrentHashMap%E8%AF%A6%E8%A7%A3.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-22-ConcurrentHashMap%E8%AF%A6%E8%A7%A3.html</guid>
         
         <category>Java</category>
         
@@ -680,9 +494,195 @@
 
 &lt;hr /&gt;
 </description>
-        <pubDate>Sun, 07 May 2017 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-07-%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-07-%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95.html</guid>
+        <pubDate>Thu, 18 May 2017 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-18-%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-18-%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95.html</guid>
+        
+        <category>Java</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
+    
+      <item>
+        <title>查找算法</title>
+        <description>&lt;p&gt;基本的排序算法&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;折半查找&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#b&quot;&gt;B树&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;基本概念&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#b-1&quot;&gt;B树的查找&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#b-2&quot;&gt;B树的插入&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#b-3&quot;&gt;B树的删除&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#b-4&quot;&gt;B+树&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;基本概念&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#bb&quot;&gt;B+树与B树的区别&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;折半查找&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;折半查找&lt;/code&gt;也叫&lt;code class=&quot;highlighter-rouge&quot;&gt;二分查找&lt;/code&gt;, 前提是顺序表 &lt;strong&gt;有序&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;基本思想:
+    &lt;ol&gt;
+      &lt;li&gt;将给定值&lt;code class=&quot;highlighter-rouge&quot;&gt;key&lt;/code&gt;与中间元素比较, 若相等, 查找成功, 返回元素位置; 若不等, 根据大小查找左半部分或右半部分&lt;/li&gt;
+      &lt;li&gt;缩小范围, 在左边或右边进行同样的查找, 直到找到为止&lt;/li&gt;
+      &lt;li&gt;若最后都没找到, 查找失败&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;算法描述:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;c1&quot;&gt;// 折半查找&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;binarySearch&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[],&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;low&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;high&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;low&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;high&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;low&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;high&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 中间位置&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;         &lt;span class=&quot;c1&quot;&gt;// 查找成功则返回所在位置&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;// 查找前半部分&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;high&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;                     &lt;span class=&quot;c1&quot;&gt;// 查找右半部分&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;low&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 查找失败&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;时间复杂度: &lt;code class=&quot;highlighter-rouge&quot;&gt;O(nlogn)&lt;/code&gt;(&lt;code class=&quot;highlighter-rouge&quot;&gt;log&lt;/code&gt;表示以2为底的对数)&lt;/li&gt;
+  &lt;li&gt;适用场景: 必须有序&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;b&quot;&gt;B树&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;注意: 下面&lt;code class=&quot;highlighter-rouge&quot;&gt;[m/2]&lt;/code&gt;意思为向上取整&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;基本概念&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;又称&lt;code class=&quot;highlighter-rouge&quot;&gt;多路平衡查找树&lt;/code&gt;或&lt;code class=&quot;highlighter-rouge&quot;&gt;多路平衡查找树&lt;/code&gt;, 但一般把&lt;code class=&quot;highlighter-rouge&quot;&gt;二叉平衡排序树&lt;/code&gt;成为&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;, 把&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;多路: 几叉就是几路, 即一个结点最多有几个子结点&lt;/li&gt;
+  &lt;li&gt;平衡树: 左右子树高度差不超过1(以二叉平衡树为例说明)&lt;/li&gt;
+  &lt;li&gt;查找树: &lt;code class=&quot;highlighter-rouge&quot;&gt;排序树&lt;/code&gt;也叫&lt;code class=&quot;highlighter-rouge&quot;&gt;查找树&lt;/code&gt;, 以二叉平衡树为例说明, 左子树结点都小于根, 右子树结点都大于根&lt;/li&gt;
+  &lt;li&gt;一个&lt;code class=&quot;highlighter-rouge&quot;&gt;m&lt;/code&gt;阶的&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;最多有&lt;code class=&quot;highlighter-rouge&quot;&gt;m&lt;/code&gt;棵子树, 如下图为3阶B树示例:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/BTree.png&quot; alt=&quot;BTree&quot; title=&quot;BTree&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;m&lt;/code&gt;阶的&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;的每个结点最多包含&lt;code class=&quot;highlighter-rouge&quot;&gt;m-1&lt;/code&gt;个关键字, &lt;code class=&quot;highlighter-rouge&quot;&gt;m&lt;/code&gt;棵子树. 结点的结构类似于下图:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/BTreeNode.png&quot; alt=&quot;BTreeNode结构图&quot; title=&quot;BTreeNode结构图&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;关键字之间有一定关系:&lt;code class=&quot;highlighter-rouge&quot;&gt;K1&amp;lt;K2&amp;lt;...&amp;lt;Kn&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;P(i-1)&lt;/code&gt;子树的关键字都小于&lt;code class=&quot;highlighter-rouge&quot;&gt;Ki&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;P(i)&lt;/code&gt;子树的关键字都大于&lt;code class=&quot;highlighter-rouge&quot;&gt;Ki&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;根结点最少有1个关键字, 2棵子树&lt;/li&gt;
+  &lt;li&gt;除根结点外的结点最少有&lt;code class=&quot;highlighter-rouge&quot;&gt;[m/2]&lt;/code&gt;棵子树, &lt;code class=&quot;highlighter-rouge&quot;&gt;[m/2] -1&lt;/code&gt;个关键字(插入时分裂是从中间分裂的)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;b-1&quot;&gt;B树的查找&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;一般是保存在磁盘上的, &lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;的查找跟二叉树的查找很像, 只不过每个结点变成了一个多关键字的有序表.&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;的查找分个基本操作:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;中找结点, 把找到的&lt;code class=&quot;highlighter-rouge&quot;&gt;结点&lt;/code&gt;从磁盘读入内存&lt;/li&gt;
+  &lt;li&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;结点&lt;/code&gt;内找关键字, 这个操作在内存中进行, 相当于在一个有序表中查找关键字K, 可以使用顺序查找或二分查找&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;若在结点上找到与关键字K则查找成功, 否则按照对应的指针去下一个结点中找, 当指针为空还没找到, 则查找失败&lt;/p&gt;
+
+&lt;h3 id=&quot;b-2&quot;&gt;B树的插入&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;的插入操作比二叉查找树要复杂, 并不能简单的找到终端结点然后添加到进去, 因为有可能插入结点后就不再满足&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;的定义要求了. &lt;br /&gt;
+把关键字&lt;code class=&quot;highlighter-rouge&quot;&gt;key&lt;/code&gt;插入到&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;的过程如下:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;定位: 利用上面的B树查找算法, 找到该关键字该插入到的最底层的那个结点.&lt;/li&gt;
+  &lt;li&gt;插入: 由于每个结点的关键字个数最多为&lt;code class=&quot;highlighter-rouge&quot;&gt;m-1&lt;/code&gt;, 所以若插入后关键字个数小于&lt;code class=&quot;highlighter-rouge&quot;&gt;m&lt;/code&gt;则可以直接插入, 若等于&lt;code class=&quot;highlighter-rouge&quot;&gt;m&lt;/code&gt;则必须对结点进行&lt;code class=&quot;highlighter-rouge&quot;&gt;分裂&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;分裂&lt;/code&gt;的方法:
+    &lt;ol&gt;
+      &lt;li&gt;取一个新结点, 将插入&lt;code class=&quot;highlighter-rouge&quot;&gt;key&lt;/code&gt;后的原结点从中间位置(&lt;code class=&quot;highlighter-rouge&quot;&gt;[m/2]&lt;/code&gt;)分成两部分&lt;/li&gt;
+      &lt;li&gt;左半部分(不包括中间位置)仍留在原结点, 右半部分(不包括中间位置)放到新结点中&lt;/li&gt;
+      &lt;li&gt;中间位置(&lt;code class=&quot;highlighter-rouge&quot;&gt;[m/2]&lt;/code&gt;)的关键字插入到原结点的父结点中.&lt;/li&gt;
+      &lt;li&gt;若父结点关键字个数没超过上限, 则新结点挂在这个中间结点的后面; 若父结点关键字个数超过了上限, 对父结点也进行这样的分裂, 直至传到根结点, 这样将导致&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;的高度增1.&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;b-3&quot;&gt;B树的删除&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;的删除与插入类似, 但更复杂一些, 要涉及结点的&lt;code class=&quot;highlighter-rouge&quot;&gt;合并&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;当要删除的关键字&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;不在终端结点时:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;若&lt;code class=&quot;highlighter-rouge&quot;&gt;k的左边子树&lt;/code&gt;(&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;与&lt;code class=&quot;highlighter-rouge&quot;&gt;k-1&lt;/code&gt;之间的子树)关键字个数n有&lt;code class=&quot;highlighter-rouge&quot;&gt;n &amp;gt;= [m/2] -1&lt;/code&gt;, 则找出&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;的前驱值&lt;code class=&quot;highlighter-rouge&quot;&gt;k&#39;&lt;/code&gt;(&lt;code class=&quot;highlighter-rouge&quot;&gt;k的左边子树&lt;/code&gt;中最大的那个), 用&lt;code class=&quot;highlighter-rouge&quot;&gt;k&#39;&lt;/code&gt;取代&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;, 再递归地删除&lt;code class=&quot;highlighter-rouge&quot;&gt;k&#39;&lt;/code&gt;. 最终会传递下去转变成在终端结点的情况.&lt;/li&gt;
+  &lt;li&gt;若&lt;code class=&quot;highlighter-rouge&quot;&gt;k的右边子树&lt;/code&gt;(&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;与&lt;code class=&quot;highlighter-rouge&quot;&gt;k+1&lt;/code&gt;之间的子树)关键字个数n有&lt;code class=&quot;highlighter-rouge&quot;&gt;n &amp;gt;= [m/2] -1&lt;/code&gt;, 则找出&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;的后继值&lt;code class=&quot;highlighter-rouge&quot;&gt;k&#39;&lt;/code&gt;(&lt;code class=&quot;highlighter-rouge&quot;&gt;k的右边子树&lt;/code&gt;中最小的那个), 用&lt;code class=&quot;highlighter-rouge&quot;&gt;k&#39;&lt;/code&gt;取代&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;, 再递归地删除&lt;code class=&quot;highlighter-rouge&quot;&gt;k&#39;&lt;/code&gt;. 最终会传递下去转变成在终端结点的情况.&lt;/li&gt;
+  &lt;li&gt;若前后两个子树关键字个数均为&lt;code class=&quot;highlighter-rouge&quot;&gt;[m/2] -1&lt;/code&gt;, 则把左右两个子树合并成一个子树(这样合并后仍不会超过&lt;code class=&quot;highlighter-rouge&quot;&gt;m-1&lt;/code&gt;), 直接删除&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;即可&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;当要删除的关键字&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;在终端结点时:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;直接删除关键字的情况: 若该结点关键字个数n有&lt;code class=&quot;highlighter-rouge&quot;&gt;n &amp;gt; [m/2] -1&lt;/code&gt;, 则直接删除关键字&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;, 写入磁盘&lt;/li&gt;
+  &lt;li&gt;兄弟够借: 若该结点关键字个数n有&lt;code class=&quot;highlighter-rouge&quot;&gt;n = [m/2] -1&lt;/code&gt;, 但相邻的右兄弟结点关键字&lt;code class=&quot;highlighter-rouge&quot;&gt;n &amp;gt; [m/2] -1&lt;/code&gt;, 此时为兄弟够借的情况; 这时调整左兄弟, 右兄弟, 父结点, 具体做法是右兄弟的最小值调整到到父结点(左右兄弟中间那个值), 父结点那个关键字调整到到左兄弟&lt;/li&gt;
+  &lt;li&gt;兄弟不够借: 若该结点关键字个数n有&lt;code class=&quot;highlighter-rouge&quot;&gt;n = [m/2] -1&lt;/code&gt;, 但相邻的右兄弟结点关键字&lt;code class=&quot;highlighter-rouge&quot;&gt;n = [m/2] -1&lt;/code&gt;, 此时为兄弟不够借的情况; 这时删除关键字&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;后, 把左兄弟, 父结点, 右兄弟的关键字进行合并&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;b-4&quot;&gt;B+树&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;B+树&lt;/code&gt;广泛应用于数据库存储引擎&lt;/p&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;基本概念&lt;/h3&gt;
+&lt;p&gt;一棵&lt;code class=&quot;highlighter-rouge&quot;&gt;m&lt;/code&gt;阶的&lt;code class=&quot;highlighter-rouge&quot;&gt;B+树&lt;/code&gt;需满足谢列条件:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;每个分支最多有&lt;code class=&quot;highlighter-rouge&quot;&gt;m&lt;/code&gt;棵子树&lt;/li&gt;
+  &lt;li&gt;根结点最少有两颗子树, 其他结点最少有&lt;code class=&quot;highlighter-rouge&quot;&gt;[m/2]&lt;/code&gt;棵子树(&lt;code class=&quot;highlighter-rouge&quot;&gt;[]&lt;/code&gt;表示向上取整)&lt;/li&gt;
+  &lt;li&gt;结点的子树个数与关键字个数相等&lt;/li&gt;
+  &lt;li&gt;所有的叶子结点包含全部关键字(即所有的叶子结点就是全部数据的集合), 而且叶子结点中将关键字按大小排序, 并且相邻叶结点按大小顺序连接起来&lt;/li&gt;
+  &lt;li&gt;所有的分支结点(非叶子结点)中仅包含它的各个子结点中关键字的最大值及指向其子结点的指针.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;一个&lt;code class=&quot;highlighter-rouge&quot;&gt;B+树&lt;/code&gt;的例子:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/B+Tree.png&quot; alt=&quot;B+Tree&quot; title=&quot;B+Tree&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;bb&quot;&gt;B+树与B树的区别&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;B+树&lt;/code&gt;中一个结点有&lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt;个关键字就有&lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt;棵子树, 即每个关键字对应一颗子树; &lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;中有&lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt;个关键字的节点含有&lt;code class=&quot;highlighter-rouge&quot;&gt;n+1&lt;/code&gt;棵子树&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;B+树&lt;/code&gt;中非根结点关键字的个数&lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt;范围是&lt;code class=&quot;highlighter-rouge&quot;&gt;[m/2] &amp;lt;= n &amp;lt;= m&lt;/code&gt;; &lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;中为&lt;code class=&quot;highlighter-rouge&quot;&gt;[m/2]-1 &amp;lt;= n &amp;lt;= m&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;B+树&lt;/code&gt;中的非叶子节点仅起到索引的作用, 不包含关键字对应记录的存储地址; &lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;中是有存储数据的&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;B+树&lt;/code&gt;中叶子节点包含全部关键字; &lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;中叶子结点包含的关键字和其他结点是不重复的, 所有结点加起来才是全部关键字&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;hr /&gt;
+</description>
+        <pubDate>Sun, 14 May 2017 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-14-%E6%9F%A5%E6%89%BE%E7%AE%97%E6%B3%95.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-14-%E6%9F%A5%E6%89%BE%E7%AE%97%E6%B3%95.html</guid>
         
         <category>Java</category>
         
