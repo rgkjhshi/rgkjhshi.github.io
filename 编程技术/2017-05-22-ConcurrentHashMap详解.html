@@ -107,6 +107,11 @@ jQuery(function(){
   <li><a href="#section">存储结构</a></li>
   <li><a href="#section-1">需要知道的概念</a></li>
   <li><a href="#section-2">构造方法</a></li>
+  <li><a href="#hash">关于hash定位</a></li>
+  <li><a href="#put">添加元素put</a></li>
+  <li><a href="#remove">删除元素remove</a></li>
+  <li><a href="#get">获取元素get</a></li>
+  <li><a href="#sizecontainsvalue">锁全段操作size/containsValue</a></li>
 </ul>
 
 <hr />
@@ -124,7 +129,7 @@ jQuery(function(){
         <span class="kd">transient</span> <span class="kd">volatile</span> <span class="n">HashEntry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;[]</span> <span class="n">table</span><span class="o">;</span> <span class="c1">// 桶, 除了类型, 其他跟HashMap里的table一样</span>
         <span class="kd">transient</span> <span class="kt">int</span> <span class="n">count</span><span class="o">;</span>     <span class="c1">// HashEntry的总个数, 对应HashMap里的size</span>
         <span class="kd">transient</span> <span class="kt">int</span> <span class="n">modCount</span><span class="o">;</span>  <span class="c1">// 同HashMap</span>
-        <span class="kd">transient</span> <span class="kt">int</span> <span class="n">threshold</span><span class="o">;</span> <span class="c1">// 同HashMap</span>
+        <span class="kd">transient</span> <span class="kt">int</span> <span class="n">threshold</span><span class="o">;</span> <span class="c1">// 同HashMap, 用于rehash, rehash时只会改变table的大小, segments大小确定之后就不会再变了</span>
     <span class="o">}</span>
 </code></pre>
 </div>
@@ -162,20 +167,215 @@ jQuery(function(){
        <span class="k">this</span><span class="o">.</span><span class="na">segmentMask</span> <span class="o">=</span> <span class="n">ssize</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
        <span class="k">if</span> <span class="o">(</span><span class="n">initialCapacity</span> <span class="o">&gt;</span> <span class="n">MAXIMUM_CAPACITY</span><span class="o">)</span>
            <span class="n">initialCapacity</span> <span class="o">=</span> <span class="n">MAXIMUM_CAPACITY</span><span class="o">;</span>
-       <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">initialCapacity</span> <span class="o">/</span> <span class="n">ssize</span><span class="o">;</span>
+       <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">initialCapacity</span> <span class="o">/</span> <span class="n">ssize</span><span class="o">;</span>       <span class="c1">// 默认的情况下 c = 16/16 = 1</span>
        <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">*</span> <span class="n">ssize</span> <span class="o">&lt;</span> <span class="n">initialCapacity</span><span class="o">)</span>
-           <span class="o">++</span><span class="n">c</span><span class="o">;</span>
-       <span class="kt">int</span> <span class="n">cap</span> <span class="o">=</span> <span class="n">MIN_SEGMENT_TABLE_CAPACITY</span><span class="o">;</span>
+           <span class="o">++</span><span class="n">c</span><span class="o">;</span>                               <span class="c1">// c是并发等级的向上取整倍</span>
+       <span class="kt">int</span> <span class="n">cap</span> <span class="o">=</span> <span class="n">MIN_SEGMENT_TABLE_CAPACITY</span><span class="o">;</span>  <span class="c1">// tables的容量, 最少为2</span>
        <span class="k">while</span> <span class="o">(</span><span class="n">cap</span> <span class="o">&lt;</span> <span class="n">c</span><span class="o">)</span>
-           <span class="n">cap</span> <span class="o">&lt;&lt;=</span> <span class="mi">1</span><span class="o">;</span>
-       <span class="c1">// create segments and segments[0]</span>
+           <span class="n">cap</span> <span class="o">&lt;&lt;=</span> <span class="mi">1</span><span class="o">;</span>                         <span class="c1">// 容量是比c大的最小2次幂, 最小为2, 默认也为2</span>
+       <span class="c1">// 创建segments[0]</span>
        <span class="n">Segment</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">s0</span> <span class="o">=</span>
-           <span class="k">new</span> <span class="n">Segment</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;(</span><span class="n">loadFactor</span><span class="o">,</span> <span class="o">(</span><span class="kt">int</span><span class="o">)(</span><span class="n">cap</span> <span class="o">*</span> <span class="n">loadFactor</span><span class="o">),</span>
-                            <span class="o">(</span><span class="n">HashEntry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;[])</span><span class="k">new</span> <span class="n">HashEntry</span><span class="o">[</span><span class="n">cap</span><span class="o">]);</span>
-       <span class="n">Segment</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;[]</span> <span class="n">ss</span> <span class="o">=</span> <span class="o">(</span><span class="n">Segment</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;[])</span><span class="k">new</span> <span class="n">Segment</span><span class="o">[</span><span class="n">ssize</span><span class="o">];</span>
-       <span class="n">UNSAFE</span><span class="o">.</span><span class="na">putOrderedObject</span><span class="o">(</span><span class="n">ss</span><span class="o">,</span> <span class="n">SBASE</span><span class="o">,</span> <span class="n">s0</span><span class="o">);</span> <span class="c1">// ordered write of segments[0]</span>
+           <span class="k">new</span> <span class="n">Segment</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;(</span><span class="n">loadFactor</span><span class="o">,</span> <span class="o">(</span><span class="kt">int</span><span class="o">)(</span><span class="n">cap</span> <span class="o">*</span> <span class="n">loadFactor</span><span class="o">),</span>   <span class="c1">// loadFactor, threshold</span>
+                            <span class="o">(</span><span class="n">HashEntry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;[])</span><span class="k">new</span> <span class="n">HashEntry</span><span class="o">[</span><span class="n">cap</span><span class="o">]);</span> <span class="c1">// 这个Segment中的tables也直接创建了, 注意默认情况下tables的每个桶中只有2个结点</span>
+       <span class="n">Segment</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;[]</span> <span class="n">ss</span> <span class="o">=</span> <span class="o">(</span><span class="n">Segment</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;[])</span><span class="k">new</span> <span class="n">Segment</span><span class="o">[</span><span class="n">ssize</span><span class="o">];</span>  <span class="c1">// 创建segments, 这里可以看出ssize是真正的并发等级</span>
+       <span class="n">UNSAFE</span><span class="o">.</span><span class="na">putOrderedObject</span><span class="o">(</span><span class="n">ss</span><span class="o">,</span> <span class="n">SBASE</span><span class="o">,</span> <span class="n">s0</span><span class="o">);</span> <span class="c1">// 只有segments[0]有值, 这是为了给创建其他位置的segment时提供模板</span>
        <span class="k">this</span><span class="o">.</span><span class="na">segments</span> <span class="o">=</span> <span class="n">ss</span><span class="o">;</span>
    <span class="o">}</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="hash">关于hash定位</h2>
+<p><code class="highlighter-rouge">ConcurrentHashMap</code>中的定位分两部分, 一部分是定位段<code class="highlighter-rouge">segments</code>, 一部分是定位桶<code class="highlighter-rouge">table</code>, 两个都直接使用<code class="highlighter-rouge">key</code>的哈希值<code class="highlighter-rouge">hash</code>进行定位; 段<code class="highlighter-rouge">segments</code>通过<code class="highlighter-rouge">hash</code>的高位定位, 桶<code class="highlighter-rouge">table</code>通过<code class="highlighter-rouge">hash</code>的低位定位.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// 定位段: hash值无符号右移(32-n)位, 比如默认16时, n=4; 然后再与低n位按位与, 就得到了在段中的位置j</span>
+    <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="o">(</span><span class="n">hash</span> <span class="o">&gt;&gt;&gt;</span> <span class="n">segmentShift</span><span class="o">)</span> <span class="o">&amp;</span> <span class="n">segmentMask</span><span class="o">;</span>
+    <span class="c1">// 获取segment的函数</span>
+    <span class="kd">private</span> <span class="n">Segment</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">segmentForHash</span><span class="o">(</span><span class="kt">int</span> <span class="n">h</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// SBASE为数组中第一个元素的偏移地址, SSHIFT为数组寻址的换算因子, 两个必须配合使用</span>
+        <span class="c1">// 这两行代码相当于在segments中获取下标为j的Segment</span>
+        <span class="kt">long</span> <span class="n">u</span> <span class="o">=</span> <span class="o">(((</span><span class="n">h</span> <span class="o">&gt;&gt;&gt;</span> <span class="n">segmentShift</span><span class="o">)</span> <span class="o">&amp;</span> <span class="n">segmentMask</span><span class="o">)</span> <span class="o">&lt;&lt;</span> <span class="n">SSHIFT</span><span class="o">)</span> <span class="o">+</span> <span class="n">SBASE</span><span class="o">;</span>
+        <span class="k">return</span> <span class="o">(</span><span class="n">Segment</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;)</span> <span class="n">UNSAFE</span><span class="o">.</span><span class="na">getObjectVolatile</span><span class="o">(</span><span class="n">segments</span><span class="o">,</span> <span class="n">u</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="c1">// 定位桶: hash直接取低位和(table的长度-1)按位与, 就得到了在桶中的下标index</span>
+    <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="o">(</span><span class="n">tab</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">&amp;</span> <span class="n">hash</span><span class="o">;</span>
+    <span class="n">HashEntry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">first</span> <span class="o">=</span> <span class="n">entryAt</span><span class="o">(</span><span class="n">tab</span><span class="o">,</span> <span class="n">index</span><span class="o">);</span>  <span class="c1">// 获取桶中下标为index的结点</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="put">添加元素put</h2>
+
+<ul>
+  <li>刚创建的<code class="highlighter-rouge">ConcurrentHashMap</code>中的<code class="highlighter-rouge">segments</code>只有位置<code class="highlighter-rouge">0</code>不为空, 其他位置还没创建<code class="highlighter-rouge">Segment</code></li>
+  <li>添加元素时, 若对应位置的段<code class="highlighter-rouge">segment</code>为<code class="highlighter-rouge">null</code>则先创建<code class="highlighter-rouge">segment</code></li>
+  <li>添加元素时, 先定位到段<code class="highlighter-rouge">segment</code>, 再转化为<code class="highlighter-rouge">segment.put()</code></li>
+  <li><code class="highlighter-rouge">segments</code>的大小不再改变, 涉及扩容时, 只有<code class="highlighter-rouge">table</code>大小会变</li>
+  <li><code class="highlighter-rouge">put</code>操作时要在对应的<code class="highlighter-rouge">segment</code>上加锁</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// ConcurrentHashMap的put,外层不加锁, 段内加锁</span>
+    <span class="kd">public</span> <span class="n">V</span> <span class="n">put</span><span class="o">(</span><span class="n">K</span> <span class="n">key</span><span class="o">,</span> <span class="n">V</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Segment</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">s</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">value</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="n">NullPointerException</span><span class="o">();</span>
+        <span class="kt">int</span> <span class="n">hash</span> <span class="o">=</span> <span class="n">hash</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>                            <span class="c1">// 获取key的哈希值</span>
+        <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="o">(</span><span class="n">hash</span> <span class="o">&gt;&gt;&gt;</span> <span class="n">segmentShift</span><span class="o">)</span> <span class="o">&amp;</span> <span class="n">segmentMask</span><span class="o">;</span>   <span class="c1">// 段索引</span>
+        <span class="k">if</span> <span class="o">((</span><span class="n">s</span> <span class="o">=</span> <span class="o">(</span><span class="n">Segment</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;)</span><span class="n">UNSAFE</span><span class="o">.</span><span class="na">getObject</span>          <span class="c1">// 获取j位置的Segment, 如果为null, 则创建</span>
+             <span class="o">(</span><span class="n">segments</span><span class="o">,</span> <span class="o">(</span><span class="n">j</span> <span class="o">&lt;&lt;</span> <span class="n">SSHIFT</span><span class="o">)</span> <span class="o">+</span> <span class="n">SBASE</span><span class="o">))</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">ensureSegment</span><span class="o">(</span><span class="n">j</span><span class="o">);</span>                        <span class="c1">// 在ensureSegment还要多次检查取保不为null才会真正创建, 并且通过CAS赋值, 创建时, cap, loadFactor和threshold都是以s0为模板创建的</span>
+        <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">hash</span><span class="o">,</span> <span class="n">value</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>           <span class="c1">// 转嫁给了Segment的put</span>
+    <span class="o">}</span>
+    <span class="c1">// Segment的put, 这里面才会加锁</span>
+    <span class="kd">final</span> <span class="n">V</span> <span class="n">put</span><span class="o">(</span><span class="n">K</span> <span class="n">key</span><span class="o">,</span> <span class="kt">int</span> <span class="n">hash</span><span class="o">,</span> <span class="n">V</span> <span class="n">value</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">onlyIfAbsent</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">HashEntry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">node</span> <span class="o">=</span> <span class="n">tryLock</span><span class="o">()</span> <span class="o">?</span> <span class="kc">null</span> <span class="o">:</span>  <span class="c1">// 尝试加锁, 加锁成功返回true, 否则返回false</span>
+            <span class="n">scanAndLockForPut</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">hash</span><span class="o">,</span> <span class="n">value</span><span class="o">);</span>  <span class="c1">// 加锁失败时, 循环尝试加锁, 试几次后, 阻塞等待加锁(这个函数中还试图创建HashEntry)</span>
+        <span class="n">V</span> <span class="n">oldValue</span><span class="o">;</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">HashEntry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;[]</span> <span class="n">tab</span> <span class="o">=</span> <span class="n">table</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="o">(</span><span class="n">tab</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">&amp;</span> <span class="n">hash</span><span class="o">;</span>  <span class="c1">// 桶下标</span>
+            <span class="n">HashEntry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">first</span> <span class="o">=</span> <span class="n">entryAt</span><span class="o">(</span><span class="n">tab</span><span class="o">,</span> <span class="n">index</span><span class="o">);</span>  <span class="c1">// table的index位置的元素</span>
+            <span class="k">for</span> <span class="o">(</span><span class="n">HashEntry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">first</span><span class="o">;;)</span> <span class="o">{</span>  <span class="c1">// 死循环, 只能从里面跳出</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">e</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>    <span class="c1">// 桶中已有其他结点, 找是否key已存在</span>
+                    <span class="n">K</span> <span class="n">k</span><span class="o">;</span>
+                    <span class="k">if</span> <span class="o">((</span><span class="n">k</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">key</span><span class="o">)</span> <span class="o">==</span> <span class="n">key</span> <span class="o">||</span>    <span class="c1">// 如果key一样, 覆盖原值, 跳出循环</span>
+                        <span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">hash</span> <span class="o">==</span> <span class="n">hash</span> <span class="o">&amp;&amp;</span> <span class="n">key</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">k</span><span class="o">)))</span> <span class="o">{</span>
+                        <span class="n">oldValue</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">value</span><span class="o">;</span>      <span class="c1">// 记录被替换掉的旧值</span>
+                        <span class="k">if</span> <span class="o">(!</span><span class="n">onlyIfAbsent</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="n">e</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>    <span class="c1">// 覆盖原值</span>
+                            <span class="o">++</span><span class="n">modCount</span><span class="o">;</span>
+                        <span class="o">}</span>
+                        <span class="k">break</span><span class="o">;</span>  <span class="c1">//  跳出循环</span>
+                    <span class="o">}</span>  <span class="c1">// key 不一样就向后移动</span>
+                    <span class="n">e</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>  <span class="c1">// 向后移动</span>
+                <span class="o">}</span>
+                <span class="k">else</span> <span class="o">{</span>  <span class="c1">// 桶中还没结点</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">node</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span>  <span class="c1">// 如果新加的结点已经创建好了, next字段指向first</span>
+                        <span class="n">node</span><span class="o">.</span><span class="na">setNext</span><span class="o">(</span><span class="n">first</span><span class="o">);</span>
+                    <span class="k">else</span>  <span class="c1">// 没创建好则创建一个, 也是next字段指向first</span>
+                        <span class="n">node</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashEntry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;(</span><span class="n">hash</span><span class="o">,</span> <span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">,</span> <span class="n">first</span><span class="o">);</span>
+                    <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>  <span class="c1">// 结点数量+1</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">&gt;</span> <span class="n">threshold</span> <span class="o">&amp;&amp;</span> <span class="n">tab</span><span class="o">.</span><span class="na">length</span> <span class="o">&lt;</span> <span class="n">MAXIMUM_CAPACITY</span><span class="o">)</span>  <span class="c1">// 看是否需要扩容</span>
+                        <span class="n">rehash</span><span class="o">(</span><span class="n">node</span><span class="o">);</span>  <span class="c1">// 扩容</span>
+                    <span class="k">else</span>
+                        <span class="n">setEntryAt</span><span class="o">(</span><span class="n">tab</span><span class="o">,</span> <span class="n">index</span><span class="o">,</span> <span class="n">node</span><span class="o">);</span>  <span class="c1">// 头插, 放到桶位置的链表头</span>
+                    <span class="o">++</span><span class="n">modCount</span><span class="o">;</span>  <span class="c1">// 修改次数加一</span>
+                    <span class="n">count</span> <span class="o">=</span> <span class="n">c</span><span class="o">;</span>   <span class="c1">// 记录结点数量</span>
+                    <span class="n">oldValue</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>  <span class="c1">// 新结点, 被替换掉的旧值为null</span>
+                    <span class="k">break</span><span class="o">;</span>  <span class="c1">// 跳出循环</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+            <span class="n">unlock</span><span class="o">();</span>  <span class="c1">// 重入锁一般都会在finally中解锁, 否则很容易发生死锁</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">oldValue</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="remove">删除元素remove</h2>
+
+<ul>
+  <li>remove元素也是先定位到段<code class="highlighter-rouge">segment</code>, 再转化为<code class="highlighter-rouge">segment.remove()</code></li>
+  <li><code class="highlighter-rouge">remove</code>操作时也要在相应的<code class="highlighter-rouge">segment</code>上加锁</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// 外层remove加锁</span>
+    <span class="kd">public</span> <span class="n">V</span> <span class="n">remove</span><span class="o">(</span><span class="n">Object</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">hash</span> <span class="o">=</span> <span class="n">hash</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+        <span class="n">Segment</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">s</span> <span class="o">=</span> <span class="n">segmentForHash</span><span class="o">(</span><span class="n">hash</span><span class="o">);</span>  <span class="c1">// 定位段</span>
+        <span class="k">return</span> <span class="n">s</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">?</span> <span class="kc">null</span> <span class="o">:</span> <span class="n">s</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">hash</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span> <span class="c1">// 转交给段remove</span>
+    <span class="o">}</span>
+    <span class="c1">// 段内的remove, 需要加锁</span>
+    <span class="kd">final</span> <span class="n">V</span> <span class="n">remove</span><span class="o">(</span><span class="n">Object</span> <span class="n">key</span><span class="o">,</span> <span class="kt">int</span> <span class="n">hash</span><span class="o">,</span> <span class="n">Object</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">tryLock</span><span class="o">())</span>   <span class="c1">// 先加锁</span>
+            <span class="n">scanAndLock</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">hash</span><span class="o">);</span>
+        <span class="n">V</span> <span class="n">oldValue</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">HashEntry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;[]</span> <span class="n">tab</span> <span class="o">=</span> <span class="n">table</span><span class="o">;</span>           <span class="c1">// 桶</span>
+            <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="o">(</span><span class="n">tab</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">&amp;</span> <span class="n">hash</span><span class="o">;</span>    <span class="c1">// 桶下标</span>
+            <span class="n">HashEntry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">entryAt</span><span class="o">(</span><span class="n">tab</span><span class="o">,</span> <span class="n">index</span><span class="o">);</span> <span class="c1">// 桶中链表头</span>
+            <span class="n">HashEntry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">pred</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>             <span class="c1">// 前驱结点</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">e</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">K</span> <span class="n">k</span><span class="o">;</span>
+                <span class="n">HashEntry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">next</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">((</span><span class="n">k</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">key</span><span class="o">)</span> <span class="o">==</span> <span class="n">key</span> <span class="o">||</span>
+                    <span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">hash</span> <span class="o">==</span> <span class="n">hash</span> <span class="o">&amp;&amp;</span> <span class="n">key</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">k</span><span class="o">)))</span> <span class="o">{</span>  <span class="c1">// 如果key一样</span>
+                    <span class="n">V</span> <span class="n">v</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">value</span><span class="o">;</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">value</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="n">value</span> <span class="o">==</span> <span class="n">v</span> <span class="o">||</span> <span class="n">value</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">v</span><span class="o">))</span> <span class="o">{</span>  <span class="c1">// 找到待删除的结点</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="n">pred</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>  <span class="c1">// 前驱结点为空, 说明表头应该被删除,直接把e.next作为表头</span>
+                            <span class="n">setEntryAt</span><span class="o">(</span><span class="n">tab</span><span class="o">,</span> <span class="n">index</span><span class="o">,</span> <span class="n">next</span><span class="o">);</span>
+                        <span class="k">else</span>
+                            <span class="n">pred</span><span class="o">.</span><span class="na">setNext</span><span class="o">(</span><span class="n">next</span><span class="o">);</span> <span class="c1">// 前驱结点不为空, 前驱结点直接指向e.next</span>
+                        <span class="o">++</span><span class="n">modCount</span><span class="o">;</span>   <span class="c1">// 修改次数+1</span>
+                        <span class="o">--</span><span class="n">count</span><span class="o">;</span>      <span class="c1">// 结点数量-1</span>
+                        <span class="n">oldValue</span> <span class="o">=</span> <span class="n">v</span><span class="o">;</span> <span class="c1">// 记录旧值</span>
+                    <span class="o">}</span>
+                    <span class="k">break</span><span class="o">;</span>  <span class="c1">// 找到并删除节点后, 跳出循环</span>
+                <span class="o">}</span>
+                <span class="n">pred</span> <span class="o">=</span> <span class="n">e</span><span class="o">;</span> <span class="c1">// 前驱结点后移</span>
+                <span class="n">e</span> <span class="o">=</span> <span class="n">next</span><span class="o">;</span> <span class="c1">// 待比较结点后移</span>
+            <span class="o">}</span>
+        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+            <span class="n">unlock</span><span class="o">();</span>   <span class="c1">// finally中解锁</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">oldValue</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="get">获取元素get</h2>
+
+<ul>
+  <li><code class="highlighter-rouge">get</code>操作不需要加锁(弱一致性)</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="kd">public</span> <span class="n">V</span> <span class="nf">get</span><span class="p">(</span><span class="n">Object</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Segment</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">s</span><span class="o">;</span>        <span class="c1">// 段</span>
+        <span class="n">HashEntry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;[]</span> <span class="n">tab</span><span class="o">;</span>  <span class="c1">// 段内table</span>
+        <span class="kt">int</span> <span class="n">h</span> <span class="o">=</span> <span class="n">hash</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>     <span class="c1">// hash值</span>
+        <span class="kt">long</span> <span class="n">u</span> <span class="o">=</span> <span class="o">(((</span><span class="n">h</span> <span class="o">&gt;&gt;&gt;</span> <span class="n">segmentShift</span><span class="o">)</span> <span class="o">&amp;</span> <span class="n">segmentMask</span><span class="o">)</span> <span class="o">&lt;&lt;</span> <span class="n">SSHIFT</span><span class="o">)</span> <span class="o">+</span> <span class="n">SBASE</span><span class="o">;</span>
+        <span class="c1">// 对应的段和段内桶都不为null</span>
+        <span class="k">if</span> <span class="o">((</span><span class="n">s</span> <span class="o">=</span> <span class="o">(</span><span class="n">Segment</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;)</span><span class="n">UNSAFE</span><span class="o">.</span><span class="na">getObjectVolatile</span><span class="o">(</span><span class="n">segments</span><span class="o">,</span> <span class="n">u</span><span class="o">))</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span>
+            <span class="o">(</span><span class="n">tab</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">table</span><span class="o">)</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// 从桶中链表头开始, 不断向后查找</span>
+            <span class="c1">// 这个get只保证了读取链表头的时候是一个原子操作, 但是有可能读出表头之后, 表头被别的线程删除了</span>
+            <span class="c1">// 因此get返回的可能是过时的数据，这一点是ConcurrentHashMap在弱一致性上的体现</span>
+            <span class="c1">// 如果要求强一致性，那么必须使用Collections.synchronizedMap()方法</span>
+            <span class="k">for</span> <span class="o">(</span><span class="n">HashEntry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="o">(</span><span class="n">HashEntry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;)</span> <span class="n">UNSAFE</span><span class="o">.</span><span class="na">getObjectVolatile</span>
+                     <span class="o">(</span><span class="n">tab</span><span class="o">,</span> <span class="o">((</span><span class="kt">long</span><span class="o">)(((</span><span class="n">tab</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">&amp;</span> <span class="n">h</span><span class="o">))</span> <span class="o">&lt;&lt;</span> <span class="n">TSHIFT</span><span class="o">)</span> <span class="o">+</span> <span class="n">TBASE</span><span class="o">);</span>
+                 <span class="n">e</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">next</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">// 刚到这里就有可能e结点已经被别的线程删除了(弱一致性)</span>
+                <span class="n">K</span> <span class="n">k</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">((</span><span class="n">k</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">key</span><span class="o">)</span> <span class="o">==</span> <span class="n">key</span> <span class="o">||</span> <span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">hash</span> <span class="o">==</span> <span class="n">h</span> <span class="o">&amp;&amp;</span> <span class="n">key</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">k</span><span class="o">)))</span>
+                    <span class="k">return</span> <span class="n">e</span><span class="o">.</span><span class="na">value</span><span class="o">;</span>  <span class="c1">// 如果key一样就返回</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre>
+</div>
+
+<hr />
+
+<hr />
+
+<h2 id="sizecontainsvalue">锁全段操作size/containsValue</h2>
+
+<ul>
+  <li><code class="highlighter-rouge">size</code>和<code class="highlighter-rouge">containsValue</code>操作的代价比较大, 需要锁住所有的段</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// 两个操作里都有这段代码, 把所有的段都加锁</span>
+    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">segments</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span>
+        <span class="n">ensureSegment</span><span class="o">(</span><span class="n">j</span><span class="o">).</span><span class="na">lock</span><span class="o">();</span> <span class="c1">// force creation</span>
 </code></pre>
 </div>
 
