@@ -5,9 +5,242 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 24 May 2017 20:38:36 +0800</pubDate>
-    <lastBuildDate>Wed, 24 May 2017 20:38:36 +0800</lastBuildDate>
+    <pubDate>Mon, 03 Jul 2017 17:26:20 +0800</pubDate>
+    <lastBuildDate>Mon, 03 Jul 2017 17:26:20 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>数据结构中常见的树</title>
+        <description>&lt;p&gt;经常见到的树有: &lt;code class=&quot;highlighter-rouge&quot;&gt;BST二叉排序树&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;AVL平衡二叉树&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;B-树&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;B+树&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;B*树&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;RBT红黑树&lt;/code&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#bst&quot;&gt;BST树&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;定义&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;示例&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;二叉排序树的查找&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-3&quot;&gt;二叉排序树的插入&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-4&quot;&gt;二叉排序树的删除&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#avl&quot;&gt;AVL平衡二叉树&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-5&quot;&gt;定义&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-6&quot;&gt;平衡二叉树的插入&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-7&quot;&gt;平衡二叉树的删除&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#rbt&quot;&gt;RBT红黑树&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#rbt-1&quot;&gt;RBT的性质&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#rbt-2&quot;&gt;RBT示例&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-8&quot;&gt;红黑树的插入&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-9&quot;&gt;红黑树的删除&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#bb-b&quot;&gt;B树,B-树,B+树&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;bst&quot;&gt;BST树&lt;/h2&gt;
+&lt;p&gt;二叉排序树, 也称二叉查找树(&lt;code class=&quot;highlighter-rouge&quot;&gt;Binary Search Tree&lt;/code&gt;), 简称&lt;code class=&quot;highlighter-rouge&quot;&gt;BST&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;定义&lt;/h3&gt;
+&lt;p&gt;二叉排序树或者是一棵空树, 或者是一棵具有下列特性的非空二叉树:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;若左子树为空, 则左子树上所有结点关键字值均小于根结点的关键字值&lt;/li&gt;
+  &lt;li&gt;若右子树为空, 则右子树上所有结点关键字值均大于根结点的关键字值&lt;/li&gt;
+  &lt;li&gt;左右子树本身也分别是一颗二叉排序树&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;示例&lt;/h3&gt;
+&lt;p&gt;下图中左右两个都是二叉排序树&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/BST.png&quot; alt=&quot;BSTTree&quot; title=&quot;BSTTree&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;二叉排序树的查找&lt;/h3&gt;
+
+&lt;p&gt;从根结点开始进行关键字比较, 若相等, 则查找成功; 若不等, 如果查找的关键字小于根结点关键字, 去左子树中查找, 否则去右子树中查找. 若最后不再有子树, 查找失败.&lt;/p&gt;
+
+&lt;h2 id=&quot;section-3&quot;&gt;二叉排序树的插入&lt;/h2&gt;
+
+&lt;p&gt;与查找过程类似, 若待插入的&lt;code class=&quot;highlighter-rouge&quot;&gt;BST&lt;/code&gt;树为空, 则直接插入; 若关键字&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;小于根结点关键字, 则插入到左子树, 否则插入到右子树&lt;/p&gt;
+
+&lt;h3 id=&quot;section-4&quot;&gt;二叉排序树的删除&lt;/h3&gt;
+&lt;p&gt;删除操作可以按下面情况处理&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;若被删结点&lt;code class=&quot;highlighter-rouge&quot;&gt;z&lt;/code&gt;是叶子结点, 则直接删除, 不会破坏二叉排序树的性质&lt;/li&gt;
+  &lt;li&gt;若&lt;code class=&quot;highlighter-rouge&quot;&gt;z&lt;/code&gt;只有一颗子树, 则让&lt;code class=&quot;highlighter-rouge&quot;&gt;z&lt;/code&gt;的子树成为&lt;code class=&quot;highlighter-rouge&quot;&gt;z&lt;/code&gt;父节点的子树, 即替代&lt;code class=&quot;highlighter-rouge&quot;&gt;z&lt;/code&gt;的位置&lt;/li&gt;
+  &lt;li&gt;若&lt;code class=&quot;highlighter-rouge&quot;&gt;z&lt;/code&gt;有左右两棵子树, 则令&lt;code class=&quot;highlighter-rouge&quot;&gt;z&lt;/code&gt;的直接前驱(即&lt;code class=&quot;highlighter-rouge&quot;&gt;z&lt;/code&gt;左子树中最大的那个结点)替代&lt;code class=&quot;highlighter-rouge&quot;&gt;z&lt;/code&gt;, 再从左子树中删除这个直接前驱, 这样就转化成了第一或第二中情况(因为&lt;code class=&quot;highlighter-rouge&quot;&gt;z&lt;/code&gt;的直接前驱, 肯定没有右子树)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;avl&quot;&gt;AVL平衡二叉树&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;平衡二叉树&lt;/code&gt;的发明者为&lt;code class=&quot;highlighter-rouge&quot;&gt;Georgy Adelson-Velsky&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;Evgenii Landis&lt;/code&gt;, 所以也被称作&lt;code class=&quot;highlighter-rouge&quot;&gt;AVL树&lt;/code&gt;. 在维基百科&lt;a href=&quot;https://en.wikipedia.org/wiki/AVL_tree&quot;&gt;AVL树的定义&lt;/a&gt;中有这么一句话: &lt;code class=&quot;highlighter-rouge&quot;&gt;In computer science, an AVL tree is a self-balancing binary search tree.&lt;/code&gt;, 所以&lt;code class=&quot;highlighter-rouge&quot;&gt;AVL平衡二叉树&lt;/code&gt;是&lt;code class=&quot;highlighter-rouge&quot;&gt;BST二叉搜索树&lt;/code&gt;的子集.&lt;/p&gt;
+
+&lt;h3 id=&quot;section-5&quot;&gt;定义&lt;/h3&gt;
+&lt;p&gt;平衡二叉树或者是一棵空树, 或者是一棵具有下列特性的非空二叉树:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;它的左右子树高度差绝对值不超过1&lt;/li&gt;
+  &lt;li&gt;它的左右子树都是平衡二叉树&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;虽然&lt;code class=&quot;highlighter-rouge&quot;&gt;AVL平衡二叉树&lt;/code&gt;的定义中并没有体现它是一个排序树, 但它是以&lt;code class=&quot;highlighter-rouge&quot;&gt;二叉排序树&lt;/code&gt;为前提的&lt;/p&gt;
+
+&lt;h3 id=&quot;section-6&quot;&gt;平衡二叉树的插入&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;二叉排序树&lt;/code&gt;插入时, 只需要保证排序的特性, &lt;code class=&quot;highlighter-rouge&quot;&gt;平衡二叉树&lt;/code&gt;的插入同时还需要保证插入结点之后仍然平衡.&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;平衡二叉树&lt;/code&gt;的插入过程前半部分与&lt;code class=&quot;highlighter-rouge&quot;&gt;二叉排序树&lt;/code&gt;相同, 但在新结点插入后, 如果破坏了某个结点的平衡, 则需要作出相应的调整. 一般可将失去平衡后进行调整的规律归纳为下列4种情况:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;LL平衡旋转&lt;/code&gt;(&lt;code class=&quot;highlighter-rouge&quot;&gt;右单旋转&lt;/code&gt;)。在结点&lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt;的左孩子(&lt;code class=&quot;highlighter-rouge&quot;&gt;L&lt;/code&gt;)的左子树(&lt;code class=&quot;highlighter-rouge&quot;&gt;L&lt;/code&gt;)上插入新结点, 导致以&lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt;为根的子树失去平衡, 此时需要做一次向右的旋转操作。将&lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt;的左孩子&lt;code class=&quot;highlighter-rouge&quot;&gt;B&lt;/code&gt;向右上旋转代替&lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt;成为根结点, 将&lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt;结点向右下旋转成为&lt;code class=&quot;highlighter-rouge&quot;&gt;B&lt;/code&gt;的右子树的根结点, 而&lt;code class=&quot;highlighter-rouge&quot;&gt;B&lt;/code&gt;的原右子树则成为&lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt;的左子树。 过程如下图:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/AVL_LL.png&quot; alt=&quot;AVL_LL&quot; title=&quot;AVL_LL&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;RR平衡旋转&lt;/code&gt;(&lt;code class=&quot;highlighter-rouge&quot;&gt;左单旋转&lt;/code&gt;)。在结点&lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt;的右孩子(&lt;code class=&quot;highlighter-rouge&quot;&gt;R&lt;/code&gt;)的右子树(&lt;code class=&quot;highlighter-rouge&quot;&gt;R&lt;/code&gt;)上插入新结点, 导致以&lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt;为根的子树失去平衡, 此时需要做一次向左的旋转操作。将&lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt;的右孩子&lt;code class=&quot;highlighter-rouge&quot;&gt;B&lt;/code&gt;向左上旋转代替&lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt;成为根结点, 将&lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt;结点向左下旋转成为&lt;code class=&quot;highlighter-rouge&quot;&gt;B&lt;/code&gt;的左子树的根结点, 而&lt;code class=&quot;highlighter-rouge&quot;&gt;B&lt;/code&gt;的原左子树则成为&lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt;的右子树。 过程如下图:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/AVL_RR.png&quot; alt=&quot;AVL_RR&quot; title=&quot;AVL_RR&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;LR平衡旋转&lt;/code&gt;(&lt;code class=&quot;highlighter-rouge&quot;&gt;先左后右双旋转&lt;/code&gt;)。在结点&lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt;的左孩子(&lt;code class=&quot;highlighter-rouge&quot;&gt;L&lt;/code&gt;)的右子树(&lt;code class=&quot;highlighter-rouge&quot;&gt;R&lt;/code&gt;)上插入新结点, 导致以&lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt;为根的子树失去平衡, 此时需要做两次旋转操作, 先左旋转后右旋转。将&lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt;的左孩子&lt;code class=&quot;highlighter-rouge&quot;&gt;B&lt;/code&gt;的右子树的根结点&lt;code class=&quot;highlighter-rouge&quot;&gt;C&lt;/code&gt;向左上旋转提升到&lt;code class=&quot;highlighter-rouge&quot;&gt;B&lt;/code&gt;结点的位置, 然后再把&lt;code class=&quot;highlighter-rouge&quot;&gt;C&lt;/code&gt;结点向右上旋转提升到&lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt;结点的位置。 过程如下图:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/AVL_LR.png&quot; alt=&quot;AVL_LR&quot; title=&quot;AVL_LR&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;RL平衡旋转&lt;/code&gt;(&lt;code class=&quot;highlighter-rouge&quot;&gt;先右后左双旋转&lt;/code&gt;)。在结点&lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt;的右孩子(&lt;code class=&quot;highlighter-rouge&quot;&gt;R&lt;/code&gt;)的左子树(&lt;code class=&quot;highlighter-rouge&quot;&gt;L&lt;/code&gt;)上插入新结点, 导致以&lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt;为根的子树失去平衡, 此时需要做两次旋转操作, 先右旋转后左旋转。将&lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt;的右孩子&lt;code class=&quot;highlighter-rouge&quot;&gt;B&lt;/code&gt;的左子树的根结点&lt;code class=&quot;highlighter-rouge&quot;&gt;C&lt;/code&gt;向右上旋转提升到&lt;code class=&quot;highlighter-rouge&quot;&gt;B&lt;/code&gt;结点的位置, 然后再把&lt;code class=&quot;highlighter-rouge&quot;&gt;C&lt;/code&gt;结点向左上旋转提升到&lt;code class=&quot;highlighter-rouge&quot;&gt;A&lt;/code&gt;结点的位置。 过程如下图:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/AVL_RL.png&quot; alt=&quot;AVL_RL&quot; title=&quot;AVL_RL&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;注意&lt;/code&gt;, 在&lt;code class=&quot;highlighter-rouge&quot;&gt;LR&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;RL&lt;/code&gt;旋转时, 究竟新结点插入在&lt;code class=&quot;highlighter-rouge&quot;&gt;C&lt;/code&gt;的左子树还是右子树上, 不影响旋转过程。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-7&quot;&gt;平衡二叉树的删除&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;AVL&lt;/code&gt;的删除过程前半部分与&lt;code class=&quot;highlighter-rouge&quot;&gt;BST&lt;/code&gt;相同, 但删除结点后, 如果破坏了父结点的平衡, 则需要作出相应的调整, 调整方法与插入时的调整方法一样&lt;/p&gt;
+
+&lt;h2 id=&quot;rbt&quot;&gt;RBT红黑树&lt;/h2&gt;
+&lt;p&gt;红黑树(&lt;code class=&quot;highlighter-rouge&quot;&gt;Red Black Tree&lt;/code&gt;)也是一种&lt;code class=&quot;highlighter-rouge&quot;&gt;二叉查找树&lt;/code&gt;, 但在每个结点上增加一个存储位表示结点的颜色(&lt;code class=&quot;highlighter-rouge&quot;&gt;Red&lt;/code&gt;或&lt;code class=&quot;highlighter-rouge&quot;&gt;Black&lt;/code&gt;), 通过对每个结点着色, 使它满足一些性质, 这些性质共同来保证红黑树是基本上平衡的.  &lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;AVL&lt;/code&gt;是严格平衡树, 因此在增加或者删除节点的时候, 根据不同情况, 旋转的次数比红黑树要多;&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;RBT&lt;/code&gt;是弱平衡的, 用非严格的平衡来换取增删节点时候旋转次数的降低;&lt;br /&gt;
+所以简单说, 若搜索的次数远远大于插入和删除时, 选择&lt;code class=&quot;highlighter-rouge&quot;&gt;AVL树&lt;/code&gt;; 若搜索、插入、删除次数几乎差不多, 应该选择&lt;code class=&quot;highlighter-rouge&quot;&gt;红黑树&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;rbt-1&quot;&gt;RBT的性质&lt;/h3&gt;
+&lt;p&gt;红黑树是每个结点都带有颜色属性的&lt;code class=&quot;highlighter-rouge&quot;&gt;二叉查找树&lt;/code&gt;。 此外, 对于任何有效的红黑树必须满足以下特点:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;结点是红色或黑色&lt;/li&gt;
+  &lt;li&gt;根结点是黑色&lt;/li&gt;
+  &lt;li&gt;每个叶结点(空结点&lt;code class=&quot;highlighter-rouge&quot;&gt;NULL&lt;/code&gt;)是黑色的&lt;/li&gt;
+  &lt;li&gt;每个红色结点的两个子结点都是黑色(从每个叶子到根的所有路径上不能有两个连续的红色结点)&lt;/li&gt;
+  &lt;li&gt;从任一结点到其每个叶子的所有路径都包含相同数目的黑色结点&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;这些特点共同限制了红黑树的关键性质: 从根到叶子的最长路径不多于最短路径的两倍长。这就保证了这个树大致上是平衡的。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;这些性质如何保证最长路径不多于最短路径的两倍长?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;性质5&lt;/code&gt;保证根结点到叶结点的所有路径都有相同数目的黑色结点;&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;性质2&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;性质3&lt;/code&gt;保证最长路径(从根开始)两头都是黑色的;&lt;br /&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;性质4&lt;/code&gt;保证了路径不能有两个相连的红色结点, 最短路径都是黑色结点, 最长路径有交替的红色和黑色结点;&lt;br /&gt;
+这就表明了没有路径能多于其他路径的两倍长&lt;/p&gt;
+
+&lt;h3 id=&quot;rbt-2&quot;&gt;RBT示例&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/RBT.png&quot; alt=&quot;RBT&quot; title=&quot;RBT&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;section-8&quot;&gt;红黑树的插入&lt;/h3&gt;
+&lt;p&gt;在对红黑树进行插入操作时, 我们一般总是插入 &lt;strong&gt;红色&lt;/strong&gt; 的结点。因为插入黑结点会增加某条路径上黑结点的数目, 从而导致整棵树黑高度的不平衡。&lt;br /&gt;
+当插入红色结点时, 如果插入的结点是根结点, 会破坏&lt;code class=&quot;highlighter-rouge&quot;&gt;性质2&lt;/code&gt;; 如果插入结点的父结点是红色, 则会破坏&lt;code class=&quot;highlighter-rouge&quot;&gt;性质4&lt;/code&gt;, 这时就需要对红黑树做一些调整。所有可能的情况有4种:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;情况1&lt;/code&gt;: 插入的是根结点(&lt;code class=&quot;highlighter-rouge&quot;&gt;空树&lt;/code&gt;)。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;此时违反&lt;code class=&quot;highlighter-rouge&quot;&gt;性质2&lt;/code&gt;, 直接把新结点改成黑色即可。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;情况2&lt;/code&gt;: 插入的结点的父结点是黑色(&lt;code class=&quot;highlighter-rouge&quot;&gt;黑父&lt;/code&gt;)。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;此时不会违反任何性质, 红黑树没有被破坏。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;情况3&lt;/code&gt;: 父结点是红色(&lt;code class=&quot;highlighter-rouge&quot;&gt;红父&lt;/code&gt;)。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;若父结点为红色, 祖父结点必定为黑色, 否则就不是红黑树了。&lt;code class=&quot;highlighter-rouge&quot;&gt;红父&lt;/code&gt;这种情况破坏了&lt;code class=&quot;highlighter-rouge&quot;&gt;性质3&lt;/code&gt;, 需要调整, 需要根据叔父结点(祖父的另一个孩子)的颜色来决定做什么样的操作, 这又分两种情况&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;3.1&lt;/code&gt;: 叔父结点为红色(&lt;code class=&quot;highlighter-rouge&quot;&gt;红父红叔&lt;/code&gt;)
+&lt;code class=&quot;highlighter-rouge&quot;&gt;红父红叔&lt;/code&gt;这种情况, 如下图所示, 无需旋转, 只要将父和叔结点变为黑色, 将祖父结点变为红色即可。&lt;br /&gt;
+但由于祖父结点的父结点有可能为红色, 从而违反红黑树性质, 此时必须将祖父结点作为新的判定点继续向上进行平衡操作。  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/RBT_1.png&quot; alt=&quot;红父红叔&quot; title=&quot;红父红叔&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt; 这种情况, 无论&lt;code class=&quot;highlighter-rouge&quot;&gt;红叔&lt;/code&gt;是在左边还是在右边, 操作都是一样的。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;3.2&lt;/code&gt;: 叔父结点为黑色(&lt;code class=&quot;highlighter-rouge&quot;&gt;红父黑叔&lt;/code&gt;)
+&lt;code class=&quot;highlighter-rouge&quot;&gt;红父黑叔&lt;/code&gt;这种情况, 需要进行旋转, 有&lt;code class=&quot;highlighter-rouge&quot;&gt;LL, LR, RR, RL&lt;/code&gt;等情况, 旋转方式与&lt;code class=&quot;highlighter-rouge&quot;&gt;AVL&lt;/code&gt;类似。如图:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/RBT_2.png&quot; alt=&quot;红父黑叔&quot; title=&quot;红父黑叔&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt; 当旋转完成后, 就已经是红黑树了, 此时不需要再向上调整; 上面四张图的&lt;code class=&quot;highlighter-rouge&quot;&gt;叔、1、2、3&lt;/code&gt;结点有可能为黑哨兵(&lt;code class=&quot;highlighter-rouge&quot;&gt;NULL&lt;/code&gt;)结点。&lt;/p&gt;
+
+&lt;h3 id=&quot;section-9&quot;&gt;红黑树的删除&lt;/h3&gt;
+&lt;p&gt;红黑树本身是一棵二叉查找树, 它的删除和二叉查找树的删除类似。根据前面&lt;code class=&quot;highlighter-rouge&quot;&gt;BST&lt;/code&gt;的删除操作可知, 真正删除的结点要么没有子树(情况1), 要么只有一颗子树(情况2、3)。所以真正删除的结点 &lt;strong&gt;只有一个孩子&lt;/strong&gt; 或 &lt;strong&gt;没有孩子&lt;/strong&gt;。 再结合&lt;code class=&quot;highlighter-rouge&quot;&gt;红黑树&lt;/code&gt;的特点, 可以得出以下两个结论:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;真正被删除的必定是没有孩子的结点或只有一个红色孩子的结点&lt;/li&gt;
+  &lt;li&gt;如果真正删除的结点是一个红色结点, 那么它必定是一个叶子结点&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;根据这两个重要结论, 删除操作有以下情况:(&lt;code class=&quot;highlighter-rouge&quot;&gt;旧点&lt;/code&gt;表示真正要删除的结点, &lt;code class=&quot;highlighter-rouge&quot;&gt;新点&lt;/code&gt;表示旧结点的孩子结点)&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;1.&lt;/code&gt;旧点为红色: 根据&lt;code class=&quot;highlighter-rouge&quot;&gt;结论2&lt;/code&gt;, 若&lt;code class=&quot;highlighter-rouge&quot;&gt;旧点&lt;/code&gt;(真正要删除的结点)为红色, 则它必是叶子结点, 这种情况直接删除即可.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;2.&lt;/code&gt;一红一黑: 若&lt;code class=&quot;highlighter-rouge&quot;&gt;旧点&lt;/code&gt;为黑色, &lt;code class=&quot;highlighter-rouge&quot;&gt;新点&lt;/code&gt;为红色时, &lt;code class=&quot;highlighter-rouge&quot;&gt;新点&lt;/code&gt;取代&lt;code class=&quot;highlighter-rouge&quot;&gt;旧点&lt;/code&gt;位置后, 将&lt;code class=&quot;highlighter-rouge&quot;&gt;新点&lt;/code&gt;染黑即可&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;3.&lt;/code&gt;双黑: 当&lt;code class=&quot;highlighter-rouge&quot;&gt;旧点&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;新点&lt;/code&gt;都为黑色时(&lt;code class=&quot;highlighter-rouge&quot;&gt;新点&lt;/code&gt;为&lt;code class=&quot;highlighter-rouge&quot;&gt;NULL&lt;/code&gt;时, 也属于这种情况), 情况比较复杂, 需要根据&lt;code class=&quot;highlighter-rouge&quot;&gt;旧点&lt;/code&gt;兄弟结点的颜色来决定进行什么样的操作, 兄弟结点又分&lt;code class=&quot;highlighter-rouge&quot;&gt;红兄&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;黑兄&lt;/code&gt;两种情况。情况略复杂, 具体可以参考&lt;a href=&quot;http://blog.csdn.net/very_2/article/details/5722682&quot;&gt;这篇文章&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;bb-b&quot;&gt;B树,B-树,B+树&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;又称&lt;code class=&quot;highlighter-rouge&quot;&gt;多路平衡查找树&lt;/code&gt;或&lt;code class=&quot;highlighter-rouge&quot;&gt;多路平衡查找树&lt;/code&gt;, 英文为&lt;code class=&quot;highlighter-rouge&quot;&gt;B-Tree&lt;/code&gt;有的翻译成&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;, 有的翻译为&lt;code class=&quot;highlighter-rouge&quot;&gt;B-树&lt;/code&gt;, 两者是同一个东西.&lt;/p&gt;
+
+&lt;p&gt;关于&lt;code class=&quot;highlighter-rouge&quot;&gt;B树&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;B+树&lt;/code&gt;, &lt;a href=&quot;/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-14-%E6%9F%A5%E6%89%BE%E7%AE%97%E6%B3%95.html&quot;&gt;这篇文章&lt;/a&gt;中已有详细介绍.&lt;/p&gt;
+
+&lt;hr /&gt;
+</description>
+        <pubDate>Tue, 20 Jun 2017 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-06-20-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E6%A0%91.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-06-20-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E6%A0%91.html</guid>
+        
+        <category>Java</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
     
       <item>
         <title>ConcurrentHashMap详解</title>
@@ -707,7 +940,7 @@
     
       <item>
         <title>查找算法</title>
-        <description>&lt;p&gt;基本的排序算法&lt;/p&gt;
+        <description>&lt;p&gt;几个查找算法&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -853,7 +1086,7 @@
 &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;B+树&lt;/code&gt;广泛应用于数据库存储引擎&lt;/p&gt;
 
 &lt;h3 id=&quot;section-2&quot;&gt;基本概念&lt;/h3&gt;
-&lt;p&gt;一棵&lt;code class=&quot;highlighter-rouge&quot;&gt;m&lt;/code&gt;阶的&lt;code class=&quot;highlighter-rouge&quot;&gt;B+树&lt;/code&gt;需满足谢列条件:&lt;/p&gt;
+&lt;p&gt;一棵&lt;code class=&quot;highlighter-rouge&quot;&gt;m&lt;/code&gt;阶的&lt;code class=&quot;highlighter-rouge&quot;&gt;B+树&lt;/code&gt;需满足下列条件:&lt;/p&gt;
 
 &lt;ol&gt;
   &lt;li&gt;每个分支最多有&lt;code class=&quot;highlighter-rouge&quot;&gt;m&lt;/code&gt;棵子树&lt;/li&gt;
@@ -1863,274 +2096,6 @@
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-12-23-%E5%AF%B9maven%E4%BE%9D%E8%B5%96%E7%9A%84%E4%B8%80%E4%BA%9B%E7%9C%8B%E6%B3%95.html</guid>
         
         <category>maven</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>Spring Boot多数据源配置</title>
-        <description>&lt;hr /&gt;
-
-&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;多数据源配置&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#mybatis&quot;&gt;MyBatis使用多数据源&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;自动注册多数据源&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;在(&lt;a href=&quot;http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-06-Spring-Boot%E9%9B%86%E6%88%90MyBatis.html&quot;&gt;Spring Boot集成MyBatis&lt;/a&gt;)一文介绍了配置数据源的简单方法, 本文介绍如何配置多个数据源, 如何与&lt;code class=&quot;highlighter-rouge&quot;&gt;MyBatis&lt;/code&gt;配合多个数据源使用.&lt;/p&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;多数据源配置&lt;/h2&gt;
-&lt;p&gt;假设我们有三个数据源, 配置这三个数据源的方法非常简单, 首先在&lt;code class=&quot;highlighter-rouge&quot;&gt;application.properties&lt;/code&gt;文件中添加这三个数据源的相关配置:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 默认数据源&lt;/span&gt;
-spring.datasource.url&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;jdbc:mysql://127.0.0.1:3306/db0
-spring.datasource.username&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;root
-spring.datasource.password&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;123123
-spring.datasource.driver-class-name&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;com.mysql.jdbc.Driver
-&lt;span class=&quot;c&quot;&gt;# 数据源db1配置&lt;/span&gt;
-custom.datasource.ds1.url&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;jdbc:mysql://127.0.0.1:3306/db1
-custom.datasource.ds1.username&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;root
-custom.datasource.ds1.password&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;123123
-custom.datasource.ds1.driver-class-name&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;com.mysql.jdbc.Driver
-&lt;span class=&quot;c&quot;&gt;# 数据源db2配置&lt;/span&gt;
-custom.datasource.ds2.url&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;jdbc:mysql://127.0.0.1:3306/db2
-custom.datasource.ds2.username&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;root
-custom.datasource.ds2.password&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;123123
-custom.datasource.ds2.driver-class-name&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;com.mysql.jdbc.Driver
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;我们可以通过一个配置类把这三个数据源加到spring容器中:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Configuration&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DataSourceConfig&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Bean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;datasource&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Primary&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 这个注解表示主数据源&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@ConfigurationProperties&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;prefix&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;spring.datasource&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DataSource&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;datasource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 这里也可以使用其他连接池, 比如 DruidDataSource&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DruidDataSource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Bean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ds1&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@ConfigurationProperties&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;prefix&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;custom.datasource.ds1&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DataSource&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ds1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DataSourceBuilder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Bean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ds2&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@ConfigurationProperties&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;prefix&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;custom.datasource.ds2&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DataSource&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ds2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DataSourceBuilder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;多数据源的配置就这么简单, 在用到的地方可以直接通过数据源的&lt;code class=&quot;highlighter-rouge&quot;&gt;name&lt;/code&gt;注入, 下面介绍如何配合使用多数据源.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;mybatis&quot;&gt;MyBatis使用多数据源&lt;/h2&gt;
-&lt;p&gt;先交代下场景. 假设我们有两个数据源(就用上面的ds0和ds1), 除了数据源的配置文件跟原来不一样, 其他跟普通的&lt;code class=&quot;highlighter-rouge&quot;&gt;MyBatis&lt;/code&gt;项目一样(SQL映射文件暂时不用注解, 还是使用mapper映射文件来写sql). 相关的文件和目录结构如下:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 源码目录结构 父目录为: com.example.demo&lt;/span&gt;
-+- Application.java
-|
-+- config  &lt;span class=&quot;c&quot;&gt;# 这是数据源的配置&lt;/span&gt;
-|   +- DS0Config.java
-|   +- DS1Config.java
-|
-+- dao  &lt;span class=&quot;c&quot;&gt;# 这是Mapper映射接口, 分别放到两个目录里&lt;/span&gt;
-|   +- ds0
-|   |   +- Test0Dao.java
-|   +- ds1
-|   |   +- Test1Dao.java
-&lt;span class=&quot;c&quot;&gt;# 资源文件&lt;/span&gt;
-resource/sqlmaps
-|   +- ds0
-|   |   +- test0.xml
-|   +- ds1
-|   |   +- test1.xml
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;如何配置&lt;code class=&quot;highlighter-rouge&quot;&gt;MyBatis&lt;/code&gt;之前的文章已经做过介绍, 这里只看两个配置类是如何写的:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// DS0Config.java&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@Configuration&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@MapperScan&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;basePackages&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;com.example.demo.dao.ds0&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sqlSessionFactoryRef&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;ds0SqlSessionFactory&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DS0Config&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Bean&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Primary&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 这个数据源设置为主要数据源&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@ConfigurationProperties&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;prefix&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;spring.datasource&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DataSource&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ds0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DruidDataSource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Bean&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 如果这里不用 Qualifier 指定, 则注入的是Primary数据源&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SqlSessionFactory&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ds0SqlSessionFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@Qualifier&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ds0&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DataSource&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dataSource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;SqlSessionFactoryBean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sessionFactory&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SqlSessionFactoryBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;sessionFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setDataSource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dataSource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 领域模型包位置&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;sessionFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setTypeAliasesPackage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;com.example.demo.domain&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 设置映射文件的位置&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;sessionFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setMapperLocations&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PathMatchingResourcePatternResolver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getResources&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;classpath:sqlmaps/ds0/*.xml&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sessionFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getObject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Bean&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SqlSessionTemplate&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ds0SqlSessionTemplate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@Qualifier&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ds0SqlSessionFactory&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SqlSessionFactory&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sqlSessionFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SqlSessionTemplate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sqlSessionFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;c1&quot;&gt;// DS1Config.java&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@Configuration&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@MapperScan&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;basePackages&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;com.example.demo.dao.ds1&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sqlSessionFactoryRef&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;ds1SqlSessionFactory&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 这个包里的mapp使用的是ds1数据源&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DS1Config&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Bean&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@ConfigurationProperties&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;prefix&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;custom.datasource.ds1&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 自动会把属性注入到对应的字段&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DataSource&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ds0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-       &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DataSourceBuilder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Bean&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SqlSessionFactory&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ds1SqlSessionFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@Qualifier&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ds1&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DataSource&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dataSource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;SqlSessionFactoryBean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sessionFactory&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SqlSessionFactoryBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;sessionFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setDataSource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dataSource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 领域模型包位置&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;sessionFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setTypeAliasesPackage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;com.example.demo.domain&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 设置映射文件的位置&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;sessionFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setMapperLocations&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PathMatchingResourcePatternResolver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getResources&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;classpath:sqlmaps/ds1/*.xml&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sessionFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getObject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Bean&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SqlSessionTemplate&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ds1SqlSessionTemplate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@Qualifier&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ds1SqlSessionFactory&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SqlSessionFactory&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sqlSessionFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SqlSessionTemplate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sqlSessionFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;上面这样, 把&lt;code class=&quot;highlighter-rouge&quot;&gt;MyBatis&lt;/code&gt;配置好之后, 特别是通过&lt;code class=&quot;highlighter-rouge&quot;&gt;MapperScan&lt;/code&gt;指定&lt;code class=&quot;highlighter-rouge&quot;&gt;dao&lt;/code&gt;扫描路径之后, 就可以像之前一样直接在spring中注入对应的&lt;code class=&quot;highlighter-rouge&quot;&gt;Dao&lt;/code&gt;操作数据库了.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section-1&quot;&gt;自动注册多数据源&lt;/h2&gt;
-&lt;p&gt;如果数据源比较多, 我们可以把多个数据源通过其它方式注入到Spring容器中, 使用时可以直接通过名字注入使用.&lt;br /&gt;
-假设有如下配置:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 默认数据源&lt;/span&gt;
-spring.datasource.url&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;jdbc:mysql://127.0.0.1:3306/db0
-spring.datasource.username&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;root
-spring.datasource.password&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;123123
-spring.datasource.driver-class-name&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;com.mysql.jdbc.Driver
-&lt;span class=&quot;c&quot;&gt;# 数据源db1配置&lt;/span&gt;
-custom.datasource.names&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;ds1, ds2    &lt;span class=&quot;c&quot;&gt;# 这个属性表示数据源名字列表&lt;/span&gt;
-custom.datasource.ds1.url&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;jdbc:mysql://127.0.0.1:3306/db1
-custom.datasource.ds1.username&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;root
-custom.datasource.ds1.password&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;123123
-custom.datasource.ds1.driver-class-name&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;com.mysql.jdbc.Driver
-&lt;span class=&quot;c&quot;&gt;# 数据源db2配置&lt;/span&gt;
-custom.datasource.ds2.url&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;jdbc:mysql://127.0.0.1:3306/db2
-custom.datasource.ds2.username&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;root
-custom.datasource.ds2.password&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;123123
-custom.datasource.ds2.driver-class-name&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;com.mysql.jdbc.Driver
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;上面的数据源, 我们可以直接拿来使用:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// 这个是注入默认的数据源&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@Resource&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DataSource&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dataSource&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// 注入ds1数据源&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@Resource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ds1&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DataSource&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ds1&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// 在方法里注入ds2数据源&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@Bean&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SqlSessionFactory&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;sqlSessionFactory&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;@Qualifier&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ds2&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DataSource&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dataSource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;....&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;要实现多数据源的自动注册, 我们需要借助&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanDefinitionRegistryPostProcessor&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;EnvironmentAware&lt;/code&gt;两个接口. 下面是自动注册多数据源的方法:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
-&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MultiDataSourceRegister&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeanDefinitionRegistryPostProcessor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;EnvironmentAware&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Logger&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LoggerFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MultiDataSourceRegister&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// 存放DataSource配置的集合, &amp;lt;dsName, dbProperties&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PropertyValues&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dataSourceMap&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Maps&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;newHashMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-
-    &lt;span class=&quot;cm&quot;&gt;/**
-     * 这个方法主要用于加载多数据源配置, 添加到dataSourceMap中, 之后在postProcessBeanDefinitionRegistry进行注册。
-     */&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;setEnvironment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Environment&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;environment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 获取到前缀是 &quot;custom.datasource.&quot; 的属性列表值&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;RelaxedPropertyResolver&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;propertyResolver&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RelaxedPropertyResolver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;environment&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;custom.datasource.&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 获取到所有数据源的名称列表&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dsNames&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;propertyResolver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getProperty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;names&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 拿到 custom.datasource.names 定义的数据源列表&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dsName&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Splitter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;,&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;omitEmptyStrings&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;splitToList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dsNames&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// 把数据源的配置(url, username, password, driver-class-name, type等)咱存到 dsMap 中&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dsMap&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;propertyResolver&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getSubProperties&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dsName&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;.&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CollectionUtils&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isEmpty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dsMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;warn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;未找到数据源{}的属性配置&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dsName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;PropertyValues&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;propertyValues&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MutablePropertyValues&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dsMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;dataSourceMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dsName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;propertyValues&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 数据源 dsName 的所有配置&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;cm&quot;&gt;/**
-     * 自动注册 dataSourceMap 中的所有数据源
-     */&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@SuppressWarnings&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;unchecked&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;postProcessBeanDefinitionRegistry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BeanDefinitionRegistry&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;registry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeansException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dsName&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dataSourceMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;keySet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;PropertyValues&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pv&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dataSourceMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dsName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;DataSourceBuilder&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dataSourceBuilder&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DataSourceBuilder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;create&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 这里并没有创建数据源, 只是依靠Spring拿到数据源类型&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pv&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;contains&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pv&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getPropertyValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 如果指定了type, 则使用指定的数据源类型&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;dataSourceBuilder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DataSource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;forName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ClassNotFoundException&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;加载数据源{}失败, 使用默认数据源&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// 注册&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;AnnotatedGenericBeanDefinition&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;definition&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AnnotatedGenericBeanDefinition&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dataSourceBuilder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;findType&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;registry&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;registerBeanDefinition&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dsName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;definition&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;cm&quot;&gt;/**
-     * 把自定义数据源的属性绑定到对应的bean上
-     */&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;postProcessBeanFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ConfigurableListableBeanFactory&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;beanFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeansException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 把默认数据源设置为主数据源;&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;beanFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getBeanDefinition&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;dataSource&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setPrimary&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 设置自定义数据源的属性绑定&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dsName&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dataSourceMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;keySet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;DataSource&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;customDS&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;beanFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dsName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DataSource&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;RelaxedDataBinder&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dataBinder&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RelaxedDataBinder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;customDS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;dataBinder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;bind&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dataSourceMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dsName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;hr /&gt;
-</description>
-        <pubDate>Mon, 12 Dec 2016 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-12-12-Spring-Boot%E5%A4%9A%E6%95%B0%E6%8D%AE%E6%BA%90%E9%85%8D%E7%BD%AE.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-12-12-Spring-Boot%E5%A4%9A%E6%95%B0%E6%8D%AE%E6%BA%90%E9%85%8D%E7%BD%AE.html</guid>
-        
-        <category>Spring</category>
         
         
         <category>编程技术</category>

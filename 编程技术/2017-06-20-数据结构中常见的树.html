@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="数据结构中常见的树, 编程技术, Java, 逆水行舟" />
+    <meta name="description" content="数据结构中常见的树, 编程技术, Java, 经常见到的树有: BST二叉排序树, AVL平衡二叉树, B树, B-树, B+树, B*树, RBT红黑树" />
+
+    <title>逆水行舟</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-06-20-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E6%A0%91.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="/static/js/jquery.qrcode.min.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="/static/js/uikit.min.js"></script>
+    <!-- quietflow -->
+    <!-- <script type="text/javascript" src="http://loveshisong.cn/static/js/quietflow.min.js"></script> -->
+    <!-- UK sticky -->
+    <script type="text/javascript" src="/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "shisong"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" data-uk-sticky>
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <script type="text/javascript">
+jQuery(function(){
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-06-20-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E6%A0%91.html"
+    });
+})
+</script>
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>数据结构中常见的树</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <p>经常见到的树有: <code class="highlighter-rouge">BST二叉排序树</code>, <code class="highlighter-rouge">AVL平衡二叉树</code>, <code class="highlighter-rouge">B树</code>, <code class="highlighter-rouge">B-树</code>, <code class="highlighter-rouge">B+树</code>, <code class="highlighter-rouge">B*树</code>, <code class="highlighter-rouge">RBT红黑树</code></p>
+
+<hr />
+
+<ul id="markdown-toc">
+  <li><a href="#bst">BST树</a>    <ul>
+      <li><a href="#section">定义</a></li>
+      <li><a href="#section-1">示例</a></li>
+      <li><a href="#section-2">二叉排序树的查找</a></li>
+    </ul>
+  </li>
+  <li><a href="#section-3">二叉排序树的插入</a>    <ul>
+      <li><a href="#section-4">二叉排序树的删除</a></li>
+    </ul>
+  </li>
+  <li><a href="#avl">AVL平衡二叉树</a>    <ul>
+      <li><a href="#section-5">定义</a></li>
+      <li><a href="#section-6">平衡二叉树的插入</a></li>
+      <li><a href="#section-7">平衡二叉树的删除</a></li>
+    </ul>
+  </li>
+  <li><a href="#rbt">RBT红黑树</a>    <ul>
+      <li><a href="#rbt-1">RBT的性质</a></li>
+      <li><a href="#rbt-2">RBT示例</a></li>
+      <li><a href="#section-8">红黑树的插入</a></li>
+      <li><a href="#section-9">红黑树的删除</a></li>
+    </ul>
+  </li>
+  <li><a href="#bb-b">B树,B-树,B+树</a></li>
+</ul>
+
+<hr />
+
+<h2 id="bst">BST树</h2>
+<p>二叉排序树, 也称二叉查找树(<code class="highlighter-rouge">Binary Search Tree</code>), 简称<code class="highlighter-rouge">BST</code>.</p>
+
+<h3 id="section">定义</h3>
+<p>二叉排序树或者是一棵空树, 或者是一棵具有下列特性的非空二叉树:</p>
+
+<ul>
+  <li>若左子树为空, 则左子树上所有结点关键字值均小于根结点的关键字值</li>
+  <li>若右子树为空, 则右子树上所有结点关键字值均大于根结点的关键字值</li>
+  <li>左右子树本身也分别是一颗二叉排序树</li>
+</ul>
+
+<h3 id="section-1">示例</h3>
+<p>下图中左右两个都是二叉排序树</p>
+
+<p><img src="/static/images/BST.png" alt="BSTTree" title="BSTTree" /></p>
+
+<h3 id="section-2">二叉排序树的查找</h3>
+
+<p>从根结点开始进行关键字比较, 若相等, 则查找成功; 若不等, 如果查找的关键字小于根结点关键字, 去左子树中查找, 否则去右子树中查找. 若最后不再有子树, 查找失败.</p>
+
+<h2 id="section-3">二叉排序树的插入</h2>
+
+<p>与查找过程类似, 若待插入的<code class="highlighter-rouge">BST</code>树为空, 则直接插入; 若关键字<code class="highlighter-rouge">k</code>小于根结点关键字, 则插入到左子树, 否则插入到右子树</p>
+
+<h3 id="section-4">二叉排序树的删除</h3>
+<p>删除操作可以按下面情况处理</p>
+
+<ol>
+  <li>若被删结点<code class="highlighter-rouge">z</code>是叶子结点, 则直接删除, 不会破坏二叉排序树的性质</li>
+  <li>若<code class="highlighter-rouge">z</code>只有一颗子树, 则让<code class="highlighter-rouge">z</code>的子树成为<code class="highlighter-rouge">z</code>父节点的子树, 即替代<code class="highlighter-rouge">z</code>的位置</li>
+  <li>若<code class="highlighter-rouge">z</code>有左右两棵子树, 则令<code class="highlighter-rouge">z</code>的直接前驱(即<code class="highlighter-rouge">z</code>左子树中最大的那个结点)替代<code class="highlighter-rouge">z</code>, 再从左子树中删除这个直接前驱, 这样就转化成了第一或第二中情况(因为<code class="highlighter-rouge">z</code>的直接前驱, 肯定没有右子树)</li>
+</ol>
+
+<h2 id="avl">AVL平衡二叉树</h2>
+
+<p><code class="highlighter-rouge">平衡二叉树</code>的发明者为<code class="highlighter-rouge">Georgy Adelson-Velsky</code>和<code class="highlighter-rouge">Evgenii Landis</code>, 所以也被称作<code class="highlighter-rouge">AVL树</code>. 在维基百科<a href="https://en.wikipedia.org/wiki/AVL_tree">AVL树的定义</a>中有这么一句话: <code class="highlighter-rouge">In computer science, an AVL tree is a self-balancing binary search tree.</code>, 所以<code class="highlighter-rouge">AVL平衡二叉树</code>是<code class="highlighter-rouge">BST二叉搜索树</code>的子集.</p>
+
+<h3 id="section-5">定义</h3>
+<p>平衡二叉树或者是一棵空树, 或者是一棵具有下列特性的非空二叉树:</p>
+
+<ul>
+  <li>它的左右子树高度差绝对值不超过1</li>
+  <li>它的左右子树都是平衡二叉树</li>
+</ul>
+
+<p>虽然<code class="highlighter-rouge">AVL平衡二叉树</code>的定义中并没有体现它是一个排序树, 但它是以<code class="highlighter-rouge">二叉排序树</code>为前提的</p>
+
+<h3 id="section-6">平衡二叉树的插入</h3>
+<p><code class="highlighter-rouge">二叉排序树</code>插入时, 只需要保证排序的特性, <code class="highlighter-rouge">平衡二叉树</code>的插入同时还需要保证插入结点之后仍然平衡.<br />
+<code class="highlighter-rouge">平衡二叉树</code>的插入过程前半部分与<code class="highlighter-rouge">二叉排序树</code>相同, 但在新结点插入后, 如果破坏了某个结点的平衡, 则需要作出相应的调整. 一般可将失去平衡后进行调整的规律归纳为下列4种情况:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">LL平衡旋转</code>(<code class="highlighter-rouge">右单旋转</code>)。在结点<code class="highlighter-rouge">A</code>的左孩子(<code class="highlighter-rouge">L</code>)的左子树(<code class="highlighter-rouge">L</code>)上插入新结点, 导致以<code class="highlighter-rouge">A</code>为根的子树失去平衡, 此时需要做一次向右的旋转操作。将<code class="highlighter-rouge">A</code>的左孩子<code class="highlighter-rouge">B</code>向右上旋转代替<code class="highlighter-rouge">A</code>成为根结点, 将<code class="highlighter-rouge">A</code>结点向右下旋转成为<code class="highlighter-rouge">B</code>的右子树的根结点, 而<code class="highlighter-rouge">B</code>的原右子树则成为<code class="highlighter-rouge">A</code>的左子树。 过程如下图:</li>
+</ul>
+
+<p><img src="/static/images/AVL_LL.png" alt="AVL_LL" title="AVL_LL" /></p>
+
+<ul>
+  <li><code class="highlighter-rouge">RR平衡旋转</code>(<code class="highlighter-rouge">左单旋转</code>)。在结点<code class="highlighter-rouge">A</code>的右孩子(<code class="highlighter-rouge">R</code>)的右子树(<code class="highlighter-rouge">R</code>)上插入新结点, 导致以<code class="highlighter-rouge">A</code>为根的子树失去平衡, 此时需要做一次向左的旋转操作。将<code class="highlighter-rouge">A</code>的右孩子<code class="highlighter-rouge">B</code>向左上旋转代替<code class="highlighter-rouge">A</code>成为根结点, 将<code class="highlighter-rouge">A</code>结点向左下旋转成为<code class="highlighter-rouge">B</code>的左子树的根结点, 而<code class="highlighter-rouge">B</code>的原左子树则成为<code class="highlighter-rouge">A</code>的右子树。 过程如下图:</li>
+</ul>
+
+<p><img src="/static/images/AVL_RR.png" alt="AVL_RR" title="AVL_RR" /></p>
+
+<ul>
+  <li><code class="highlighter-rouge">LR平衡旋转</code>(<code class="highlighter-rouge">先左后右双旋转</code>)。在结点<code class="highlighter-rouge">A</code>的左孩子(<code class="highlighter-rouge">L</code>)的右子树(<code class="highlighter-rouge">R</code>)上插入新结点, 导致以<code class="highlighter-rouge">A</code>为根的子树失去平衡, 此时需要做两次旋转操作, 先左旋转后右旋转。将<code class="highlighter-rouge">A</code>的左孩子<code class="highlighter-rouge">B</code>的右子树的根结点<code class="highlighter-rouge">C</code>向左上旋转提升到<code class="highlighter-rouge">B</code>结点的位置, 然后再把<code class="highlighter-rouge">C</code>结点向右上旋转提升到<code class="highlighter-rouge">A</code>结点的位置。 过程如下图:</li>
+</ul>
+
+<p><img src="/static/images/AVL_LR.png" alt="AVL_LR" title="AVL_LR" /></p>
+
+<ul>
+  <li><code class="highlighter-rouge">RL平衡旋转</code>(<code class="highlighter-rouge">先右后左双旋转</code>)。在结点<code class="highlighter-rouge">A</code>的右孩子(<code class="highlighter-rouge">R</code>)的左子树(<code class="highlighter-rouge">L</code>)上插入新结点, 导致以<code class="highlighter-rouge">A</code>为根的子树失去平衡, 此时需要做两次旋转操作, 先右旋转后左旋转。将<code class="highlighter-rouge">A</code>的右孩子<code class="highlighter-rouge">B</code>的左子树的根结点<code class="highlighter-rouge">C</code>向右上旋转提升到<code class="highlighter-rouge">B</code>结点的位置, 然后再把<code class="highlighter-rouge">C</code>结点向左上旋转提升到<code class="highlighter-rouge">A</code>结点的位置。 过程如下图:</li>
+</ul>
+
+<p><img src="/static/images/AVL_RL.png" alt="AVL_RL" title="AVL_RL" /></p>
+
+<ul>
+  <li><code class="highlighter-rouge">注意</code>, 在<code class="highlighter-rouge">LR</code>和<code class="highlighter-rouge">RL</code>旋转时, 究竟新结点插入在<code class="highlighter-rouge">C</code>的左子树还是右子树上, 不影响旋转过程。</li>
+</ul>
+
+<h3 id="section-7">平衡二叉树的删除</h3>
+<p><code class="highlighter-rouge">AVL</code>的删除过程前半部分与<code class="highlighter-rouge">BST</code>相同, 但删除结点后, 如果破坏了父结点的平衡, 则需要作出相应的调整, 调整方法与插入时的调整方法一样</p>
+
+<h2 id="rbt">RBT红黑树</h2>
+<p>红黑树(<code class="highlighter-rouge">Red Black Tree</code>)也是一种<code class="highlighter-rouge">二叉查找树</code>, 但在每个结点上增加一个存储位表示结点的颜色(<code class="highlighter-rouge">Red</code>或<code class="highlighter-rouge">Black</code>), 通过对每个结点着色, 使它满足一些性质, 这些性质共同来保证红黑树是基本上平衡的.  </p>
+
+<p><code class="highlighter-rouge">AVL</code>是严格平衡树, 因此在增加或者删除节点的时候, 根据不同情况, 旋转的次数比红黑树要多;<br />
+<code class="highlighter-rouge">RBT</code>是弱平衡的, 用非严格的平衡来换取增删节点时候旋转次数的降低;<br />
+所以简单说, 若搜索的次数远远大于插入和删除时, 选择<code class="highlighter-rouge">AVL树</code>; 若搜索、插入、删除次数几乎差不多, 应该选择<code class="highlighter-rouge">红黑树</code></p>
+
+<h3 id="rbt-1">RBT的性质</h3>
+<p>红黑树是每个结点都带有颜色属性的<code class="highlighter-rouge">二叉查找树</code>。 此外, 对于任何有效的红黑树必须满足以下特点:</p>
+
+<ol>
+  <li>结点是红色或黑色</li>
+  <li>根结点是黑色</li>
+  <li>每个叶结点(空结点<code class="highlighter-rouge">NULL</code>)是黑色的</li>
+  <li>每个红色结点的两个子结点都是黑色(从每个叶子到根的所有路径上不能有两个连续的红色结点)</li>
+  <li>从任一结点到其每个叶子的所有路径都包含相同数目的黑色结点</li>
+</ol>
+
+<p>这些特点共同限制了红黑树的关键性质: 从根到叶子的最长路径不多于最短路径的两倍长。这就保证了这个树大致上是平衡的。</p>
+
+<ul>
+  <li>这些性质如何保证最长路径不多于最短路径的两倍长?</li>
+</ul>
+
+<p><code class="highlighter-rouge">性质5</code>保证根结点到叶结点的所有路径都有相同数目的黑色结点;<br />
+<code class="highlighter-rouge">性质2</code>和<code class="highlighter-rouge">性质3</code>保证最长路径(从根开始)两头都是黑色的;<br />
+<code class="highlighter-rouge">性质4</code>保证了路径不能有两个相连的红色结点, 最短路径都是黑色结点, 最长路径有交替的红色和黑色结点;<br />
+这就表明了没有路径能多于其他路径的两倍长</p>
+
+<h3 id="rbt-2">RBT示例</h3>
+
+<p><img src="/static/images/RBT.png" alt="RBT" title="RBT" /></p>
+
+<h3 id="section-8">红黑树的插入</h3>
+<p>在对红黑树进行插入操作时, 我们一般总是插入 <strong>红色</strong> 的结点。因为插入黑结点会增加某条路径上黑结点的数目, 从而导致整棵树黑高度的不平衡。<br />
+当插入红色结点时, 如果插入的结点是根结点, 会破坏<code class="highlighter-rouge">性质2</code>; 如果插入结点的父结点是红色, 则会破坏<code class="highlighter-rouge">性质4</code>, 这时就需要对红黑树做一些调整。所有可能的情况有4种:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">情况1</code>: 插入的是根结点(<code class="highlighter-rouge">空树</code>)。</li>
+</ul>
+
+<p>此时违反<code class="highlighter-rouge">性质2</code>, 直接把新结点改成黑色即可。</p>
+
+<ul>
+  <li><code class="highlighter-rouge">情况2</code>: 插入的结点的父结点是黑色(<code class="highlighter-rouge">黑父</code>)。</li>
+</ul>
+
+<p>此时不会违反任何性质, 红黑树没有被破坏。</p>
+
+<ul>
+  <li><code class="highlighter-rouge">情况3</code>: 父结点是红色(<code class="highlighter-rouge">红父</code>)。</li>
+</ul>
+
+<p>若父结点为红色, 祖父结点必定为黑色, 否则就不是红黑树了。<code class="highlighter-rouge">红父</code>这种情况破坏了<code class="highlighter-rouge">性质3</code>, 需要调整, 需要根据叔父结点(祖父的另一个孩子)的颜色来决定做什么样的操作, 这又分两种情况</p>
+
+<ul>
+  <li><code class="highlighter-rouge">3.1</code>: 叔父结点为红色(<code class="highlighter-rouge">红父红叔</code>)
+<code class="highlighter-rouge">红父红叔</code>这种情况, 如下图所示, 无需旋转, 只要将父和叔结点变为黑色, 将祖父结点变为红色即可。<br />
+但由于祖父结点的父结点有可能为红色, 从而违反红黑树性质, 此时必须将祖父结点作为新的判定点继续向上进行平衡操作。  </li>
+</ul>
+
+<p><img src="/static/images/RBT_1.png" alt="红父红叔" title="红父红叔" /></p>
+
+<p><strong>注意</strong> 这种情况, 无论<code class="highlighter-rouge">红叔</code>是在左边还是在右边, 操作都是一样的。</p>
+
+<ul>
+  <li><code class="highlighter-rouge">3.2</code>: 叔父结点为黑色(<code class="highlighter-rouge">红父黑叔</code>)
+<code class="highlighter-rouge">红父黑叔</code>这种情况, 需要进行旋转, 有<code class="highlighter-rouge">LL, LR, RR, RL</code>等情况, 旋转方式与<code class="highlighter-rouge">AVL</code>类似。如图:</li>
+</ul>
+
+<p><img src="/static/images/RBT_2.png" alt="红父黑叔" title="红父黑叔" /></p>
+
+<p><strong>注意</strong> 当旋转完成后, 就已经是红黑树了, 此时不需要再向上调整; 上面四张图的<code class="highlighter-rouge">叔、1、2、3</code>结点有可能为黑哨兵(<code class="highlighter-rouge">NULL</code>)结点。</p>
+
+<h3 id="section-9">红黑树的删除</h3>
+<p>红黑树本身是一棵二叉查找树, 它的删除和二叉查找树的删除类似。根据前面<code class="highlighter-rouge">BST</code>的删除操作可知, 真正删除的结点要么没有子树(情况1), 要么只有一颗子树(情况2、3)。所以真正删除的结点 <strong>只有一个孩子</strong> 或 <strong>没有孩子</strong>。 再结合<code class="highlighter-rouge">红黑树</code>的特点, 可以得出以下两个结论:</p>
+
+<ol>
+  <li>真正被删除的必定是没有孩子的结点或只有一个红色孩子的结点</li>
+  <li>如果真正删除的结点是一个红色结点, 那么它必定是一个叶子结点</li>
+</ol>
+
+<p>根据这两个重要结论, 删除操作有以下情况:(<code class="highlighter-rouge">旧点</code>表示真正要删除的结点, <code class="highlighter-rouge">新点</code>表示旧结点的孩子结点)</p>
+
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">1.</code>旧点为红色: 根据<code class="highlighter-rouge">结论2</code>, 若<code class="highlighter-rouge">旧点</code>(真正要删除的结点)为红色, 则它必是叶子结点, 这种情况直接删除即可.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">2.</code>一红一黑: 若<code class="highlighter-rouge">旧点</code>为黑色, <code class="highlighter-rouge">新点</code>为红色时, <code class="highlighter-rouge">新点</code>取代<code class="highlighter-rouge">旧点</code>位置后, 将<code class="highlighter-rouge">新点</code>染黑即可</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">3.</code>双黑: 当<code class="highlighter-rouge">旧点</code>和<code class="highlighter-rouge">新点</code>都为黑色时(<code class="highlighter-rouge">新点</code>为<code class="highlighter-rouge">NULL</code>时, 也属于这种情况), 情况比较复杂, 需要根据<code class="highlighter-rouge">旧点</code>兄弟结点的颜色来决定进行什么样的操作, 兄弟结点又分<code class="highlighter-rouge">红兄</code>和<code class="highlighter-rouge">黑兄</code>两种情况。情况略复杂, 具体可以参考<a href="http://blog.csdn.net/very_2/article/details/5722682">这篇文章</a></p>
+  </li>
+</ul>
+
+<h2 id="bb-b">B树,B-树,B+树</h2>
+
+<p><code class="highlighter-rouge">B树</code>又称<code class="highlighter-rouge">多路平衡查找树</code>或<code class="highlighter-rouge">多路平衡查找树</code>, 英文为<code class="highlighter-rouge">B-Tree</code>有的翻译成<code class="highlighter-rouge">B树</code>, 有的翻译为<code class="highlighter-rouge">B-树</code>, 两者是同一个东西.</p>
+
+<p>关于<code class="highlighter-rouge">B树</code>和<code class="highlighter-rouge">B+树</code>, <a href="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-14-%E6%9F%A5%E6%89%BE%E7%AE%97%E6%B3%95.html">这篇文章</a>中已有详细介绍.</p>
+
+<hr />
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/数据结构中常见的树" data-title="数据结构中常见的树" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-06-20-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E6%A0%91.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
+
+</body>
+
+</html>
