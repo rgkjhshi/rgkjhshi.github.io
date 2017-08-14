@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="Spring Bean的生命周期, 编程技术, Spring, 逆水行舟" />
+    <meta name="description" content="Spring Bean的生命周期, 编程技术, Spring, " />
+
+    <title>逆水行舟</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-08-14-Spring-Bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="/static/js/jquery.qrcode.min.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="/static/js/uikit.min.js"></script>
+    <!-- quietflow -->
+    <!-- <script type="text/javascript" src="http://loveshisong.cn/static/js/quietflow.min.js"></script> -->
+    <!-- UK sticky -->
+    <script type="text/javascript" src="/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "shisong"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" data-uk-sticky>
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <script type="text/javascript">
+jQuery(function(){
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-08-14-Spring-Bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.html"
+    });
+})
+</script>
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>Spring Bean的生命周期</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <hr />
+
+<ul id="markdown-toc">
+  <li><a href="#section">生命周期</a></li>
+  <li><a href="#section-1">测试示例</a></li>
+</ul>
+
+<hr />
+
+<h2 id="section">生命周期</h2>
+<p>普通的<code class="highlighter-rouge">Java</code>程序中一个对象通过关键字<code class="highlighter-rouge">new</code>进行实例化, 而在<code class="highlighter-rouge">Spring</code>容器里, <code class="highlighter-rouge">Bean</code>的生命周期由<code class="highlighter-rouge">Spring</code>来控制, 而<code class="highlighter-rouge">Spring</code>中对<code class="highlighter-rouge">Bean</code>的生命周期的控制非常细致, 我们可以通过<code class="highlighter-rouge">Spring</code>提供的扩展点来自定义<code class="highlighter-rouge">Bean</code>的创建过程.</p>
+
+<p>下图是一个典型的生命周期过程:</p>
+
+<p><img src="/static/images/bean_lifecycle.png" alt="Bean生命周期" title="Bean生命周期" /></p>
+
+<ol>
+  <li>对<code class="highlighter-rouge">Bean</code>进行实例化, 相当于调用构造函数, <code class="highlighter-rouge">new</code>出一个对象</li>
+  <li>将<code class="highlighter-rouge">值</code>和<code class="highlighter-rouge">Bean的引用</code>注入到<code class="highlighter-rouge">Bean</code>对应的属性中</li>
+  <li>若<code class="highlighter-rouge">Bean</code>实现了<code class="highlighter-rouge">BeanNameAware</code>接口, Spring将Bean的ID传递给<code class="highlighter-rouge">setBeanName(String name)</code>方法. (实现<code class="highlighter-rouge">BeanNameAware</code>主要是为了通过Bean的引用来 <strong>获取</strong> Bean的ID)</li>
+  <li>若<code class="highlighter-rouge">Bean</code>实现了<code class="highlighter-rouge">BeanFactoryAware</code>接口, Spring将调用<code class="highlighter-rouge">setBeanFactory(BeanFactory beanFactory)</code>方法, 将<code class="highlighter-rouge">BeanFactory</code>容器实例传入. (实现<code class="highlighter-rouge">BeanFactoryAware</code>主要目的是为了获取Spring容器, 如Bean通过Spring容器发布事件等)</li>
+  <li>若<code class="highlighter-rouge">Bean</code>实现了<code class="highlighter-rouge">ApplicationContextAware</code>接口, Spring容器将调用<code class="highlighter-rouge">setApplicationContext(ApplicationContext applicationContext)</code>方法, 将应用上下文的引用传入. (作用与<code class="highlighter-rouge">BeanFactoryAware</code>类似都是为了获取Spring容器, 不同的是Spring容器在调用<code class="highlighter-rouge">setApplicationContext</code>方法时会把自己作为参数传入, 而Spring容器在调用<code class="highlighter-rouge">setBeanFactory</code>前需要程序员自己指定<code class="highlighter-rouge">setBeanFactory</code>里的参数<code class="highlighter-rouge">BeanFactory</code>)</li>
+  <li>若<code class="highlighter-rouge">Bean</code>实现了<code class="highlighter-rouge">BeanPostProcessor</code>接口, Spring将调用它们的<code class="highlighter-rouge">预初始化方法: postProcessBeforeInitialization(Object bean, String beanName)</code>方法. (作用是在Bean实例创建成功后对进行增强处理, 如对Bean进行修改, 增加某个功能)</li>
+  <li>调用自定义初始化方法, 即自己通过<code class="highlighter-rouge">@PostConstruct</code>注解的定义方法, 该方法必须为<code class="highlighter-rouge">public</code>或<code class="highlighter-rouge">protected</code>, 不能抛受检查异常, 返回值必须为<code class="highlighter-rouge">void</code>.</li>
+  <li>若<code class="highlighter-rouge">Bean</code>实现了<code class="highlighter-rouge">InitializingBean</code>接口, Spring将调用它们的<code class="highlighter-rouge">afterPropertiesSet()</code>方法. 与在配置文件中对<code class="highlighter-rouge">Bean</code>使用<code class="highlighter-rouge">init-method</code>声明初始化方法的作用一样, 都是在<code class="highlighter-rouge">Bean</code>的全部属性设置成功后执行的初始化方法.</li>
+  <li>若<code class="highlighter-rouge">Bean</code>实现了<code class="highlighter-rouge">BeanPostProcessor</code>接口的实现类, Spring将调用它们的<code class="highlighter-rouge">后初始化方法: postProcessAfterInitialization(Object bean, String beanName)</code>方法.</li>
+  <li>此时<code class="highlighter-rouge">Bean</code>已经准备就绪, 可以被应用程序使用了, 它将一直驻留在应用上下文中, 直到应用上下文被销毁</li>
+  <li>调用自定义销毁方法, 即自己通过<code class="highlighter-rouge">@PreDestroy</code>注解定义的方法</li>
+  <li>若<code class="highlighter-rouge">Bean</code>实现了<code class="highlighter-rouge">DisposableBean</code>接口, 则调用其<code class="highlighter-rouge">destroy()</code>方法. 作用与在配置文件中对<code class="highlighter-rouge">Bean</code>使用<code class="highlighter-rouge">destory-method</code>声明销毁方法的作用一样，都是在<code class="highlighter-rouge">Bean</code>实例销毁前执行的方法</li>
+</ol>
+
+<p><code class="highlighter-rouge">注意</code>: 黄色部分标识的<code class="highlighter-rouge">BeanPostProcessor</code>接口有点特殊, 如果我们定义了一个实现<code class="highlighter-rouge">BeanPostProcessor</code>接口的<code class="highlighter-rouge">Bean</code>(后处理器), 那么在这个<code class="highlighter-rouge">Bean</code>所在的容器中的 <strong>其他所有Bean</strong> 在初始化前后都会执行后处理器的方法</p>
+
+<hr />
+
+<h2 id="section-1">测试示例</h2>
+<p>下面这个例子的输出结果将按照序号按顺序输出</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 后处理器</span>
+<span class="nd">@Service</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyBeanPostProcessor</span> <span class="kd">implements</span> <span class="n">BeanPostProcessor</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">LifecycleService</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">Object</span> <span class="n">postProcessBeforeInitialization</span><span class="o">(</span><span class="n">Object</span> <span class="n">bean</span><span class="o">,</span> <span class="n">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
+        <span class="c1">// 每一个没有实现BeanPostProcessor接口的Bean都会调用</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">bean</span> <span class="k">instanceof</span> <span class="n">LifecycleService</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"5. BeanPostProcessor.postProcessBeforeInitialization()方法, beanName={}"</span><span class="o">,</span> <span class="n">beanName</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">bean</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">Object</span> <span class="n">postProcessAfterInitialization</span><span class="o">(</span><span class="n">Object</span> <span class="n">bean</span><span class="o">,</span> <span class="n">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
+        <span class="c1">// 每一个没有实现BeanPostProcessor接口的Bean都会调用</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">bean</span> <span class="k">instanceof</span> <span class="n">LifecycleService</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"8. BeanPostProcessor.postProcessBeforeInitialization()方法, beanName={}"</span><span class="o">,</span> <span class="n">beanName</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">bean</span><span class="o">;</span>
+    <span class="o">}</span>
+
+<span class="o">}</span>
+<span class="c1">// 一个普通的Bean</span>
+<span class="nd">@Service</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">LifecycleService</span> <span class="kd">implements</span> <span class="n">BeanNameAware</span><span class="o">,</span> <span class="n">BeanFactoryAware</span><span class="o">,</span> <span class="n">ApplicationContextAware</span><span class="o">,</span> <span class="n">InitializingBean</span><span class="o">,</span> <span class="n">DisposableBean</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">LifecycleService</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+    <span class="kd">public</span> <span class="n">LifecycleService</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"1. 构造方法"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">setBeanName</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"2. BeanNameAware.setBeanName()方法, 用于获取Bean的ID"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">setBeanFactory</span><span class="o">(</span><span class="n">BeanFactory</span> <span class="n">beanFactory</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
+        <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"3. BeanFactoryAware.setBeanFactory()方法"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">setApplicationContext</span><span class="o">(</span><span class="n">ApplicationContext</span> <span class="n">applicationContext</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
+        <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"4. ApplicationContextAware.setApplicationContext()方法"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@PostConstruct</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">init</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"6. @PostConstruct"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">afterPropertiesSet</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"7. InitializingBean.afterPropertiesSet()方法"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="c1">// bean就绪</span>
+
+    <span class="nd">@PreDestroy</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">preDestory</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"9. @PreDestroy"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">destroy</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"10. DisposableBean.destroy()方法"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<hr />
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/Spring Bean的生命周期" data-title="Spring Bean的生命周期" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-08-14-Spring-Bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
+
+</body>
+
+</html>

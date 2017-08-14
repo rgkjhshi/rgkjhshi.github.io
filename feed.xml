@@ -5,9 +5,135 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 02 Aug 2017 20:14:11 +0800</pubDate>
-    <lastBuildDate>Wed, 02 Aug 2017 20:14:11 +0800</lastBuildDate>
+    <pubDate>Mon, 14 Aug 2017 16:02:16 +0800</pubDate>
+    <lastBuildDate>Mon, 14 Aug 2017 16:02:16 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>Spring Bean的生命周期</title>
+        <description>&lt;hr /&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;生命周期&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;测试示例&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;生命周期&lt;/h2&gt;
+&lt;p&gt;普通的&lt;code class=&quot;highlighter-rouge&quot;&gt;Java&lt;/code&gt;程序中一个对象通过关键字&lt;code class=&quot;highlighter-rouge&quot;&gt;new&lt;/code&gt;进行实例化, 而在&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;容器里, &lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;的生命周期由&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;来控制, 而&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;中对&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;的生命周期的控制非常细致, 我们可以通过&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;提供的扩展点来自定义&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;的创建过程.&lt;/p&gt;
+
+&lt;p&gt;下图是一个典型的生命周期过程:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/bean_lifecycle.png&quot; alt=&quot;Bean生命周期&quot; title=&quot;Bean生命周期&quot; /&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;对&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;进行实例化, 相当于调用构造函数, &lt;code class=&quot;highlighter-rouge&quot;&gt;new&lt;/code&gt;出一个对象&lt;/li&gt;
+  &lt;li&gt;将&lt;code class=&quot;highlighter-rouge&quot;&gt;值&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean的引用&lt;/code&gt;注入到&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;对应的属性中&lt;/li&gt;
+  &lt;li&gt;若&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanNameAware&lt;/code&gt;接口, Spring将Bean的ID传递给&lt;code class=&quot;highlighter-rouge&quot;&gt;setBeanName(String name)&lt;/code&gt;方法. (实现&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanNameAware&lt;/code&gt;主要是为了通过Bean的引用来 &lt;strong&gt;获取&lt;/strong&gt; Bean的ID)&lt;/li&gt;
+  &lt;li&gt;若&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactoryAware&lt;/code&gt;接口, Spring将调用&lt;code class=&quot;highlighter-rouge&quot;&gt;setBeanFactory(BeanFactory beanFactory)&lt;/code&gt;方法, 将&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactory&lt;/code&gt;容器实例传入. (实现&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactoryAware&lt;/code&gt;主要目的是为了获取Spring容器, 如Bean通过Spring容器发布事件等)&lt;/li&gt;
+  &lt;li&gt;若&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;ApplicationContextAware&lt;/code&gt;接口, Spring容器将调用&lt;code class=&quot;highlighter-rouge&quot;&gt;setApplicationContext(ApplicationContext applicationContext)&lt;/code&gt;方法, 将应用上下文的引用传入. (作用与&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactoryAware&lt;/code&gt;类似都是为了获取Spring容器, 不同的是Spring容器在调用&lt;code class=&quot;highlighter-rouge&quot;&gt;setApplicationContext&lt;/code&gt;方法时会把自己作为参数传入, 而Spring容器在调用&lt;code class=&quot;highlighter-rouge&quot;&gt;setBeanFactory&lt;/code&gt;前需要程序员自己指定&lt;code class=&quot;highlighter-rouge&quot;&gt;setBeanFactory&lt;/code&gt;里的参数&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactory&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;若&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanPostProcessor&lt;/code&gt;接口, Spring将调用它们的&lt;code class=&quot;highlighter-rouge&quot;&gt;预初始化方法: postProcessBeforeInitialization(Object bean, String beanName)&lt;/code&gt;方法. (作用是在Bean实例创建成功后对进行增强处理, 如对Bean进行修改, 增加某个功能)&lt;/li&gt;
+  &lt;li&gt;调用自定义初始化方法, 即自己通过&lt;code class=&quot;highlighter-rouge&quot;&gt;@PostConstruct&lt;/code&gt;注解的定义方法, 该方法必须为&lt;code class=&quot;highlighter-rouge&quot;&gt;public&lt;/code&gt;或&lt;code class=&quot;highlighter-rouge&quot;&gt;protected&lt;/code&gt;, 不能抛受检查异常, 返回值必须为&lt;code class=&quot;highlighter-rouge&quot;&gt;void&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;若&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;InitializingBean&lt;/code&gt;接口, Spring将调用它们的&lt;code class=&quot;highlighter-rouge&quot;&gt;afterPropertiesSet()&lt;/code&gt;方法. 与在配置文件中对&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;init-method&lt;/code&gt;声明初始化方法的作用一样, 都是在&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;的全部属性设置成功后执行的初始化方法.&lt;/li&gt;
+  &lt;li&gt;若&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanPostProcessor&lt;/code&gt;接口的实现类, Spring将调用它们的&lt;code class=&quot;highlighter-rouge&quot;&gt;后初始化方法: postProcessAfterInitialization(Object bean, String beanName)&lt;/code&gt;方法.&lt;/li&gt;
+  &lt;li&gt;此时&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;已经准备就绪, 可以被应用程序使用了, 它将一直驻留在应用上下文中, 直到应用上下文被销毁&lt;/li&gt;
+  &lt;li&gt;调用自定义销毁方法, 即自己通过&lt;code class=&quot;highlighter-rouge&quot;&gt;@PreDestroy&lt;/code&gt;注解定义的方法&lt;/li&gt;
+  &lt;li&gt;若&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;DisposableBean&lt;/code&gt;接口, 则调用其&lt;code class=&quot;highlighter-rouge&quot;&gt;destroy()&lt;/code&gt;方法. 作用与在配置文件中对&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;destory-method&lt;/code&gt;声明销毁方法的作用一样，都是在&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;实例销毁前执行的方法&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;注意&lt;/code&gt;: 黄色部分标识的&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanPostProcessor&lt;/code&gt;接口有点特殊, 如果我们定义了一个实现&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanPostProcessor&lt;/code&gt;接口的&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;(后处理器), 那么在这个&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;所在的容器中的 &lt;strong&gt;其他所有Bean&lt;/strong&gt; 在初始化前后都会执行后处理器的方法&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;测试示例&lt;/h2&gt;
+&lt;p&gt;下面这个例子的输出结果将按照序号按顺序输出&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// 后处理器&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Service&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyBeanPostProcessor&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeanPostProcessor&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Logger&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LoggerFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LifecycleService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;postProcessBeforeInitialization&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;beanName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeansException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// 每一个没有实现BeanPostProcessor接口的Bean都会调用&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bean&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LifecycleService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;5. BeanPostProcessor.postProcessBeforeInitialization()方法, beanName={}&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;beanName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;postProcessAfterInitialization&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;beanName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeansException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// 每一个没有实现BeanPostProcessor接口的Bean都会调用&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bean&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LifecycleService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;8. BeanPostProcessor.postProcessBeforeInitialization()方法, beanName={}&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;beanName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 一个普通的Bean&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Service&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LifecycleService&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeanNameAware&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeanFactoryAware&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ApplicationContextAware&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;InitializingBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DisposableBean&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Logger&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LoggerFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LifecycleService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LifecycleService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;1. 构造方法&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;setBeanName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;2. BeanNameAware.setBeanName()方法, 用于获取Bean的ID&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;setBeanFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BeanFactory&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;beanFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeansException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;3. BeanFactoryAware.setBeanFactory()方法&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;setApplicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ApplicationContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;applicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeansException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;4. ApplicationContextAware.setApplicationContext()方法&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@PostConstruct&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;init&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;6. @PostConstruct&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;afterPropertiesSet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;7. InitializingBean.afterPropertiesSet()方法&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;// bean就绪&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@PreDestroy&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;preDestory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;9. @PreDestroy&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;destroy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;10. DisposableBean.destroy()方法&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+</description>
+        <pubDate>Mon, 14 Aug 2017 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-08-14-Spring-Bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-08-14-Spring-Bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.html</guid>
+        
+        <category>Spring</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
     
       <item>
         <title>数据结构中常见的树</title>
@@ -1962,140 +2088,6 @@
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-03-03-%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB.html</guid>
         
         <category>sql</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>对maven依赖的一些看法</title>
-        <description>&lt;hr /&gt;
-
-&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;同一个包依赖声明两次&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;完全没有用到的包依赖&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#dependencymanagement&quot;&gt;没有使用&lt;code class=&quot;highlighter-rouge&quot;&gt;dependencyManagement&lt;/code&gt;进行包管理&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;版本管理直接声明而不是采用变量形式&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#dependencymanagementexecution&quot;&gt;直接在&lt;code class=&quot;highlighter-rouge&quot;&gt;dependencyManagement&lt;/code&gt;进行&lt;code class=&quot;highlighter-rouge&quot;&gt;execution&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#api&quot;&gt;提供的API依赖过于庞大&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-3&quot;&gt;版本管理的变量名不一致问题&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;目前我们的项目大多使用&lt;code class=&quot;highlighter-rouge&quot;&gt;Maven&lt;/code&gt;进行包依赖管理, 而像&lt;code class=&quot;highlighter-rouge&quot;&gt;pom&lt;/code&gt;里依赖该怎么写, 我总认为这是不值得单独拿出来说, 因为这是基本功, 就像是程序员的基本素养, 大家都很熟悉, 实在没啥可说的了. 然而做过如此多的项目之后, 我发现这里却有着非常严重的问题, 写法真是千奇百怪, 简直辣眼睛, 我实在看不下去了, 就把我看到的一些现象晒出来看看, 另附上我的一些看法.&lt;/p&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;同一个包依赖声明两次&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;现象描述&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;同一个&lt;code class=&quot;highlighter-rouge&quot;&gt;groupId&lt;/code&gt;同一个&lt;code class=&quot;highlighter-rouge&quot;&gt;artifactId&lt;/code&gt;同一个&lt;code class=&quot;highlighter-rouge&quot;&gt;version&lt;/code&gt;的包在同一个pom文件里被硬生生的声明了两次!&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;个人看法&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;虽然这不会引起什么大的问题, 但显然是开发者的态度问题, 估计内容都是copy过来的, 连看都不看, copy完就不管了&lt;/p&gt;
-
-&lt;h2 id=&quot;section-1&quot;&gt;完全没有用到的包依赖&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;现象描述&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;这个没用到不是传递依赖进来的, 而是直接在&lt;code class=&quot;highlighter-rouge&quot;&gt;pom&lt;/code&gt;里声明了, 但是没有使用.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;个人看法&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;产生的原因, 有可能有以下几点:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;传递依赖中版本不一致, 为了统一版本而声明; 这种产生原因是可以接受的, 但我认为也是可以避免的(比如所有的包都采用变量声明来进行版本管理, 就不会出现这样的局面).&lt;/li&gt;
-  &lt;li&gt;原来使用过该包提供的功能, 后来相关代码删掉了, 忘了修改&lt;code class=&quot;highlighter-rouge&quot;&gt;pom&lt;/code&gt;里的包依赖; 这种情况就尽量避免吧&lt;/li&gt;
-  &lt;li&gt;不知道这个包有什么用或不知道是否能用到, 加进来再说; 呵呵, 这种情况还真有!&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;dependencymanagement&quot;&gt;没有使用&lt;code class=&quot;highlighter-rouge&quot;&gt;dependencyManagement&lt;/code&gt;进行包管理&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;现象描述&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;完全没用&lt;code class=&quot;highlighter-rouge&quot;&gt;dependencyManagement&lt;/code&gt;的情况很少, 大部分情况都是个别的包直接在&lt;code class=&quot;highlighter-rouge&quot;&gt;dependencies&lt;/code&gt;中声明了依赖&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;个人看法&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;虽然看似省事儿, 但不便于管理&lt;/p&gt;
-
-&lt;h2 id=&quot;section-2&quot;&gt;版本管理直接声明而不是采用变量形式&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;现象描述&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 直接声明版本 --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;com.google.guava&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;guava&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;20.0&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;个人看法&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;推荐使用变量控制版本, 强烈推荐参考&lt;code class=&quot;highlighter-rouge&quot;&gt;Sprint Boot&lt;/code&gt;提供的各种&lt;code class=&quot;highlighter-rouge&quot;&gt;starter&lt;/code&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 版本通过变量统一管理 --&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;guava.version&amp;gt;&lt;/span&gt;20.0&lt;span class=&quot;nt&quot;&gt;&amp;lt;/guava.version&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;com.google.guava&lt;span class=&quot;nt&quot;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;guava&lt;span class=&quot;nt&quot;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;${guava.version}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;不过这样有可能引发一个问题, 用于版本管理的变量名可能不一样. 变量名尽量向&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot&lt;/code&gt;看齐, 后面还会说到.&lt;/p&gt;
-
-&lt;h2 id=&quot;dependencymanagementexecution&quot;&gt;直接在&lt;code class=&quot;highlighter-rouge&quot;&gt;dependencyManagement&lt;/code&gt;进行&lt;code class=&quot;highlighter-rouge&quot;&gt;execution&lt;/code&gt;&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;现象描述&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;需要排除掉某些包的时候, 直接在&lt;code class=&quot;highlighter-rouge&quot;&gt;dependencyManagement&lt;/code&gt;中进行&lt;code class=&quot;highlighter-rouge&quot;&gt;execution&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;个人看法&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;这种情况是真是存在的, 并且我认为这是非常严重的 &lt;strong&gt;错误&lt;/strong&gt;. &lt;br /&gt;
-通常项目中有可能包含多个子模块, 我们可以统一在父&lt;code class=&quot;highlighter-rouge&quot;&gt;pom&lt;/code&gt;中进行包版本管理, 在各个子模块中直接依赖某包.&lt;br /&gt;
-假设在子模块1中因为某包的传递依赖包存在冲突而在父&lt;code class=&quot;highlighter-rouge&quot;&gt;pom&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;dependencyManagement&lt;/code&gt;中直接把冲突的包进行&lt;code class=&quot;highlighter-rouge&quot;&gt;execution&lt;/code&gt;, 那么在子模块2中使用这个包时, 就是不完整的.&lt;/p&gt;
-
-&lt;h2 id=&quot;api&quot;&gt;提供的API依赖过于庞大&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;现象描述&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;现实中总会遇到需要与其他系统交互的场景, 比如进行&lt;code class=&quot;highlighter-rouge&quot;&gt;RPC&lt;/code&gt;通信. 通常情况下我们需要引入其他系统提供的&lt;code class=&quot;highlighter-rouge&quot;&gt;API&lt;/code&gt;, 而不关注对方具体怎么实现. &lt;br /&gt;
-但是所依赖的的这个第三方&lt;code class=&quot;highlighter-rouge&quot;&gt;API&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;pom&lt;/code&gt;依赖过于庞大, 有图为证:
-&lt;img src=&quot;/static/images/maven-api.png&quot; alt=&quot;垃圾的API&quot; title=&quot;垃圾的API&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;上面那一坨东西全都是所依赖的API传递依赖进来的&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;个人看法&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;我只想说, API提供方估计是跟使用方有什么深仇大恨. 如果API里依赖了一两个其他包勉强还能接受, 但是依赖这么多, 实在是让使用方太痛苦了. &lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;maven&lt;/code&gt;提供了一个可选依赖的属性&lt;code class=&quot;highlighter-rouge&quot;&gt;optional&lt;/code&gt;, 值为&lt;code class=&quot;highlighter-rouge&quot;&gt;true&lt;/code&gt;时表示该依赖是可选的, 不强制引入, 如果使用方要用到某包功能时, 需要自行引入.&lt;/p&gt;
-
-&lt;h2 id=&quot;section-3&quot;&gt;版本管理的变量名不一致问题&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;现象描述&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;继承某父pom是很常见的, 在&lt;code class=&quot;highlighter-rouge&quot;&gt;dependencyManagement&lt;/code&gt;中&lt;code class=&quot;highlighter-rouge&quot;&gt;import&lt;/code&gt;其他pom文件做版本统一管理也是一个避免依赖冲突的常用方法. 但当两个文件同时采用变量控制版本, 而变量名字不一样时, 就会出现问题. 比如, 父pom中有&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;com.google.guava.version&amp;gt;18.0&amp;lt;/com.google.guava.version&amp;gt;&lt;/code&gt;, 而&lt;code class=&quot;highlighter-rouge&quot;&gt;import&lt;/code&gt;进来的pom文件有&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;guava.version&amp;gt;20.0&amp;lt;/guava.version&amp;gt;&lt;/code&gt;, 这个时候起作用的是哪个?&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;个人看法&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;对于版本控制变量的名字, 希望都向&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring Boot&lt;/code&gt;看齐, 如果真出现了上面的情况, 优先级是:&lt;code class=&quot;highlighter-rouge&quot;&gt;父pom &amp;gt; import&lt;/code&gt;, 也就是上面的情况实用的&lt;code class=&quot;highlighter-rouge&quot;&gt;guava&lt;/code&gt;版本为18.0. 若想改成20.0, 需要使用父pom中的变量重新声明下其值;&lt;br /&gt;
-即使父pom中为&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;guava.version&amp;gt;18.0&amp;lt;/guava.version&amp;gt;&lt;/code&gt;, 变量名一样, 版本不一样时, 仍是父pom起作用.&lt;/p&gt;
-
-&lt;hr /&gt;
-</description>
-        <pubDate>Fri, 23 Dec 2016 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-12-23-%E5%AF%B9maven%E4%BE%9D%E8%B5%96%E7%9A%84%E4%B8%80%E4%BA%9B%E7%9C%8B%E6%B3%95.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-12-23-%E5%AF%B9maven%E4%BE%9D%E8%B5%96%E7%9A%84%E4%B8%80%E4%BA%9B%E7%9C%8B%E6%B3%95.html</guid>
-        
-        <category>maven</category>
         
         
         <category>编程技术</category>
