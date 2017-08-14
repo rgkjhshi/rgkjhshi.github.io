@@ -35,7 +35,7 @@ tag: Spring
 11. 调用自定义销毁方法, 即自己通过`@PreDestroy`注解定义的方法
 12. 若`Bean`实现了`DisposableBean`接口, 则调用其`destroy()`方法. 作用与在配置文件中对`Bean`使用`destory-method`声明销毁方法的作用一样，都是在`Bean`实例销毁前执行的方法
 
-`注意`: 黄色部分标识的`BeanPostProcessor`接口有点特殊, 如果我们定义了一个实现`BeanPostProcessor`接口的`Bean`(后处理器), 那么在这个`Bean`所在的容器中的 **其他所有Bean** 在初始化前后都会执行后处理器的方法
+`注意`: 黄色部分标识的`BeanPostProcessor`接口有点特殊, 如果我们定义了一个实现`BeanPostProcessor`接口的`Bean`(后处理器), 那么在这个`Bean`所在的容器中的 **其他所有Bean** 在初始化前后都会执行该后处理器的方法
 
 *****
 
