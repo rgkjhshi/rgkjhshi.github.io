@@ -217,10 +217,10 @@ java通过JVM进行内存管理，它的内存占用情况是怎样的？</p>
 <span class="mh">0x00000007d569f1d0</span><span class="o">:</span> <span class="mh">0x007fffffef650cc4</span>
 <span class="mh">0x00000007d569f1d8</span><span class="o">:</span> <span class="mh">0x0000007effffffff</span>
 <span class="mh">0x00000007d569f1e0</span><span class="o">:</span> <span class="mh">0x00000000007effff</span>
-<span class="c1">// 对于Demo地址分配的解释(x86是小端模式)</span>
+<span class="c1">// 对于Demo地址分配的解释(x86是小端模式:数据的低位保存在内存的低地址中)</span>
 <span class="nl">_mark:</span>             <span class="mh">0x00000007d569f1c8</span><span class="o">:</span> <span class="mh">0x0000000000000001</span>
-<span class="nl">I:</span>                 <span class="mh">0x00000007d569f1d4</span><span class="o">:</span> <span class="mh">0x007fffff</span>        <span class="c1">// gap填充</span>
 <span class="nl">_compressed_klass:</span> <span class="mh">0x00000007d569f1d0</span><span class="o">:</span> <span class="mh">0xef650cc4</span>
+<span class="nl">I:</span>                 <span class="mh">0x00000007d569f1d4</span><span class="o">:</span> <span class="mh">0x007fffff</span>        <span class="c1">// gap填充</span>
 <span class="nl">L:</span>                 <span class="mh">0x00000007d569f1d8</span><span class="o">:</span> <span class="mh">0x0000007effffffff</span>
 <span class="nl">J:</span>                 <span class="mh">0x00000007d569f1e0</span><span class="o">:</span> <span class="mh">0x007effff</span>
 <span class="o">(</span><span class="n">padding</span><span class="o">):</span>         <span class="mh">0x00000007d569f1e4</span><span class="o">:</span> <span class="mh">0x00000000</span>
