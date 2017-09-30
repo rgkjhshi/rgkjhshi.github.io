@@ -5,9 +5,261 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 20 Sep 2017 21:25:38 +0800</pubDate>
-    <lastBuildDate>Wed, 20 Sep 2017 21:25:38 +0800</lastBuildDate>
+    <pubDate>Sat, 30 Sep 2017 15:45:01 +0800</pubDate>
+    <lastBuildDate>Sat, 30 Sep 2017 15:45:01 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>Spring中的XML配置的写法</title>
+        <description>&lt;p&gt;现在的Spring项目提倡无&lt;code class=&quot;highlighter-rouge&quot;&gt;xml&lt;/code&gt;配置, 但是在一些老的项目中难免会遇见一些通过&lt;code class=&quot;highlighter-rouge&quot;&gt;xml&lt;/code&gt;进行配置的地方, 这篇文章总结下通过&lt;code class=&quot;highlighter-rouge&quot;&gt;xml&lt;/code&gt;来配置&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;的各种写法&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;构造器创建实例&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#constructor-arg&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;constructor-arg&amp;gt;元素&lt;/code&gt;注入&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#c-&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;c-命名空间&lt;/code&gt;注入&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;工厂方法创建实例&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;装配属性&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-3&quot;&gt;装配集合&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#listsetarray&quot;&gt;装配List、Set和Array&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#map&quot;&gt;装配Map&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#properties&quot;&gt;装配Properties&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#util-&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;util-命名空间&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section&quot;&gt;构造器创建实例&lt;/h2&gt;
+&lt;p&gt;构造器注入可以注入值, 也可以注入其他&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;的引用, 我们有两种配置方式可供选择, &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;constructor-arg&amp;gt;元素&lt;/code&gt; 和 &lt;code class=&quot;highlighter-rouge&quot;&gt;c-命名空间&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;constructor-arg&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;constructor-arg&amp;gt;元素&lt;/code&gt;注入&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;constructor-arg&amp;gt;&lt;/code&gt;元素的写法有多种形式&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;按顺序注入, 如:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;beanService&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;com.test.BeanService&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;第一个参数&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;第二个参数&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;指定顺序注入, 参数是从0开始的. 如:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;beanService&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;com.qunar.finance.demo.service.BeanService&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;index=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;0&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;第0个参数的值&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;index=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;1&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;第1个参数的值&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;按参数名称注入, 如:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;beanService&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;com.test.BeanService&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;name&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;name的值&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;title&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;title的值&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;注入的不是值, 而是另一个&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;的引用, 只需要把&lt;code class=&quot;highlighter-rouge&quot;&gt;value&lt;/code&gt;换成&lt;code class=&quot;highlighter-rouge&quot;&gt;ref&lt;/code&gt;即可, 如:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;otherBeanId&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;index=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;0&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;otherBeanId&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;otherBean&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;otherBeanId&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;c-&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;c-命名空间&lt;/code&gt;注入&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;c-命名空间&lt;/code&gt;是在Spring 3.0中引入的, 要使用这个空间需要在&lt;code class=&quot;highlighter-rouge&quot;&gt;XML&lt;/code&gt;顶部生命其模式:&lt;code class=&quot;highlighter-rouge&quot;&gt;xmlns:c=&quot;http://www.springframework.org/schema/c&quot;&lt;/code&gt;, 但是一般集成开发环境都会有自动导入功能.&lt;/p&gt;
+
+&lt;p&gt;先看几个例子:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;beanService&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;com.test.BeanService&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;c:name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Tom&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;c:title=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;TestTitle&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;beanService&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;com.test.BeanService&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;c:_0=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Tom&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;c:_1=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;TestTitle&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;beanService&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;com.test.BeanService&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;c:otherBean-ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;otherBeanId&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;beanService&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;com.test.BeanService&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;c:_0-ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;otherBeanId&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;与之前类似, 注入引用只是比注入值多了一个&lt;code class=&quot;highlighter-rouge&quot;&gt;-ref&lt;/code&gt;, 但由于变量名不能以数字开头, 所以会在数字前面加一个下划线&lt;code class=&quot;highlighter-rouge&quot;&gt;_&lt;/code&gt;, 如&lt;code class=&quot;highlighter-rouge&quot;&gt;c:_0&lt;/code&gt;表示第0个参数&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;工厂方法创建实例&lt;/h2&gt;
+&lt;p&gt;有的类提供了一个静态工厂方法来产生实例(往往这种方法可以使用&lt;code class=&quot;highlighter-rouge&quot;&gt;initialization on demand holder&lt;/code&gt;技术进行延时加载, 不论是静态内部类还是非静态内部类都是在第一次使用时才会被加载)。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Singleton&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Singleton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SingletonHolder&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 延迟加载实例&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Singleton&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;instance&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Singleton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Singleton&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;getInstance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SingletonHolder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;instance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 返回实例&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;我们可以使用&lt;code class=&quot;highlighter-rouge&quot;&gt;factory-method&lt;/code&gt;属性来创建实例:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;beanService&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;com.test.Singleton&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;factory-method=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;getInstance&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section-2&quot;&gt;装配属性&lt;/h2&gt;
+&lt;p&gt;属性装配是以&lt;code class=&quot;highlighter-rouge&quot;&gt;setter&lt;/code&gt;方法为基础的, 如果属性没有&lt;code class=&quot;highlighter-rouge&quot;&gt;setter&lt;/code&gt;方法, 是无法通过这种方式进行属性注入的.&lt;/p&gt;
+
+&lt;p&gt;与构造注入类似, 属性注入也有两种方式: &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;property&amp;gt;&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;p-命名空间&lt;/code&gt;, 如:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- property方式, name属性是必须的 --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;beanService&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;com.test.BeanService&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;name&quot;&lt;/span&gt;  &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Tom&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;otherBean&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;otherBeanId&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- p命名空间 --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;beanService&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;com.test.BeanService&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;p:name&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Tom&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;p:otherBean-ref&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;otherBeanId&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section-3&quot;&gt;装配集合&lt;/h2&gt;
+&lt;p&gt;集合可以作为属性或者构造函数参数的值. Spring 提供了4中集合元素&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;list&amp;gt;&lt;/code&gt;: 装备list类型的值, 允许重复&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;set&amp;gt;&lt;/code&gt;: 装备set类型的值, 不允许重复&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;map&amp;gt;&lt;/code&gt;: 装备map类型的值, 名称和值可以是任意类型&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;props&amp;gt;&lt;/code&gt;: 装备properties类型的值, 名称和值必须是&lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt;型&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;实际上, &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;list&amp;gt;&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;set&amp;gt;&lt;/code&gt;可以装备任意&lt;code class=&quot;highlighter-rouge&quot;&gt;java.util.Collection&lt;/code&gt;甚至是数组, 两者唯一的区别就是&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;set&amp;gt;&lt;/code&gt;中重复元素会被过滤掉; &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;map&amp;gt;&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;props&amp;gt;&lt;/code&gt;元素分别对应&lt;code class=&quot;highlighter-rouge&quot;&gt;java.util.Map&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;java.util.Properties&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;props&amp;gt;&lt;/code&gt;要求键和值都必须是&lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt;类型.&lt;/p&gt;
+
+&lt;h3 id=&quot;listsetarray&quot;&gt;装配List、Set和Array&lt;/h3&gt;
+&lt;p&gt;属性为数组或&lt;code class=&quot;highlighter-rouge&quot;&gt;List&lt;/code&gt;或者&lt;code class=&quot;highlighter-rouge&quot;&gt;Set&lt;/code&gt;都可以这样装配:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 注入值 --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;nameList&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;list&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;Tom&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;Tom&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;Michael&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/list&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 注入bean的引用 --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;otherBeanList&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;list&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;ref&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;bean=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;beanId&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;ref&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;bean=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;beanId&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;ref&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;bean=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;beanId&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/list&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;map&quot;&gt;装配Map&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;map&amp;gt;&lt;/code&gt;元素包含多个&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;entry&amp;gt;&lt;/code&gt;元素, &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;entry&amp;gt;&lt;/code&gt;元素由有个键和一个值组成&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;key&lt;/code&gt;: 指定&lt;code class=&quot;highlighter-rouge&quot;&gt;map&lt;/code&gt;中&lt;code class=&quot;highlighter-rouge&quot;&gt;entry&lt;/code&gt;的键为&lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;key-ref&lt;/code&gt;: 指定&lt;code class=&quot;highlighter-rouge&quot;&gt;map&lt;/code&gt;中&lt;code class=&quot;highlighter-rouge&quot;&gt;entry&lt;/code&gt;的键其他Bean的引用&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;value&lt;/code&gt;: 指定&lt;code class=&quot;highlighter-rouge&quot;&gt;map&lt;/code&gt;中&lt;code class=&quot;highlighter-rouge&quot;&gt;entry&lt;/code&gt;的值为&lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;value-ref&lt;/code&gt;: 指定&lt;code class=&quot;highlighter-rouge&quot;&gt;map&lt;/code&gt;中&lt;code class=&quot;highlighter-rouge&quot;&gt;entry&lt;/code&gt;的值为其他Bean的引用&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;比如:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;map&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;map&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;entry&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;a&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value-ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;helloService&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;entry&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;b&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value-ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;helloService&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;entry&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;c&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value-ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;helloService&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/map&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;properties&quot;&gt;装配Properties&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Properties&lt;/code&gt;类提供了和&lt;code class=&quot;highlighter-rouge&quot;&gt;Map&lt;/code&gt;大致相同的功能, 只是它的键和值都必须是&lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt;类型&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;props&amp;gt;&lt;/code&gt;元素包含多个&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;prop&amp;gt;&lt;/code&gt;元素, &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;prop&amp;gt;&lt;/code&gt;元素有个&lt;code class=&quot;highlighter-rouge&quot;&gt;key&lt;/code&gt;属性. 比如:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;properties&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;props&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;prop&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;a&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Tom&lt;span class=&quot;nt&quot;&gt;&amp;lt;/prop&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;prop&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;b&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Jim&lt;span class=&quot;nt&quot;&gt;&amp;lt;/prop&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;prop&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;c&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Michael&lt;span class=&quot;nt&quot;&gt;&amp;lt;/prop&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/props&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;util-&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;util-命名空间&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;util-命名空间&lt;/code&gt;可以用来装配集合,  它有如下元素:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;util:list&lt;/code&gt;: 创建一个&lt;code class=&quot;highlighter-rouge&quot;&gt;java.util.List&lt;/code&gt;类型的&lt;code class=&quot;highlighter-rouge&quot;&gt;bean&lt;/code&gt;, 其中包含值或引用&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;util:set&lt;/code&gt;: 创建一个&lt;code class=&quot;highlighter-rouge&quot;&gt;java.util.Set&lt;/code&gt;类型的&lt;code class=&quot;highlighter-rouge&quot;&gt;bean&lt;/code&gt;, 其中包含值或引用&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;util:map&lt;/code&gt;: 创建一个&lt;code class=&quot;highlighter-rouge&quot;&gt;java.util.Map&lt;/code&gt;类型的&lt;code class=&quot;highlighter-rouge&quot;&gt;bean&lt;/code&gt;, 其中包含值或引用&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;util:properties&lt;/code&gt;: 创建一个&lt;code class=&quot;highlighter-rouge&quot;&gt;java.util.Properties&lt;/code&gt;类型的&lt;code class=&quot;highlighter-rouge&quot;&gt;bean&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;util:property-path&lt;/code&gt;: 引用一个&lt;code class=&quot;highlighter-rouge&quot;&gt;bean&lt;/code&gt;的属性(或内嵌属性)，并将其暴露为&lt;code class=&quot;highlighter-rouge&quot;&gt;bean&lt;/code&gt;(不太常用)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;util:constant&amp;gt;&lt;/code&gt;: 引用某个类的&lt;code class=&quot;highlighter-rouge&quot;&gt;public static&lt;/code&gt;域, 并将其暴露为&lt;code class=&quot;highlighter-rouge&quot;&gt;bean&lt;/code&gt;(不太常用)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;例如:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;nt&quot;&gt;&amp;lt;util:list&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;listBean&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;Tom&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;Michael&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/util:list&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;util:set&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;setBean&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;Tom&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;Michael&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/util:set&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;util:map&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;mapBean&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;entry&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;key1&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;value1&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;entry&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;key2&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;value2&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/util:map&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;util:properties&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;propertiesBean&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;prop&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;key1&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;value1&lt;span class=&quot;nt&quot;&gt;&amp;lt;/prop&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;prop&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;key2&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;value2&lt;span class=&quot;nt&quot;&gt;&amp;lt;/prop&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/util:properties&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+</description>
+        <pubDate>Thu, 28 Sep 2017 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-09-28-Spring%E4%B8%AD%E7%9A%84XML%E9%85%8D%E7%BD%AE%E7%9A%84%E5%86%99%E6%B3%95.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-09-28-Spring%E4%B8%AD%E7%9A%84XML%E9%85%8D%E7%BD%AE%E7%9A%84%E5%86%99%E6%B3%95.html</guid>
+        
+        <category>Spring</category>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
     
       <item>
         <title>Spring Bean的生命周期</title>
@@ -2067,60 +2319,6 @@
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-03-08-HashMap%E8%AF%A6%E8%A7%A3.html</guid>
         
         <category>Java</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>事务的隔离级别</title>
-        <description>&lt;hr /&gt;
-
-&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#ru&quot;&gt;未授权读取(RU)&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#rc&quot;&gt;授权读取(RC)&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#rr&quot;&gt;可重复读取(RR)&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#s&quot;&gt;串行化(S)&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-&lt;p&gt;在标准的SQL规范中，定义了4个事务隔离级别。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/static/images/isolation.png&quot; alt=&quot;隔离级别&quot; title=&quot;隔离级别&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;ru&quot;&gt;未授权读取(RU)&lt;/h2&gt;
-&lt;p&gt;未授权读取也被称作读未提交(&lt;code class=&quot;highlighter-rouge&quot;&gt;Read Uncommitted&lt;/code&gt;)，这种隔离级别允许读取未提交的数据，隔离级别最低。&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;RU&lt;/code&gt;这种隔离级别中，允许&lt;code class=&quot;highlighter-rouge&quot;&gt;脏读&lt;/code&gt;, 但不允许出现&lt;code class=&quot;highlighter-rouge&quot;&gt;丢失更新&lt;/code&gt;。  &lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;丢失更新&lt;/code&gt;: 两个事务同时更新统一数据时, 会发生更新丢失。&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;脏读&lt;/code&gt;: 一个事务读取到另一个事务未提交的修改时, 会产生脏读。如:事务A把一数据从1&lt;code class=&quot;highlighter-rouge&quot;&gt;update&lt;/code&gt;成2,&lt;code class=&quot;highlighter-rouge&quot;&gt;update&lt;/code&gt;成3直到&lt;code class=&quot;highlighter-rouge&quot;&gt;update&lt;/code&gt;成9, 事务B每次&lt;code class=&quot;highlighter-rouge&quot;&gt;select&lt;/code&gt;都能看到事务A的中间值(比如2,3或7)，对B来说这些就是脏数据。&lt;/p&gt;
-
-&lt;h2 id=&quot;rc&quot;&gt;授权读取(RC)&lt;/h2&gt;
-&lt;p&gt;授权读取也被称为读已提交(&lt;code class=&quot;highlighter-rouge&quot;&gt;Read Committed&lt;/code&gt;)，这种隔离级别只允许读取已经被提交的数据。&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;RC&lt;/code&gt;这种隔离级别中允许出现&lt;code class=&quot;highlighter-rouge&quot;&gt;不可重复读&lt;/code&gt;, 但不允许&lt;code class=&quot;highlighter-rouge&quot;&gt;脏读&lt;/code&gt;  &lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;不可重复读&lt;/code&gt;: 同一查询在同一事务中多次进行，由于其他提交事务所做的 &lt;strong&gt;修改或删除&lt;/strong&gt;，每次返回不同的结果集，这就发生非重复读。 如:事务A操作数据1, 要把它&lt;code class=&quot;highlighter-rouge&quot;&gt;update&lt;/code&gt;成9, 事务B第一次&lt;code class=&quot;highlighter-rouge&quot;&gt;select&lt;/code&gt;发现是1, 此时事务A提交了, 事务B再次&lt;code class=&quot;highlighter-rouge&quot;&gt;select&lt;/code&gt;发现变成了9, 这种现象叫做&lt;code class=&quot;highlighter-rouge&quot;&gt;不可重复读&lt;/code&gt;。 &lt;br /&gt;
-它的危害也很明显, 因为B第一次读取的时候是1, 若果要对它进行+1在更新回去, 就会变成2, 但实际上这是不对的。(这里你不能用mysql做实验, 因为mysql不再这个隔离级别, 所以这种情况在mysql中不会发生)&lt;/p&gt;
-
-&lt;h2 id=&quot;rr&quot;&gt;可重复读取(RR)&lt;/h2&gt;
-&lt;p&gt;可重复读取(Repeatable Read), 这种隔离级别保证在一个事务中，多次读取到的数据都是和事务开始时是一样的。&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;RR&lt;/code&gt;这种隔离级别允许出现&lt;code class=&quot;highlighter-rouge&quot;&gt;幻读&lt;/code&gt;，但不允许&lt;code class=&quot;highlighter-rouge&quot;&gt;不可重复读&lt;/code&gt;。&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;幻读&lt;/code&gt;: 同一查询在同一事务中多次进行，由于其他提交事务所做的 &lt;strong&gt;插入&lt;/strong&gt; 操作，每次返回不同的结果集，此时发生幻像读。在&lt;code class=&quot;highlighter-rouge&quot;&gt;RR&lt;/code&gt;中, 事务B读取到的数据值都是跟事务开始时一致(所以可以重复读), 但若事务A新&lt;code class=&quot;highlighter-rouge&quot;&gt;insert&lt;/code&gt;了一条数据, 事务B是可见的, 因此对于事务B来说，开始时没有这个数据，但是过了一会儿却多出来一条数据(数据不一致了)，因此对于事务B来说就很莫名其妙。  &lt;/p&gt;
-
-&lt;p&gt;MySql就是在&lt;code class=&quot;highlighter-rouge&quot;&gt;RR&lt;/code&gt;隔离级别上的, 但它在此基础上又加了&lt;code class=&quot;highlighter-rouge&quot;&gt;gap&lt;/code&gt;锁, 保证了不会出现&lt;code class=&quot;highlighter-rouge&quot;&gt;幻读&lt;/code&gt;。其实MySql中并没有区分&lt;code class=&quot;highlighter-rouge&quot;&gt;不可重复读&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;幻读&lt;/code&gt;,MySql统称为&lt;code class=&quot;highlighter-rouge&quot;&gt;幻读&lt;/code&gt;并且禁止了&lt;code class=&quot;highlighter-rouge&quot;&gt;幻读&lt;/code&gt;现象的出现。&lt;/p&gt;
-
-&lt;h2 id=&quot;s&quot;&gt;串行化(S)&lt;/h2&gt;
-&lt;p&gt;串行化(Serializable)是最严格的事务隔离级别，它要求所有的事务都被串行执行。&lt;/p&gt;
-
-&lt;hr /&gt;
-</description>
-        <pubDate>Fri, 03 Mar 2017 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-03-03-%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-03-03-%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB.html</guid>
-        
-        <category>sql</category>
         
         
         <category>编程技术</category>
