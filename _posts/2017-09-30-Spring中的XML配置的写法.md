@@ -1,7 +1,7 @@
 ---
 layout: blog
 title:  Spring中的XML配置的写法
-date:   2017-09-28
+date:   2017-09-30
 category: 编程技术
 tag: Spring
 ---
