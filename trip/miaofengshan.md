@@ -47,9 +47,8 @@ tag:
 
 *****
 
-## 相关链接
+## 妙峰山充电桩
 
 * [妙峰山充电桩](http://www.sohu.com/a/106848628_383324)
-* [妙峰山充电桩](http://takungpao.news18a.com/news/20160721/story_972166_1.html)
 
 *****
