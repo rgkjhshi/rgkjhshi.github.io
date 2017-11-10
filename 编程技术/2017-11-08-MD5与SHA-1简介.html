@@ -146,18 +146,7 @@ jQuery(function(){
   <li>利用<code class="highlighter-rouge">Guava</code>中的工具</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MD5Util</span> <span class="o">{</span>
-
-    <span class="cm">/**
-     * 对source按UTF_8编码进行md5签名
-     *
-     * @param source 待签名的原串
-     * @return md5签名值（(32位小写16进制字符串）
-     */</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">encode</span><span class="o">(</span><span class="n">String</span> <span class="n">source</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">Hashing</span><span class="o">.</span><span class="na">md5</span><span class="o">().</span><span class="na">newHasher</span><span class="o">().</span><span class="na">putString</span><span class="o">(</span><span class="n">source</span><span class="o">,</span> <span class="n">Charsets</span><span class="o">.</span><span class="na">UTF_8</span><span class="o">).</span><span class="na">hash</span><span class="o">().</span><span class="na">toString</span><span class="o">();</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="n">Hashing</span><span class="o">.</span><span class="na">md5</span><span class="o">().</span><span class="na">newHasher</span><span class="o">().</span><span class="na">putString</span><span class="o">(</span><span class="n">source</span><span class="o">,</span> <span class="n">Charsets</span><span class="o">.</span><span class="na">UTF_8</span><span class="o">).</span><span class="na">hash</span><span class="o">().</span><span class="na">toString</span><span class="o">();</span>
 </code></pre>
 </div>
 
@@ -167,7 +156,7 @@ jQuery(function(){
 
 <p>下面这个工具完全是通过<code class="highlighter-rouge">JDK</code>实现的, 没有使用第三方工具包</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MD5Util</span> <span class="o">{</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MD5Utils</span> <span class="o">{</span>
 
     <span class="cm">/**
      * 对source按UTF_8编码进行md5签名
@@ -175,7 +164,7 @@ jQuery(function(){
      * @param source 待签名的原串
      * @return md5签名值（(32位小写16进制字符串）
      */</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">encode1</span><span class="o">(</span><span class="n">String</span> <span class="n">source</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">encode</span><span class="o">(</span><span class="n">String</span> <span class="n">source</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">return</span> <span class="n">encode</span><span class="o">(</span><span class="n">source</span><span class="o">,</span> <span class="s">"UTF-8"</span><span class="o">);</span>
     <span class="o">}</span>
 

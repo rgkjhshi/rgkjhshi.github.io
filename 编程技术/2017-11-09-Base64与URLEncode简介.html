@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="Base64与URLEncode简介, 编程技术,  逆水行舟" />
+    <meta name="description" content="Base64与URLEncode简介, 编程技术,  " />
+
+    <title>逆水行舟</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-11-09-Base64%E4%B8%8EURLEncode%E7%AE%80%E4%BB%8B.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="/static/js/jquery.qrcode.min.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="/static/js/uikit.min.js"></script>
+    <!-- quietflow -->
+    <!-- <script type="text/javascript" src="http://loveshisong.cn/static/js/quietflow.min.js"></script> -->
+    <!-- UK sticky -->
+    <script type="text/javascript" src="/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "shisong"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" data-uk-sticky>
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <script type="text/javascript">
+jQuery(function(){
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-11-09-Base64%E4%B8%8EURLEncode%E7%AE%80%E4%BB%8B.html"
+    });
+})
+</script>
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>Base64与URLEncode简介</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <hr />
+
+<ul id="markdown-toc">
+  <li><a href="#base64">Base64简介</a>    <ul>
+      <li><a href="#base64-1">Base64原理</a></li>
+      <li><a href="#url-safebase64">URL safe的Base64编码</a></li>
+      <li><a href="#base64-2">Base64工具类</a></li>
+    </ul>
+  </li>
+  <li><a href="#md5sha-1">MD5与SHA-1的比较</a></li>
+  <li><a href="#section">相关链接</a></li>
+</ul>
+
+<hr />
+
+<h2 id="base64">Base64简介</h2>
+<p><code class="highlighter-rouge">Base64</code>是最常见的一种基于64个可打印字符来表示二进制数据的方法.</p>
+
+<h3 id="base64-1">Base64原理</h3>
+
+<ul>
+  <li>首先, <code class="highlighter-rouge">Base64</code>基于64个可打印字符, 这64个字符有<code class="highlighter-rouge">A~Z</code>, <code class="highlighter-rouge">a~z</code>, <code class="highlighter-rouge">0~9</code>, <code class="highlighter-rouge">+</code>, <code class="highlighter-rouge">/</code></li>
+</ul>
+
+<blockquote>
+  <p><code class="highlighter-rouge">['A', 'B', 'C', ... 'a', 'b', 'c', ... '0', '1', ... '+', '/']</code></p>
+</blockquote>
+
+<ul>
+  <li>然后, 对二进制数据进行处理, 每3个字节一组, 一共是<code class="highlighter-rouge">3x8=24bit</code>, 划为4组, 每组正好6个bit:</li>
+</ul>
+
+<p><img src="/static/images/base64.png" alt="Base64" title="Base64" /></p>
+
+<p>这样我们得到4个数字作为索引, 然后查表, 获得相应的4个字符, 就是编码后的字符串。<br />
+<code class="highlighter-rouge">Base64</code>编码会把3字节的二进制数据编码为4字节的文本数据, 长度增加33%, 好处是编码后的文本数据可以在邮件正文、网页等直接显示。</p>
+
+<ul>
+  <li>另外, 如果要编码的二进制数据不是3的倍数, 最后会剩下1个或2个字节, <code class="highlighter-rouge">Base64</code>会先用<code class="highlighter-rouge">\x00</code>字节在末尾补足后, 再在编码的末尾加上1个或2个<code class="highlighter-rouge">=</code>, 表示补了多少字节, 解码的时候, 会自动去掉。</li>
+</ul>
+
+<p>由于<code class="highlighter-rouge">=</code>在<code class="highlighter-rouge">URL、Cookie</code>里面会造成歧义, 所以, 很多<code class="highlighter-rouge">Base64</code>编码后会把<code class="highlighter-rouge">=</code>去掉。因为<code class="highlighter-rouge">Base64</code>是把3个字节变为4个字节, 所以, <code class="highlighter-rouge">Base64</code>编码的长度永远是4的倍数, 因此, 加上=把Base64字符串的长度变为4的倍数，就可以正常解码了。</p>
+
+<h3 id="url-safebase64">URL safe的Base64编码</h3>
+
+<p>由于标准的<code class="highlighter-rouge">Base64</code>编码后可能出现字符<code class="highlighter-rouge">+</code>和<code class="highlighter-rouge">/</code>, 在URL中就不能直接作为参数, 所以又有一种<code class="highlighter-rouge">url safe</code>的<code class="highlighter-rouge">base64</code>编码, 其实就是把字符<code class="highlighter-rouge">+</code>和<code class="highlighter-rouge">/</code>分别变成<code class="highlighter-rouge">-</code>和<code class="highlighter-rouge">_</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>        <span class="c1">// 下面这段代码来自于JDK1.8中的 java.util.Base64</span>
+        <span class="cm">/**
+         * This array is a lookup table that translates 6-bit positive integer
+         * index values into their "Base64 Alphabet" equivalents as specified
+         * in "Table 1: The Base64 Alphabet" of RFC 2045 (and RFC 4648).
+         */</span>
+        <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">char</span><span class="o">[]</span> <span class="n">toBase64</span> <span class="o">=</span> <span class="o">{</span>
+            <span class="sc">'A'</span><span class="o">,</span> <span class="sc">'B'</span><span class="o">,</span> <span class="sc">'C'</span><span class="o">,</span> <span class="sc">'D'</span><span class="o">,</span> <span class="sc">'E'</span><span class="o">,</span> <span class="sc">'F'</span><span class="o">,</span> <span class="sc">'G'</span><span class="o">,</span> <span class="sc">'H'</span><span class="o">,</span> <span class="sc">'I'</span><span class="o">,</span> <span class="sc">'J'</span><span class="o">,</span> <span class="sc">'K'</span><span class="o">,</span> <span class="sc">'L'</span><span class="o">,</span> <span class="sc">'M'</span><span class="o">,</span>
+            <span class="sc">'N'</span><span class="o">,</span> <span class="sc">'O'</span><span class="o">,</span> <span class="sc">'P'</span><span class="o">,</span> <span class="sc">'Q'</span><span class="o">,</span> <span class="sc">'R'</span><span class="o">,</span> <span class="sc">'S'</span><span class="o">,</span> <span class="sc">'T'</span><span class="o">,</span> <span class="sc">'U'</span><span class="o">,</span> <span class="sc">'V'</span><span class="o">,</span> <span class="sc">'W'</span><span class="o">,</span> <span class="sc">'X'</span><span class="o">,</span> <span class="sc">'Y'</span><span class="o">,</span> <span class="sc">'Z'</span><span class="o">,</span>
+            <span class="sc">'a'</span><span class="o">,</span> <span class="sc">'b'</span><span class="o">,</span> <span class="sc">'c'</span><span class="o">,</span> <span class="sc">'d'</span><span class="o">,</span> <span class="sc">'e'</span><span class="o">,</span> <span class="sc">'f'</span><span class="o">,</span> <span class="sc">'g'</span><span class="o">,</span> <span class="sc">'h'</span><span class="o">,</span> <span class="sc">'i'</span><span class="o">,</span> <span class="sc">'j'</span><span class="o">,</span> <span class="sc">'k'</span><span class="o">,</span> <span class="sc">'l'</span><span class="o">,</span> <span class="sc">'m'</span><span class="o">,</span>
+            <span class="sc">'n'</span><span class="o">,</span> <span class="sc">'o'</span><span class="o">,</span> <span class="sc">'p'</span><span class="o">,</span> <span class="sc">'q'</span><span class="o">,</span> <span class="sc">'r'</span><span class="o">,</span> <span class="sc">'s'</span><span class="o">,</span> <span class="sc">'t'</span><span class="o">,</span> <span class="sc">'u'</span><span class="o">,</span> <span class="sc">'v'</span><span class="o">,</span> <span class="sc">'w'</span><span class="o">,</span> <span class="sc">'x'</span><span class="o">,</span> <span class="sc">'y'</span><span class="o">,</span> <span class="sc">'z'</span><span class="o">,</span>
+            <span class="sc">'0'</span><span class="o">,</span> <span class="sc">'1'</span><span class="o">,</span> <span class="sc">'2'</span><span class="o">,</span> <span class="sc">'3'</span><span class="o">,</span> <span class="sc">'4'</span><span class="o">,</span> <span class="sc">'5'</span><span class="o">,</span> <span class="sc">'6'</span><span class="o">,</span> <span class="sc">'7'</span><span class="o">,</span> <span class="sc">'8'</span><span class="o">,</span> <span class="sc">'9'</span><span class="o">,</span> <span class="sc">'+'</span><span class="o">,</span> <span class="sc">'/'</span>
+        <span class="o">};</span>
+
+        <span class="cm">/**
+         * It's the lookup table for "URL and Filename safe Base64" as specified
+         * in Table 2 of the RFC 4648, with the '+' and '/' changed to '-' and
+         * '_'. This table is used when BASE64_URL is specified.
+         */</span>
+        <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">char</span><span class="o">[]</span> <span class="n">toBase64URL</span> <span class="o">=</span> <span class="o">{</span>
+            <span class="sc">'A'</span><span class="o">,</span> <span class="sc">'B'</span><span class="o">,</span> <span class="sc">'C'</span><span class="o">,</span> <span class="sc">'D'</span><span class="o">,</span> <span class="sc">'E'</span><span class="o">,</span> <span class="sc">'F'</span><span class="o">,</span> <span class="sc">'G'</span><span class="o">,</span> <span class="sc">'H'</span><span class="o">,</span> <span class="sc">'I'</span><span class="o">,</span> <span class="sc">'J'</span><span class="o">,</span> <span class="sc">'K'</span><span class="o">,</span> <span class="sc">'L'</span><span class="o">,</span> <span class="sc">'M'</span><span class="o">,</span>
+            <span class="sc">'N'</span><span class="o">,</span> <span class="sc">'O'</span><span class="o">,</span> <span class="sc">'P'</span><span class="o">,</span> <span class="sc">'Q'</span><span class="o">,</span> <span class="sc">'R'</span><span class="o">,</span> <span class="sc">'S'</span><span class="o">,</span> <span class="sc">'T'</span><span class="o">,</span> <span class="sc">'U'</span><span class="o">,</span> <span class="sc">'V'</span><span class="o">,</span> <span class="sc">'W'</span><span class="o">,</span> <span class="sc">'X'</span><span class="o">,</span> <span class="sc">'Y'</span><span class="o">,</span> <span class="sc">'Z'</span><span class="o">,</span>
+            <span class="sc">'a'</span><span class="o">,</span> <span class="sc">'b'</span><span class="o">,</span> <span class="sc">'c'</span><span class="o">,</span> <span class="sc">'d'</span><span class="o">,</span> <span class="sc">'e'</span><span class="o">,</span> <span class="sc">'f'</span><span class="o">,</span> <span class="sc">'g'</span><span class="o">,</span> <span class="sc">'h'</span><span class="o">,</span> <span class="sc">'i'</span><span class="o">,</span> <span class="sc">'j'</span><span class="o">,</span> <span class="sc">'k'</span><span class="o">,</span> <span class="sc">'l'</span><span class="o">,</span> <span class="sc">'m'</span><span class="o">,</span>
+            <span class="sc">'n'</span><span class="o">,</span> <span class="sc">'o'</span><span class="o">,</span> <span class="sc">'p'</span><span class="o">,</span> <span class="sc">'q'</span><span class="o">,</span> <span class="sc">'r'</span><span class="o">,</span> <span class="sc">'s'</span><span class="o">,</span> <span class="sc">'t'</span><span class="o">,</span> <span class="sc">'u'</span><span class="o">,</span> <span class="sc">'v'</span><span class="o">,</span> <span class="sc">'w'</span><span class="o">,</span> <span class="sc">'x'</span><span class="o">,</span> <span class="sc">'y'</span><span class="o">,</span> <span class="sc">'z'</span><span class="o">,</span>
+            <span class="sc">'0'</span><span class="o">,</span> <span class="sc">'1'</span><span class="o">,</span> <span class="sc">'2'</span><span class="o">,</span> <span class="sc">'3'</span><span class="o">,</span> <span class="sc">'4'</span><span class="o">,</span> <span class="sc">'5'</span><span class="o">,</span> <span class="sc">'6'</span><span class="o">,</span> <span class="sc">'7'</span><span class="o">,</span> <span class="sc">'8'</span><span class="o">,</span> <span class="sc">'9'</span><span class="o">,</span> <span class="sc">'-'</span><span class="o">,</span> <span class="sc">'_'</span>
+        <span class="o">};</span>
+</code></pre>
+</div>
+
+<h3 id="base64-2">Base64工具类</h3>
+<p>在java中有很多MD5实现, 其中<code class="highlighter-rouge">Guava</code>和<code class="highlighter-rouge">JDK</code>都有, 下面是一些例子</p>
+
+<ul>
+  <li>利用<code class="highlighter-rouge">Guava</code>中的工具</li>
+</ul>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MD5Util</span> <span class="o">{</span>
+
+    <span class="cm">/**
+     * 对source按UTF_8编码进行md5签名
+     *
+     * @param source 待签名的原串
+     * @return md5签名值（(32位小写16进制字符串）
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">encode</span><span class="o">(</span><span class="n">String</span> <span class="n">source</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">Hashing</span><span class="o">.</span><span class="na">md5</span><span class="o">().</span><span class="na">newHasher</span><span class="o">().</span><span class="na">putString</span><span class="o">(</span><span class="n">source</span><span class="o">,</span> <span class="n">Charsets</span><span class="o">.</span><span class="na">UTF_8</span><span class="o">).</span><span class="na">hash</span><span class="o">().</span><span class="na">toString</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<ul>
+  <li>使用<code class="highlighter-rouge">JDK</code>的工具</li>
+</ul>
+
+<p>下面这个工具完全是通过<code class="highlighter-rouge">JDK</code>实现的, 没有使用第三方工具包</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MD5Util</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<hr />
+
+<hr />
+
+<h2 id="md5sha-1">MD5与SHA-1的比较</h2>
+<p><code class="highlighter-rouge">MD5</code>与<code class="highlighter-rouge">SHA-1</code>都属于哈希散列算法, 都是从<code class="highlighter-rouge">MD4</code>发展而来，它们的结构和强度等特性有很多相似之处, 他们的区别主要有下面这些:</p>
+
+<ul>
+  <li>安全性: <code class="highlighter-rouge">MD5</code>摘要长度128位(16字节), <code class="highlighter-rouge">SHA-1</code>摘要长度160位(20字节)</li>
+  <li>速度: <code class="highlighter-rouge">SHA1</code>的运算步骤(80步)比<code class="highlighter-rouge">MD5</code>(64步)多了16步, 而且SHA1记录单元的长度比MD5多了32位, <code class="highlighter-rouge">SHA1</code>速度大约比<code class="highlighter-rouge">MD5</code>慢了<code class="highlighter-rouge">25％</code></li>
+  <li>简易性: 两种方法都是相当的简单，在实现上不需要很复杂的程序或是大量存储空间。总体上来讲, <code class="highlighter-rouge">SHA1</code>对每一步骤的操作描述比<code class="highlighter-rouge">MD5</code>简单</li>
+</ul>
+
+<hr />
+
+<h2 id="section">相关链接</h2>
+
+<ul>
+  <li><a href="http://blog.csdn.net/woxinfeixiangliudan/article/details/50371932">关于MD5和SHA-1的简单的介绍</a></li>
+  <li><a href="https://www.cnblogs.com/scu-cjx/p/6878853.html">SHA1算法原理</a></li>
+</ul>
+
+<hr />
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/Base64与URLEncode简介" data-title="Base64与URLEncode简介" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-11-09-Base64%E4%B8%8EURLEncode%E7%AE%80%E4%BB%8B.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
+
+</body>
+
+</html>
