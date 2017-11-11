@@ -1,7 +1,7 @@
 ---
 layout: blog
 title:  Base64与URLEncode简介
-date:   2017-11-09
+date:   2017-11-11
 category: 编程技术
 tag:
 ---
@@ -32,7 +32,7 @@ tag:
 
 * 另外, 如果要编码的二进制数据不是3的倍数, 最后会剩下1个或2个字节, `Base64`会先用`\x00`字节在末尾补足后, 再在编码的末尾加上1个或2个`=`, 表示补了多少字节, 解码的时候, 会自动去掉。
 
-由于`=`在`URL、Cookie`里面会造成歧义, 所以, 很多`Base64`编码后会把`=`去掉。因为`Base64`是把3个字节变为4个字节, 所以, `Base64`编码的长度永远是4的倍数, 因此, 加上=把Base64字符串的长度变为4的倍数，就可以正常解码了。
+由于`=`在`URL、Cookie`里面会造成歧义, 所以, 很多`Base64`编码后会把`=`去掉。因为`Base64`是把3个字节变为4个字节, 所以, `Base64`编码的长度永远是4的倍数, 因此, 加上`=`把Base64字符串的长度变为4的倍数，就可以正常解码了。
 
 ### URL safe的Base64编码
 
@@ -68,44 +68,70 @@ tag:
 ~~~
 
 ### Base64工具类
-在java中有很多MD5实现, 其中`Guava`和`JDK`都有, 下面是一些例子
 
-* 利用`Guava`中的工具
+* 在`Guava`中有`BaseEncoding`类
+* 在`JDK8`中有专门的工具类`java.util.Base64`
+* 在`JDK7中`也有`sun.misc.BASE64Encoder`和`sun.misc.BASE64Decoder`两个类
+* 在`Spring`中, 也提供了一个`Base64Utils`, 它自动根据反射来决定是使用`Java 8`的 `java.util.Base64`还是`Apache Commons Codec`的`org.apache.commons.codec.binary.Base64`
+* 除了`JDK7`, 其他的工具类中都有`url safe`的`Base64`编码方法
 
 ~~~java
-public class MD5Util {
-
-    /**
-     * 对source按UTF_8编码进行md5签名
-     *
-     * @param source 待签名的原串
-     * @return md5签名值（(32位小写16进制字符串）
-     */
-    public static String encode(String source) {
-        return Hashing.md5().newHasher().putString(source, Charsets.UTF_8).hash().toString();
+    // guava 工具类的使用
+    public void testBase64() {
+        // 原串
+        String origin = "abc";
+        // encode
+        String encodeString = BaseEncoding.base64().encode(origin.getBytes());
+        // decode
+        String result = new String(BaseEncoding.base64().decode(encodeString));
+        // result = origin
+        Assert.assertEquals(origin, result);
     }
-}
-~~~
-
-* 使用`JDK`的工具
-
-下面这个工具完全是通过`JDK`实现的, 没有使用第三方工具包
-
-~~~java
-public class MD5Util
-}
+    // Spring 工具类的使用
+    public void testBase64() {
+        // 原串
+        String origin = "abc";
+        // encode
+        String encodeString = Base64Utils.encodeToString(origin.getBytes());
+        // decode
+        String result = new String(Base64Utils.decodeFromString(encodeString));
+        // result = origin
+        Assert.assertEquals(origin, result);
+    }
+    // JDK8 工具类的使用
+    public void testBase64() {
+        // 原串
+        String origin = "abc";
+        // encode
+        String encodeString = Base64.getEncoder().encodeToString(origin.getBytes());
+        // decode
+        String result = new String(Base64.getDecoder().decode(encodeString.getBytes()));
+        // result = origin
+        Assert.assertEquals(origin, result);
+    }
+    // JDK7 工具类的使用(解码时会抛出 IOException)
+    public void testBase64() {
+        // 原串
+        String origin = "abc";
+        // encode
+        String encodeString = new BASE64Encoder().encodeBuffer(origin.getBytes());
+        // decode
+        String result = null;
+        try {
+            result = new String(new BASE64Decoder().decodeBuffer(encodeString));
+        } catch (IOException e) {
+            logger.error("Base64解码失败", e);
+        }
+        // result = origin
+        Assert.assertEquals(origin, result);
+    }
 ~~~
 
 *****
 
+## URLEncode简介
+
 *****
-
-## MD5与SHA-1的比较
-`MD5`与`SHA-1`都属于哈希散列算法, 都是从`MD4`发展而来，它们的结构和强度等特性有很多相似之处, 他们的区别主要有下面这些:
-
-* 安全性: `MD5`摘要长度128位(16字节), `SHA-1`摘要长度160位(20字节)
-* 速度: `SHA1`的运算步骤(80步)比`MD5`(64步)多了16步, 而且SHA1记录单元的长度比MD5多了32位, `SHA1`速度大约比`MD5`慢了`25％`
-* 简易性: 两种方法都是相当的简单，在实现上不需要很复杂的程序或是大量存储空间。总体上来讲, `SHA1`对每一步骤的操作描述比`MD5`简单
 
 *****
 
