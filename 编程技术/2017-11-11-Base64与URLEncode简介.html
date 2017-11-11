@@ -137,8 +137,10 @@ jQuery(function(){
 <code class="highlighter-rouge">Base64</code>编码会把3字节的二进制数据编码为4字节的文本数据, 长度增加33%, 好处是编码后的文本数据可以在邮件正文、网页等直接显示。</p>
 
 <ul>
-  <li>另外, 如果要编码的二进制数据不是3的倍数, 最后会剩下1个或2个字节, <code class="highlighter-rouge">Base64</code>会先用<code class="highlighter-rouge">\x00</code>字节在末尾补足后, 再在编码的末尾加上1个或2个<code class="highlighter-rouge">=</code>, 表示补了多少字节, 解码的时候, 会自动去掉。</li>
+  <li>另外, 如果要编码的二进制数据不是3的倍数, 最后会剩下1个或2个字节, <code class="highlighter-rouge">Base64</code>会先用<code class="highlighter-rouge">\x00</code>在末尾补足后, 再在编码的末尾加上1个或2个<code class="highlighter-rouge">=</code>, 表示补了多少字节, 解码的时候, 会自动去掉。</li>
 </ul>
+
+<p><img src="/static/images/base64.jpeg" alt="Base64" title="Base64" /></p>
 
 <p>由于<code class="highlighter-rouge">=</code>在<code class="highlighter-rouge">URL、Cookie</code>里面会造成歧义, 所以, 很多<code class="highlighter-rouge">Base64</code>编码后会把<code class="highlighter-rouge">=</code>去掉。因为<code class="highlighter-rouge">Base64</code>是把3个字节变为4个字节, 所以, <code class="highlighter-rouge">Base64</code>编码的长度永远是4的倍数, 因此, 加上<code class="highlighter-rouge">=</code>把Base64字符串的长度变为4的倍数，就可以正常解码了。</p>
 

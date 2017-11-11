@@ -5,8 +5,8 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 11 Nov 2017 15:14:21 +0800</pubDate>
-    <lastBuildDate>Sat, 11 Nov 2017 15:14:21 +0800</lastBuildDate>
+    <pubDate>Sat, 11 Nov 2017 15:19:05 +0800</pubDate>
+    <lastBuildDate>Sat, 11 Nov 2017 15:19:05 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
@@ -49,8 +49,10 @@
 &lt;code class=&quot;highlighter-rouge&quot;&gt;Base64&lt;/code&gt;编码会把3字节的二进制数据编码为4字节的文本数据, 长度增加33%, 好处是编码后的文本数据可以在邮件正文、网页等直接显示。&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;另外, 如果要编码的二进制数据不是3的倍数, 最后会剩下1个或2个字节, &lt;code class=&quot;highlighter-rouge&quot;&gt;Base64&lt;/code&gt;会先用&lt;code class=&quot;highlighter-rouge&quot;&gt;\x00&lt;/code&gt;字节在末尾补足后, 再在编码的末尾加上1个或2个&lt;code class=&quot;highlighter-rouge&quot;&gt;=&lt;/code&gt;, 表示补了多少字节, 解码的时候, 会自动去掉。&lt;/li&gt;
+  &lt;li&gt;另外, 如果要编码的二进制数据不是3的倍数, 最后会剩下1个或2个字节, &lt;code class=&quot;highlighter-rouge&quot;&gt;Base64&lt;/code&gt;会先用&lt;code class=&quot;highlighter-rouge&quot;&gt;\x00&lt;/code&gt;在末尾补足后, 再在编码的末尾加上1个或2个&lt;code class=&quot;highlighter-rouge&quot;&gt;=&lt;/code&gt;, 表示补了多少字节, 解码的时候, 会自动去掉。&lt;/li&gt;
 &lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/base64.jpeg&quot; alt=&quot;Base64&quot; title=&quot;Base64&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;由于&lt;code class=&quot;highlighter-rouge&quot;&gt;=&lt;/code&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;URL、Cookie&lt;/code&gt;里面会造成歧义, 所以, 很多&lt;code class=&quot;highlighter-rouge&quot;&gt;Base64&lt;/code&gt;编码后会把&lt;code class=&quot;highlighter-rouge&quot;&gt;=&lt;/code&gt;去掉。因为&lt;code class=&quot;highlighter-rouge&quot;&gt;Base64&lt;/code&gt;是把3个字节变为4个字节, 所以, &lt;code class=&quot;highlighter-rouge&quot;&gt;Base64&lt;/code&gt;编码的长度永远是4的倍数, 因此, 加上&lt;code class=&quot;highlighter-rouge&quot;&gt;=&lt;/code&gt;把Base64字符串的长度变为4的倍数，就可以正常解码了。&lt;/p&gt;
 
