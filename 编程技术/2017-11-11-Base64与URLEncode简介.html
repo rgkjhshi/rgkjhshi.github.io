@@ -13,7 +13,7 @@
     <!-- ico图标 -->
     <link rel="shortcut icon" type="image/x-icon" media="screen" href="/static/favicon.ico" />
     <!-- 搜索引擎收入相关 -->
-    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-11-09-Base64%E4%B8%8EURLEncode%E7%AE%80%E4%BB%8B.html" />
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-11-11-Base64%E4%B8%8EURLEncode%E7%AE%80%E4%BB%8B.html" />
     <!-- rss输出源 -->
     <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
     <!-- jquery -->
@@ -87,7 +87,7 @@ jQuery(function(){
 	jQuery('#qrcode').qrcode({
         width: 150,
         height: 150,
-        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-11-09-Base64%E4%B8%8EURLEncode%E7%AE%80%E4%BB%8B.html"
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-11-11-Base64%E4%B8%8EURLEncode%E7%AE%80%E4%BB%8B.html"
     });
 })
 </script>
@@ -108,7 +108,7 @@ jQuery(function(){
       <li><a href="#base64-2">Base64工具类</a></li>
     </ul>
   </li>
-  <li><a href="#md5sha-1">MD5与SHA-1的比较</a></li>
+  <li><a href="#urlencode">URLEncode简介</a></li>
   <li><a href="#section">相关链接</a></li>
 </ul>
 
@@ -140,7 +140,7 @@ jQuery(function(){
   <li>另外, 如果要编码的二进制数据不是3的倍数, 最后会剩下1个或2个字节, <code class="highlighter-rouge">Base64</code>会先用<code class="highlighter-rouge">\x00</code>字节在末尾补足后, 再在编码的末尾加上1个或2个<code class="highlighter-rouge">=</code>, 表示补了多少字节, 解码的时候, 会自动去掉。</li>
 </ul>
 
-<p>由于<code class="highlighter-rouge">=</code>在<code class="highlighter-rouge">URL、Cookie</code>里面会造成歧义, 所以, 很多<code class="highlighter-rouge">Base64</code>编码后会把<code class="highlighter-rouge">=</code>去掉。因为<code class="highlighter-rouge">Base64</code>是把3个字节变为4个字节, 所以, <code class="highlighter-rouge">Base64</code>编码的长度永远是4的倍数, 因此, 加上=把Base64字符串的长度变为4的倍数，就可以正常解码了。</p>
+<p>由于<code class="highlighter-rouge">=</code>在<code class="highlighter-rouge">URL、Cookie</code>里面会造成歧义, 所以, 很多<code class="highlighter-rouge">Base64</code>编码后会把<code class="highlighter-rouge">=</code>去掉。因为<code class="highlighter-rouge">Base64</code>是把3个字节变为4个字节, 所以, <code class="highlighter-rouge">Base64</code>编码的长度永远是4的倍数, 因此, 加上<code class="highlighter-rouge">=</code>把Base64字符串的长度变为4的倍数，就可以正常解码了。</p>
 
 <h3 id="url-safebase64">URL safe的Base64编码</h3>
 
@@ -176,50 +176,72 @@ jQuery(function(){
 </div>
 
 <h3 id="base64-2">Base64工具类</h3>
-<p>在java中有很多MD5实现, 其中<code class="highlighter-rouge">Guava</code>和<code class="highlighter-rouge">JDK</code>都有, 下面是一些例子</p>
 
 <ul>
-  <li>利用<code class="highlighter-rouge">Guava</code>中的工具</li>
+  <li>在<code class="highlighter-rouge">Guava</code>中有<code class="highlighter-rouge">BaseEncoding</code>类</li>
+  <li>在<code class="highlighter-rouge">JDK8</code>中有专门的工具类<code class="highlighter-rouge">java.util.Base64</code></li>
+  <li>在<code class="highlighter-rouge">JDK7中</code>也有<code class="highlighter-rouge">sun.misc.BASE64Encoder</code>和<code class="highlighter-rouge">sun.misc.BASE64Decoder</code>两个类</li>
+  <li>在<code class="highlighter-rouge">Spring</code>中, 也提供了一个<code class="highlighter-rouge">Base64Utils</code>, 它自动根据反射来决定是使用<code class="highlighter-rouge">Java 8</code>的 <code class="highlighter-rouge">java.util.Base64</code>还是<code class="highlighter-rouge">Apache Commons Codec</code>的<code class="highlighter-rouge">org.apache.commons.codec.binary.Base64</code></li>
+  <li>除了<code class="highlighter-rouge">JDK7</code>, 其他的工具类中都有<code class="highlighter-rouge">url safe</code>的<code class="highlighter-rouge">Base64</code>编码方法</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MD5Util</span> <span class="o">{</span>
-
-    <span class="cm">/**
-     * 对source按UTF_8编码进行md5签名
-     *
-     * @param source 待签名的原串
-     * @return md5签名值（(32位小写16进制字符串）
-     */</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">encode</span><span class="o">(</span><span class="n">String</span> <span class="n">source</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">Hashing</span><span class="o">.</span><span class="na">md5</span><span class="o">().</span><span class="na">newHasher</span><span class="o">().</span><span class="na">putString</span><span class="o">(</span><span class="n">source</span><span class="o">,</span> <span class="n">Charsets</span><span class="o">.</span><span class="na">UTF_8</span><span class="o">).</span><span class="na">hash</span><span class="o">().</span><span class="na">toString</span><span class="o">();</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// guava 工具类的使用</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">testBase64</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// 原串</span>
+        <span class="n">String</span> <span class="n">origin</span> <span class="o">=</span> <span class="s">"abc"</span><span class="o">;</span>
+        <span class="c1">// encode</span>
+        <span class="n">String</span> <span class="n">encodeString</span> <span class="o">=</span> <span class="n">BaseEncoding</span><span class="o">.</span><span class="na">base64</span><span class="o">().</span><span class="na">encode</span><span class="o">(</span><span class="n">origin</span><span class="o">.</span><span class="na">getBytes</span><span class="o">());</span>
+        <span class="c1">// decode</span>
+        <span class="n">String</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span><span class="n">BaseEncoding</span><span class="o">.</span><span class="na">base64</span><span class="o">().</span><span class="na">decode</span><span class="o">(</span><span class="n">encodeString</span><span class="o">));</span>
+        <span class="c1">// result = origin</span>
+        <span class="n">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="n">origin</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>
     <span class="o">}</span>
-<span class="o">}</span>
-</code></pre>
-</div>
-
-<ul>
-  <li>使用<code class="highlighter-rouge">JDK</code>的工具</li>
-</ul>
-
-<p>下面这个工具完全是通过<code class="highlighter-rouge">JDK</code>实现的, 没有使用第三方工具包</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MD5Util</span>
-<span class="o">}</span>
+    <span class="c1">// Spring 工具类的使用</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">testBase64</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// 原串</span>
+        <span class="n">String</span> <span class="n">origin</span> <span class="o">=</span> <span class="s">"abc"</span><span class="o">;</span>
+        <span class="c1">// encode</span>
+        <span class="n">String</span> <span class="n">encodeString</span> <span class="o">=</span> <span class="n">Base64Utils</span><span class="o">.</span><span class="na">encodeToString</span><span class="o">(</span><span class="n">origin</span><span class="o">.</span><span class="na">getBytes</span><span class="o">());</span>
+        <span class="c1">// decode</span>
+        <span class="n">String</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span><span class="n">Base64Utils</span><span class="o">.</span><span class="na">decodeFromString</span><span class="o">(</span><span class="n">encodeString</span><span class="o">));</span>
+        <span class="c1">// result = origin</span>
+        <span class="n">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="n">origin</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="c1">// JDK8 工具类的使用</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">testBase64</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// 原串</span>
+        <span class="n">String</span> <span class="n">origin</span> <span class="o">=</span> <span class="s">"abc"</span><span class="o">;</span>
+        <span class="c1">// encode</span>
+        <span class="n">String</span> <span class="n">encodeString</span> <span class="o">=</span> <span class="n">Base64</span><span class="o">.</span><span class="na">getEncoder</span><span class="o">().</span><span class="na">encodeToString</span><span class="o">(</span><span class="n">origin</span><span class="o">.</span><span class="na">getBytes</span><span class="o">());</span>
+        <span class="c1">// decode</span>
+        <span class="n">String</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span><span class="n">Base64</span><span class="o">.</span><span class="na">getDecoder</span><span class="o">().</span><span class="na">decode</span><span class="o">(</span><span class="n">encodeString</span><span class="o">.</span><span class="na">getBytes</span><span class="o">()));</span>
+        <span class="c1">// result = origin</span>
+        <span class="n">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="n">origin</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="c1">// JDK7 工具类的使用(解码时会抛出 IOException)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">testBase64</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// 原串</span>
+        <span class="n">String</span> <span class="n">origin</span> <span class="o">=</span> <span class="s">"abc"</span><span class="o">;</span>
+        <span class="c1">// encode</span>
+        <span class="n">String</span> <span class="n">encodeString</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BASE64Encoder</span><span class="o">().</span><span class="na">encodeBuffer</span><span class="o">(</span><span class="n">origin</span><span class="o">.</span><span class="na">getBytes</span><span class="o">());</span>
+        <span class="c1">// decode</span>
+        <span class="n">String</span> <span class="n">result</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span><span class="k">new</span> <span class="n">BASE64Decoder</span><span class="o">().</span><span class="na">decodeBuffer</span><span class="o">(</span><span class="n">encodeString</span><span class="o">));</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">logger</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">"Base64解码失败"</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="c1">// result = origin</span>
+        <span class="n">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="n">origin</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>
+    <span class="o">}</span>
 </code></pre>
 </div>
 
 <hr />
 
+<h2 id="urlencode">URLEncode简介</h2>
+
 <hr />
-
-<h2 id="md5sha-1">MD5与SHA-1的比较</h2>
-<p><code class="highlighter-rouge">MD5</code>与<code class="highlighter-rouge">SHA-1</code>都属于哈希散列算法, 都是从<code class="highlighter-rouge">MD4</code>发展而来，它们的结构和强度等特性有很多相似之处, 他们的区别主要有下面这些:</p>
-
-<ul>
-  <li>安全性: <code class="highlighter-rouge">MD5</code>摘要长度128位(16字节), <code class="highlighter-rouge">SHA-1</code>摘要长度160位(20字节)</li>
-  <li>速度: <code class="highlighter-rouge">SHA1</code>的运算步骤(80步)比<code class="highlighter-rouge">MD5</code>(64步)多了16步, 而且SHA1记录单元的长度比MD5多了32位, <code class="highlighter-rouge">SHA1</code>速度大约比<code class="highlighter-rouge">MD5</code>慢了<code class="highlighter-rouge">25％</code></li>
-  <li>简易性: 两种方法都是相当的简单，在实现上不需要很复杂的程序或是大量存储空间。总体上来讲, <code class="highlighter-rouge">SHA1</code>对每一步骤的操作描述比<code class="highlighter-rouge">MD5</code>简单</li>
-</ul>
 
 <hr />
 
@@ -236,7 +258,7 @@ jQuery(function(){
     </div>
 
     <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/Base64与URLEncode简介" data-title="Base64与URLEncode简介" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-11-09-Base64%E4%B8%8EURLEncode%E7%AE%80%E4%BB%8B.html"></div>
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/Base64与URLEncode简介" data-title="Base64与URLEncode简介" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-11-11-Base64%E4%B8%8EURLEncode%E7%AE%80%E4%BB%8B.html"></div>
     <!-- 多说评论框 end -->
 </div>
 
