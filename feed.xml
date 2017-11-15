@@ -5,8 +5,8 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 11 Nov 2017 15:19:05 +0800</pubDate>
-    <lastBuildDate>Sat, 11 Nov 2017 15:19:05 +0800</lastBuildDate>
+    <pubDate>Wed, 15 Nov 2017 17:51:55 +0800</pubDate>
+    <lastBuildDate>Wed, 15 Nov 2017 17:51:55 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
@@ -20,8 +20,12 @@
       &lt;li&gt;&lt;a href=&quot;#base64-2&quot;&gt;Base64工具类&lt;/a&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#urlencode&quot;&gt;URLEncode简介&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;相关链接&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#urlencode&quot;&gt;URLEncode简介&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;编码规则&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#urlencode-1&quot;&gt;URLEncode工具类&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;相关链接&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;hr /&gt;
@@ -96,7 +100,7 @@
   &lt;li&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;JDK8&lt;/code&gt;中有专门的工具类&lt;code class=&quot;highlighter-rouge&quot;&gt;java.util.Base64&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;JDK7中&lt;/code&gt;也有&lt;code class=&quot;highlighter-rouge&quot;&gt;sun.misc.BASE64Encoder&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;sun.misc.BASE64Decoder&lt;/code&gt;两个类&lt;/li&gt;
   &lt;li&gt;在&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;中, 也提供了一个&lt;code class=&quot;highlighter-rouge&quot;&gt;Base64Utils&lt;/code&gt;, 它自动根据反射来决定是使用&lt;code class=&quot;highlighter-rouge&quot;&gt;Java 8&lt;/code&gt;的 &lt;code class=&quot;highlighter-rouge&quot;&gt;java.util.Base64&lt;/code&gt;还是&lt;code class=&quot;highlighter-rouge&quot;&gt;Apache Commons Codec&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;org.apache.commons.codec.binary.Base64&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;除了&lt;code class=&quot;highlighter-rouge&quot;&gt;JDK7&lt;/code&gt;, 其他的工具类中都有&lt;code class=&quot;highlighter-rouge&quot;&gt;url safe&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;Base64&lt;/code&gt;编码方法&lt;/li&gt;
+  &lt;li&gt;除了&lt;code class=&quot;highlighter-rouge&quot;&gt;JDK7&lt;/code&gt;, 其他的工具类中都有&lt;code class=&quot;highlighter-rouge&quot;&gt;url safe&lt;/code&gt;的&lt;code class=&quot;highlighter-rouge&quot;&gt;Base64&lt;/code&gt;编码方法, 而且&lt;code class=&quot;highlighter-rouge&quot;&gt;JDK7&lt;/code&gt;中会产生换行符!&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;c1&quot;&gt;// guava 工具类的使用&lt;/span&gt;
@@ -136,7 +140,7 @@
     &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;testBase64&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
         &lt;span class=&quot;c1&quot;&gt;// 原串&lt;/span&gt;
         &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;origin&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;abc&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// encode&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// encode, 如果原串比较长, 这个方法得到的签名会有换行符, 所以最好不要用JDK7的这个工具&lt;/span&gt;
         &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;encodeString&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BASE64Encoder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;encodeBuffer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;origin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getBytes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
         &lt;span class=&quot;c1&quot;&gt;// decode&lt;/span&gt;
         &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
@@ -154,16 +158,45 @@
 &lt;hr /&gt;
 
 &lt;h2 id=&quot;urlencode&quot;&gt;URLEncode简介&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;URLEncoder&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;URLDecoder&lt;/code&gt;用于完成普通字符串和&lt;code class=&quot;highlighter-rouge&quot;&gt;application/x-www-form-urlencoded&lt;/code&gt;MIME类型的字符串之间的相互转换&lt;/p&gt;
 
-&lt;hr /&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;相关链接&lt;/h2&gt;
+&lt;h3 id=&quot;section&quot;&gt;编码规则&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;application/x-www-form-urlencoded&lt;/code&gt;类型会按照如下规则进行字符串转换&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;http://blog.csdn.net/woxinfeixiangliudan/article/details/50371932&quot;&gt;关于MD5和SHA-1的简单的介绍&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://www.cnblogs.com/scu-cjx/p/6878853.html&quot;&gt;SHA1算法原理&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;字母(&lt;code class=&quot;highlighter-rouge&quot;&gt;a-z&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;A-Z&lt;/code&gt;), 数字(&lt;code class=&quot;highlighter-rouge&quot;&gt;0-9&lt;/code&gt;), 点(&lt;code class=&quot;highlighter-rouge&quot;&gt;.&lt;/code&gt;), 星号(&lt;code class=&quot;highlighter-rouge&quot;&gt;*&lt;/code&gt;), 横线(&lt;code class=&quot;highlighter-rouge&quot;&gt;-&lt;/code&gt;), 下划线(&lt;code class=&quot;highlighter-rouge&quot;&gt;_&lt;/code&gt;)不变&lt;/li&gt;
+  &lt;li&gt;空格(&lt;code class=&quot;highlighter-rouge&quot;&gt; &lt;/code&gt;)变为加号(&lt;code class=&quot;highlighter-rouge&quot;&gt;+&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;其他字符变为&lt;code class=&quot;highlighter-rouge&quot;&gt;%XY&lt;/code&gt;形式, &lt;code class=&quot;highlighter-rouge&quot;&gt;XY&lt;/code&gt;是两位16进制数值&lt;/li&gt;
+  &lt;li&gt;在每个&lt;code class=&quot;highlighter-rouge&quot;&gt;name=value&lt;/code&gt;对之间放置&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;amp;&lt;/code&gt;符号(这条规则跟编码没关系)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;urlencode-1&quot;&gt;URLEncode工具类&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;JDK&lt;/code&gt;自带了两个工具类 &lt;code class=&quot;highlighter-rouge&quot;&gt;URLEncoder&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;URLDecoder&lt;/code&gt;, 下面是用法&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;nd&quot;&gt;@Test&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;testURLEncode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;str&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;*. -_~!&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;     &lt;span class=&quot;c1&quot;&gt;// *. -_~!&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;encode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;URLEncoder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;encode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;encode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// *.+-_%7E%21&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;encode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;URLEncoder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;encode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;encode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;encode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// *.%2B-_%257E%2521&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// 注意编码两次是不一样的&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;decode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;URLDecoder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;decode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;encode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;decode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// *.+-_%7E%21&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;decode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;URLDecoder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;decode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;decode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;decode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// *. -_~!&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;相关链接&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.cnblogs.com/chengmo/archive/2014/05/18/3735917.html&quot;&gt;Base64算法原理&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://blog.csdn.net/justloveyou_/article/details/57156039&quot;&gt;URLEncoder编码和解码&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;hr /&gt;

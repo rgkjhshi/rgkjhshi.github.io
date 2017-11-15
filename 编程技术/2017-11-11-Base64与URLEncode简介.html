@@ -108,8 +108,12 @@ jQuery(function(){
       <li><a href="#base64-2">Base64工具类</a></li>
     </ul>
   </li>
-  <li><a href="#urlencode">URLEncode简介</a></li>
-  <li><a href="#section">相关链接</a></li>
+  <li><a href="#urlencode">URLEncode简介</a>    <ul>
+      <li><a href="#section">编码规则</a></li>
+      <li><a href="#urlencode-1">URLEncode工具类</a></li>
+    </ul>
+  </li>
+  <li><a href="#section-1">相关链接</a></li>
 </ul>
 
 <hr />
@@ -184,7 +188,7 @@ jQuery(function(){
   <li>在<code class="highlighter-rouge">JDK8</code>中有专门的工具类<code class="highlighter-rouge">java.util.Base64</code></li>
   <li>在<code class="highlighter-rouge">JDK7中</code>也有<code class="highlighter-rouge">sun.misc.BASE64Encoder</code>和<code class="highlighter-rouge">sun.misc.BASE64Decoder</code>两个类</li>
   <li>在<code class="highlighter-rouge">Spring</code>中, 也提供了一个<code class="highlighter-rouge">Base64Utils</code>, 它自动根据反射来决定是使用<code class="highlighter-rouge">Java 8</code>的 <code class="highlighter-rouge">java.util.Base64</code>还是<code class="highlighter-rouge">Apache Commons Codec</code>的<code class="highlighter-rouge">org.apache.commons.codec.binary.Base64</code></li>
-  <li>除了<code class="highlighter-rouge">JDK7</code>, 其他的工具类中都有<code class="highlighter-rouge">url safe</code>的<code class="highlighter-rouge">Base64</code>编码方法</li>
+  <li>除了<code class="highlighter-rouge">JDK7</code>, 其他的工具类中都有<code class="highlighter-rouge">url safe</code>的<code class="highlighter-rouge">Base64</code>编码方法, 而且<code class="highlighter-rouge">JDK7</code>中会产生换行符!</li>
 </ul>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// guava 工具类的使用</span>
@@ -224,7 +228,7 @@ jQuery(function(){
     <span class="kd">public</span> <span class="kt">void</span> <span class="n">testBase64</span><span class="o">()</span> <span class="o">{</span>
         <span class="c1">// 原串</span>
         <span class="n">String</span> <span class="n">origin</span> <span class="o">=</span> <span class="s">"abc"</span><span class="o">;</span>
-        <span class="c1">// encode</span>
+        <span class="c1">// encode, 如果原串比较长, 这个方法得到的签名会有换行符, 所以最好不要用JDK7的这个工具</span>
         <span class="n">String</span> <span class="n">encodeString</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BASE64Encoder</span><span class="o">().</span><span class="na">encodeBuffer</span><span class="o">(</span><span class="n">origin</span><span class="o">.</span><span class="na">getBytes</span><span class="o">());</span>
         <span class="c1">// decode</span>
         <span class="n">String</span> <span class="n">result</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
@@ -242,16 +246,45 @@ jQuery(function(){
 <hr />
 
 <h2 id="urlencode">URLEncode简介</h2>
+<p><code class="highlighter-rouge">URLEncoder</code>和<code class="highlighter-rouge">URLDecoder</code>用于完成普通字符串和<code class="highlighter-rouge">application/x-www-form-urlencoded</code>MIME类型的字符串之间的相互转换</p>
 
-<hr />
-
-<hr />
-
-<h2 id="section">相关链接</h2>
+<h3 id="section">编码规则</h3>
+<p><code class="highlighter-rouge">application/x-www-form-urlencoded</code>类型会按照如下规则进行字符串转换</p>
 
 <ul>
-  <li><a href="http://blog.csdn.net/woxinfeixiangliudan/article/details/50371932">关于MD5和SHA-1的简单的介绍</a></li>
-  <li><a href="https://www.cnblogs.com/scu-cjx/p/6878853.html">SHA1算法原理</a></li>
+  <li>字母(<code class="highlighter-rouge">a-z</code>, <code class="highlighter-rouge">A-Z</code>), 数字(<code class="highlighter-rouge">0-9</code>), 点(<code class="highlighter-rouge">.</code>), 星号(<code class="highlighter-rouge">*</code>), 横线(<code class="highlighter-rouge">-</code>), 下划线(<code class="highlighter-rouge">_</code>)不变</li>
+  <li>空格(<code class="highlighter-rouge"> </code>)变为加号(<code class="highlighter-rouge">+</code>)</li>
+  <li>其他字符变为<code class="highlighter-rouge">%XY</code>形式, <code class="highlighter-rouge">XY</code>是两位16进制数值</li>
+  <li>在每个<code class="highlighter-rouge">name=value</code>对之间放置<code class="highlighter-rouge">&amp;</code>符号(这条规则跟编码没关系)</li>
+</ul>
+
+<h3 id="urlencode-1">URLEncode工具类</h3>
+<p><code class="highlighter-rouge">JDK</code>自带了两个工具类 <code class="highlighter-rouge">URLEncoder</code>和<code class="highlighter-rouge">URLDecoder</code>, 下面是用法</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="n">testURLEncode</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">String</span> <span class="n">str</span> <span class="o">=</span> <span class="s">"*. -_~!"</span><span class="o">;</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">str</span><span class="o">);</span>     <span class="c1">// *. -_~!</span>
+        <span class="n">String</span> <span class="n">encode</span> <span class="o">=</span> <span class="n">URLEncoder</span><span class="o">.</span><span class="na">encode</span><span class="o">(</span><span class="n">str</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">encode</span><span class="o">);</span>  <span class="c1">// *.+-_%7E%21</span>
+        <span class="n">encode</span> <span class="o">=</span> <span class="n">URLEncoder</span><span class="o">.</span><span class="na">encode</span><span class="o">(</span><span class="n">encode</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">encode</span><span class="o">);</span>  <span class="c1">// *.%2B-_%257E%2521</span>
+        <span class="c1">// 注意编码两次是不一样的</span>
+        <span class="n">String</span> <span class="n">decode</span> <span class="o">=</span> <span class="n">URLDecoder</span><span class="o">.</span><span class="na">decode</span><span class="o">(</span><span class="n">encode</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">decode</span><span class="o">);</span>  <span class="c1">// *.+-_%7E%21</span>
+        <span class="n">decode</span> <span class="o">=</span> <span class="n">URLDecoder</span><span class="o">.</span><span class="na">decode</span><span class="o">(</span><span class="n">decode</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">decode</span><span class="o">);</span>  <span class="c1">// *. -_~!</span>
+    <span class="o">}</span>
+</code></pre>
+</div>
+
+<hr />
+
+<h2 id="section-1">相关链接</h2>
+
+<ul>
+  <li><a href="https://www.cnblogs.com/chengmo/archive/2014/05/18/3735917.html">Base64算法原理</a></li>
+  <li><a href="http://blog.csdn.net/justloveyou_/article/details/57156039">URLEncoder编码和解码</a></li>
 </ul>
 
 <hr />
