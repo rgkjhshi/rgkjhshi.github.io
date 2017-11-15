@@ -75,7 +75,7 @@ tag:
 * 在`JDK8`中有专门的工具类`java.util.Base64`
 * 在`JDK7中`也有`sun.misc.BASE64Encoder`和`sun.misc.BASE64Decoder`两个类
 * 在`Spring`中, 也提供了一个`Base64Utils`, 它自动根据反射来决定是使用`Java 8`的 `java.util.Base64`还是`Apache Commons Codec`的`org.apache.commons.codec.binary.Base64`
-* 除了`JDK7`, 其他的工具类中都有`url safe`的`Base64`编码方法
+* 除了`JDK7`, 其他的工具类中都有`url safe`的`Base64`编码方法, 而且`JDK7`中会产生换行符!
 
 ~~~java
     // guava 工具类的使用
@@ -115,7 +115,7 @@ tag:
     public void testBase64() {
         // 原串
         String origin = "abc";
-        // encode
+        // encode, 如果原串比较长, 这个方法得到的签名会有换行符, 所以最好不要用JDK7的这个工具
         String encodeString = new BASE64Encoder().encodeBuffer(origin.getBytes());
         // decode
         String result = null;
@@ -132,14 +132,41 @@ tag:
 *****
 
 ## URLEncode简介
+`URLEncoder`和`URLDecoder`用于完成普通字符串和`application/x-www-form-urlencoded`MIME类型的字符串之间的相互转换
 
-*****
+### 编码规则
+`application/x-www-form-urlencoded`类型会按照如下规则进行字符串转换
+
+* 字母(`a-z`, `A-Z`), 数字(`0-9`), 点(`.`), 星号(`*`), 横线(`-`), 下划线(`_`)不变
+* 空格(` `)变为加号(`+`)
+* 其他字符变为`%XY`形式, `XY`是两位16进制数值
+* 在每个`name=value`对之间放置`&`符号(这条规则跟编码没关系)
+
+### URLEncode工具类
+`JDK`自带了两个工具类 `URLEncoder`和`URLDecoder`, 下面是用法
+
+~~~java
+    @Test
+    public void testURLEncode() {
+        String str = "*. -_~!";
+        System.out.println(str);     // *. -_~!
+        String encode = URLEncoder.encode(str);
+        System.out.println(encode);  // *.+-_%7E%21
+        encode = URLEncoder.encode(encode);
+        System.out.println(encode);  // *.%2B-_%257E%2521
+        // 注意编码两次是不一样的
+        String decode = URLDecoder.decode(encode);
+        System.out.println(decode);  // *.+-_%7E%21
+        decode = URLDecoder.decode(decode);
+        System.out.println(decode);  // *. -_~!
+    }
+~~~
 
 *****
 
 ## 相关链接
 
-* [关于MD5和SHA-1的简单的介绍](http://blog.csdn.net/woxinfeixiangliudan/article/details/50371932)
-* [SHA1算法原理](https://www.cnblogs.com/scu-cjx/p/6878853.html)
+* [Base64算法原理](https://www.cnblogs.com/chengmo/archive/2014/05/18/3735917.html)
+* [URLEncoder编码和解码](http://blog.csdn.net/justloveyou_/article/details/57156039)
 
 *****
