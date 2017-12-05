@@ -5,9 +5,242 @@
     <description>Michael King&#39;s Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 21 Nov 2017 14:52:41 +0800</pubDate>
-    <lastBuildDate>Tue, 21 Nov 2017 14:52:41 +0800</lastBuildDate>
+    <pubDate>Tue, 05 Dec 2017 22:17:53 +0800</pubDate>
+    <lastBuildDate>Tue, 05 Dec 2017 22:17:53 +0800</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
+    
+      <item>
+        <title>ARP详解</title>
+        <description>&lt;hr /&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#macmac&quot;&gt;MAC地址与MAC帧&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#arp&quot;&gt;地址解析协议&lt;code class=&quot;highlighter-rouge&quot;&gt;ARP&lt;/code&gt;&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#arp-1&quot;&gt;ARP帧格式&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#arp-2&quot;&gt;ARP工作流程&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;macmac&quot;&gt;MAC地址与MAC帧&lt;/h2&gt;
+&lt;p&gt;每块网络设备都至少有一个地址, 称为&lt;code class=&quot;highlighter-rouge&quot;&gt;MAC地址&lt;/code&gt;, 也称物理地址。 MAC地址长&lt;code class=&quot;highlighter-rouge&quot;&gt;6B&lt;/code&gt;, 一般由冒号(或连字符)分个的6个十六进制数表示, 如:&lt;code class=&quot;highlighter-rouge&quot;&gt;02-60-8c-e4-b1-21&lt;/code&gt;, 高24位为厂商代码, 低24位为厂商自行分配的网卡序列号。&lt;/p&gt;
+
+&lt;p&gt;常用的以太网MAC帧格式有两种标准: &lt;code class=&quot;highlighter-rouge&quot;&gt;DIX Ethernet V2&lt;/code&gt;标准 和 &lt;code class=&quot;highlighter-rouge&quot;&gt;IEEE 的 802.3&lt;/code&gt;标准, 最常用的MAC帧格式是以太网V2的格式:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/mac.png&quot; alt=&quot;MAC帧&quot; title=&quot;MAC帧&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;MAC帧字段说明:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;前导码&lt;/code&gt;: 8个字节可分两部分, 第一部分7个字节, 是前同步码, 用来迅速实现MAC帧的比特同步; 第二个字段是帧开始定界符，表示后面的信息就是MAC帧。&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;地址&lt;/code&gt;: 6B的地址(MAC地址)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;类型&lt;/code&gt;: 用来标志使用的是什么协议, 以便把收到的MAC帧的数据上交给这个协议处理&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;数据&lt;/code&gt;: &lt;code class=&quot;highlighter-rouge&quot;&gt;46 ~ 1500B&lt;/code&gt;, 由于&lt;code class=&quot;highlighter-rouge&quot;&gt;CSMA/CD&lt;/code&gt;算法的限制, 以太网帧最小长度为&lt;code class=&quot;highlighter-rouge&quot;&gt;64B&lt;/code&gt;(其他字段共占了&lt;code class=&quot;highlighter-rouge&quot;&gt;18B&lt;/code&gt;, 数据字段最少&lt;code class=&quot;highlighter-rouge&quot;&gt;46B&lt;/code&gt;), 因此当数据字段长度小于&lt;code class=&quot;highlighter-rouge&quot;&gt;46B&lt;/code&gt;时, 必须在数据之后进行, 保证以太网的MAC帧长不小于&lt;code class=&quot;highlighter-rouge&quot;&gt;64B&lt;/code&gt;。&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;FCS&lt;/code&gt;: &lt;code class=&quot;highlighter-rouge&quot;&gt;4B&lt;/code&gt;校验字段, 校验范围从目的地址到数据段的末尾, 算法采用32位的CRC。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;arp&quot;&gt;地址解析协议&lt;code class=&quot;highlighter-rouge&quot;&gt;ARP&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;无论在网络层使用什么协议, 在实际网络的数据链路上传送数据时, 最终必须使用硬件地址。 所以需要一种方法来完成&lt;code class=&quot;highlighter-rouge&quot;&gt;IP地址&lt;/code&gt;到&lt;code class=&quot;highlighter-rouge&quot;&gt;MAC地址&lt;/code&gt;的映射, 这就需要用到地址解析协议(&lt;code class=&quot;highlighter-rouge&quot;&gt;Address Resolution Protocol, ARP&lt;/code&gt;)。 每台主机(路由器)上单独存放一个从&lt;code class=&quot;highlighter-rouge&quot;&gt;IP地址&lt;/code&gt;到&lt;code class=&quot;highlighter-rouge&quot;&gt;MAC地址&lt;/code&gt;的映射表, 称&lt;code class=&quot;highlighter-rouge&quot;&gt;ARP表&lt;/code&gt;, 使用ARP协议来动态维护此ARP表。&lt;/p&gt;
+
+&lt;h3 id=&quot;arp-1&quot;&gt;ARP帧格式&lt;/h3&gt;
+&lt;p&gt;ARP帧格式如下:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/ARP.png&quot; alt=&quot;ARP&quot; title=&quot;ARP&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;以太网目的地址&lt;/code&gt;: 目的主机的硬件地址。目的地址全为1表示广播地址&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;以太网源地址&lt;/code&gt;: 源主机的硬件地址&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;帧类型&lt;/code&gt;: 对于&lt;code class=&quot;highlighter-rouge&quot;&gt;ARP协议&lt;/code&gt;, 该字段为&lt;code class=&quot;highlighter-rouge&quot;&gt;0x0806&lt;/code&gt;; 对于&lt;code class=&quot;highlighter-rouge&quot;&gt;RARP协议&lt;/code&gt;, 该字段为&lt;code class=&quot;highlighter-rouge&quot;&gt;0x8035&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;硬件类型&lt;/code&gt;: 表示硬件地址的类型, 值为1时表示以太网地址。也就是说ARP协议不仅仅应用于以太网协议, 还可以支持别的链路层协议&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;协议类型&lt;/code&gt;: 表示要映射的协议地址类型。值为&lt;code class=&quot;highlighter-rouge&quot;&gt;0x0800&lt;/code&gt;表示IP协议。&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;硬件地址长度&lt;/code&gt;: 与&lt;code class=&quot;highlighter-rouge&quot;&gt;硬件类型&lt;/code&gt;对应的&lt;code class=&quot;highlighter-rouge&quot;&gt;硬件地址长度&lt;/code&gt;, 以字节为单位。如果是以太网，则是6字节(MAC长度)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;协议地址长度&lt;/code&gt;: 与&lt;code class=&quot;highlighter-rouge&quot;&gt;协议类型&lt;/code&gt;对应的&lt;code class=&quot;highlighter-rouge&quot;&gt;协议地址长度&lt;/code&gt;, 以字节为单位。如果是IP协议, 则是4字节(IP地址长度)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;操作类型(op)&lt;/code&gt;: 四中操作类型。&lt;code class=&quot;highlighter-rouge&quot;&gt;1&lt;/code&gt;表示&lt;code class=&quot;highlighter-rouge&quot;&gt;ARP请求&lt;/code&gt;; &lt;code class=&quot;highlighter-rouge&quot;&gt;2&lt;/code&gt;表示&lt;code class=&quot;highlighter-rouge&quot;&gt;ARP应答&lt;/code&gt;; &lt;code class=&quot;highlighter-rouge&quot;&gt;3&lt;/code&gt;表示&lt;code class=&quot;highlighter-rouge&quot;&gt;RARP请求&lt;/code&gt;; &lt;code class=&quot;highlighter-rouge&quot;&gt;4&lt;/code&gt;表示&lt;code class=&quot;highlighter-rouge&quot;&gt;RARP应答&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;发送端硬件地址&lt;/code&gt;: 如果是以太网, 则是源主机以太网地址, 此处和以太网头中的源地址对应&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;发送端协议地址&lt;/code&gt;: 如果是IP协议, 则表示源主机的IP地址&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;目的端硬件地址&lt;/code&gt;: 如果是以太网, 则是目的以太网地址, 和以太网头中的目的地址对应&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;目的端协议地址&lt;/code&gt;: 如果是IP协议, 则表示源主机要请求硬件地址的IP地址&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;另外, 需要注意:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;这里的&lt;code class=&quot;highlighter-rouge&quot;&gt;以太网首部(14B)&lt;/code&gt;就是上一部分内容中的&lt;code class=&quot;highlighter-rouge&quot;&gt;MAC帧&lt;/code&gt;的格式&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;以太网首部&lt;/code&gt;与&lt;code class=&quot;highlighter-rouge&quot;&gt;ARP报文体&lt;/code&gt;的部分内容是重复的。对应ARP请求包来说, &lt;code class=&quot;highlighter-rouge&quot;&gt;以太网首部&lt;/code&gt;中的目的物理地址为&lt;code class=&quot;highlighter-rouge&quot;&gt;FF-FF-FF-FF-FF-FF&lt;/code&gt;, 报文体中的&lt;code class=&quot;highlighter-rouge&quot;&gt;目的端的硬件地址&lt;/code&gt;字段无需填充, 其他字段都需要填充。&lt;/li&gt;
+  &lt;li&gt;APR请求包是广播的, 但是ARP应答帧是单播的&lt;/li&gt;
+  &lt;li&gt;ARP报文体只有&lt;code class=&quot;highlighter-rouge&quot;&gt;28B&lt;/code&gt;, 需要进行填充, 使得&lt;code class=&quot;highlighter-rouge&quot;&gt;MAC帧&lt;/code&gt;数据部分最少为&lt;code class=&quot;highlighter-rouge&quot;&gt;46B&lt;/code&gt;(首部14B, 数据46B, FCS 4B, 总共64B)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;arp-2&quot;&gt;ARP工作流程&lt;/h3&gt;
+&lt;p&gt;在以太网(&lt;code class=&quot;highlighter-rouge&quot;&gt;ARP协议只适用于局域网&lt;/code&gt;)中, 如果本地主机想要向某一个IP地址的主机发数据报, 但是并不知道其硬件地址, 此时利用ARP协议提供的机制来获取硬件地址，具体过程如下:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;当主机A向 &lt;strong&gt;本局域网&lt;/strong&gt; 上的某个&lt;code class=&quot;highlighter-rouge&quot;&gt;主机B&lt;/code&gt;发送IP数据报时, 就先在自己的ARP缓冲表中查看有无主机B的IP地址&lt;/li&gt;
+  &lt;li&gt;如果有, 就可以查出其对应的硬件地址, 再将此硬件地址写入&lt;code class=&quot;highlighter-rouge&quot;&gt;MAC帧&lt;/code&gt;(链路层协议), 然后通过局域网将&lt;code class=&quot;highlighter-rouge&quot;&gt;该MAC帧&lt;/code&gt;发往目的主机&lt;/li&gt;
+  &lt;li&gt;如果没有, 主机A就需要使用ARP协议来解析这个IP地址
+    &lt;ul&gt;
+      &lt;li&gt;通过使用目的MAC地址为&lt;code class=&quot;highlighter-rouge&quot;&gt;FF-FF-FF-FF-FF-FF&lt;/code&gt;(MAC地址为6B)的帧来封装并广播ARP请求分组&lt;/li&gt;
+      &lt;li&gt;同一个局域网里所有主机都收到此ARP请求&lt;/li&gt;
+      &lt;li&gt;主机B收到该ARP请求后, 就会向A发出响应ARP分组, 分组中包含B的IP与MAC地址的映射关系&lt;/li&gt;
+      &lt;li&gt;主机A收到主机B的ARP响应分组后, 就在其ARP缓存中写入主机B的IP地址到硬件地址的映射&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;: ARP解决的是同一个局域网上的主机或路由器的IP地址与MAC地址的映射问题。如果要找的主机和源主机不在同一个局域网上, 那么需要通过ARP协议找到一个位于本局域网的某个路由器的硬件地址, 然后把分组发送给这个路由器, 让这个路由器把分组转发给下一个网络&lt;/p&gt;
+
+&lt;hr /&gt;
+</description>
+        <pubDate>Sun, 03 Dec 2017 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-12-03-ARP%E8%AF%A6%E8%A7%A3.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-12-03-ARP%E8%AF%A6%E8%A7%A3.html</guid>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
+    
+      <item>
+        <title>IPv4详解</title>
+        <description>&lt;hr /&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#ipv4&quot;&gt;IPv4数据报&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#ipv4-1&quot;&gt;IPv4地址分类&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#nat&quot;&gt;网络地址转换&lt;code class=&quot;highlighter-rouge&quot;&gt;NAT&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#cidr&quot;&gt;子网与CIDR&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;子网划分&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;子网掩码&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#cidr-1&quot;&gt;无分类编址&lt;code class=&quot;highlighter-rouge&quot;&gt;CIDR&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;ipv4&quot;&gt;IPv4数据报&lt;/h2&gt;
+&lt;p&gt;一个IP分组由首部和数据两部分组成。首部的前一部分是固定长度的, 共&lt;code class=&quot;highlighter-rouge&quot;&gt;20B&lt;/code&gt;, 是所有IP分组必须具有的。在首部固定部分后面是一些可选字段, 其长度是可变的。 IP数据报的格式如下图所示:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/IPv4.png&quot; alt=&quot;IPv4&quot; title=&quot;IPv4&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;IP首部的字段含义如下:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;版本: IP协议的版本，目前的IP协议版本号为4，下一代IP协议版本号为6。&lt;/li&gt;
+  &lt;li&gt;首部长度: IP报头的长度, 固定部分的长度(20B)和可变部分的长度之和。共占4位, 以&lt;code class=&quot;highlighter-rouge&quot;&gt;4字节(32bit)&lt;/code&gt;为单位, 即报头的最大长度可以为&lt;code class=&quot;highlighter-rouge&quot;&gt;15*4B=60B&lt;/code&gt;, 除去固定部分的长度&lt;code class=&quot;highlighter-rouge&quot;&gt;20字节&lt;/code&gt;, 可变部分的长度最大为&lt;code class=&quot;highlighter-rouge&quot;&gt;40字节&lt;/code&gt;。&lt;/li&gt;
+  &lt;li&gt;服务类型: Type Of Service(TOS), 占8位, 其中的前3位表示报文的优先级, 后面的几位分别表示要求更低时延、更高的吞吐量、更高的可靠性、更低的路由代价等。对应位为1即有相应要求, 为0则不要求。
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;bit 0~2&lt;/code&gt;: 优先级&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;bit 3&lt;/code&gt;: 延迟, 0 = Normal Delay, 1 = Low Delay&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;bit 4&lt;/code&gt;: 吞吐量, 0 = Normal Throughput, 1 = High Throughput&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;bit 5&lt;/code&gt;: 可靠性, 0 = Normal Relibility, 1 = High Relibility&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;bit 6~7&lt;/code&gt;: Reserved for Future Use. 6: 开销(路由代价); 7: 仍为保留&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;总长度: 报文的总长度, 单位为字节, 所以一个IP报文的的最大长度为65535B。&lt;/li&gt;
+  &lt;li&gt;标识: 每产生一个报文就加1, 通常与标记字段和分片字段一起用于数据包的分段。当IP报文长度超过传输网络的&lt;code class=&quot;highlighter-rouge&quot;&gt;MTU&lt;/code&gt;(最大传输单元)时, 必须分片, 此时这个标识字段的值被复制到所有数据分片的标识字段中, 以便这些分片在达到最终目的地时可以重新组合起来。&lt;/li&gt;
+  &lt;li&gt;标志: 共3位, 分别为&lt;code class=&quot;highlighter-rouge&quot;&gt;R(Reserved)、DF(Don&#39;t Fragment)、MF(More Fragment)&lt;/code&gt;, 目前只有后两位有效, &lt;code class=&quot;highlighter-rouge&quot;&gt;DF=1&lt;/code&gt;表示不分片, &lt;code class=&quot;highlighter-rouge&quot;&gt;DF=0&lt;/code&gt;表示分片; &lt;code class=&quot;highlighter-rouge&quot;&gt;MF=1&lt;/code&gt;表示后面还有分片，&lt;code class=&quot;highlighter-rouge&quot;&gt;MF=0&lt;/code&gt;表示这是最后一片。&lt;/li&gt;
+  &lt;li&gt;片偏移: 本分片在原先数据报文中相对首位的偏移位, 13位, 以&lt;code class=&quot;highlighter-rouge&quot;&gt;8B&lt;/code&gt;为偏移单位, 所以一个分片的长度一定是&lt;code class=&quot;highlighter-rouge&quot;&gt;8B(64bit)&lt;/code&gt;的整数倍
+    &lt;ul&gt;
+      &lt;li&gt;举例: 若&lt;code class=&quot;highlighter-rouge&quot;&gt;MTU=1500&lt;/code&gt;时, 一个大小为3000字节的数据经过该接口, 会被分为3段, 第一段分组总长度为&lt;code class=&quot;highlighter-rouge&quot;&gt;1480+20&lt;/code&gt;, 第二段也为&lt;code class=&quot;highlighter-rouge&quot;&gt;1480&lt;/code&gt;, 第三段为&lt;code class=&quot;highlighter-rouge&quot;&gt;40&lt;/code&gt;, 那么第一段的分段偏移为&lt;code class=&quot;highlighter-rouge&quot;&gt;0&lt;/code&gt;, 第二段分段偏移为&lt;code class=&quot;highlighter-rouge&quot;&gt;1480/8=185&lt;/code&gt;, 第三段为&lt;code class=&quot;highlighter-rouge&quot;&gt;185+185=370&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;生存时间: TTL(Time to Live), 标识分组在网络中的寿命, 以确保分组不会永远在网络中循环。路由在转发分组之前, 先把&lt;code class=&quot;highlighter-rouge&quot;&gt;TTL&lt;/code&gt;减1, 为0时则丢弃该分组。推荐的初始值由分配数字&lt;code class=&quot;highlighter-rouge&quot;&gt;RFC&lt;/code&gt;指定, 当前值为&lt;code class=&quot;highlighter-rouge&quot;&gt;64&lt;/code&gt;, 发送&lt;code class=&quot;highlighter-rouge&quot;&gt;ICMP&lt;/code&gt;回显应答时经常把&lt;code class=&quot;highlighter-rouge&quot;&gt;TTL&lt;/code&gt;设为最大值&lt;code class=&quot;highlighter-rouge&quot;&gt;255&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;协议: 标识IP分组携带的数据使用的是那种协议, 以便目的主机的IP层能知道要将数据报上交到哪个进程(与端口号类似, 这里采用的是协议号)
+    &lt;ul&gt;
+      &lt;li&gt;1: Internet Control Message Protocol (&lt;code class=&quot;highlighter-rouge&quot;&gt;ICMP&lt;/code&gt;)&lt;/li&gt;
+      &lt;li&gt;2: Internet Group Management Protocol (&lt;code class=&quot;highlighter-rouge&quot;&gt;IGMP&lt;/code&gt;)&lt;/li&gt;
+      &lt;li&gt;4: IP in IP (encapsulation)&lt;/li&gt;
+      &lt;li&gt;6: Transmission Control Protocol (&lt;code class=&quot;highlighter-rouge&quot;&gt;TCP&lt;/code&gt;)&lt;/li&gt;
+      &lt;li&gt;17: User Datagram Protocol (&lt;code class=&quot;highlighter-rouge&quot;&gt;UDP&lt;/code&gt;)&lt;/li&gt;
+      &lt;li&gt;45: Inter-Domain Routing Protocol (&lt;code class=&quot;highlighter-rouge&quot;&gt;IDRP&lt;/code&gt;)&lt;/li&gt;
+      &lt;li&gt;46: Resource Reservation Protocol (&lt;code class=&quot;highlighter-rouge&quot;&gt;RSVP&lt;/code&gt;)&lt;/li&gt;
+      &lt;li&gt;47: Generic Routing Encapsulation (&lt;code class=&quot;highlighter-rouge&quot;&gt;GRE&lt;/code&gt;)&lt;/li&gt;
+      &lt;li&gt;54: NBMA Next Hop Resolution Protocol (&lt;code class=&quot;highlighter-rouge&quot;&gt;NHRP&lt;/code&gt;)&lt;/li&gt;
+      &lt;li&gt;88: Cisco Internet Gateway Routing Protocol (&lt;code class=&quot;highlighter-rouge&quot;&gt;IGRP&lt;/code&gt;)&lt;/li&gt;
+      &lt;li&gt;89: Open Shortest Path First (&lt;code class=&quot;highlighter-rouge&quot;&gt;OSPF&lt;/code&gt;)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;首部校验和: 首部的校验和, 检查首部的完整性(只校验首部, 不校验数据部分)&lt;/li&gt;
+  &lt;li&gt;源IP地址: 发送方IP地址&lt;/li&gt;
+  &lt;li&gt;目的IP地址: 接收方IP地址&lt;/li&gt;
+  &lt;li&gt;可选字段: 包括源点产生的信息和其它路由器加入的信息, 可选字段, 主要用于测试, 长度可变&lt;/li&gt;
+  &lt;li&gt;填充: 通过在可选字段后面添加0来补足32位, 确保报头长度是32的倍数&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;ipv4-1&quot;&gt;IPv4地址分类&lt;/h2&gt;
+&lt;p&gt;现在的IP网络使用32位地址表示, 以点分十进制表示. IP地址由&lt;code class=&quot;highlighter-rouge&quot;&gt;网络号&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;主机号&lt;/code&gt;两部分组成, 根据网络号的不同分为A类地址、B类地址、C类地址、D类地址和E类地址5种类型, 如下图:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/static/images/IPv4_type.png&quot; alt=&quot;IPv4&quot; title=&quot;IPv4&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;主机号全0表示网络本身, 如&lt;code class=&quot;highlighter-rouge&quot;&gt;202.98.174.0&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;主机号全1表示本网络的广播地址, 如&lt;code class=&quot;highlighter-rouge&quot;&gt;202.98.174.255&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;127.0.0.0&lt;/code&gt;网络保留作为环路自检地址&lt;/li&gt;
+  &lt;li&gt;32位全0, 即&lt;code class=&quot;highlighter-rouge&quot;&gt;0.0.0.0&lt;/code&gt;表示本网络上的本主机&lt;/li&gt;
+  &lt;li&gt;32位全1, 即&lt;code class=&quot;highlighter-rouge&quot;&gt;255.255.255.255&lt;/code&gt;表示整个&lt;code class=&quot;highlighter-rouge&quot;&gt;TCP/IP&lt;/code&gt;网络的广播地址, 由于路由器对广播域的隔离, 所以等效为本网络的广播地址&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;nat&quot;&gt;网络地址转换&lt;code class=&quot;highlighter-rouge&quot;&gt;NAT&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;网络地址转换(&lt;code class=&quot;highlighter-rouge&quot;&gt;NAT&lt;/code&gt;)通过将专用地址转换为公用地址, 隐藏了内部网络结构, 节省了IP地址消耗. 私有IP必须经过NAT转换成公网IP才可用于互联网. NAT路由器使用NAT转换表(存放着&lt;code class=&quot;highlighter-rouge&quot;&gt;私有IP:端口&lt;/code&gt;到&lt;code class=&quot;highlighter-rouge&quot;&gt;全球IP:端口&lt;/code&gt;的映射)可以把多个私有IP都映射到同一个公网IP上.&lt;/p&gt;
+
+&lt;p&gt;私有IP地址网段如下:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;A类: 1个网段, 即&lt;code class=&quot;highlighter-rouge&quot;&gt;10.0.0.0 ~ 10.255.255.255&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;B类: 16个网段, 即&lt;code class=&quot;highlighter-rouge&quot;&gt;172.16.0.0 ~ 172.31.255.255&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;C类: 256个网段, 即&lt;code class=&quot;highlighter-rouge&quot;&gt;192.168.0.0 ~ 192.168.255.255&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;注意: 普通路由器转发IP数据报时不改变源和目的IP地址, 而NAT路由转发时一定会改变其IP地址, 而且需要查看传输层的端口.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;cidr&quot;&gt;子网与CIDR&lt;/h2&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;子网划分&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;从1985年起, 在IP地址中又增加了一个&lt;code class=&quot;highlighter-rouge&quot;&gt;子网号字段&lt;/code&gt;, 两级IP地址变成三级, 即三级IP地址由&lt;code class=&quot;highlighter-rouge&quot;&gt;网络号&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;子网号&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;主机号&lt;/code&gt;三部分组成。&lt;/li&gt;
+  &lt;li&gt;划分子网只是把IP地址的&lt;code class=&quot;highlighter-rouge&quot;&gt;主机号&lt;/code&gt;这部分进行再划分, 不会改变原来的&lt;code class=&quot;highlighter-rouge&quot;&gt;网络号&lt;/code&gt;, 从IP数据报中无法判断源或目的主机是否进行了子网划分&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;子网掩码&lt;/h3&gt;
+&lt;p&gt;子网掩码是跟IP地址相对应的32位二进制串, 1对应网络号及子网号, 0对应主机号。子网掩码与IP地址按位相与(&lt;code class=&quot;highlighter-rouge&quot;&gt;AND&lt;/code&gt;)即可得到相应子网的网络地址。 如果一个网络没有划分子网, 那就使用默认子网掩码, &lt;code class=&quot;highlighter-rouge&quot;&gt;A、B、C&lt;/code&gt;类地址默认的子网掩码分别为&lt;code class=&quot;highlighter-rouge&quot;&gt;255.0.0.0&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;255.255.0.0&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;255.255.255.0&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;子网掩码是一个网络中的重要属性, 路由之间交换信息时, 必须把自己所在网络的子网掩码告诉对方。在使用子网掩码的情况下:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;一个主机在设置IP地址信息的同时, 必须设置子网掩码&lt;/li&gt;
+  &lt;li&gt;同属于一个字网的所有主机及路由器的相应端口, 必须设置相同的子网掩码&lt;/li&gt;
+  &lt;li&gt;路由器的路由表中包含的主要信息必须有: &lt;code class=&quot;highlighter-rouge&quot;&gt;目的网络地址&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;子网掩码&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;下一跳地址&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;cidr-1&quot;&gt;无分类编址&lt;code class=&quot;highlighter-rouge&quot;&gt;CIDR&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;CIDR&lt;/code&gt;(Classless Inter-Domain Routing)消除了传统的A、B、C类地址以及划分子网的概念, 更加有效地分配IPv4的地址空间, 提高了IP地址空间利用率, 减小路由表大小, 提高路由转发能力。 它有如下特点:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;CIDR&lt;/code&gt;使用“斜线记法”(又称为CIDR记法), 即&lt;code class=&quot;highlighter-rouge&quot;&gt;IP地址/网络前缀位数&lt;/code&gt;, 如&lt;code class=&quot;highlighter-rouge&quot;&gt;128.14.32.5/20&lt;/code&gt;表示掩码为前20位全1和后12位全0, 即网络前缀为&lt;code class=&quot;highlighter-rouge&quot;&gt;128.14.32.0&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;网络前缀县通的连续的IP地址组成&lt;code class=&quot;highlighter-rouge&quot;&gt;CIDR地址块&lt;/code&gt;, 一个CIDR地址块可以包括多个ABC类地址&lt;/li&gt;
+  &lt;li&gt;使用CIDR时, 在路由表可能得到多个匹配结果, 应采用&lt;code class=&quot;highlighter-rouge&quot;&gt;最长前缀匹配&lt;/code&gt;原则, 选取最长的网络前缀匹配&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+</description>
+        <pubDate>Wed, 29 Nov 2017 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-11-29-IPv4%E8%AF%A6%E8%A7%A3.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-11-29-IPv4%E8%AF%A6%E8%A7%A3.html</guid>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
     
       <item>
         <title>Base64与URLEncode简介</title>
@@ -1901,439 +2134,6 @@
         <pubDate>Sun, 14 May 2017 00:00:00 +0800</pubDate>
         <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-14-%E6%9F%A5%E6%89%BE%E7%AE%97%E6%B3%95.html</link>
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-14-%E6%9F%A5%E6%89%BE%E7%AE%97%E6%B3%95.html</guid>
-        
-        <category>Java</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>Java中的并发之Future模式</title>
-        <description>&lt;p&gt;Java的多线程编程中经常用到&lt;code class=&quot;highlighter-rouge&quot;&gt;Future模式&lt;/code&gt;, 本文就简单介绍下&lt;code class=&quot;highlighter-rouge&quot;&gt;Future模式&lt;/code&gt;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#future&quot;&gt;Future模式&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#futuretask&quot;&gt;FutureTask详解&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#futuretask-1&quot;&gt;FutureTask的结构&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;构造方法&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#run&quot;&gt;run方法&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#set&quot;&gt;set方法&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#get&quot;&gt;get方法&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;future&quot;&gt;Future模式&lt;/h2&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Future模式&lt;/code&gt;的核心在于: 去除了主函数的等待时间，使原本需要等待的时间段可以用于处理其他业务逻辑.&lt;br /&gt;
-&lt;code class=&quot;highlighter-rouge&quot;&gt;Future模式&lt;/code&gt;的关键在于: 返回的数据并不是真实的处理结果&lt;code class=&quot;highlighter-rouge&quot;&gt;RealData&lt;/code&gt;, 而是一个代理数据&lt;code class=&quot;highlighter-rouge&quot;&gt;FutureData&lt;/code&gt;, 当调用代理数据的&lt;code class=&quot;highlighter-rouge&quot;&gt;get&lt;/code&gt;方法时(&lt;code class=&quot;highlighter-rouge&quot;&gt;FutureData.get()&lt;/code&gt;), 会阻塞等待获取真实数据&lt;code class=&quot;highlighter-rouge&quot;&gt;RealData&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;下面实现一个简易版的&lt;code class=&quot;highlighter-rouge&quot;&gt;Future模式&lt;/code&gt;, 这个例子很好的说明了&lt;code class=&quot;highlighter-rouge&quot;&gt;Future.get()&lt;/code&gt;时的阻塞的形成原理&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cm&quot;&gt;/**
- * FutureData实际上是真实数据RealData的代理, 封装了获取RealData的等待过程
- */&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;FutureData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Future&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;V&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;realData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;// FutureData是realData的封装&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;isReady&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 是否已经准备好&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;synchronized&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;setRealData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;realData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;isReady&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;realData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;realData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;isReady&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;notifyAll&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// realData已经被注入到FutureData中, 通知get()方法(因为get方法里在等待锁)&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;synchronized&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;V&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;InterruptedException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;isReady&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;wait&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;//一直等到realData注入到FutureData中&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;realData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// Future的其他接口略...&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;要使用我们自己实现的简易版&lt;code class=&quot;highlighter-rouge&quot;&gt;Future模式&lt;/code&gt;, 我们需要一个在一个方法里加工一些数据并最后返回我们的&lt;code class=&quot;highlighter-rouge&quot;&gt;FutureData&lt;/code&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Future&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;doSomething&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FutureData&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;futureData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FutureData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 假设生成realData的过程特别慢, 所以放在单独的线程中运行&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Runnable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-            &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;realData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;假设生成realData的过程特别慢&quot;&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;futureData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setRealData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;realData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;futureData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 直接返回FutureData&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;这样当我们调用&lt;code class=&quot;highlighter-rouge&quot;&gt;Future futureData = doSomething()&lt;/code&gt;来处理数据的时候, 要加工的数据特别慢, 我们直接返回了&lt;code class=&quot;highlighter-rouge&quot;&gt;FutureData&lt;/code&gt;, 所以在调用&lt;code class=&quot;highlighter-rouge&quot;&gt;doSomething()&lt;/code&gt;的线程里并不被阻塞, 这个线程可以去做其他事情, 只有当这个线程通过&lt;code class=&quot;highlighter-rouge&quot;&gt;futureData.get()&lt;/code&gt;时, 线程才会被阻塞, 直到返回&lt;code class=&quot;highlighter-rouge&quot;&gt;realData&lt;/code&gt;.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;futuretask&quot;&gt;FutureTask详解&lt;/h2&gt;
-
-&lt;p&gt;JDK中&lt;code class=&quot;highlighter-rouge&quot;&gt;Future模式&lt;/code&gt;的经典实现类为&lt;code class=&quot;highlighter-rouge&quot;&gt;FutureTask&lt;/code&gt;, 它除了实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;Future&lt;/code&gt;接口外还实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;Runnable&lt;/code&gt;接口, 它的实现比我们简易版的实现要复杂一些&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;FutureTask&lt;/code&gt;本身实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;Future&lt;/code&gt;(就像上面的&lt;code class=&quot;highlighter-rouge&quot;&gt;FutureData&lt;/code&gt;), 我们执行了这个&lt;code class=&quot;highlighter-rouge&quot;&gt;FutureTask&lt;/code&gt;之后, 想要获取结果可以使用&lt;code class=&quot;highlighter-rouge&quot;&gt;FutureTask.get()&lt;/code&gt;来获取真实数据&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;FutureTask&lt;/code&gt;自己实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;Runnable&lt;/code&gt;接口, 也就是说我们我们不用再另起线程来执行某任务了(就像&lt;code class=&quot;highlighter-rouge&quot;&gt;doSomething()&lt;/code&gt;里做的), 可以直接使用&lt;code class=&quot;highlighter-rouge&quot;&gt;Thread&lt;/code&gt;去启动这个&lt;code class=&quot;highlighter-rouge&quot;&gt;FutureTask&lt;/code&gt;或者把它交给一个&lt;code class=&quot;highlighter-rouge&quot;&gt;ExecutorService&lt;/code&gt;去执行.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;futuretask-1&quot;&gt;FutureTask的结构&lt;/h3&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;FutureTask&lt;/code&gt;内部的主要成员如下:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;cm&quot;&gt;/**
-     * 任务的状态
-     * 可能的状态转换:
-     * NEW -&amp;gt; COMPLETING -&amp;gt; NORMAL
-     * NEW -&amp;gt; COMPLETING -&amp;gt; EXCEPTIONAL
-     * NEW -&amp;gt; CANCELLED
-     * NEW -&amp;gt; INTERRUPTING -&amp;gt; INTERRUPTED
-     */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;volatile&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;NEW&lt;/span&gt;          &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 初始化的状态(包括任务未启动, 任务执行中, 任务刚跑完)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;COMPLETING&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 完成中, 这是个过渡状态, 任务跑完了但是还没给outcome赋值&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;NORMAL&lt;/span&gt;       &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 已完成&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;EXCEPTIONAL&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 运行中出现了异常&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CANCELLED&lt;/span&gt;    &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 已取消&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;INTERRUPTING&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 正在中断&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;INTERRUPTED&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 已中断&lt;/span&gt;
-
-    &lt;span class=&quot;cm&quot;&gt;/** 可执行的任务, 即最后的结果是由它计算出来的; 运行结束后将被设置为null */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Callable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;callable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;cm&quot;&gt;/** 用于存放get()时要返回的结果或者异常 */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;outcome&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;cm&quot;&gt;/** 执行callable的那个线程 */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;volatile&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;runner&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;cm&quot;&gt;/** 用于存放等待任务结果的线程, 即调用get()的那些被阻塞的线程都用这个链表来保存, 以便于结果完成时把等待的线程唤醒 */&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;volatile&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WaitNode&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;waiters&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// WaitNode 类定义&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;WaitNode&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;volatile&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;volatile&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WaitNode&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;WaitNode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;currentThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;section&quot;&gt;构造方法&lt;/h3&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;FutureTask&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Callable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;callable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;callable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;NullPointerException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;callable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;callable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;NEW&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FutureTask&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Runnable&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;runnable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;V&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;callable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Executors&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;callable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;runnable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 把runnable转成了callable&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;NEW&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;我们看到成员变量里只有一个&lt;code class=&quot;highlighter-rouge&quot;&gt;callable&lt;/code&gt;, 而构造方法里传入&lt;code class=&quot;highlighter-rouge&quot;&gt;Runnable 或 Callable&lt;/code&gt;都可以, 在构造方法里已经把&lt;code class=&quot;highlighter-rouge&quot;&gt;Runnable&lt;/code&gt;转化成了&lt;code class=&quot;highlighter-rouge&quot;&gt;Callable&lt;/code&gt;. 我们也可以这样声明一个不需要返回值的task: &lt;code class=&quot;highlighter-rouge&quot;&gt;Future&amp;lt;?&amp;gt; f = new FutureTask&amp;lt;Void&amp;gt;(runnable, null)&lt;/code&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;run&quot;&gt;run方法&lt;/h3&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;run()&lt;/code&gt;方法是真正执行任务获取最终数据的地方&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;NEW&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 如果状态不是 NEW, 短路或就会直接返回, 只有状态 是NEW的时候才会执行后面的CAS&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;UNSAFE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;compareAndSwapObject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;runnerOffset&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;currentThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()))&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// 这句CAS的意思为 this.runner == null ? (this.runner = 当前线程, 然后返回true) : (返回 false)&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// CAS是一个原子操作, 整个if的意思是, 只有状态为NEW且头一回被线程执行(this.runner == null)才会把当前线程赋值给 this.runner&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;Callable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;callable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;NEW&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;V&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-                &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ran&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 是否正常运行完得到结果的标识&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 处理过程, 获取最终结果的过程&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;ran&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 虽然此时已经处理完了获取了result, 但在调用 set 之前state一直是NEW&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Throwable&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ex&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 出了异常的情况&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;ran&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;setException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ex&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// state状态变换 NEW -&amp;gt; COMPLETING -&amp;gt; EXCEPTIONAL&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ran&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// state状态变换 NEW -&amp;gt; COMPLETING -&amp;gt; NORMAL&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;finally&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// runner must be non-null until state is settled to&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// prevent concurrent calls to run()&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;runner&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// state must be re-read after nulling runner to prevent&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// leaked interrupts&lt;/span&gt;
-            &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;INTERRUPTING&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;handlePossibleCancellationInterrupt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;set&quot;&gt;set方法&lt;/h3&gt;
-&lt;p&gt;不管是&lt;code class=&quot;highlighter-rouge&quot;&gt;set()&lt;/code&gt;还是&lt;code class=&quot;highlighter-rouge&quot;&gt;setException()&lt;/code&gt;, 都大同小异, 他们两个都调用了&lt;code class=&quot;highlighter-rouge&quot;&gt;finishCompletion()&lt;/code&gt;方法&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;kd&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;UNSAFE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;compareAndSwapInt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stateOffset&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;NEW&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;COMPLETING&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 这里状态变成 COMPLETING&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;outcome&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;v&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 把结果放在 outcome(出现异常时, 异常也放在outcome)&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;UNSAFE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;putOrderedInt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stateOffset&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;NORMAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 把state改成NORMAL, 但不保证立即改过来(可理解为延时生效, 即不保证修改立即可见)&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;finishCompletion&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// 这个方法很重要, 它用来唤醒所有的阻塞线程&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;finishCompletion&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 外层是个循环, 很有必要&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;WaitNode&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;q&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;waiters&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// 代码执行到这里是有可能产生 q != waiters 的情况的, 比如刚进入循环, 又有个地方因调用future.get()&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// 而被加入到阻塞链表里, 这时if就不满足了, 所以外层必须是个循环才能继续执行唤醒工作&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;UNSAFE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;compareAndSwapObject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;waitersOffset&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 原子操作 waiters = null&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(;;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;Thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-                    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                        &lt;span class=&quot;n&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-                        &lt;span class=&quot;n&quot;&gt;LockSupport&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;unpark&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 唤醒阻塞线程&lt;/span&gt;
-                    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;WaitNode&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;next&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-                    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;next&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 唤醒所有阻塞线程后跳出死循环&lt;/span&gt;
-                        &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// unlink to help gc&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;q&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 跳出外层循环(不用担心在唤醒的的时候又有新线程被添加到阻塞链表里, get方法中可以保证)&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;done&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;callable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;// 清理执行足迹&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;get&quot;&gt;get方法&lt;/h3&gt;
-&lt;p&gt;不管是&lt;code class=&quot;highlighter-rouge&quot;&gt;get()&lt;/code&gt;是获取最终结果的方法, 如果结果数据还没准备好, 则调用线程将被阻塞, 被记录在&lt;code class=&quot;highlighter-rouge&quot;&gt;FutureTask&lt;/code&gt;的阻塞链表(&lt;code class=&quot;highlighter-rouge&quot;&gt;waiters&lt;/code&gt;)里.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;V&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;InterruptedException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ExecutionException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;COMPLETING&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;awaitDone&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0L&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 真正的阻塞发生在这里&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;report&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 根据状态返回结果&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// 根据state返回结果, 结果或异常都在outcome里&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;V&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;report&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ExecutionException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;outcome&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;NORMAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 正常结束返回结果&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;V&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CANCELLED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 取消了抛异常&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CancellationException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ExecutionException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Throwable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 执行过程中产生的异常直接抛出&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// 等待(可以等待一段时间, 时间到就不再等了)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;awaitDone&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;timed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nanos&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;InterruptedException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;deadline&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;timed&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;nanoTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nanos&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0L&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;WaitNode&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;q&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;queued&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 这个变量表示有没有把当前线程加入到阻塞链表中去&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(;;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 这个循环会被执行很多次, 每次都匹配到条件执行, 直到复合特定条件才直接返回结果&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;interrupted&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;removeWaiter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;InterruptedException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 这里注意跟set中同步, 有可能刚得到s, sate就被更改了&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;COMPLETING&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 这里保证只有 NEW 和 COMPLETING 才不会直接返回&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;q&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 这里的跳出循环并返回结果, 实际上只有任务完成(或被取消)才会执行到&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;COMPLETING&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 这里把 COMPLETING 也排除掉了, 也就是说, 往下走的情况只有 s = NEW&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;yield&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;q&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;q&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WaitNode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;queued&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-                &lt;span class=&quot;c1&quot;&gt;// 头插法(q.next指向原表头, 并把q赋值给了waiters, 相当于q放在了链表头), 成功返回true表示已经加入到了阻塞链表.&lt;/span&gt;
-                &lt;span class=&quot;c1&quot;&gt;// 这一切发生的前提是 waitersOffset == waiters, 这并不总是成立,&lt;/span&gt;
-                &lt;span class=&quot;c1&quot;&gt;// 因为有可能刚好在q.next = waiters之后(此时得到了waiters, 假设用tmp表示),&lt;/span&gt;
-                &lt;span class=&quot;c1&quot;&gt;// set方法里把futureTask.waiters改成了null. 这时就会出现waitersOffset != waiters(tmp)的情况&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;queued&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;UNSAFE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;compareAndSwapObject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;waitersOffset&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;waiters&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;timed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;nanos&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;deadline&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;nanoTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nanos&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0L&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;removeWaiter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;q&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-                    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;state&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 如果设置了等待时间, 时间到了也会跳出循环&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;LockSupport&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;parkNanos&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nanos&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;LockSupport&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;park&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;hr /&gt;
-</description>
-        <pubDate>Wed, 03 May 2017 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-03-Java%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E4%B9%8BFuture%E6%A8%A1%E5%BC%8F.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-03-Java%E4%B8%AD%E7%9A%84%E5%B9%B6%E5%8F%91%E4%B9%8BFuture%E6%A8%A1%E5%BC%8F.html</guid>
-        
-        <category>Java</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>ES学习之全文检索原理</title>
-        <description>&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Elasticsearch&lt;/code&gt;是比较好用的全文搜索工具, 它是基于&lt;code class=&quot;highlighter-rouge&quot;&gt;Lucene&lt;/code&gt;的, 本文简单介绍下全文搜索的一些内容&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#section&quot;&gt;关于搜索&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-1&quot;&gt;全文搜索的方法&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-2&quot;&gt;倒排索引&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-3&quot;&gt;创建索引&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-4&quot;&gt;搜索索引&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#section-5&quot;&gt;参考文章&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section&quot;&gt;关于搜索&lt;/h2&gt;
-&lt;p&gt;搜索就是从一堆数据里找我们想要的内容, 我们先对数据做个分类:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;结构化数据&lt;/code&gt;: 具有固定格式或长度限制的数据, 如数据库&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;非结构化数据&lt;/code&gt;: 也叫全文数据, 没有固定格式的数据, 如一篇作文, 一封邮件&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;此外还有半结构化数据, 如&lt;code class=&quot;highlighter-rouge&quot;&gt;XML&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;HTML&lt;/code&gt;等, 按不同的数据分类, 搜索也分两类:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;对结构化数据的搜索&lt;/code&gt;: 如数据库搜索, 使用SQL语句。&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;全文搜索&lt;/code&gt;: 如&lt;code class=&quot;highlighter-rouge&quot;&gt;grep&lt;/code&gt;命令, Google和百度对大量数据的搜索等。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section-1&quot;&gt;全文搜索的方法&lt;/h2&gt;
-
-&lt;p&gt;对全文数据进行搜索, 最简单的一种方式就是顺序扫描, 如果要找某个字符串, 则需要从头到尾开始找, 找到了则该文档就是我们要找的文档, 接下来再从下一个文档中搜索。这种方法最简单，单数据量大的时候效率十分低。&lt;/p&gt;
-
-&lt;p&gt;第二种方法是先把这些全文数据处理一下, 提取一部分信息重新组织, 让它变得有一定的结构。 这部分从非结构化数据中提取出的然后重新组织的信息，我们称之为索引。&lt;/p&gt;
-
-&lt;p&gt;因此通常全文检索分为两个过程: 创建索引(&lt;code class=&quot;highlighter-rouge&quot;&gt;Index&lt;/code&gt;)和搜索索引(&lt;code class=&quot;highlighter-rouge&quot;&gt;Search&lt;/code&gt;)。虽然创建索引的过程比较慢, 但索引创建之后可以多次使用，大大提高了搜索的效率。&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section-2&quot;&gt;倒排索引&lt;/h2&gt;
-
-&lt;p&gt;在顺序扫描中, 我们是匹配文档是否包含我们所查找的字符串, 即从文档中找字符串; 我们想要的结果是哪些文档中包含要找的字符串, 即找到字符串到文档的映射, 两者恰恰相反. 所以如果索引能够保存字符串到文档的映射关系, 搜索就会变快, 这种保存字符串到文档映射关系的索引, 被称作&lt;code class=&quot;highlighter-rouge&quot;&gt;反向索引&lt;/code&gt;或&lt;code class=&quot;highlighter-rouge&quot;&gt;倒排索引&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;假设我们有100篇文章, 三个字符串&lt;code class=&quot;highlighter-rouge&quot;&gt;lucene&lt;/code&gt;,&lt;code class=&quot;highlighter-rouge&quot;&gt;solr&lt;/code&gt;,&lt;code class=&quot;highlighter-rouge&quot;&gt;hadoop&lt;/code&gt;分别出现在不同的文章中, 我们创建的反向索引如下图:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/static/images/post_list.jpg&quot; alt=&quot;倒排索引&quot; title=&quot;倒排索引&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;左边的字符串一般称为词典, 右边是包含该字符串的文档(&lt;code class=&quot;highlighter-rouge&quot;&gt;Document&lt;/code&gt;)组成的链表, 成为倒排表(&lt;code class=&quot;highlighter-rouge&quot;&gt;Posting List&lt;/code&gt;)&lt;/p&gt;
-
-&lt;p&gt;我们利用反向索引查找即包含&lt;code class=&quot;highlighter-rouge&quot;&gt;lucene&lt;/code&gt;, 又包含&lt;code class=&quot;highlighter-rouge&quot;&gt;hadoop&lt;/code&gt;的文档, 只需要通过字典找到两个链表, 把链表中相同的文档取出即可.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section-3&quot;&gt;创建索引&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;第一步: 把文档(&lt;code class=&quot;highlighter-rouge&quot;&gt;Document&lt;/code&gt;)传给分词组件(&lt;code class=&quot;highlighter-rouge&quot;&gt;Tokenizer&lt;/code&gt;)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;这个过程会把文档&lt;code class=&quot;highlighter-rouge&quot;&gt;Document&lt;/code&gt;分割成一个个的单词, 去掉标点, 去掉停顿次(&lt;code class=&quot;highlighter-rouge&quot;&gt;the&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;a&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;this&lt;/code&gt;等), 经过分词得到的结果成为词元(&lt;code class=&quot;highlighter-rouge&quot;&gt;Token&lt;/code&gt;).&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;第二步: 把词元(&lt;code class=&quot;highlighter-rouge&quot;&gt;Token&lt;/code&gt;)交给语言处理组件(&lt;code class=&quot;highlighter-rouge&quot;&gt;linguistic processor&lt;/code&gt;)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;语言处理组件(&lt;code class=&quot;highlighter-rouge&quot;&gt;linguistic processor&lt;/code&gt;)主要是对得到的词元(&lt;code class=&quot;highlighter-rouge&quot;&gt;Token&lt;/code&gt;)做一些同语言相关的处理, 比如变为小写(&lt;code class=&quot;highlighter-rouge&quot;&gt;lowercase&lt;/code&gt;), 复数变为单数(&lt;code class=&quot;highlighter-rouge&quot;&gt;stemming&lt;/code&gt;), 过去式变为原型(&lt;code class=&quot;highlighter-rouge&quot;&gt;lemmatization&lt;/code&gt;)等。语言处理组件的结果被称为词(&lt;code class=&quot;highlighter-rouge&quot;&gt;Term&lt;/code&gt;).&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;第三步: 把词(&lt;code class=&quot;highlighter-rouge&quot;&gt;Term&lt;/code&gt;)传给索引组件(&lt;code class=&quot;highlighter-rouge&quot;&gt;Indexer&lt;/code&gt;)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;索引组件利用词(&lt;code class=&quot;highlighter-rouge&quot;&gt;Term&lt;/code&gt;)生成一个字典, 按字母顺序进行排序, 然后合并相同的&lt;code class=&quot;highlighter-rouge&quot;&gt;Term&lt;/code&gt;成为文档的倒排链表&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/static/images/post_list2.jpg&quot; alt=&quot;倒排索引&quot; title=&quot;倒排索引&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;其中:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Document Frequency&lt;/code&gt;: 文档频次，表示总共有多少文件包含此词(&lt;code class=&quot;highlighter-rouge&quot;&gt;Term&lt;/code&gt;)&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Frequency&lt;/code&gt;: 词频率，表示此文件中包含了几个此词(&lt;code class=&quot;highlighter-rouge&quot;&gt;Term&lt;/code&gt;)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section-4&quot;&gt;搜索索引&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;第一步: 输入查询语句&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;查询语句一般会有一定的语法, 比如&lt;code class=&quot;highlighter-rouge&quot;&gt;lucene AND learned NOT hadoop&lt;/code&gt;, 表示搜索包含&lt;code class=&quot;highlighter-rouge&quot;&gt;lucene&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;learned&lt;/code&gt;但不包含&lt;code class=&quot;highlighter-rouge&quot;&gt;hadoop&lt;/code&gt;的文档&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;第二步: 对查询语句进行词法分析, 语法分析, 及语言处理&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;词法分析主要用来识别关键词和要搜索的单词, 比如例子中关键词有&lt;code class=&quot;highlighter-rouge&quot;&gt;AND&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;NOT&lt;/code&gt;;&lt;br /&gt;
-语法分析主要用来生成语法树, 不满足语法规则的则报错;&lt;br /&gt;
-语言处理跟创建索引中几乎一致, 比如&lt;code class=&quot;highlighter-rouge&quot;&gt;learned&lt;/code&gt;变为&lt;code class=&quot;highlighter-rouge&quot;&gt;learn&lt;/code&gt;;&lt;/p&gt;
-
-&lt;p&gt;经过第二步处理, 得到一个经过语言处理的语法树&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;第三步: 搜索索引, 得到符合语法树的文档&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;首先，在反向索引表中，分别找出包含&lt;code class=&quot;highlighter-rouge&quot;&gt;lucene, learn, hadoop&lt;/code&gt;的文档链表&lt;br /&gt;
-其次，对包含&lt;code class=&quot;highlighter-rouge&quot;&gt;lucene, learn&lt;/code&gt;的链表进行合并, 得到既包含&lt;code class=&quot;highlighter-rouge&quot;&gt;lucene&lt;/code&gt;又包含&lt;code class=&quot;highlighter-rouge&quot;&gt;learn&lt;/code&gt;的文档链表&lt;br /&gt;
-然后，将此链表与&lt;code class=&quot;highlighter-rouge&quot;&gt;hadoop&lt;/code&gt;的文档链表进行差操作, 去除包含&lt;code class=&quot;highlighter-rouge&quot;&gt;hadoop&lt;/code&gt;的文档&lt;br /&gt;
-最后, 此文档链表就是我们要找的文档&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;第四步: 根据文档和查询语句的相关性,对结果进行排序&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;这一步要先根据相关性进行打分, 得分高的排序靠前.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;section-5&quot;&gt;参考文章&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.kailing.pub/article/index/arcid/72.html&quot;&gt;Lucene全文检索的基本原理&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.open-open.com/lib/view/open1410492056742.html&quot;&gt;Lucene和搜索技术&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-</description>
-        <pubDate>Tue, 11 Apr 2017 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-04-11-ES%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2%E5%8E%9F%E7%90%86.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-04-11-ES%E5%AD%A6%E4%B9%A0%E4%B9%8B%E5%85%A8%E6%96%87%E6%A3%80%E7%B4%A2%E5%8E%9F%E7%90%86.html</guid>
         
         <category>Java</category>
         

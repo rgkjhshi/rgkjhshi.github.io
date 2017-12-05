@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="IPv4详解, 编程技术,  逆水行舟" />
+    <meta name="description" content="IPv4详解, 编程技术,  " />
+
+    <title>逆水行舟</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-11-29-IPv4%E8%AF%A6%E8%A7%A3.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="/static/js/jquery.qrcode.min.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="/static/js/uikit.min.js"></script>
+    <!-- quietflow -->
+    <!-- <script type="text/javascript" src="http://loveshisong.cn/static/js/quietflow.min.js"></script> -->
+    <!-- UK sticky -->
+    <script type="text/javascript" src="/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "shisong"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" data-uk-sticky>
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <script type="text/javascript">
+jQuery(function(){
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-11-29-IPv4%E8%AF%A6%E8%A7%A3.html"
+    });
+})
+</script>
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>IPv4详解</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <hr />
+
+<ul id="markdown-toc">
+  <li><a href="#ipv4">IPv4数据报</a></li>
+  <li><a href="#ipv4-1">IPv4地址分类</a></li>
+  <li><a href="#nat">网络地址转换<code class="highlighter-rouge">NAT</code></a></li>
+  <li><a href="#cidr">子网与CIDR</a>    <ul>
+      <li><a href="#section">子网划分</a></li>
+      <li><a href="#section-1">子网掩码</a></li>
+      <li><a href="#cidr-1">无分类编址<code class="highlighter-rouge">CIDR</code></a></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="ipv4">IPv4数据报</h2>
+<p>一个IP分组由首部和数据两部分组成。首部的前一部分是固定长度的, 共<code class="highlighter-rouge">20B</code>, 是所有IP分组必须具有的。在首部固定部分后面是一些可选字段, 其长度是可变的。 IP数据报的格式如下图所示:</p>
+
+<p><img src="/static/images/IPv4.png" alt="IPv4" title="IPv4" /></p>
+
+<p>IP首部的字段含义如下:</p>
+
+<ul>
+  <li>版本: IP协议的版本，目前的IP协议版本号为4，下一代IP协议版本号为6。</li>
+  <li>首部长度: IP报头的长度, 固定部分的长度(20B)和可变部分的长度之和。共占4位, 以<code class="highlighter-rouge">4字节(32bit)</code>为单位, 即报头的最大长度可以为<code class="highlighter-rouge">15*4B=60B</code>, 除去固定部分的长度<code class="highlighter-rouge">20字节</code>, 可变部分的长度最大为<code class="highlighter-rouge">40字节</code>。</li>
+  <li>服务类型: Type Of Service(TOS), 占8位, 其中的前3位表示报文的优先级, 后面的几位分别表示要求更低时延、更高的吞吐量、更高的可靠性、更低的路由代价等。对应位为1即有相应要求, 为0则不要求。
+    <ul>
+      <li><code class="highlighter-rouge">bit 0~2</code>: 优先级</li>
+      <li><code class="highlighter-rouge">bit 3</code>: 延迟, 0 = Normal Delay, 1 = Low Delay</li>
+      <li><code class="highlighter-rouge">bit 4</code>: 吞吐量, 0 = Normal Throughput, 1 = High Throughput</li>
+      <li><code class="highlighter-rouge">bit 5</code>: 可靠性, 0 = Normal Relibility, 1 = High Relibility</li>
+      <li><code class="highlighter-rouge">bit 6~7</code>: Reserved for Future Use. 6: 开销(路由代价); 7: 仍为保留</li>
+    </ul>
+  </li>
+  <li>总长度: 报文的总长度, 单位为字节, 所以一个IP报文的的最大长度为65535B。</li>
+  <li>标识: 每产生一个报文就加1, 通常与标记字段和分片字段一起用于数据包的分段。当IP报文长度超过传输网络的<code class="highlighter-rouge">MTU</code>(最大传输单元)时, 必须分片, 此时这个标识字段的值被复制到所有数据分片的标识字段中, 以便这些分片在达到最终目的地时可以重新组合起来。</li>
+  <li>标志: 共3位, 分别为<code class="highlighter-rouge">R(Reserved)、DF(Don't Fragment)、MF(More Fragment)</code>, 目前只有后两位有效, <code class="highlighter-rouge">DF=1</code>表示不分片, <code class="highlighter-rouge">DF=0</code>表示分片; <code class="highlighter-rouge">MF=1</code>表示后面还有分片，<code class="highlighter-rouge">MF=0</code>表示这是最后一片。</li>
+  <li>片偏移: 本分片在原先数据报文中相对首位的偏移位, 13位, 以<code class="highlighter-rouge">8B</code>为偏移单位, 所以一个分片的长度一定是<code class="highlighter-rouge">8B(64bit)</code>的整数倍
+    <ul>
+      <li>举例: 若<code class="highlighter-rouge">MTU=1500</code>时, 一个大小为3000字节的数据经过该接口, 会被分为3段, 第一段分组总长度为<code class="highlighter-rouge">1480+20</code>, 第二段也为<code class="highlighter-rouge">1480</code>, 第三段为<code class="highlighter-rouge">40</code>, 那么第一段的分段偏移为<code class="highlighter-rouge">0</code>, 第二段分段偏移为<code class="highlighter-rouge">1480/8=185</code>, 第三段为<code class="highlighter-rouge">185+185=370</code></li>
+    </ul>
+  </li>
+  <li>生存时间: TTL(Time to Live), 标识分组在网络中的寿命, 以确保分组不会永远在网络中循环。路由在转发分组之前, 先把<code class="highlighter-rouge">TTL</code>减1, 为0时则丢弃该分组。推荐的初始值由分配数字<code class="highlighter-rouge">RFC</code>指定, 当前值为<code class="highlighter-rouge">64</code>, 发送<code class="highlighter-rouge">ICMP</code>回显应答时经常把<code class="highlighter-rouge">TTL</code>设为最大值<code class="highlighter-rouge">255</code></li>
+  <li>协议: 标识IP分组携带的数据使用的是那种协议, 以便目的主机的IP层能知道要将数据报上交到哪个进程(与端口号类似, 这里采用的是协议号)
+    <ul>
+      <li>1: Internet Control Message Protocol (<code class="highlighter-rouge">ICMP</code>)</li>
+      <li>2: Internet Group Management Protocol (<code class="highlighter-rouge">IGMP</code>)</li>
+      <li>4: IP in IP (encapsulation)</li>
+      <li>6: Transmission Control Protocol (<code class="highlighter-rouge">TCP</code>)</li>
+      <li>17: User Datagram Protocol (<code class="highlighter-rouge">UDP</code>)</li>
+      <li>45: Inter-Domain Routing Protocol (<code class="highlighter-rouge">IDRP</code>)</li>
+      <li>46: Resource Reservation Protocol (<code class="highlighter-rouge">RSVP</code>)</li>
+      <li>47: Generic Routing Encapsulation (<code class="highlighter-rouge">GRE</code>)</li>
+      <li>54: NBMA Next Hop Resolution Protocol (<code class="highlighter-rouge">NHRP</code>)</li>
+      <li>88: Cisco Internet Gateway Routing Protocol (<code class="highlighter-rouge">IGRP</code>)</li>
+      <li>89: Open Shortest Path First (<code class="highlighter-rouge">OSPF</code>)</li>
+    </ul>
+  </li>
+  <li>首部校验和: 首部的校验和, 检查首部的完整性(只校验首部, 不校验数据部分)</li>
+  <li>源IP地址: 发送方IP地址</li>
+  <li>目的IP地址: 接收方IP地址</li>
+  <li>可选字段: 包括源点产生的信息和其它路由器加入的信息, 可选字段, 主要用于测试, 长度可变</li>
+  <li>填充: 通过在可选字段后面添加0来补足32位, 确保报头长度是32的倍数</li>
+</ul>
+
+<hr />
+
+<h2 id="ipv4-1">IPv4地址分类</h2>
+<p>现在的IP网络使用32位地址表示, 以点分十进制表示. IP地址由<code class="highlighter-rouge">网络号</code>和<code class="highlighter-rouge">主机号</code>两部分组成, 根据网络号的不同分为A类地址、B类地址、C类地址、D类地址和E类地址5种类型, 如下图:</p>
+
+<p><img src="/static/images/IPv4_type.png" alt="IPv4" title="IPv4" /></p>
+
+<ul>
+  <li>主机号全0表示网络本身, 如<code class="highlighter-rouge">202.98.174.0</code></li>
+  <li>主机号全1表示本网络的广播地址, 如<code class="highlighter-rouge">202.98.174.255</code></li>
+  <li><code class="highlighter-rouge">127.0.0.0</code>网络保留作为环路自检地址</li>
+  <li>32位全0, 即<code class="highlighter-rouge">0.0.0.0</code>表示本网络上的本主机</li>
+  <li>32位全1, 即<code class="highlighter-rouge">255.255.255.255</code>表示整个<code class="highlighter-rouge">TCP/IP</code>网络的广播地址, 由于路由器对广播域的隔离, 所以等效为本网络的广播地址</li>
+</ul>
+
+<hr />
+
+<h2 id="nat">网络地址转换<code class="highlighter-rouge">NAT</code></h2>
+<p>网络地址转换(<code class="highlighter-rouge">NAT</code>)通过将专用地址转换为公用地址, 隐藏了内部网络结构, 节省了IP地址消耗. 私有IP必须经过NAT转换成公网IP才可用于互联网. NAT路由器使用NAT转换表(存放着<code class="highlighter-rouge">私有IP:端口</code>到<code class="highlighter-rouge">全球IP:端口</code>的映射)可以把多个私有IP都映射到同一个公网IP上.</p>
+
+<p>私有IP地址网段如下:</p>
+
+<ul>
+  <li>A类: 1个网段, 即<code class="highlighter-rouge">10.0.0.0 ~ 10.255.255.255</code></li>
+  <li>B类: 16个网段, 即<code class="highlighter-rouge">172.16.0.0 ~ 172.31.255.255</code></li>
+  <li>C类: 256个网段, 即<code class="highlighter-rouge">192.168.0.0 ~ 192.168.255.255</code></li>
+</ul>
+
+<p>注意: 普通路由器转发IP数据报时不改变源和目的IP地址, 而NAT路由转发时一定会改变其IP地址, 而且需要查看传输层的端口.</p>
+
+<hr />
+
+<h2 id="cidr">子网与CIDR</h2>
+
+<h3 id="section">子网划分</h3>
+
+<ul>
+  <li>从1985年起, 在IP地址中又增加了一个<code class="highlighter-rouge">子网号字段</code>, 两级IP地址变成三级, 即三级IP地址由<code class="highlighter-rouge">网络号</code>, <code class="highlighter-rouge">子网号</code>和<code class="highlighter-rouge">主机号</code>三部分组成。</li>
+  <li>划分子网只是把IP地址的<code class="highlighter-rouge">主机号</code>这部分进行再划分, 不会改变原来的<code class="highlighter-rouge">网络号</code>, 从IP数据报中无法判断源或目的主机是否进行了子网划分</li>
+</ul>
+
+<h3 id="section-1">子网掩码</h3>
+<p>子网掩码是跟IP地址相对应的32位二进制串, 1对应网络号及子网号, 0对应主机号。子网掩码与IP地址按位相与(<code class="highlighter-rouge">AND</code>)即可得到相应子网的网络地址。 如果一个网络没有划分子网, 那就使用默认子网掩码, <code class="highlighter-rouge">A、B、C</code>类地址默认的子网掩码分别为<code class="highlighter-rouge">255.0.0.0</code>, <code class="highlighter-rouge">255.255.0.0</code>和<code class="highlighter-rouge">255.255.255.0</code></p>
+
+<p>子网掩码是一个网络中的重要属性, 路由之间交换信息时, 必须把自己所在网络的子网掩码告诉对方。在使用子网掩码的情况下:</p>
+
+<ol>
+  <li>一个主机在设置IP地址信息的同时, 必须设置子网掩码</li>
+  <li>同属于一个字网的所有主机及路由器的相应端口, 必须设置相同的子网掩码</li>
+  <li>路由器的路由表中包含的主要信息必须有: <code class="highlighter-rouge">目的网络地址</code>, <code class="highlighter-rouge">子网掩码</code>, <code class="highlighter-rouge">下一跳地址</code></li>
+</ol>
+
+<h3 id="cidr-1">无分类编址<code class="highlighter-rouge">CIDR</code></h3>
+<p><code class="highlighter-rouge">CIDR</code>(Classless Inter-Domain Routing)消除了传统的A、B、C类地址以及划分子网的概念, 更加有效地分配IPv4的地址空间, 提高了IP地址空间利用率, 减小路由表大小, 提高路由转发能力。 它有如下特点:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">CIDR</code>使用“斜线记法”(又称为CIDR记法), 即<code class="highlighter-rouge">IP地址/网络前缀位数</code>, 如<code class="highlighter-rouge">128.14.32.5/20</code>表示掩码为前20位全1和后12位全0, 即网络前缀为<code class="highlighter-rouge">128.14.32.0</code></li>
+  <li>网络前缀县通的连续的IP地址组成<code class="highlighter-rouge">CIDR地址块</code>, 一个CIDR地址块可以包括多个ABC类地址</li>
+  <li>使用CIDR时, 在路由表可能得到多个匹配结果, 应采用<code class="highlighter-rouge">最长前缀匹配</code>原则, 选取最长的网络前缀匹配</li>
+</ul>
+
+<hr />
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/IPv4详解" data-title="IPv4详解" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-11-29-IPv4%E8%AF%A6%E8%A7%A3.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
+
+</body>
+
+</html>
