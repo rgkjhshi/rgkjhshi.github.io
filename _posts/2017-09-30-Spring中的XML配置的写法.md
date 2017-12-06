@@ -213,6 +213,7 @@ public class Singleton {
         <prop key="key1">value1</prop>
         <prop key="key2">value2</prop>
     </util:properties>
+    <util:properties id="properties" location="classpath:config.properties" />
 ~~~
 
 *****
