@@ -104,33 +104,33 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#future">Future模式</a></li>
-  <li><a href="#futuretask">FutureTask详解</a>    <ul>
-      <li><a href="#futuretask-1">FutureTask的结构</a></li>
-      <li><a href="#section">构造方法</a></li>
-      <li><a href="#run">run方法</a></li>
-      <li><a href="#set">set方法</a></li>
-      <li><a href="#get">get方法</a></li>
+  <li><a href="#future模式" id="markdown-toc-future模式">Future模式</a></li>
+  <li><a href="#futuretask详解" id="markdown-toc-futuretask详解">FutureTask详解</a>    <ul>
+      <li><a href="#futuretask的结构" id="markdown-toc-futuretask的结构">FutureTask的结构</a></li>
+      <li><a href="#构造方法" id="markdown-toc-构造方法">构造方法</a></li>
+      <li><a href="#run方法" id="markdown-toc-run方法">run方法</a></li>
+      <li><a href="#set方法" id="markdown-toc-set方法">set方法</a></li>
+      <li><a href="#get方法" id="markdown-toc-get方法">get方法</a></li>
     </ul>
   </li>
 </ul>
 
 <hr />
 
-<h2 id="future">Future模式</h2>
+<h2 id="future模式">Future模式</h2>
 <p><code class="highlighter-rouge">Future模式</code>的核心在于: 去除了主函数的等待时间，使原本需要等待的时间段可以用于处理其他业务逻辑.<br />
 <code class="highlighter-rouge">Future模式</code>的关键在于: 返回的数据并不是真实的处理结果<code class="highlighter-rouge">RealData</code>, 而是一个代理数据<code class="highlighter-rouge">FutureData</code>, 当调用代理数据的<code class="highlighter-rouge">get</code>方法时(<code class="highlighter-rouge">FutureData.get()</code>), 会阻塞等待获取真实数据<code class="highlighter-rouge">RealData</code>.</p>
 
 <p>下面实现一个简易版的<code class="highlighter-rouge">Future模式</code>, 这个例子很好的说明了<code class="highlighter-rouge">Future.get()</code>时的阻塞的形成原理</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="cm">/**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
  * FutureData实际上是真实数据RealData的代理, 封装了获取RealData的等待过程
  */</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">FutureData</span><span class="o">&lt;</span><span class="n">V</span><span class="o">&gt;</span> <span class="kd">implements</span> <span class="n">Future</span><span class="o">&lt;</span><span class="n">V</span><span class="o">&gt;</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="n">V</span> <span class="n">realData</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>        <span class="c1">// FutureData是realData的封装</span>
     <span class="kd">private</span> <span class="kt">boolean</span> <span class="n">isReady</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>  <span class="c1">// 是否已经准备好</span>
 
-    <span class="kd">public</span> <span class="kd">synchronized</span> <span class="kt">void</span> <span class="n">setRealData</span><span class="o">(</span><span class="n">V</span> <span class="n">realData</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">synchronized</span> <span class="kt">void</span> <span class="nf">setRealData</span><span class="o">(</span><span class="n">V</span> <span class="n">realData</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">if</span> <span class="o">(</span><span class="n">isReady</span><span class="o">)</span>
             <span class="k">return</span><span class="o">;</span>
         <span class="k">this</span><span class="o">.</span><span class="na">realData</span> <span class="o">=</span> <span class="n">realData</span><span class="o">;</span>
@@ -139,7 +139,7 @@ jQuery(function(){
     <span class="o">}</span>
 
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kd">synchronized</span> <span class="n">V</span> <span class="n">get</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">InterruptedException</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">synchronized</span> <span class="n">V</span> <span class="nf">get</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">InterruptedException</span> <span class="o">{</span>
         <span class="k">if</span> <span class="o">(!</span><span class="n">isReady</span><span class="o">)</span> <span class="o">{</span>
             <span class="n">wait</span><span class="o">();</span>  <span class="c1">//一直等到realData注入到FutureData中</span>
         <span class="o">}</span>
@@ -147,31 +147,29 @@ jQuery(function(){
     <span class="o">}</span>
     <span class="c1">// Future的其他接口略...</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>要使用我们自己实现的简易版<code class="highlighter-rouge">Future模式</code>, 我们需要一个在一个方法里加工一些数据并最后返回我们的<code class="highlighter-rouge">FutureData</code></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="kd">public</span> <span class="n">Future</span> <span class="nf">doSomething</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="n">Future</span> <span class="nf">doSomething</span><span class="o">()</span> <span class="o">{</span>
         <span class="kd">final</span> <span class="n">FutureData</span> <span class="n">futureData</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FutureData</span><span class="o">();</span>
         <span class="c1">// 假设生成realData的过程特别慢, 所以放在单独的线程中运行</span>
-        <span class="k">new</span> <span class="n">Thread</span><span class="o">(</span><span class="k">new</span> <span class="n">Runnable</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">new</span> <span class="nf">Thread</span><span class="o">(</span><span class="k">new</span> <span class="n">Runnable</span><span class="o">()</span> <span class="o">{</span>
             <span class="nd">@Override</span>
-            <span class="kd">public</span> <span class="kt">void</span> <span class="n">run</span><span class="o">()</span> <span class="o">{</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
                 <span class="n">String</span> <span class="n">realData</span> <span class="o">=</span> <span class="s">"假设生成realData的过程特别慢"</span>
                 <span class="n">futureData</span><span class="o">.</span><span class="na">setRealData</span><span class="o">(</span><span class="n">realData</span><span class="o">);</span>
             <span class="o">}</span>
         <span class="o">}).</span><span class="na">start</span><span class="o">();</span>
         <span class="k">return</span> <span class="n">futureData</span><span class="o">;</span> <span class="c1">// 直接返回FutureData</span>
     <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>这样当我们调用<code class="highlighter-rouge">Future futureData = doSomething()</code>来处理数据的时候, 要加工的数据特别慢, 我们直接返回了<code class="highlighter-rouge">FutureData</code>, 所以在调用<code class="highlighter-rouge">doSomething()</code>的线程里并不被阻塞, 这个线程可以去做其他事情, 只有当这个线程通过<code class="highlighter-rouge">futureData.get()</code>时, 线程才会被阻塞, 直到返回<code class="highlighter-rouge">realData</code>.</p>
 
 <hr />
 
-<h2 id="futuretask">FutureTask详解</h2>
+<h2 id="futuretask详解">FutureTask详解</h2>
 
 <p>JDK中<code class="highlighter-rouge">Future模式</code>的经典实现类为<code class="highlighter-rouge">FutureTask</code>, 它除了实现了<code class="highlighter-rouge">Future</code>接口外还实现了<code class="highlighter-rouge">Runnable</code>接口, 它的实现比我们简易版的实现要复杂一些</p>
 
@@ -180,11 +178,11 @@ jQuery(function(){
   <li><code class="highlighter-rouge">FutureTask</code>自己实现了<code class="highlighter-rouge">Runnable</code>接口, 也就是说我们我们不用再另起线程来执行某任务了(就像<code class="highlighter-rouge">doSomething()</code>里做的), 可以直接使用<code class="highlighter-rouge">Thread</code>去启动这个<code class="highlighter-rouge">FutureTask</code>或者把它交给一个<code class="highlighter-rouge">ExecutorService</code>去执行.</li>
 </ul>
 
-<h3 id="futuretask-1">FutureTask的结构</h3>
+<h3 id="futuretask的结构">FutureTask的结构</h3>
 
 <p><code class="highlighter-rouge">FutureTask</code>内部的主要成员如下:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="cm">/**
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cm">/**
      * 任务的状态
      * 可能的状态转换:
      * NEW -&gt; COMPLETING -&gt; NORMAL
@@ -216,30 +214,28 @@ jQuery(function(){
         <span class="n">WaitNode</span><span class="o">()</span> <span class="o">{</span> <span class="n">thread</span> <span class="o">=</span> <span class="n">Thread</span><span class="o">.</span><span class="na">currentThread</span><span class="o">();</span> <span class="o">}</span>
     <span class="o">}</span>
 
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="section">构造方法</h3>
+<h3 id="构造方法">构造方法</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="kd">public</span> <span class="nf">FutureTask</span><span class="p">(</span><span class="n">Callable</span><span class="o">&lt;</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">callable</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="nf">FutureTask</span><span class="o">(</span><span class="n">Callable</span><span class="o">&lt;</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">callable</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">if</span> <span class="o">(</span><span class="n">callable</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="n">NullPointerException</span><span class="o">();</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">NullPointerException</span><span class="o">();</span>
         <span class="k">this</span><span class="o">.</span><span class="na">callable</span> <span class="o">=</span> <span class="n">callable</span><span class="o">;</span>
         <span class="k">this</span><span class="o">.</span><span class="na">state</span> <span class="o">=</span> <span class="n">NEW</span><span class="o">;</span>
     <span class="o">}</span>
-    <span class="kd">public</span> <span class="n">FutureTask</span><span class="o">(</span><span class="n">Runnable</span> <span class="n">runnable</span><span class="o">,</span> <span class="n">V</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nf">FutureTask</span><span class="o">(</span><span class="n">Runnable</span> <span class="n">runnable</span><span class="o">,</span> <span class="n">V</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="na">callable</span> <span class="o">=</span> <span class="n">Executors</span><span class="o">.</span><span class="na">callable</span><span class="o">(</span><span class="n">runnable</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>  <span class="c1">// 把runnable转成了callable</span>
         <span class="k">this</span><span class="o">.</span><span class="na">state</span> <span class="o">=</span> <span class="n">NEW</span><span class="o">;</span>
     <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>我们看到成员变量里只有一个<code class="highlighter-rouge">callable</code>, 而构造方法里传入<code class="highlighter-rouge">Runnable 或 Callable</code>都可以, 在构造方法里已经把<code class="highlighter-rouge">Runnable</code>转化成了<code class="highlighter-rouge">Callable</code>. 我们也可以这样声明一个不需要返回值的task: <code class="highlighter-rouge">Future&lt;?&gt; f = new FutureTask&lt;Void&gt;(runnable, null)</code></p>
 
-<h3 id="run">run方法</h3>
+<h3 id="run方法">run方法</h3>
 <p><code class="highlighter-rouge">run()</code>方法是真正执行任务获取最终数据的地方</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">if</span> <span class="o">(</span><span class="n">state</span> <span class="o">!=</span> <span class="n">NEW</span> <span class="o">||</span>  <span class="c1">// 如果状态不是 NEW, 短路或就会直接返回, 只有状态 是NEW的时候才会执行后面的CAS</span>
             <span class="o">!</span><span class="n">UNSAFE</span><span class="o">.</span><span class="na">compareAndSwapObject</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">runnerOffset</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">Thread</span><span class="o">.</span><span class="na">currentThread</span><span class="o">()))</span>
             <span class="c1">// 这句CAS的意思为 this.runner == null ? (this.runner = 当前线程, 然后返回true) : (返回 false)</span>
@@ -272,13 +268,12 @@ jQuery(function(){
                 <span class="n">handlePossibleCancellationInterrupt</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
         <span class="o">}</span>
     <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="set">set方法</h3>
+<h3 id="set方法">set方法</h3>
 <p>不管是<code class="highlighter-rouge">set()</code>还是<code class="highlighter-rouge">setException()</code>, 都大同小异, 他们两个都调用了<code class="highlighter-rouge">finishCompletion()</code>方法</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">set</span><span class="p">(</span><span class="n">V</span> <span class="n">v</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">set</span><span class="o">(</span><span class="n">V</span> <span class="n">v</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">if</span> <span class="o">(</span><span class="n">UNSAFE</span><span class="o">.</span><span class="na">compareAndSwapInt</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">stateOffset</span><span class="o">,</span> <span class="n">NEW</span><span class="o">,</span> <span class="n">COMPLETING</span><span class="o">))</span> <span class="o">{</span>  <span class="c1">// 这里状态变成 COMPLETING</span>
             <span class="n">outcome</span> <span class="o">=</span> <span class="n">v</span><span class="o">;</span> <span class="c1">// 把结果放在 outcome(出现异常时, 异常也放在outcome)</span>
             <span class="n">UNSAFE</span><span class="o">.</span><span class="na">putOrderedInt</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">stateOffset</span><span class="o">,</span> <span class="n">NORMAL</span><span class="o">);</span> <span class="c1">// 把state改成NORMAL, 但不保证立即改过来(可理解为延时生效, 即不保证修改立即可见)</span>
@@ -286,7 +281,7 @@ jQuery(function(){
         <span class="o">}</span>
     <span class="o">}</span>
     <span class="c1">// 这个方法很重要, 它用来唤醒所有的阻塞线程</span>
-    <span class="kd">private</span> <span class="kt">void</span> <span class="n">finishCompletion</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">finishCompletion</span><span class="o">()</span> <span class="o">{</span>
         <span class="c1">// 外层是个循环, 很有必要</span>
         <span class="k">for</span> <span class="o">(</span><span class="n">WaitNode</span> <span class="n">q</span><span class="o">;</span> <span class="o">(</span><span class="n">q</span> <span class="o">=</span> <span class="n">waiters</span><span class="o">)</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">;)</span> <span class="o">{</span>
             <span class="c1">// 代码执行到这里是有可能产生 q != waiters 的情况的, 比如刚进入循环, 又有个地方因调用future.get()</span>
@@ -310,29 +305,28 @@ jQuery(function(){
         <span class="n">done</span><span class="o">();</span>
         <span class="n">callable</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>   <span class="c1">// 清理执行足迹</span>
     <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="get">get方法</h3>
+<h3 id="get方法">get方法</h3>
 <p>不管是<code class="highlighter-rouge">get()</code>是获取最终结果的方法, 如果结果数据还没准备好, 则调用线程将被阻塞, 被记录在<code class="highlighter-rouge">FutureTask</code>的阻塞链表(<code class="highlighter-rouge">waiters</code>)里.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="kd">public</span> <span class="n">V</span> <span class="nf">get</span><span class="p">(</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">InterruptedException</span><span class="o">,</span> <span class="n">ExecutionException</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="n">V</span> <span class="nf">get</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">InterruptedException</span><span class="o">,</span> <span class="n">ExecutionException</span> <span class="o">{</span>
         <span class="kt">int</span> <span class="n">s</span> <span class="o">=</span> <span class="n">state</span><span class="o">;</span>
         <span class="k">if</span> <span class="o">(</span><span class="n">s</span> <span class="o">&lt;=</span> <span class="n">COMPLETING</span><span class="o">)</span>
             <span class="n">s</span> <span class="o">=</span> <span class="n">awaitDone</span><span class="o">(</span><span class="kc">false</span><span class="o">,</span> <span class="mi">0L</span><span class="o">);</span>  <span class="c1">// 真正的阻塞发生在这里</span>
-        <span class="k">return</span> <span class="n">report</span><span class="o">(</span><span class="n">s</span><span class="o">);</span> <span class="c1">// 根据状态返回结果</span>
+        <span class="k">return</span> <span class="nf">report</span><span class="o">(</span><span class="n">s</span><span class="o">);</span> <span class="c1">// 根据状态返回结果</span>
     <span class="o">}</span>
     <span class="c1">// 根据state返回结果, 结果或异常都在outcome里</span>
-    <span class="kd">private</span> <span class="n">V</span> <span class="n">report</span><span class="o">(</span><span class="kt">int</span> <span class="n">s</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ExecutionException</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">V</span> <span class="nf">report</span><span class="o">(</span><span class="kt">int</span> <span class="n">s</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ExecutionException</span> <span class="o">{</span>
         <span class="n">Object</span> <span class="n">x</span> <span class="o">=</span> <span class="n">outcome</span><span class="o">;</span>
         <span class="k">if</span> <span class="o">(</span><span class="n">s</span> <span class="o">==</span> <span class="n">NORMAL</span><span class="o">)</span>  <span class="c1">// 正常结束返回结果</span>
             <span class="k">return</span> <span class="o">(</span><span class="n">V</span><span class="o">)</span><span class="n">x</span><span class="o">;</span>
         <span class="k">if</span> <span class="o">(</span><span class="n">s</span> <span class="o">&gt;=</span> <span class="n">CANCELLED</span><span class="o">)</span>  <span class="c1">// 取消了抛异常</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="n">CancellationException</span><span class="o">();</span>
-        <span class="k">throw</span> <span class="k">new</span> <span class="n">ExecutionException</span><span class="o">((</span><span class="n">Throwable</span><span class="o">)</span><span class="n">x</span><span class="o">);</span> <span class="c1">// 执行过程中产生的异常直接抛出</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">CancellationException</span><span class="o">();</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">ExecutionException</span><span class="o">((</span><span class="n">Throwable</span><span class="o">)</span><span class="n">x</span><span class="o">);</span> <span class="c1">// 执行过程中产生的异常直接抛出</span>
     <span class="o">}</span>
     <span class="c1">// 等待(可以等待一段时间, 时间到就不再等了)</span>
-    <span class="kd">private</span> <span class="kt">int</span> <span class="n">awaitDone</span><span class="o">(</span><span class="kt">boolean</span> <span class="n">timed</span><span class="o">,</span> <span class="kt">long</span> <span class="n">nanos</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="nf">awaitDone</span><span class="o">(</span><span class="kt">boolean</span> <span class="n">timed</span><span class="o">,</span> <span class="kt">long</span> <span class="n">nanos</span><span class="o">)</span>
         <span class="kd">throws</span> <span class="n">InterruptedException</span> <span class="o">{</span>
         <span class="kd">final</span> <span class="kt">long</span> <span class="n">deadline</span> <span class="o">=</span> <span class="n">timed</span> <span class="o">?</span> <span class="n">System</span><span class="o">.</span><span class="na">nanoTime</span><span class="o">()</span> <span class="o">+</span> <span class="n">nanos</span> <span class="o">:</span> <span class="mi">0L</span><span class="o">;</span>
         <span class="n">WaitNode</span> <span class="n">q</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
@@ -340,7 +334,7 @@ jQuery(function(){
         <span class="k">for</span> <span class="o">(;;)</span> <span class="o">{</span> <span class="c1">// 这个循环会被执行很多次, 每次都匹配到条件执行, 直到复合特定条件才直接返回结果</span>
             <span class="k">if</span> <span class="o">(</span><span class="n">Thread</span><span class="o">.</span><span class="na">interrupted</span><span class="o">())</span> <span class="o">{</span>
                 <span class="n">removeWaiter</span><span class="o">(</span><span class="n">q</span><span class="o">);</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="n">InterruptedException</span><span class="o">();</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">InterruptedException</span><span class="o">();</span>
             <span class="o">}</span>
             <span class="kt">int</span> <span class="n">s</span> <span class="o">=</span> <span class="n">state</span><span class="o">;</span>  <span class="c1">// 这里注意跟set中同步, 有可能刚得到s, sate就被更改了</span>
             <span class="k">if</span> <span class="o">(</span><span class="n">s</span> <span class="o">&gt;</span> <span class="n">COMPLETING</span><span class="o">)</span> <span class="o">{</span>  <span class="c1">// 这里保证只有 NEW 和 COMPLETING 才不会直接返回</span>
@@ -348,17 +342,17 @@ jQuery(function(){
                     <span class="n">q</span><span class="o">.</span><span class="na">thread</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
                 <span class="k">return</span> <span class="n">s</span><span class="o">;</span>  <span class="c1">// 这里的跳出循环并返回结果, 实际上只有任务完成(或被取消)才会执行到</span>
             <span class="o">}</span>
-            <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">s</span> <span class="o">==</span> <span class="n">COMPLETING</span><span class="o">)</span> <span class="c1">// 这里把 COMPLETING 也排除掉了, 也就是说, 往下走的情况只有 s = NEW</span>
+            <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">s</span> <span class="o">==</span> <span class="n">COMPLETING</span><span class="o">)</span> <span class="c1">// 这里把 COMPLETING 也排除掉了, 也就是说, 往下走的情况只有 s = NEW</span>
                 <span class="n">Thread</span><span class="o">.</span><span class="na">yield</span><span class="o">();</span>
-            <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">q</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
+            <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">q</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
                 <span class="n">q</span> <span class="o">=</span> <span class="k">new</span> <span class="n">WaitNode</span><span class="o">();</span>
-            <span class="k">else</span> <span class="k">if</span> <span class="o">(!</span><span class="n">queued</span><span class="o">)</span>
+            <span class="k">else</span> <span class="nf">if</span> <span class="o">(!</span><span class="n">queued</span><span class="o">)</span>
                 <span class="c1">// 头插法(q.next指向原表头, 并把q赋值给了waiters, 相当于q放在了链表头), 成功返回true表示已经加入到了阻塞链表.</span>
                 <span class="c1">// 这一切发生的前提是 waitersOffset == waiters, 这并不总是成立,</span>
                 <span class="c1">// 因为有可能刚好在q.next = waiters之后(此时得到了waiters, 假设用tmp表示),</span>
                 <span class="c1">// set方法里把futureTask.waiters改成了null. 这时就会出现waitersOffset != waiters(tmp)的情况</span>
                 <span class="n">queued</span> <span class="o">=</span> <span class="n">UNSAFE</span><span class="o">.</span><span class="na">compareAndSwapObject</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">waitersOffset</span><span class="o">,</span> <span class="n">q</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">waiters</span><span class="o">,</span> <span class="n">q</span><span class="o">);</span>
-            <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">timed</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">timed</span><span class="o">)</span> <span class="o">{</span>
                 <span class="n">nanos</span> <span class="o">=</span> <span class="n">deadline</span> <span class="o">-</span> <span class="n">System</span><span class="o">.</span><span class="na">nanoTime</span><span class="o">();</span>
                 <span class="k">if</span> <span class="o">(</span><span class="n">nanos</span> <span class="o">&lt;=</span> <span class="mi">0L</span><span class="o">)</span> <span class="o">{</span>
                     <span class="n">removeWaiter</span><span class="o">(</span><span class="n">q</span><span class="o">);</span>
@@ -370,8 +364,7 @@ jQuery(function(){
                 <span class="n">LockSupport</span><span class="o">.</span><span class="na">park</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
         <span class="o">}</span>
     <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 

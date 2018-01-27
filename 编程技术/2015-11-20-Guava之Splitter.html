@@ -104,14 +104,14 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#splitter-">生成 Splitter 的方法</a></li>
-  <li><a href="#split-">split 方法</a></li>
-  <li><a href="#mapsplitter">MapSplitter</a></li>
+  <li><a href="#生成-splitter-的方法" id="markdown-toc-生成-splitter-的方法">生成 Splitter 的方法</a></li>
+  <li><a href="#split-方法" id="markdown-toc-split-方法">split 方法</a></li>
+  <li><a href="#mapsplitter" id="markdown-toc-mapsplitter">MapSplitter</a></li>
 </ul>
 
 <hr />
 
-<h2 id="splitter-">生成 Splitter 的方法</h2>
+<h2 id="生成-splitter-的方法">生成 Splitter 的方法</h2>
 <p>工厂方法:</p>
 
 <ul>
@@ -134,7 +134,7 @@ jQuery(function(){
 
 <p>示例:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Splitter</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="sc">','</span><span class="o">).</span><span class="na">split</span><span class="o">(</span><span class="s">"foo,,bar"</span><span class="o">);</span>  <span class="c1">// ["foo", "", "bar"]</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Splitter</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="sc">','</span><span class="o">).</span><span class="na">split</span><span class="o">(</span><span class="s">"foo,,bar"</span><span class="o">);</span>  <span class="c1">// ["foo", "", "bar"]</span>
 <span class="n">Splitter</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="n">CharMatcher</span><span class="o">.</span><span class="na">anyOf</span><span class="o">(</span><span class="s">";,"</span><span class="o">)).</span><span class="na">split</span><span class="o">(</span><span class="s">"foo,;bar,quux"</span><span class="o">);</span> <span class="c1">// ["foo", "", "bar", "quux"]</span>
 <span class="n">Splitter</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="s">", "</span><span class="o">).</span><span class="na">split</span><span class="o">(</span><span class="s">"foo, bar,baz"</span><span class="o">);</span> <span class="c1">// ["foo", "bar,baz"]</span>
 <span class="n">Splitter</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="n">Pattern</span><span class="o">.</span><span class="na">compile</span><span class="o">(</span><span class="s">"\\d+"</span><span class="o">)).</span><span class="na">split</span><span class="o">(</span><span class="s">"a12b3c"</span><span class="o">);</span> <span class="c1">// [a, b, c]</span>
@@ -143,12 +143,11 @@ jQuery(function(){
 <span class="n">Splitter</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="sc">','</span><span class="o">).</span><span class="na">limit</span><span class="o">(</span><span class="mi">3</span><span class="o">).</span><span class="na">omitEmptyStrings</span><span class="o">().</span><span class="na">split</span><span class="o">(</span><span class="s">"a,,,b,,,c,d"</span><span class="o">);</span> <span class="c1">// ["a", "b", "c,d"]</span>
 <span class="n">Splitter</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="sc">','</span><span class="o">).</span><span class="na">limit</span><span class="o">(</span><span class="mi">3</span><span class="o">).</span><span class="na">trimResults</span><span class="o">().</span><span class="na">split</span><span class="o">(</span><span class="s">" a , b , c , d "</span><span class="o">);</span> <span class="c1">// ["a", "b", "c , d"]</span>
 <span class="n">Splitter</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="sc">','</span><span class="o">).</span><span class="na">trimResults</span><span class="o">(</span><span class="n">CharMatcher</span><span class="o">.</span><span class="na">is</span><span class="o">(</span><span class="sc">'_'</span><span class="o">)).</span><span class="na">split</span><span class="o">(</span><span class="s">"_a ,_b_ ,c__"</span><span class="o">);</span> <span class="c1">// ["a ", "b_ ", "c"]</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="split-">split 方法</h2>
+<h2 id="split-方法">split 方法</h2>
 
 <ul>
   <li><code class="highlighter-rouge">Iterable&lt;String&gt; split(final CharSequence sequence)</code></li>
@@ -168,9 +167,8 @@ jQuery(function(){
 
 <p>注意: <code class="highlighter-rouge">MapSplitter</code>的<code class="highlighter-rouge">split</code>方法返回的是<code class="highlighter-rouge">Map&lt;String, String&gt;</code></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="n">Splitter</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="s">"&amp;"</span><span class="o">).</span><span class="na">withKeyValueSeparator</span><span class="o">(</span><span class="s">"="</span><span class="o">).</span><span class="na">split</span><span class="o">(</span><span class="s">"a=1&amp;b=2&amp;c=3"</span><span class="o">);</span>
-</code></pre>
-</div>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="n">Splitter</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="s">"&amp;"</span><span class="o">).</span><span class="na">withKeyValueSeparator</span><span class="o">(</span><span class="s">"="</span><span class="o">).</span><span class="na">split</span><span class="o">(</span><span class="s">"a=1&amp;b=2&amp;c=3"</span><span class="o">);</span>
+</code></pre></div></div>
 
 <hr />
 

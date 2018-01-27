@@ -106,44 +106,43 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#url">简单URL映射规则</a></li>
-  <li><a href="#requestmapping">RequestMapping</a></li>
-  <li><a href="#pathvariable">PathVariable</a></li>
-  <li><a href="#requestparam">RequestParam</a></li>
-  <li><a href="#cookievalue">CookieValue</a></li>
-  <li><a href="#requestheader">RequestHeader</a></li>
-  <li><a href="#modelattribute--sessionattributes">ModelAttribute 和 SessionAttributes</a></li>
-  <li><a href="#section">自定义参数类型转换</a>    <ul>
-      <li><a href="#initbinder">使用<code class="highlighter-rouge">@InitBinder</code>注解定义局部的类型转换器</a></li>
-      <li><a href="#propertyeditor">PropertyEditor属性编辑器</a></li>
-      <li><a href="#webbindinginitializer">实现WebBindingInitializer接口定义全局的类型转换器</a></li>
+  <li><a href="#简单url映射规则" id="markdown-toc-简单url映射规则">简单URL映射规则</a></li>
+  <li><a href="#requestmapping" id="markdown-toc-requestmapping">RequestMapping</a></li>
+  <li><a href="#pathvariable" id="markdown-toc-pathvariable">PathVariable</a></li>
+  <li><a href="#requestparam" id="markdown-toc-requestparam">RequestParam</a></li>
+  <li><a href="#cookievalue" id="markdown-toc-cookievalue">CookieValue</a></li>
+  <li><a href="#requestheader" id="markdown-toc-requestheader">RequestHeader</a></li>
+  <li><a href="#modelattribute-和-sessionattributes" id="markdown-toc-modelattribute-和-sessionattributes">ModelAttribute 和 SessionAttributes</a></li>
+  <li><a href="#自定义参数类型转换" id="markdown-toc-自定义参数类型转换">自定义参数类型转换</a>    <ul>
+      <li><a href="#使用initbinder注解定义局部的类型转换器" id="markdown-toc-使用initbinder注解定义局部的类型转换器">使用<code class="highlighter-rouge">@InitBinder</code>注解定义局部的类型转换器</a></li>
+      <li><a href="#propertyeditor属性编辑器" id="markdown-toc-propertyeditor属性编辑器">PropertyEditor属性编辑器</a></li>
+      <li><a href="#实现webbindinginitializer接口定义全局的类型转换器" id="markdown-toc-实现webbindinginitializer接口定义全局的类型转换器">实现WebBindingInitializer接口定义全局的类型转换器</a></li>
     </ul>
   </li>
-  <li><a href="#section-1">控制器方法支持的方法参数</a></li>
-  <li><a href="#section-2">返回值的类型</a></li>
+  <li><a href="#控制器方法支持的方法参数" id="markdown-toc-控制器方法支持的方法参数">控制器方法支持的方法参数</a></li>
+  <li><a href="#返回值的类型" id="markdown-toc-返回值的类型">返回值的类型</a></li>
 </ul>
 
 <hr />
 
-<h2 id="url">简单URL映射规则</h2>
+<h2 id="简单url映射规则">简单URL映射规则</h2>
 <p><code class="highlighter-rouge">@RequestMapping</code>可以标记在类上,也可以标记在方法上,通过例子说明(假设拦截<code class="highlighter-rouge">*.do</code>)</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Controller</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Controller</span>
 <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/test"</span><span class="o">)</span>  <span class="c1">// 若类`TestController`上没有`@RequestMapping`注解, 则访问`/index1.do`即可调用`index1`方法</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestController</span> <span class="o">{</span>
     <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/index1"</span><span class="o">)</span>  <span class="c1">// index后面加不加.do都可以,即这里写`/index1`等同于`/index1.do`</span>
     <span class="nd">@ResponseBody</span>               <span class="c1">// 这个注解是为了不经过`ModelAndView`直接返回字符串</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">index1</span><span class="o">(</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">map</span><span class="o">)</span> <span class="o">{</span>  <span class="c1">// 这些参数在返回篇里面说</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">index1</span><span class="o">(</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">map</span><span class="o">)</span> <span class="o">{</span>  <span class="c1">// 这些参数在返回篇里面说</span>
         <span class="k">return</span> <span class="s">"index1"</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/*/index2"</span><span class="o">)</span>  <span class="c1">// 支持通配符, 如`/test/abc/index2.do`,但`/test/index2.do`不能访问</span>
     <span class="nd">@ResponseBody</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">index2</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">index2</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="s">"index2"</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
@@ -160,42 +159,41 @@ jQuery(function(){
   <li>produces : 指定返回的内容类型，仅当request请求头中的(Accept)类型中包含该指定类型才返回</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Controller</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Controller</span>
 <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/test"</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestController</span> <span class="o">{</span>
     <span class="c1">// 请求参数中必须包含`key1`和`key2`两个参数才会执行该方法, 如`/index1.do?key1=1&amp;key2=2`</span>
     <span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/index1"</span><span class="o">,</span> <span class="n">params</span> <span class="o">=</span> <span class="o">{</span><span class="s">"key1"</span><span class="o">,</span> <span class="s">"key2"</span><span class="o">})</span>
     <span class="nd">@ResponseBody</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">index1</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">index1</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="s">"index1"</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="c1">// 请求参数中必须包含参数`key`且值必须为`value`才会执行该方法, 如`/index2.do?key=value`</span>
     <span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/index2"</span><span class="o">,</span> <span class="n">params</span> <span class="o">=</span> <span class="s">"key=value"</span><span class="o">)</span>
     <span class="nd">@ResponseBody</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">index2</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">index2</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="s">"index2"</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="c1">// 请求头中`Accept`必须包含`text/html`才会执行该方法</span>
     <span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="o">{</span><span class="s">"/index3"</span><span class="o">},</span> <span class="n">headers</span> <span class="o">=</span> <span class="s">"Accept=text/html"</span><span class="o">)</span>
     <span class="nd">@ResponseBody</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">index3</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">index3</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="s">"index3"</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="c1">// 该方法仅处理请求中Content-Type为`application/json`类型的请求</span>
     <span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="o">{</span><span class="s">"/index4"</span><span class="o">},</span> <span class="n">consumes</span> <span class="o">=</span> <span class="n">MediaType</span><span class="o">.</span><span class="na">APPLICATION_JSON_VALUE</span><span class="o">)</span>
     <span class="nd">@ResponseBody</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">index4</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">index4</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="s">"index4"</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="c1">// 该方法仅处理请求中Accept包含`text/html`的请求,同时暗示了返回的内容类型为`text/html`</span>
     <span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="o">{</span><span class="s">"/index5"</span><span class="o">},</span> <span class="n">produces</span> <span class="o">=</span> <span class="s">"text/html;charset=UTF-8"</span><span class="o">)</span>
     <span class="nd">@ResponseBody</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">index5</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">index5</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="s">"index5"</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
@@ -203,24 +201,23 @@ jQuery(function(){
 <p>在<code class="highlighter-rouge">@RequestMapping</code>注解标注的方法上可以使用URI模板<br />
 URI模板就是在URI中给定一个变量, 然后在映射的时候动态的给该变量赋值, 通过注解<code class="highlighter-rouge">@PathVariable</code>获取URI模板中的值</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Controller</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Controller</span>
 <span class="c1">//@RequestMapping(value = "/{testName}")  // 类上的模板变量可以赋值给所有成员方法的参数</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestController</span> <span class="o">{</span>
     <span class="c1">// URI: `/index1/id5.do`, 则 id = id5</span>
     <span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/index1/{indexId}"</span><span class="o">)</span>
     <span class="nd">@ResponseBody</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">index1</span><span class="o">(</span><span class="nd">@PathVariable</span><span class="o">(</span><span class="s">"indexId"</span><span class="o">)</span> <span class="n">String</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>  <span class="c1">// 可以指定取自哪个URI模板变量, 不指定则默认找跟参数名相同的变量, 最好都指定</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">index1</span><span class="o">(</span><span class="nd">@PathVariable</span><span class="o">(</span><span class="s">"indexId"</span><span class="o">)</span> <span class="n">String</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>  <span class="c1">// 可以指定取自哪个URI模板变量, 不指定则默认找跟参数名相同的变量, 最好都指定</span>
         <span class="k">return</span> <span class="n">id</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="c1">// 支持正则, 如 URI: `/index2/test-10.do`, 则 indexName=test, v=10</span>
     <span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/index2/{indexName:[a-z]+}-{version:[\d]+}"</span><span class="o">)</span>
     <span class="nd">@ResponseBody</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">index2</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="n">String</span> <span class="n">indexName</span><span class="o">,</span> <span class="nd">@PathVariable</span><span class="o">(</span><span class="s">"version"</span><span class="o">)</span> <span class="kt">int</span> <span class="n">v</span><span class="o">)</span> <span class="o">{</span> <span class="c1">// 简单类型Spring直接转, 复杂类型后面说怎么转</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">index2</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="n">String</span> <span class="n">indexName</span><span class="o">,</span> <span class="nd">@PathVariable</span><span class="o">(</span><span class="s">"version"</span><span class="o">)</span> <span class="kt">int</span> <span class="n">v</span><span class="o">)</span> <span class="o">{</span> <span class="c1">// 简单类型Spring直接转, 复杂类型后面说怎么转</span>
         <span class="k">return</span> <span class="n">indexName</span> <span class="o">+</span> <span class="s">"-"</span> <span class="o">+</span> <span class="n">v</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
@@ -235,17 +232,16 @@ URI模板就是在URI中给定一个变量, 然后在映射的时候动态的给
   <li>defaultValue : 默认值, 不传时相当于默认传了该值</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Controller</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestController</span> <span class="o">{</span>
     <span class="c1">// URI: `/index1.do?id=5`, 则 id = 5</span>
     <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/index1"</span><span class="o">)</span>
     <span class="nd">@ResponseBody</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">index1</span><span class="o">(</span><span class="nd">@RequestParam</span> <span class="n">String</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>  <span class="c1">// 默认绑定同名参数</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">index1</span><span class="o">(</span><span class="nd">@RequestParam</span> <span class="n">String</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>  <span class="c1">// 默认绑定同名参数</span>
         <span class="k">return</span> <span class="n">id</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
@@ -257,27 +253,26 @@ URI模板就是在URI中给定一个变量, 然后在映射的时候动态的给
 <h2 id="requestheader">RequestHeader</h2>
 <p>使用<code class="highlighter-rouge">@RequestHeader</code>可以绑定<code class="highlighter-rouge">HttpServletRequest</code>头信息到Controller的方法参数, 属性和用法同<code class="highlighter-rouge">RequestParam</code></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Controller</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestController</span> <span class="o">{</span>
     <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/index"</span><span class="o">)</span>
     <span class="nd">@ResponseBody</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">index</span><span class="o">(</span><span class="nd">@RequestHeader</span> <span class="n">String</span> <span class="n">Host</span><span class="o">,</span> <span class="nd">@RequestHeader</span> <span class="n">String</span> <span class="n">host</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">index</span><span class="o">(</span><span class="nd">@RequestHeader</span> <span class="n">String</span> <span class="n">Host</span><span class="o">,</span> <span class="nd">@RequestHeader</span> <span class="n">String</span> <span class="n">host</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">return</span> <span class="n">Host</span> <span class="o">+</span> <span class="s">";"</span> <span class="o">+</span> <span class="n">host</span><span class="o">;</span>  <span class="c1">// 两个值是一样的, 即RequestHeader是大小写不敏感的, 这是与RequestParam的不同</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="modelattribute--sessionattributes">ModelAttribute 和 SessionAttributes</h2>
+<h2 id="modelattribute-和-sessionattributes">ModelAttribute 和 SessionAttributes</h2>
 <p><code class="highlighter-rouge">@ModelAttribute</code>和<code class="highlighter-rouge">@SessionAttributes</code>可在不同的模型和控制器之间共享数据<br />
 <code class="highlighter-rouge">@ModelAttribute</code>主要有两种使用方式，一种是标注在方法上，一种是标注在Controller的方法参数上:</p>
 
 <ul>
   <li>标注在方法上时,该方法将在处理器方法(即有<code class="highlighter-rouge">@RequestMapping</code>注解的方法)执行之前执行,
 然后把返回的对象存放在session或模型属性中,属性名可以使用<code class="highlighter-rouge">@ModelAttribute("attributeName")</code> 在指定,
-若未指定,则用返回类型的类名(首字母小写)作为属性名称  </li>
+若未指定,则用返回类型的类名(首字母小写)作为属性名称</li>
   <li>标注在Controller的方法参数上时, 即将属性值从session或模型属性中取出来注入到参数中去</li>
 </ul>
 
@@ -291,21 +286,21 @@ URI模板就是在URI中给定一个变量, 然后在映射的时候动态的给
 
 <p>如何使用看下面例子</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// OneController没有使用`@SessionAttributes`标注, 属性值存放在模型属性中</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// OneController没有使用`@SessionAttributes`标注, 属性值存放在模型属性中</span>
 <span class="nd">@RestController</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">OneController</span> <span class="o">{</span>
     <span class="nd">@ModelAttribute</span>    <span class="c1">// ModelAttribute标注的方法，每次请求控制器方法时都会执行</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">getName</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"不设置属性名则默认为string"</span><span class="o">);</span>
         <span class="k">return</span> <span class="s">"Tom"</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="nd">@ModelAttribute</span><span class="o">(</span><span class="s">"name"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">getAge</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getAge</span><span class="o">()</span> <span class="o">{</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"属性名为name"</span><span class="o">);</span>
         <span class="k">return</span> <span class="s">"Bob"</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/one"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">index</span><span class="o">(</span><span class="nd">@ModelAttribute</span><span class="o">(</span><span class="s">"string"</span><span class="o">)</span> <span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="nd">@ModelAttribute</span><span class="o">(</span><span class="s">"name"</span><span class="o">)</span> <span class="n">String</span> <span class="n">name2</span><span class="o">,</span> <span class="n">HttpSession</span> <span class="n">session</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">index</span><span class="o">(</span><span class="nd">@ModelAttribute</span><span class="o">(</span><span class="s">"string"</span><span class="o">)</span> <span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="nd">@ModelAttribute</span><span class="o">(</span><span class="s">"name"</span><span class="o">)</span> <span class="n">String</span> <span class="n">name2</span><span class="o">,</span> <span class="n">HttpSession</span> <span class="n">session</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"请求／one.do时, 该控制器方法执行之前,上面那两个方法就已经执行了"</span><span class="o">);</span>
         <span class="n">Enumeration</span> <span class="n">names</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="na">getAttributeNames</span><span class="o">();</span>
         <span class="k">while</span> <span class="o">(</span><span class="n">names</span><span class="o">.</span><span class="na">hasMoreElements</span><span class="o">())</span> <span class="o">{</span>
@@ -319,27 +314,27 @@ URI模板就是在URI中给定一个变量, 然后在映射的时候动态的给
 <span class="nd">@SessionAttributes</span><span class="o">(</span><span class="n">names</span> <span class="o">=</span> <span class="o">{</span><span class="s">"v1"</span><span class="o">},</span> <span class="n">types</span> <span class="o">=</span> <span class="o">{</span><span class="n">String</span><span class="o">.</span><span class="na">class</span><span class="o">})</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">TwoController</span> <span class="o">{</span>
     <span class="nd">@ModelAttribute</span><span class="o">(</span><span class="s">"v1"</span><span class="o">)</span>  <span class="c1">// 通过names注入到session, 属性名为v1</span>
-    <span class="kd">public</span> <span class="n">Integer</span> <span class="n">value1</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">Integer</span> <span class="nf">value1</span><span class="o">()</span> <span class="o">{</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"model:v1"</span><span class="o">);</span>
         <span class="k">return</span> <span class="mi">1</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="nd">@ModelAttribute</span><span class="o">(</span><span class="s">"s1"</span><span class="o">)</span>  <span class="c1">// 通过types保存到session, 属性名为s1</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">string1</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">string1</span><span class="o">()</span> <span class="o">{</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"model:s1"</span><span class="o">);</span>
         <span class="k">return</span> <span class="s">"s1"</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="nd">@ModelAttribute</span>        <span class="c1">// 通过types保存到session, 属性名为默认的string</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">string2</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">string2</span><span class="o">()</span> <span class="o">{</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"model:s2"</span><span class="o">);</span>
         <span class="k">return</span> <span class="s">"s2"</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="nd">@ModelAttribute</span>        <span class="c1">// 只能保存到模型属性中, 属性名为默认的date, 每次仍会执行</span>
-    <span class="kd">public</span> <span class="n">Date</span> <span class="n">date1</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">Date</span> <span class="nf">date1</span><span class="o">()</span> <span class="o">{</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"model:d1"</span><span class="o">);</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="n">Date</span><span class="o">();</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">Date</span><span class="o">();</span>
     <span class="o">}</span>
     <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/two"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">index</span><span class="o">(</span><span class="nd">@ModelAttribute</span><span class="o">(</span><span class="s">"v1"</span><span class="o">)</span> <span class="n">Integer</span> <span class="n">v1</span><span class="o">,</span> <span class="nd">@ModelAttribute</span><span class="o">(</span><span class="s">"date"</span><span class="o">)</span> <span class="n">Date</span> <span class="n">d1</span><span class="o">,</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">index</span><span class="o">(</span><span class="nd">@ModelAttribute</span><span class="o">(</span><span class="s">"v1"</span><span class="o">)</span> <span class="n">Integer</span> <span class="n">v1</span><span class="o">,</span> <span class="nd">@ModelAttribute</span><span class="o">(</span><span class="s">"date"</span><span class="o">)</span> <span class="n">Date</span> <span class="n">d1</span><span class="o">,</span>
                         <span class="nd">@ModelAttribute</span><span class="o">(</span><span class="s">"s1"</span><span class="o">)</span> <span class="n">String</span> <span class="n">s1</span><span class="o">,</span> <span class="nd">@ModelAttribute</span><span class="o">(</span><span class="s">"string"</span><span class="o">)</span> <span class="n">String</span> <span class="n">s2</span><span class="o">,</span> <span class="n">HttpSession</span> <span class="n">session</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">Enumeration</span> <span class="n">names</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="na">getAttributeNames</span><span class="o">();</span>
         <span class="k">while</span> <span class="o">(</span><span class="n">names</span><span class="o">.</span><span class="na">hasMoreElements</span><span class="o">())</span> <span class="o">{</span>
@@ -348,11 +343,10 @@ URI模板就是在URI中给定一个变量, 然后在映射的时候动态的给
         <span class="k">return</span> <span class="n">v1</span> <span class="o">+</span> <span class="s">","</span> <span class="o">+</span> <span class="n">s1</span> <span class="o">+</span> <span class="s">","</span> <span class="o">+</span> <span class="n">s2</span> <span class="o">+</span> <span class="s">","</span> <span class="o">+</span> <span class="n">d1</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>对于<code class="highlighter-rouge">TwoController</code>的输出结果有必要说明下:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 第一遍请求/two.do输出的结果:</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 第一遍请求/two.do输出的结果:</span>
 <span class="nl">model:</span><span class="n">v1</span>
 <span class="nl">model:</span><span class="n">s1</span>
 <span class="nl">model:</span><span class="n">s2</span>
@@ -363,58 +357,56 @@ URI模板就是在URI中给定一个变量, 然后在映射的时候动态的给
 <span class="nl">session:</span><span class="n">v1</span>
 <span class="nl">session:</span><span class="n">s1</span>
 <span class="nl">session:</span><span class="n">string</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>第一遍请求时session中还没有属性，请求完建立session之后才有值</p>
 
 <hr />
 
-<h2 id="section">自定义参数类型转换</h2>
+<h2 id="自定义参数类型转换">自定义参数类型转换</h2>
 <p>处理器方法参数接收请求参数绑定数据的时候,对于一些简单的数据类型Spring会帮我们自动进行类型转换,而对于一些复杂的类型想要在接受参数时自动转换就必须向Spring注册一个对特定类型的识别转换器<br />
 Spring允许我们提供两种类型的识别转换器，一种是注册在Controller中的，一种是注册在SpringMVC的配置中;<br />
 定义在Controller中的是局部的，只在当前Controller中有效，而放在SpringMVC配置文件中的是全局的，所有Controller都可以拿来使用。</p>
 
 <p>每一个使用<code class="highlighter-rouge">@RequestParam</code>,<code class="highlighter-rouge">@PathVariable</code><code class="highlighter-rouge">@RequestHeader</code><code class="highlighter-rouge">@CookieValue</code>和<code class="highlighter-rouge">@ModelAttribute</code>标记的参数绑定时都会触发<code class="highlighter-rouge">initBinder</code>方法的执行,包括全局和局部的(局部只包括当前类中有效的), 注意是每一个,即每次请求，有几个注解参数就会触发几次</p>
 
-<h3 id="initbinder">使用<code class="highlighter-rouge">@InitBinder</code>注解定义局部的类型转换器</h3>
+<h3 id="使用initbinder注解定义局部的类型转换器">使用<code class="highlighter-rouge">@InitBinder</code>注解定义局部的类型转换器</h3>
 <p>在控制器里定义一个用<code class="highlighter-rouge">@InitBinder</code>注解的方法并声明一个<code class="highlighter-rouge">WebDataBinder</code>参数, 当Controller在处理请求方法时,若发现有不能解析的对象, 就会看该类中是否有用<code class="highlighter-rouge">@InitBinder</code>标记的方法, 如果有就会执行该方法, 然后看里面定义的类型转换器是否与当前需要的类型匹配.如下:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Controller</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestController</span> <span class="o">{</span>
     <span class="nd">@InitBinder</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">dataBinder</span><span class="o">(</span><span class="n">WebDataBinder</span> <span class="n">binder</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">dataBinder</span><span class="o">(</span><span class="n">WebDataBinder</span> <span class="n">binder</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">DateFormat</span> <span class="n">dateFormat</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SimpleDateFormat</span><span class="o">(</span><span class="s">"yyyyMMdd"</span><span class="o">);</span>
         <span class="n">PropertyEditor</span> <span class="n">propertyEditor</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CustomDateEditor</span><span class="o">(</span><span class="n">dateFormat</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span> <span class="c1">// 第二个参数表示是否允许为空</span>
         <span class="n">binder</span><span class="o">.</span><span class="na">registerCustomEditor</span><span class="o">(</span><span class="n">Date</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">propertyEditor</span><span class="o">);</span>
     <span class="o">}</span>
     <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"test/{date}"</span><span class="o">)</span>   <span class="c1">// URI: /test/20151218.do</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">testDate</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="n">Date</span> <span class="n">date</span><span class="o">,</span> <span class="n">Writer</span> <span class="n">writer</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testDate</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="n">Date</span> <span class="n">date</span><span class="o">,</span> <span class="n">Writer</span> <span class="n">writer</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
         <span class="n">writer</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">date</span><span class="o">.</span><span class="na">getTime</span><span class="o">()));</span>  <span class="c1">// 输出: 1450368000000</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>类型转换器是通过<code class="highlighter-rouge">WebDataBinder</code>对象的<code class="highlighter-rouge">registerCustomEditor</code>方法来注册的,要实现自己的类型转换器就要实现自己的<code class="highlighter-rouge">PropertyEditor</code> 对象. Spring已经提供了一些常用的属性编辑器,如<code class="highlighter-rouge">CustomDateEditor</code>,<code class="highlighter-rouge">CustomBooleanEditor</code>等</p>
 
-<h3 id="propertyeditor">PropertyEditor属性编辑器</h3>
+<h3 id="propertyeditor属性编辑器">PropertyEditor属性编辑器</h3>
 <p><code class="highlighter-rouge">PropertyEditor</code>是JDK的接口,它有个实现类:<code class="highlighter-rouge">PropertyEditorSupport</code>,所以要实现自己的<code class="highlighter-rouge">PropertyEditor</code>时只需继承<code class="highlighter-rouge">PropertyEditorSupport</code>类, 然后重写其中的一些方法即可,一般重写<code class="highlighter-rouge">setAsText</code>和<code class="highlighter-rouge">getAsText</code>方法就可以了.</p>
 
 <p><code class="highlighter-rouge">setAsText</code>方法用于把字符串类型的值转换为对应的对象,一般先把字符串类型的对象转为特定的对象，然后利用<code class="highlighter-rouge">PropertyEditor</code>的<code class="highlighter-rouge">setValue</code>方法设定转换后的值.<br />
 <code class="highlighter-rouge">getAsText</code>方法用于把对象当做字符串来返回,一般先使用<code class="highlighter-rouge">getValue</code>方法获取当前的对象, 然后把它转换为字符串后再返回给<code class="highlighter-rouge">getAsText</code>方法</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Controller</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestController</span> <span class="o">{</span>
     <span class="nd">@InitBinder</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">dataBinder</span><span class="o">(</span><span class="n">WebDataBinder</span> <span class="n">binder</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">dataBinder</span><span class="o">(</span><span class="n">WebDataBinder</span> <span class="n">binder</span><span class="o">)</span> <span class="o">{</span>
         <span class="c1">// 定义一个 User 属性编辑器</span>
         <span class="n">PropertyEditor</span> <span class="n">userEditor</span> <span class="o">=</span> <span class="k">new</span> <span class="n">PropertyEditorSupport</span><span class="o">()</span> <span class="o">{</span>
             <span class="nd">@Override</span>
-            <span class="kd">public</span> <span class="kt">void</span> <span class="n">setAsText</span><span class="o">(</span><span class="n">String</span> <span class="n">userStr</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IllegalArgumentException</span> <span class="o">{</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAsText</span><span class="o">(</span><span class="n">String</span> <span class="n">userStr</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IllegalArgumentException</span> <span class="o">{</span>
                 <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="k">new</span> <span class="n">User</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">userStr</span><span class="o">);</span>  <span class="c1">// 先转成User对象</span>
                 <span class="n">setValue</span><span class="o">(</span><span class="n">user</span><span class="o">);</span>                    <span class="c1">// 在用setValue设置转换后的值</span>
             <span class="o">}</span>
             <span class="nd">@Override</span>
-            <span class="kd">public</span> <span class="n">String</span> <span class="n">getAsText</span><span class="o">()</span> <span class="o">{</span>
+            <span class="kd">public</span> <span class="n">String</span> <span class="nf">getAsText</span><span class="o">()</span> <span class="o">{</span>
                 <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="o">(</span><span class="n">User</span><span class="o">)</span> <span class="n">getValue</span><span class="o">();</span>     <span class="c1">// 先获取当前对象</span>
                 <span class="k">return</span> <span class="n">user</span><span class="o">.</span><span class="na">getUsername</span><span class="o">();</span>         <span class="c1">// 再返回对象的字符串形式</span>
             <span class="o">}</span>
@@ -423,18 +415,17 @@ Spring允许我们提供两种类型的识别转换器，一种是注册在Contr
         <span class="n">binder</span><span class="o">.</span><span class="na">registerCustomEditor</span><span class="o">(</span><span class="n">User</span><span class="o">.</span><span class="na">class</span> <span class="o">,</span> <span class="n">userEditor</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="webbindinginitializer">实现WebBindingInitializer接口定义全局的类型转换器</h3>
+<h3 id="实现webbindinginitializer接口定义全局的类型转换器">实现WebBindingInitializer接口定义全局的类型转换器</h3>
 <p>定义全局的类型转换器需要实现自己的<code class="highlighter-rouge">WebBindingInitializer</code>对象,然后把该对象注入到<code class="highlighter-rouge">RequestMappingHandlerAdapter</code>中,这样Spring在遇到自己不能解析的对象的时候就会到全局的<code class="highlighter-rouge">WebBindingInitializer</code>的<code class="highlighter-rouge">initBinder</code>方法中去找,每次遇到不认识的对象时,<code class="highlighter-rouge">initBinder</code>方法都会被执行一遍.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nd">@Bean</span>
-    <span class="kd">public</span> <span class="n">RequestMappingHandlerAdapter</span> <span class="n">requestMappingHandlerAdapter</span><span class="o">()</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="n">RequestMappingHandlerAdapter</span> <span class="nf">requestMappingHandlerAdapter</span><span class="o">()</span> <span class="o">{</span>
         <span class="n">RequestMappingHandlerAdapter</span> <span class="n">adapter</span> <span class="o">=</span> <span class="kd">super</span><span class="o">.</span><span class="na">requestMappingHandlerAdapter</span><span class="o">();</span>
         <span class="c1">// 匿名内部类定义自己的WebBindingInitializer, 并注入到RequestMappingHandlerAdapter中</span>
         <span class="n">adapter</span><span class="o">.</span><span class="na">setWebBindingInitializer</span><span class="o">(</span><span class="k">new</span> <span class="n">WebBindingInitializer</span><span class="o">()</span> <span class="o">{</span>
-            <span class="kd">public</span> <span class="kt">void</span> <span class="n">initBinder</span><span class="o">(</span><span class="n">WebDataBinder</span> <span class="n">binder</span><span class="o">,</span> <span class="n">WebRequest</span> <span class="n">request</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">initBinder</span><span class="o">(</span><span class="n">WebDataBinder</span> <span class="n">binder</span><span class="o">,</span> <span class="n">WebRequest</span> <span class="n">request</span><span class="o">)</span> <span class="o">{</span>
                 <span class="n">DateFormat</span> <span class="n">dateFormat</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SimpleDateFormat</span><span class="o">(</span><span class="s">"yyyyMMdd"</span><span class="o">);</span>
                 <span class="n">PropertyEditor</span> <span class="n">propertyEditor</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CustomDateEditor</span><span class="o">(</span><span class="n">dateFormat</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
                 <span class="n">binder</span><span class="o">.</span><span class="na">registerCustomEditor</span><span class="o">(</span><span class="n">Date</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">propertyEditor</span><span class="o">);</span>
@@ -442,12 +433,11 @@ Spring允许我们提供两种类型的识别转换器，一种是注册在Contr
         <span class="o">});</span>
         <span class="k">return</span> <span class="n">adapter</span><span class="o">;</span>
     <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="section-1">控制器方法支持的方法参数</h2>
+<h2 id="控制器方法支持的方法参数">控制器方法支持的方法参数</h2>
 <p><code class="highlighter-rouge">@RequestMapping</code>标记的控制器方法,传入spring会自动帮我们赋值，我们直接在方法上声明参数即可。<br />
 方法的传入参数归纳如下:</p>
 
@@ -457,18 +447,17 @@ Spring允许我们提供两种类型的识别转换器，一种是注册在Contr
   <li>流对象: 包括<code class="highlighter-rouge">InputStream</code>, <code class="highlighter-rouge">OutputStream</code>, <code class="highlighter-rouge">Reader</code>和<code class="highlighter-rouge">Writer</code>.<code class="highlighter-rouge">InputStream</code>和<code class="highlighter-rouge">Reader</code>是针对HttpServletRequest 而言的,可以从里面取数据; <code class="highlighter-rouge">OutputStream</code>和<code class="highlighter-rouge">Writer</code>是针对HttpServletResponse而言的,可以往里面写数据,如下列子:</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Controller</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Controller</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestController</span> <span class="o">{</span>
     <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/index"</span><span class="o">)</span>  <span class="c1">//  直接向客户端输出内容</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">index</span><span class="o">(</span><span class="n">Writer</span> <span class="n">writer</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">index</span><span class="o">(</span><span class="n">Writer</span> <span class="n">writer</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">{</span>
         <span class="n">writer</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="s">"Hello World"</span><span class="o">);</span>
         <span class="n">writer</span><span class="o">.</span><span class="na">write</span><span class="o">(</span> <span class="s">"\r"</span> <span class="o">);</span>
         <span class="n">writer</span><span class="o">.</span><span class="na">write</span><span class="o">(</span> <span class="s">"哈哈"</span> <span class="o">);</span>
         <span class="n">writer</span><span class="o">.</span><span class="na">write</span><span class="o">(</span> <span class="s">"\r"</span> <span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ul>
   <li>使用<code class="highlighter-rouge">@PathVariable</code>, <code class="highlighter-rouge">@RequestParam</code>, <code class="highlighter-rouge">@CookieValue</code>和<code class="highlighter-rouge">@RequestHeader</code>标记的参数</li>
@@ -481,7 +470,7 @@ Spring允许我们提供两种类型的识别转换器，一种是注册在Contr
 
 <hr />
 
-<h2 id="section-2">返回值的类型</h2>
+<h2 id="返回值的类型">返回值的类型</h2>
 <p>处理器中<code class="highlighter-rouge">@RequestMapping</code>标记的处理器方法的返回值也有不同情况，大部分情况是返回一个<code class="highlighter-rouge">ModelAndView</code>, 这个过程中发挥作用的就是<code class="highlighter-rouge">ViewResolver</code>和<code class="highlighter-rouge">View</code>.
 有下面这些情况:</p>
 

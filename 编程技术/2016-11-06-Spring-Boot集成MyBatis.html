@@ -104,43 +104,41 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#section">配置数据源</a>    <ul>
-      <li><a href="#section-1">连接池</a></li>
+  <li><a href="#配置数据源" id="markdown-toc-配置数据源">配置数据源</a>    <ul>
+      <li><a href="#连接池" id="markdown-toc-连接池">连接池</a></li>
     </ul>
   </li>
-  <li><a href="#mybatis">集成MyBatis</a>    <ul>
-      <li><a href="#mybatis-spring"><code class="highlighter-rouge">mybatis-spring</code>方式</a></li>
-      <li><a href="#mybatis-spring-boot-starter"><code class="highlighter-rouge">mybatis-spring-boot-starter</code>方式</a></li>
+  <li><a href="#集成mybatis" id="markdown-toc-集成mybatis">集成MyBatis</a>    <ul>
+      <li><a href="#mybatis-spring方式" id="markdown-toc-mybatis-spring方式"><code class="highlighter-rouge">mybatis-spring</code>方式</a></li>
+      <li><a href="#mybatis-spring-boot-starter方式" id="markdown-toc-mybatis-spring-boot-starter方式"><code class="highlighter-rouge">mybatis-spring-boot-starter</code>方式</a></li>
     </ul>
   </li>
 </ul>
 
 <hr />
 
-<h2 id="section">配置数据源</h2>
+<h2 id="配置数据源">配置数据源</h2>
 
 <p>Java的<code class="highlighter-rouge">javax.sql.DataSource</code>接口提供了标准的使用数据库连接的方法. 建立数据库连接只需要提供<code class="highlighter-rouge">URL</code>等相关参数, <code class="highlighter-rouge">Spring Boot</code>就可以创建数据源. 当然我们必须提供相应的包:<code class="highlighter-rouge">spring-boot-starter-data-jpa</code>, 这个包已经把<code class="highlighter-rouge">spring-boot-starter-jdbc</code>包含进来了.</p>
 
 <p><code class="highlighter-rouge">Spring</code>提供了内嵌数据库的支持(包括<code class="highlighter-rouge">H2, HSQL, Derby</code>), 当我们使用内嵌数据库的时候, 连<code class="highlighter-rouge">URL</code>等这些配置都不需要了, 直接导入相应的数据库依赖包就可以, 比如使用<code class="highlighter-rouge">HSQL</code>, 只需添加pom依赖:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.hsqldb<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>hsqldb<span class="nt">&lt;/artifactId&gt;</span>
     <span class="nt">&lt;scope&gt;</span>runtime<span class="nt">&lt;/scope&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>如果不用内嵌数据库, 而是用<code class="highlighter-rouge">Mysql</code>的话, 就需要<code class="highlighter-rouge">URL</code>等配置, 然后在把<code class="highlighter-rouge">Mysql</code>相关的包依赖添加进来:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>mysql<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>mysql-connector-java<span class="nt">&lt;/artifactId&gt;</span>
     <span class="nt">&lt;scope&gt;</span>runtime<span class="nt">&lt;/scope&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="section-1">连接池</h3>
+<h3 id="连接池">连接池</h3>
 <p>线上使用数据库通常都会通过数据库连接池, <code class="highlighter-rouge">Spring Boot</code>会按照下面的策略选取一个:</p>
 
 <ul>
@@ -152,38 +150,35 @@ jQuery(function(){
 
 <p>我们可以通过在应用配置的参数<code class="highlighter-rouge">spring.datasource.type</code>指定一个连接池, 比如使用阿里的德鲁伊(<code class="highlighter-rouge">Druid</code>):<code class="highlighter-rouge">spring.datasource.type=com.alibaba.druid.pool.DruidDataSource</code>, 这个需要添加依赖:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>com.alibaba<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>druid<span class="nt">&lt;/artifactId&gt;</span>
     <span class="nt">&lt;version&gt;</span>1.0.18<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>关于数据源的配置, 可在应用配置文件<code class="highlighter-rouge">application.properties</code>中进行配置</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>spring.datasource.url<span class="o">=</span>jdbc:mysql://localhost/test
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>spring.datasource.url<span class="o">=</span>jdbc:mysql://localhost/test
 spring.datasource.username<span class="o">=</span>dbuser
 spring.datasource.password<span class="o">=</span>dbpass
 spring.datasource.driver-class-name<span class="o">=</span>com.mysql.jdbc.Drive
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>对于不同连接池还有一些其他参数(<code class="highlighter-rouge">spring.datasource.tomcat.*</code>, <code class="highlighter-rouge">spring.datasource.hikari.*</code>), 比如:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># Number of ms to wait before throwing an exception if no connection is available.</span>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Number of ms to wait before throwing an exception if no connection is available.</span>
 spring.datasource.tomcat.max-wait<span class="o">=</span>10000
 <span class="c"># Maximum number of active connections that can be allocated from this pool at the same time.</span>
 spring.datasource.tomcat.max-active<span class="o">=</span>50
 <span class="c"># Validate the connection before borrowing it from the pool.</span>
 spring.datasource.tomcat.test-on-borrow<span class="o">=</span><span class="nb">true</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>关于数据源, 我们仅需要配置一下参数, <code class="highlighter-rouge">Spring Boot</code>已经自动帮我们配置了, 使用的时候直接注入就可以.</p>
 
 <hr />
 
-<h2 id="mybatis">集成MyBatis</h2>
+<h2 id="集成mybatis">集成MyBatis</h2>
 
 <p>我们可以使用传统的<code class="highlighter-rouge">mybatis-spring</code>的方式, 引入<code class="highlighter-rouge">mybatis</code>和<code class="highlighter-rouge">mybatis-spring</code>包, 手动配置<code class="highlighter-rouge">MyBatis</code>, 这种方式跟原来使用<code class="highlighter-rouge">Spring</code>框架时比较类似, 比较灵活, 可自行配置<code class="highlighter-rouge">SqlSessionFactoryBean</code>. 这是我们将用的第一种方式.</p>
 
@@ -191,29 +186,27 @@ spring.datasource.tomcat.test-on-borrow<span class="o">=</span><span class="nb">
 
 <p>不管哪种方式, 包依赖和数据源的配置少不了, 因此先把数据源配置(在<code class="highlighter-rouge">application.yml</code>中)贴出来:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1"># 数据库配置</span>
-<span class="s">spring</span><span class="pi">:</span>
-    <span class="s">datasource</span><span class="pi">:</span>
-        <span class="s">url</span><span class="pi">:</span> <span class="s">jdbc:mysql://10.90.187.120:3306/test?useUnicode=true&amp;characterEncoding=UTF-8</span>
-        <span class="s">username</span><span class="pi">:</span> <span class="s">dbname</span>
-        <span class="s">password</span><span class="pi">:</span> <span class="s">dbpass</span>
-        <span class="s">driver-class-name</span><span class="pi">:</span> <span class="s">com.mysql.jdbc.Driver</span>
-</code></pre>
-</div>
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 数据库配置</span>
+<span class="na">spring</span><span class="pi">:</span>
+    <span class="na">datasource</span><span class="pi">:</span>
+        <span class="na">url</span><span class="pi">:</span> <span class="s">jdbc:mysql://10.90.187.120:3306/test?useUnicode=true&amp;characterEncoding=UTF-8</span>
+        <span class="na">username</span><span class="pi">:</span> <span class="s">dbname</span>
+        <span class="na">password</span><span class="pi">:</span> <span class="s">dbpass</span>
+        <span class="na">driver-class-name</span><span class="pi">:</span> <span class="s">com.mysql.jdbc.Driver</span>
+</code></pre></div></div>
 <p>包依赖(第一种方式只要包含<code class="highlighter-rouge">mybatis</code>和<code class="highlighter-rouge">mybatis-spring</code>即可):</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.mybatis.spring.boot<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>mybatis-spring-boot-starter<span class="nt">&lt;/artifactId&gt;</span>
     <span class="nt">&lt;version&gt;</span>1.0.0<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="mybatis-spring"><code class="highlighter-rouge">mybatis-spring</code>方式</h3>
+<h3 id="mybatis-spring方式"><code class="highlighter-rouge">mybatis-spring</code>方式</h3>
 <p>这种方式不再需要额外的配置, 主配置类该怎么写还是怎么写, 另外我们专门为<code class="highlighter-rouge">MyBatis</code>添加两个配置类:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// com.example.project.config.MyBatisConfig.java 这个类是MyBatis的配置类</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// com.example.project.config.MyBatisConfig.java 这个类是MyBatis的配置类</span>
 <span class="nd">@Configuration</span>  <span class="c1">// 不要忘记加配置注解</span>
 <span class="nd">@EnableTransactionManagement</span>  <span class="c1">// 事务管理</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyBatisConfig</span> <span class="kd">implements</span> <span class="n">TransactionManagementConfigurer</span> <span class="o">{</span>
@@ -223,7 +216,7 @@ spring.datasource.tomcat.test-on-borrow<span class="o">=</span><span class="nb">
     <span class="n">DataSource</span> <span class="n">dataSource</span><span class="o">;</span>  <span class="c1">// 这个数据源, Spring boot 会自动注入</span>
 
     <span class="nd">@Bean</span><span class="o">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">"sqlSessionFactory"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="n">SqlSessionFactory</span> <span class="n">sqlSessionFactoryBean</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">SqlSessionFactory</span> <span class="nf">sqlSessionFactoryBean</span><span class="o">()</span> <span class="o">{</span>
         <span class="n">SqlSessionFactoryBean</span> <span class="n">sqlSessionFactory</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SqlSessionFactoryBean</span><span class="o">();</span>
         <span class="c1">// 设置数据源</span>
         <span class="n">sqlSessionFactory</span><span class="o">.</span><span class="na">setDataSource</span><span class="o">(</span><span class="n">dataSource</span><span class="o">);</span>
@@ -240,19 +233,19 @@ spring.datasource.tomcat.test-on-borrow<span class="o">=</span><span class="nb">
             <span class="k">return</span> <span class="n">sqlSessionFactory</span><span class="o">.</span><span class="na">getObject</span><span class="o">();</span>
         <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
             <span class="n">logger</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">"初始化SqlSessionFactory失败"</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="n">RuntimeException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
         <span class="o">}</span>
     <span class="o">}</span>
 
     <span class="nd">@Bean</span>
-    <span class="kd">public</span> <span class="n">SqlSessionTemplate</span> <span class="n">sqlSessionTemplate</span><span class="o">(</span><span class="n">SqlSessionFactory</span> <span class="n">sqlSessionFactory</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="n">SqlSessionTemplate</span><span class="o">(</span><span class="n">sqlSessionFactory</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="n">SqlSessionTemplate</span> <span class="nf">sqlSessionTemplate</span><span class="o">(</span><span class="n">SqlSessionFactory</span> <span class="n">sqlSessionFactory</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">SqlSessionTemplate</span><span class="o">(</span><span class="n">sqlSessionFactory</span><span class="o">);</span>
     <span class="o">}</span>
 
     <span class="nd">@Bean</span>
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="n">PlatformTransactionManager</span> <span class="n">annotationDrivenTransactionManager</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="n">DataSourceTransactionManager</span><span class="o">(</span><span class="n">dataSource</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="n">PlatformTransactionManager</span> <span class="nf">annotationDrivenTransactionManager</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">DataSourceTransactionManager</span><span class="o">(</span><span class="n">dataSource</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
 
@@ -263,7 +256,7 @@ spring.datasource.tomcat.test-on-borrow<span class="o">=</span><span class="nb">
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyBatisMapperScannerConfig</span> <span class="o">{</span>
 
     <span class="nd">@Bean</span>
-    <span class="kd">public</span> <span class="n">MapperScannerConfigurer</span> <span class="n">mapperScannerConfigurer</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">MapperScannerConfigurer</span> <span class="nf">mapperScannerConfigurer</span><span class="o">()</span> <span class="o">{</span>
         <span class="n">MapperScannerConfigurer</span> <span class="n">mapperScannerConfigurer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MapperScannerConfigurer</span><span class="o">();</span>
         <span class="c1">// 设置自动扫描包, 该包下的Mapper(Dao)将会被mybatis自动注册, 不用写实现类</span>
         <span class="n">mapperScannerConfigurer</span><span class="o">.</span><span class="na">setBasePackage</span><span class="o">(</span><span class="s">"com.example.project.dao"</span><span class="o">);</span>
@@ -271,12 +264,11 @@ spring.datasource.tomcat.test-on-borrow<span class="o">=</span><span class="nb">
         <span class="k">return</span> <span class="n">mapperScannerConfigurer</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>这种方式, <code class="highlighter-rouge">MyBatis</code>就配置完了, 剩下的就是写实体和对应的Mapper(<code class="highlighter-rouge">Dao</code>)了.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// com.example.project.entity.User.java</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// com.example.project.entity.User.java</span>
 <span class="nd">@Data</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserCreditRecord</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="n">Long</span> <span class="n">id</span><span class="o">;</span>
@@ -288,32 +280,30 @@ spring.datasource.tomcat.test-on-borrow<span class="o">=</span><span class="nb">
 <span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserDao</span> <span class="o">{</span>
 
    <span class="nd">@Select</span><span class="o">(</span><span class="s">"select * from user where id = #{id}"</span><span class="o">)</span>
-    <span class="n">User</span> <span class="n">getById</span><span class="o">(</span><span class="nd">@Param</span><span class="o">(</span><span class="s">"id"</span><span class="o">)</span> <span class="n">Long</span> <span class="n">id</span><span class="o">);</span>
+    <span class="n">User</span> <span class="nf">getById</span><span class="o">(</span><span class="nd">@Param</span><span class="o">(</span><span class="s">"id"</span><span class="o">)</span> <span class="n">Long</span> <span class="n">id</span><span class="o">);</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>当实体跟数据库中字段名字一致的时候没啥问题, 但实体字段跟数据库字段不一致时(比如一个驼峰, 一个用下划线)就比较麻烦了, 这种情况我们可以不使用注解形式, 而使用<code class="highlighter-rouge">User.xml</code>文件, 在文件中可以<code class="highlighter-rouge">select user_name as userName</code>也可以通过<code class="highlighter-rouge">resultMap</code>来制定数据库字段名<code class="highlighter-rouge">column</code>与实体属性名<code class="highlighter-rouge">property</code>的映射关系;</p>
 
 <p>还有一个第三方<code class="highlighter-rouge">Mapper</code>插件, 可以完美解决这个问题, 参考<a href="https://github.com/abel533/Mapper">这里</a></p>
 
-<h3 id="mybatis-spring-boot-starter"><code class="highlighter-rouge">mybatis-spring-boot-starter</code>方式</h3>
+<h3 id="mybatis-spring-boot-starter方式"><code class="highlighter-rouge">mybatis-spring-boot-starter</code>方式</h3>
 <p>这种方式就更简单了, 仅仅需要在应用配置文件<code class="highlighter-rouge">application.yml</code>添加一些配置:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1"># mybatis 配置</span>
-<span class="s">mybatis</span><span class="pi">:</span>
-    <span class="s">typeAliasesPackage</span><span class="pi">:</span> <span class="s">com.example.project.entity</span>
-    <span class="s">typeHandlersPackage</span><span class="pi">:</span> <span class="s">com.example.project.handler</span>  <span class="c1"># 如果有 typeHandler</span>
-    <span class="s">mapperLocations</span><span class="pi">:</span> <span class="s">classpath:sqlmaps/*.xml</span>          <span class="c1"># mapper 文件</span>
-    <span class="s">configLocation</span><span class="pi">:</span> <span class="s">classpath:mybatis-config.xml</span>      <span class="c1"># 可以不设置</span>
-</code></pre>
-</div>
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># mybatis 配置</span>
+<span class="na">mybatis</span><span class="pi">:</span>
+    <span class="na">typeAliasesPackage</span><span class="pi">:</span> <span class="s">com.example.project.entity</span>
+    <span class="na">typeHandlersPackage</span><span class="pi">:</span> <span class="s">com.example.project.handler</span>  <span class="c1"># 如果有 typeHandler</span>
+    <span class="na">mapperLocations</span><span class="pi">:</span> <span class="s">classpath:sqlmaps/*.xml</span>          <span class="c1"># mapper 文件</span>
+    <span class="na">configLocation</span><span class="pi">:</span> <span class="s">classpath:mybatis-config.xml</span>      <span class="c1"># 可以不设置</span>
+</code></pre></div></div>
 
 <p>然后从 main类 上添加注解:<code class="highlighter-rouge">@MapperScan("com.example.project.dao")</code>, 扫描Mapper(<code class="highlighter-rouge">Dao</code>)的位置即可. 其他的<code class="highlighter-rouge">Spring Boot</code>都帮我们做了, 接下来就专注于写<code class="highlighter-rouge">Dao</code>和<code class="highlighter-rouge">entity</code>就可以了.</p>
 
 <p>注意上面的mybatis的配置文件<code class="highlighter-rouge">classpath:mybatis-config.xml</code>, 如果没有这个文件就不要配置, 要是配置了就保证存在, 网上找了个例子:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
 <span class="cp">&lt;!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd"&gt;</span>
 
 <span class="nt">&lt;configuration&gt;</span>
@@ -343,8 +333,7 @@ spring.datasource.tomcat.test-on-borrow<span class="o">=</span><span class="nb">
         <span class="nt">&lt;/plugin&gt;</span>
     <span class="nt">&lt;/plugins&gt;</span>
 <span class="nt">&lt;/configuration&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 

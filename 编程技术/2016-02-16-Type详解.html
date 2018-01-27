@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="keywords" content="Java中的Type详解, 编程技术, Java, 逆水行舟" />
-    <meta name="description" content="Java中的Type详解, 编程技术, Java, 本文主要介绍java中Type接口的来历以及相关的几个接口。通过这边文章，我们可以了解到与范型相关的几个接口, 对范型的分类有个了解;还可以了解到Type接口与Class类的关系, 以及Type出现的原因.  " />
+    <meta name="description" content="Java中的Type详解, 编程技术, Java, 本文主要介绍java中Type接口的来历以及相关的几个接口。通过这边文章，我们可以了解到与范型相关的几个接口, 对范型的分类有个了解;还可以了解到Type接口与Class类的关系, 以及Type出现的原因." />
 
     <title>逆水行舟</title>
 
@@ -101,28 +101,28 @@ jQuery(function(){
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
             <p>本文主要介绍java中<code class="highlighter-rouge">Type</code>接口的来历以及相关的几个接口。<br />
 通过这边文章，我们可以了解到与范型相关的几个接口, 对范型的分类有个了解;<br />
-还可以了解到<code class="highlighter-rouge">Type</code>接口与<code class="highlighter-rouge">Class</code>类的关系, 以及<code class="highlighter-rouge">Type</code>出现的原因.  </p>
+还可以了解到<code class="highlighter-rouge">Type</code>接口与<code class="highlighter-rouge">Class</code>类的关系, 以及<code class="highlighter-rouge">Type</code>出现的原因.</p>
 
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#section">反射相关接口</a></li>
-  <li><a href="#type">Type</a></li>
-  <li><a href="#parameterizedtype">ParameterizedType</a></li>
-  <li><a href="#typevariable">TypeVariable</a></li>
-  <li><a href="#genericarraytype">GenericArrayType</a></li>
-  <li><a href="#wildcardtype">WildcardType</a></li>
-  <li><a href="#type-1">Type及其子接口的来历</a>    <ul>
-      <li><a href="#section-1">泛型出现之前的类型</a></li>
-      <li><a href="#section-2">泛型出现之后的类型</a></li>
-      <li><a href="#class">与泛型有关的类型不能和原始类型统一到Class的原因</a></li>
+  <li><a href="#反射相关接口" id="markdown-toc-反射相关接口">反射相关接口</a></li>
+  <li><a href="#type" id="markdown-toc-type">Type</a></li>
+  <li><a href="#parameterizedtype" id="markdown-toc-parameterizedtype">ParameterizedType</a></li>
+  <li><a href="#typevariable" id="markdown-toc-typevariable">TypeVariable</a></li>
+  <li><a href="#genericarraytype" id="markdown-toc-genericarraytype">GenericArrayType</a></li>
+  <li><a href="#wildcardtype" id="markdown-toc-wildcardtype">WildcardType</a></li>
+  <li><a href="#type及其子接口的来历" id="markdown-toc-type及其子接口的来历">Type及其子接口的来历</a>    <ul>
+      <li><a href="#泛型出现之前的类型" id="markdown-toc-泛型出现之前的类型">泛型出现之前的类型</a></li>
+      <li><a href="#泛型出现之后的类型" id="markdown-toc-泛型出现之后的类型">泛型出现之后的类型</a></li>
+      <li><a href="#与泛型有关的类型不能和原始类型统一到class的原因" id="markdown-toc-与泛型有关的类型不能和原始类型统一到class的原因">与泛型有关的类型不能和原始类型统一到Class的原因</a></li>
     </ul>
   </li>
 </ul>
 
 <hr />
 
-<h2 id="section">反射相关接口</h2>
+<h2 id="反射相关接口">反射相关接口</h2>
 <p><img src="/static/images/reflect_interface.png" alt="反射相关接口继承关系图" title="反射相关接口继承关系图" /></p>
 
 <p>下面就把<code class="highlighter-rouge">Type</code>的来龙去脉彻底弄清楚</p>
@@ -140,9 +140,9 @@ jQuery(function(){
   <li><code class="highlighter-rouge">Type getOwnerType()</code>: 返回是谁的member.(上面那两个最常用)</li>
 </ol>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestType</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestType</span> <span class="o">{</span>
     <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">map</span><span class="o">;</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
         <span class="n">Field</span> <span class="n">f</span> <span class="o">=</span> <span class="n">TestType</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">"map"</span><span class="o">);</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">f</span><span class="o">.</span><span class="na">getGenericType</span><span class="o">());</span>                               <span class="c1">// java.util.Map&lt;java.lang.String, java.lang.String&gt;</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">f</span><span class="o">.</span><span class="na">getGenericType</span><span class="o">()</span> <span class="k">instanceof</span> <span class="n">ParameterizedType</span><span class="o">);</span>  <span class="c1">// true</span>
@@ -154,8 +154,7 @@ jQuery(function(){
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">pType</span><span class="o">.</span><span class="na">getOwnerType</span><span class="o">());</span>                             <span class="c1">// null</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="typevariable">TypeVariable</h2>
 <p>类型变量, 范型信息在编译时会被转换为一个特定的类型, 而<code class="highlighter-rouge">TypeVariable</code>就是用来反映在JVM编译该泛型前的信息.<br />
@@ -177,10 +176,10 @@ jQuery(function(){
   <li>为什么边界是一个数组? 因为类型变量可以通过<code class="highlighter-rouge">&amp;</code>进行多个上边界限定，因此上边界有多个</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestType</span> <span class="o">&lt;</span><span class="n">K</span> <span class="kd">extends</span> <span class="n">Comparable</span> <span class="o">&amp;</span> <span class="n">Serializable</span><span class="o">,</span> <span class="n">V</span><span class="o">&gt;</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestType</span> <span class="o">&lt;</span><span class="n">K</span> <span class="kd">extends</span> <span class="n">Comparable</span> <span class="o">&amp;</span> <span class="n">Serializable</span><span class="o">,</span> <span class="n">V</span><span class="o">&gt;</span> <span class="o">{</span>
     <span class="n">K</span> <span class="n">key</span><span class="o">;</span>
     <span class="n">V</span> <span class="n">value</span><span class="o">;</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
         <span class="c1">// 获取字段的类型</span>
         <span class="n">Field</span> <span class="n">fk</span> <span class="o">=</span> <span class="n">TestType</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">"key"</span><span class="o">);</span>
         <span class="n">Field</span> <span class="n">fv</span> <span class="o">=</span> <span class="n">TestType</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">"value"</span><span class="o">);</span>
@@ -205,8 +204,7 @@ jQuery(function(){
         <span class="o">}</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="genericarraytype">GenericArrayType</h2>
 <p>范型数组,组成数组的元素中有范型则实现了该接口; 它的组成元素是<code class="highlighter-rouge">ParameterizedType</code>或<code class="highlighter-rouge">TypeVariable</code>类型,它只有一个方法:</p>
@@ -215,8 +213,8 @@ jQuery(function(){
   <li><code class="highlighter-rouge">Type getGenericComponentType()</code>: 返回数组的组成对象, 即被JVM编译后实际的对象</li>
 </ol>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestType</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestType</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
         <span class="n">Method</span> <span class="n">method</span> <span class="o">=</span> <span class="n">Test</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getDeclaredMethods</span><span class="o">()[</span><span class="mi">0</span><span class="o">];</span>
         <span class="c1">// public void com.test.Test.show(java.util.List[],java.lang.Object[],java.util.List,java.lang.String[],int[])</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">method</span><span class="o">);</span>
@@ -227,11 +225,10 @@ jQuery(function(){
     <span class="o">}</span>
 <span class="o">}</span>
 <span class="kd">class</span> <span class="nc">Test</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">show</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;[]</span> <span class="n">pTypeArray</span><span class="o">,</span> <span class="n">T</span><span class="o">[]</span> <span class="n">vTypeArray</span><span class="o">,</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">,</span> <span class="n">String</span><span class="o">[]</span> <span class="n">strings</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">ints</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">show</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;[]</span> <span class="n">pTypeArray</span><span class="o">,</span> <span class="n">T</span><span class="o">[]</span> <span class="n">vTypeArray</span><span class="o">,</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">,</span> <span class="n">String</span><span class="o">[]</span> <span class="n">strings</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">ints</span><span class="o">)</span> <span class="o">{</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ul>
   <li>第一个参数<code class="highlighter-rouge">List&lt;String&gt;[]</code>的组成元素<code class="highlighter-rouge">List&lt;String&gt;</code>是<code class="highlighter-rouge">ParameterizedType</code>类型, 打印结果为<code class="highlighter-rouge">true</code></li>
@@ -256,10 +253,10 @@ jQuery(function(){
   <li>现阶段通配符只接受一个上边界或下边界, 返回数组是为了以后的扩展, 实际上现在返回的数组的大小是1</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestType</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestType</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="n">List</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Number</span><span class="o">&gt;</span> <span class="n">a</span><span class="o">;</span>  <span class="c1">// // a没有下界, 取下界会抛出ArrayIndexOutOfBoundsException</span>
     <span class="kd">private</span> <span class="n">List</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">b</span><span class="o">;</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
         <span class="n">Field</span> <span class="n">fieldA</span> <span class="o">=</span> <span class="n">TestType</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">"a"</span><span class="o">);</span>
         <span class="n">Field</span> <span class="n">fieldB</span> <span class="o">=</span> <span class="n">TestType</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">"b"</span><span class="o">);</span>
         <span class="c1">// 先拿到范型类型</span>
@@ -279,8 +276,7 @@ jQuery(function(){
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">wTypeA</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>再写几个边界的例子:</p>
 
@@ -296,15 +292,15 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="type-1">Type及其子接口的来历</h2>
+<h2 id="type及其子接口的来历">Type及其子接口的来历</h2>
 
-<h3 id="section-1">泛型出现之前的类型</h3>
+<h3 id="泛型出现之前的类型">泛型出现之前的类型</h3>
 <p>没有泛型的时候，只有原始类型。此时，所有的原始类型都通过字节码文件类Class类进行抽象。Class类的一个具体对象就代表一个指定的原始类型。</p>
 
-<h3 id="section-2">泛型出现之后的类型</h3>
+<h3 id="泛型出现之后的类型">泛型出现之后的类型</h3>
 <p>泛型出现之后，扩充了数据类型。从只有原始类型扩充了参数化类型、类型变量类型、限定符类型 、泛型数组类型。</p>
 
-<h3 id="class">与泛型有关的类型不能和原始类型统一到Class的原因</h3>
+<h3 id="与泛型有关的类型不能和原始类型统一到class的原因">与泛型有关的类型不能和原始类型统一到Class的原因</h3>
 
 <ul>
   <li>产生泛型擦除的原因</li>

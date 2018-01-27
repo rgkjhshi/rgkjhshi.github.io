@@ -102,24 +102,24 @@ jQuery(function(){
             <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#section">前言</a>    <ul>
-      <li><a href="#section-1">关于测试工具</a></li>
+  <li><a href="#前言" id="markdown-toc-前言">前言</a>    <ul>
+      <li><a href="#关于测试工具" id="markdown-toc-关于测试工具">关于测试工具</a></li>
     </ul>
   </li>
-  <li><a href="#junit"><code class="highlighter-rouge">Junit</code>使用详解</a></li>
-  <li><a href="#mockito"><code class="highlighter-rouge">Mockito</code>使用详解</a>    <ul>
-      <li><a href="#section-2">参数匹配器</a></li>
+  <li><a href="#junit使用详解" id="markdown-toc-junit使用详解"><code class="highlighter-rouge">Junit</code>使用详解</a></li>
+  <li><a href="#mockito使用详解" id="markdown-toc-mockito使用详解"><code class="highlighter-rouge">Mockito</code>使用详解</a>    <ul>
+      <li><a href="#参数匹配器" id="markdown-toc-参数匹配器">参数匹配器</a></li>
     </ul>
   </li>
-  <li><a href="#spring-boot-test">Spring Boot Test</a>    <ul>
-      <li><a href="#section-3">模仿和侦查</a></li>
+  <li><a href="#spring-boot-test" id="markdown-toc-spring-boot-test">Spring Boot Test</a>    <ul>
+      <li><a href="#模仿和侦查" id="markdown-toc-模仿和侦查">模仿和侦查</a></li>
     </ul>
   </li>
 </ul>
 
 <hr />
 
-<h2 id="section">前言</h2>
+<h2 id="前言">前言</h2>
 <p>测试是开发过程中必不可少的, 但是实际工作中严格按照标准, 测试用例能够覆盖大部分业务逻辑的, 估计连一半都不到.</p>
 
 <p>每天的工作流程应该是这样的:</p>
@@ -131,7 +131,7 @@ jQuery(function(){
   <li>提交到<code class="highlighter-rouge">git</code></li>
 </ol>
 
-<h3 id="section-1">关于测试工具</h3>
+<h3 id="关于测试工具">关于测试工具</h3>
 <p>单元测试主要使用<code class="highlighter-rouge">Junit</code>工具, 已经是很古老的技术了, 现在的<code class="highlighter-rouge">Junit4</code>直接通过注解就可以实现, 特别方便.</p>
 
 <p>另一个测试的必备利器就是数据模拟工具<code class="highlighter-rouge">Mockito</code>. 假设我们在代码中有如下的调用关系:</p>
@@ -141,7 +141,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="junit"><code class="highlighter-rouge">Junit</code>使用详解</h2>
+<h2 id="junit使用详解"><code class="highlighter-rouge">Junit</code>使用详解</h2>
 <p><code class="highlighter-rouge">Junit4</code>使用方式特别简单, 只需要加一些注解就可以. 下面对一些常用的注解进行简单说明:</p>
 
 <ul>
@@ -155,13 +155,12 @@ jQuery(function(){
   <li><code class="highlighter-rouge">@Suite.SuiteClasses</code>: 打包测试, 需要与<code class="highlighter-rouge">@RunWith(Suite.class)</code>联合使用, 比如下面的例子:</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@RunWith</span><span class="o">(</span><span class="n">Suite</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RunWith</span><span class="o">(</span><span class="n">Suite</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
 <span class="nd">@SuiteClasses</span><span class="o">({</span><span class="n">ATest</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">BTest</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">CTest</span><span class="o">.</span><span class="na">class</span><span class="o">})</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ABCSuite</span> <span class="o">{</span>
     <span class="c1">// 类中不需要编写代码</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ul>
   <li><code class="highlighter-rouge">Parameterized.Parameters</code>: 参数化测试, 这个稍微复杂一些, 一般有这么几个条件:
@@ -176,7 +175,7 @@ jQuery(function(){
 
 <p>下面是参数化测试的一个例子:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@RunWith</span><span class="o">(</span><span class="n">Parameterized</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RunWith</span><span class="o">(</span><span class="n">Parameterized</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ParameterTest</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
@@ -185,7 +184,7 @@ jQuery(function(){
     <span class="cm">/**
      * 该构造方法的参数与下面@Parameters注解的方法中的Object数组中值的顺序对应
      */</span>
-    <span class="kd">public</span> <span class="n">ParameterTest</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nf">ParameterTest</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
         <span class="kd">super</span><span class="o">();</span>
         <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
         <span class="k">this</span><span class="o">.</span><span class="na">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">;</span>
@@ -193,7 +192,7 @@ jQuery(function(){
 
     <span class="c1">// 将对参数构建出的每个对象都执行一遍, 即本例中将会执行三遍</span>
     <span class="nd">@Test</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">test</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">test</span><span class="o">()</span> <span class="o">{</span>
         <span class="n">Assert</span><span class="o">.</span><span class="na">assertTrue</span><span class="o">(</span><span class="n">name</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="s">"小"</span><span class="o">)</span> <span class="o">==</span> <span class="n">result</span><span class="o">);</span>
     <span class="o">}</span>
 
@@ -210,21 +209,20 @@ jQuery(function(){
         <span class="o">});</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>另外单测中还常用到一些断言方法, 比较简单, 不再介绍.</p>
 
 <hr />
 
-<h2 id="mockito"><code class="highlighter-rouge">Mockito</code>使用详解</h2>
+<h2 id="mockito使用详解"><code class="highlighter-rouge">Mockito</code>使用详解</h2>
 <p>使用<code class="highlighter-rouge">Mockito</code>可以设定当调用哪个对象的哪个方法时, 返回什么数据; 还可以验证调用了某对象的某方法几次.<br />
 创建mock对象不能对<code class="highlighter-rouge">final, Anonymous, primitive类</code>进行mock</p>
 
 <p>下面是一个简单的例子及相关说明</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nd">@Test</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">testMock</span><span class="o">()</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testMock</span><span class="o">()</span> <span class="o">{</span>
         <span class="c1">// 创建mock对象，参数可以是类，也可以是接口</span>
         <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="n">mock</span><span class="o">(</span><span class="n">List</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
         <span class="c1">// 设置方法的预期返回值</span>
@@ -253,23 +251,21 @@ jQuery(function(){
         <span class="n">verify</span><span class="o">(</span><span class="n">list</span><span class="o">,</span> <span class="n">atLeast</span><span class="o">(</span><span class="mi">2</span><span class="o">)).</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>    <span class="c1">// 至少两次</span>
         <span class="n">verify</span><span class="o">(</span><span class="n">list</span><span class="o">,</span> <span class="n">atMost</span><span class="o">(</span><span class="mi">5</span><span class="o">)).</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>     <span class="c1">// 最多5次</span>
     <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="section-2">参数匹配器</h3>
+<h3 id="参数匹配器">参数匹配器</h3>
 <ul>
   <li><code class="highlighter-rouge">Mockito</code>类继承于<code class="highlighter-rouge">Matchers</code></li>
-  <li><code class="highlighter-rouge">Matchers</code>类中有许多参数匹配器用于匹配一种类型, 比如<code class="highlighter-rouge">anyInt, anyString, anyMap...</code>  </li>
+  <li><code class="highlighter-rouge">Matchers</code>类中有许多参数匹配器用于匹配一种类型, 比如<code class="highlighter-rouge">anyInt, anyString, anyMap...</code></li>
   <li>如果使用参数匹配器, 那么所有的参数都要使用参数匹配器, 不能即有<code class="highlighter-rouge">get(0)</code>又有<code class="highlighter-rouge">get(anyInt())</code></li>
 </ul>
 
 <p>如下例子:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>        <span class="n">when</span><span class="o">(</span><span class="n">list</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">anyInt</span><span class="o">())).</span><span class="na">thenReturn</span><span class="o">(</span><span class="s">"helloworld"</span><span class="o">);</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="n">when</span><span class="o">(</span><span class="n">list</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">anyInt</span><span class="o">())).</span><span class="na">thenReturn</span><span class="o">(</span><span class="s">"helloworld"</span><span class="o">);</span>
         <span class="n">when</span><span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">anyString</span><span class="o">())).</span><span class="na">thenReturn</span><span class="o">(</span><span class="s">"hello"</span><span class="o">);</span>
         <span class="n">when</span><span class="o">(</span><span class="n">list</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">)).</span><span class="na">thenReturn</span><span class="o">(</span><span class="s">"helloworld"</span><span class="o">);</span>  <span class="c1">// 再这么用, 就会报错</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
@@ -277,31 +273,28 @@ jQuery(function(){
 <p>与单元测试不通, 在Spring中需要初始化完整的应用程序上下文, 因此这种测试常称为集成测试.<br />
 Spring Boot提供了一个测试相关的starter:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>        <span class="nt">&lt;dependency&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="nt">&lt;dependency&gt;</span>
             <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
             <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-test<span class="nt">&lt;/artifactId&gt;</span>
             <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
         <span class="nt">&lt;/dependency&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>我们在之前的Spring项目中使用<code class="highlighter-rouge">JUnit</code>测试时, 测试类是这样写的:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@RunWith</span><span class="o">(</span><span class="n">SpringJUnit4ClassRunner</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>  <span class="c1">// Spring JUnit支持</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RunWith</span><span class="o">(</span><span class="n">SpringJUnit4ClassRunner</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>  <span class="c1">// Spring JUnit支持</span>
 <span class="nd">@ContextConfiguration</span><span class="o">(</span><span class="n">classes</span> <span class="o">=</span> <span class="n">Application</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>  <span class="c1">// 指定启动类</span>
 <span class="nd">@WebAppConfiguration</span> <span class="c1">// 如果是Web项目, Junit需要模拟ServletContext, 因此需要加上这个注解</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ExampleServiceTest</span> <span class="o">{</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>而在<code class="highlighter-rouge">Spring Boot 1.4</code>已经做了优化, 变成了这样:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@RunWith</span><span class="o">(</span><span class="n">SpringRunner</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RunWith</span><span class="o">(</span><span class="n">SpringRunner</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
 <span class="nd">@SpringBootTest</span><span class="o">(</span><span class="n">classes</span> <span class="o">=</span> <span class="n">Application</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ExampleServiceTest</span> <span class="o">{</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ul>
   <li><code class="highlighter-rouge">SpringRunner</code>是<code class="highlighter-rouge">SpringJUnit4ClassRunner</code>的新名字, 这个名字只是让名字看起来简单些.</li>
@@ -309,10 +302,10 @@ Spring Boot提供了一个测试相关的starter:</p>
   <li>在<code class="highlighter-rouge">Spring Boot 1.3</code>中的<code class="highlighter-rouge">@SpringApplicationConfiguration</code>和<code class="highlighter-rouge">@WebIntegrationTest</code>已经被废弃掉了, 被<code class="highlighter-rouge">@SpringBootTest</code>替代了</li>
 </ul>
 
-<h3 id="section-3">模仿和侦查</h3>
+<h3 id="模仿和侦查">模仿和侦查</h3>
 <p>在Spring项目中做测试的时候会发现大部分情况下都需要模拟特定的bean, 使某个bean的特定方法返回你想要的数据. 在Spring Boot中变的特别简单, 比如:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@RunWith</span><span class="o">(</span><span class="n">SpringRunner</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RunWith</span><span class="o">(</span><span class="n">SpringRunner</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
 <span class="nd">@SpringBootTest</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyTests</span> <span class="o">{</span>
     <span class="nd">@MockBean</span>
@@ -320,14 +313,13 @@ Spring Boot提供了一个测试相关的starter:</p>
     <span class="nd">@Autowired</span>
     <span class="kd">private</span> <span class="n">Reverser</span> <span class="n">reverser</span><span class="o">;</span>  <span class="c1">// 这个bean是spring中的</span>
     <span class="nd">@Test</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">exampleTest</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">exampleTest</span><span class="o">()</span> <span class="o">{</span>
         <span class="c1">// RemoteService 已经被注入到了 reverser bean里了</span>
         <span class="n">when</span><span class="o">(</span><span class="n">remoteService</span><span class="o">.</span><span class="na">someCall</span><span class="o">()).</span><span class="na">thenReturn</span><span class="o">(</span><span class="s">"mock"</span><span class="o">);</span>
         <span class="n">String</span> <span class="n">reverse</span> <span class="o">=</span> <span class="n">reverser</span><span class="o">.</span><span class="na">reverseSomeCall</span><span class="o">();</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><code class="highlighter-rouge">@MockBean</code>是把原来的bean用mock的bean整个替换掉了, 而<code class="highlighter-rouge">@SpyBean</code>还会执行原来bean的方法, 但是后面可以mock想要的方法</p>
 

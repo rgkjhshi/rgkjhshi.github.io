@@ -102,13 +102,13 @@ jQuery(function(){
             <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#beanfactorypostprocessor">BeanFactoryPostProcessor</a></li>
-  <li><a href="#beandefinitionregistrypostprocessor">BeanDefinitionRegistryPostProcessor</a></li>
-  <li><a href="#beanpostprocessor">BeanPostProcessor</a></li>
-  <li><a href="#section">一些例子</a></li>
-  <li><a href="#initializingbean">InitializingBean</a></li>
-  <li><a href="#applicationcontextaware">ApplicationContextAware</a></li>
-  <li><a href="#applicationlistener">ApplicationListener</a></li>
+  <li><a href="#beanfactorypostprocessor" id="markdown-toc-beanfactorypostprocessor">BeanFactoryPostProcessor</a></li>
+  <li><a href="#beandefinitionregistrypostprocessor" id="markdown-toc-beandefinitionregistrypostprocessor">BeanDefinitionRegistryPostProcessor</a></li>
+  <li><a href="#beanpostprocessor" id="markdown-toc-beanpostprocessor">BeanPostProcessor</a></li>
+  <li><a href="#一些例子" id="markdown-toc-一些例子">一些例子</a></li>
+  <li><a href="#initializingbean" id="markdown-toc-initializingbean">InitializingBean</a></li>
+  <li><a href="#applicationcontextaware" id="markdown-toc-applicationcontextaware">ApplicationContextAware</a></li>
+  <li><a href="#applicationlistener" id="markdown-toc-applicationlistener">ApplicationListener</a></li>
 </ul>
 
 <hr />
@@ -149,14 +149,14 @@ jQuery(function(){
 
 <p>另外, 在<code class="highlighter-rouge">Bean</code>中可以通过<code class="highlighter-rouge">@PostConstruct</code>注解来指定在被<code class="highlighter-rouge">Construct</code>之后紧接着做一些初始化操作, 上面的<code class="highlighter-rouge">postProcessAfterInitialization</code>方法是在<code class="highlighter-rouge">@PostConstruct</code>之后被调用的.</p>
 
-<h2 id="section">一些例子</h2>
+<h2 id="一些例子">一些例子</h2>
 <p>我们通过一些简单例子来熟悉下上面的几个接口:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 一个普通的 Bean</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 一个普通的 Bean</span>
 <span class="nd">@Component</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestA</span> <span class="o">{</span>
     <span class="nd">@PostConstruct</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">init</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">init</span><span class="o">()</span> <span class="o">{</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"TestA PostConstruct"</span><span class="o">);</span>
     <span class="o">}</span>
     <span class="nd">@Resource</span>
@@ -166,7 +166,7 @@ jQuery(function(){
 <span class="nd">@Component</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestB</span> <span class="o">{</span>
     <span class="nd">@PostConstruct</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">init</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">init</span><span class="o">()</span> <span class="o">{</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"TestB PostConstruct"</span><span class="o">);</span>
     <span class="o">}</span>
     <span class="nd">@Resource</span>
@@ -177,12 +177,12 @@ jQuery(function(){
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyBeanDefinitionRegistryPostProcessor</span> <span class="kd">implements</span> <span class="n">BeanDefinitionRegistryPostProcessor</span> <span class="o">{</span>
     <span class="c1">// 这个方法来自 BeanDefinitionRegistryPostProcessor</span>
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">postProcessBeanDefinitionRegistry</span><span class="o">(</span><span class="n">BeanDefinitionRegistry</span> <span class="n">registry</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">postProcessBeanDefinitionRegistry</span><span class="o">(</span><span class="n">BeanDefinitionRegistry</span> <span class="n">registry</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"postProcessBeanDefinitionRegistry"</span><span class="o">);</span>
     <span class="o">}</span>
     <span class="c1">// 这个方法来自 BeanFactoryPostProcessor</span>
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">postProcessBeanFactory</span><span class="o">(</span><span class="n">ConfigurableListableBeanFactory</span> <span class="n">beanFactory</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">postProcessBeanFactory</span><span class="o">(</span><span class="n">ConfigurableListableBeanFactory</span> <span class="n">beanFactory</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"postProcessBeanFactory"</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
@@ -190,25 +190,24 @@ jQuery(function(){
 <span class="nd">@Component</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyBeanPostProcessor</span> <span class="kd">implements</span> <span class="n">BeanPostProcessor</span> <span class="o">{</span>
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="n">Object</span> <span class="n">postProcessBeforeInitialization</span><span class="o">(</span><span class="n">Object</span> <span class="n">bean</span><span class="o">,</span> <span class="n">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">Object</span> <span class="nf">postProcessBeforeInitialization</span><span class="o">(</span><span class="n">Object</span> <span class="n">bean</span><span class="o">,</span> <span class="n">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
         <span class="k">if</span> <span class="o">(</span><span class="n">bean</span> <span class="k">instanceof</span> <span class="n">TestA</span> <span class="o">||</span> <span class="n">bean</span> <span class="k">instanceof</span>  <span class="n">TestB</span><span class="o">)</span> <span class="o">{</span>
             <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"beforeInitialization"</span><span class="o">);</span>
         <span class="o">}</span>
         <span class="k">return</span> <span class="n">bean</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="n">Object</span> <span class="n">postProcessAfterInitialization</span><span class="o">(</span><span class="n">Object</span> <span class="n">bean</span><span class="o">,</span> <span class="n">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">Object</span> <span class="nf">postProcessAfterInitialization</span><span class="o">(</span><span class="n">Object</span> <span class="n">bean</span><span class="o">,</span> <span class="n">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
         <span class="k">if</span> <span class="o">(</span><span class="n">bean</span> <span class="k">instanceof</span> <span class="n">TestA</span> <span class="o">||</span> <span class="n">bean</span> <span class="k">instanceof</span>  <span class="n">TestB</span><span class="o">)</span> <span class="o">{</span>
             <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"afterInitialization"</span><span class="o">);</span>
         <span class="o">}</span>
         <span class="k">return</span> <span class="n">bean</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>用法就类似于上面, 那几条数据语句的顺序如下:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>postProcessBeanDefinitionRegistry
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>postProcessBeanDefinitionRegistry
 postProcessBeanFactory
 beforeInitialization
 TestB PostConstruct
@@ -216,8 +215,7 @@ afterInitialization
 beforeInitialization
 TestA PostConstruct
 afterInitialization
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h2 id="initializingbean">InitializingBean</h2>
 <p>这个接口有一个方法:<code class="highlighter-rouge">afterPropertiesSet</code>, 该方法在所有的属性都被赋值后调用. 属性被赋值是在初始化的时候做的, 与<code class="highlighter-rouge">BeanPostProcessor</code>结合来看, <code class="highlighter-rouge">afterPropertiesSet</code>方法将在<code class="highlighter-rouge">postProcessBeforeInitialization</code>和<code class="highlighter-rouge">postProcessAfterInitialization</code>之间被调用.</p>
@@ -230,9 +228,9 @@ afterInitialization
 
 <p>我们定义一个事件, 在实现了<code class="highlighter-rouge">ApplicationContextAware</code>的<code class="highlighter-rouge">Bean</code>中触发事件, 在实现了<code class="highlighter-rouge">ApplicationListener</code>的类中对事件做出反应.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 自定义事件</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 自定义事件</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyEvent</span> <span class="kd">extends</span> <span class="n">ApplicationEvent</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="n">MyEvent</span><span class="o">(</span><span class="n">Object</span> <span class="n">source</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nf">MyEvent</span><span class="o">(</span><span class="n">Object</span> <span class="n">source</span><span class="o">)</span> <span class="o">{</span>
         <span class="kd">super</span><span class="o">(</span><span class="n">source</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
@@ -241,15 +239,15 @@ afterInitialization
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloBean</span> <span class="kd">implements</span> <span class="n">ApplicationContextAware</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="n">ApplicationContext</span> <span class="n">applicationContext</span><span class="o">;</span>
     <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">setApplicationContext</span><span class="o">(</span><span class="n">ApplicationContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setApplicationContext</span><span class="o">(</span><span class="n">ApplicationContext</span> <span class="n">context</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="na">applicationContext</span> <span class="o">=</span> <span class="n">context</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="c1">// 当调用 setName 时, 触发事件</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">setName</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
         <span class="n">applicationContext</span><span class="o">.</span><span class="na">publishEvent</span><span class="o">(</span><span class="k">new</span> <span class="n">MyEvent</span><span class="o">(</span><span class="k">this</span><span class="o">));</span>  <span class="c1">// 这行代码执行完会立即被监听到</span>
     <span class="o">}</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">getName</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
@@ -257,14 +255,13 @@ afterInitialization
 <span class="nd">@Component</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyApplicationListener</span> <span class="kd">implements</span> <span class="n">ApplicationListener</span> <span class="o">{</span>
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">onApplicationEvent</span><span class="o">(</span><span class="n">ApplicationEvent</span> <span class="n">event</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onApplicationEvent</span><span class="o">(</span><span class="n">ApplicationEvent</span> <span class="n">event</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">if</span> <span class="o">(</span><span class="n">event</span> <span class="k">instanceof</span> <span class="n">MyEvent</span><span class="o">)</span> <span class="o">{</span>
             <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(((</span><span class="n">HelloBean</span><span class="o">)</span><span class="n">event</span><span class="o">.</span><span class="na">getSource</span><span class="o">()).</span><span class="na">getName</span><span class="o">());</span>
         <span class="o">}</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 

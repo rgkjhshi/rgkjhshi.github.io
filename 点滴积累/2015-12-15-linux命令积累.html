@@ -104,20 +104,20 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#grep">抓取命令 <em>grep</em></a>    <ul>
-      <li><a href="#section">抓去时间大于某个值</a></li>
+  <li><a href="#抓取命令-grep" id="markdown-toc-抓取命令-grep">抓取命令 <em>grep</em></a>    <ul>
+      <li><a href="#抓去时间大于某个值" id="markdown-toc-抓去时间大于某个值">抓去时间大于某个值</a></li>
     </ul>
   </li>
-  <li><a href="#ln">链接命令 <em>ln</em></a></li>
-  <li><a href="#tar">打包命令 <em>tar</em></a></li>
-  <li><a href="#scp">远程拷贝 <em>scp</em></a></li>
-  <li><a href="#chmod">修改权限 <em>chmod</em></a></li>
-  <li><a href="#section-1">查看端口占用情况</a></li>
+  <li><a href="#链接命令-ln" id="markdown-toc-链接命令-ln">链接命令 <em>ln</em></a></li>
+  <li><a href="#打包命令-tar" id="markdown-toc-打包命令-tar">打包命令 <em>tar</em></a></li>
+  <li><a href="#远程拷贝-scp" id="markdown-toc-远程拷贝-scp">远程拷贝 <em>scp</em></a></li>
+  <li><a href="#修改权限-chmod" id="markdown-toc-修改权限-chmod">修改权限 <em>chmod</em></a></li>
+  <li><a href="#查看端口占用情况" id="markdown-toc-查看端口占用情况">查看端口占用情况</a></li>
 </ul>
 
 <hr />
 
-<h2 id="grep">抓取命令 <em>grep</em></h2>
+<h2 id="抓取命令-grep">抓取命令 <em>grep</em></h2>
 
 <p>命令形式: <code class="highlighter-rouge">grep [-acinv] [--color[=auto]] "搜寻内容" filename</code>, 其中搜索串可以是正则表达式</p>
 
@@ -136,35 +136,32 @@ jQuery(function(){
 
 <p>常用示例:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>向前显示5行: grep "2016-6-23 12:00:00" -B5 --color access.log
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>向前显示5行: grep "2016-6-23 12:00:00" -B5 --color access.log
+</code></pre></div></div>
 
-<h3 id="section">抓去时间大于某个值</h3>
+<h3 id="抓去时间大于某个值">抓去时间大于某个值</h3>
 <p>配合<code class="highlighter-rouge">sed</code>命令和<code class="highlighter-rouge">awk</code>命令</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ grep "运行时间为" qcredit.log  | sed 's/ms//' | awk -F ':' '{if($5&gt;100) print}'
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ grep "运行时间为" qcredit.log  | sed 's/ms//' | awk -F ':' '{if($5&gt;100) print}'
+</code></pre></div></div>
 
 <p>通过<code class="highlighter-rouge">sed</code>命令把字符串里的<code class="highlighter-rouge">ms</code>换成空串, <code class="highlighter-rouge">awk</code>命令 <code class="highlighter-rouge">-F ':'</code> 表示用<code class="highlighter-rouge">:</code>对文本分割, <code class="highlighter-rouge">$5</code>对应分割后的时间那一列</p>
 
 <hr />
 
-<h2 id="ln">链接命令 <em>ln</em></h2>
+<h2 id="链接命令-ln">链接命令 <em>ln</em></h2>
 <ul>
   <li>软链接: 可链接目录、可跨文件系统、相当于快捷方式</li>
   <li>硬链接: 文件副本、不占空间、不可链接目录、不可跨文件系统</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>软链接: ln -s src_name link_name
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>软链接: ln -s src_name link_name
 硬链接: ln file_name link_name
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="tar">打包命令 <em>tar</em></h2>
+<h2 id="打包命令-tar">打包命令 <em>tar</em></h2>
 <p>常用参数:</p>
 
 <ul>
@@ -179,15 +176,14 @@ jQuery(function(){
 
 <p>常用示例:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>打包: tar -cvf output.tar inpt1 input2 ...
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>打包: tar -cvf output.tar inpt1 input2 ...
 压缩: tar -zcvf output.tar directory/input
 解压: tar -xvf input.tar
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="scp">远程拷贝 <em>scp</em></h2>
+<h2 id="远程拷贝-scp">远程拷贝 <em>scp</em></h2>
 <p>常用参数:</p>
 
 <ul>
@@ -196,25 +192,22 @@ jQuery(function(){
 
 <p>常用示例:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>上传: scp -r local_file username@remote_ip:remote_file
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>上传: scp -r local_file username@remote_ip:remote_file
 下载: scp -r username@ip:remote_file local_file
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h2 id="chmod">修改权限 <em>chmod</em></h2>
+<h2 id="修改权限-chmod">修改权限 <em>chmod</em></h2>
 <p>递归修改权限，比如，将某目录下面的所有文件修改为644，所有目录修改为755</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>find ./mydir -type f | xargs chmod 644
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find ./mydir -type f | xargs chmod 644
 find ./mydir -type d | xargs chmod 755
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h2 id="section-1">查看端口占用情况</h2>
+<h2 id="查看端口占用情况">查看端口占用情况</h2>
 <p>不用<code class="highlighter-rouge">sudo</code>看不到<code class="highlighter-rouge">PID/Program name</code></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sudo netstat -tunlp
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo netstat -tunlp
+</code></pre></div></div>
 
 <hr />
 

@@ -104,24 +104,24 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#section">折半查找</a></li>
-  <li><a href="#b">B树</a>    <ul>
-      <li><a href="#section-1">基本概念</a></li>
-      <li><a href="#b-1">B树的查找</a></li>
-      <li><a href="#b-2">B树的插入</a></li>
-      <li><a href="#b-3">B树的删除</a></li>
+  <li><a href="#折半查找" id="markdown-toc-折半查找">折半查找</a></li>
+  <li><a href="#b树" id="markdown-toc-b树">B树</a>    <ul>
+      <li><a href="#基本概念" id="markdown-toc-基本概念">基本概念</a></li>
+      <li><a href="#b树的查找" id="markdown-toc-b树的查找">B树的查找</a></li>
+      <li><a href="#b树的插入" id="markdown-toc-b树的插入">B树的插入</a></li>
+      <li><a href="#b树的删除" id="markdown-toc-b树的删除">B树的删除</a></li>
     </ul>
   </li>
-  <li><a href="#b-4">B+树</a>    <ul>
-      <li><a href="#section-2">基本概念</a></li>
-      <li><a href="#bb">B+树与B树的区别</a></li>
+  <li><a href="#b树-1" id="markdown-toc-b树-1">B+树</a>    <ul>
+      <li><a href="#基本概念-1" id="markdown-toc-基本概念-1">基本概念</a></li>
+      <li><a href="#b树与b树的区别" id="markdown-toc-b树与b树的区别">B+树与B树的区别</a></li>
     </ul>
   </li>
 </ul>
 
 <hr />
 
-<h2 id="section">折半查找</h2>
+<h2 id="折半查找">折半查找</h2>
 <p><code class="highlighter-rouge">折半查找</code>也叫<code class="highlighter-rouge">二分查找</code>, 前提是顺序表 <strong>有序</strong></p>
 
 <ul>
@@ -135,8 +135,8 @@ jQuery(function(){
   <li>算法描述:</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// 折半查找</span>
-    <span class="kd">public</span> <span class="kt">int</span> <span class="n">binarySearch</span><span class="o">(</span><span class="kt">int</span> <span class="n">A</span><span class="o">[],</span> <span class="kt">int</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// 折半查找</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">binarySearch</span><span class="o">(</span><span class="kt">int</span> <span class="n">A</span><span class="o">[],</span> <span class="kt">int</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
         <span class="kt">int</span> <span class="n">low</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
         <span class="kt">int</span> <span class="n">high</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
         <span class="k">while</span> <span class="o">(</span><span class="n">low</span> <span class="o">&lt;=</span> <span class="n">high</span><span class="o">)</span> <span class="o">{</span>
@@ -151,21 +151,20 @@ jQuery(function(){
         <span class="o">}</span>
         <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>  <span class="c1">// 查找失败</span>
     <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ul>
   <li>时间复杂度: <code class="highlighter-rouge">O(nlogn)</code>(<code class="highlighter-rouge">log</code>表示以2为底的对数)</li>
   <li>适用场景: 必须有序</li>
 </ul>
 
-<h2 id="b">B树</h2>
+<h2 id="b树">B树</h2>
 
 <ul>
   <li>注意: 下面<code class="highlighter-rouge">[m/2]</code>意思为向上取整</li>
 </ul>
 
-<h3 id="section-1">基本概念</h3>
+<h3 id="基本概念">基本概念</h3>
 <p><code class="highlighter-rouge">B树</code>又称<code class="highlighter-rouge">多路平衡查找树</code>或<code class="highlighter-rouge">多路平衡查找树</code>, 但一般把<code class="highlighter-rouge">二叉平衡排序树</code>成为<code class="highlighter-rouge">B树</code>, 把</p>
 
 <ul>
@@ -189,7 +188,7 @@ jQuery(function(){
   <li>除根结点外的结点最少有<code class="highlighter-rouge">[m/2]</code>棵子树, <code class="highlighter-rouge">[m/2] -1</code>个关键字(插入时分裂是从中间分裂的)</li>
 </ul>
 
-<h3 id="b-1">B树的查找</h3>
+<h3 id="b树的查找">B树的查找</h3>
 <p><code class="highlighter-rouge">B树</code>一般是保存在磁盘上的, <code class="highlighter-rouge">B树</code>的查找跟二叉树的查找很像, 只不过每个结点变成了一个多关键字的有序表.<br />
 <code class="highlighter-rouge">B树</code>的查找分个基本操作:</p>
 
@@ -200,7 +199,7 @@ jQuery(function(){
 
 <p>若在结点上找到与关键字K则查找成功, 否则按照对应的指针去下一个结点中找, 当指针为空还没找到, 则查找失败</p>
 
-<h3 id="b-2">B树的插入</h3>
+<h3 id="b树的插入">B树的插入</h3>
 <p><code class="highlighter-rouge">B树</code>的插入操作比二叉查找树要复杂, 并不能简单的找到终端结点然后添加到进去, 因为有可能插入结点后就不再满足<code class="highlighter-rouge">B树</code>的定义要求了. <br />
 把关键字<code class="highlighter-rouge">key</code>插入到<code class="highlighter-rouge">B树</code>的过程如下:</p>
 
@@ -220,7 +219,7 @@ jQuery(function(){
   </li>
 </ul>
 
-<h3 id="b-3">B树的删除</h3>
+<h3 id="b树的删除">B树的删除</h3>
 <p><code class="highlighter-rouge">B树</code>的删除与插入类似, 但更复杂一些, 要涉及结点的<code class="highlighter-rouge">合并</code>.</p>
 
 <p>当要删除的关键字<code class="highlighter-rouge">k</code>不在终端结点时:</p>
@@ -241,10 +240,10 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="b-4">B+树</h2>
+<h2 id="b树-1">B+树</h2>
 <p><code class="highlighter-rouge">B+树</code>广泛应用于数据库存储引擎</p>
 
-<h3 id="section-2">基本概念</h3>
+<h3 id="基本概念-1">基本概念</h3>
 <p>一棵<code class="highlighter-rouge">m</code>阶的<code class="highlighter-rouge">B+树</code>需满足下列条件:</p>
 
 <ol>
@@ -261,7 +260,7 @@ jQuery(function(){
 
 <p><img src="/static/images/B+Tree.png" alt="B+Tree" title="B+Tree" /></p>
 
-<h3 id="bb">B+树与B树的区别</h3>
+<h3 id="b树与b树的区别">B+树与B树的区别</h3>
 
 <ol>
   <li><code class="highlighter-rouge">B+树</code>中一个结点有<code class="highlighter-rouge">n</code>个关键字就有<code class="highlighter-rouge">n</code>棵子树, 即每个关键字对应一颗子树; <code class="highlighter-rouge">B树</code>中有<code class="highlighter-rouge">n</code>个关键字的节点含有<code class="highlighter-rouge">n+1</code>棵子树</li>

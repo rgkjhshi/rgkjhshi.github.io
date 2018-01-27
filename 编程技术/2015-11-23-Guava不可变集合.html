@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="keywords" content="Guava不可变集合, 编程技术, Guava, 逆水行舟" />
-    <meta name="description" content="Guava不可变集合, 编程技术, Guava, JDK中也提供了Collections.unmodifiableXXX方法把普通集合包装为不可变形式Guava直接提供了不可变集合类型ImmutableXXX, 所有不可变集合都不接受null值  " />
+    <meta name="description" content="Guava不可变集合, 编程技术, Guava, JDK中也提供了Collections.unmodifiableXXX方法把普通集合包装为不可变形式Guava直接提供了不可变集合类型ImmutableXXX, 所有不可变集合都不接受null值" />
 
     <title>逆水行舟</title>
 
@@ -100,18 +100,18 @@ jQuery(function(){
         <div  class="uk-width-4-4">
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
             <p>JDK中也提供了<code class="highlighter-rouge">Collections.unmodifiableXXX</code>方法把普通集合包装为不可变形式<br />
-Guava直接提供了不可变集合类型<code class="highlighter-rouge">ImmutableXXX</code>, 所有不可变集合都不接受<code class="highlighter-rouge">null</code>值  </p>
+Guava直接提供了不可变集合类型<code class="highlighter-rouge">ImmutableXXX</code>, 所有不可变集合都不接受<code class="highlighter-rouge">null</code>值</p>
 
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#section">怎么使用不可变集合</a></li>
-  <li><a href="#aslist">asList视图</a></li>
+  <li><a href="#怎么使用不可变集合" id="markdown-toc-怎么使用不可变集合">怎么使用不可变集合</a></li>
+  <li><a href="#aslist视图" id="markdown-toc-aslist视图">asList视图</a></li>
 </ul>
 
 <hr />
 
-<h2 id="section">怎么使用不可变集合</h2>
+<h2 id="怎么使用不可变集合">怎么使用不可变集合</h2>
 <p>不可变集合可以用如下多种方式创建</p>
 
 <ul>
@@ -120,17 +120,16 @@ Guava直接提供了不可变集合类型<code class="highlighter-rouge">Immutab
   <li>Builder工具: 如下</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">ImmutableSet</span><span class="o">&lt;</span><span class="n">Color</span><span class="o">&gt;</span> <span class="n">GOOGLE_COLORS</span> <span class="o">=</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">ImmutableSet</span><span class="o">&lt;</span><span class="n">Color</span><span class="o">&gt;</span> <span class="n">GOOGLE_COLORS</span> <span class="o">=</span>
     <span class="k">new</span> <span class="n">ImmutableSet</span><span class="o">.</span><span class="na">Builder</span><span class="o">&lt;</span><span class="n">Color</span><span class="o">&gt;()</span>
         <span class="o">.</span><span class="na">addAll</span><span class="o">(</span><span class="n">WEBSAFE_COLORS</span><span class="o">)</span>
         <span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">Color</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">191</span><span class="o">,</span> <span class="mi">255</span><span class="o">))</span>
         <span class="o">.</span><span class="na">build</span><span class="o">();</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="aslist">asList视图</h2>
+<h2 id="aslist视图">asList视图</h2>
 <p>所有不可变集合都有一个asList()方法提供ImmutableList视图，来帮助你用列表形式方便地读取集合元素<br />
 例如，你可以使用<code class="highlighter-rouge">sortedSet.asList().get(k)</code>从<code class="highlighter-rouge">ImmutableSortedSet</code>中读取第k个最小元素</p>
 

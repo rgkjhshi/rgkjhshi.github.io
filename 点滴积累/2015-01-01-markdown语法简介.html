@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="keywords" content="markdown 语法简介, 点滴积累, Markdown, 逆水行舟" />
-    <meta name="description" content="markdown 语法简介, 点滴积累, Markdown, Markdown是用于书写纯文本文件的语言，通过一些特殊标记使文本更加容易读，而且兼容HTML。如果想看本文的例子，可以将代码块中的文字复制到在线 Markdown 编译器来查看效果  本文是我在使用Markdown时所作的总结，更详细的Markdown语法请看Markdown 语法说明 (简体中文版)  " />
+    <meta name="description" content="markdown 语法简介, 点滴积累, Markdown, Markdown是用于书写纯文本文件的语言，通过一些特殊标记使文本更加容易读，而且兼容HTML。如果想看本文的例子，可以将代码块中的文字复制到在线 Markdown 编译器来查看效果  本文是我在使用Markdown时所作的总结，更详细的Markdown语法请看Markdown 语法说明 (简体中文版)" />
 
     <title>逆水行舟</title>
 
@@ -101,28 +101,28 @@ jQuery(function(){
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
             <p>Markdown是用于书写纯文本文件的语言，通过一些特殊标记使文本更加容易读，而且兼容HTML。<br />
 如果想看本文的例子，可以将代码块中的文字复制到<a href="http://tool.oschina.net/markdown/">在线 Markdown 编译器</a>来查看效果  <br />
-本文是我在使用Markdown时所作的总结，更详细的Markdown语法请看<a href="http://wowubuntu.com/markdown/basic.html">Markdown 语法说明 (简体中文版)</a>  </p>
+本文是我在使用Markdown时所作的总结，更详细的Markdown语法请看<a href="http://wowubuntu.com/markdown/basic.html">Markdown 语法说明 (简体中文版)</a></p>
 
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#section">标题</a></li>
-  <li><a href="#section-1">分割线</a></li>
-  <li><a href="#section-2">段落和换行</a></li>
-  <li><a href="#section-3">代码</a></li>
-  <li><a href="#section-4">引用</a></li>
-  <li><a href="#section-5">列表</a></li>
-  <li><a href="#section-6">链接</a></li>
-  <li><a href="#section-7">强调</a></li>
-  <li><a href="#section-8">图片</a></li>
-  <li><a href="#section-9">自动链接</a></li>
+  <li><a href="#标题" id="markdown-toc-标题">标题</a></li>
+  <li><a href="#分割线" id="markdown-toc-分割线">分割线</a></li>
+  <li><a href="#段落和换行" id="markdown-toc-段落和换行">段落和换行</a></li>
+  <li><a href="#代码" id="markdown-toc-代码">代码</a></li>
+  <li><a href="#引用" id="markdown-toc-引用">引用</a></li>
+  <li><a href="#列表" id="markdown-toc-列表">列表</a></li>
+  <li><a href="#链接" id="markdown-toc-链接">链接</a></li>
+  <li><a href="#强调" id="markdown-toc-强调">强调</a></li>
+  <li><a href="#图片" id="markdown-toc-图片">图片</a></li>
+  <li><a href="#自动链接" id="markdown-toc-自动链接">自动链接</a></li>
 </ul>
 
 <hr />
 
-<h2 id="section">标题</h2>
+<h2 id="标题">标题</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>这样表示H1
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>这样表示H1
 =========
 
 # 这也可以表示H1
@@ -135,45 +135,42 @@ jQuery(function(){
 ### H3 后面放几个`#`都无所谓
 
 #### H4 H1~H6 都可以用`#`方式来表达
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="section-1">分割线</h2>
+<h2 id="分割线">分割线</h2>
 
 <p>一行中用三个以上的星号、减号、底线都能建立一个分隔线，行内可以有空格，但不能有其他东西。如下均可以：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>* * *  
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>* * *  
 ***
 *****
 - - -
 ----------------------------------------
 ______
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="section-2">段落和换行</h2>
+<h2 id="段落和换行">段落和换行</h2>
 
 <p>文字前后要有一个以上的空行才会产生段落，文本中的换行并不会产生换行符<code class="highlighter-rouge">&lt;br /&gt;</code>，如果要强制产生换行符<code class="highlighter-rouge">&lt;br /&gt;</code>的话，可以在行末尾加两个空格。如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>这样是不产
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>这样是不产
 生换行的
 
 如果在末尾加两个空格  
 就会强制换行
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="section-3">代码</h2>
+<h2 id="代码">代码</h2>
 
 <p>代码分为行内的代码(如<code class="highlighter-rouge">printf()</code>)和代码块，建立代码块需要将代码块缩紧4个空格或一个tab键，行内代码可通过反引号<code class="highlighter-rouge">`</code>实现。如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>这是普通段落
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>这是普通段落
 
     这是代码块
 
@@ -181,16 +178,15 @@ ______
 
 如果行内代码本身包含反引号，可以使用多个反引号来开启和关闭代码块，  
 如：`` `foo` ``，为了能正确表示一开始就有反引号的情况，中间的内容要用空格隔开。
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="section-4">引用</h2>
+<h2 id="引用">引用</h2>
 
 <p>在行首添加<code class="highlighter-rouge">&gt;</code>表示引用，如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&gt; 行首加引用
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; 行首加引用
 &gt;
 &gt; 也可以偷懒，只在每
 一段的开头加一个也可以
@@ -202,54 +198,49 @@ ______
 &gt; ### 里面还能写其他的markdown语法
 &gt;
 &gt;     printf("代码区块也可以");
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="section-5">列表</h2>
+<h2 id="列表">列表</h2>
 
 <p>Markdown 支持有序列表和无序列表，无需列表会转换成html中的<code class="highlighter-rouge">&lt;ul&gt;</code>，有序列表会转换成html中的<code class="highlighter-rouge">&lt;ol&gt;</code>。</p>
 
 <p>无序列表使用星号、加号或是减号作为列表标记，标记与内容间至少有一个空格，如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>*   Red
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>*   Red
 *   Green
 +   Blue
 -   Yello
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>有序列表则使用数字接着一个英文句点，如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>1.  Bird
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1.  Bird
 2.  McHale
 3.  Parish
 9.  数字的序号是无所谓的
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="section-6">链接</h2>
+<h2 id="链接">链接</h2>
 
 <p>链接语法包括行内式和参考式两种形式<br />
 行内式的链接，链接文字都是用 [方括号] 来标记， 如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>这是个链接[百度](http://www.baidu.com #maodian)
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>这是个链接[百度](http://www.baidu.com #maodian)
 这是个链接[百度](http://www.baidu.com "Title")
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>参考式是在链接文字的括号后面再接上另一个方括号，而在第二个方括号里填入用以辨识链接的标记(不区分大小写)，如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>这是[百度][1]  
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>这是[百度][1]  
 这是[谷歌][2]
 
 [1]: http://www.baidu.com "Optional Title Here"
 [2]: http://www.google.com "Optional Title Here"
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>其内容定义的形式为：</p>
 
@@ -263,7 +254,7 @@ ______
 
 <hr />
 
-<h2 id="section-7">强调</h2>
+<h2 id="强调">强调</h2>
 
 <p>Markdown 使用星号（<code class="highlighter-rouge">*</code>）和底线（<code class="highlighter-rouge">_</code>）作为标记强调字词的符号，被 <code class="highlighter-rouge">*</code> 或 <code class="highlighter-rouge">_</code> 包围的字词会被转成用 <code class="highlighter-rouge">&lt;em&gt;</code> 标签包围，
 用两个 <code class="highlighter-rouge">*</code> 或 <code class="highlighter-rouge">_</code> 包起来的话，则会被转成 <code class="highlighter-rouge">&lt;strong&gt;</code>。<br />
@@ -272,46 +263,41 @@ ______
 
 <hr />
 
-<h2 id="section-8">图片</h2>
+<h2 id="图片">图片</h2>
 
 <p>图片跟链接很类似，同样分为行内式和参考式。只是比链接前面多了一个<code class="highlighter-rouge">!</code>，如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>![Alt text](/path/to/img.jpg "Optional title")
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>![Alt text](/path/to/img.jpg "Optional title")
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="section-9">自动链接</h2>
+<h2 id="自动链接">自动链接</h2>
 
 <p>Markdown 支持以比较简短的自动链接形式来处理<strong>网址</strong>和<strong>电子邮箱</strong>，只要用尖括号包起来。</p>
 
 <p>网址的链接文字就和链接地址一样，例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;http://example.com/&gt;
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;http://example.com/&gt;
+</code></pre></div></div>
 
 <p>Markdown 会转为：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;a href="http://example.com/"&gt;http://example.com/&lt;/a&gt;
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;a href="http://example.com/"&gt;http://example.com/&lt;/a&gt;
+</code></pre></div></div>
 
 <p>邮件的自动链接也很类似，只是 Markdown 会先做一个编码转换的过程，把文字字符转成 16 进位码的 HTML 实体，这样的格式可以糊弄一些不好的邮址收集机器人，例如：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;address@example.com&gt;
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;address@example.com&gt;
+</code></pre></div></div>
 
 <p>Markdown 会转成：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>&lt;a href="&amp;#x6D;&amp;#x61;i&amp;#x6C;&amp;#x74;&amp;#x6F;:&amp;#x61;&amp;#x64;&amp;#x64;&amp;#x72;&amp;#x65;
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;a href="&amp;#x6D;&amp;#x61;i&amp;#x6C;&amp;#x74;&amp;#x6F;:&amp;#x61;&amp;#x64;&amp;#x64;&amp;#x72;&amp;#x65;
 &amp;#115;&amp;#115;&amp;#64;&amp;#101;&amp;#120;&amp;#x61;&amp;#109;&amp;#x70;&amp;#x6C;e&amp;#x2E;&amp;#99;&amp;#111;
 &amp;#109;"&gt;&amp;#x61;&amp;#x64;&amp;#x64;&amp;#x72;&amp;#x65;&amp;#115;&amp;#115;&amp;#64;&amp;#101;&amp;#120;&amp;#x61;
 &amp;#109;&amp;#x70;&amp;#x6C;e&amp;#x2E;&amp;#99;&amp;#111;&amp;#109;&lt;/a&gt;
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>这段字（其实是 <code class="highlighter-rouge">&lt;a href="mailto:address@example.com"&gt;address@example.com&lt;/a&gt;</code>) 会变成一个可以点击的「address@example.com」链接。
 貌似邮件自动链接在开始提到的<a href="http://tool.oschina.net/markdown/">在线 Markdown 编译器</a>中不起作用</p>

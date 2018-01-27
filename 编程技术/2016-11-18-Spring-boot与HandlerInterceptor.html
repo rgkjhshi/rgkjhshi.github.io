@@ -102,11 +102,11 @@ jQuery(function(){
             <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#handlerinterceptor">HandlerInterceptor</a>    <ul>
-      <li><a href="#section">拦截器中的方法</a></li>
+  <li><a href="#handlerinterceptor" id="markdown-toc-handlerinterceptor">HandlerInterceptor</a>    <ul>
+      <li><a href="#拦截器中的方法" id="markdown-toc-拦截器中的方法">拦截器中的方法</a></li>
     </ul>
   </li>
-  <li><a href="#spring-boot--interceptor">Spring boot 定制 Interceptor</a></li>
+  <li><a href="#spring-boot-定制-interceptor" id="markdown-toc-spring-boot-定制-interceptor">Spring boot 定制 Interceptor</a></li>
 </ul>
 
 <hr />
@@ -116,7 +116,7 @@ jQuery(function(){
 
 <p>在<code class="highlighter-rouge">Spring</code>中定义一个<code class="highlighter-rouge">Interceptor</code>只需要实现<code class="highlighter-rouge">HandlerInterceptor</code>接口, <code class="highlighter-rouge">Spring</code>已经为我们提供了一个<code class="highlighter-rouge">HandlerInterceptorAdapter</code>, 我们只需要继承它, 覆盖想要重写的方法.</p>
 
-<h3 id="section">拦截器中的方法</h3>
+<h3 id="拦截器中的方法">拦截器中的方法</h3>
 <p><code class="highlighter-rouge">Interceptor</code>中有如下方法:</p>
 
 <ul>
@@ -128,49 +128,46 @@ jQuery(function(){
 
 <p>关于最后那个方法, 举个列子:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@RestController</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RestController</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ExampleController</span> <span class="o">{</span>
     <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span>
-    <span class="n">DeferredResult</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">home</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">DeferredResult</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">home</span><span class="o">()</span> <span class="o">{</span>
         <span class="n">DeferredResult</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">dr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">DeferredResult</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;();</span>
         <span class="n">dr</span><span class="o">.</span><span class="na">setResult</span><span class="o">(</span><span class="s">"成功"</span><span class="o">);</span>
         <span class="k">return</span> <span class="n">dr</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>上面这样的<code class="highlighter-rouge">Controller</code>里面有个异步结果, 则拦截器的执行顺序将是: <code class="highlighter-rouge">preHandle -&gt; afterConcurrentHandlingStarted -&gt; preHandle -&gt; postHandle -&gt; afterCompletion</code>.</p>
 
 <p>如果把<code class="highlighter-rouge">dr.setResult("成功");</code> 这句删掉, 将只执行<code class="highlighter-rouge">preHandle -&gt; afterConcurrentHandlingStarted</code></p>
 
 <p>可以认为, <code class="highlighter-rouge">afterConcurrentHandlingStarted</code>是返回异步结果时调用(此时异步结果里不需要有数据), 而<code class="highlighter-rouge">postHandle</code>必须是返回的结果执行完, 异步结果中有数据了(<code class="highlighter-rouge">dr.setResult</code>)才调用.</p>
 
-<h2 id="spring-boot--interceptor">Spring boot 定制 Interceptor</h2>
+<h2 id="spring-boot-定制-interceptor">Spring boot 定制 Interceptor</h2>
 
 <p>首先我们先定义我们自己的拦截器, 方式还是继承<code class="highlighter-rouge">HandlerInterceptorAdapter</code>, 覆盖想要的方法:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Component</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Component</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyInterceptor</span> <span class="kd">extends</span> <span class="n">HandlerInterceptorAdapter</span> <span class="o">{</span>
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">boolean</span> <span class="n">preHandle</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">,</span> <span class="n">Object</span> <span class="n">handler</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">preHandle</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">,</span> <span class="n">Object</span> <span class="n">handler</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
         <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="c1">// ...</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>像这样我们把<code class="highlighter-rouge">MyInterceptor</code>作为一个<code class="highlighter-rouge">Bean</code>, <code class="highlighter-rouge">Spring boot</code>并不会帮我们注册到拦截器列表中. 就像添加消息转换器一样, 我们可以在继承<code class="highlighter-rouge">WebMvcConfigurerAdapter</code>的配置类里, 通过覆盖方法来添加:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Configuration</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Configuration</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">WebMvcConfig</span> <span class="kd">extends</span> <span class="n">WebMvcConfigurerAdapter</span> <span class="o">{</span>
       <span class="c1">// 拦截器需要手动加入到调用链中</span>
       <span class="nd">@Override</span>
-      <span class="kd">public</span> <span class="kt">void</span> <span class="n">addInterceptors</span><span class="o">(</span><span class="n">InterceptorRegistry</span> <span class="n">registry</span><span class="o">)</span> <span class="o">{</span>
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">addInterceptors</span><span class="o">(</span><span class="n">InterceptorRegistry</span> <span class="n">registry</span><span class="o">)</span> <span class="o">{</span>
           <span class="n">registry</span><span class="o">.</span><span class="na">addInterceptor</span><span class="o">(</span><span class="k">new</span> <span class="n">MyInterceptor</span><span class="o">());</span>
       <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 

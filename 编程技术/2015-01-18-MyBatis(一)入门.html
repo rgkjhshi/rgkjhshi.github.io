@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="keywords" content="MyBatis(一): 入门, 编程技术, MyBatis, 逆水行舟" />
-    <meta name="description" content="MyBatis(一): 入门, 编程技术, MyBatis, 有关 MyBatis 的详细信息，可以查看MyBatis官方文档  " />
+    <meta name="description" content="MyBatis(一): 入门, 编程技术, MyBatis, 有关 MyBatis 的详细信息，可以查看MyBatis官方文档" />
 
     <title>逆水行舟</title>
 
@@ -99,58 +99,55 @@ jQuery(function(){
     <div class="uk-grid">
         <div  class="uk-width-4-4">
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
-            <p>有关 MyBatis 的详细信息，可以查看<a href="http://mybatis.github.io/mybatis-3/zh/index.html">MyBatis官方文档</a>  </p>
+            <p>有关 MyBatis 的详细信息，可以查看<a href="http://mybatis.github.io/mybatis-3/zh/index.html">MyBatis官方文档</a></p>
 
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#jdbc">JDBC的使用</a></li>
-  <li><a href="#mybatis">MyBatis的简单使用</a></li>
-  <li><a href="#mybatis-1">MyBatis项目实例</a></li>
+  <li><a href="#jdbc的使用" id="markdown-toc-jdbc的使用">JDBC的使用</a></li>
+  <li><a href="#mybatis的简单使用" id="markdown-toc-mybatis的简单使用">MyBatis的简单使用</a></li>
+  <li><a href="#mybatis项目实例" id="markdown-toc-mybatis项目实例">MyBatis项目实例</a></li>
 </ul>
 
 <hr />
 
-<h2 id="jdbc">JDBC的使用</h2>
+<h2 id="jdbc的使用">JDBC的使用</h2>
 
 <p>在我看来， MyBatis 是用来进行数据库的连接和管理的包，使用 MyBatis 必须将对应的jar包添加到classpath中。<br />
 不使用 MyBatis, 通过JDBC进行数据库的操作方式如下：</p>
 
 <p>数据库连接相关参数：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// JDBC 连接所需参数</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// JDBC 连接所需参数</span>
     <span class="n">String</span> <span class="n">MYSQL_URL</span> <span class="o">=</span> <span class="s">"jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&amp;amp;characterEncoding=utf8"</span><span class="o">;</span>
     <span class="n">String</span> <span class="n">USERNAME</span> <span class="o">=</span> <span class="s">"root"</span><span class="o">;</span>
     <span class="n">String</span> <span class="n">PASSWORD</span> <span class="o">=</span> <span class="s">"root"</span><span class="o">;</span>
     <span class="c1">// JDBC 对应的MySQL驱动</span>
     <span class="n">String</span> <span class="n">MYSQL_DRIVER</span> <span class="o">=</span> <span class="s">"com.mysql.jdbc.Driver"</span><span class="o">;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>使用 <code class="highlighter-rouge">Statement</code> 执行SQL语句</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="n">MYSQL_DRIVER</span><span class="o">);</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="n">MYSQL_DRIVER</span><span class="o">);</span>
     <span class="n">Connection</span> <span class="n">connection</span> <span class="o">=</span> <span class="n">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span><span class="n">MYSQL_URL</span><span class="o">,</span> <span class="n">USERNAME</span><span class="o">,</span> <span class="n">PASSWORD</span><span class="o">);</span>
     <span class="n">Statement</span> <span class="n">statement</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="na">createStatement</span><span class="o">();</span>
     <span class="n">String</span> <span class="n">SQL</span> <span class="o">=</span> <span class="s">"SELECT * FROM user"</span><span class="o">;</span>
     <span class="n">ResultSet</span> <span class="n">resultSet</span> <span class="o">=</span> <span class="n">statement</span><span class="o">.</span><span class="na">executeQuery</span><span class="o">(</span><span class="n">SQL</span><span class="o">);</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>或者使用 <code class="highlighter-rouge">preparedStatement</code>，来避免一些SQL注入漏洞</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="n">MYSQL_DRIVER</span><span class="o">);</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="n">MYSQL_DRIVER</span><span class="o">);</span>
     <span class="n">Connection</span> <span class="n">connection</span> <span class="o">=</span> <span class="n">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span><span class="n">MYSQL_URL</span><span class="o">,</span> <span class="n">USERNAME</span><span class="o">,</span> <span class="n">PASSWORD</span><span class="o">);</span>
     <span class="n">String</span> <span class="n">preparedSql</span> <span class="o">=</span> <span class="s">"SELECT * FROM user WHERE username = ? AND password = ?"</span><span class="o">;</span>
     <span class="n">PreparedStatement</span> <span class="n">preparedStatement</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="na">prepareStatement</span><span class="o">(</span><span class="n">preparedSql</span><span class="o">);</span>
     <span class="n">preparedStatement</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="s">"shisong"</span><span class="o">);</span> <span class="c1">// 第一个'?'的值</span>
     <span class="n">preparedStatement</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="s">"123456"</span><span class="o">);</span>  <span class="c1">// 第二个'?'的值</span>
     <span class="n">ResultSet</span> <span class="n">resultSet</span> <span class="o">=</span> <span class="n">preparedStatement</span><span class="o">.</span><span class="na">executeQuery</span><span class="o">();</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>这样不仅需要添加 <code class="highlighter-rouge">try catch</code>，而且还要自己关闭不再使用的数据库连接。而使用MyBatis，这些工作就不需要自己管理了。</p>
 
 <hr />
 
-<h2 id="mybatis">MyBatis的简单使用</h2>
+<h2 id="mybatis的简单使用">MyBatis的简单使用</h2>
 
 <p>MyBatis 是以 <code class="highlighter-rouge">SqlSessionFactory</code> 的实例为中心的。
 <code class="highlighter-rouge">SqlSessionFactory</code> 的实例可以通过 <code class="highlighter-rouge">SqlSessionFactoryBuilder</code>获得。
@@ -159,33 +156,31 @@ jQuery(function(){
 
 <p><strong>通过 <code class="highlighter-rouge">XML</code>配置文件获得 <code class="highlighter-rouge">SqlSessionFactory</code>的方式</strong></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="n">String</span> <span class="n">resource</span> <span class="o">=</span> <span class="s">"mybatis-config.xml"</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">String</span> <span class="n">resource</span> <span class="o">=</span> <span class="s">"mybatis-config.xml"</span><span class="o">;</span>
     <span class="n">InputStream</span> <span class="n">inputStream</span> <span class="o">=</span> <span class="n">Resources</span><span class="o">.</span><span class="na">getResourceAsStream</span><span class="o">(</span><span class="n">resource</span><span class="o">);</span>
     <span class="n">sqlSessionFactory</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SqlSessionFactoryBuilder</span><span class="o">().</span><span class="na">build</span><span class="o">(</span><span class="n">inputStream</span><span class="o">);</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>其中的resource是mybatis配置文件，其内容稍后讲，先来看如何使用<code class="highlighter-rouge">sqlSessionFactory</code>进行数据库操作</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="n">SqlSession</span> <span class="n">session</span> <span class="o">=</span> <span class="n">sqlSessionFactory</span><span class="o">.</span><span class="na">openSession</span><span class="o">();</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">SqlSession</span> <span class="n">session</span> <span class="o">=</span> <span class="n">sqlSessionFactory</span><span class="o">.</span><span class="na">openSession</span><span class="o">();</span>
     <span class="k">try</span> <span class="o">{</span>
         <span class="n">UserMapper</span> <span class="n">mapper</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="na">getMapper</span><span class="o">(</span><span class="n">UserMapper</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
         <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">.</span><span class="na">selectUserById</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
     <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
         <span class="n">session</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
     <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>其中的<code class="highlighter-rouge">UserMapper</code>和<code class="highlighter-rouge">User</code>都是自己定义的类，<code class="highlighter-rouge">User</code>是与数据库中的user表对应的bean，
 <code class="highlighter-rouge">UserMapper</code>是一个对数据库进行操作的接口，要有一个UserMapper.xml文件与之对应，
 <code class="highlighter-rouge">selectUserById</code>就是接口定义的方法，其实现方式有两种，一种是在xml文件中，一种是通过注解，之后的文章会具体讲。</p>
 
 <hr />
 
-<h2 id="mybatis-1">MyBatis项目实例</h2>
+<h2 id="mybatis项目实例">MyBatis项目实例</h2>
 
 <p><strong>项目的文件清单</strong></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    src
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    src
     |--com.test.mybatis
     |  |--bean
     |  |  |--User.java
@@ -196,11 +191,10 @@ jQuery(function(){
     |--mappers
     |  |--UserMapper.xml
     |--mybatis-config.xml
-</code></pre>
-</div>
+</code></pre></div></div>
 <p><strong>MyBatis配置文件: mybatis-config.xml</strong></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span>
 <span class="cp">&lt;!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd"&gt;</span>
 <span class="nt">&lt;configuration&gt;</span>
     <span class="nt">&lt;typeAliases&gt;</span>
@@ -223,11 +217,10 @@ jQuery(function(){
         <span class="nt">&lt;mapper</span> <span class="na">resource=</span><span class="s">"mappers/UserMapper.xml"</span><span class="nt">/&gt;</span>
     <span class="nt">&lt;/mappers&gt;</span>
 <span class="nt">&lt;/configuration&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p><strong>Mapper文件: mappers/UserMapper.xml</strong></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
 <span class="cp">&lt;!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"&gt;</span>
 <span class="nt">&lt;mapper</span> <span class="na">namespace=</span><span class="s">"com.test.mybatis.mapper.UserMapper"</span><span class="nt">&gt;</span>
 
@@ -238,52 +231,49 @@ jQuery(function(){
     <span class="nt">&lt;/select&gt;</span>
 
 <span class="nt">&lt;/mapper&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p><strong>与数据库对应的bean:User.java</strong></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">;</span>
     <span class="kd">private</span> <span class="n">String</span> <span class="n">username</span><span class="o">;</span>
     <span class="kd">private</span> <span class="n">String</span> <span class="n">password</span><span class="o">;</span>
 
-    <span class="kd">public</span> <span class="n">Integer</span> <span class="n">getId</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">Integer</span> <span class="nf">getId</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="n">id</span><span class="o">;</span>
     <span class="o">}</span>
 
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">setId</span><span class="o">(</span><span class="n">Integer</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setId</span><span class="o">(</span><span class="n">Integer</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
     <span class="o">}</span>
 
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">getUsername</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getUsername</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="n">username</span><span class="o">;</span>
     <span class="o">}</span>
 
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">setUsername</span><span class="o">(</span><span class="n">String</span> <span class="n">username</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setUsername</span><span class="o">(</span><span class="n">String</span> <span class="n">username</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="na">username</span> <span class="o">=</span> <span class="n">username</span><span class="o">;</span>
     <span class="o">}</span>
 
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">getPassword</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getPassword</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="n">password</span><span class="o">;</span>
     <span class="o">}</span>
 
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">setPassword</span><span class="o">(</span><span class="n">String</span> <span class="n">password</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setPassword</span><span class="o">(</span><span class="n">String</span> <span class="n">password</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="na">password</span> <span class="o">=</span> <span class="n">password</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p><strong>对数据库的操作接口: UserMapper.java</strong></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserMapper</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserMapper</span> <span class="o">{</span>
 
-    <span class="kd">public</span> <span class="n">User</span> <span class="n">selectUserById</span><span class="o">(</span><span class="n">Integer</span> <span class="n">id</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="n">User</span> <span class="nf">selectUserById</span><span class="o">(</span><span class="n">Integer</span> <span class="n">id</span><span class="o">);</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p><strong>测试类: TestMybatis.java</strong></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestMybatis</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestMybatis</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">TestMybatis</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
 
     <span class="kd">private</span> <span class="kd">static</span> <span class="n">SqlSessionFactory</span> <span class="n">sqlSessionFactory</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
@@ -298,7 +288,7 @@ jQuery(function(){
 
     <span class="o">}</span>
 
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">SqlSession</span> <span class="n">session</span> <span class="o">=</span> <span class="n">sqlSessionFactory</span><span class="o">.</span><span class="na">openSession</span><span class="o">();</span>
         <span class="k">try</span> <span class="o">{</span>
             <span class="n">UserMapper</span> <span class="n">userMapper</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="na">getMapper</span><span class="o">(</span><span class="n">UserMapper</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
@@ -309,8 +299,7 @@ jQuery(function(){
         <span class="o">}</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 

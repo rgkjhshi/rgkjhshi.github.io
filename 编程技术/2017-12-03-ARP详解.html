@@ -102,17 +102,17 @@ jQuery(function(){
             <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#macmac">MAC地址与MAC帧</a></li>
-  <li><a href="#arp">地址解析协议<code class="highlighter-rouge">ARP</code></a>    <ul>
-      <li><a href="#arp-1">ARP帧格式</a></li>
-      <li><a href="#arp-2">ARP工作流程</a></li>
+  <li><a href="#mac地址与mac帧" id="markdown-toc-mac地址与mac帧">MAC地址与MAC帧</a></li>
+  <li><a href="#地址解析协议arp" id="markdown-toc-地址解析协议arp">地址解析协议<code class="highlighter-rouge">ARP</code></a>    <ul>
+      <li><a href="#arp帧格式" id="markdown-toc-arp帧格式">ARP帧格式</a></li>
+      <li><a href="#arp工作流程" id="markdown-toc-arp工作流程">ARP工作流程</a></li>
     </ul>
   </li>
 </ul>
 
 <hr />
 
-<h2 id="macmac">MAC地址与MAC帧</h2>
+<h2 id="mac地址与mac帧">MAC地址与MAC帧</h2>
 <p>每块网络设备都至少有一个地址, 称为<code class="highlighter-rouge">MAC地址</code>, 也称物理地址。 MAC地址长<code class="highlighter-rouge">6B</code>, 一般由冒号(或连字符)分个的6个十六进制数表示, 如:<code class="highlighter-rouge">02-60-8c-e4-b1-21</code>, 高24位为厂商代码, 低24位为厂商自行分配的网卡序列号。</p>
 
 <p>常用的以太网MAC帧格式有两种标准: <code class="highlighter-rouge">DIX Ethernet V2</code>标准 和 <code class="highlighter-rouge">IEEE 的 802.3</code>标准, 最常用的MAC帧格式是以太网V2的格式:</p>
@@ -129,10 +129,10 @@ jQuery(function(){
   <li><code class="highlighter-rouge">FCS</code>: <code class="highlighter-rouge">4B</code>校验字段, 校验范围从目的地址到数据段的末尾, 算法采用32位的CRC。</li>
 </ul>
 
-<h2 id="arp">地址解析协议<code class="highlighter-rouge">ARP</code></h2>
+<h2 id="地址解析协议arp">地址解析协议<code class="highlighter-rouge">ARP</code></h2>
 <p>无论在网络层使用什么协议, 在实际网络的数据链路上传送数据时, 最终必须使用硬件地址。 所以需要一种方法来完成<code class="highlighter-rouge">IP地址</code>到<code class="highlighter-rouge">MAC地址</code>的映射, 这就需要用到地址解析协议(<code class="highlighter-rouge">Address Resolution Protocol, ARP</code>)。 每台主机(路由器)上单独存放一个从<code class="highlighter-rouge">IP地址</code>到<code class="highlighter-rouge">MAC地址</code>的映射表, 称<code class="highlighter-rouge">ARP表</code>, 使用ARP协议来动态维护此ARP表。</p>
 
-<h3 id="arp-1">ARP帧格式</h3>
+<h3 id="arp帧格式">ARP帧格式</h3>
 <p>ARP帧格式如下:</p>
 
 <p><img src="/static/images/ARP.png" alt="ARP" title="ARP" /></p>
@@ -161,7 +161,7 @@ jQuery(function(){
   <li>ARP报文体只有<code class="highlighter-rouge">28B</code>, 需要进行填充, 使得<code class="highlighter-rouge">MAC帧</code>数据部分最少为<code class="highlighter-rouge">46B</code>(首部14B, 数据46B, FCS 4B, 总共64B)</li>
 </ol>
 
-<h3 id="arp-2">ARP工作流程</h3>
+<h3 id="arp工作流程">ARP工作流程</h3>
 <p>在以太网(<code class="highlighter-rouge">ARP协议只适用于局域网</code>)中, 如果本地主机想要向某一个IP地址的主机发数据报, 但是并不知道其硬件地址, 此时利用ARP协议提供的机制来获取硬件地址，具体过程如下:</p>
 
 <ol>

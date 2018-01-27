@@ -102,13 +102,13 @@ jQuery(function(){
             <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#section">生命周期</a></li>
-  <li><a href="#section-1">测试示例</a></li>
+  <li><a href="#生命周期" id="markdown-toc-生命周期">生命周期</a></li>
+  <li><a href="#测试示例" id="markdown-toc-测试示例">测试示例</a></li>
 </ul>
 
 <hr />
 
-<h2 id="section">生命周期</h2>
+<h2 id="生命周期">生命周期</h2>
 <p>普通的<code class="highlighter-rouge">Java</code>程序中一个对象通过关键字<code class="highlighter-rouge">new</code>进行实例化, 而在<code class="highlighter-rouge">Spring</code>容器里, <code class="highlighter-rouge">Bean</code>的生命周期由<code class="highlighter-rouge">Spring</code>来控制, 而<code class="highlighter-rouge">Spring</code>中对<code class="highlighter-rouge">Bean</code>的生命周期的控制非常细致, 我们可以通过<code class="highlighter-rouge">Spring</code>提供的扩展点来自定义<code class="highlighter-rouge">Bean</code>的创建过程.</p>
 
 <p>下图是一个典型的生命周期过程:</p>
@@ -136,23 +136,22 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="section-1">测试示例</h2>
+<h2 id="测试示例">测试示例</h2>
 <p>如果我们在xml文件中有这样的配置</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"lifecycleService"</span> <span class="na">class=</span><span class="s">"XXX.service.LifecycleService"</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"lifecycleService"</span> <span class="na">class=</span><span class="s">"XXX.service.LifecycleService"</span>
   <span class="na">init-method=</span><span class="s">"initMethod"</span> <span class="na">destroy-method=</span><span class="s">"destroyMethod"</span><span class="nt">/&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>Bean的定义如下:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 后处理器</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 后处理器</span>
 <span class="nd">@Service</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyBeanPostProcessor</span> <span class="kd">implements</span> <span class="n">BeanPostProcessor</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">LifecycleService</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
 
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="n">Object</span> <span class="n">postProcessBeforeInitialization</span><span class="o">(</span><span class="n">Object</span> <span class="n">bean</span><span class="o">,</span> <span class="n">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">Object</span> <span class="nf">postProcessBeforeInitialization</span><span class="o">(</span><span class="n">Object</span> <span class="n">bean</span><span class="o">,</span> <span class="n">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
         <span class="c1">// 每一个没有实现BeanPostProcessor接口的Bean都会调用</span>
         <span class="k">if</span> <span class="o">(</span><span class="n">bean</span> <span class="k">instanceof</span> <span class="n">LifecycleService</span><span class="o">)</span> <span class="o">{</span>
             <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"BeanPostProcessor.postProcessBeforeInitialization()方法, beanName={}"</span><span class="o">,</span> <span class="n">beanName</span><span class="o">);</span>
@@ -161,7 +160,7 @@ jQuery(function(){
     <span class="o">}</span>
 
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="n">Object</span> <span class="n">postProcessAfterInitialization</span><span class="o">(</span><span class="n">Object</span> <span class="n">bean</span><span class="o">,</span> <span class="n">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">Object</span> <span class="nf">postProcessAfterInitialization</span><span class="o">(</span><span class="n">Object</span> <span class="n">bean</span><span class="o">,</span> <span class="n">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
         <span class="c1">// 每一个没有实现BeanPostProcessor接口的Bean都会调用</span>
         <span class="k">if</span> <span class="o">(</span><span class="n">bean</span> <span class="k">instanceof</span> <span class="n">LifecycleService</span><span class="o">)</span> <span class="o">{</span>
             <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"BeanPostProcessor.postProcessBeforeInitialization()方法, beanName={}"</span><span class="o">,</span> <span class="n">beanName</span><span class="o">);</span>
@@ -174,61 +173,60 @@ jQuery(function(){
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">LifecycleService</span> <span class="kd">implements</span> <span class="n">BeanNameAware</span><span class="o">,</span> <span class="n">BeanFactoryAware</span><span class="o">,</span> <span class="n">ApplicationContextAware</span><span class="o">,</span> <span class="n">InitializingBean</span><span class="o">,</span> <span class="n">DisposableBean</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">LifecycleService</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
 
-        <span class="kd">public</span> <span class="n">LifecycleService</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">public</span> <span class="nf">LifecycleService</span><span class="o">()</span> <span class="o">{</span>
             <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"1. 构造方法"</span><span class="o">);</span>
         <span class="o">}</span>
 
         <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="n">setBeanName</span><span class="o">(</span><span class="n">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setBeanName</span><span class="o">(</span><span class="n">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="o">{</span>
             <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"2. BeanNameAware.setBeanName()方法, 用于获取Bean的ID"</span><span class="o">);</span>
         <span class="o">}</span>
 
         <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="n">setBeanFactory</span><span class="o">(</span><span class="n">BeanFactory</span> <span class="n">beanFactory</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setBeanFactory</span><span class="o">(</span><span class="n">BeanFactory</span> <span class="n">beanFactory</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
             <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"3. BeanFactoryAware.setBeanFactory()方法"</span><span class="o">);</span>
         <span class="o">}</span>
 
         <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="n">setApplicationContext</span><span class="o">(</span><span class="n">ApplicationContext</span> <span class="n">applicationContext</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setApplicationContext</span><span class="o">(</span><span class="n">ApplicationContext</span> <span class="n">applicationContext</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
             <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"4. ApplicationContextAware.setApplicationContext()方法"</span><span class="o">);</span>
         <span class="o">}</span>
 
         <span class="nd">@PostConstruct</span>
-        <span class="kd">private</span> <span class="kt">void</span> <span class="n">init</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">private</span> <span class="kt">void</span> <span class="nf">init</span><span class="o">()</span> <span class="o">{</span>
             <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"5. @PostConstruct"</span><span class="o">);</span>
         <span class="o">}</span>
 
         <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="n">afterPropertiesSet</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">afterPropertiesSet</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
             <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"6. InitializingBean.afterPropertiesSet()方法"</span><span class="o">);</span>
         <span class="o">}</span>
 
-        <span class="kd">public</span> <span class="kt">void</span> <span class="n">initMethod</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">initMethod</span><span class="o">()</span> <span class="o">{</span>
             <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"7. initMethod"</span><span class="o">);</span>
         <span class="o">}</span>
 
         <span class="c1">// bean就绪</span>
 
         <span class="nd">@PreDestroy</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="n">preDestory</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">preDestory</span><span class="o">()</span> <span class="o">{</span>
             <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"8. @PreDestroy"</span><span class="o">);</span>
         <span class="o">}</span>
 
         <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="n">destroy</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">destroy</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
             <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"9. DisposableBean.destroy()方法"</span><span class="o">);</span>
         <span class="o">}</span>
 
-        <span class="kd">public</span> <span class="kt">void</span> <span class="n">destroyMethod</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">destroyMethod</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
             <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"10. destroyMethod"</span><span class="o">);</span>
         <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>这个例子的输出结果为:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="mi">1</span><span class="o">.</span> <span class="err">构造方法</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="mi">1</span><span class="o">.</span> <span class="err">构造方法</span>
 <span class="mi">2</span><span class="o">.</span> <span class="n">BeanNameAware</span><span class="o">.</span><span class="na">setBeanName</span><span class="o">()</span><span class="err">方法</span><span class="o">,</span> <span class="err">用于获取</span><span class="n">Bean</span><span class="err">的</span><span class="n">ID</span>
 <span class="mi">3</span><span class="o">.</span> <span class="n">BeanFactoryAware</span><span class="o">.</span><span class="na">setBeanFactory</span><span class="o">()</span><span class="err">方法</span>
 <span class="mi">4</span><span class="o">.</span> <span class="n">ApplicationContextAware</span><span class="o">.</span><span class="na">setApplicationContext</span><span class="o">()</span><span class="err">方法</span>
@@ -240,8 +238,7 @@ jQuery(function(){
 <span class="mi">8</span><span class="o">.</span> <span class="nd">@PreDestroy</span>
 <span class="mi">9</span><span class="o">.</span> <span class="n">DisposableBean</span><span class="o">.</span><span class="na">destroy</span><span class="o">()</span><span class="err">方法</span>
 <span class="mi">10</span><span class="o">.</span> <span class="n">destroyMethod</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 

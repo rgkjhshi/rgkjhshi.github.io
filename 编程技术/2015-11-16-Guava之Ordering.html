@@ -106,14 +106,14 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#section">静态方法</a></li>
-  <li><a href="#section-1">实例方法:链式调用</a></li>
-  <li><a href="#section-2">实例方法:操作集合元素的方法</a></li>
+  <li><a href="#静态方法" id="markdown-toc-静态方法">静态方法</a></li>
+  <li><a href="#实例方法链式调用" id="markdown-toc-实例方法链式调用">实例方法:链式调用</a></li>
+  <li><a href="#实例方法操作集合元素的方法" id="markdown-toc-实例方法操作集合元素的方法">实例方法:操作集合元素的方法</a></li>
 </ul>
 
 <hr />
 
-<h2 id="section">静态方法</h2>
+<h2 id="静态方法">静态方法</h2>
 
 <ul>
   <li><code class="highlighter-rouge">Ordering&lt;C&gt; natural()</code>: 返回自然顺序的比较器, 如数字按大小，日期按先后</li>
@@ -127,7 +127,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="section-1">实例方法:链式调用</h2>
+<h2 id="实例方法链式调用">实例方法:链式调用</h2>
 
 <ul>
   <li><code class="highlighter-rouge">Ordering&lt;S&gt; reverse()</code>: 返回反序比较器</li>
@@ -139,17 +139,16 @@ jQuery(function(){
 
 <p>看下面这个链式调用的例子, 应该从后往前读, 先调用apply方法获取Foo的name值, 在把null放前面, 再对剩下的按照name的自然顺序进行排序</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Ordering</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span> <span class="n">ordering</span> <span class="o">=</span> <span class="n">Ordering</span><span class="o">.</span><span class="na">natural</span><span class="o">().</span><span class="na">nullsFirst</span><span class="o">().</span><span class="na">onResultOf</span><span class="o">(</span><span class="k">new</span> <span class="n">Function</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;()</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">apply</span><span class="o">(</span><span class="n">Foo</span> <span class="n">foo</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Ordering</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span> <span class="n">ordering</span> <span class="o">=</span> <span class="n">Ordering</span><span class="o">.</span><span class="na">natural</span><span class="o">().</span><span class="na">nullsFirst</span><span class="o">().</span><span class="na">onResultOf</span><span class="o">(</span><span class="k">new</span> <span class="n">Function</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">apply</span><span class="o">(</span><span class="n">Foo</span> <span class="n">foo</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">return</span> <span class="n">foo</span><span class="o">.</span><span class="na">getName</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">});</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="section-2">实例方法:操作集合元素的方法</h2>
+<h2 id="实例方法操作集合元素的方法">实例方法:操作集合元素的方法</h2>
 <p>注:后面说的大小是指排序的前后</p>
 
 <p><code class="highlighter-rouge">min()</code>: 返回最小的那个元素, 重载方法有</p>

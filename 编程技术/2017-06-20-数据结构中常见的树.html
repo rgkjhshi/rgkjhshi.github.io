@@ -104,38 +104,38 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#bst">BST树</a>    <ul>
-      <li><a href="#section">定义</a></li>
-      <li><a href="#section-1">示例</a></li>
-      <li><a href="#section-2">二叉排序树的查找</a></li>
+  <li><a href="#bst树" id="markdown-toc-bst树">BST树</a>    <ul>
+      <li><a href="#定义" id="markdown-toc-定义">定义</a></li>
+      <li><a href="#示例" id="markdown-toc-示例">示例</a></li>
+      <li><a href="#二叉排序树的查找" id="markdown-toc-二叉排序树的查找">二叉排序树的查找</a></li>
     </ul>
   </li>
-  <li><a href="#section-3">二叉排序树的插入</a>    <ul>
-      <li><a href="#section-4">二叉排序树的删除</a></li>
+  <li><a href="#二叉排序树的插入" id="markdown-toc-二叉排序树的插入">二叉排序树的插入</a>    <ul>
+      <li><a href="#二叉排序树的删除" id="markdown-toc-二叉排序树的删除">二叉排序树的删除</a></li>
     </ul>
   </li>
-  <li><a href="#avl">AVL平衡二叉树</a>    <ul>
-      <li><a href="#section-5">定义</a></li>
-      <li><a href="#section-6">平衡二叉树的插入</a></li>
-      <li><a href="#section-7">平衡二叉树的删除</a></li>
+  <li><a href="#avl平衡二叉树" id="markdown-toc-avl平衡二叉树">AVL平衡二叉树</a>    <ul>
+      <li><a href="#定义-1" id="markdown-toc-定义-1">定义</a></li>
+      <li><a href="#平衡二叉树的插入" id="markdown-toc-平衡二叉树的插入">平衡二叉树的插入</a></li>
+      <li><a href="#平衡二叉树的删除" id="markdown-toc-平衡二叉树的删除">平衡二叉树的删除</a></li>
     </ul>
   </li>
-  <li><a href="#rbt">RBT红黑树</a>    <ul>
-      <li><a href="#rbt-1">RBT的性质</a></li>
-      <li><a href="#rbt-2">RBT示例</a></li>
-      <li><a href="#section-8">红黑树的插入</a></li>
-      <li><a href="#section-9">红黑树的删除</a></li>
+  <li><a href="#rbt红黑树" id="markdown-toc-rbt红黑树">RBT红黑树</a>    <ul>
+      <li><a href="#rbt的性质" id="markdown-toc-rbt的性质">RBT的性质</a></li>
+      <li><a href="#rbt示例" id="markdown-toc-rbt示例">RBT示例</a></li>
+      <li><a href="#红黑树的插入" id="markdown-toc-红黑树的插入">红黑树的插入</a></li>
+      <li><a href="#红黑树的删除" id="markdown-toc-红黑树的删除">红黑树的删除</a></li>
     </ul>
   </li>
-  <li><a href="#bb-b">B树,B-树,B+树</a></li>
+  <li><a href="#b树b-树b树" id="markdown-toc-b树b-树b树">B树,B-树,B+树</a></li>
 </ul>
 
 <hr />
 
-<h2 id="bst">BST树</h2>
+<h2 id="bst树">BST树</h2>
 <p>二叉排序树, 也称二叉查找树(<code class="highlighter-rouge">Binary Search Tree</code>), 简称<code class="highlighter-rouge">BST</code>.</p>
 
-<h3 id="section">定义</h3>
+<h3 id="定义">定义</h3>
 <p>二叉排序树或者是一棵空树, 或者是一棵具有下列特性的非空二叉树:</p>
 
 <ul>
@@ -144,20 +144,20 @@ jQuery(function(){
   <li>左右子树本身也分别是一颗二叉排序树</li>
 </ul>
 
-<h3 id="section-1">示例</h3>
+<h3 id="示例">示例</h3>
 <p>下图中左右两个都是二叉排序树</p>
 
 <p><img src="/static/images/BST.png" alt="BSTTree" title="BSTTree" /></p>
 
-<h3 id="section-2">二叉排序树的查找</h3>
+<h3 id="二叉排序树的查找">二叉排序树的查找</h3>
 
 <p>从根结点开始进行关键字比较, 若相等, 则查找成功; 若不等, 如果查找的关键字小于根结点关键字, 去左子树中查找, 否则去右子树中查找. 若最后不再有子树, 查找失败.</p>
 
-<h2 id="section-3">二叉排序树的插入</h2>
+<h2 id="二叉排序树的插入">二叉排序树的插入</h2>
 
 <p>与查找过程类似, 若待插入的<code class="highlighter-rouge">BST</code>树为空, 则直接插入; 若关键字<code class="highlighter-rouge">k</code>小于根结点关键字, 则插入到左子树, 否则插入到右子树</p>
 
-<h3 id="section-4">二叉排序树的删除</h3>
+<h3 id="二叉排序树的删除">二叉排序树的删除</h3>
 <p>删除操作可以按下面情况处理</p>
 
 <ol>
@@ -166,11 +166,11 @@ jQuery(function(){
   <li>若<code class="highlighter-rouge">z</code>有左右两棵子树, 则令<code class="highlighter-rouge">z</code>的直接前驱(即<code class="highlighter-rouge">z</code>左子树中最大的那个结点)替代<code class="highlighter-rouge">z</code>, 再从左子树中删除这个直接前驱, 这样就转化成了第一或第二中情况(因为<code class="highlighter-rouge">z</code>的直接前驱, 肯定没有右子树)</li>
 </ol>
 
-<h2 id="avl">AVL平衡二叉树</h2>
+<h2 id="avl平衡二叉树">AVL平衡二叉树</h2>
 
 <p><code class="highlighter-rouge">平衡二叉树</code>的发明者为<code class="highlighter-rouge">Georgy Adelson-Velsky</code>和<code class="highlighter-rouge">Evgenii Landis</code>, 所以也被称作<code class="highlighter-rouge">AVL树</code>. 在维基百科<a href="https://en.wikipedia.org/wiki/AVL_tree">AVL树的定义</a>中有这么一句话: <code class="highlighter-rouge">In computer science, an AVL tree is a self-balancing binary search tree.</code>, 所以<code class="highlighter-rouge">AVL平衡二叉树</code>是<code class="highlighter-rouge">BST二叉搜索树</code>的子集.</p>
 
-<h3 id="section-5">定义</h3>
+<h3 id="定义-1">定义</h3>
 <p>平衡二叉树或者是一棵空树, 或者是一棵具有下列特性的非空二叉树:</p>
 
 <ul>
@@ -180,7 +180,7 @@ jQuery(function(){
 
 <p>虽然<code class="highlighter-rouge">AVL平衡二叉树</code>的定义中并没有体现它是一个排序树, 但它是以<code class="highlighter-rouge">二叉排序树</code>为前提的</p>
 
-<h3 id="section-6">平衡二叉树的插入</h3>
+<h3 id="平衡二叉树的插入">平衡二叉树的插入</h3>
 <p><code class="highlighter-rouge">二叉排序树</code>插入时, 只需要保证排序的特性, <code class="highlighter-rouge">平衡二叉树</code>的插入同时还需要保证插入结点之后仍然平衡.<br />
 <code class="highlighter-rouge">平衡二叉树</code>的插入过程前半部分与<code class="highlighter-rouge">二叉排序树</code>相同, 但在新结点插入后, 如果破坏了某个结点的平衡, 则需要作出相应的调整. 一般可将失去平衡后进行调整的规律归纳为下列4种情况:</p>
 
@@ -212,17 +212,17 @@ jQuery(function(){
   <li><code class="highlighter-rouge">注意</code>, 在<code class="highlighter-rouge">LR</code>和<code class="highlighter-rouge">RL</code>旋转时, 究竟新结点插入在<code class="highlighter-rouge">C</code>的左子树还是右子树上, 不影响旋转过程。</li>
 </ul>
 
-<h3 id="section-7">平衡二叉树的删除</h3>
+<h3 id="平衡二叉树的删除">平衡二叉树的删除</h3>
 <p><code class="highlighter-rouge">AVL</code>的删除过程前半部分与<code class="highlighter-rouge">BST</code>相同, 但删除结点后, 如果破坏了父结点的平衡, 则需要作出相应的调整, 调整方法与插入时的调整方法一样</p>
 
-<h2 id="rbt">RBT红黑树</h2>
-<p>红黑树(<code class="highlighter-rouge">Red Black Tree</code>)也是一种<code class="highlighter-rouge">二叉查找树</code>, 但在每个结点上增加一个存储位表示结点的颜色(<code class="highlighter-rouge">Red</code>或<code class="highlighter-rouge">Black</code>), 通过对每个结点着色, 使它满足一些性质, 这些性质共同来保证红黑树是基本上平衡的.  </p>
+<h2 id="rbt红黑树">RBT红黑树</h2>
+<p>红黑树(<code class="highlighter-rouge">Red Black Tree</code>)也是一种<code class="highlighter-rouge">二叉查找树</code>, 但在每个结点上增加一个存储位表示结点的颜色(<code class="highlighter-rouge">Red</code>或<code class="highlighter-rouge">Black</code>), 通过对每个结点着色, 使它满足一些性质, 这些性质共同来保证红黑树是基本上平衡的.</p>
 
 <p><code class="highlighter-rouge">AVL</code>是严格平衡树, 因此在增加或者删除节点的时候, 根据不同情况, 旋转的次数比红黑树要多;<br />
 <code class="highlighter-rouge">RBT</code>是弱平衡的, 用非严格的平衡来换取增删节点时候旋转次数的降低;<br />
 所以简单说, 若搜索的次数远远大于插入和删除时, 选择<code class="highlighter-rouge">AVL树</code>; 若搜索、插入、删除次数几乎差不多, 应该选择<code class="highlighter-rouge">红黑树</code></p>
 
-<h3 id="rbt-1">RBT的性质</h3>
+<h3 id="rbt的性质">RBT的性质</h3>
 <p>红黑树是每个结点都带有颜色属性的<code class="highlighter-rouge">二叉查找树</code>。 此外, 对于任何有效的红黑树必须满足以下特点:</p>
 
 <ol>
@@ -244,11 +244,11 @@ jQuery(function(){
 <code class="highlighter-rouge">性质4</code>保证了路径不能有两个相连的红色结点, 最短路径都是黑色结点, 最长路径有交替的红色和黑色结点;<br />
 这就表明了没有路径能多于其他路径的两倍长</p>
 
-<h3 id="rbt-2">RBT示例</h3>
+<h3 id="rbt示例">RBT示例</h3>
 
 <p><img src="/static/images/RBT.png" alt="RBT" title="RBT" /></p>
 
-<h3 id="section-8">红黑树的插入</h3>
+<h3 id="红黑树的插入">红黑树的插入</h3>
 <p>在对红黑树进行插入操作时, 我们一般总是插入 <strong>红色</strong> 的结点。因为插入黑结点会增加某条路径上黑结点的数目, 从而导致整棵树黑高度的不平衡。<br />
 当插入红色结点时, 如果插入的结点是根结点, 会破坏<code class="highlighter-rouge">性质2</code>; 如果插入结点的父结点是红色, 则会破坏<code class="highlighter-rouge">性质4</code>, 这时就需要对红黑树做一些调整。所有可能的情况有4种:</p>
 
@@ -273,7 +273,7 @@ jQuery(function(){
 <ul>
   <li><code class="highlighter-rouge">3.1</code>: 叔父结点为红色(<code class="highlighter-rouge">红父红叔</code>)
 <code class="highlighter-rouge">红父红叔</code>这种情况, 如下图所示, 无需旋转, 只要将父和叔结点变为黑色, 将祖父结点变为红色即可。<br />
-但由于祖父结点的父结点有可能为红色, 从而违反红黑树性质, 此时必须将祖父结点作为新的判定点继续向上进行平衡操作。  </li>
+但由于祖父结点的父结点有可能为红色, 从而违反红黑树性质, 此时必须将祖父结点作为新的判定点继续向上进行平衡操作。</li>
 </ul>
 
 <p><img src="/static/images/RBT_1.png" alt="红父红叔" title="红父红叔" /></p>
@@ -289,7 +289,7 @@ jQuery(function(){
 
 <p><strong>注意</strong> 当旋转完成后, 就已经是红黑树了, 此时不需要再向上调整; 上面四张图的<code class="highlighter-rouge">叔、1、2、3</code>结点有可能为黑哨兵(<code class="highlighter-rouge">NULL</code>)结点。</p>
 
-<h3 id="section-9">红黑树的删除</h3>
+<h3 id="红黑树的删除">红黑树的删除</h3>
 <p>红黑树本身是一棵二叉查找树, 它的删除和二叉查找树的删除类似。根据前面<code class="highlighter-rouge">BST</code>的删除操作可知, 真正删除的结点要么没有子树(情况1), 要么只有一颗子树(情况2、3)。所以真正删除的结点 <strong>只有一个孩子</strong> 或 <strong>没有孩子</strong>。 再结合<code class="highlighter-rouge">红黑树</code>的特点, 可以得出以下两个结论:</p>
 
 <ol>
@@ -311,7 +311,7 @@ jQuery(function(){
   </li>
 </ul>
 
-<h2 id="bb-b">B树,B-树,B+树</h2>
+<h2 id="b树b-树b树">B树,B-树,B+树</h2>
 
 <p><code class="highlighter-rouge">B树</code>又称<code class="highlighter-rouge">多路平衡查找树</code>或<code class="highlighter-rouge">多路平衡查找树</code>, 英文为<code class="highlighter-rouge">B-Tree</code>有的翻译成<code class="highlighter-rouge">B树</code>, 有的翻译为<code class="highlighter-rouge">B-树</code>, 两者是同一个东西.</p>
 

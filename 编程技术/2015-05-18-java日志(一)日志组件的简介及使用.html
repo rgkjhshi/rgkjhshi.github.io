@@ -105,30 +105,30 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#section">日志都做什么</a></li>
-  <li><a href="#section-1">各个日志组件的介绍</a>    <ul>
-      <li><a href="#jul">JUL</a></li>
-      <li><a href="#common-logging">common-logging</a></li>
-      <li><a href="#slf4j">slf4j</a></li>
-      <li><a href="#log4j">Log4j</a></li>
-      <li><a href="#logback">LogBack</a></li>
+  <li><a href="#日志都做什么" id="markdown-toc-日志都做什么">日志都做什么</a></li>
+  <li><a href="#各个日志组件的介绍" id="markdown-toc-各个日志组件的介绍">各个日志组件的介绍</a>    <ul>
+      <li><a href="#jul" id="markdown-toc-jul">JUL</a></li>
+      <li><a href="#common-logging" id="markdown-toc-common-logging">common-logging</a></li>
+      <li><a href="#slf4j" id="markdown-toc-slf4j">slf4j</a></li>
+      <li><a href="#log4j" id="markdown-toc-log4j">Log4j</a></li>
+      <li><a href="#logback" id="markdown-toc-logback">LogBack</a></li>
     </ul>
   </li>
-  <li><a href="#section-2">为什么有这么多不同日志组件</a></li>
-  <li><a href="#section-3">各日志组件的用法</a>    <ul>
-      <li><a href="#jul-1">JUL</a></li>
-      <li><a href="#log4j1">Log4j1</a></li>
-      <li><a href="#log4j2">Log4j2</a></li>
-      <li><a href="#logback-1">LogBack</a></li>
-      <li><a href="#jclcommon-logging">JCL(common-logging)</a></li>
-      <li><a href="#slf4j-1">slf4j</a></li>
+  <li><a href="#为什么有这么多不同日志组件" id="markdown-toc-为什么有这么多不同日志组件">为什么有这么多不同日志组件</a></li>
+  <li><a href="#各日志组件的用法" id="markdown-toc-各日志组件的用法">各日志组件的用法</a>    <ul>
+      <li><a href="#jul-1" id="markdown-toc-jul-1">JUL</a></li>
+      <li><a href="#log4j1" id="markdown-toc-log4j1">Log4j1</a></li>
+      <li><a href="#log4j2" id="markdown-toc-log4j2">Log4j2</a></li>
+      <li><a href="#logback-1" id="markdown-toc-logback-1">LogBack</a></li>
+      <li><a href="#jclcommon-logging" id="markdown-toc-jclcommon-logging">JCL(common-logging)</a></li>
+      <li><a href="#slf4j-1" id="markdown-toc-slf4j-1">slf4j</a></li>
     </ul>
   </li>
 </ul>
 
 <hr />
 
-<h2 id="section">日志都做什么</h2>
+<h2 id="日志都做什么">日志都做什么</h2>
 
 <p>平时写代码想看看输出结果的时候一般直接用<code class="highlighter-rouge">System.out</code>来输出了，感觉也挺好用的，为什么还要有专门的组件记录日志？
 下面给出了几条日志组件应该具有的功能:</p>
@@ -142,7 +142,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="section-1">各个日志组件的介绍</h2>
+<h2 id="各个日志组件的介绍">各个日志组件的介绍</h2>
 <p>日志框架(实现): JUL、 Log4j、 LogBack<br />
 日志门面(接口): JCL(common-logging)、 SLF4J</p>
 
@@ -171,7 +171,7 @@ Log4j有两个版本，一个是log4j1，它使用properties文件进行配置�
 
 <hr />
 
-<h2 id="section-2">为什么有这么多不同日志组件</h2>
+<h2 id="为什么有这么多不同日志组件">为什么有这么多不同日志组件</h2>
 <p>反正有很多，各有各的用法。JDK里的JUL好像不太好用，后来Log4j得到了广泛应用。
 日志组件越来越多，如果一个应用程序中有两个组件，而这两个组件恰好用了不同的日志工具，那这个应用不就有两个日志输出了。<br />
 这时候出现了<code class="highlighter-rouge">Apache Commons Logging(JCL)</code>，它只提供log接口，具体的实现则是在<strong>运行时动态查找</strong>。只要遵守JCL借口的日志工具，都可以通过JCL来使用。<br />
@@ -179,72 +179,66 @@ JCL是在运行时动态查找具体的日志实现，当项目很大时，JCL�
 
 <hr />
 
-<h2 id="section-3">各日志组件的用法</h2>
+<h2 id="各日志组件的用法">各日志组件的用法</h2>
 <p>常用的日志组件有 <code class="highlighter-rouge">JUL, Log4j(Log4j1、 Log4j2), Logback</code>，下面是他们的用法</p>
 
 <h3 id="jul-1">JUL</h3>
 <p>依赖jdk，无需额外jar包<br />
 代码示例:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.logging.Logger</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.logging.Logger</span><span class="o">;</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">LogTest</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">LogTest</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">LOGGER</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="n">LOGGER</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>结果输出:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>五月 23, 2015 4:49:11 下午 com.test.log.LogTest main
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>五月 23, 2015 4:49:11 下午 com.test.log.LogTest main
 信息: java.util.logging.Logger
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="log4j1">Log4j1</h3>
 <p>需要<code class="highlighter-rouge">log4j</code>版本<code class="highlighter-rouge">1.2.**</code>的<code class="highlighter-rouge">jar</code>包<br />
 需要properties配置文件(名为<code class="highlighter-rouge">log4j.properties</code>放在classpath下)； 无配置文件无法输出日志。<br />
 jar包的maven依赖:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>        <span class="nt">&lt;dependency&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="nt">&lt;dependency&gt;</span>
             <span class="nt">&lt;groupId&gt;</span>log4j<span class="nt">&lt;/groupId&gt;</span>
             <span class="nt">&lt;artifactId&gt;</span>log4j<span class="nt">&lt;/artifactId&gt;</span>
             <span class="nt">&lt;version&gt;</span>1.2.14<span class="nt">&lt;/version&gt;</span>
         <span class="nt">&lt;/dependency&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p><code class="highlighter-rouge">log4j.properties</code>配置文件:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="py">log4j.rootLogger</span> <span class="p">=</span> <span class="s">debug, console</span>
+<div class="language-properties highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="py">log4j.rootLogger</span> <span class="p">=</span> <span class="s">debug, console</span>
 <span class="py">log4j.appender.console</span> <span class="p">=</span> <span class="s">org.apache.log4j.ConsoleAppender</span>
 <span class="py">log4j.appender.console.layout</span> <span class="p">=</span> <span class="s">org.apache.log4j.PatternLayout</span>
 <span class="py">log4j.appender.console.layout.ConversionPattern</span> <span class="p">=</span> <span class="s">%-d{yyyy-MM-dd HH:mm:ss} %m%n</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>代码示例:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.apache.log4j.Logger</span><span class="o">;</span> <span class="c1">// 引入的是类</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.apache.log4j.Logger</span><span class="o">;</span> <span class="c1">// 引入的是类</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">LogTest</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">LogTest</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">LOGGER</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="n">LOGGER</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>结果输出:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>2015-05-23 17:44:07 org.apache.log4j.Logger
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2015-05-23 17:44:07 org.apache.log4j.Logger
+</code></pre></div></div>
 
 <h3 id="log4j2">Log4j2</h3>
 <p>Log4j2需要<code class="highlighter-rouge">log4j-api、log4j-core</code>版本<code class="highlighter-rouge">2.*</code>的<code class="highlighter-rouge">jar</code>包<br />
 需要xml配置文件(名为<code class="highlighter-rouge">log4j2.xml</code>放在classpath下)； 不支持properties文件； 无配置文件无法输出日志。<br />
 jar包的maven依赖:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>        <span class="nt">&lt;dependency&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="nt">&lt;dependency&gt;</span>
             <span class="nt">&lt;groupId&gt;</span>org.apache.logging.log4j<span class="nt">&lt;/groupId&gt;</span>
             <span class="nt">&lt;artifactId&gt;</span>log4j-api<span class="nt">&lt;/artifactId&gt;</span>
             <span class="nt">&lt;version&gt;</span>2.2<span class="nt">&lt;/version&gt;</span>
@@ -254,11 +248,10 @@ jar包的maven依赖:</p>
             <span class="nt">&lt;artifactId&gt;</span>log4j-core<span class="nt">&lt;/artifactId&gt;</span>
             <span class="nt">&lt;version&gt;</span>2.2<span class="nt">&lt;/version&gt;</span>
         <span class="nt">&lt;/dependency&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p><code class="highlighter-rouge">log4j2.xml</code>配置文件:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
 <span class="nt">&lt;Configuration</span> <span class="na">status=</span><span class="s">"WARN"</span><span class="nt">&gt;</span>
     <span class="nt">&lt;Appenders&gt;</span>
         <span class="nt">&lt;Console</span> <span class="na">name=</span><span class="s">"Console"</span> <span class="na">target=</span><span class="s">"SYSTEM_OUT"</span><span class="nt">&gt;</span>
@@ -271,25 +264,22 @@ jar包的maven依赖:</p>
         <span class="nt">&lt;/Root&gt;</span>
     <span class="nt">&lt;/Loggers&gt;</span>
 <span class="nt">&lt;/Configuration&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>代码示例:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.apache.logging.log4j.LogManager</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.apache.logging.log4j.LogManager</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">org.apache.logging.log4j.Logger</span><span class="o">;</span>  <span class="c1">// 引入的是接口</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">LogTest</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">LogManager</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">LogTest</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">LOGGER</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="n">LOGGER</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>结果输出:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>18:00:35.409 [main] INFO  com.test.log.LogTest - org.apache.logging.log4j.core.Logger
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>18:00:35.409 [main] INFO  com.test.log.LogTest - org.apache.logging.log4j.core.Logger
+</code></pre></div></div>
 
 <h3 id="logback-1">LogBack</h3>
 <p>Logback需要<code class="highlighter-rouge">logback-core、logback-classic[、slf4j-api]</code>的<code class="highlighter-rouge">jar</code>包(<code class="highlighter-rouge">logback-classic</code>实现了<code class="highlighter-rouge">slf4j-api</code>)<br />
@@ -305,7 +295,7 @@ jar包的maven依赖:</p>
 
 <p>jar包的maven依赖:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>        <span class="nt">&lt;dependency&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="nt">&lt;dependency&gt;</span>
             <span class="nt">&lt;groupId&gt;</span>ch.qos.logback<span class="nt">&lt;/groupId&gt;</span>
             <span class="nt">&lt;artifactId&gt;</span>logback-core<span class="nt">&lt;/artifactId&gt;</span>
             <span class="nt">&lt;version&gt;</span>1.1.3<span class="nt">&lt;/version&gt;</span>
@@ -315,11 +305,10 @@ jar包的maven依赖:</p>
             <span class="nt">&lt;artifactId&gt;</span>logback-classic<span class="nt">&lt;/artifactId&gt;</span>
             <span class="nt">&lt;version&gt;</span>1.1.3<span class="nt">&lt;/version&gt;</span>
         <span class="nt">&lt;/dependency&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p><code class="highlighter-rouge">logback.xml</code>配置文件:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
 <span class="nt">&lt;configuration&gt;</span>
     <span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">"SYSTEM_OUT"</span> <span class="na">class=</span><span class="s">"ch.qos.logback.core.ConsoleAppender"</span><span class="nt">&gt;</span>
         <span class="nt">&lt;encoder&gt;</span>
@@ -330,25 +319,22 @@ jar包的maven依赖:</p>
         <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">"SYSTEM_OUT"</span> <span class="nt">/&gt;</span>
     <span class="nt">&lt;/root&gt;</span>
 <span class="nt">&lt;/configuration&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>代码示例:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.slf4j.Logger</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.slf4j.Logger</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">org.slf4j.LoggerFactory</span><span class="o">;</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">LogTest</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">LogTest</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">LOGGER</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="n">LOGGER</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>结果输出:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>18:00:35.409 [main] INFO  com.test.log.LogTest - ch.qos.logback.classic.Logger
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>18:00:35.409 [main] INFO  com.test.log.LogTest - ch.qos.logback.classic.Logger
+</code></pre></div></div>
 
 <h3 id="jclcommon-logging">JCL(common-logging)</h3>
 <p>JCL需要<code class="highlighter-rouge">commons-logging</code>的<code class="highlighter-rouge">jar</code>包<br />
@@ -356,31 +342,28 @@ jar包的maven依赖:</p>
 
 <p>jar包的maven依赖:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>        <span class="nt">&lt;dependency&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="nt">&lt;dependency&gt;</span>
             <span class="nt">&lt;groupId&gt;</span>commons-logging<span class="nt">&lt;/groupId&gt;</span>
             <span class="nt">&lt;artifactId&gt;</span>commons-logging<span class="nt">&lt;/artifactId&gt;</span>
             <span class="nt">&lt;version&gt;</span>1.2<span class="nt">&lt;/version&gt;</span>
         <span class="nt">&lt;/dependency&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>代码示例:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.apache.commons.logging.Log</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.apache.commons.logging.Log</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">org.apache.commons.logging.LogFactory</span><span class="o">;</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">LogTest</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Log</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">LogFactory</span><span class="o">.</span><span class="na">getLog</span><span class="o">(</span><span class="n">LogTest</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="n">logger</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>结果输出:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>五月 23, 2015 7:19:09 下午 com.test.log.LogTest main
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>五月 23, 2015 7:19:09 下午 com.test.log.LogTest main
 信息: org.apache.commons.logging.impl.Jdk14Logger
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="slf4j-1">slf4j</h3>
 <p>slf4j只有接口没有实现，必须结合其他日志的实现一起使用</p>

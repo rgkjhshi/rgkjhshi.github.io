@@ -104,43 +104,41 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#select-">select 语句简介</a></li>
-  <li><a href="#insert-update--delete-">insert, update 和 delete 简介</a></li>
-  <li><a href="#parameters-">Parameters 参数</a>    <ul>
-      <li><a href="#section">字符串替换</a></li>
+  <li><a href="#select-语句简介" id="markdown-toc-select-语句简介">select 语句简介</a></li>
+  <li><a href="#insert-update-和-delete-简介" id="markdown-toc-insert-update-和-delete-简介">insert, update 和 delete 简介</a></li>
+  <li><a href="#parameters-参数" id="markdown-toc-parameters-参数">Parameters 参数</a>    <ul>
+      <li><a href="#字符串替换" id="markdown-toc-字符串替换">字符串替换</a></li>
     </ul>
   </li>
-  <li><a href="#resultmap">ResultMap</a>    <ul>
-      <li><a href="#idresult">id和result</a></li>
-      <li><a href="#constructor">构造方法constructor</a></li>
-      <li><a href="#association">关联association</a></li>
-      <li><a href="#collection">集合collection</a></li>
+  <li><a href="#resultmap" id="markdown-toc-resultmap">ResultMap</a>    <ul>
+      <li><a href="#id和result" id="markdown-toc-id和result">id和result</a></li>
+      <li><a href="#构造方法constructor" id="markdown-toc-构造方法constructor">构造方法constructor</a></li>
+      <li><a href="#关联association" id="markdown-toc-关联association">关联association</a></li>
+      <li><a href="#集合collection" id="markdown-toc-集合collection">集合collection</a></li>
     </ul>
   </li>
 </ul>
 
 <hr />
 
-<h2 id="select-">select 语句简介</h2>
+<h2 id="select-语句简介">select 语句简介</h2>
 
 <p>查询语句是 MyBatis 中最常用的元素之一，先来个例子</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">"selectPerson"</span> <span class="na">parameterType=</span><span class="s">"int"</span> <span class="na">resultType=</span><span class="s">"hashmap"</span><span class="nt">&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">"selectPerson"</span> <span class="na">parameterType=</span><span class="s">"int"</span> <span class="na">resultType=</span><span class="s">"hashmap"</span><span class="nt">&gt;</span>
   SELECT * FROM PERSON WHERE ID = #{id}
 <span class="nt">&lt;/select&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>其中的<code class="highlighter-rouge">XXXType</code>使用的都是<strong>完全限定名</strong>或者<strong><a href="/blog/mybatis/2015/01/20/MyBatis(二)配置文件.html#typeAliases">别名</a></strong> , 其中的符号<code class="highlighter-rouge">#{id}</code>会使用预处理语句，在 SQL 中会由一个“?”来标识，在<code class="highlighter-rouge">JDBC</code>中相当于这样：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// Similar JDBC code, NOT MyBatis…</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Similar JDBC code, NOT MyBatis…</span>
 <span class="n">String</span> <span class="n">selectPerson</span> <span class="o">=</span> <span class="s">"SELECT * FROM PERSON WHERE ID=?"</span><span class="o">;</span>
 <span class="n">PreparedStatement</span> <span class="n">ps</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="na">prepareStatement</span><span class="o">(</span><span class="n">selectPerson</span><span class="o">);</span>
 <span class="n">ps</span><span class="o">.</span><span class="na">setInt</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="n">id</span><span class="o">);</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p><code class="highlighter-rouge">select</code> 元素还有很多属性</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>id              | 在命名空间中唯一的标识符, 可以被用来引用这条语句
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>id              | 在命名空间中唯一的标识符, 可以被用来引用这条语句
 resultType      | 如果是集合情形, 那应该是集合可以包含的类型, 而不能是集合本身. 比如返回的结果是多个Persion, 这里应该写Persion而不是List
 resultMap       | 外部resultMap的命名引用, 与resultType不能同时使用. 后面会具体讲
 parameterType   | 默认值:unset. 可选, MyBatis可以通过TypeHandler推断出具体传入语句的参数
@@ -153,59 +151,53 @@ statementType   | 默认值:PREPARED. STATEMENT,PREPARED或CALLABLE的一个. �
 databaseId      | 如果配置了 databaseIdProvider, MyBatis 会加载所有的不带databaseId或匹配当前databaseId的语句;如果带或者不带的语句都有,则不带的会被忽略
 resultOrdered   | 默认值:false. 这个设置仅针对嵌套结果select语句适用:如果为 true,就是假设包含了嵌套结果集或是分组了,这样的话当返回一个主结果行的时候,就不会发生有对前面结果集的引用的情况. 这就使得在获取嵌套的结果集的时候不至于导致内存不够用
 resultSets      | 这个设置仅对多结果集的情况适用, 它将列出语句执行后返回的结果集并每个结果集给一个名称,名称是逗号分隔的
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="insert-update--delete-">insert, update 和 delete 简介</h2>
-<p><code class="highlighter-rouge">insert, update, delete</code>同<code class="highlighter-rouge">select</code>类似，也有许多属性，其中  </p>
+<h2 id="insert-update-和-delete-简介">insert, update 和 delete 简介</h2>
+<p><code class="highlighter-rouge">insert, update, delete</code>同<code class="highlighter-rouge">select</code>类似，也有许多属性，其中</p>
 
 <ul>
-  <li><code class="highlighter-rouge">id, parameterType, timeout, statementType, databaseId</code>与select元素中的属性相同;   </li>
+  <li><code class="highlighter-rouge">id, parameterType, timeout, statementType, databaseId</code>与select元素中的属性相同;</li>
   <li><code class="highlighter-rouge">flushCache</code>的默认值为’true’</li>
   <li>还有些是<code class="highlighter-rouge">insert和update</code>所特有的属性，如:</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>useGeneratedKeys  | 默认值:false. 为true时会令MyBatis使用JDBC的getGeneratedKeys方法来取出由数据库内部生成的主键
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>useGeneratedKeys  | 默认值:false. 为true时会令MyBatis使用JDBC的getGeneratedKeys方法来取出由数据库内部生成的主键
 keyProperty       | 默认:unset. 唯一标记一个属性,MyBatis会通过getGeneratedKeys的返回值或者通过insert语句的selectKey子元素设置它的键值. 如果希望得到多个生成的列,也可以是逗号分隔的属性名称列表
 keyColumn         | 通过生成的键值设置表中的列名,当主键列不是表中的第一列的时候需要设置. 如果希望得到多个生成的列,也可以是逗号分隔的属性名称列表
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>例如下面这段代码，如果你的数据库支持自动生成主键的字段（比如 MySQL 和 SQL Server），那么你可以设置 useGeneratedKeys=”true”，然后再把 keyProperty 设置到目标属性上就OK了。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;insert</span> <span class="na">id=</span><span class="s">"insertAuthor"</span> <span class="na">useGeneratedKeys=</span><span class="s">"true"</span> <span class="na">keyProperty=</span><span class="s">"id"</span><span class="nt">&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;insert</span> <span class="na">id=</span><span class="s">"insertAuthor"</span> <span class="na">useGeneratedKeys=</span><span class="s">"true"</span> <span class="na">keyProperty=</span><span class="s">"id"</span><span class="nt">&gt;</span>
   insert into Author (username,password,email,bio)
   values (#{username},#{password},#{email},#{bio})
 <span class="nt">&lt;/insert&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="parameters-">Parameters 参数</h2>
-<p>参数是 MyBatis 非常强大的功能, <code class="highlighter-rouge">parameterType="anyType"</code>其中的<code class="highlighter-rouge">anyType</code>可以是<code class="highlighter-rouge">int</code>等基本类型，也可以是<code class="highlighter-rouge">User</code>等复杂类型。  </p>
+<h2 id="parameters-参数">Parameters 参数</h2>
+<p>参数是 MyBatis 非常强大的功能, <code class="highlighter-rouge">parameterType="anyType"</code>其中的<code class="highlighter-rouge">anyType</code>可以是<code class="highlighter-rouge">int</code>等基本类型，也可以是<code class="highlighter-rouge">User</code>等复杂类型。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;insert</span> <span class="na">id=</span><span class="s">"insertUser"</span> <span class="na">parameterType=</span><span class="s">"User"</span><span class="nt">&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;insert</span> <span class="na">id=</span><span class="s">"insertUser"</span> <span class="na">parameterType=</span><span class="s">"User"</span><span class="nt">&gt;</span>
   insert into users (id, username, password)
   values (#{id}, #{username}, #{password})
 <span class="nt">&lt;/insert&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>上例中，传入的事复杂类型<code class="highlighter-rouge">User</code>，将会在<code class="highlighter-rouge">User</code>中查找id、username 和 password 属性，并放入对应位置。如果是<code class="highlighter-rouge">int</code>或<code class="highlighter-rouge">String</code>等类型，不存在属性，则直接将其值放入对应的位置。</p>
 
 <p>另外，参数映射也可以指定映射类型，甚至可以指定类型处理器，像之前讲一样，<code class="highlighter-rouge">javaType</code>通常可以根据参数对象去推测。</p>
 
-<p>~~~xml
- #{age,javaType=int,jdbcType=NUMERIC,typeHandler=MyTypeHandler}
- ~~~</p>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code> #{age,javaType=int,jdbcType=NUMERIC,typeHandler=MyTypeHandler}
+</code></pre></div></div>
 
-<h3 id="section">字符串替换</h3>
+<h3 id="字符串替换">字符串替换</h3>
 <p>默认情况下,使用#{}格式的语法会创建预处理语句属性并安全地设置值（比如?）。不过有时只想直接在 SQL 语句中插入一个不改变的字符串，就可以这样使用参数：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>ORDER BY ${columnName}
-</code></pre>
-</div>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ORDER BY ${columnName}
+</code></pre></div></div>
 <p>这里 MyBatis 不会修改或转义字符串</p>
 
 <hr />
@@ -213,9 +205,8 @@ keyColumn         | 通过生成的键值设置表中的列名,当主键列不�
 <h2 id="resultmap">ResultMap</h2>
 <p><code class="highlighter-rouge">resultMap</code> 元素是MyBatis中最重要最强大的元素，resultMap元素本身有一些属性，如下代码，<code class="highlighter-rouge">id</code>用于标识该<code class="highlighter-rouge">resultMap</code>，<code class="highlighter-rouge">type</code>用于指定该<code class="highlighter-rouge">resultMap</code>映射到哪个<code class="highlighter-rouge">JavaBean</code></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">"blogResultMap"</span> <span class="na">type=</span><span class="s">"Blog"</span><span class="nt">&gt;</span>...<span class="nt">&lt;/resultMap&gt;</span>
-</code></pre>
-</div>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">"blogResultMap"</span> <span class="na">type=</span><span class="s">"Blog"</span><span class="nt">&gt;</span>...<span class="nt">&lt;/resultMap&gt;</span>
+</code></pre></div></div>
 <p>它还有很多子元素，下面是<code class="highlighter-rouge">resultMap</code>元素的概念图</p>
 
 <p><strong>resultMap</strong></p>
@@ -250,36 +241,34 @@ keyColumn         | 通过生成的键值设置表中的列名,当主键列不�
   </li>
 </ul>
 
-<p><strong>注意</strong> 由于DTD的限制，这些元素出现的顺序必须按照上面的顺序  </p>
+<p><strong>注意</strong> 由于DTD的限制，这些元素出现的顺序必须按照上面的顺序</p>
 
 <p>下面详细说明<code class="highlighter-rouge">resultMap</code>的每个子元素</p>
 
-<h3 id="idresult">id和result</h3>
+<h3 id="id和result">id和result</h3>
 <p>这是最基本的内容，这两者之间的唯一不同是<code class="highlighter-rouge">id</code>所指定属性将是能够唯一标识对象的属性，这能提高效率，特别是有联合映射时。<br />
 <code class="highlighter-rouge">id</code>和<code class="highlighter-rouge">reslut</code>元素有<code class="highlighter-rouge">column, property, javaType, jdbcType, typeHandler</code>等属性，其中<code class="highlighter-rouge">column</code>用于指定数据库中的列名，<code class="highlighter-rouge">property</code>用于指定<code class="highlighter-rouge">JavaBean</code>对应的属性，其他属性则与之前讲的一样。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;id</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">property=</span><span class="s">"id"</span><span class="nt">/&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;id</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">property=</span><span class="s">"id"</span><span class="nt">/&gt;</span>
 <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">"user_name"</span> <span class="na">property=</span><span class="s">"username"</span><span class="nt">/&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="constructor">构造方法constructor</h3>
+<h3 id="构造方法constructor">构造方法constructor</h3>
 <p>如果<code class="highlighter-rouge">resultMap</code>所映射的<code class="highlighter-rouge">JavaBean</code>的构造方法需要提供参数，则<code class="highlighter-rouge">constructor</code>就不能缺少了<br />
 <code class="highlighter-rouge">constructor</code>有<code class="highlighter-rouge">idArg</code>和<code class="highlighter-rouge">arg</code>两个子元素，意义差不多(参见<code class="highlighter-rouge">id</code>和<code class="highlighter-rouge">result</code>的区别)，都是给构造方法提供参数。他们的属性也同<code class="highlighter-rouge">id</code>和<code class="highlighter-rouge">result</code>一样<br />
 <code class="highlighter-rouge">constructor</code>常用的形式如下：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;constructor&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;constructor&gt;</span>
   <span class="nt">&lt;idArg</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">javaType=</span><span class="s">"int"</span><span class="nt">/&gt;</span>
   <span class="nt">&lt;arg</span> <span class="na">column=</span><span class="s">"username"</span> <span class="na">javaType=</span><span class="s">"String"</span><span class="nt">/&gt;</span>
 <span class="nt">&lt;/constructor&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p><strong>注意</strong> Java 没有自查(反射)参数名的方法，所以要保证这里的参数顺序同<code class="highlighter-rouge">JavaBean</code>定义的顺序一致，而且数据类型也是确定的。</p>
 
-<h3 id="association">关联association</h3>
+<h3 id="关联association">关联association</h3>
 <p>关联元素处理“有一个”类型的关系。比如,一个博客有一个作者，就像下面这样</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">//来自 Author.java</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//来自 Author.java</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Author</span> <span class="o">{</span>
 
     <span class="kd">private</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">;</span>
@@ -296,11 +285,10 @@ keyColumn         | 通过生成的键值设置表中的列名,当主键列不�
     <span class="kd">private</span> <span class="n">Author</span> <span class="n">author</span><span class="o">;</span> <span class="c1">//数据库中对应的字段是 author_id int类型</span>
     <span class="o">...</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>可以这样做级联查询</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">"BlogResultMap"</span> <span class="na">type=</span><span class="s">"Blog"</span><span class="nt">&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">"BlogResultMap"</span> <span class="na">type=</span><span class="s">"Blog"</span><span class="nt">&gt;</span>
     <span class="nt">&lt;id</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">property=</span><span class="s">"id"</span><span class="nt">/&gt;</span>
     <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">"title"</span> <span class="na">property=</span><span class="s">"title"</span><span class="nt">/&gt;</span>
     <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">"content"</span> <span class="na">property=</span><span class="s">"content"</span><span class="nt">/&gt;</span>
@@ -318,14 +306,13 @@ keyColumn         | 通过生成的键值设置表中的列名,当主键列不�
 <span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">"selectAuthorById"</span> <span class="na">parameterType=</span><span class="s">"int"</span> <span class="na">resultType=</span><span class="s">"Author"</span><span class="nt">&gt;</span>
     SELECT * FROM author WHERE id = #{id}
 <span class="nt">&lt;/select&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p><code class="highlighter-rouge">association</code>是通过把column指定的字段作为参数，传给select子查询的。</p>
 
-<h3 id="collection">集合collection</h3>
+<h3 id="集合collection">集合collection</h3>
 <p>如果博客有了许多评论，则会出现“一对多”的情形，比如上面的<code class="highlighter-rouge">Blog</code>会多出一个属性</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">//Blog.java新增的属性</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">//Blog.java新增的属性</span>
     <span class="kd">private</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Comment</span><span class="o">&gt;</span> <span class="n">comments</span><span class="o">;</span>
 
 <span class="c1">//Comment.java</span>
@@ -336,11 +323,10 @@ keyColumn         | 通过生成的键值设置表中的列名,当主键列不�
     <span class="kd">private</span> <span class="n">Blog</span> <span class="n">blog</span><span class="o">;</span>
     <span class="o">...</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>那么对于<code class="highlighter-rouge">Blog</code>的查询将变成这样</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">"BlogResultMap"</span> <span class="na">type=</span><span class="s">"Blog"</span><span class="nt">&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;resultMap</span> <span class="na">id=</span><span class="s">"BlogResultMap"</span> <span class="na">type=</span><span class="s">"Blog"</span><span class="nt">&gt;</span>
     <span class="nt">&lt;id</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">property=</span><span class="s">"id"</span><span class="nt">/&gt;</span>
     <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">"title"</span> <span class="na">property=</span><span class="s">"title"</span><span class="nt">/&gt;</span>
     <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">"content"</span> <span class="na">property=</span><span class="s">"content"</span><span class="nt">/&gt;</span>
@@ -365,8 +351,7 @@ keyColumn         | 通过生成的键值设置表中的列名,当主键列不�
 <span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">"selectCommentForBlog"</span> <span class="na">parameterType=</span><span class="s">"int"</span> <span class="na">resultType=</span><span class="s">"Comment"</span><span class="nt">&gt;</span>
     SELECT * FROM comment WHERE blog_id = #{id}
 <span class="nt">&lt;/select&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>其中的<code class="highlighter-rouge">ofType</code>用于表示集合中所存放的类型，上面可以理解为产生了一个<code class="highlighter-rouge">ArrayList&lt;Comment&gt; comments</code>，<code class="highlighter-rouge">javaType</code>属性可以省略；<code class="highlighter-rouge">column</code>指定了id作为传入参数</p>
 
 <hr />

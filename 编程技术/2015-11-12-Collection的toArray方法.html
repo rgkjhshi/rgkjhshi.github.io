@@ -108,7 +108,7 @@ jQuery(function(){
 该方法也是把集合转成数组, 你可以指定转成什么类型的数组,若转换的类型与集合中元素类型不一样,会抛<code class="highlighter-rouge">ArrayStoreException</code>.<br />
 关于参数的写法上, 这个数组a可以是空的, 也可以不空, 会有不同的效果, 看下面代码:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 先创建一个集合</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 先创建一个集合</span>
 <span class="n">Set</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">set</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;(</span><span class="mi">5</span><span class="o">);</span>
 <span class="c1">// 可以这么写, 长度为0, 只表示转成什么类型, 在内部还会创建一个长度为5的数组</span>
 <span class="n">String</span><span class="o">[]</span> <span class="n">array</span> <span class="o">=</span> <span class="n">set</span><span class="o">.</span><span class="na">toArray</span><span class="o">(</span><span class="k">new</span> <span class="n">String</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
@@ -117,11 +117,10 @@ jQuery(function(){
 <span class="c1">// 还可以这么写, 长度大于集合的size, 在内部会把集合里的元素放到这个传参时创建的数组, 后面多出来的3(8-5)个位置填充null</span>
 <span class="n">String</span><span class="o">[]</span> <span class="n">array</span> <span class="o">=</span> <span class="n">set</span><span class="o">.</span><span class="na">toArray</span><span class="o">(</span><span class="k">new</span> <span class="n">String</span><span class="o">[</span><span class="mi">8</span><span class="o">]);</span>
 <span class="c1">// 无论哪种方式, 如果传入的类型与即集合里元素的类型不匹配, 就会抛出ArrayStoreException</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>仔细看下JDK1.7的源码, 发现也很腹黑:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">T</span><span class="o">[]</span> <span class="n">toArray</span><span class="o">(</span><span class="n">T</span><span class="o">[]</span> <span class="n">a</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">T</span><span class="o">[]</span> <span class="nf">toArray</span><span class="o">(</span><span class="n">T</span><span class="o">[]</span> <span class="n">a</span><span class="o">)</span> <span class="o">{</span>
     <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="n">size</span><span class="o">();</span>
     <span class="n">T</span><span class="o">[]</span> <span class="n">r</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="na">length</span> <span class="o">&gt;=</span> <span class="n">size</span> <span class="o">?</span> <span class="n">a</span> <span class="o">:</span> <span class="o">(</span><span class="n">T</span><span class="o">[])</span><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">reflect</span><span class="o">.</span><span class="na">Array</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getComponentType</span><span class="o">(),</span> <span class="n">size</span><span class="o">);</span>
     <span class="n">Iterator</span><span class="o">&lt;</span><span class="n">E</span><span class="o">&gt;</span> <span class="n">it</span> <span class="o">=</span> <span class="n">iterator</span><span class="o">();</span>
@@ -143,8 +142,7 @@ jQuery(function(){
     <span class="o">}</span>
     <span class="k">return</span> <span class="n">it</span><span class="o">.</span><span class="na">hasNext</span><span class="o">()</span> <span class="o">?</span> <span class="n">finishToArray</span><span class="o">(</span><span class="n">r</span><span class="o">,</span> <span class="n">it</span><span class="o">)</span> <span class="o">:</span> <span class="n">r</span><span class="o">;</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>代码里注释中提的问题我想了好久, 我考虑的情况都是正常情况, 在并发环境中, 集合里的元素有可能会被其他线程remove掉,
 这就造成了iterator迭代出的元素个数小于size的情况, 注释里的那俩else就会被执行到了!<br />
  JDK源码写的还真是考虑周到啊…</p>

@@ -104,21 +104,21 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#section">异常的结构关系图</a></li>
-  <li><a href="#section-1">异常的分类</a></li>
-  <li><a href="#finallyreturn">finally中的return</a></li>
-  <li><a href="#finally">在finally中修改返回值</a></li>
+  <li><a href="#异常的结构关系图" id="markdown-toc-异常的结构关系图">异常的结构关系图</a></li>
+  <li><a href="#异常的分类" id="markdown-toc-异常的分类">异常的分类</a></li>
+  <li><a href="#finally中的return" id="markdown-toc-finally中的return">finally中的return</a></li>
+  <li><a href="#在finally中修改返回值" id="markdown-toc-在finally中修改返回值">在finally中修改返回值</a></li>
 </ul>
 
 <hr />
 
-<h2 id="section">异常的结构关系图</h2>
+<h2 id="异常的结构关系图">异常的结构关系图</h2>
 
 <p><img src="/static/images/java_exception.jpg" alt="异常的继承结构关系图" title="异常的继承结构关系图" /></p>
 
 <hr />
 
-<h2 id="section-1">异常的分类</h2>
+<h2 id="异常的分类">异常的分类</h2>
 
 <p>Java的异常可分为：错误、不受检查异常、受检查异常。</p>
 
@@ -134,7 +134,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="finallyreturn">finally中的return</h2>
+<h2 id="finally中的return">finally中的return</h2>
 
 <p>一般情况下<code class="highlighter-rouge">finally</code>总会被执行，即使前面执行到了<code class="highlighter-rouge">return</code>语句，在执行完之前也会执行<code class="highlighter-rouge">finally</code>，在<code class="highlighter-rouge">finally</code>中使用<code class="highlighter-rouge">return</code>语句是非常不好的习惯。</p>
 
@@ -143,8 +143,8 @@ jQuery(function(){
   <li><code class="highlighter-rouge">finally</code>的<code class="highlighter-rouge">return</code>会吞掉<code class="highlighter-rouge">catch</code>块中抛出的异常，如下标记D就吞掉了标记C抛出的异常。</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestException</span> <span class="o">{</span>
-    <span class="kt">boolean</span> <span class="n">testEx</span><span class="o">()</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestException</span> <span class="o">{</span>
+    <span class="kt">boolean</span> <span class="nf">testEx</span><span class="o">()</span> <span class="o">{</span>
         <span class="kt">boolean</span> <span class="n">ret</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
         <span class="k">try</span> <span class="o">{</span>
             <span class="n">testEx1</span><span class="o">();</span>          <span class="cm">/* 将不会抛出异常，因为testEx1中catch块抛出的异常被finally里的return吞掉了；
@@ -159,7 +159,7 @@ jQuery(function(){
             <span class="k">return</span> <span class="n">ret</span><span class="o">;</span>       <span class="cm">/* 该语句会吞掉之前标记A的return值，该语句标记为B */</span>
         <span class="o">}</span>
     <span class="o">}</span>
-    <span class="kt">boolean</span> <span class="n">testEx1</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="kt">boolean</span> <span class="nf">testEx1</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
         <span class="k">try</span> <span class="o">{</span>
             <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">9</span> <span class="o">/</span> <span class="mi">0</span><span class="o">;</span>       <span class="cm">/* 将抛出 ArithmeticException */</span>
             <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>         <span class="cm">/* 执行不到 */</span>
@@ -171,23 +171,22 @@ jQuery(function(){
             <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>        <span class="cm">/* 返回，并且catch中跑出的异常被忽略了 该语句标记为D */</span>
         <span class="o">}</span>
     <span class="o">}</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">TestException</span> <span class="n">testException</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TestException</span><span class="o">();</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">testException</span><span class="o">.</span><span class="na">testEx</span><span class="o">());</span>    <span class="c1">// 将输出标记B的返回值: false</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="finally">在finally中修改返回值</h2>
+<h2 id="在finally中修改返回值">在finally中修改返回值</h2>
 
 <p>另外，由于<code class="highlighter-rouge">finally</code>块一定会执行，所以可以在函数返回结果之前修改返回值，但一定要小心，有些情况下能够修改返回值，有些情况下是无法修改的。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// TestFinally.java</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// TestFinally.java</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestFinally</span> <span class="o">{</span>
-    <span class="n">Man</span> <span class="n">test1</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">Man</span> <span class="nf">test1</span><span class="o">()</span> <span class="o">{</span>
         <span class="n">Man</span> <span class="n">man1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Man</span><span class="o">();</span>
         <span class="n">Man</span> <span class="n">man2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Man</span><span class="o">();</span>
         <span class="k">try</span> <span class="o">{</span>
@@ -197,7 +196,7 @@ jQuery(function(){
             <span class="n">man1</span> <span class="o">=</span> <span class="n">man2</span><span class="o">;</span>   <span class="c1">// 修改man1</span>
         <span class="o">}</span>
     <span class="o">}</span>
-    <span class="n">Man</span> <span class="n">test2</span><span class="o">(){</span>
+    <span class="n">Man</span> <span class="nf">test2</span><span class="o">(){</span>
         <span class="n">Man</span> <span class="n">man1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Man</span><span class="o">();</span>
         <span class="n">Man</span> <span class="n">man2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Man</span><span class="o">();</span>
         <span class="k">try</span> <span class="o">{</span>
@@ -206,7 +205,7 @@ jQuery(function(){
             <span class="n">man1</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"world"</span><span class="o">);</span> <span class="c1">// 修改man1</span>
         <span class="o">}</span>
     <span class="o">}</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">TestFinally</span> <span class="n">testFinally</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TestFinally</span><span class="o">();</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">testFinally</span><span class="o">.</span><span class="na">test1</span><span class="o">());</span>    <span class="c1">// 输出 name:hello</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">testFinally</span><span class="o">.</span><span class="na">test2</span><span class="o">());</span>    <span class="c1">// 输出 name:world</span>
@@ -215,19 +214,18 @@ jQuery(function(){
 <span class="c1">// Man.java</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Man</span><span class="o">{</span>
     <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span> <span class="o">=</span> <span class="s">"hello"</span><span class="o">;</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">getName</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
     <span class="o">}</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">setName</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="n">toString</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="s">"name:"</span> <span class="o">+</span> <span class="n">name</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><code class="highlighter-rouge">test1</code>中<code class="highlighter-rouge">man1 = man2;</code>确实执行了，但是在执行<code class="highlighter-rouge">finally</code>块之前，<code class="highlighter-rouge">return</code>的值就确定了，所以返回的<code class="highlighter-rouge">man1</code>仍是原来的;
 <code class="highlighter-rouge">test2</code>中<code class="highlighter-rouge">man1.setName("world");</code>也执行了，并且在此之前,<code class="highlighter-rouge">return</code>的值也确定了，但这句并未改变<code class="highlighter-rouge">man1</code>的值(引用地址)，而是改变了<code class="highlighter-rouge">name</code>属性的值。</p>

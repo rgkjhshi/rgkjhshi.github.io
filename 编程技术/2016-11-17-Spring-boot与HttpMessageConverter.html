@@ -102,39 +102,38 @@ jQuery(function(){
             <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#httpmessageconverter">默认的HttpMessageConverter</a></li>
-  <li><a href="#httpmessageconverter-1">自定义HttpMessageConverter</a>    <ul>
-      <li><a href="#section">方式一</a></li>
-      <li><a href="#section-1">方式二</a></li>
-      <li><a href="#section-2">方式三</a></li>
+  <li><a href="#默认的httpmessageconverter" id="markdown-toc-默认的httpmessageconverter">默认的HttpMessageConverter</a></li>
+  <li><a href="#自定义httpmessageconverter" id="markdown-toc-自定义httpmessageconverter">自定义HttpMessageConverter</a>    <ul>
+      <li><a href="#方式一" id="markdown-toc-方式一">方式一</a></li>
+      <li><a href="#方式二" id="markdown-toc-方式二">方式二</a></li>
+      <li><a href="#方式三" id="markdown-toc-方式三">方式三</a></li>
     </ul>
   </li>
 </ul>
 
 <hr />
 
-<h2 id="httpmessageconverter">默认的HttpMessageConverter</h2>
+<h2 id="默认的httpmessageconverter">默认的HttpMessageConverter</h2>
 <p>在构建<code class="highlighter-rouge">RESTful</code>服务时, 我们常常会把一个对象直接转换成<code class="highlighter-rouge">json</code>对象, 就像下面这样:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@RestController</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RestController</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">HomeController</span> <span class="o">{</span>
     <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span>
-    <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">home</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="nf">home</span><span class="o">()</span> <span class="o">{</span>
         <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="n">Maps</span><span class="o">.</span><span class="na">newHashMap</span><span class="o">();</span>
         <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"name"</span><span class="o">,</span> <span class="s">"中文"</span><span class="o">);</span>
         <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"age"</span><span class="o">,</span> <span class="mi">18</span><span class="o">);</span>
         <span class="k">return</span> <span class="n">map</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><code class="highlighter-rouge">Spring</code>提供了多种<code class="highlighter-rouge">HttpMessageConverter</code>让我们对结果进行转换, 像上面那样, 把对象转换成<code class="highlighter-rouge">json</code>格式输出, <code class="highlighter-rouge">Spring boot</code>默认使用<code class="highlighter-rouge">MappingJackson2HttpMessageConverter</code>进行转换. 如果我们想要使用另一个工具进行<code class="highlighter-rouge">json</code>转换, 或者想添加自己的<code class="highlighter-rouge">HttpMessageConverter</code>, <code class="highlighter-rouge">Spring boot</code>提供了多种不通的方式来实现.</p>
 
-<h2 id="httpmessageconverter-1">自定义HttpMessageConverter</h2>
+<h2 id="自定义httpmessageconverter">自定义HttpMessageConverter</h2>
 <p>我们以<code class="highlighter-rouge">GsonHttpMessageConverter</code>为例, 除了主配置类之外, 我们添加另一个配置类, 从这个类中添加自己的<code class="highlighter-rouge">Converter</code></p>
 
-<h3 id="section">方式一</h3>
+<h3 id="方式一">方式一</h3>
 <p>直接添加一个<code class="highlighter-rouge">Bean</code>, 它将添加到<code class="highlighter-rouge">Converter</code>列表的最前面</p>
 
 <ul>
@@ -144,11 +143,11 @@ jQuery(function(){
 
 <p>代码如下:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 <span class="nd">@Configuration</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">WebMvcConfig</span> <span class="o">{</span>
     <span class="nd">@Bean</span>
-    <span class="kd">public</span> <span class="n">GsonHttpMessageConverter</span> <span class="n">gsonHttpMessageConverter</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">GsonHttpMessageConverter</span> <span class="nf">gsonHttpMessageConverter</span><span class="o">()</span> <span class="o">{</span>
         <span class="n">Gson</span> <span class="n">gson</span> <span class="o">=</span> <span class="k">new</span> <span class="n">GsonBuilder</span><span class="o">().</span><span class="na">serializeNulls</span><span class="o">()</span>    <span class="c1">// null 也序列化</span>
                 <span class="o">.</span><span class="na">setDateFormat</span><span class="o">(</span><span class="s">"yyyy-MM-dd HH:mm:ss"</span><span class="o">)</span>     <span class="c1">// 时间转化为特定格式 yyyy-MM-dd HH:mm:ss</span>
                 <span class="o">.</span><span class="na">create</span><span class="o">();</span>
@@ -157,10 +156,9 @@ jQuery(function(){
         <span class="k">return</span> <span class="n">converter</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="section-1">方式二</h3>
+<h3 id="方式二">方式二</h3>
 <p>继承<code class="highlighter-rouge">WebMvcConfigurerAdapter</code>, 覆盖<code class="highlighter-rouge">configureMessageConverters</code>方法</p>
 
 <ul>
@@ -170,10 +168,10 @@ jQuery(function(){
 
 <p>代码如下:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Configuration</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Configuration</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">WebMvcConfig</span> <span class="kd">extends</span> <span class="n">WebMvcConfigurerAdapter</span> <span class="o">{</span>
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">configureMessageConverters</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">HttpMessageConverter</span><span class="o">&lt;?&gt;&gt;</span> <span class="n">converters</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">configureMessageConverters</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">HttpMessageConverter</span><span class="o">&lt;?&gt;&gt;</span> <span class="n">converters</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">Gson</span> <span class="n">gson</span> <span class="o">=</span> <span class="k">new</span> <span class="n">GsonBuilder</span><span class="o">().</span><span class="na">serializeNulls</span><span class="o">()</span>    <span class="c1">// null 也序列化</span>
                 <span class="o">.</span><span class="na">setDateFormat</span><span class="o">(</span><span class="s">"yyyy-MM-dd HH:mm:ss"</span><span class="o">)</span>     <span class="c1">// 时间转化为特定格式 yyyy-MM-dd HH:mm:ss</span>
                 <span class="o">.</span><span class="na">create</span><span class="o">();</span>
@@ -182,10 +180,9 @@ jQuery(function(){
         <span class="n">converters</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">converter</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="section-2">方式三</h3>
+<h3 id="方式三">方式三</h3>
 <p>继承<code class="highlighter-rouge">WebMvcConfigurerAdapter</code>, 覆盖<code class="highlighter-rouge">extendMessageConverters</code>方法</p>
 
 <ul>
@@ -195,10 +192,10 @@ jQuery(function(){
 
 <p>代码如下:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Configuration</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Configuration</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">WebMvcConfig</span> <span class="kd">extends</span> <span class="n">WebMvcConfigurerAdapter</span> <span class="o">{</span>
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">configureMessageConverters</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">HttpMessageConverter</span><span class="o">&lt;?&gt;&gt;</span> <span class="n">converters</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">configureMessageConverters</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">HttpMessageConverter</span><span class="o">&lt;?&gt;&gt;</span> <span class="n">converters</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">converters</span><span class="o">.</span><span class="na">clear</span><span class="o">();</span>  <span class="c1">// 把其他 converter 清除掉</span>
         <span class="n">Gson</span> <span class="n">gson</span> <span class="o">=</span> <span class="k">new</span> <span class="n">GsonBuilder</span><span class="o">().</span><span class="na">serializeNulls</span><span class="o">()</span>    <span class="c1">// null 也序列化</span>
                 <span class="o">.</span><span class="na">setDateFormat</span><span class="o">(</span><span class="s">"yyyy-MM-dd HH:mm:ss"</span><span class="o">)</span>     <span class="c1">// 时间转化为特定格式 yyyy-MM-dd HH:mm:ss</span>
@@ -208,8 +205,7 @@ jQuery(function(){
         <span class="n">converters</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">converter</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 

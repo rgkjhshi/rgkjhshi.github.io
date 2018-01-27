@@ -104,19 +104,19 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#section">场景</a></li>
-  <li><a href="#section-1">使用一致性哈希解决上述场景</a>    <ul>
-      <li><a href="#section-2">算法步骤</a></li>
-      <li><a href="#cache">新增Cache服务器的情景</a></li>
-      <li><a href="#cache-1">删除Cache服务器的情景</a></li>
+  <li><a href="#场景" id="markdown-toc-场景">场景</a></li>
+  <li><a href="#使用一致性哈希解决上述场景" id="markdown-toc-使用一致性哈希解决上述场景">使用一致性哈希解决上述场景</a>    <ul>
+      <li><a href="#算法步骤" id="markdown-toc-算法步骤">算法步骤</a></li>
+      <li><a href="#新增cache服务器的情景" id="markdown-toc-新增cache服务器的情景">新增Cache服务器的情景</a></li>
+      <li><a href="#删除cache服务器的情景" id="markdown-toc-删除cache服务器的情景">删除Cache服务器的情景</a></li>
     </ul>
   </li>
-  <li><a href="#cache-2">虚拟Cache服务器</a></li>
+  <li><a href="#虚拟cache服务器" id="markdown-toc-虚拟cache服务器">虚拟Cache服务器</a></li>
 </ul>
 
 <hr />
 
-<h2 id="section">场景</h2>
+<h2 id="场景">场景</h2>
 
 <p>如果我们有4台Cache服务器来存放一些对象, 可以用简单的办法来分配:<code class="highlighter-rouge">object.hashCode() % 4</code>.</p>
 
@@ -130,9 +130,9 @@ jQuery(function(){
 <p>动态变化体现在, 如果因为某些原因Cache服务器少了一台或者多了一台, 我们怎么处理对象与服务器的关系呢?<br />
 少了一台应该<code class="highlighter-rouge">%3</code>, 多了一台应该<code class="highlighter-rouge">%5</code>, 这样服务器上原来存放的对象与服务器的对应关系就全乱了</p>
 
-<h2 id="section-1">使用一致性哈希解决上述场景</h2>
+<h2 id="使用一致性哈希解决上述场景">使用一致性哈希解决上述场景</h2>
 
-<h3 id="section-2">算法步骤</h3>
+<h3 id="算法步骤">算法步骤</h3>
 
 <p>一致性哈希算法采用一种新的方式来解决问题，不再仅仅依赖object.hashCode()本身，而且将Cache的配置也进行哈希运算。具体步骤如下:</p>
 
@@ -144,24 +144,24 @@ jQuery(function(){
 
 <p><img src="/static/images/hash01.png" alt="一致性哈希算法" title="一致性哈希算法" /></p>
 
-<h3 id="cache">新增Cache服务器的情景</h3>
+<h3 id="新增cache服务器的情景">新增Cache服务器的情景</h3>
 
 <p>假设在这个环形哈希空间中, Cache5被映射在Cache3和Cache4之间, 那么受影响的将仅是沿Cache5逆时针遍历, 直到下一个Cache(Cache3)之间的对象. 只对这些对象进行转移即可.
 Cache3~Cache5之间部分原来映射到Cache4, 现在应该映射到Cache5;<br />
-Cache5~Cache4之间部分原来映射到Cache4, 现在还是映射到Cache4, 不受影响;  </p>
+Cache5~Cache4之间部分原来映射到Cache4, 现在还是映射到Cache4, 不受影响;</p>
 
 <p><img src="/static/images/hash02.png" alt="新增Cache服务器的情景" title="新增Cache服务器的情景" /></p>
 
-<h3 id="cache-1">删除Cache服务器的情景</h3>
+<h3 id="删除cache服务器的情景">删除Cache服务器的情景</h3>
 
 <p>假设在这个环形哈希空间中, Cache3被移除, 那么受影响的将仅是沿Cache3逆时针遍历直到下一个Cache(Cache2)之间的对象</p>
 
 <p>原来Cache2~Cache3之间部分原来映射到Cache3, 现在应该映射到Cache4;<br />
-原来Cache3~Cache4之间部分原来映射到Cache4, 现在还是映射到Cache4, 不受影响;  </p>
+原来Cache3~Cache4之间部分原来映射到Cache4, 现在还是映射到Cache4, 不受影响;</p>
 
 <p><img src="/static/images/hash03.png" alt="删除Cache服务器的情景" title="删除Cache服务器的情景" /></p>
 
-<h2 id="cache-2">虚拟Cache服务器</h2>
+<h2 id="虚拟cache服务器">虚拟Cache服务器</h2>
 
 <p>考虑到哈希算法并不是保证绝对的平衡, 尤其Cache较少的话, 对象并不能被均匀的映射到Cache上. 为了解决这种情况引入了”虚拟节点”的概念.<br />
 虚拟节点是实际节点在环形空间的复制品, 一个实际节点对应了若干个”虚拟节点”, 这个对应个数也称为”复制个数”, “虚拟节点”在哈希空间中以哈希值排列.</p>

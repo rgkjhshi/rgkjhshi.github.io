@@ -104,17 +104,17 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#section">分支操作</a></li>
-  <li><a href="#section-1">撤销操作</a></li>
-  <li><a href="#log">log显示</a></li>
-  <li><a href="#section-2">显示远程仓库信息</a></li>
+  <li><a href="#分支操作" id="markdown-toc-分支操作">分支操作</a></li>
+  <li><a href="#撤销操作" id="markdown-toc-撤销操作">撤销操作</a></li>
+  <li><a href="#log显示" id="markdown-toc-log显示">log显示</a></li>
+  <li><a href="#显示远程仓库信息" id="markdown-toc-显示远程仓库信息">显示远程仓库信息</a></li>
 </ul>
 
 <hr />
 
-<h2 id="section">分支操作</h2>
+<h2 id="分支操作">分支操作</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>git branch             :    查看本地分支
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git branch             :    查看本地分支
 git branch -a          :    查看所有分支(包括远程)
 git branch name        :    创建分支
 git branch -d name     :    删除分支
@@ -122,8 +122,7 @@ git checkout name      :    切换分支
 git checkout -b name   :    创建+切换分支
 git merge name         :    合并某分支到当前分支
 git push origin -delete &lt;branchname&gt;     :    删除远程分支
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ol>
   <li>合并分支一般使用 <code class="highlighter-rouge">git merge --no-ff -m "merge with no-ff" branchName</code> 表示禁用“Fast forward”，合并就跟一次提交一样</li>
@@ -132,40 +131,35 @@ git push origin -delete &lt;branchname&gt;     :    删除远程分支
 
 <hr />
 
-<h2 id="section-1">撤销操作</h2>
+<h2 id="撤销操作">撤销操作</h2>
 
 <p><strong>重新提交</strong>: 若暂存区没有新的修改，相当于重写了提交信息</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ git commit --amend -m "message"
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git commit --amend -m "message"
+</code></pre></div></div>
 
 <p><strong>丢弃工作区的修改</strong>: 若有add则从暂存区恢复，若无add则从仓库恢复。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ git checkout -- filename
-</code></pre>
-</div>
-<p>注：<code class="highlighter-rouge">git checkout -- file</code>命令中的“–”很重要，没有“–”，就变成了“创建一个新分支”的命令  </p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git checkout -- filename
+</code></pre></div></div>
+<p>注：<code class="highlighter-rouge">git checkout -- file</code>命令中的“–”很重要，没有“–”，就变成了“创建一个新分支”的命令</p>
 
 <p><strong>撤销暂存区修改</strong>: 把暂存区的修改回退到工作区。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ git reset HEAD readme.txt
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git reset HEAD readme.txt
+</code></pre></div></div>
 
 <p><strong>回退版本</strong>: <code class="highlighter-rouge">HEAD</code>表示当前版本，上一个版本就是<code class="highlighter-rouge">HEAD^</code>，上上一个版本就是<code class="highlighter-rouge">HEAD^^</code>，上100个版本可写成<code class="highlighter-rouge">HEAD~100</code>。用上hard参数后，文件会回到原来的commit状态，不用hard参数，工作目录的文件修改会保留，状态为未提交。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>git reset --hard HEAD^
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git reset --hard HEAD^
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="log">log显示</h2>
+<h2 id="log显示">log显示</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="err">$</span> <span class="n">git</span> <span class="n">log</span> <span class="o">--</span><span class="n">graph</span> <span class="o">--</span><span class="n">pretty</span><span class="o">=</span><span class="n">oneline</span> <span class="o">--</span><span class="n">abbrev</span><span class="o">-</span><span class="n">commit</span>
-</code></pre>
-</div>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">$</span> <span class="n">git</span> <span class="n">log</span> <span class="o">--</span><span class="n">graph</span> <span class="o">--</span><span class="n">pretty</span><span class="o">=</span><span class="n">oneline</span> <span class="o">--</span><span class="n">abbrev</span><span class="o">-</span><span class="n">commit</span>
+</code></pre></div></div>
 <ol>
   <li><code class="highlighter-rouge">--graph</code>可以看到分支合并图</li>
   <li><code class="highlighter-rouge">--pretty=oneline</code>Log会显示在一行</li>
@@ -174,19 +168,17 @@ git push origin -delete &lt;branchname&gt;     :    删除远程分支
 
 <p>如果之前有过版本回退操作，则<code class="highlighter-rouge">git log</code>只能显示当前版本之前的记录，如果想看所有的记录(包括当前版本之后的版本)，可以使用：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ git reflog
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git reflog
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="section-2">显示远程仓库信息</h2>
+<h2 id="显示远程仓库信息">显示远程仓库信息</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ git remote -v
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git remote -v
 origin  git@github.com:rgkjhshi/blog.git (fetch)
 origin  git@github.com:rgkjhshi/blog.git (push)
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 

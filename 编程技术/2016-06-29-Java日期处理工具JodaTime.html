@@ -104,29 +104,28 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#maven">maven依赖</a></li>
-  <li><a href="#section">使用示例</a></li>
+  <li><a href="#maven依赖" id="markdown-toc-maven依赖">maven依赖</a></li>
+  <li><a href="#使用示例" id="markdown-toc-使用示例">使用示例</a></li>
 </ul>
 
 <hr />
 
-<h2 id="maven">maven依赖</h2>
+<h2 id="maven依赖">maven依赖</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>joda-time<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>joda-time<span class="nt">&lt;/artifactId&gt;</span>
     <span class="nt">&lt;version&gt;</span>2.9.4<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="section">使用示例</h2>
+<h2 id="使用示例">使用示例</h2>
 
 <p>最常用的一个类就是<code class="highlighter-rouge">DateTime</code>类, 它有很多构造方法和时间的操作方法</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">DateTime</span> <span class="n">dateTime</span><span class="o">;</span>
         <span class="c1">// 创建当前时间</span>
         <span class="n">dateTime</span> <span class="o">=</span> <span class="n">DateTime</span><span class="o">.</span><span class="na">now</span><span class="o">();</span>
@@ -167,8 +166,7 @@ jQuery(function(){
         <span class="n">dateTime</span> <span class="o">=</span> <span class="n">DateTime</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span><span class="s">"2016-06-30 12:01:01"</span><span class="o">,</span> <span class="n">DateTimeFormat</span><span class="o">.</span><span class="na">forPattern</span><span class="o">(</span><span class="s">"yyyy-MM-dd HH:mm:ss"</span><span class="o">));</span>
         <span class="kt">int</span> <span class="n">days</span> <span class="o">=</span> <span class="n">Days</span><span class="o">.</span><span class="na">daysBetween</span><span class="o">(</span><span class="n">dateTime</span><span class="o">,</span> <span class="n">DateTime</span><span class="o">.</span><span class="na">now</span><span class="o">()).</span><span class="na">getDays</span><span class="o">();</span>  <span class="c1">// 后面早则为负数</span>
     <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>其实创建<code class="highlighter-rouge">DateTime</code>对象时也能传<code class="highlighter-rouge">ISODateTimeFormat</code>格式化的字符串, 如:”2006-01-26T13:30:00-06:00”, 但要确保给出的字符串格式正确, 可以参考<a href="http://joda-time.sourceforge.net/api-release/index.html">Joda API文档</a></p>
 

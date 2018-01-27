@@ -105,19 +105,19 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#section">包依赖和目录结构</a></li>
-  <li><a href="#section-1">简单示例</a></li>
-  <li><a href="#kmodulexml">kmodule.xml</a></li>
-  <li><a href="#kie">KIE</a></li>
-  <li><a href="#kmodule">编码方式实现kmodule定义</a></li>
+  <li><a href="#包依赖和目录结构" id="markdown-toc-包依赖和目录结构">包依赖和目录结构</a></li>
+  <li><a href="#简单示例" id="markdown-toc-简单示例">简单示例</a></li>
+  <li><a href="#kmodulexml" id="markdown-toc-kmodulexml">kmodule.xml</a></li>
+  <li><a href="#kie" id="markdown-toc-kie">KIE</a></li>
+  <li><a href="#编码方式实现kmodule定义" id="markdown-toc-编码方式实现kmodule定义">编码方式实现kmodule定义</a></li>
 </ul>
 
 <hr />
 
-<h2 id="section">包依赖和目录结构</h2>
+<h2 id="包依赖和目录结构">包依赖和目录结构</h2>
 <p><code class="highlighter-rouge">Drools</code>也提供了一个<code class="highlighter-rouge">bom</code>文件进行相关的包管理, 在maven项目中, <code class="highlighter-rouge">pom</code>文件可以这样写:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependencyManagement&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependencyManagement&gt;</span>
     <span class="nt">&lt;dependencies&gt;</span>
         <span class="nt">&lt;dependency&gt;</span>
             <span class="nt">&lt;groupId&gt;</span>org.drools<span class="nt">&lt;/groupId&gt;</span>
@@ -139,12 +139,11 @@ jQuery(function(){
         <span class="nt">&lt;scope&gt;</span>runtime<span class="nt">&lt;/scope&gt;</span>
     <span class="nt">&lt;/dependency&gt;</span>
 <span class="nt">&lt;dependencies&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>项目的目录结构是下面这样子的</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    src
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    src
     |--com.test.drools
     |  |--DroolsTest.java
     resources
@@ -152,8 +151,7 @@ jQuery(function(){
     |  |--kmodule.xml
     |--rules
     |  |--test.drl
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ul>
   <li><code class="highlighter-rouge">Drools</code>默认会加载<code class="highlighter-rouge">classpath</code>路径下的<code class="highlighter-rouge">META-INF/kmodule.xml</code>文件(稍后详述)</li>
@@ -162,13 +160,13 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="section-1">简单示例</h2>
+<h2 id="简单示例">简单示例</h2>
 <p>下面是一个简单的例子</p>
 
 <p><code class="highlighter-rouge">DroolsTest.java</code>内容如下:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">DroolsTest</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">DroolsTest</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
         <span class="c1">// 获取 drools 实现的 KieServices 实例</span>
         <span class="n">KieServices</span> <span class="n">kieServices</span> <span class="o">=</span> <span class="n">KieServices</span><span class="o">.</span><span class="na">Factory</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
         <span class="c1">// kieServices 默认加载 classpath:META-INF/kmodule.xml 得到 KieContainer</span>
@@ -181,12 +179,11 @@ jQuery(function(){
         <span class="n">kieSession</span><span class="o">.</span><span class="na">fireAllRules</span><span class="o">();</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><code class="highlighter-rouge">META-INF/kmodule.xml</code>内容如下:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
 <span class="nt">&lt;kmodule</span> <span class="na">xmlns=</span><span class="s">"http://jboss.org/kie/6.0.0/kmodule"</span><span class="nt">&gt;</span>
     <span class="nt">&lt;kbase</span> <span class="na">name=</span><span class="s">"kbase-rules"</span> <span class="na">packages=</span><span class="s">"rules"</span><span class="nt">&gt;</span>
         <span class="nt">&lt;ksession</span> <span class="na">name=</span><span class="s">"ksession-rules"</span><span class="nt">/&gt;</span>
@@ -195,8 +192,7 @@ jQuery(function(){
         <span class="nt">&lt;ksession</span> <span class="na">name=</span><span class="s">"ksession-process"</span><span class="nt">/&gt;</span>
     <span class="nt">&lt;/kbase&gt;</span>
 <span class="nt">&lt;/kmodule&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><code class="highlighter-rouge">rules/test.drl</code>内容如下:</p>
 
@@ -254,24 +250,23 @@ end
 
 <hr />
 
-<h2 id="kmodule">编码方式实现kmodule定义</h2>
+<h2 id="编码方式实现kmodule定义">编码方式实现kmodule定义</h2>
 <p>前面的例子都是默认读取<code class="highlighter-rouge">classpath</code>下的<code class="highlighter-rouge">META-INF/kmodule.xml</code>文件的, 接下来我们通过<code class="highlighter-rouge">KieFileSystem</code>定义<code class="highlighter-rouge">KieModule</code>, 这样就不需要<code class="highlighter-rouge">META-INF/kmodule.xml</code>配置文件了.</p>
 
 <p>还是类似的例子, 目录结构将变为</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    src
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    src
     |--com.test.drools
     |  |--KieFileSystemTest.java
     resources
     |--rules
     |  |--test.drl
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>其中 <code class="highlighter-rouge">KKieFileSystemTest.java</code>内容为:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">KieFileSystemTest</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">KieFileSystemTest</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
         <span class="c1">// 获取 drools 实现的 KieServices 实例</span>
         <span class="n">KieServices</span> <span class="n">kieServices</span> <span class="o">=</span> <span class="n">KieServices</span><span class="o">.</span><span class="na">Factory</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
         <span class="c1">// 创建一个 KieFileSystem</span>
@@ -306,8 +301,7 @@ end
         <span class="n">kieSession</span><span class="o">.</span><span class="na">fireAllRules</span><span class="o">();</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 

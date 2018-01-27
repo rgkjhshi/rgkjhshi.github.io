@@ -102,20 +102,20 @@ jQuery(function(){
             <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#section">如何创建一个线程</a></li>
-  <li><a href="#section-1">结束线程</a></li>
-  <li><a href="#wait--sleep">wait 与 sleep</a></li>
-  <li><a href="#section-2">线程池</a>    <ul>
-      <li><a href="#section-3">好处</a></li>
-      <li><a href="#section-4">使用</a></li>
-      <li><a href="#section-5">原理</a></li>
+  <li><a href="#如何创建一个线程" id="markdown-toc-如何创建一个线程">如何创建一个线程</a></li>
+  <li><a href="#结束线程" id="markdown-toc-结束线程">结束线程</a></li>
+  <li><a href="#wait-与-sleep" id="markdown-toc-wait-与-sleep">wait 与 sleep</a></li>
+  <li><a href="#线程池" id="markdown-toc-线程池">线程池</a>    <ul>
+      <li><a href="#好处" id="markdown-toc-好处">好处</a></li>
+      <li><a href="#使用" id="markdown-toc-使用">使用</a></li>
+      <li><a href="#原理" id="markdown-toc-原理">原理</a></li>
     </ul>
   </li>
 </ul>
 
 <hr />
 
-<h2 id="section">如何创建一个线程</h2>
+<h2 id="如何创建一个线程">如何创建一个线程</h2>
 
 <p>按 Java 语言规范中的说法，创建线程只有一种方式，就是创建一个 Thread 对象。而从 HotSpot 虚拟机的角度看，创建一个虚拟机线程
 有两种方式，一种是创建 Thread 对象，另一种是创建 一个本地线程，加入到虚拟机线程中。</p>
@@ -124,9 +124,9 @@ jQuery(function(){
 
 <p>第一是继承 Thread 类，实现 run 方法，并创建子类对象。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">startThreadUseSubClass</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">startThreadUseSubClass</span><span class="o">()</span> <span class="o">{</span>
 		<span class="kd">class</span> <span class="nc">MyThread</span> <span class="kd">extends</span> <span class="n">Thread</span> <span class="o">{</span>
-			<span class="kd">public</span> <span class="kt">void</span> <span class="n">run</span><span class="o">()</span> <span class="o">{</span>
+			<span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
 				<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"start thread using Subclass of Thread"</span><span class="o">);</span>
 			<span class="o">}</span>
 		<span class="o">}</span>
@@ -134,33 +134,31 @@ jQuery(function(){
 		<span class="n">MyThread</span> <span class="n">thread</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MyThread</span><span class="o">();</span>
 		<span class="n">thread</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
 	<span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>另一种是传递给 Thread 构造函数一个 Runnable 对象。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">startThreadUseRunnalbe</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">startThreadUseRunnalbe</span><span class="o">()</span> <span class="o">{</span>
 		<span class="n">Thread</span> <span class="n">thread</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Thread</span><span class="o">(</span><span class="k">new</span> <span class="n">Runnable</span><span class="o">()</span> <span class="o">{</span>
-			<span class="kd">public</span> <span class="kt">void</span> <span class="n">run</span><span class="o">()</span> <span class="o">{</span>
+			<span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
 				<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"start thread using runnable"</span><span class="o">);</span>
 			<span class="o">}</span>
 		<span class="o">});</span>
 		<span class="n">thread</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
 	<span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>当然， Runnalbe 对象，也不是只有这一种形式，例如如果我们想要线程执行时返回一个值，就需要用到另一种 Runnalbe 对象，它
 对原来的 Runnalbe 对象进行了包装。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">startFutureTask</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">startFutureTask</span><span class="o">()</span> <span class="o">{</span>
 		<span class="n">FutureTask</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">task</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FutureTask</span><span class="o">&lt;&gt;(</span><span class="k">new</span> <span class="n">Callable</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;()</span> <span class="o">{</span>
-			<span class="kd">public</span> <span class="n">Integer</span> <span class="n">call</span><span class="o">()</span> <span class="o">{</span>
+			<span class="kd">public</span> <span class="n">Integer</span> <span class="nf">call</span><span class="o">()</span> <span class="o">{</span>
 				<span class="k">return</span> <span class="mi">1</span><span class="o">;</span>
 			<span class="o">}</span>
 		<span class="o">});</span>
 
-		<span class="k">new</span> <span class="n">Thread</span><span class="o">(</span><span class="n">task</span><span class="o">).</span><span class="na">start</span><span class="o">();</span>
+		<span class="k">new</span> <span class="nf">Thread</span><span class="o">(</span><span class="n">task</span><span class="o">).</span><span class="na">start</span><span class="o">();</span>
 
 		<span class="k">try</span> <span class="o">{</span>
 			<span class="n">Integer</span> <span class="n">result</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
@@ -171,20 +169,19 @@ jQuery(function(){
 			<span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
 		<span class="o">}</span>
 	<span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h2 id="section-1">结束线程</h2>
+<h2 id="结束线程">结束线程</h2>
 
-<h2 id="wait--sleep">wait 与 sleep</h2>
+<h2 id="wait-与-sleep">wait 与 sleep</h2>
 
 <p>sleep 会使得当前线程休眠一段时间，但并不会释放已经得到的锁。</p>
 
 <p>wait 会阻塞住，并释放已经得到的锁。一直到有人调用 notify 或者 notifyAll，它会重新尝试得到锁，然后再唤醒。</p>
 
-<h2 id="section-2">线程池</h2>
+<h2 id="线程池">线程池</h2>
 
-<h3 id="section-3">好处</h3>
+<h3 id="好处">好处</h3>
 
 <ul>
   <li>复用</li>
@@ -201,7 +198,7 @@ jQuery(function(){
 <p>同时，可以设置线程数目，这样，线程不会增大到影响系统整体性能的程度。当任务太多时，可以在队列中排队，
 如果有空闲线程，他们会从队列中取出任务执行。</p>
 
-<h3 id="section-4">使用</h3>
+<h3 id="使用">使用</h3>
 
 <ul>
   <li>线程数目</li>
@@ -218,17 +215,16 @@ jQuery(function(){
 
 <p>JDK 的 java.util.concurrent.Executors 类提供了几个静态的方法，用于创建不同类型的线程池。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">ExecutorService</span> <span class="n">service</span> <span class="o">=</span> <span class="n">Executors</span><span class="o">.</span><span class="na">newFixedThreadPool</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ExecutorService</span> <span class="n">service</span> <span class="o">=</span> <span class="n">Executors</span><span class="o">.</span><span class="na">newFixedThreadPool</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span>
 <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Future</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;&gt;</span> <span class="n">results</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;();</span>
 <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">14</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
 	<span class="n">Future</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">r</span> <span class="o">=</span> <span class="n">service</span><span class="o">.</span><span class="na">submit</span><span class="o">(</span><span class="k">new</span> <span class="n">Callable</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;()</span> <span class="o">{</span>
-		<span class="kd">public</span> <span class="n">Integer</span> <span class="n">call</span><span class="o">()</span> <span class="o">{</span>
-		<span class="k">return</span> <span class="k">new</span> <span class="n">Random</span><span class="o">().</span><span class="na">nextInt</span><span class="o">();</span>
+		<span class="kd">public</span> <span class="n">Integer</span> <span class="nf">call</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="k">new</span> <span class="nf">Random</span><span class="o">().</span><span class="na">nextInt</span><span class="o">();</span>
 	<span class="o">});</span>
 	<span class="n">results</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">r</span><span class="o">);</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p><code class="highlighter-rouge">newFixedThreadPool</code> 可以创建固定数目的线程，一旦创建不会自动销毁线程，即便长期没有任务。除非显式关闭线程池。如果任务队列中有任务，就取出任务执行。</p>
 
@@ -236,7 +232,7 @@ jQuery(function(){
 
 <p>另外，还提供了 <code class="highlighter-rouge">newSingleThreadExecutor</code> 创建有一个工作线程的线程池。</p>
 
-<h3 id="section-5">原理</h3>
+<h3 id="原理">原理</h3>
 
 <p>JDK 中的线程池通过 HashSet 存储工作者线程，通过 BlockingQueue 来存储待处理任务。</p>
 

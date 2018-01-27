@@ -104,17 +104,17 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#section">进程三态模型</a></li>
-  <li><a href="#java">Java线程状态</a>    <ul>
-      <li><a href="#section-1">线程状态解释</a></li>
-      <li><a href="#section-2">状态转换图</a></li>
+  <li><a href="#进程三态模型" id="markdown-toc-进程三态模型">进程三态模型</a></li>
+  <li><a href="#java线程状态" id="markdown-toc-java线程状态">Java线程状态</a>    <ul>
+      <li><a href="#线程状态解释" id="markdown-toc-线程状态解释">线程状态解释</a></li>
+      <li><a href="#状态转换图" id="markdown-toc-状态转换图">状态转换图</a></li>
     </ul>
   </li>
 </ul>
 
 <hr />
 
-<h2 id="section">进程三态模型</h2>
+<h2 id="进程三态模型">进程三态模型</h2>
 
 <p>操作系统中有比较经典的进程三态模型, 各状态之间的转换关系如下图:</p>
 
@@ -122,11 +122,11 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="java">Java线程状态</h2>
+<h2 id="java线程状态">Java线程状态</h2>
 
 <p>类<code class="highlighter-rouge">java.long.Thread</code>中有个内部的枚举类<code class="highlighter-rouge">State</code>用来表示线程的状态, 它的定义如下:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="n">State</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="n">State</span> <span class="o">{</span>
     <span class="n">NEW</span><span class="o">,</span>      <span class="c1">// 刚创建, 还没启动</span>
     <span class="n">RUNNABLE</span><span class="o">,</span> <span class="c1">// 可运行状态</span>
     <span class="n">BLOCKED</span><span class="o">,</span>  <span class="c1">// 阻塞态, 或被挂起</span>
@@ -134,10 +134,9 @@ jQuery(function(){
     <span class="n">TIMED_WAITING</span><span class="o">,</span> <span class="c1">// 等待时间的状态, 如sleep就在等待时间</span>
     <span class="n">TERMINATED</span><span class="o">;</span>  <span class="c1">// 终止态</span>
     <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="section-1">线程状态解释</h3>
+<h3 id="线程状态解释">线程状态解释</h3>
 
 <ul>
   <li><code class="highlighter-rouge">NEW</code>: 线程还没被<code class="highlighter-rouge">start()</code>启动. 调用了<code class="highlighter-rouge">start()</code>状态也不一定会立即改变, 中间还有一些步骤.</li>
@@ -148,7 +147,7 @@ jQuery(function(){
   <li><code class="highlighter-rouge">TERMINATED</code>: 线程结束了,<code class="highlighter-rouge">run()</code>方法跑完了. 这是Java的一种状态,在操作系统内部可能线程已经注销了.</li>
 </ul>
 
-<h3 id="section-2">状态转换图</h3>
+<h3 id="状态转换图">状态转换图</h3>
 
 <p><img src="/static/images/java_thread.png" alt="进程三态模型" title="进程三态模型" /></p>
 

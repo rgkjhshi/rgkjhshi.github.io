@@ -130,30 +130,30 @@ jQuery(function(){
     <tr>
       <td style="text-align: left"><code class="highlighter-rouge">*</code></td>
       <td style="text-align: left">零次或多次匹配前面的字符或子表达式</td>
-      <td style="text-align: left"><code class="highlighter-rouge">zo*</code> 匹配<code class="highlighter-rouge">z</code>和<code class="highlighter-rouge">zoo</code>; <br /><code class="highlighter-rouge">*</code> 等效于 <code class="highlighter-rouge"><span class="p">{</span><span class="err">0,</span><span class="p">}</span></code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">zo*</code> 匹配<code class="highlighter-rouge">z</code>和<code class="highlighter-rouge">zoo</code>; <br /><code class="highlighter-rouge">*</code> 等效于 <code class="highlighter-rouge">{0,}</code></td>
     </tr>
     <tr>
       <td style="text-align: left"><code class="highlighter-rouge">+</code></td>
       <td style="text-align: left">一次或多次匹配前面的字符或子表达式</td>
-      <td style="text-align: left"><code class="highlighter-rouge">zo+</code> 匹配<code class="highlighter-rouge">zo</code>和<code class="highlighter-rouge">zoo</code>,但与<code class="highlighter-rouge">z</code>不匹配; <br /><code class="highlighter-rouge">+</code> 等效于 <code class="highlighter-rouge"><span class="p">{</span><span class="err">1,</span><span class="p">}</span></code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">zo+</code> 匹配<code class="highlighter-rouge">zo</code>和<code class="highlighter-rouge">zoo</code>,但与<code class="highlighter-rouge">z</code>不匹配; <br /><code class="highlighter-rouge">+</code> 等效于 <code class="highlighter-rouge">{1,}</code></td>
     </tr>
     <tr>
       <td style="text-align: left"><code class="highlighter-rouge">?</code></td>
       <td style="text-align: left">零次或一次匹配前面的字符或子表达式</td>
-      <td style="text-align: left"><code class="highlighter-rouge">do(es)?</code>匹配<code class="highlighter-rouge">do</code>或<code class="highlighter-rouge">does</code>; <br /><code class="highlighter-rouge">?</code> 等效于 <code class="highlighter-rouge"><span class="p">{</span><span class="err">0,1</span><span class="p">}</span></code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">do(es)?</code>匹配<code class="highlighter-rouge">do</code>或<code class="highlighter-rouge">does</code>; <br /><code class="highlighter-rouge">?</code> 等效于 <code class="highlighter-rouge">{0,1}</code></td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge"><span class="p">{</span><span class="err">n</span><span class="p">}</span></code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">{n}</code></td>
       <td style="text-align: left">n 是非负整数, 正好匹配 n 次</td>
       <td style="text-align: left"><code class="highlighter-rouge">o{2}</code>与<code class="highlighter-rouge">Bob</code>中的<code class="highlighter-rouge">o</code>不匹配，但与<code class="highlighter-rouge">food</code>中的两个<code class="highlighter-rouge">o</code>匹配</td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge"><span class="p">{</span><span class="err">n,</span><span class="p">}</span></code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">{n,}</code></td>
       <td style="text-align: left">至少匹配 n 次</td>
       <td style="text-align: left"><code class="highlighter-rouge">o{2,}</code>不匹配<code class="highlighter-rouge">Bob</code>中的<code class="highlighter-rouge">o</code>, 但匹配<code class="highlighter-rouge">foooood</code>中的所有<code class="highlighter-rouge">o</code>; <br /><code class="highlighter-rouge">o{1,}</code>等效于<code class="highlighter-rouge">o+</code>; <code class="highlighter-rouge">o{0,}</code>等效于<code class="highlighter-rouge">o*</code></td>
     </tr>
     <tr>
-      <td style="text-align: left"><code class="highlighter-rouge"><span class="p">{</span><span class="err">n,m</span><span class="p">}</span></code></td>
+      <td style="text-align: left"><code class="highlighter-rouge">{n,m}</code></td>
       <td style="text-align: left">n &lt;= m, 匹配至少 n 次，至多 m 次</td>
       <td style="text-align: left"><code class="highlighter-rouge">o{1,3}</code>匹配<code class="highlighter-rouge">fooooood</code>中的头三个 <code class="highlighter-rouge">o</code>; <br /><code class="highlighter-rouge">o{0,1}</code> 等效于 <code class="highlighter-rouge">o?</code>; <br />注意:不能将空格插入逗号和数字之间</td>
     </tr>

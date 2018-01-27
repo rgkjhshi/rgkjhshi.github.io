@@ -104,17 +104,17 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#section">引用简介</a></li>
-  <li><a href="#section-1">强引用</a></li>
-  <li><a href="#section-2">弱引用</a></li>
-  <li><a href="#section-3">软引用</a></li>
-  <li><a href="#section-4">虚引用</a></li>
-  <li><a href="#section-5">引用队列</a></li>
+  <li><a href="#引用简介" id="markdown-toc-引用简介">引用简介</a></li>
+  <li><a href="#强引用" id="markdown-toc-强引用">强引用</a></li>
+  <li><a href="#弱引用" id="markdown-toc-弱引用">弱引用</a></li>
+  <li><a href="#软引用" id="markdown-toc-软引用">软引用</a></li>
+  <li><a href="#虚引用" id="markdown-toc-虚引用">虚引用</a></li>
+  <li><a href="#引用队列" id="markdown-toc-引用队列">引用队列</a></li>
 </ul>
 
 <hr />
 
-<h2 id="section">引用简介</h2>
+<h2 id="引用简介">引用简介</h2>
 
 <p>引用跟垃圾回收相关, 关于引用的类位于<code class="highlighter-rouge">java.long.ref</code>包中, 他们的继承关系图如下(蓝色表示抽象类):</p>
 
@@ -123,12 +123,12 @@ jQuery(function(){
 <p>按照他们阻止被回收的能力强弱可以分为:
 <code class="highlighter-rouge">强引用 &gt; 软引用(SoftReference) &gt; 弱引用(WeakReference) &gt; 虚引用(PhantomReference)</code></p>
 
-<h2 id="section-1">强引用</h2>
+<h2 id="强引用">强引用</h2>
 
 <p>就是我们平时使用的对象的引用, 比如:<code class="highlighter-rouge">Object o = new Object()</code>, 那个<code class="highlighter-rouge">o</code>就是一个强引用.<br />
 如果一个对象通过强引用链可到达, 它是不会被回收的, 不可达时才有可能被回收.</p>
 
-<h2 id="section-2">弱引用</h2>
+<h2 id="弱引用">弱引用</h2>
 
 <p>先说下弱引用(<code class="highlighter-rouge">WeakReference</code>),  它阻止被回收的能力不太强,  由JVM决定何时回收. 可以这样创建一个弱引用对象:
 <code class="highlighter-rouge">WeakReference&lt;Object&gt; weakObject = new WeakReference&lt;Object&gt;(o);</code>, 通过<code class="highlighter-rouge">weakObject.get()</code>就可以得到引用的对象了.<br />
@@ -136,21 +136,21 @@ jQuery(function(){
 如果一个对象是弱引用可到达, 那么这个对象会JVM的下一个回收周期销毁.<br />
 有一个<code class="highlighter-rouge">WeakHashMap</code>和<code class="highlighter-rouge">HashMap</code>几乎一样, 唯一的区别就是它的键(key)使用<code class="highlighter-rouge">WeakReference</code>引用, 当它里面的某个key被标记为垃圾时, 对应的这个<code class="highlighter-rouge">Entry</code>就被自动移除了</p>
 
-<h2 id="section-3">软引用</h2>
+<h2 id="软引用">软引用</h2>
 
 <p>软引用(<code class="highlighter-rouge">SoftReference</code>)比弱引用稍微强一些, 当内存不足时(即将<code class="highlighter-rouge">OutOfMemory</code>)垃圾回收器才会回收这些软引用可到达的对象.</p>
 
-<h2 id="section-4">虚引用</h2>
+<h2 id="虚引用">虚引用</h2>
 <p>虚引用(PhantomReference)指向的对象十分脆弱,我们不能用get方法来得到其指向的对象(get总返回<code class="highlighter-rouge">null</code>).<br />
 它的唯一作用就是当其指向的对象被回收之后，自己被加入到引用队列，用作记录该引用指向的对象已被销毁。</p>
 
-<h2 id="section-5">引用队列</h2>
+<h2 id="引用队列">引用队列</h2>
 
 <p>各种引用的父类<code class="highlighter-rouge">Reference</code>中有个字段<code class="highlighter-rouge">queue</code>, 它就是引用队列<code class="highlighter-rouge">ReferenceQueue</code>.<br />
 一旦弱引用对象开始返回<code class="highlighter-rouge">null</code>, 该引用指向的对象就被标记成了垃圾.<br />
 当构造时传入一个<code class="highlighter-rouge">ReferenceQueue</code>对象, 则当引用只想的对象被标记为垃圾时, 这个引用对象会自动地加入到引用队列里面.<br />
 我们可以处理传入的引用队列来主动清理一些已经不用的引用.<br />
-软引用和弱引用被放入引用队列时, 并不能保证此时引用对象已经被销毁了(对象可以在<code class="highlighter-rouge">finalize</code>方法里再生), 虚引用放入引用队列时, 可保证引用对象已经被销毁了.  </p>
+软引用和弱引用被放入引用队列时, 并不能保证此时引用对象已经被销毁了(对象可以在<code class="highlighter-rouge">finalize</code>方法里再生), 虚引用放入引用队列时, 可保证引用对象已经被销毁了.</p>
 
 <hr />
 

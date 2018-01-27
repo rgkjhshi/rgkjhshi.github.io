@@ -102,19 +102,19 @@ jQuery(function(){
             <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#section">多数据源配置</a></li>
-  <li><a href="#mybatis">MyBatis使用多数据源</a></li>
-  <li><a href="#section-1">自动注册多数据源</a></li>
+  <li><a href="#多数据源配置" id="markdown-toc-多数据源配置">多数据源配置</a></li>
+  <li><a href="#mybatis使用多数据源" id="markdown-toc-mybatis使用多数据源">MyBatis使用多数据源</a></li>
+  <li><a href="#自动注册多数据源" id="markdown-toc-自动注册多数据源">自动注册多数据源</a></li>
 </ul>
 
 <hr />
 
 <p>在(<a href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-06-Spring-Boot%E9%9B%86%E6%88%90MyBatis.html">Spring Boot集成MyBatis</a>)一文介绍了配置数据源的简单方法, 本文介绍如何配置多个数据源, 如何与<code class="highlighter-rouge">MyBatis</code>配合多个数据源使用.</p>
 
-<h2 id="section">多数据源配置</h2>
+<h2 id="多数据源配置">多数据源配置</h2>
 <p>假设我们有三个数据源, 配置这三个数据源的方法非常简单, 首先在<code class="highlighter-rouge">application.properties</code>文件中添加这三个数据源的相关配置:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># 默认数据源</span>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 默认数据源</span>
 spring.datasource.url<span class="o">=</span>jdbc:mysql://127.0.0.1:3306/db0
 spring.datasource.username<span class="o">=</span>root
 spring.datasource.password<span class="o">=</span>123123
@@ -129,41 +129,39 @@ custom.datasource.ds2.url<span class="o">=</span>jdbc:mysql://127.0.0.1:3306/db2
 custom.datasource.ds2.username<span class="o">=</span>root
 custom.datasource.ds2.password<span class="o">=</span>123123
 custom.datasource.ds2.driver-class-name<span class="o">=</span>com.mysql.jdbc.Driver
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>我们可以通过一个配置类把这三个数据源加到spring容器中:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Configuration</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Configuration</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">DataSourceConfig</span> <span class="o">{</span>
     <span class="nd">@Bean</span><span class="o">(</span><span class="s">"datasource"</span><span class="o">)</span>
     <span class="nd">@Primary</span>  <span class="c1">// 这个注解表示主数据源</span>
     <span class="nd">@ConfigurationProperties</span><span class="o">(</span><span class="n">prefix</span> <span class="o">=</span> <span class="s">"spring.datasource"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="n">DataSource</span> <span class="n">datasource</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">DataSource</span> <span class="nf">datasource</span><span class="o">()</span> <span class="o">{</span>
         <span class="c1">// 这里也可以使用其他连接池, 比如 DruidDataSource</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="n">DruidDataSource</span><span class="o">();</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">DruidDataSource</span><span class="o">();</span>
     <span class="o">}</span>
     <span class="nd">@Bean</span><span class="o">(</span><span class="s">"ds1"</span><span class="o">)</span>
     <span class="nd">@ConfigurationProperties</span><span class="o">(</span><span class="n">prefix</span> <span class="o">=</span> <span class="s">"custom.datasource.ds1"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="n">DataSource</span> <span class="n">ds1</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">DataSource</span> <span class="nf">ds1</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="n">DataSourceBuilder</span><span class="o">.</span><span class="na">create</span><span class="o">().</span><span class="na">build</span><span class="o">();</span>
     <span class="o">}</span>
     <span class="nd">@Bean</span><span class="o">(</span><span class="s">"ds2"</span><span class="o">)</span>
     <span class="nd">@ConfigurationProperties</span><span class="o">(</span><span class="n">prefix</span> <span class="o">=</span> <span class="s">"custom.datasource.ds2"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="n">DataSource</span> <span class="n">ds2</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">DataSource</span> <span class="nf">ds2</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="n">DataSourceBuilder</span><span class="o">.</span><span class="na">create</span><span class="o">().</span><span class="na">build</span><span class="o">();</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>多数据源的配置就这么简单, 在用到的地方可以直接通过数据源的<code class="highlighter-rouge">name</code>注入, 下面介绍如何配合使用多数据源.</p>
 
 <hr />
 
-<h2 id="mybatis">MyBatis使用多数据源</h2>
+<h2 id="mybatis使用多数据源">MyBatis使用多数据源</h2>
 <p>先交代下场景. 假设我们有两个数据源(就用上面的ds0和ds1), 除了数据源的配置文件跟原来不一样, 其他跟普通的<code class="highlighter-rouge">MyBatis</code>项目一样(SQL映射文件暂时不用注解, 还是使用mapper映射文件来写sql). 相关的文件和目录结构如下:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># 源码目录结构 父目录为: com.example.demo</span>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 源码目录结构 父目录为: com.example.demo</span>
 +- Application.java
 |
 +- config  <span class="c"># 这是数据源的配置</span>
@@ -181,22 +179,21 @@ resource/sqlmaps
 |   |   +- test0.xml
 |   +- ds1
 |   |   +- test1.xml
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>如何配置<code class="highlighter-rouge">MyBatis</code>之前的文章已经做过介绍, 这里只看两个配置类是如何写的:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// DS0Config.java</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// DS0Config.java</span>
 <span class="nd">@Configuration</span>
 <span class="nd">@MapperScan</span><span class="o">(</span><span class="n">basePackages</span> <span class="o">=</span> <span class="s">"com.example.demo.dao.ds0"</span><span class="o">,</span> <span class="n">sqlSessionFactoryRef</span> <span class="o">=</span> <span class="s">"ds0SqlSessionFactory"</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">DS0Config</span> <span class="o">{</span>
     <span class="nd">@Bean</span>
     <span class="nd">@Primary</span>  <span class="c1">// 这个数据源设置为主要数据源</span>
     <span class="nd">@ConfigurationProperties</span><span class="o">(</span><span class="n">prefix</span> <span class="o">=</span> <span class="s">"spring.datasource"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="n">DataSource</span> <span class="n">ds0</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="n">DruidDataSource</span><span class="o">();</span>
+    <span class="kd">public</span> <span class="n">DataSource</span> <span class="nf">ds0</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">DruidDataSource</span><span class="o">();</span>
     <span class="o">}</span>
     <span class="nd">@Bean</span>  <span class="c1">// 如果这里不用 Qualifier 指定, 则注入的是Primary数据源</span>
-    <span class="kd">public</span> <span class="n">SqlSessionFactory</span> <span class="n">ds0SqlSessionFactory</span><span class="o">(</span><span class="nd">@Qualifier</span><span class="o">(</span><span class="s">"ds0"</span><span class="o">)</span> <span class="n">DataSource</span> <span class="n">dataSource</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">SqlSessionFactory</span> <span class="nf">ds0SqlSessionFactory</span><span class="o">(</span><span class="nd">@Qualifier</span><span class="o">(</span><span class="s">"ds0"</span><span class="o">)</span> <span class="n">DataSource</span> <span class="n">dataSource</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
         <span class="n">SqlSessionFactoryBean</span> <span class="n">sessionFactory</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SqlSessionFactoryBean</span><span class="o">();</span>
         <span class="n">sessionFactory</span><span class="o">.</span><span class="na">setDataSource</span><span class="o">(</span><span class="n">dataSource</span><span class="o">);</span>
         <span class="c1">// 领域模型包位置</span>
@@ -206,8 +203,8 @@ resource/sqlmaps
         <span class="k">return</span> <span class="n">sessionFactory</span><span class="o">.</span><span class="na">getObject</span><span class="o">();</span>
     <span class="o">}</span>
     <span class="nd">@Bean</span>
-    <span class="kd">public</span> <span class="n">SqlSessionTemplate</span> <span class="n">ds0SqlSessionTemplate</span><span class="o">(</span><span class="nd">@Qualifier</span><span class="o">(</span><span class="s">"ds0SqlSessionFactory"</span><span class="o">)</span> <span class="n">SqlSessionFactory</span> <span class="n">sqlSessionFactory</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="n">SqlSessionTemplate</span><span class="o">(</span><span class="n">sqlSessionFactory</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="n">SqlSessionTemplate</span> <span class="nf">ds0SqlSessionTemplate</span><span class="o">(</span><span class="nd">@Qualifier</span><span class="o">(</span><span class="s">"ds0SqlSessionFactory"</span><span class="o">)</span> <span class="n">SqlSessionFactory</span> <span class="n">sqlSessionFactory</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">SqlSessionTemplate</span><span class="o">(</span><span class="n">sqlSessionFactory</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
 
@@ -217,11 +214,11 @@ resource/sqlmaps
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">DS1Config</span> <span class="o">{</span>
     <span class="nd">@Bean</span>
     <span class="nd">@ConfigurationProperties</span><span class="o">(</span><span class="n">prefix</span> <span class="o">=</span> <span class="s">"custom.datasource.ds1"</span><span class="o">)</span>  <span class="c1">// 自动会把属性注入到对应的字段</span>
-    <span class="kd">public</span> <span class="n">DataSource</span> <span class="n">ds0</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">DataSource</span> <span class="nf">ds0</span><span class="o">()</span> <span class="o">{</span>
        <span class="k">return</span> <span class="n">DataSourceBuilder</span><span class="o">.</span><span class="na">create</span><span class="o">().</span><span class="na">build</span><span class="o">();</span>
     <span class="o">}</span>
     <span class="nd">@Bean</span>
-    <span class="kd">public</span> <span class="n">SqlSessionFactory</span> <span class="n">ds1SqlSessionFactory</span><span class="o">(</span><span class="nd">@Qualifier</span><span class="o">(</span><span class="s">"ds1"</span><span class="o">)</span> <span class="n">DataSource</span> <span class="n">dataSource</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">SqlSessionFactory</span> <span class="nf">ds1SqlSessionFactory</span><span class="o">(</span><span class="nd">@Qualifier</span><span class="o">(</span><span class="s">"ds1"</span><span class="o">)</span> <span class="n">DataSource</span> <span class="n">dataSource</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
         <span class="n">SqlSessionFactoryBean</span> <span class="n">sessionFactory</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SqlSessionFactoryBean</span><span class="o">();</span>
         <span class="n">sessionFactory</span><span class="o">.</span><span class="na">setDataSource</span><span class="o">(</span><span class="n">dataSource</span><span class="o">);</span>
         <span class="c1">// 领域模型包位置</span>
@@ -231,22 +228,21 @@ resource/sqlmaps
         <span class="k">return</span> <span class="n">sessionFactory</span><span class="o">.</span><span class="na">getObject</span><span class="o">();</span>
     <span class="o">}</span>
     <span class="nd">@Bean</span>
-    <span class="kd">public</span> <span class="n">SqlSessionTemplate</span> <span class="n">ds1SqlSessionTemplate</span><span class="o">(</span><span class="nd">@Qualifier</span><span class="o">(</span><span class="s">"ds1SqlSessionFactory"</span><span class="o">)</span> <span class="n">SqlSessionFactory</span> <span class="n">sqlSessionFactory</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="n">SqlSessionTemplate</span><span class="o">(</span><span class="n">sqlSessionFactory</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="n">SqlSessionTemplate</span> <span class="nf">ds1SqlSessionTemplate</span><span class="o">(</span><span class="nd">@Qualifier</span><span class="o">(</span><span class="s">"ds1SqlSessionFactory"</span><span class="o">)</span> <span class="n">SqlSessionFactory</span> <span class="n">sqlSessionFactory</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">SqlSessionTemplate</span><span class="o">(</span><span class="n">sqlSessionFactory</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>上面这样, 把<code class="highlighter-rouge">MyBatis</code>配置好之后, 特别是通过<code class="highlighter-rouge">MapperScan</code>指定<code class="highlighter-rouge">dao</code>扫描路径之后, 就可以像之前一样直接在spring中注入对应的<code class="highlighter-rouge">Dao</code>操作数据库了.</p>
 
 <hr />
 
-<h2 id="section-1">自动注册多数据源</h2>
+<h2 id="自动注册多数据源">自动注册多数据源</h2>
 <p>如果数据源比较多, 我们可以把多个数据源通过其它方式注入到Spring容器中, 使用时可以直接通过名字注入使用.<br />
 假设有如下配置:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># 默认数据源</span>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 默认数据源</span>
 spring.datasource.url<span class="o">=</span>jdbc:mysql://127.0.0.1:3306/db0
 spring.datasource.username<span class="o">=</span>root
 spring.datasource.password<span class="o">=</span>123123
@@ -262,12 +258,11 @@ custom.datasource.ds2.url<span class="o">=</span>jdbc:mysql://127.0.0.1:3306/db2
 custom.datasource.ds2.username<span class="o">=</span>root
 custom.datasource.ds2.password<span class="o">=</span>123123
 custom.datasource.ds2.driver-class-name<span class="o">=</span>com.mysql.jdbc.Driver
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>上面的数据源, 我们可以直接拿来使用:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 这个是注入默认的数据源</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 这个是注入默认的数据源</span>
 <span class="nd">@Resource</span>
 <span class="kd">private</span> <span class="n">DataSource</span> <span class="n">dataSource</span>
 <span class="c1">// 注入ds1数据源</span>
@@ -275,15 +270,14 @@ custom.datasource.ds2.driver-class-name<span class="o">=</span>com.mysql.jdbc.Dr
 <span class="kd">private</span> <span class="n">DataSource</span> <span class="n">ds1</span>
 <span class="c1">// 在方法里注入ds2数据源</span>
 <span class="nd">@Bean</span>
-<span class="kd">public</span> <span class="n">SqlSessionFactory</span> <span class="nf">sqlSessionFactory</span><span class="p">(</span><span class="nd">@Qualifier</span><span class="o">(</span><span class="s">"ds2"</span><span class="o">)</span> <span class="n">DataSource</span> <span class="n">dataSource</span><span class="o">)</span> <span class="o">{</span>
+<span class="kd">public</span> <span class="n">SqlSessionFactory</span> <span class="nf">sqlSessionFactory</span><span class="o">(</span><span class="nd">@Qualifier</span><span class="o">(</span><span class="s">"ds2"</span><span class="o">)</span> <span class="n">DataSource</span> <span class="n">dataSource</span><span class="o">)</span> <span class="o">{</span>
     <span class="o">....</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>要实现多数据源的自动注册, 我们需要借助<code class="highlighter-rouge">BeanDefinitionRegistryPostProcessor</code>和<code class="highlighter-rouge">EnvironmentAware</code>两个接口. 下面是自动注册多数据源的方法:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 <span class="nd">@Component</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MultiDataSourceRegister</span> <span class="kd">implements</span> <span class="n">BeanDefinitionRegistryPostProcessor</span><span class="o">,</span> <span class="n">EnvironmentAware</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">MultiDataSourceRegister</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
@@ -294,7 +288,7 @@ custom.datasource.ds2.driver-class-name<span class="o">=</span>com.mysql.jdbc.Dr
      * 这个方法主要用于加载多数据源配置, 添加到dataSourceMap中, 之后在postProcessBeanDefinitionRegistry进行注册。
      */</span>
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">setEnvironment</span><span class="o">(</span><span class="n">Environment</span> <span class="n">environment</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setEnvironment</span><span class="o">(</span><span class="n">Environment</span> <span class="n">environment</span><span class="o">)</span> <span class="o">{</span>
         <span class="c1">// 获取到前缀是 "custom.datasource." 的属性列表值</span>
         <span class="n">RelaxedPropertyResolver</span> <span class="n">propertyResolver</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RelaxedPropertyResolver</span><span class="o">(</span><span class="n">environment</span><span class="o">,</span> <span class="s">"custom.datasource."</span><span class="o">);</span>
         <span class="c1">// 获取到所有数据源的名称列表</span>
@@ -316,7 +310,7 @@ custom.datasource.ds2.driver-class-name<span class="o">=</span>com.mysql.jdbc.Dr
      */</span>
     <span class="nd">@Override</span>
     <span class="nd">@SuppressWarnings</span><span class="o">(</span><span class="s">"unchecked"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">postProcessBeanDefinitionRegistry</span><span class="o">(</span><span class="n">BeanDefinitionRegistry</span> <span class="n">registry</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">postProcessBeanDefinitionRegistry</span><span class="o">(</span><span class="n">BeanDefinitionRegistry</span> <span class="n">registry</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
         <span class="k">for</span> <span class="o">(</span><span class="n">String</span> <span class="n">dsName</span> <span class="o">:</span> <span class="n">dataSourceMap</span><span class="o">.</span><span class="na">keySet</span><span class="o">())</span> <span class="o">{</span>
             <span class="n">PropertyValues</span> <span class="n">pv</span> <span class="o">=</span> <span class="n">dataSourceMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">dsName</span><span class="o">);</span>
             <span class="n">DataSourceBuilder</span> <span class="n">dataSourceBuilder</span> <span class="o">=</span> <span class="n">DataSourceBuilder</span><span class="o">.</span><span class="na">create</span><span class="o">();</span>  <span class="c1">// 这里并没有创建数据源, 只是依靠Spring拿到数据源类型</span>
@@ -338,7 +332,7 @@ custom.datasource.ds2.driver-class-name<span class="o">=</span>com.mysql.jdbc.Dr
      * 把自定义数据源的属性绑定到对应的bean上
      */</span>
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">postProcessBeanFactory</span><span class="o">(</span><span class="n">ConfigurableListableBeanFactory</span> <span class="n">beanFactory</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">postProcessBeanFactory</span><span class="o">(</span><span class="n">ConfigurableListableBeanFactory</span> <span class="n">beanFactory</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
         <span class="c1">// 把默认数据源设置为主数据源;</span>
         <span class="n">beanFactory</span><span class="o">.</span><span class="na">getBeanDefinition</span><span class="o">(</span><span class="s">"dataSource"</span><span class="o">).</span><span class="na">setPrimary</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
         <span class="c1">// 设置自定义数据源的属性绑定</span>
@@ -349,8 +343,7 @@ custom.datasource.ds2.driver-class-name<span class="o">=</span>com.mysql.jdbc.Dr
         <span class="o">}</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 

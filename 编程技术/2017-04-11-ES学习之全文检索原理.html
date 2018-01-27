@@ -104,17 +104,17 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#section">关于搜索</a></li>
-  <li><a href="#section-1">全文搜索的方法</a></li>
-  <li><a href="#section-2">倒排索引</a></li>
-  <li><a href="#section-3">创建索引</a></li>
-  <li><a href="#section-4">搜索索引</a></li>
-  <li><a href="#section-5">参考文章</a></li>
+  <li><a href="#关于搜索" id="markdown-toc-关于搜索">关于搜索</a></li>
+  <li><a href="#全文搜索的方法" id="markdown-toc-全文搜索的方法">全文搜索的方法</a></li>
+  <li><a href="#倒排索引" id="markdown-toc-倒排索引">倒排索引</a></li>
+  <li><a href="#创建索引" id="markdown-toc-创建索引">创建索引</a></li>
+  <li><a href="#搜索索引" id="markdown-toc-搜索索引">搜索索引</a></li>
+  <li><a href="#参考文章" id="markdown-toc-参考文章">参考文章</a></li>
 </ul>
 
 <hr />
 
-<h2 id="section">关于搜索</h2>
+<h2 id="关于搜索">关于搜索</h2>
 <p>搜索就是从一堆数据里找我们想要的内容, 我们先对数据做个分类:</p>
 
 <ul>
@@ -131,7 +131,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="section-1">全文搜索的方法</h2>
+<h2 id="全文搜索的方法">全文搜索的方法</h2>
 
 <p>对全文数据进行搜索, 最简单的一种方式就是顺序扫描, 如果要找某个字符串, 则需要从头到尾开始找, 找到了则该文档就是我们要找的文档, 接下来再从下一个文档中搜索。这种方法最简单，单数据量大的时候效率十分低。</p>
 
@@ -141,7 +141,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="section-2">倒排索引</h2>
+<h2 id="倒排索引">倒排索引</h2>
 
 <p>在顺序扫描中, 我们是匹配文档是否包含我们所查找的字符串, 即从文档中找字符串; 我们想要的结果是哪些文档中包含要找的字符串, 即找到字符串到文档的映射, 两者恰恰相反. 所以如果索引能够保存字符串到文档的映射关系, 搜索就会变快, 这种保存字符串到文档映射关系的索引, 被称作<code class="highlighter-rouge">反向索引</code>或<code class="highlighter-rouge">倒排索引</code>.</p>
 
@@ -155,7 +155,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="section-3">创建索引</h2>
+<h2 id="创建索引">创建索引</h2>
 
 <ul>
   <li>第一步: 把文档(<code class="highlighter-rouge">Document</code>)传给分词组件(<code class="highlighter-rouge">Tokenizer</code>)</li>
@@ -186,7 +186,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="section-4">搜索索引</h2>
+<h2 id="搜索索引">搜索索引</h2>
 
 <ul>
   <li>第一步: 输入查询语句</li>
@@ -221,7 +221,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="section-5">参考文章</h2>
+<h2 id="参考文章">参考文章</h2>
 
 <ul>
   <li><a href="http://www.kailing.pub/article/index/arcid/72.html">Lucene全文检索的基本原理</a></li>

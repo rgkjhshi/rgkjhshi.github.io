@@ -104,37 +104,36 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#section">语法全貌概览</a>    <ul>
-      <li><a href="#package">package</a></li>
-      <li><a href="#import">import</a></li>
-      <li><a href="#global">global</a></li>
-      <li><a href="#functon">functon</a></li>
+  <li><a href="#语法全貌概览" id="markdown-toc-语法全貌概览">语法全貌概览</a>    <ul>
+      <li><a href="#package" id="markdown-toc-package">package</a></li>
+      <li><a href="#import" id="markdown-toc-import">import</a></li>
+      <li><a href="#global" id="markdown-toc-global">global</a></li>
+      <li><a href="#functon" id="markdown-toc-functon">functon</a></li>
     </ul>
   </li>
-  <li><a href="#rule">rule</a></li>
-  <li><a href="#section-1">规则属性</a></li>
-  <li><a href="#when">when</a></li>
-  <li><a href="#then">then</a></li>
+  <li><a href="#rule" id="markdown-toc-rule">rule</a></li>
+  <li><a href="#规则属性" id="markdown-toc-规则属性">规则属性</a></li>
+  <li><a href="#when" id="markdown-toc-when">when</a></li>
+  <li><a href="#then" id="markdown-toc-then">then</a></li>
 </ul>
 
 <hr />
 
-<h2 id="section">语法全貌概览</h2>
+<h2 id="语法全貌概览">语法全貌概览</h2>
 
 <p>规则文件一般都是<code class="highlighter-rouge">.drl</code>文件, 也可以是<code class="highlighter-rouge">xml</code>文件. 我们默认都是用<code class="highlighter-rouge">.drl</code>文件. 一个规则文件大致会有这样的结构:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kr">package</span>   <span class="cm">/* 包名, 必须, 逻辑上的管理, 不对应物理位置 */</span>
-<span class="kr">import</span>    <span class="cm">/* 导入类或方法, 与java中的import类似 */</span>
-<span class="nx">global</span>    <span class="cm">/* 全局变量 */</span>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">package</span>   <span class="cm">/* 包名, 必须, 逻辑上的管理, 不对应物理位置 */</span>
+<span class="k">import</span>    <span class="cm">/* 导入类或方法, 与java中的import类似 */</span>
+<span class="nb">global</span>    <span class="cm">/* 全局变量 */</span>
 <span class="kd">function</span>  <span class="cm">/* 定义函数 */</span>
 <span class="nx">query</span>     <span class="cm">/* 查询 */</span>
 <span class="nx">rule</span>      <span class="cm">/* 规则, 可以由多个; 这是规则文件的主要部分 */</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>来个具体的规则文件的例子:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kr">package</span> <span class="nx">com</span><span class="p">.</span><span class="nx">test</span><span class="p">.</span><span class="nx">drools</span><span class="p">;</span>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">package</span> <span class="nx">com</span><span class="p">.</span><span class="nx">test</span><span class="p">.</span><span class="nx">drools</span><span class="p">;</span>
 
 <span class="kd">function</span> <span class="k">void</span> <span class="nx">showName</span><span class="p">(</span><span class="nb">String</span> <span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">System</span><span class="p">.</span><span class="nx">out</span><span class="p">.</span><span class="nx">println</span><span class="p">(</span><span class="s2">"我是"</span> <span class="o">+</span> <span class="nx">name</span><span class="p">);</span>
@@ -142,13 +141,12 @@ jQuery(function(){
 
 <span class="nx">rule</span> <span class="s2">"rule1"</span>
     <span class="nx">when</span>
-        <span class="nb">eval</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
+        <span class="kr">eval</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
     <span class="nx">then</span>
         <span class="nx">System</span><span class="p">.</span><span class="nx">out</span><span class="p">.</span><span class="nx">println</span><span class="p">(</span><span class="s2">"hello drools"</span><span class="p">);</span>
         <span class="nx">showName</span><span class="p">(</span><span class="s2">"test"</span><span class="p">);</span>
 <span class="nx">end</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="package">package</h3>
 
@@ -178,15 +176,14 @@ jQuery(function(){
 
 <p>定义一个规则, 格式大致为:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">rule</span> <span class="s2">"规则名"</span>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">rule</span> <span class="s2">"规则名"</span>
     <span class="o">&lt;</span><span class="err">属性</span><span class="o">&gt;&lt;</span><span class="err">值</span><span class="o">&gt;</span>
     <span class="nx">when</span>
         <span class="err">条件</span> <span class="p">(</span><span class="err">也叫</span> <span class="nx">Left</span> <span class="nx">Hand</span> <span class="nx">Side</span><span class="p">,</span> <span class="err">简称</span> <span class="nx">LHS</span><span class="p">)</span>
     <span class="nx">then</span>
         <span class="err">结果</span> <span class="p">(</span><span class="err">也叫</span> <span class="nx">Right</span> <span class="nx">Hand</span> <span class="nx">Side</span><span class="p">,</span> <span class="err">简称</span> <span class="nx">RHS</span><span class="p">)</span>
 <span class="nx">end</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>主要包含三部分:</p>
 
@@ -198,7 +195,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="section-1">规则属性</h2>
+<h2 id="规则属性">规则属性</h2>
 <p>属性有这些内容: <code class="highlighter-rouge">activation-group</code>, <code class="highlighter-rouge">agenda-group</code>, <code class="highlighter-rouge">auto-focus</code>, <code class="highlighter-rouge">date-effective</code>, <code class="highlighter-rouge">date-expires</code>, <code class="highlighter-rouge">dialect</code>, <code class="highlighter-rouge">duration</code>, <code class="highlighter-rouge">duration-value</code>, <code class="highlighter-rouge">enabled</code>, <code class="highlighter-rouge">lock-on-active</code>, <code class="highlighter-rouge">no-loop</code>, <code class="highlighter-rouge">ruleflow-group</code>, <code class="highlighter-rouge">salience</code></p>
 
 <p>下面挨个解释:</p>
@@ -222,22 +219,21 @@ jQuery(function(){
 <hr />
 
 <h2 id="when">when</h2>
-<p>条件部分(Conditions/LHS)用于匹配条件, 也叫匹配模式(Pattern)  </p>
+<p>条件部分(Conditions/LHS)用于匹配条件, 也叫匹配模式(Pattern)</p>
 
 <p>条件可以是单个, 也可以有多个, 下面是一些例子</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">when</span>
-    <span class="nb">eval</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>            <span class="c1">// 是一个默认的api, 类似于 while(true)</span>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">when</span>
+    <span class="kr">eval</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>            <span class="c1">// 是一个默认的api, 类似于 while(true)</span>
     <span class="nx">Person</span><span class="p">()</span>              <span class="c1">// 当前的 workingMemory 中存在 Pserson 类型的 Fact 对象</span>
-    <span class="nl">$person</span><span class="p">:</span><span class="nx">Person</span><span class="p">()</span>      <span class="c1">// 同上, $person 是给对象起的名字</span>
-    <span class="nl">$bob</span><span class="p">:</span><span class="nx">Person</span><span class="p">(</span><span class="nx">name</span> <span class="o">==</span> <span class="s2">"bob"</span><span class="p">)</span>  <span class="c1">// 字段绑定, 存在 Person 类型且属性 name 值为bob的对象</span>
-    <span class="nx">Person</span><span class="p">(</span><span class="nx">$name</span><span class="err">:</span><span class="nx">name</span> <span class="o">==</span> <span class="s2">"bob"</span><span class="p">)</span> <span class="c1">// 与上面类似, 只是把名字放到了 $name 变量里</span>
+    <span class="nx">$person</span><span class="p">:</span><span class="nx">Person</span><span class="p">()</span>      <span class="c1">// 同上, $person 是给对象起的名字</span>
+    <span class="nx">$bob</span><span class="p">:</span><span class="nx">Person</span><span class="p">(</span><span class="nx">name</span> <span class="o">==</span> <span class="s2">"bob"</span><span class="p">)</span>  <span class="c1">// 字段绑定, 存在 Person 类型且属性 name 值为bob的对象</span>
+    <span class="nx">Person</span><span class="p">(</span><span class="nx">$name</span><span class="p">:</span><span class="nx">name</span> <span class="o">==</span> <span class="s2">"bob"</span><span class="p">)</span> <span class="c1">// 与上面类似, 只是把名字放到了 $name 变量里</span>
     <span class="nx">Person</span><span class="p">(</span><span class="nx">name</span> <span class="o">==</span> <span class="nx">$name</span><span class="p">)</span> <span class="c1">// 与上面类似, 只是把名字放到了 $name 变量里</span>
-    <span class="nl">$tom</span><span class="p">:</span><span class="nx">Person</span><span class="p">(</span><span class="nx">name</span> <span class="o">==</span> <span class="s2">"tom"</span> <span class="o">||</span> <span class="nx">name</span> <span class="o">==</span> <span class="s2">"Tom"</span><span class="p">)</span> <span class="c1">// 条件组合</span>
+    <span class="nx">$tom</span><span class="p">:</span><span class="nx">Person</span><span class="p">(</span><span class="nx">name</span> <span class="o">==</span> <span class="s2">"tom"</span> <span class="o">||</span> <span class="nx">name</span> <span class="o">==</span> <span class="s2">"Tom"</span><span class="p">)</span> <span class="c1">// 条件组合</span>
 <span class="nx">then</span>
     <span class="p">...</span>  <span class="c1">// 上面起的变量这里可以直接使用</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>注意:</p>
 

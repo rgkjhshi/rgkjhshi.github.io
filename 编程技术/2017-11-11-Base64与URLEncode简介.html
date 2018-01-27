@@ -102,26 +102,26 @@ jQuery(function(){
             <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#base64">Base64简介</a>    <ul>
-      <li><a href="#base64-1">Base64原理</a></li>
-      <li><a href="#url-safebase64">URL safe的Base64编码</a></li>
-      <li><a href="#base64-2">Base64工具类</a></li>
+  <li><a href="#base64简介" id="markdown-toc-base64简介">Base64简介</a>    <ul>
+      <li><a href="#base64原理" id="markdown-toc-base64原理">Base64原理</a></li>
+      <li><a href="#url-safe的base64编码" id="markdown-toc-url-safe的base64编码">URL safe的Base64编码</a></li>
+      <li><a href="#base64工具类" id="markdown-toc-base64工具类">Base64工具类</a></li>
     </ul>
   </li>
-  <li><a href="#urlencode">URLEncode简介</a>    <ul>
-      <li><a href="#section">编码规则</a></li>
-      <li><a href="#urlencode-1">URLEncode工具类</a></li>
+  <li><a href="#urlencode简介" id="markdown-toc-urlencode简介">URLEncode简介</a>    <ul>
+      <li><a href="#编码规则" id="markdown-toc-编码规则">编码规则</a></li>
+      <li><a href="#urlencode工具类" id="markdown-toc-urlencode工具类">URLEncode工具类</a></li>
     </ul>
   </li>
-  <li><a href="#section-1">相关链接</a></li>
+  <li><a href="#相关链接" id="markdown-toc-相关链接">相关链接</a></li>
 </ul>
 
 <hr />
 
-<h2 id="base64">Base64简介</h2>
+<h2 id="base64简介">Base64简介</h2>
 <p><code class="highlighter-rouge">Base64</code>是最常见的一种基于64个可打印字符来表示二进制数据的方法.</p>
 
-<h3 id="base64-1">Base64原理</h3>
+<h3 id="base64原理">Base64原理</h3>
 
 <ul>
   <li>首先, <code class="highlighter-rouge">Base64</code>基于64个可打印字符, 这64个字符有<code class="highlighter-rouge">A~Z</code>, <code class="highlighter-rouge">a~z</code>, <code class="highlighter-rouge">0~9</code>, <code class="highlighter-rouge">+</code>, <code class="highlighter-rouge">/</code></li>
@@ -148,11 +148,11 @@ jQuery(function(){
 
 <p>由于<code class="highlighter-rouge">=</code>在<code class="highlighter-rouge">URL、Cookie</code>里面会造成歧义, 所以, 很多<code class="highlighter-rouge">Base64</code>编码后会把<code class="highlighter-rouge">=</code>去掉。因为<code class="highlighter-rouge">Base64</code>是把3个字节变为4个字节, 所以, <code class="highlighter-rouge">Base64</code>编码的长度永远是4的倍数, 因此, 加上<code class="highlighter-rouge">=</code>把Base64字符串的长度变为4的倍数，就可以正常解码了。</p>
 
-<h3 id="url-safebase64">URL safe的Base64编码</h3>
+<h3 id="url-safe的base64编码">URL safe的Base64编码</h3>
 
 <p>由于标准的<code class="highlighter-rouge">Base64</code>编码后可能出现字符<code class="highlighter-rouge">+</code>和<code class="highlighter-rouge">/</code>, 在URL中就不能直接作为参数, 所以又有一种<code class="highlighter-rouge">url safe</code>的<code class="highlighter-rouge">base64</code>编码, 其实就是把字符<code class="highlighter-rouge">+</code>和<code class="highlighter-rouge">/</code>分别变成<code class="highlighter-rouge">-</code>和<code class="highlighter-rouge">_</code></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>        <span class="c1">// 下面这段代码来自于JDK1.8中的 java.util.Base64</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="c1">// 下面这段代码来自于JDK1.8中的 java.util.Base64</span>
         <span class="cm">/**
          * This array is a lookup table that translates 6-bit positive integer
          * index values into their "Base64 Alphabet" equivalents as specified
@@ -178,10 +178,9 @@ jQuery(function(){
             <span class="sc">'n'</span><span class="o">,</span> <span class="sc">'o'</span><span class="o">,</span> <span class="sc">'p'</span><span class="o">,</span> <span class="sc">'q'</span><span class="o">,</span> <span class="sc">'r'</span><span class="o">,</span> <span class="sc">'s'</span><span class="o">,</span> <span class="sc">'t'</span><span class="o">,</span> <span class="sc">'u'</span><span class="o">,</span> <span class="sc">'v'</span><span class="o">,</span> <span class="sc">'w'</span><span class="o">,</span> <span class="sc">'x'</span><span class="o">,</span> <span class="sc">'y'</span><span class="o">,</span> <span class="sc">'z'</span><span class="o">,</span>
             <span class="sc">'0'</span><span class="o">,</span> <span class="sc">'1'</span><span class="o">,</span> <span class="sc">'2'</span><span class="o">,</span> <span class="sc">'3'</span><span class="o">,</span> <span class="sc">'4'</span><span class="o">,</span> <span class="sc">'5'</span><span class="o">,</span> <span class="sc">'6'</span><span class="o">,</span> <span class="sc">'7'</span><span class="o">,</span> <span class="sc">'8'</span><span class="o">,</span> <span class="sc">'9'</span><span class="o">,</span> <span class="sc">'-'</span><span class="o">,</span> <span class="sc">'_'</span>
         <span class="o">};</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="base64-2">Base64工具类</h3>
+<h3 id="base64工具类">Base64工具类</h3>
 
 <ul>
   <li>在<code class="highlighter-rouge">Guava</code>中有<code class="highlighter-rouge">BaseEncoding</code>类</li>
@@ -191,8 +190,8 @@ jQuery(function(){
   <li>除了<code class="highlighter-rouge">JDK7</code>, 其他的工具类中都有<code class="highlighter-rouge">url safe</code>的<code class="highlighter-rouge">Base64</code>编码方法, 而且<code class="highlighter-rouge">JDK7</code>中会产生换行符!</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// guava 工具类的使用</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">testBase64</span><span class="o">()</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// guava 工具类的使用</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testBase64</span><span class="o">()</span> <span class="o">{</span>
         <span class="c1">// 原串</span>
         <span class="n">String</span> <span class="n">origin</span> <span class="o">=</span> <span class="s">"abc"</span><span class="o">;</span>
         <span class="c1">// encode</span>
@@ -203,7 +202,7 @@ jQuery(function(){
         <span class="n">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="n">origin</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>
     <span class="o">}</span>
     <span class="c1">// Spring 工具类的使用</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">testBase64</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testBase64</span><span class="o">()</span> <span class="o">{</span>
         <span class="c1">// 原串</span>
         <span class="n">String</span> <span class="n">origin</span> <span class="o">=</span> <span class="s">"abc"</span><span class="o">;</span>
         <span class="c1">// encode</span>
@@ -214,7 +213,7 @@ jQuery(function(){
         <span class="n">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="n">origin</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>
     <span class="o">}</span>
     <span class="c1">// JDK8 工具类的使用</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">testBase64</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testBase64</span><span class="o">()</span> <span class="o">{</span>
         <span class="c1">// 原串</span>
         <span class="n">String</span> <span class="n">origin</span> <span class="o">=</span> <span class="s">"abc"</span><span class="o">;</span>
         <span class="c1">// encode</span>
@@ -225,7 +224,7 @@ jQuery(function(){
         <span class="n">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="n">origin</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>
     <span class="o">}</span>
     <span class="c1">// JDK7 工具类的使用(解码时会抛出 IOException)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">testBase64</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testBase64</span><span class="o">()</span> <span class="o">{</span>
         <span class="c1">// 原串</span>
         <span class="n">String</span> <span class="n">origin</span> <span class="o">=</span> <span class="s">"abc"</span><span class="o">;</span>
         <span class="c1">// encode, 如果原串比较长, 这个方法得到的签名会有换行符, 所以最好不要用JDK7的这个工具</span>
@@ -240,15 +239,14 @@ jQuery(function(){
         <span class="c1">// result = origin</span>
         <span class="n">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="n">origin</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>
     <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="urlencode">URLEncode简介</h2>
+<h2 id="urlencode简介">URLEncode简介</h2>
 <p><code class="highlighter-rouge">URLEncoder</code>和<code class="highlighter-rouge">URLDecoder</code>用于完成普通字符串和<code class="highlighter-rouge">application/x-www-form-urlencoded</code>MIME类型的字符串之间的相互转换</p>
 
-<h3 id="section">编码规则</h3>
+<h3 id="编码规则">编码规则</h3>
 <p><code class="highlighter-rouge">application/x-www-form-urlencoded</code>类型会按照如下规则进行字符串转换</p>
 
 <ul>
@@ -258,11 +256,11 @@ jQuery(function(){
   <li>在每个<code class="highlighter-rouge">name=value</code>对之间放置<code class="highlighter-rouge">&amp;</code>符号(这条规则跟编码没关系)</li>
 </ul>
 
-<h3 id="urlencode-1">URLEncode工具类</h3>
+<h3 id="urlencode工具类">URLEncode工具类</h3>
 <p><code class="highlighter-rouge">JDK</code>自带了两个工具类 <code class="highlighter-rouge">URLEncoder</code>和<code class="highlighter-rouge">URLDecoder</code>, 下面是用法</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nd">@Test</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">testURLEncode</span><span class="o">()</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testURLEncode</span><span class="o">()</span> <span class="o">{</span>
         <span class="n">String</span> <span class="n">str</span> <span class="o">=</span> <span class="s">"*. -_~!"</span><span class="o">;</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">str</span><span class="o">);</span>     <span class="c1">// *. -_~!</span>
         <span class="n">String</span> <span class="n">encode</span> <span class="o">=</span> <span class="n">URLEncoder</span><span class="o">.</span><span class="na">encode</span><span class="o">(</span><span class="n">str</span><span class="o">);</span>
@@ -275,12 +273,11 @@ jQuery(function(){
         <span class="n">decode</span> <span class="o">=</span> <span class="n">URLDecoder</span><span class="o">.</span><span class="na">decode</span><span class="o">(</span><span class="n">decode</span><span class="o">);</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">decode</span><span class="o">);</span>  <span class="c1">// *. -_~!</span>
     <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="section-1">相关链接</h2>
+<h2 id="相关链接">相关链接</h2>
 
 <ul>
   <li><a href="https://www.cnblogs.com/chengmo/archive/2014/05/18/3735917.html">Base64算法原理</a></li>

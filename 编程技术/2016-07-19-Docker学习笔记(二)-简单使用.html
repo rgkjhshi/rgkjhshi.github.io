@@ -104,63 +104,60 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#section">命令格式</a></li>
-  <li><a href="#section-1">简单使用</a>    <ul>
-      <li><a href="#hello-world">hello world</a></li>
-      <li><a href="#section-2">交互式运行</a></li>
-      <li><a href="#section-3">后台运行</a></li>
-      <li><a href="#section-4">查看容器</a></li>
-      <li><a href="#section-5">容器命名</a></li>
-      <li><a href="#section-6">查看容器的输出</a></li>
-      <li><a href="#section-7">停止/启动容器</a></li>
-      <li><a href="#section-8">删除容器</a></li>
+  <li><a href="#命令格式" id="markdown-toc-命令格式">命令格式</a></li>
+  <li><a href="#简单使用" id="markdown-toc-简单使用">简单使用</a>    <ul>
+      <li><a href="#hello-world" id="markdown-toc-hello-world">hello world</a></li>
+      <li><a href="#交互式运行" id="markdown-toc-交互式运行">交互式运行</a></li>
+      <li><a href="#后台运行" id="markdown-toc-后台运行">后台运行</a></li>
+      <li><a href="#查看容器" id="markdown-toc-查看容器">查看容器</a></li>
+      <li><a href="#容器命名" id="markdown-toc-容器命名">容器命名</a></li>
+      <li><a href="#查看容器的输出" id="markdown-toc-查看容器的输出">查看容器的输出</a></li>
+      <li><a href="#停止启动容器" id="markdown-toc-停止启动容器">停止/启动容器</a></li>
+      <li><a href="#删除容器" id="markdown-toc-删除容器">删除容器</a></li>
     </ul>
   </li>
-  <li><a href="#web">运行web程序(使用端口)</a>    <ul>
-      <li><a href="#section-9">查看端口</a></li>
-      <li><a href="#section-10">查看程序日志</a></li>
-      <li><a href="#section-11">检查容器</a></li>
+  <li><a href="#运行web程序使用端口" id="markdown-toc-运行web程序使用端口">运行web程序(使用端口)</a>    <ul>
+      <li><a href="#查看端口" id="markdown-toc-查看端口">查看端口</a></li>
+      <li><a href="#查看程序日志" id="markdown-toc-查看程序日志">查看程序日志</a></li>
+      <li><a href="#检查容器" id="markdown-toc-检查容器">检查容器</a></li>
     </ul>
   </li>
-  <li><a href="#section-12">镜像操作</a>    <ul>
-      <li><a href="#section-13">显示本地镜像</a></li>
-      <li><a href="#section-14">获取镜像</a></li>
-      <li><a href="#section-15">搜索镜像</a></li>
-      <li><a href="#section-16">制作镜像</a></li>
-      <li><a href="#tag">镜像的tag</a></li>
-      <li><a href="#section-17">提交镜像</a></li>
-      <li><a href="#section-18">删除镜像</a></li>
-      <li><a href="#image-digests">Image Digests</a></li>
+  <li><a href="#镜像操作" id="markdown-toc-镜像操作">镜像操作</a>    <ul>
+      <li><a href="#显示本地镜像" id="markdown-toc-显示本地镜像">显示本地镜像</a></li>
+      <li><a href="#获取镜像" id="markdown-toc-获取镜像">获取镜像</a></li>
+      <li><a href="#搜索镜像" id="markdown-toc-搜索镜像">搜索镜像</a></li>
+      <li><a href="#制作镜像" id="markdown-toc-制作镜像">制作镜像</a></li>
+      <li><a href="#镜像的tag" id="markdown-toc-镜像的tag">镜像的tag</a></li>
+      <li><a href="#提交镜像" id="markdown-toc-提交镜像">提交镜像</a></li>
+      <li><a href="#删除镜像" id="markdown-toc-删除镜像">删除镜像</a></li>
+      <li><a href="#image-digests" id="markdown-toc-image-digests">Image Digests</a></li>
     </ul>
   </li>
 </ul>
 
 <hr />
 
-<h2 id="section">命令格式</h2>
+<h2 id="命令格式">命令格式</h2>
 
 <p><code class="highlighter-rouge">Docker</code>安装过程参考<a href="https://docs.docker.com/">官网</a>, 安装成功后我们可以通过命令行接口(CLI)来使用<code class="highlighter-rouge">Docker</code>, 每个命令都可能会包含一些标记(<code class="highlighter-rouge">flags</code>)和参数(<code class="highlighter-rouge">arguments</code>), 命令的格式大致如下:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nx">$</span> <span class="p">[</span><span class="nx">sudo</span><span class="p">]</span> <span class="nx">docker</span> <span class="p">[</span><span class="nx">subcommand</span><span class="p">]</span> <span class="p">[</span><span class="nx">flags</span><span class="p">]</span> <span class="p">[</span><span class="nx">arguments</span><span class="p">]</span> <span class="p">..</span>
-</code></pre>
-</div>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span> <span class="p">[</span><span class="nx">sudo</span><span class="p">]</span> <span class="nx">docker</span> <span class="p">[</span><span class="nx">subcommand</span><span class="p">]</span> <span class="p">[</span><span class="nx">flags</span><span class="p">]</span> <span class="p">[</span><span class="kr">arguments</span><span class="p">]</span> <span class="p">..</span>
+</code></pre></div></div>
 <p>比如刚安装完成可以查看<code class="highlighter-rouge">Docker</code>的版本信息:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ docker version
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker version
+</code></pre></div></div>
 
 <p>我们可以通过<code class="highlighter-rouge">--help</code>标记来获取帮助, 比如列出<code class="highlighter-rouge">docker</code>命令的所有选项(子命令)和用法、查看子命令的用法</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>docker --help
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker <span class="nt">--help</span>
 <span class="c"># 查看 attach 子命令的用法</span>
-<span class="gp">$ </span>docker attach --help
-</code></pre>
-</div>
+<span class="nv">$ </span>docker attach <span class="nt">--help</span>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="section-1">简单使用</h2>
+<h2 id="简单使用">简单使用</h2>
 
 <p>常用的命令使用方式示例以及一些解释</p>
 
@@ -170,24 +167,21 @@ jQuery(function(){
 
 <p>先来个简单例子:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ docker run hello-world
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker run hello-world
+</code></pre></div></div>
 <p>当运行镜像<code class="highlighter-rouge">hello-world</code>时, 会先检查本地是否有这个镜像, 没有则会去仓库(默认是docker hub)下载</p>
 
 <p>其他例子:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ docker run ubuntu /bin/echo 'Hello world'
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker run ubuntu /bin/echo 'Hello world'
 Hello world
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="section-2">交互式运行</h3>
+<h3 id="交互式运行">交互式运行</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ docker run -t -i ubuntu /bin/bash
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker run -t -i ubuntu /bin/bash
 root@a98895ac1616:/#
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ul>
   <li><code class="highlighter-rouge">-t</code> flag: 给容器分配一个tty终端</li>
@@ -195,25 +189,23 @@ root@a98895ac1616:/#
   <li><code class="highlighter-rouge">/bin/bash</code>: 在容器里运行的<code class="highlighter-rouge">bash shell</code>, 可用shell命令<code class="highlighter-rouge">exit</code>退出容器</li>
 </ul>
 
-<h3 id="section-3">后台运行</h3>
+<h3 id="后台运行">后台运行</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ docker run -d ubuntu /bin/sh -c "while true; do echo hello world; sleep 1; done"
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker run -d ubuntu /bin/sh -c "while true; do echo hello world; sleep 1; done"
 28f3adccbae408573bbe6ecc03ad621d4257fbf1a79c672cc8d83ad327266807
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ul>
   <li><code class="highlighter-rouge">-d</code> flag: 后台运行容器(daemonize)</li>
   <li>输出的那一长串是<code class="highlighter-rouge">container ID</code></li>
 </ul>
 
-<h3 id="section-4">查看容器</h3>
+<h3 id="查看容器">查看容器</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ docker ps
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker ps
 CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
 28f3adccbae4        ubuntu              "/bin/sh -c 'while tr"   4 minutes ago       Up 4 minutes                            zen_curran
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ul>
   <li><code class="highlighter-rouge">container ID</code>: 前面那一长串的缩写</li>
@@ -226,110 +218,98 @@ CONTAINER ID        IMAGE               COMMAND                  CREATED        
   <li><code class="highlighter-rouge">docker ps -a</code>: 查看所有运行过的容器</li>
 </ul>
 
-<h3 id="section-5">容器命名</h3>
+<h3 id="容器命名">容器命名</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ docker run --name hello ubuntu /bin/echo 'Hello world'
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker run --name hello ubuntu /bin/echo 'Hello world'
 Hello world
 $ docker ps -l
 CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                     PORTS               NAMES
 c4c79c82eb6c        ubuntu              "/bin/echo 'Hello wor"   48 minutes ago      Exited (0) 2 seconds ago                       hello
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ul>
   <li>容器的名字已经变成了<code class="highlighter-rouge">hello</code>而不再是自动起的名</li>
 </ul>
 
-<h3 id="section-6">查看容器的输出</h3>
+<h3 id="查看容器的输出">查看容器的输出</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ docker logs zen_curran
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker logs zen_curran
 hello world
 hello world
 ...
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="section-7">停止/启动容器</h3>
+<h3 id="停止启动容器">停止/启动容器</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ docker stop zen_curran
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker stop zen_curran
+</code></pre></div></div>
 <p>可以再次运行某个容器</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ docker start zen_curran
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker start zen_curran
+</code></pre></div></div>
 
-<h3 id="section-8">删除容器</h3>
+<h3 id="删除容器">删除容器</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ docker rm zen_curran
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker rm zen_curran
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="web">运行web程序(使用端口)</h2>
+<h2 id="运行web程序使用端口">运行web程序(使用端口)</h2>
 <p>新下载一个镜像<code class="highlighter-rouge">training/webapp</code>, 运行<code class="highlighter-rouge">python app.py</code>可运行python写的web程序, 通过下面的命令运行容器</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ docker run -d -P training/webapp python app.py
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker run -d -P training/webapp python app.py
+</code></pre></div></div>
 <p>查看该容器的信息:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ docker ps -l
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker ps -l
 CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS                     NAMES
 9b32553a8272        training/webapp     "python app.py"     12 minutes ago      Up 12 minutes       0.0.0.0:32768-&gt;5000/tcp   admiring_mayer
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>其中有个与其他程序不一样的地方:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>PORTS
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PORTS
 0.0.0.0:32768-&gt;5000/tcp
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>这就是<code class="highlighter-rouge">-P</code>的作用, 上面描述的意思是<code class="highlighter-rouge">Dcoker</code>容器里的端口是<code class="highlighter-rouge">5000(Python Flask的默认端口)</code>暴露到了属主机的<code class="highlighter-rouge">32768</code>端口.<br />
 上面<code class="highlighter-rouge">-P</code>的作用等同于<code class="highlighter-rouge">-p 5000</code>, 将暴露容器中的端口<code class="highlighter-rouge">5000</code>到一个更大的宿主机端口上(临时端口映射范围一般为<code class="highlighter-rouge">32768~61000</code>).<br />
 也可以自己指定使用某个具体的端口:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ docker run -d -p 80:5000 training/webapp python app.py
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker run -d -p 80:5000 training/webapp python app.py
+</code></pre></div></div>
 
 <p>访问容器运行起来的web程序地址为:<code class="highlighter-rouge">127.0.0.1:80</code></p>
 
-<h3 id="section-9">查看端口</h3>
+<h3 id="查看端口">查看端口</h3>
 <p>上面的<code class="highlighter-rouge">docker ps</code>可以看到容器的端口信息, 还有个更简单的命令<code class="highlighter-rouge">docker port</code>, 指定要查看的容器的<code class="highlighter-rouge">name</code>或<code class="highlighter-rouge">ID</code>即可:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ docker port 9b32553a8272
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker port 9b32553a8272
 5000/tcp -&gt; 0.0.0.0:32768
 $ docker port admiring_mayer 5000
 0.0.0.0:32768
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="section-10">查看程序日志</h3>
+<h3 id="查看程序日志">查看程序日志</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ docker logs -f admiring_mayer
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker logs -f admiring_mayer
  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
 172.17.0.1 - - [19/Jul/2016 09:10:49] "GET / HTTP/1.1" 200 -
 172.17.0.1 - - [19/Jul/2016 09:10:49] "GET /favicon.ico HTTP/1.1" 404 -
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ul>
   <li><code class="highlighter-rouge">-f</code>: 类似与<code class="highlighter-rouge">tail -f</code>的形式查看</li>
 </ul>
 
-<h3 id="section-11">检查容器</h3>
+<h3 id="检查容器">检查容器</h3>
 
 <p>使用<code class="highlighter-rouge">docker inspect</code>命令可以获取一些信息, 如:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ docker inspect admiring_mayer
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker inspect admiring_mayer
+</code></pre></div></div>
 <p>可以看到一些json格式的信息:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">[</span>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span>
     <span class="p">{</span>
         <span class="s2">"Id"</span><span class="p">:</span> <span class="s2">"9b32553a82729a012b33b157abefb7639f1a59007042454f7ea543982a888466"</span><span class="p">,</span>
         <span class="s2">"Created"</span><span class="p">:</span> <span class="s2">"2016-07-19T08:40:01.882402323Z"</span><span class="p">,</span>
@@ -341,21 +321,19 @@ $ docker port admiring_mayer 5000
             <span class="s2">"Status"</span><span class="p">:</span> <span class="s2">"running"</span><span class="p">,</span>
             <span class="s2">"Running"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
 <span class="p">...</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="section-12">镜像操作</h2>
+<h2 id="镜像操作">镜像操作</h2>
 
-<h3 id="section-13">显示本地镜像</h3>
+<h3 id="显示本地镜像">显示本地镜像</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ docker images
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
 ubuntu              latest              cf62323fa025        11 days ago         125 MB
 hello-world         latest              c54a2cc56cbb        2 weeks ago         1.848 kB
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ul>
   <li><code class="highlighter-rouge">REPOSITORY</code>: 镜像来自哪个仓库, 如<code class="highlighter-rouge">ubuntu</code></li>
@@ -365,24 +343,22 @@ hello-world         latest              c54a2cc56cbb        2 weeks ago         
 
 <p>每个镜像都有很多版本, 你可以指定某个版本, 如<code class="highlighter-rouge">$ docker run -t -i ubuntu:14.04 /bin/bash</code>, 当不指定时, 默认都是<code class="highlighter-rouge">latest</code>.</p>
 
-<h3 id="section-14">获取镜像</h3>
+<h3 id="获取镜像">获取镜像</h3>
 <p>之前都是直接<code class="highlighter-rouge">run</code>的, 会自动获取镜像, 也可以仅获取, 不运行:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ docker pull ubuntu:14.04
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker pull ubuntu:14.04
 $ docker pull centos
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="section-15">搜索镜像</h3>
+<h3 id="搜索镜像">搜索镜像</h3>
 <p>可以去<a href="https://hub.docker.com/">Docker Hub</a>搜索镜像, 也可以在命令行搜索</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ docker search ubuntu
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker search ubuntu
 NAME                              DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED
 ubuntu                            Ubuntu is a Debian-based Linux operating s...   4293      [OK]       
 ubuntu-upstart                    Upstart is an event-based replacement for ...   65        [OK]       
 rastasheep/ubuntu-sshd            Dockerized SSH service, built on top of of...   29                   [OK]
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ul>
   <li><code class="highlighter-rouge">STARS</code>: 表示该镜像的受欢迎程度</li>
@@ -390,7 +366,7 @@ rastasheep/ubuntu-sshd            Dockerized SSH service, built on top of of... 
   <li><code class="highlighter-rouge">AUTOMATED</code>: 表示是用户制作的镜像,<code class="highlighter-rouge">/</code>前面就是用户名</li>
 </ul>
 
-<h3 id="section-16">制作镜像</h3>
+<h3 id="制作镜像">制作镜像</h3>
 <p>我们可以通过两种方式来制作镜像</p>
 
 <ol>
@@ -402,23 +378,20 @@ rastasheep/ubuntu-sshd            Dockerized SSH service, built on top of of... 
 
 <p>通过<code class="highlighter-rouge">training/sinatra</code>镜像运行起来一个容器:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ docker run -t -i training/sinatra /bin/bash
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker run -t -i training/sinatra /bin/bash
 root@0b2616b0e5a8:/#
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>记住这个容器的id:<code class="highlighter-rouge">0b2616b0e5a8</code>,一会儿会用. 然后通过bash在容器中安装<code class="highlighter-rouge">json</code> gem</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>root@0b2616b0e5a8:/# gem install json
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@0b2616b0e5a8:/# gem install json
+</code></pre></div></div>
 <p>完成之后退出容器就可以了</p>
 
 <p>最后我们用<code class="highlighter-rouge">docker commit</code>命令, 把刚才已经改变了的容器提交一个副本制作成镜像</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ docker commit -m "Added json gem" -a "Kate Smith" 0b2616b0e5a8 ouruser/sinatra:v2
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker commit -m "Added json gem" -a "Kate Smith" 0b2616b0e5a8 ouruser/sinatra:v2
 4f177bd27a9ff0f6dc2a830403925b5360bfe0b93d476f7fc3231110e7f71b1c
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ul>
   <li><code class="highlighter-rouge">-m</code>: 添加描述信息, 类似于<code class="highlighter-rouge">git commit -m</code></li>
@@ -431,20 +404,18 @@ root@0b2616b0e5a8:/#
 
 <p>通过<code class="highlighter-rouge">docker build</code>命令编译<code class="highlighter-rouge">Dockerfile</code>来制作镜像, 首先创建一个目录和一个<code class="highlighter-rouge">Dockerfile</code>文件:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ mkdir sinatra
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ mkdir sinatra
 $ cd sinatra
 $ touch Dockerfile
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>然后在<code class="highlighter-rouge">Dockerfile</code>文件里添加类似于下面的内容:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># This is a comment</span>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># This is a comment</span>
 FROM ubuntu:14.04
 MAINTAINER Kate Smith &lt;ksmith@example.com&gt;
-RUN apt-get update <span class="o">&amp;&amp;</span> apt-get install -y ruby ruby-dev
+RUN apt-get update <span class="o">&amp;&amp;</span> apt-get install <span class="nt">-y</span> ruby ruby-dev
 RUN gem install sinatra
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>上面<code class="highlighter-rouge">#</code>开头的是注释, 下面是指令, 指令的格式类似于<code class="highlighter-rouge">INSTRUCTION statement</code>, 每条指令都会创建镜像的一层</p>
 
@@ -456,55 +427,49 @@ RUN gem install sinatra
 
 <p>最后我们编译<code class="highlighter-rouge">Dockerfile</code></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ docker build -t ouruser/sinatra:v2 .
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker build -t ouruser/sinatra:v2 .
+</code></pre></div></div>
 
 <ul>
   <li><code class="highlighter-rouge">-t</code>: 来指定一个新的<code class="highlighter-rouge">tag</code>, 形式为:<code class="highlighter-rouge">name:tag</code></li>
   <li><code class="highlighter-rouge">.</code>: 注意后面有个<code class="highlighter-rouge">.</code>, 用来表示编译当前目录里的<code class="highlighter-rouge">Dockerfile</code>文件, 也可以自己指定<code class="highlighter-rouge">Dockerfile</code>文件的位置</li>
 </ul>
 
-<h3 id="tag">镜像的tag</h3>
+<h3 id="镜像的tag">镜像的tag</h3>
 <p>我们可以给已经存在的镜像添加新的<code class="highlighter-rouge">tag</code></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>docker tag ubuntu:14.04 rgkjhshi/ubuntu:newtag
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker tag ubuntu:14.04 rgkjhshi/ubuntu:newtag
 docker tag b2f1fdd93175 rgkjhshi/ubuntu:newtag2
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="section-17">提交镜像</h3>
+<h3 id="提交镜像">提交镜像</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>docker push rgkjhshi/ubuntu:newtag
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker push rgkjhshi/ubuntu:newtag
 <span class="c"># 提交所有tag</span>
-<span class="gp">$ </span>docker push rgkjhshi/ubuntu
-</code></pre>
-</div>
+<span class="nv">$ </span>docker push rgkjhshi/ubuntu
+</code></pre></div></div>
 
-<h3 id="section-18">删除镜像</h3>
+<h3 id="删除镜像">删除镜像</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>docker rmi rgkjhshi/ubuntu:newtag2
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>docker rmi rgkjhshi/ubuntu:newtag2
 <span class="c"># 不写tag 默认删除 latest</span>
-<span class="gp">$ </span>docker rmi rgkjhshi/ubuntu
-</code></pre>
-</div>
+<span class="nv">$ </span>docker rmi rgkjhshi/ubuntu
+</code></pre></div></div>
 
 <h3 id="image-digests">Image Digests</h3>
 <p><code class="highlighter-rouge">v2</code>或之后的格式的镜像, 有个唯一标识符叫做<code class="highlighter-rouge">digest</code>, 如果用于生成镜像的输入没有变,则<code class="highlighter-rouge">digest</code>值也是一样的</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ docker images --digests
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker images --digests
 REPOSITORY          TAG                 DIGEST                                                                    IMAGE ID            CREATED             SIZE
 rgkjhshi/ubuntu     newtag              sha256:8d0f6d13291273ad6271c3c55b222ad08e28ff71a40c27487c79dbe80cce184f   b2f1fdd93175        40 hours ago        188.4 MB
 rgkjhshi/ubuntu     newtag2             sha256:8d0f6d13291273ad6271c3c55b222ad08e28ff71a40c27487c79dbe80cce184f   b2f1fdd93175        40 hours ago        188.4 MB
 ubuntu              14.04               sha256:b2c8a4d46473ab082200880391ddf8c06f2a67da4fa905ce2747dcd95d8d7af7   b2f1fdd93175        40 hours ago        188.4 MB
 ubuntu              latest              sha256:ba1688fec34f66d8a7ff5b42e6971625d8232c72bf0e38ad06dda10cad157293   cf62323fa025        11 days ago         125 MB
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>在<code class="highlighter-rouge">2.0</code>的仓库使用<code class="highlighter-rouge">push</code>或<code class="highlighter-rouge">pull</code>命令时都会显示镜像的<code class="highlighter-rouge">digest</code>, 我们也可以直接像这样使用<code class="highlighter-rouge">digest</code>:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ docker pull rgkjhshi/ubuntu@sha256:8d0f6d13291273ad6271c3c55b222ad08e28ff71a40c27487c79dbe80cce184f
-</code></pre>
-</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker pull rgkjhshi/ubuntu@sha256:8d0f6d13291273ad6271c3c55b222ad08e28ff71a40c27487c79dbe80cce184f
+</code></pre></div></div>
 
 <ul>
   <li>若同一个<code class="highlighter-rouge">digest</code>有不同的<code class="highlighter-rouge">tag</code>, 则<code class="highlighter-rouge">pull</code>下来的镜像没有<code class="highlighter-rouge">tag</code>(显示的是<code class="highlighter-rouge">&lt;none&gt;</code>)</li>

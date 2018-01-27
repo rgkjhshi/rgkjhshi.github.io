@@ -104,20 +104,20 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#section">存储结构</a></li>
-  <li><a href="#section-1">构造函数</a></li>
-  <li><a href="#section-2">需要知道的概念</a></li>
-  <li><a href="#hash">关于hash</a></li>
-  <li><a href="#bucketindex">计算桶坐标:bucketIndex</a></li>
-  <li><a href="#put">添加元素put</a></li>
-  <li><a href="#modcount">关于modCount</a></li>
-  <li><a href="#section-3">关于扩容</a></li>
-  <li><a href="#section-4">关于并发</a></li>
+  <li><a href="#存储结构" id="markdown-toc-存储结构">存储结构</a></li>
+  <li><a href="#构造函数" id="markdown-toc-构造函数">构造函数</a></li>
+  <li><a href="#需要知道的概念" id="markdown-toc-需要知道的概念">需要知道的概念</a></li>
+  <li><a href="#关于hash" id="markdown-toc-关于hash">关于hash</a></li>
+  <li><a href="#计算桶坐标bucketindex" id="markdown-toc-计算桶坐标bucketindex">计算桶坐标:bucketIndex</a></li>
+  <li><a href="#添加元素put" id="markdown-toc-添加元素put">添加元素put</a></li>
+  <li><a href="#关于modcount" id="markdown-toc-关于modcount">关于modCount</a></li>
+  <li><a href="#关于扩容" id="markdown-toc-关于扩容">关于扩容</a></li>
+  <li><a href="#关于并发" id="markdown-toc-关于并发">关于并发</a></li>
 </ul>
 
 <hr />
 
-<h2 id="section">存储结构</h2>
+<h2 id="存储结构">存储结构</h2>
 <p><code class="highlighter-rouge">HashMap</code>的数据结构是数组加链表的形式。结构大体如下:</p>
 
 <p><img src="/static/images/HashMap.png" alt="HashMap结构图" title="HashMap结构图" /></p>
@@ -127,7 +127,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="section-1">构造函数</h2>
+<h2 id="构造函数">构造函数</h2>
 
 <ul>
   <li><code class="highlighter-rouge">HashMap(int initialCapacity, float loadFactor)</code>: 指定初始容量和负载因子</li>
@@ -138,7 +138,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="section-2">需要知道的概念</h2>
+<h2 id="需要知道的概念">需要知道的概念</h2>
 <p><code class="highlighter-rouge">HashMap</code>中有几个概念, 还有几个<code class="highlighter-rouge">成员属性</code>, 需要了解它们的意义:</p>
 
 <ul>
@@ -151,11 +151,11 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="hash">关于hash</h2>
+<h2 id="关于hash">关于hash</h2>
 <p>既然是<code class="highlighter-rouge">HashMap</code>, 一定避免不了hash. <code class="highlighter-rouge">Object</code>都有<code class="highlighter-rouge">hashCode()</code>函数, 但在<code class="highlighter-rouge">HashMap</code>又提供了一个辅助哈希函数<code class="highlighter-rouge">hash(Object k)</code>, 这个函数在<code class="highlighter-rouge">JDK7</code>与<code class="highlighter-rouge">JDK8</code>中不同. 当<code class="highlighter-rouge">key</code>为<code class="highlighter-rouge">null</code>时, 是没有<code class="highlighter-rouge">hashCode()</code>的, 因此要单独处理. <code class="highlighter-rouge">JDK7</code>中有专门的<code class="highlighter-rouge">putForNullKey()</code>函数来把<code class="highlighter-rouge">null</code>放在下标为0的<code class="highlighter-rouge">bucket</code>中; 而<code class="highlighter-rouge">JDK8</code>直接在辅助哈希函数<code class="highlighter-rouge">hash()</code>中把<code class="highlighter-rouge">null</code>的哈希值设置为0.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// JDK7</span>
-    <span class="kd">final</span> <span class="kt">int</span> <span class="n">hash</span><span class="o">(</span><span class="n">Object</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// JDK7</span>
+    <span class="kd">final</span> <span class="kt">int</span> <span class="nf">hash</span><span class="o">(</span><span class="n">Object</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
         <span class="kt">int</span> <span class="n">h</span> <span class="o">=</span> <span class="n">hashSeed</span><span class="o">;</span>
         <span class="k">if</span> <span class="o">(</span><span class="mi">0</span> <span class="o">!=</span> <span class="n">h</span> <span class="o">&amp;&amp;</span> <span class="n">k</span> <span class="k">instanceof</span> <span class="n">String</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">return</span> <span class="n">sun</span><span class="o">.</span><span class="na">misc</span><span class="o">.</span><span class="na">Hashing</span><span class="o">.</span><span class="na">stringHash32</span><span class="o">((</span><span class="n">String</span><span class="o">)</span> <span class="n">k</span><span class="o">);</span>
@@ -170,16 +170,15 @@ jQuery(function(){
         <span class="k">return</span> <span class="n">h</span> <span class="o">^</span> <span class="o">(</span><span class="n">h</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">7</span><span class="o">)</span> <span class="o">^</span> <span class="o">(</span><span class="n">h</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">4</span><span class="o">);</span>
     <span class="o">}</span>
    <span class="c1">// JDK8</span>
-    <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">hash</span><span class="o">(</span><span class="n">Object</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="nf">hash</span><span class="o">(</span><span class="n">Object</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
         <span class="kt">int</span> <span class="n">h</span><span class="o">;</span>
         <span class="k">return</span> <span class="o">(</span><span class="n">key</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="o">(</span><span class="n">h</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="na">hashCode</span><span class="o">())</span> <span class="o">^</span> <span class="o">(</span><span class="n">h</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">16</span><span class="o">);</span>
     <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="bucketindex">计算桶坐标:bucketIndex</h2>
+<h2 id="计算桶坐标bucketindex">计算桶坐标:bucketIndex</h2>
 <p>这一步是用来计算数组下标(即应放到那个<code class="highlighter-rouge">bucket</code>中)的。 但是这一步很关键，也正好解释了很多问题，如:</p>
 
 <ul>
@@ -190,21 +189,20 @@ jQuery(function(){
 
 <p>计算数组下标的函数如下:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="kt">int</span> <span class="n">hash</span> <span class="o">=</span> <span class="n">hash</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>  <span class="c1">// 辅助哈希函数</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kt">int</span> <span class="n">hash</span> <span class="o">=</span> <span class="n">hash</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>  <span class="c1">// 辅助哈希函数</span>
     <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">indexFor</span><span class="o">(</span><span class="n">hash</span><span class="o">,</span> <span class="n">table</span><span class="o">.</span><span class="na">length</span><span class="o">);</span> <span class="c1">// 求桶坐标的函数</span>
     <span class="c1">// 具体实现</span>
-    <span class="kd">static</span> <span class="kt">int</span> <span class="n">indexFor</span><span class="o">(</span><span class="kt">int</span> <span class="n">h</span><span class="o">,</span> <span class="kt">int</span> <span class="n">length</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">static</span> <span class="kt">int</span> <span class="nf">indexFor</span><span class="o">(</span><span class="kt">int</span> <span class="n">h</span><span class="o">,</span> <span class="kt">int</span> <span class="n">length</span><span class="o">)</span> <span class="o">{</span>
         <span class="c1">// assert Integer.bitCount(length) == 1 : "length must be a non-zero power of 2";</span>
         <span class="k">return</span> <span class="n">h</span> <span class="o">&amp;</span> <span class="o">(</span><span class="n">length</span><span class="o">-</span><span class="mi">1</span><span class="o">);</span>
     <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>正常来讲, 哈希值的索引一般通过<code class="highlighter-rouge">index = h % length</code>计算, 但是若<code class="highlighter-rouge">length</code>总是2的整数次幂, 就可以通过位运算<code class="highlighter-rouge">h &amp; (length-1)</code>来优化.</p>
 
 <hr />
 
-<h2 id="put">添加元素put</h2>
+<h2 id="添加元素put">添加元素put</h2>
 
 <ul>
   <li>刚创建的<code class="highlighter-rouge">HashMap</code>中的<code class="highlighter-rouge">table</code>是空的(<code class="highlighter-rouge">EMPTY_TABLE</code>), 真正添加元素的时候才回分配空间</li>
@@ -213,14 +211,14 @@ jQuery(function(){
   <li>新添加的元素位于链表头, 即<code class="highlighter-rouge">table[bucketIndex]</code>的位置</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// JDK7 put方法</span>
-    <span class="kd">public</span> <span class="n">V</span> <span class="n">put</span><span class="o">(</span><span class="n">K</span> <span class="n">key</span><span class="o">,</span> <span class="n">V</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// JDK7 put方法</span>
+    <span class="kd">public</span> <span class="n">V</span> <span class="nf">put</span><span class="o">(</span><span class="n">K</span> <span class="n">key</span><span class="o">,</span> <span class="n">V</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
         <span class="c1">// 如果数组是空的, 需要根据初始容量来扩张. 默认构造函数中, threshold=initialCapacity</span>
         <span class="k">if</span> <span class="o">(</span><span class="n">table</span> <span class="o">==</span> <span class="n">EMPTY_TABLE</span><span class="o">)</span> <span class="o">{</span>
             <span class="n">inflateTable</span><span class="o">(</span><span class="n">threshold</span><span class="o">);</span>  <span class="c1">// table大小为: a power of 2 &gt;= threshold</span>
         <span class="o">}</span>
         <span class="k">if</span> <span class="o">(</span><span class="n">key</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
-            <span class="k">return</span> <span class="n">putForNullKey</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>  <span class="c1">// null 放到 table[0] 的位置</span>
+            <span class="k">return</span> <span class="nf">putForNullKey</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>  <span class="c1">// null 放到 table[0] 的位置</span>
         <span class="kt">int</span> <span class="n">hash</span> <span class="o">=</span> <span class="n">hash</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
         <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">indexFor</span><span class="o">(</span><span class="n">hash</span><span class="o">,</span> <span class="n">table</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>  <span class="c1">// 通过位运算得到桶的位置</span>
         <span class="k">for</span> <span class="o">(</span><span class="n">Entry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">table</span><span class="o">[</span><span class="n">i</span><span class="o">];</span> <span class="n">e</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">next</span><span class="o">)</span> <span class="o">{</span>  <span class="c1">// 这个循环里, 处理该key已经存在的情况</span>
@@ -237,7 +235,7 @@ jQuery(function(){
         <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="c1">// 添加元素的函数</span>
-    <span class="kt">void</span> <span class="n">addEntry</span><span class="o">(</span><span class="kt">int</span> <span class="n">hash</span><span class="o">,</span> <span class="n">K</span> <span class="n">key</span><span class="o">,</span> <span class="n">V</span> <span class="n">value</span><span class="o">,</span> <span class="kt">int</span> <span class="n">bucketIndex</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kt">void</span> <span class="nf">addEntry</span><span class="o">(</span><span class="kt">int</span> <span class="n">hash</span><span class="o">,</span> <span class="n">K</span> <span class="n">key</span><span class="o">,</span> <span class="n">V</span> <span class="n">value</span><span class="o">,</span> <span class="kt">int</span> <span class="n">bucketIndex</span><span class="o">)</span> <span class="o">{</span>
         <span class="c1">// 这就是需要扩容的条件(扩容的条件有2个)</span>
         <span class="k">if</span> <span class="o">((</span><span class="n">size</span> <span class="o">&gt;=</span> <span class="n">threshold</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="kc">null</span> <span class="o">!=</span> <span class="n">table</span><span class="o">[</span><span class="n">bucketIndex</span><span class="o">]))</span> <span class="o">{</span>
             <span class="n">resize</span><span class="o">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">table</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>  <span class="c1">// 扩容是在这里进行的</span>
@@ -247,20 +245,19 @@ jQuery(function(){
         <span class="c1">// 新创建一个元素并添加到 bucketIndex 位置</span>
         <span class="n">createEntry</span><span class="o">(</span><span class="n">hash</span><span class="o">,</span> <span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">,</span> <span class="n">bucketIndex</span><span class="o">);</span>
     <span class="o">}</span>
-    <span class="kt">void</span> <span class="n">createEntry</span><span class="o">(</span><span class="kt">int</span> <span class="n">hash</span><span class="o">,</span> <span class="n">K</span> <span class="n">key</span><span class="o">,</span> <span class="n">V</span> <span class="n">value</span><span class="o">,</span> <span class="kt">int</span> <span class="n">bucketIndex</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kt">void</span> <span class="nf">createEntry</span><span class="o">(</span><span class="kt">int</span> <span class="n">hash</span><span class="o">,</span> <span class="n">K</span> <span class="n">key</span><span class="o">,</span> <span class="n">V</span> <span class="n">value</span><span class="o">,</span> <span class="kt">int</span> <span class="n">bucketIndex</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">Entry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">table</span><span class="o">[</span><span class="n">bucketIndex</span><span class="o">];</span>
         <span class="n">table</span><span class="o">[</span><span class="n">bucketIndex</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Entry</span><span class="o">&lt;&gt;(</span><span class="n">hash</span><span class="o">,</span> <span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span> <span class="c1">// 放到链表头</span>
         <span class="n">size</span><span class="o">++;</span>  <span class="c1">// 元素数量+1</span>
     <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="modcount">关于modCount</h2>
+<h2 id="关于modcount">关于modCount</h2>
 <p>平时使用<code class="highlighter-rouge">HashMap</code>遇到过的一个异常是<code class="highlighter-rouge">ConcurrentModificationException</code>. 这种情况是因为在使用迭代器的过程中, 增加或者删除了元素, 导致<code class="highlighter-rouge">modCount</code>变化导致的. 原因就在迭代器中:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 迭代器构造方法</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 迭代器构造方法</span>
 <span class="n">HashIterator</span><span class="o">()</span> <span class="o">{</span>
     <span class="n">expectedModCount</span> <span class="o">=</span> <span class="n">modCount</span><span class="o">;</span>  <span class="c1">// 创建迭代器的时候expectedModCount=modCount, 不相等的时候快速失败</span>
     <span class="k">if</span> <span class="o">(</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span> <span class="c1">// advance to first entry</span>
@@ -270,12 +267,12 @@ jQuery(function(){
     <span class="o">}</span>
 <span class="o">}</span>
 <span class="c1">// 迭代器找下一个元素方法</span>
-<span class="kd">final</span> <span class="n">Entry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">nextEntry</span><span class="o">()</span> <span class="o">{</span>
+<span class="kd">final</span> <span class="n">Entry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="nf">nextEntry</span><span class="o">()</span> <span class="o">{</span>
     <span class="k">if</span> <span class="o">(</span><span class="n">modCount</span> <span class="o">!=</span> <span class="n">expectedModCount</span><span class="o">)</span> <span class="c1">// 在这里抛出异常, 快速失败</span>
-        <span class="k">throw</span> <span class="k">new</span> <span class="n">ConcurrentModificationException</span><span class="o">();</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">ConcurrentModificationException</span><span class="o">();</span>
     <span class="n">Entry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">next</span><span class="o">;</span>
     <span class="k">if</span> <span class="o">(</span><span class="n">e</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
-        <span class="k">throw</span> <span class="k">new</span> <span class="n">NoSuchElementException</span><span class="o">();</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">NoSuchElementException</span><span class="o">();</span>
 
     <span class="k">if</span> <span class="o">((</span><span class="n">next</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">next</span><span class="o">)</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>  <span class="c1">// 如果 e.next是null, 就到了链表尾, 此时应该找下一个桶中的元素</span>
         <span class="n">Entry</span><span class="o">[]</span> <span class="n">t</span> <span class="o">=</span> <span class="n">table</span><span class="o">;</span>
@@ -285,12 +282,11 @@ jQuery(function(){
     <span class="n">current</span> <span class="o">=</span> <span class="n">e</span><span class="o">;</span>
     <span class="k">return</span> <span class="n">e</span><span class="o">;</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="section-3">关于扩容</h2>
+<h2 id="关于扩容">关于扩容</h2>
 <p><code class="highlighter-rouge">HashMap</code>扩容是通过<code class="highlighter-rouge">resize(int newCapacity)</code>函数实现的, 而扩容的时机, 则是在<code class="highlighter-rouge">put</code>函数里真正添加元素时调用<code class="highlighter-rouge">addEntry</code>来控制的.</p>
 
 <p>扩容需要两个条件:</p>
@@ -302,10 +298,10 @@ jQuery(function(){
 
 <p>扩容过程如下:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 在 addEntry 中调用resize扩容</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 在 addEntry 中调用resize扩容</span>
 <span class="n">resize</span><span class="o">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">table</span><span class="o">.</span><span class="na">length</span><span class="o">);</span> <span class="c1">// 每次都是2倍扩容</span>
 <span class="c1">// resize函数</span>
-<span class="kt">void</span> <span class="nf">resize</span><span class="p">(</span><span class="kt">int</span> <span class="n">newCapacity</span><span class="o">)</span> <span class="o">{</span> <span class="c1">// capacity MUST be a power of two</span>
+<span class="kt">void</span> <span class="nf">resize</span><span class="o">(</span><span class="kt">int</span> <span class="n">newCapacity</span><span class="o">)</span> <span class="o">{</span> <span class="c1">// capacity MUST be a power of two</span>
     <span class="n">Entry</span><span class="o">[]</span> <span class="n">oldTable</span> <span class="o">=</span> <span class="n">table</span><span class="o">;</span>
     <span class="kt">int</span> <span class="n">oldCapacity</span> <span class="o">=</span> <span class="n">oldTable</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
     <span class="k">if</span> <span class="o">(</span><span class="n">oldCapacity</span> <span class="o">==</span> <span class="n">MAXIMUM_CAPACITY</span><span class="o">)</span> <span class="o">{</span>  <span class="c1">// 最大容量时就不再扩容了</span>
@@ -318,7 +314,7 @@ jQuery(function(){
     <span class="n">threshold</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span><span class="n">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">newCapacity</span> <span class="o">*</span> <span class="n">loadFactor</span><span class="o">,</span> <span class="n">MAXIMUM_CAPACITY</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span> <span class="c1">// 更新阈值</span>
 <span class="o">}</span>
 <span class="c1">// 移动元素的 transfer 函数</span>
-<span class="kt">void</span> <span class="nf">transfer</span><span class="p">(</span><span class="n">Entry</span><span class="o">[]</span> <span class="n">newTable</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">rehash</span><span class="o">)</span> <span class="o">{</span>
+<span class="kt">void</span> <span class="nf">transfer</span><span class="o">(</span><span class="n">Entry</span><span class="o">[]</span> <span class="n">newTable</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">rehash</span><span class="o">)</span> <span class="o">{</span>
     <span class="kt">int</span> <span class="n">newCapacity</span> <span class="o">=</span> <span class="n">newTable</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
     <span class="k">for</span> <span class="o">(</span><span class="n">Entry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">e</span> <span class="o">:</span> <span class="n">table</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">while</span><span class="o">(</span><span class="kc">null</span> <span class="o">!=</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
@@ -333,12 +329,11 @@ jQuery(function(){
         <span class="o">}</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="section-4">关于并发</h2>
+<h2 id="关于并发">关于并发</h2>
 <p><code class="highlighter-rouge">HashMap</code>不是线程安全的, 一般还会提到一个不常用的但是线程安全的对象<code class="highlighter-rouge">Hashtable</code>, 它相当于<code class="highlighter-rouge">HashMap</code>的方法(包括<code class="highlighter-rouge">toString</code>)加锁(<code class="highlighter-rouge">synchronized</code>)来控制并发.</p>
 
 <p>若要考虑并发问题, 一般推荐使用<code class="highlighter-rouge">ConcurrentHashMap</code>, 它通过<code class="highlighter-rouge">Segment</code>来实现分段加锁。</p>

@@ -104,33 +104,33 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#section">反射相关的类和接口简介</a>    <ul>
-      <li><a href="#section-1">相关类说明</a></li>
-      <li><a href="#section-2">相关接口继承关系图</a></li>
-      <li><a href="#section-3">相关接口说明</a></li>
+  <li><a href="#反射相关的类和接口简介" id="markdown-toc-反射相关的类和接口简介">反射相关的类和接口简介</a>    <ul>
+      <li><a href="#相关类说明" id="markdown-toc-相关类说明">相关类说明</a></li>
+      <li><a href="#相关接口继承关系图" id="markdown-toc-相关接口继承关系图">相关接口继承关系图</a></li>
+      <li><a href="#相关接口说明" id="markdown-toc-相关接口说明">相关接口说明</a></li>
     </ul>
   </li>
-  <li><a href="#object-classtype"><code class="highlighter-rouge">Object</code>, <code class="highlighter-rouge">Class</code>和<code class="highlighter-rouge">Type</code>的关系和区别</a></li>
-  <li><a href="#section-4">反射的具体功能</a>    <ul>
-      <li><a href="#section-5">获取类</a></li>
-      <li><a href="#section-6">获取对象实例</a></li>
+  <li><a href="#object-class和type的关系和区别" id="markdown-toc-object-class和type的关系和区别"><code class="highlighter-rouge">Object</code>, <code class="highlighter-rouge">Class</code>和<code class="highlighter-rouge">Type</code>的关系和区别</a></li>
+  <li><a href="#反射的具体功能" id="markdown-toc-反射的具体功能">反射的具体功能</a>    <ul>
+      <li><a href="#获取类" id="markdown-toc-获取类">获取类</a></li>
+      <li><a href="#获取对象实例" id="markdown-toc-获取对象实例">获取对象实例</a></li>
     </ul>
   </li>
-  <li><a href="#section-7">反射相关接口的详细说明</a>    <ul>
-      <li><a href="#annotatedelement">AnnotatedElement</a></li>
-      <li><a href="#member">Member</a></li>
-      <li><a href="#invocationhandler">InvocationHandler</a></li>
-      <li><a href="#genericdeclaration">GenericDeclaration</a></li>
+  <li><a href="#反射相关接口的详细说明" id="markdown-toc-反射相关接口的详细说明">反射相关接口的详细说明</a>    <ul>
+      <li><a href="#annotatedelement" id="markdown-toc-annotatedelement">AnnotatedElement</a></li>
+      <li><a href="#member" id="markdown-toc-member">Member</a></li>
+      <li><a href="#invocationhandler" id="markdown-toc-invocationhandler">InvocationHandler</a></li>
+      <li><a href="#genericdeclaration" id="markdown-toc-genericdeclaration">GenericDeclaration</a></li>
     </ul>
   </li>
 </ul>
 
 <hr />
 
-<h2 id="section">反射相关的类和接口简介</h2>
+<h2 id="反射相关的类和接口简介">反射相关的类和接口简介</h2>
 <p>在<code class="highlighter-rouge">java.lang.reflect</code>包中定义了一些接口和类,简单记录下他们的作用</p>
 
-<h3 id="section-1">相关类说明</h3>
+<h3 id="相关类说明">相关类说明</h3>
 <p>这些类都比较简单，对照API一看就懂，主要是平时用到的比较少，这里先简单说明下，不在此展开</p>
 
 <table>
@@ -178,10 +178,10 @@ jQuery(function(){
 
 <p>另外反射机制还经常用到<code class="highlighter-rouge">java.lang</code>中的类, 如<code class="highlighter-rouge">Class</code>、<code class="highlighter-rouge">Packate</code>还有各种原始类型等</p>
 
-<h3 id="section-2">相关接口继承关系图</h3>
+<h3 id="相关接口继承关系图">相关接口继承关系图</h3>
 <p><img src="/static/images/reflect_interface.png" alt="反射相关接口继承关系图" title="反射相关接口继承关系图" /></p>
 
-<h3 id="section-3">相关接口说明</h3>
+<h3 id="相关接口说明">相关接口说明</h3>
 <p>这里先简单介绍下，后文还会详细说明这些接口</p>
 
 <table>
@@ -233,7 +233,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="object-classtype"><code class="highlighter-rouge">Object</code>, <code class="highlighter-rouge">Class</code>和<code class="highlighter-rouge">Type</code>的关系和区别</h2>
+<h2 id="object-class和type的关系和区别"><code class="highlighter-rouge">Object</code>, <code class="highlighter-rouge">Class</code>和<code class="highlighter-rouge">Type</code>的关系和区别</h2>
 
 <p>所有的类都继承<code class="highlighter-rouge">Object</code>是毫无疑问的, <code class="highlighter-rouge">Class</code>也是类，也继承<code class="highlighter-rouge">Object</code><br />
 <code class="highlighter-rouge">Class</code>类特殊的地方是它在运行时用来描述类的各种元信息,对象是类的实例,而类在运行时的描述就是<code class="highlighter-rouge">Class</code><br />
@@ -242,10 +242,10 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="section-4">反射的具体功能</h2>
+<h2 id="反射的具体功能">反射的具体功能</h2>
 <p>反射作用挺多, 比如反编译, 通过反射机制访问对象的属性、方法、构造方法等, 先简单给出一些示例</p>
 
-<h3 id="section-5">获取类</h3>
+<h3 id="获取类">获取类</h3>
 <p>有如下三种方法:</p>
 
 <ol>
@@ -254,13 +254,13 @@ jQuery(function(){
   <li>通过实例对象的<code class="highlighter-rouge">getClass</code>方法, 如: <code class="highlighter-rouge">Class clazz = user.getClass();</code></li>
 </ol>
 
-<h3 id="section-6">获取对象实例</h3>
+<h3 id="获取对象实例">获取对象实例</h3>
 
 <ol>
   <li>通过<code class="highlighter-rouge">Class</code>实例的<code class="highlighter-rouge">newInstance()</code>, 如:<code class="highlighter-rouge">String str = (String)clazz.newInstance();</code></li>
 </ol>
 
-<h2 id="section-7">反射相关接口的详细说明</h2>
+<h2 id="反射相关接口的详细说明">反射相关接口的详细说明</h2>
 <p>这些接口的关系可参考上面那幅图, 这里只详细说明<code class="highlighter-rouge">AnnotatedElement、Member、InvocationHandler、GenericDeclaration</code>这几个接口<br />
 <code class="highlighter-rouge">Type</code>接口及其字类在<a href="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-02-16-Type%E8%AF%A6%E8%A7%A3.html">Type详解</a>中详细说明</p>
 
@@ -286,21 +286,20 @@ jQuery(function(){
   <li><code class="highlighter-rouge">Class&lt;?&gt; getDeclaringClass()</code>: 返回声明该成员的声明类</li>
 </ol>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// getName方法的测试</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// getName方法的测试</span>
 <span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">test</span><span class="o">;</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestMember</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>              <span class="c1">// 属性名为: name</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">hello</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{}</span> <span class="c1">// 方法名(不包括参数)为: hello</span>
-    <span class="kd">public</span> <span class="n">TestMember</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{}</span> <span class="c1">// 构造器名为: com.test.TestMember</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">hello</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{}</span> <span class="c1">// 方法名(不包括参数)为: hello</span>
+    <span class="kd">public</span> <span class="nf">TestMember</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{}</span> <span class="c1">// 构造器名为: com.test.TestMember</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">TestMember</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">"name"</span><span class="o">).</span><span class="na">getName</span><span class="o">());</span>                    <span class="c1">// name</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">TestMember</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getDeclaredMethod</span><span class="o">(</span><span class="s">"hello"</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">getName</span><span class="o">());</span>    <span class="c1">// hello</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">TestMember</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getDeclaredConstructor</span><span class="o">(</span><span class="n">String</span><span class="o">.</span><span class="na">class</span><span class="o">).</span><span class="na">getName</span><span class="o">());</span>        <span class="c1">//com.test.TestMember</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">TestMember</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">"name"</span><span class="o">).</span><span class="na">getDeclaringClass</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span><span class="c1">//com.test.TestMember</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="invocationhandler">InvocationHandler</h3>
 <p>代理处理器类的实例需要实现的接口, 只有一个方法:</p>
@@ -319,15 +318,15 @@ jQuery(function(){
 
 <p>通常代理处理器类的实例<code class="highlighter-rouge">handler</code>会作为参数传到java代理类<code class="highlighter-rouge">Proxy</code>的<code class="highlighter-rouge">newProxyInstance</code>方法中来产生一个代理对象(与被代理对象实现了同一接口)<br />
 调用代理对象的方法时, 真正调用的就是上面的invoke函数.<br />
-还是来个例子吧(<code class="highlighter-rouge">HelloImpl</code>实现了<code class="highlighter-rouge">Hello</code>接口, 并实现了<code class="highlighter-rouge">sayHello()</code>方法)  </p>
+还是来个例子吧(<code class="highlighter-rouge">HelloImpl</code>实现了<code class="highlighter-rouge">Hello</code>接口, 并实现了<code class="highlighter-rouge">sayHello()</code>方法)</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 代理处理器类</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 代理处理器类</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">AOPHandler</span> <span class="kd">implements</span> <span class="n">InvocationHandler</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="n">Object</span> <span class="n">target</span><span class="o">;</span>  <span class="c1">// 这个用来表示被代理的对象</span>
-    <span class="kd">public</span> <span class="n">AOPHandler</span><span class="o">(</span><span class="n">Object</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nf">AOPHandler</span><span class="o">(</span><span class="n">Object</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="na">target</span> <span class="o">=</span> <span class="n">target</span><span class="o">;</span>
     <span class="o">}</span>
-    <span class="kd">public</span> <span class="n">Object</span> <span class="n">invoke</span><span class="o">(</span><span class="n">Object</span> <span class="n">proxy</span><span class="o">,</span> <span class="n">Method</span> <span class="n">method</span><span class="o">,</span> <span class="n">Object</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Throwable</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">Object</span> <span class="nf">invoke</span><span class="o">(</span><span class="n">Object</span> <span class="n">proxy</span><span class="o">,</span> <span class="n">Method</span> <span class="n">method</span><span class="o">,</span> <span class="n">Object</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Throwable</span> <span class="o">{</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"proxy:"</span> <span class="o">+</span> <span class="n">proxy</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>   <span class="c1">// proxy:com.sun.proxy.$Proxy0</span>
         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"method:"</span> <span class="o">+</span> <span class="n">method</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span> <span class="c1">// proxy:java.lang.reflect.Method</span>
         <span class="k">return</span> <span class="n">method</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="n">target</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>  <span class="c1">// 调用被代理对象的的方法, 即 target 的 method</span>
@@ -335,7 +334,7 @@ jQuery(function(){
 <span class="o">}</span>
 <span class="c1">// 测试类</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProxyTest</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
         <span class="n">Object</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">"com.test.HelloImpl"</span><span class="o">).</span><span class="na">newInstance</span><span class="o">();</span>
         <span class="n">InvocationHandler</span> <span class="n">handler</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AOPHandler</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>  <span class="c1">// 创建代理处理器对象的时候把被代理的对象传进去</span>
         <span class="c1">// 这里生成代理类对象, 参数依次为: 被代理对象的ClassLoader, 被代理对象实现的所有接口, 代理处理器</span>
@@ -343,8 +342,7 @@ jQuery(function(){
         <span class="n">proxy</span><span class="o">.</span><span class="na">sayHello</span><span class="o">();</span>  <span class="c1">// 这就调用了那个invoke方法</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="genericdeclaration">GenericDeclaration</h3>
 <p>可以声明类型变量的实体的公共接口, 就是那些能够声明范型类型<code class="highlighter-rouge">&lt;T&gt;</code>的地方, 注意是声明而不是使用.其实现类有: <code class="highlighter-rouge">Class, Constructor, Method</code><br />

@@ -104,73 +104,69 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#spel">SpEL简介</a></li>
-  <li><a href="#section">文本表达式</a></li>
-  <li><a href="#section-1">变量</a></li>
-  <li><a href="#section-2">属性和方法调用</a></li>
-  <li><a href="#section-3">类型</a></li>
-  <li><a href="#section-4">操作符</a></li>
-  <li><a href="#section-5">避免空指针</a></li>
-  <li><a href="#this"><code class="highlighter-rouge">#this</code>变量</a></li>
-  <li><a href="#section-6">集合选择</a></li>
-  <li><a href="#section-7">模板表达式</a></li>
+  <li><a href="#spel简介" id="markdown-toc-spel简介">SpEL简介</a></li>
+  <li><a href="#文本表达式" id="markdown-toc-文本表达式">文本表达式</a></li>
+  <li><a href="#变量" id="markdown-toc-变量">变量</a></li>
+  <li><a href="#属性和方法调用" id="markdown-toc-属性和方法调用">属性和方法调用</a></li>
+  <li><a href="#类型" id="markdown-toc-类型">类型</a></li>
+  <li><a href="#操作符" id="markdown-toc-操作符">操作符</a></li>
+  <li><a href="#避免空指针" id="markdown-toc-避免空指针">避免空指针</a></li>
+  <li><a href="#this变量" id="markdown-toc-this变量"><code class="highlighter-rouge">#this</code>变量</a></li>
+  <li><a href="#集合选择" id="markdown-toc-集合选择">集合选择</a></li>
+  <li><a href="#模板表达式" id="markdown-toc-模板表达式">模板表达式</a></li>
 </ul>
 
 <hr />
 
-<h2 id="spel">SpEL简介</h2>
+<h2 id="spel简介">SpEL简介</h2>
 <p>在Spring3中就已经支持EL表达式了, <code class="highlighter-rouge">Spring Expression Language(SpEL)</code>是类似于<code class="highlighter-rouge">OGNL</code>和<code class="highlighter-rouge">JSF EL</code>的表达式语言, 能够在运行时构建复杂表达式, 存取对象属性、调用对象方法等, 而且所有的<code class="highlighter-rouge">SpEL</code>都支持<code class="highlighter-rouge">XML</code>和<code class="highlighter-rouge">Annotation</code>两种方式, 使用的格式均为:<code class="highlighter-rouge">#{SpEL expression}</code>. 比如在<code class="highlighter-rouge">XML</code>中使用的例子:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"helloBean"</span> <span class="na">class=</span><span class="s">"com.***.Hello"</span><span class="nt">&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"helloBean"</span> <span class="na">class=</span><span class="s">"com.***.Hello"</span><span class="nt">&gt;</span>
     <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"item"</span> <span class="na">value=</span><span class="s">"#{otherBean}"</span> <span class="nt">/&gt;</span>  <span class="c">&lt;!-- 把otherBean注入到helloBean的item属性中 --&gt;</span>
     <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"itemName"</span> <span class="na">value=</span><span class="s">"#{otherBean.name}"</span> <span class="nt">/&gt;</span> <span class="c">&lt;!-- 把otherBean的name注入到helloBean的itemName属性中 --&gt;</span>
 <span class="nt">&lt;/bean&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>在<code class="highlighter-rouge">Annotation</code>中使用的例子:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Component</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Component</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
     <span class="nd">@Value</span><span class="o">(</span><span class="s">"#{'Tom'.toUpperCase()}"</span><span class="o">)</span>
     <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>上面的例子可以看出, 在使用Spring时, 我们已经在不知不觉中使用了<code class="highlighter-rouge">SpEL</code>表达式了. 另外我们自己使用<code class="highlighter-rouge">SpEL</code>表达式时, 大体可分三个步骤:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 1. 构建解析器</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 1. 构建解析器</span>
 <span class="n">ExpressionParser</span> <span class="n">parser</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SpelExpressionParser</span><span class="o">();</span>
 <span class="c1">// 2. 解析表达式</span>
 <span class="n">Expression</span> <span class="n">exp</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="n">SpEl</span><span class="o">);</span>
 <span class="c1">// 3. 获取结果</span>
 <span class="n">exp</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>这就是使用<code class="highlighter-rouge">SpEL</code>的基本方式, 还有许多功能, 下文将举例列举</p>
 
 <hr />
 
-<h2 id="section">文本表达式</h2>
+<h2 id="文本表达式">文本表达式</h2>
 <p>文本表达式支持: 字符串(需要用单引号声明)、日期、数字、布尔类型及<code class="highlighter-rouge">null</code>,对数字支持负数、指数及小数, 默认情况下实数使用<code class="highlighter-rouge">Double.parseDouble()</code>进行表达式类型转换.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"'hello'"</span><span class="o">).</span><span class="na">getValue</span><span class="o">(</span><span class="n">String</span><span class="o">.</span><span class="na">class</span><span class="o">);</span> <span class="c1">// hello , 注意单引号</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"'hello'"</span><span class="o">).</span><span class="na">getValue</span><span class="o">(</span><span class="n">String</span><span class="o">.</span><span class="na">class</span><span class="o">);</span> <span class="c1">// hello , 注意单引号</span>
 <span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"1.024E+3"</span><span class="o">).</span><span class="na">getValue</span><span class="o">(</span><span class="n">Long</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>  <span class="c1">// 1024  , 指数形式</span>
 <span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"0xFFFF"</span><span class="o">).</span><span class="na">getValue</span><span class="o">(</span><span class="n">Integer</span><span class="o">.</span><span class="na">class</span><span class="o">);</span> <span class="c1">// 65535 , 十六进制</span>
 <span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"true"</span><span class="o">).</span><span class="na">getValue</span><span class="o">(</span><span class="n">Boolean</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>   <span class="c1">// true</span>
 <span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"null"</span><span class="o">).</span><span class="na">getValue</span><span class="o">();</span>                <span class="c1">// null</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="section-1">变量</h2>
+<h2 id="变量">变量</h2>
 <p>变量可以通过<code class="highlighter-rouge">StandardEvaluationContext</code>的<code class="highlighter-rouge">setVariable</code>方法设置到上下文中, 表达式中可以通过<code class="highlighter-rouge">#变量名</code>使用变量;<br />
 另外, 还可以直接使用构造方法创建对象.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 定义变量</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 定义变量</span>
 <span class="n">String</span> <span class="n">name</span> <span class="o">=</span> <span class="s">"Tom"</span><span class="o">;</span>
 <span class="n">EvaluationContext</span> <span class="n">context</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StandardEvaluationContext</span><span class="o">();</span>  <span class="c1">// 表达式的上下文,</span>
 <span class="n">context</span><span class="o">.</span><span class="na">setVariable</span><span class="o">(</span><span class="s">"myName"</span><span class="o">,</span> <span class="n">name</span><span class="o">);</span>                        <span class="c1">// 为了让表达式可以访问该对象, 先把对象放到上下文中</span>
@@ -179,21 +175,20 @@ jQuery(function(){
 <span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"#myName"</span><span class="o">).</span><span class="na">getValue</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>   <span class="c1">// Tom , 使用变量</span>
 <span class="c1">// 直接使用构造方法创建对象</span>
 <span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"new String('aaa')"</span><span class="o">).</span><span class="na">getValue</span><span class="o">(</span><span class="n">String</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>   <span class="c1">// aaa</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="section-2">属性和方法调用</h2>
+<h2 id="属性和方法调用">属性和方法调用</h2>
 
 <ul>
-  <li>属性可直接使用属性名,属性名首字母大小写均可(只有首字母可不区分大小写);  </li>
-  <li>数组、列表可直接通过下表形式(<code class="highlighter-rouge">list[index]</code>)访问;  </li>
+  <li>属性可直接使用属性名,属性名首字母大小写均可(只有首字母可不区分大小写);</li>
+  <li>数组、列表可直接通过下表形式(<code class="highlighter-rouge">list[index]</code>)访问;</li>
   <li>map可以直接把key当成索引来访问(<code class="highlighter-rouge">map[key]</code>);</li>
   <li>方法可以直接访问;</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 准备工作</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 准备工作</span>
 <span class="n">Person</span> <span class="n">person</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Person</span><span class="o">(</span><span class="s">"Tom"</span><span class="o">,</span> <span class="mi">18</span><span class="o">);</span> <span class="c1">// 一个普通的POJO</span>
 <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="n">Lists</span><span class="o">.</span><span class="na">newArrayList</span><span class="o">(</span><span class="s">"a"</span><span class="o">,</span> <span class="s">"b"</span><span class="o">);</span>
 <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="n">Maps</span><span class="o">.</span><span class="na">newHashMap</span><span class="o">();</span>
@@ -213,28 +208,26 @@ jQuery(function(){
 <span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"#map[A]"</span><span class="o">).</span><span class="na">getValue</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>           <span class="c1">// 1 , key</span>
 <span class="c1">// 方法</span>
 <span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"#person.getAge()"</span><span class="o">).</span><span class="na">getValue</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">Integer</span><span class="o">.</span><span class="na">class</span><span class="o">);</span> <span class="c1">// 18 , 方法访问</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<p>另外列表可以直接写在表达式中, <code class="highlighter-rouge"><span class="p">{}</span></code>表示一个空列表, 比如:<code class="highlighter-rouge">parser.parseExpression("{'A', 'B', 'C'}[0]").getValue(String.class)</code>跟上面效果一样, 同样会访问列表的第一个元素, 得到<code class="highlighter-rouge">"A"</code></p>
+<p>另外列表可以直接写在表达式中, <code class="highlighter-rouge">{}</code>表示一个空列表, 比如:<code class="highlighter-rouge">parser.parseExpression("{'A', 'B', 'C'}[0]").getValue(String.class)</code>跟上面效果一样, 同样会访问列表的第一个元素, 得到<code class="highlighter-rouge">"A"</code></p>
 
 <hr />
 
-<h2 id="section-3">类型</h2>
+<h2 id="类型">类型</h2>
 <p><code class="highlighter-rouge">T</code>操作符可以获取类型, 可以调用对象的静态方法</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 获取类型</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 获取类型</span>
 <span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"T(java.util.Date)"</span><span class="o">).</span><span class="na">getValue</span><span class="o">(</span><span class="n">Class</span><span class="o">.</span><span class="na">class</span><span class="o">);</span> <span class="c1">// class java.util.Date</span>
 <span class="c1">// 访问静态成员(方法或属性)</span>
 <span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"T(Math).abs(-1)"</span><span class="o">).</span><span class="na">getValue</span><span class="o">(</span><span class="n">Integer</span><span class="o">.</span><span class="na">class</span><span class="o">);</span> <span class="c1">// 1</span>
 <span class="c1">// 判断类型</span>
 <span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"'asdf' instanceof T(String)"</span><span class="o">).</span><span class="na">getValue</span><span class="o">(</span><span class="n">Boolean</span><span class="o">.</span><span class="na">class</span><span class="o">);</span> <span class="c1">// true;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="section-4">操作符</h2>
+<h2 id="操作符">操作符</h2>
 <p>Spring EL 支持大多数的数学操作符、逻辑操作符、关系操作符.</p>
 
 <ul>
@@ -246,7 +239,7 @@ jQuery(function(){
 
 <p>另外三元操作符有个特殊的用法, 一般用于赋默认值, 比如: <code class="highlighter-rouge">parseExpression("#name?:'defaultName'")</code>, 如果变量<code class="highlighter-rouge">name</code>为空时设置默认值.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"1 &gt; -1"</span><span class="o">).</span><span class="na">getValue</span><span class="o">(</span><span class="n">Boolean</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>         <span class="c1">// true</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"1 &gt; -1"</span><span class="o">).</span><span class="na">getValue</span><span class="o">(</span><span class="n">Boolean</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>         <span class="c1">// true</span>
 <span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"1 gt -1"</span><span class="o">).</span><span class="na">getValue</span><span class="o">(</span><span class="n">Boolean</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>        <span class="c1">// true</span>
 <span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"true or true"</span><span class="o">).</span><span class="na">getValue</span><span class="o">(</span><span class="n">Boolean</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>   <span class="c1">// true</span>
 <span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"true || true"</span><span class="o">).</span><span class="na">getValue</span><span class="o">(</span><span class="n">Boolean</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>   <span class="c1">// true</span>
@@ -258,32 +251,29 @@ jQuery(function(){
 <span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"#person.name"</span><span class="o">).</span><span class="na">getValue</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>  <span class="c1">// Tom , 原来的值</span>
 <span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"#person.name = 'Jim'"</span><span class="o">).</span><span class="na">getValue</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">class</span><span class="o">);</span> <span class="c1">// Jim , 赋值之后</span>
 <span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"#person.name"</span><span class="o">).</span><span class="na">getValue</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>  <span class="c1">// Jim, 赋值起了作用</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="section-5">避免空指针</h2>
+<h2 id="避免空指针">避免空指针</h2>
 <p>当访问一个对象的属性或方法时, 若该对象为<code class="highlighter-rouge">null</code>, 就会出现空指针异常. 安全导航会判断对象是否为<code class="highlighter-rouge">null</code>,如果是的话, 就返回<code class="highlighter-rouge">null</code>而不是抛出空指针异常. 使用方式就是在对象后面加个<code class="highlighter-rouge">?</code>. 如下:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 使用这种表达式可以避免抛出空指针异常</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 使用这种表达式可以避免抛出空指针异常</span>
 <span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"#name?.toUpperCase()"</span><span class="o">).</span><span class="na">getValue</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">class</span><span class="o">);</span> <span class="c1">// null</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="this"><code class="highlighter-rouge">#this</code>变量</h2>
+<h2 id="this变量"><code class="highlighter-rouge">#this</code>变量</h2>
 <p>有个特殊的变量<code class="highlighter-rouge">#this</code>来表示当前的对象. 常用于集合的过滤</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// this 使用示例</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// this 使用示例</span>
 <span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"{1, 3, 5, 7}.?[#this &gt; 3]"</span><span class="o">).</span><span class="na">getValue</span><span class="o">();</span> <span class="c1">// [5, 7]</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="section-6">集合选择</h2>
+<h2 id="集合选择">集合选择</h2>
 <p>可以使用选择表达式对集合进行过滤或一些操作，从而生成一个新的符合选择条件的集合, 有如下一些形式:</p>
 
 <ul>
@@ -295,7 +285,7 @@ jQuery(function(){
 
 <p>对于集合可以配合<code class="highlighter-rouge">#this</code>变量进行过滤, 对于map, 可分别对<code class="highlighter-rouge">keySet</code>及<code class="highlighter-rouge">valueSet</code>分别使用<code class="highlighter-rouge">key</code>和<code class="highlighter-rouge">value</code>关键字;</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 集合</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 集合</span>
 <span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"{1, 3, 5, 7}.?[#this &gt; 3]"</span><span class="o">).</span><span class="na">getValue</span><span class="o">();</span> <span class="c1">// [5, 7] , 选择元素</span>
 <span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"{1, 3, 5, 7}.^[#this &gt; 3]"</span><span class="o">).</span><span class="na">getValue</span><span class="o">();</span> <span class="c1">// 5 , 第一个</span>
 <span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"{1, 3, 5, 7}.$[#this &gt; 3]"</span><span class="o">).</span><span class="na">getValue</span><span class="o">();</span> <span class="c1">// 7 , 最后一个</span>
@@ -311,17 +301,15 @@ jQuery(function(){
 <span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"#map.?[key &gt; 3]"</span><span class="o">).</span><span class="na">getValue</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>             <span class="c1">// {4=D}</span>
 <span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"#map.?[value == 'A']"</span><span class="o">).</span><span class="na">getValue</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>        <span class="c1">// {1=A}</span>
 <span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"#map.?[key &gt; 2 and key &lt; 4]"</span><span class="o">).</span><span class="na">getValue</span><span class="o">(</span><span class="n">context</span><span class="o">);</span> <span class="c1">// {3=C}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="section-7">模板表达式</h2>
+<h2 id="模板表达式">模板表达式</h2>
 <p>模板表达式允许文字和表达式混合使用, 一般选择使用<code class="highlighter-rouge">#{}</code>作为一个定界符:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"他的名字为#{#person.name}"</span><span class="o">,</span> <span class="k">new</span> <span class="n">TemplateParserContext</span><span class="o">()).</span><span class="na">getValue</span><span class="o">(</span><span class="n">context</span><span class="o">);</span> <span class="c1">// 他的名字为Tom</span>
-</code></pre>
-</div>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">parser</span><span class="o">.</span><span class="na">parseExpression</span><span class="o">(</span><span class="s">"他的名字为#{#person.name}"</span><span class="o">,</span> <span class="k">new</span> <span class="n">TemplateParserContext</span><span class="o">()).</span><span class="na">getValue</span><span class="o">(</span><span class="n">context</span><span class="o">);</span> <span class="c1">// 他的名字为Tom</span>
+</code></pre></div></div>
 
 <hr />
 

@@ -104,31 +104,31 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#collection">Collection继承关系图</a></li>
-  <li><a href="#collection-1">Collection基本操作</a></li>
-  <li><a href="#set">Set接口</a></li>
-  <li><a href="#list">List接口</a>    <ul>
-      <li><a href="#arraylistvector">ArrayList和Vector</a></li>
-      <li><a href="#stack">Stack</a></li>
+  <li><a href="#collection继承关系图" id="markdown-toc-collection继承关系图">Collection继承关系图</a></li>
+  <li><a href="#collection基本操作" id="markdown-toc-collection基本操作">Collection基本操作</a></li>
+  <li><a href="#set接口" id="markdown-toc-set接口">Set接口</a></li>
+  <li><a href="#list接口" id="markdown-toc-list接口">List接口</a>    <ul>
+      <li><a href="#arraylist和vector" id="markdown-toc-arraylist和vector">ArrayList和Vector</a></li>
+      <li><a href="#stack" id="markdown-toc-stack">Stack</a></li>
     </ul>
   </li>
-  <li><a href="#queue">Queue接口</a>    <ul>
-      <li><a href="#priorityqueue">PriorityQueue类</a></li>
-      <li><a href="#dequearraydeque">Deque接口与ArrayDeque类</a></li>
-      <li><a href="#linkedlist">LinkedList</a></li>
+  <li><a href="#queue接口" id="markdown-toc-queue接口">Queue接口</a>    <ul>
+      <li><a href="#priorityqueue类" id="markdown-toc-priorityqueue类">PriorityQueue类</a></li>
+      <li><a href="#deque接口与arraydeque类" id="markdown-toc-deque接口与arraydeque类">Deque接口与ArrayDeque类</a></li>
+      <li><a href="#linkedlist" id="markdown-toc-linkedlist">LinkedList</a></li>
     </ul>
   </li>
 </ul>
 
 <hr />
 
-<h2 id="collection">Collection继承关系图</h2>
+<h2 id="collection继承关系图">Collection继承关系图</h2>
 
 <p><img src="/static/images/collection.png" alt="Collection继承关系图" title="Collection结构图" /></p>
 
 <hr />
 
-<h2 id="collection-1">Collection基本操作</h2>
+<h2 id="collection基本操作">Collection基本操作</h2>
 
 <ul>
   <li><code class="highlighter-rouge">int size()</code>: 返回集合大小</li>
@@ -146,7 +146,7 @@ jQuery(function(){
   <li><code class="highlighter-rouge">void clear()</code>: 清空集合</li>
 </ul>
 
-<h2 id="set">Set接口</h2>
+<h2 id="set接口">Set接口</h2>
 
 <ul>
   <li>Set不允许包含相同的元素, 而判断两个对象是否相同则是根据<code class="highlighter-rouge">equals</code>方法</li>
@@ -155,7 +155,7 @@ jQuery(function(){
   <li><code class="highlighter-rouge">TreeSet</code>是<code class="highlighter-rouge">SortedSet</code>接口的实现类, 有顺序, 可自定义比较器(<code class="highlighter-rouge">Comparator</code>),有<code class="highlighter-rouge">first、last、lower、higher</code>等方法</li>
 </ul>
 
-<h2 id="list">List接口</h2>
+<h2 id="list接口">List接口</h2>
 <p><code class="highlighter-rouge">List</code>是经常用到的工具, 是有序集合, 增加了与索引位置相关的操作:</p>
 
 <ul>
@@ -169,8 +169,8 @@ jQuery(function(){
   <li><code class="highlighter-rouge">List&lt;E&gt; subList(int fromIndex, int toIndex)</code>: 子list</li>
 </ul>
 
-<h3 id="arraylistvector">ArrayList和Vector</h3>
-<p><code class="highlighter-rouge">ArrayList</code>是线程不安全的,而<code class="highlighter-rouge">Vector</code>是线程安全的  </p>
+<h3 id="arraylist和vector">ArrayList和Vector</h3>
+<p><code class="highlighter-rouge">ArrayList</code>是线程不安全的,而<code class="highlighter-rouge">Vector</code>是线程安全的</p>
 
 <h3 id="stack">Stack</h3>
 <p><code class="highlighter-rouge">Stack</code>是<code class="highlighter-rouge">Vector</code>的子类,模拟数据结构中的栈,有下面几个操作:</p>
@@ -183,7 +183,7 @@ jQuery(function(){
   <li><code class="highlighter-rouge">int search(Object o)</code>: 返回元素位置, 栈顶元素是1, －1表示栈里没有</li>
 </ul>
 
-<h2 id="queue">Queue接口</h2>
+<h2 id="queue接口">Queue接口</h2>
 <p><code class="highlighter-rouge">Queue</code>用于模拟队列这种数据结构，实现先进先出”FIFO”等数据结构,常用如下操作:</p>
 
 <ul>
@@ -196,11 +196,11 @@ jQuery(function(){
   <li><code class="highlighter-rouge">boolean peek()</code>: 返回队首元素, 队空返回<code class="highlighter-rouge">null</code></li>
 </ul>
 
-<h3 id="priorityqueue">PriorityQueue类</h3>
+<h3 id="priorityqueue类">PriorityQueue类</h3>
 <p><code class="highlighter-rouge">PriorityQueue</code>类中元素的顺序不是按照加入的顺序排列的, 而是按队列元素的优先级重新排序,
 调用<code class="highlighter-rouge">peek()</code>或者是<code class="highlighter-rouge">poll()</code>方法时，返回的是队列中优先级最小的元素, 可以自定义排序.</p>
 
-<h3 id="dequearraydeque">Deque接口与ArrayDeque类</h3>
+<h3 id="deque接口与arraydeque类">Deque接口与ArrayDeque类</h3>
 <p><code class="highlighter-rouge">Deque</code>代表一个双端队列，可以当作一个双端队列使用，也可以当作“栈”来使用，因为它包含出栈<code class="highlighter-rouge">pop()</code>与入栈<code class="highlighter-rouge">push()</code>方法</p>
 
 <ul>

@@ -102,29 +102,29 @@ jQuery(function(){
             <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#md5">MD5简介</a>    <ul>
-      <li><a href="#md5-1">MD5算法的特点</a></li>
-      <li><a href="#md5-2">MD5的作用</a></li>
-      <li><a href="#md5-3">MD5的算法原理</a></li>
-      <li><a href="#md5-4">MD5的工具类</a></li>
+  <li><a href="#md5简介" id="markdown-toc-md5简介">MD5简介</a>    <ul>
+      <li><a href="#md5算法的特点" id="markdown-toc-md5算法的特点">MD5算法的特点</a></li>
+      <li><a href="#md5的作用" id="markdown-toc-md5的作用">MD5的作用</a></li>
+      <li><a href="#md5的算法原理" id="markdown-toc-md5的算法原理">MD5的算法原理</a></li>
+      <li><a href="#md5的工具类" id="markdown-toc-md5的工具类">MD5的工具类</a></li>
     </ul>
   </li>
-  <li><a href="#sha1">SHA1简介</a>    <ul>
-      <li><a href="#sha1-1">SHA1的特点</a></li>
-      <li><a href="#sha1-2">SHA1算法流程</a></li>
-      <li><a href="#sha1-3">SHA1工具类</a></li>
+  <li><a href="#sha1简介" id="markdown-toc-sha1简介">SHA1简介</a>    <ul>
+      <li><a href="#sha1的特点" id="markdown-toc-sha1的特点">SHA1的特点</a></li>
+      <li><a href="#sha1算法流程" id="markdown-toc-sha1算法流程">SHA1算法流程</a></li>
+      <li><a href="#sha1工具类" id="markdown-toc-sha1工具类">SHA1工具类</a></li>
     </ul>
   </li>
-  <li><a href="#md5sha-1">MD5与SHA-1的比较</a></li>
-  <li><a href="#section">相关链接</a></li>
+  <li><a href="#md5与sha-1的比较" id="markdown-toc-md5与sha-1的比较">MD5与SHA-1的比较</a></li>
+  <li><a href="#相关链接" id="markdown-toc-相关链接">相关链接</a></li>
 </ul>
 
 <hr />
 
-<h2 id="md5">MD5简介</h2>
+<h2 id="md5简介">MD5简介</h2>
 <p><code class="highlighter-rouge">MD5</code>即<code class="highlighter-rouge">Message-Digest Algorithm 5</code>(信息-摘要算法5), 用于确保信息传输完整一致. 是计算机广泛使用的杂凑算法之一(又译摘要算法、哈希算法), 将数据运算为另一固定长度值，是杂凑算法的基础原理，主流编程语言普遍已有MD5实现。<code class="highlighter-rouge">MD5</code>的前身有<code class="highlighter-rouge">MD2</code>、<code class="highlighter-rouge">MD3</code>和<code class="highlighter-rouge">MD4</code>。</p>
 
-<h3 id="md5-1">MD5算法的特点</h3>
+<h3 id="md5算法的特点">MD5算法的特点</h3>
 
 <ol>
   <li>压缩性: 任意长度的数据，算出的MD5值的长度都是固定的</li>
@@ -133,22 +133,21 @@ jQuery(function(){
   <li>强抗碰撞: 已知原数据和MD5, 想找到一个具有相同MD5值的数据(即伪造数据)是非常困难的</li>
 </ol>
 
-<h3 id="md5-2">MD5的作用</h3>
+<h3 id="md5的作用">MD5的作用</h3>
 <p>MD5的作用是让大容量信息在用数字签名软件签署私人密钥前被”压缩”成一种保密的格式(就是把一个任意长度的字节串变换成一个定长的十六进制数字串).</p>
 
-<h3 id="md5-3">MD5的算法原理</h3>
+<h3 id="md5的算法原理">MD5的算法原理</h3>
 <p>MD5以512位分组来处理输入的信息, 且每一分组又被划分为16个32位子分组, 经过了一系列的处理后, 算法的输出由四个32位分组组成, 将这四个32位分组级联后将生成一个128位散列值.</p>
 
-<h3 id="md5-4">MD5的工具类</h3>
+<h3 id="md5的工具类">MD5的工具类</h3>
 <p>在java中有很多MD5实现, 其中<code class="highlighter-rouge">Guava</code>和<code class="highlighter-rouge">JDK</code>都有, 下面是一些例子</p>
 
 <ul>
   <li>利用<code class="highlighter-rouge">Guava</code>中的工具</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="n">Hashing</span><span class="o">.</span><span class="na">md5</span><span class="o">().</span><span class="na">newHasher</span><span class="o">().</span><span class="na">putString</span><span class="o">(</span><span class="n">source</span><span class="o">,</span> <span class="n">Charsets</span><span class="o">.</span><span class="na">UTF_8</span><span class="o">).</span><span class="na">hash</span><span class="o">().</span><span class="na">toString</span><span class="o">();</span>
-</code></pre>
-</div>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">Hashing</span><span class="o">.</span><span class="na">md5</span><span class="o">().</span><span class="na">newHasher</span><span class="o">().</span><span class="na">putString</span><span class="o">(</span><span class="n">source</span><span class="o">,</span> <span class="n">Charsets</span><span class="o">.</span><span class="na">UTF_8</span><span class="o">).</span><span class="na">hash</span><span class="o">().</span><span class="na">toString</span><span class="o">();</span>
+</code></pre></div></div>
 
 <ul>
   <li>使用<code class="highlighter-rouge">JDK</code>的工具</li>
@@ -156,7 +155,7 @@ jQuery(function(){
 
 <p>下面这个工具完全是通过<code class="highlighter-rouge">JDK</code>实现的, 没有使用第三方工具包</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MD5Utils</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MD5Utils</span> <span class="o">{</span>
 
     <span class="cm">/**
      * 对source按UTF_8编码进行md5签名
@@ -164,8 +163,8 @@ jQuery(function(){
      * @param source 待签名的原串
      * @return md5签名值（(32位小写16进制字符串）
      */</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">encode</span><span class="o">(</span><span class="n">String</span> <span class="n">source</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">encode</span><span class="o">(</span><span class="n">source</span><span class="o">,</span> <span class="s">"UTF-8"</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">encode</span><span class="o">(</span><span class="n">String</span> <span class="n">source</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">encode</span><span class="o">(</span><span class="n">source</span><span class="o">,</span> <span class="s">"UTF-8"</span><span class="o">);</span>
     <span class="o">}</span>
 
     <span class="cm">/**
@@ -175,7 +174,7 @@ jQuery(function(){
      * @param charsetName 字符编码
      * @return md5签名值（(32位小写16进制字符串）
      */</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">encode</span><span class="o">(</span><span class="n">String</span> <span class="n">source</span><span class="o">,</span> <span class="n">String</span> <span class="n">charsetName</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">encode</span><span class="o">(</span><span class="n">String</span> <span class="n">source</span><span class="o">,</span> <span class="n">String</span> <span class="n">charsetName</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">String</span> <span class="n">resultString</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
         <span class="k">try</span> <span class="o">{</span>
             <span class="c1">// 这里涉及SPI的相关内容</span>
@@ -183,7 +182,7 @@ jQuery(function(){
             <span class="kt">byte</span><span class="o">[]</span> <span class="n">bytes</span> <span class="o">=</span> <span class="n">md5</span><span class="o">.</span><span class="na">digest</span><span class="o">(</span><span class="n">source</span><span class="o">.</span><span class="na">getBytes</span><span class="o">());</span>
             <span class="n">resultString</span> <span class="o">=</span> <span class="n">byteArrayToHexString</span><span class="o">(</span><span class="n">bytes</span><span class="o">);</span>
         <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">exception</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="n">RuntimeException</span><span class="o">(</span><span class="s">"MD5签名失败"</span><span class="o">);</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="s">"MD5签名失败"</span><span class="o">);</span>
         <span class="o">}</span>
         <span class="k">return</span> <span class="n">resultString</span><span class="o">;</span>
     <span class="o">}</span>
@@ -191,7 +190,7 @@ jQuery(function(){
     <span class="cm">/**
      * 字节数组转换成16进制字符串
      */</span>
-    <span class="kd">private</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">byteArrayToHexString</span><span class="o">(</span><span class="kt">byte</span><span class="o">[]</span> <span class="n">bytes</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">byteArrayToHexString</span><span class="o">(</span><span class="kt">byte</span><span class="o">[]</span> <span class="n">bytes</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">StringBuilder</span> <span class="n">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">bytes</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>
         <span class="k">for</span> <span class="o">(</span><span class="kt">byte</span> <span class="n">b</span> <span class="o">:</span> <span class="n">bytes</span><span class="o">)</span> <span class="o">{</span>
             <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">hexDigits</span><span class="o">[(</span><span class="n">b</span> <span class="o">&gt;&gt;</span> <span class="mi">4</span><span class="o">)</span> <span class="o">&amp;</span> <span class="mh">0xf</span><span class="o">]).</span><span class="na">append</span><span class="o">(</span><span class="n">hexDigits</span><span class="o">[</span><span class="n">b</span> <span class="o">&amp;</span> <span class="mh">0xf</span><span class="o">]);</span>
@@ -202,22 +201,21 @@ jQuery(function(){
     <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">char</span><span class="o">[]</span> <span class="n">hexDigits</span> <span class="o">=</span> <span class="s">"0123456789abcdef"</span><span class="o">.</span><span class="na">toCharArray</span><span class="o">();</span>
 
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="sha1">SHA1简介</h2>
+<h2 id="sha1简介">SHA1简介</h2>
 <p>SHA是美国国家安全局设计的，由美国国家标准和技术研究院发布的一系列密码散列函数。 安全哈希算法(<code class="highlighter-rouge">Secure Hash Algorithm</code>)主要适用于数字签名标准(<code class="highlighter-rouge">Digital Signature Standard DSS</code>)里面定义的数字签名算法(<code class="highlighter-rouge">Digital Signature Algorithm DSA</code>)。对于长度小于<code class="highlighter-rouge">2^64</code>位的消息, SHA1会产生一个160位的消息摘要。</p>
 
-<h3 id="sha1-1">SHA1的特点</h3>
+<h3 id="sha1的特点">SHA1的特点</h3>
 
 <ul>
   <li>不可以从消息摘要中复原信息</li>
   <li>两个不同的消息不会产生同样的消息摘要(会有<code class="highlighter-rouge">10^48分之一</code>的机率出现相同的消息摘要, 一般使用时忽略)</li>
 </ul>
 
-<h3 id="sha1-2">SHA1算法流程</h3>
+<h3 id="sha1算法流程">SHA1算法流程</h3>
 <p>对于任意长度的明文, <code class="highlighter-rouge">SHA1</code>首先对其进行分组, 使得每一组的长度为512位，然后对这些明文分组反复重复处理。</p>
 
 <p>对于每个明文分组的摘要生成过程如下:</p>
@@ -232,16 +230,15 @@ jQuery(function(){
   <li>最后，5个链接变量里面的数据就是SHA1摘要。</li>
 </ol>
 
-<h3 id="sha1-3">SHA1工具类</h3>
+<h3 id="sha1工具类">SHA1工具类</h3>
 <p><code class="highlighter-rouge">Guava</code>中同样有<code class="highlighter-rouge">SHA1</code>的相关工具, 类似的还有<code class="highlighter-rouge">sha256</code>, <code class="highlighter-rouge">sha512</code>等散列工具</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Hashing</span><span class="o">.</span><span class="na">sha1</span><span class="o">().</span><span class="na">newHasher</span><span class="o">().</span><span class="na">putString</span><span class="o">(</span><span class="n">source</span><span class="o">,</span> <span class="n">Charsets</span><span class="o">.</span><span class="na">UTF_8</span><span class="o">).</span><span class="na">hash</span><span class="o">().</span><span class="na">toString</span><span class="o">();</span>
-</code></pre>
-</div>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Hashing</span><span class="o">.</span><span class="na">sha1</span><span class="o">().</span><span class="na">newHasher</span><span class="o">().</span><span class="na">putString</span><span class="o">(</span><span class="n">source</span><span class="o">,</span> <span class="n">Charsets</span><span class="o">.</span><span class="na">UTF_8</span><span class="o">).</span><span class="na">hash</span><span class="o">().</span><span class="na">toString</span><span class="o">();</span>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="md5sha-1">MD5与SHA-1的比较</h2>
+<h2 id="md5与sha-1的比较">MD5与SHA-1的比较</h2>
 <p><code class="highlighter-rouge">MD5</code>与<code class="highlighter-rouge">SHA-1</code>都属于哈希散列算法, 都是从<code class="highlighter-rouge">MD4</code>发展而来，它们的结构和强度等特性有很多相似之处, 他们的区别主要有下面这些:</p>
 
 <ul>
@@ -252,7 +249,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="section">相关链接</h2>
+<h2 id="相关链接">相关链接</h2>
 
 <ul>
   <li><a href="http://blog.csdn.net/woxinfeixiangliudan/article/details/50371932">关于MD5和SHA-1的简单的介绍</a></li>

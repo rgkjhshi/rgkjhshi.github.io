@@ -104,21 +104,21 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#section">加载过程</a>    <ul>
-      <li><a href="#logmanager">1. 生成LogManager</a></li>
-      <li><a href="#logmanagerdemandloggerlogger">2. 通过LogManager的demandLogger方法返回Logger</a></li>
+  <li><a href="#加载过程" id="markdown-toc-加载过程">加载过程</a>    <ul>
+      <li><a href="#1-生成logmanager" id="markdown-toc-1-生成logmanager">1. 生成LogManager</a></li>
+      <li><a href="#2-通过logmanager的demandlogger方法返回logger" id="markdown-toc-2-通过logmanager的demandlogger方法返回logger">2. 通过LogManager的demandLogger方法返回Logger</a></li>
     </ul>
   </li>
-  <li><a href="#section-1">源码解析</a></li>
-  <li><a href="#section-2">特殊说明</a></li>
+  <li><a href="#源码解析" id="markdown-toc-源码解析">源码解析</a></li>
+  <li><a href="#特殊说明" id="markdown-toc-特殊说明">特殊说明</a></li>
 </ul>
 
 <hr />
 
-<h2 id="section">加载过程</h2>
+<h2 id="加载过程">加载过程</h2>
 <p>Logger.getLogger(“className”)加载整个日志的过程简单概括如下</p>
 
-<h3 id="logmanager">1. 生成LogManager</h3>
+<h3 id="1-生成logmanager">1. 生成LogManager</h3>
 
 <ul>
   <li>LogManager静态初始化
@@ -137,7 +137,7 @@ jQuery(function(){
   </li>
 </ul>
 
-<h3 id="logmanagerdemandloggerlogger">2. 通过LogManager的demandLogger方法返回Logger</h3>
+<h3 id="2-通过logmanager的demandlogger方法返回logger">2. 通过LogManager的demandLogger方法返回Logger</h3>
 
 <ul>
   <li>若已创建该logger，直接返回该logger</li>
@@ -146,27 +146,26 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="section-1">源码解析</h2>
+<h2 id="源码解析">源码解析</h2>
 
 <p>先上入口</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.logging.Logger</span><span class="o">;</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.logging.Logger</span><span class="o">;</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">JULTest</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">log</span> <span class="o">=</span> <span class="n">Logger</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">JULTest</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span> <span class="c1">// 从这里开始</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="n">log</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>从<code class="highlighter-rouge">Logger.getLogger(XXX.class.getName())</code>开始,进入<code class="highlighter-rouge">java.util.logging.Logger</code>源码中可以看到</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Logger</span> <span class="nf">getLogger</span><span class="p">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Logger</span> <span class="nf">getLogger</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
         <span class="c1">// 直接调用了另一个方法</span>
-        <span class="k">return</span> <span class="n">demandLogger</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">Reflection</span><span class="o">.</span><span class="na">getCallerClass</span><span class="o">());</span>
+        <span class="k">return</span> <span class="nf">demandLogger</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">Reflection</span><span class="o">.</span><span class="na">getCallerClass</span><span class="o">());</span>
     <span class="o">}</span>
-    <span class="kd">private</span> <span class="kd">static</span> <span class="n">Logger</span> <span class="n">demandLogger</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="n">String</span> <span class="n">resourceBundleName</span><span class="o">,</span> <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">caller</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">Logger</span> <span class="nf">demandLogger</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="n">String</span> <span class="n">resourceBundleName</span><span class="o">,</span> <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">caller</span><span class="o">)</span> <span class="o">{</span>
        <span class="n">LogManager</span> <span class="n">manager</span> <span class="o">=</span> <span class="n">LogManager</span><span class="o">.</span><span class="na">getLogManager</span><span class="o">();</span>  <span class="c1">// 第一步就是生成LogManager</span>
        <span class="n">SecurityManager</span> <span class="n">sm</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">getSecurityManager</span><span class="o">();</span>
        <span class="k">if</span> <span class="o">(</span><span class="n">sm</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">LoggerHelper</span><span class="o">.</span><span class="na">disableCallerCheck</span><span class="o">)</span> <span class="o">{</span>
@@ -176,16 +175,15 @@ jQuery(function(){
        <span class="o">}</span>
        <span class="k">return</span> <span class="n">manager</span><span class="o">.</span><span class="na">demandLogger</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">resourceBundleName</span><span class="o">,</span> <span class="n">caller</span><span class="o">);</span> <span class="c1">// 最后通过这个方法返回Logger</span>
    <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>接下来看看<code class="highlighter-rouge">LogManager.getLogManager()</code>，不过在此之前，首先要注意，<code class="highlighter-rouge">LogManager</code>有一个静态初始化方法：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="kd">static</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">static</span> <span class="o">{</span>
         <span class="c1">// AccessController.doPrivileged()方法表示执行一些特权内容，跟Linux中的登陆有点类似。</span>
         <span class="c1">// Linux中的login程序必须访问password文件从而获得用户授权信息，但是用户不能随意的访问password文件。</span>
         <span class="c1">// 所以，login程序比较特殊，它不管被哪个用户所调用，都具有root的权限，而不是要登陆的用户权限。</span>
         <span class="n">AccessController</span><span class="o">.</span><span class="na">doPrivileged</span><span class="o">(</span><span class="k">new</span> <span class="n">PrivilegedAction</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;()</span> <span class="o">{</span>
-                <span class="kd">public</span> <span class="n">Object</span> <span class="n">run</span><span class="o">()</span> <span class="o">{</span>
+                <span class="kd">public</span> <span class="n">Object</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
                     <span class="n">String</span> <span class="n">cname</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
                     <span class="k">try</span> <span class="o">{</span>
                         <span class="n">cname</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">"java.util.logging.manager"</span><span class="o">);</span>
@@ -209,7 +207,7 @@ jQuery(function(){
                         <span class="n">manager</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LogManager</span><span class="o">();</span>
                     <span class="o">}</span>
                     <span class="c1">// 生成一个根Logger，添加到manager里</span>
-                    <span class="n">manager</span><span class="o">.</span><span class="na">rootLogger</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="na">new</span> <span class="n">RootLogger</span><span class="o">();</span>
+                    <span class="n">manager</span><span class="o">.</span><span class="na">rootLogger</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="na">new</span> <span class="nf">RootLogger</span><span class="o">();</span>
                     <span class="n">manager</span><span class="o">.</span><span class="na">addLogger</span><span class="o">(</span><span class="n">manager</span><span class="o">.</span><span class="na">rootLogger</span><span class="o">);</span>
                     <span class="n">manager</span><span class="o">.</span><span class="na">systemContext</span><span class="o">.</span><span class="na">addLocalLogger</span><span class="o">(</span><span class="n">manager</span><span class="o">.</span><span class="na">rootLogger</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
                     <span class="n">manager</span><span class="o">.</span><span class="na">userContext</span><span class="o">.</span><span class="na">addLocalLogger</span><span class="o">(</span><span class="n">manager</span><span class="o">.</span><span class="na">rootLogger</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
@@ -221,18 +219,17 @@ jQuery(function(){
                 <span class="o">}</span>
             <span class="o">});</span>
     <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p><code class="highlighter-rouge">LogManager</code>初始化方法执行完了之后，再来看<code class="highlighter-rouge">LogManager.getLogManager()</code></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">static</span> <span class="n">LogManager</span> <span class="nf">getLogManager</span><span class="p">(</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">static</span> <span class="n">LogManager</span> <span class="nf">getLogManager</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">if</span> <span class="o">(</span><span class="n">manager</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>   <span class="c1">// manager为类变量，只有一份。已经初始化了，不会为空</span>
             <span class="n">manager</span><span class="o">.</span><span class="na">readPrimordialConfiguration</span><span class="o">();</span>  <span class="c1">// 读取原始配置</span>
         <span class="o">}</span>
         <span class="k">return</span> <span class="n">manager</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="c1">// 下面主要是加载logging的属性</span>
-    <span class="kd">private</span> <span class="kt">void</span> <span class="n">readPrimordialConfiguration</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">readPrimordialConfiguration</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">if</span> <span class="o">(!</span><span class="n">readPrimordialConfiguration</span><span class="o">)</span> <span class="o">{</span> <span class="c1">// LogManager的私有变量，刚开始为false</span>
             <span class="kd">synchronized</span> <span class="o">(</span><span class="k">this</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">if</span> <span class="o">(!</span><span class="n">readPrimordialConfiguration</span><span class="o">)</span> <span class="o">{</span>
@@ -244,7 +241,7 @@ jQuery(function(){
                     <span class="k">try</span> <span class="o">{</span>
                         <span class="c1">// 又是特权函数</span>
                         <span class="n">AccessController</span><span class="o">.</span><span class="na">doPrivileged</span><span class="o">(</span><span class="k">new</span> <span class="n">PrivilegedExceptionAction</span><span class="o">&lt;</span><span class="n">Void</span><span class="o">&gt;()</span> <span class="o">{</span>
-                                <span class="kd">public</span> <span class="n">Void</span> <span class="n">run</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+                                <span class="kd">public</span> <span class="n">Void</span> <span class="nf">run</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
                                     <span class="n">readConfiguration</span><span class="o">();</span> <span class="c1">// 读取配置</span>
                                     <span class="c1">// Platform loggers 开始代理 java.util.logging.Logger</span>
                                     <span class="n">sun</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">logging</span><span class="o">.</span><span class="na">PlatformLogger</span><span class="o">.</span><span class="na">redirectPlatformLoggers</span><span class="o">();</span>
@@ -260,7 +257,7 @@ jQuery(function(){
     <span class="c1">// 重新初始化 logging properties，重新读取 logging 的配置</span>
     <span class="c1">// 先依此尝试加载系统属性"ava.util.logging.config.file"和""java.util.logging.config.class"</span>
     <span class="c1">// 若找不到则加载(即默认加载) java_home 下面的 "lib/logging.properties"配置文件(可以在 jre/lib 目录下面查看其内容)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">readConfiguration</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">SecurityException</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">readConfiguration</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">SecurityException</span> <span class="o">{</span>
         <span class="n">checkPermission</span><span class="o">();</span>
         <span class="n">String</span> <span class="n">cname</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">"java.util.logging.config.class"</span><span class="o">);</span>
         <span class="k">if</span> <span class="o">(</span><span class="n">cname</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
@@ -283,7 +280,7 @@ jQuery(function(){
         <span class="k">if</span> <span class="o">(</span><span class="n">fname</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
             <span class="n">fname</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">"java.home"</span><span class="o">);</span>   <span class="c1">// 这个必须有</span>
             <span class="k">if</span> <span class="o">(</span><span class="n">fname</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="n">Error</span><span class="o">(</span><span class="s">"Can't find java.home ??"</span><span class="o">);</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">Error</span><span class="o">(</span><span class="s">"Can't find java.home ??"</span><span class="o">);</span>
             <span class="o">}</span>
             <span class="n">File</span> <span class="n">f</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="n">fname</span><span class="o">,</span> <span class="s">"lib"</span><span class="o">);</span>
             <span class="n">f</span> <span class="o">=</span> <span class="k">new</span> <span class="n">File</span><span class="o">(</span><span class="n">f</span><span class="o">,</span> <span class="s">"logging.properties"</span><span class="o">);</span>
@@ -299,7 +296,7 @@ jQuery(function(){
             <span class="o">}</span>
         <span class="o">}</span>
     <span class="o">}</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">readConfiguration</span><span class="o">(</span><span class="n">InputStream</span> <span class="n">ins</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">SecurityException</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">readConfiguration</span><span class="o">(</span><span class="n">InputStream</span> <span class="n">ins</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">SecurityException</span> <span class="o">{</span>
         <span class="n">checkPermission</span><span class="o">();</span>
         <span class="n">reset</span><span class="o">();</span>
         <span class="n">props</span><span class="o">.</span><span class="na">load</span><span class="o">(</span><span class="n">ins</span><span class="o">);</span>
@@ -322,11 +319,10 @@ jQuery(function(){
             <span class="n">initializedGlobalHandlers</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
         <span class="o">}</span>
     <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p><code class="highlighter-rouge">LogManager.getLogManager</code>分析完了，再看看mananer是怎么返回Logger的</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Logger</span> <span class="nf">demandLogger</span><span class="p">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="n">String</span> <span class="n">resourceBundleName</span><span class="o">,</span> <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">caller</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Logger</span> <span class="nf">demandLogger</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="n">String</span> <span class="n">resourceBundleName</span><span class="o">,</span> <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">caller</span><span class="o">)</span> <span class="o">{</span>
     <span class="c1">// 如果给定name的logger已经创建过了，则返回原来创建的，保证同name的logger只有一个</span>
     <span class="n">Logger</span> <span class="n">result</span> <span class="o">=</span> <span class="n">getLogger</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
     <span class="k">if</span> <span class="o">(</span><span class="n">result</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
@@ -341,12 +337,11 @@ jQuery(function(){
     <span class="o">}</span>
     <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="section-2">特殊说明</h2>
+<h2 id="特殊说明">特殊说明</h2>
 <p>凡是有加载系统属性的地方，就提供了用户自定义的接口，比如上面的”java.util.logging.manager”、
 “java.util.logging.config.class”、”java.util.logging.config.file”，用户可以自己设置这些系统属性来进行自定义。</p>
 
@@ -356,26 +351,24 @@ jQuery(function(){
   <li>修改属性”java.util.logging.manager”,自定义<code class="highlighter-rouge">LogManager</code>，使用自己的<code class="highlighter-rouge">ClassLoaderLogManager</code>:</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># -z 表示判断指定的变量是否存在值</span>
-<span class="k">if</span> <span class="o">[</span> -z <span class="s2">"</span><span class="nv">$LOGGING_MANAGER</span><span class="s2">"</span> <span class="o">]</span>; <span class="k">then
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># -z 表示判断指定的变量是否存在值</span>
+<span class="k">if</span> <span class="o">[</span> <span class="nt">-z</span> <span class="s2">"</span><span class="nv">$LOGGING_MANAGER</span><span class="s2">"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then
   </span><span class="nv">LOGGING_MANAGER</span><span class="o">=</span><span class="s2">"-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager"</span>
 <span class="k">fi</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ul>
   <li>修改属性”java.util.logging.config.file”,自定义配置文件， 使用自己的<code class="highlighter-rouge">%CATALINA_BASE%\conf\logging.properties</code>文件:</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">if</span> <span class="o">[</span> -z <span class="s2">"</span><span class="nv">$LOGGING_CONFIG</span><span class="s2">"</span> <span class="o">]</span>; <span class="k">then
-  if</span> <span class="o">[</span> -r <span class="s2">"</span><span class="nv">$CATALINA_BASE</span><span class="s2">"</span>/conf/logging.properties <span class="o">]</span>; <span class="k">then
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">[</span> <span class="nt">-z</span> <span class="s2">"</span><span class="nv">$LOGGING_CONFIG</span><span class="s2">"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then
+  if</span> <span class="o">[</span> <span class="nt">-r</span> <span class="s2">"</span><span class="nv">$CATALINA_BASE</span><span class="s2">"</span>/conf/logging.properties <span class="o">]</span><span class="p">;</span> <span class="k">then
     </span><span class="nv">LOGGING_CONFIG</span><span class="o">=</span><span class="s2">"-Djava.util.logging.config.file=</span><span class="nv">$CATALINA_BASE</span><span class="s2">/conf/logging.properties"</span>
   <span class="k">else
     </span><span class="nv">LOGGING_CONFIG</span><span class="o">=</span><span class="s2">"-Dnop"</span>
   <span class="k">fi
 fi</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 

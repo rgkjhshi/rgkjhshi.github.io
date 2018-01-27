@@ -108,34 +108,32 @@ jQuery(function(){
 <code class="highlighter-rouge">testApp</code>即为项目部署的名称<br />
 项目的代码片段是这样子的:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@RestController</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RestController</span>
 <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/testController"</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestController</span> <span class="o">{</span>
     <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/testAPI.htm"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="n">ModelAndView</span> <span class="n">test</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">ModelAndView</span> <span class="nf">test</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="n">Maps</span><span class="o">.</span><span class="na">newHashMap</span><span class="o">();</span>
         <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"getContextPath"</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getContextPath</span><span class="o">());</span>
         <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"getServletPath"</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getServletPath</span><span class="o">());</span>
         <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"getRequestURL"</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getRequestURL</span><span class="o">());</span>
         <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"getRequestURI"</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getRequestURI</span><span class="o">());</span>
         <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"getQueryString"</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getQueryString</span><span class="o">());</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="n">ModelAndView</span><span class="o">(</span><span class="k">new</span> <span class="n">MappingJackson2JsonView</span><span class="o">(),</span> <span class="n">map</span><span class="o">);</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">ModelAndView</span><span class="o">(</span><span class="k">new</span> <span class="n">MappingJackson2JsonView</span><span class="o">(),</span> <span class="n">map</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 <p>请求的URL为: <code class="highlighter-rouge">http://localhost:8080/testApp/testController/testAPI.htm?a=1&amp;b=2</code><br />
 得到的结果是:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-    </span><span class="nt">"getContextPath"</span><span class="p">:</span><span class="s2">"/testApp"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"getServletPath"</span><span class="p">:</span><span class="s2">"/testController/testAPI.htm"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"getRequestURL"</span><span class="p">:</span><span class="s2">"http://localhost:8080/testApp/testController/testAPI.htm"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"getRequestURI"</span><span class="p">:</span><span class="s2">"/testApp/testController/testAPI.htm"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"getQueryString"</span><span class="p">:</span><span class="s2">"a=1&amp;b=2"</span><span class="w">
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"getContextPath"</span><span class="p">:</span><span class="s2">"/testApp"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"getServletPath"</span><span class="p">:</span><span class="s2">"/testController/testAPI.htm"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"getRequestURL"</span><span class="p">:</span><span class="s2">"http://localhost:8080/testApp/testController/testAPI.htm"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"getRequestURI"</span><span class="p">:</span><span class="s2">"/testApp/testController/testAPI.htm"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"getQueryString"</span><span class="p">:</span><span class="s2">"a=1&amp;b=2"</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
+</span></code></pre></div></div>
 
 <table>
   <thead>

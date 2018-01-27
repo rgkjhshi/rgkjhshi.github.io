@@ -104,119 +104,112 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#section">构造器创建实例</a>    <ul>
-      <li><a href="#constructor-arg"><code class="highlighter-rouge">&lt;constructor-arg&gt;元素</code>注入</a></li>
-      <li><a href="#c-"><code class="highlighter-rouge">c-命名空间</code>注入</a></li>
+  <li><a href="#构造器创建实例" id="markdown-toc-构造器创建实例">构造器创建实例</a>    <ul>
+      <li><a href="#constructor-arg元素注入" id="markdown-toc-constructor-arg元素注入"><code class="highlighter-rouge">&lt;constructor-arg&gt;元素</code>注入</a></li>
+      <li><a href="#c-命名空间注入" id="markdown-toc-c-命名空间注入"><code class="highlighter-rouge">c-命名空间</code>注入</a></li>
     </ul>
   </li>
-  <li><a href="#section-1">工厂方法创建实例</a></li>
-  <li><a href="#section-2">装配属性</a></li>
-  <li><a href="#section-3">装配集合</a>    <ul>
-      <li><a href="#listsetarray">装配List、Set和Array</a></li>
-      <li><a href="#map">装配Map</a></li>
-      <li><a href="#properties">装配Properties</a></li>
-      <li><a href="#util-"><code class="highlighter-rouge">util-命名空间</code></a></li>
+  <li><a href="#工厂方法创建实例" id="markdown-toc-工厂方法创建实例">工厂方法创建实例</a></li>
+  <li><a href="#装配属性" id="markdown-toc-装配属性">装配属性</a></li>
+  <li><a href="#装配集合" id="markdown-toc-装配集合">装配集合</a>    <ul>
+      <li><a href="#装配listset和array" id="markdown-toc-装配listset和array">装配List、Set和Array</a></li>
+      <li><a href="#装配map" id="markdown-toc-装配map">装配Map</a></li>
+      <li><a href="#装配properties" id="markdown-toc-装配properties">装配Properties</a></li>
+      <li><a href="#util-命名空间" id="markdown-toc-util-命名空间"><code class="highlighter-rouge">util-命名空间</code></a></li>
     </ul>
   </li>
 </ul>
 
 <hr />
 
-<h2 id="section">构造器创建实例</h2>
+<h2 id="构造器创建实例">构造器创建实例</h2>
 <p>构造器注入可以注入值, 也可以注入其他<code class="highlighter-rouge">Bean</code>的引用, 我们有两种配置方式可供选择, <code class="highlighter-rouge">&lt;constructor-arg&gt;元素</code> 和 <code class="highlighter-rouge">c-命名空间</code></p>
 
-<h3 id="constructor-arg"><code class="highlighter-rouge">&lt;constructor-arg&gt;元素</code>注入</h3>
+<h3 id="constructor-arg元素注入"><code class="highlighter-rouge">&lt;constructor-arg&gt;元素</code>注入</h3>
 <p><code class="highlighter-rouge">&lt;constructor-arg&gt;</code>元素的写法有多种形式</p>
 
 <ul>
   <li>按顺序注入, 如:</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"beanService"</span> <span class="na">class=</span><span class="s">"com.test.BeanService"</span><span class="nt">&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"beanService"</span> <span class="na">class=</span><span class="s">"com.test.BeanService"</span><span class="nt">&gt;</span>
         <span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"第一个参数"</span><span class="nt">/&gt;</span>
         <span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"第二个参数"</span><span class="nt">/&gt;</span>
     <span class="nt">&lt;/bean&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ul>
   <li>指定顺序注入, 参数是从0开始的. 如:</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"beanService"</span> <span class="na">class=</span><span class="s">"com.qunar.finance.demo.service.BeanService"</span><span class="nt">&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"beanService"</span> <span class="na">class=</span><span class="s">"com.qunar.finance.demo.service.BeanService"</span><span class="nt">&gt;</span>
         <span class="nt">&lt;constructor-arg</span> <span class="na">index=</span><span class="s">"0"</span> <span class="na">value=</span><span class="s">"第0个参数的值"</span><span class="nt">/&gt;</span>
         <span class="nt">&lt;constructor-arg</span> <span class="na">index=</span><span class="s">"1"</span> <span class="na">value=</span><span class="s">"第1个参数的值"</span><span class="nt">/&gt;</span>
     <span class="nt">&lt;/bean&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ul>
   <li>按参数名称注入, 如:</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"beanService"</span> <span class="na">class=</span><span class="s">"com.test.BeanService"</span><span class="nt">&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"beanService"</span> <span class="na">class=</span><span class="s">"com.test.BeanService"</span><span class="nt">&gt;</span>
         <span class="nt">&lt;constructor-arg</span> <span class="na">name=</span><span class="s">"name"</span> <span class="na">value=</span><span class="s">"name的值"</span><span class="nt">/&gt;</span>
         <span class="nt">&lt;constructor-arg</span> <span class="na">name=</span><span class="s">"title"</span> <span class="na">value=</span><span class="s">"title的值"</span><span class="nt">/&gt;</span>
     <span class="nt">&lt;/bean&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ul>
   <li>注入的不是值, 而是另一个<code class="highlighter-rouge">Bean</code>的引用, 只需要把<code class="highlighter-rouge">value</code>换成<code class="highlighter-rouge">ref</code>即可, 如:</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nt">&lt;constructor-arg</span> <span class="na">ref=</span><span class="s">"otherBeanId"</span><span class="nt">/&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nt">&lt;constructor-arg</span> <span class="na">ref=</span><span class="s">"otherBeanId"</span><span class="nt">/&gt;</span>
     <span class="nt">&lt;constructor-arg</span> <span class="na">index=</span><span class="s">"0"</span> <span class="na">ref=</span><span class="s">"otherBeanId"</span><span class="nt">/&gt;</span>
     <span class="nt">&lt;constructor-arg</span> <span class="na">name=</span><span class="s">"otherBean"</span> <span class="na">ref=</span><span class="s">"otherBeanId"</span><span class="nt">/&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="c-"><code class="highlighter-rouge">c-命名空间</code>注入</h3>
+<h3 id="c-命名空间注入"><code class="highlighter-rouge">c-命名空间</code>注入</h3>
 <p><code class="highlighter-rouge">c-命名空间</code>是在Spring 3.0中引入的, 要使用这个空间需要在<code class="highlighter-rouge">XML</code>顶部生命其模式:<code class="highlighter-rouge">xmlns:c="http://www.springframework.org/schema/c"</code>, 但是一般集成开发环境都会有自动导入功能.</p>
 
 <p>先看几个例子:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"beanService"</span> <span class="na">class=</span><span class="s">"com.test.BeanService"</span> <span class="na">c:name=</span><span class="s">"Tom"</span> <span class="na">c:title=</span><span class="s">"TestTitle"</span> <span class="nt">/&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"beanService"</span> <span class="na">class=</span><span class="s">"com.test.BeanService"</span> <span class="na">c:name=</span><span class="s">"Tom"</span> <span class="na">c:title=</span><span class="s">"TestTitle"</span> <span class="nt">/&gt;</span>
 <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"beanService"</span> <span class="na">class=</span><span class="s">"com.test.BeanService"</span> <span class="na">c:_0=</span><span class="s">"Tom"</span> <span class="na">c:_1=</span><span class="s">"TestTitle"</span> <span class="nt">/&gt;</span>
 <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"beanService"</span> <span class="na">class=</span><span class="s">"com.test.BeanService"</span> <span class="na">c:otherBean-ref=</span><span class="s">"otherBeanId"</span> <span class="nt">/&gt;</span>
 <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"beanService"</span> <span class="na">class=</span><span class="s">"com.test.BeanService"</span> <span class="na">c:_0-ref=</span><span class="s">"otherBeanId"</span> <span class="nt">/&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>与之前类似, 注入引用只是比注入值多了一个<code class="highlighter-rouge">-ref</code>, 但由于变量名不能以数字开头, 所以会在数字前面加一个下划线<code class="highlighter-rouge">_</code>, 如<code class="highlighter-rouge">c:_0</code>表示第0个参数</p>
 
 <hr />
 
-<h2 id="section-1">工厂方法创建实例</h2>
+<h2 id="工厂方法创建实例">工厂方法创建实例</h2>
 <p>有的类提供了一个静态工厂方法来产生实例(往往这种方法可以使用<code class="highlighter-rouge">initialization on demand holder</code>技术进行延时加载, 不论是静态内部类还是非静态内部类都是在第一次使用时才会被加载)。</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Singleton</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="n">Singleton</span><span class="o">()</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Singleton</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nf">Singleton</span><span class="o">()</span> <span class="o">{</span>
     <span class="o">}</span>
     <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">SingletonHolder</span> <span class="o">{</span>  <span class="c1">// 延迟加载实例</span>
         <span class="kd">static</span> <span class="n">Singleton</span> <span class="n">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Singleton</span><span class="o">();</span>
     <span class="o">}</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Singleton</span> <span class="n">getInstance</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Singleton</span> <span class="nf">getInstance</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="n">SingletonHolder</span><span class="o">.</span><span class="na">instance</span><span class="o">;</span>  <span class="c1">// 返回实例</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>我们可以使用<code class="highlighter-rouge">factory-method</code>属性来创建实例:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"beanService"</span> <span class="na">class=</span><span class="s">"com.test.Singleton"</span> <span class="na">factory-method=</span><span class="s">"getInstance"</span> <span class="nt">/&gt;</span>
-</code></pre>
-</div>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"beanService"</span> <span class="na">class=</span><span class="s">"com.test.Singleton"</span> <span class="na">factory-method=</span><span class="s">"getInstance"</span> <span class="nt">/&gt;</span>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="section-2">装配属性</h2>
+<h2 id="装配属性">装配属性</h2>
 <p>属性装配是以<code class="highlighter-rouge">setter</code>方法为基础的, 如果属性没有<code class="highlighter-rouge">setter</code>方法, 是无法通过这种方式进行属性注入的.</p>
 
 <p>与构造注入类似, 属性注入也有两种方式: <code class="highlighter-rouge">&lt;property&gt;</code>和<code class="highlighter-rouge">p-命名空间</code>, 如:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c">&lt;!-- property方式, name属性是必须的 --&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c">&lt;!-- property方式, name属性是必须的 --&gt;</span>
     <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"beanService"</span> <span class="na">class=</span><span class="s">"com.test.BeanService"</span><span class="nt">&gt;</span>
         <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"name"</span>  <span class="na">value=</span><span class="s">"Tom"</span><span class="nt">/&gt;</span>
         <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"otherBean"</span> <span class="na">ref=</span><span class="s">"otherBeanId"</span><span class="nt">/&gt;</span>
@@ -226,12 +219,11 @@ jQuery(function(){
         <span class="nt">&lt;p:name</span> <span class="na">value=</span><span class="s">"Tom"</span><span class="nt">/&gt;</span>
         <span class="nt">&lt;p:otherBean-ref</span> <span class="na">value=</span><span class="s">"otherBeanId"</span><span class="nt">/&gt;</span>
     <span class="nt">&lt;/bean&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="section-3">装配集合</h2>
+<h2 id="装配集合">装配集合</h2>
 <p>集合可以作为属性或者构造函数参数的值. Spring 提供了4中集合元素</p>
 
 <ul>
@@ -243,10 +235,10 @@ jQuery(function(){
 
 <p>实际上, <code class="highlighter-rouge">&lt;list&gt;</code>和<code class="highlighter-rouge">&lt;set&gt;</code>可以装备任意<code class="highlighter-rouge">java.util.Collection</code>甚至是数组, 两者唯一的区别就是<code class="highlighter-rouge">&lt;set&gt;</code>中重复元素会被过滤掉; <code class="highlighter-rouge">&lt;map&gt;</code>和<code class="highlighter-rouge">&lt;props&gt;</code>元素分别对应<code class="highlighter-rouge">java.util.Map</code>和<code class="highlighter-rouge">java.util.Properties</code>, <code class="highlighter-rouge">&lt;props&gt;</code>要求键和值都必须是<code class="highlighter-rouge">String</code>类型.</p>
 
-<h3 id="listsetarray">装配List、Set和Array</h3>
+<h3 id="装配listset和array">装配List、Set和Array</h3>
 <p>属性为数组或<code class="highlighter-rouge">List</code>或者<code class="highlighter-rouge">Set</code>都可以这样装配:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c">&lt;!-- 注入值 --&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c">&lt;!-- 注入值 --&gt;</span>
     <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"nameList"</span><span class="nt">&gt;</span>
         <span class="nt">&lt;list&gt;</span>
             <span class="nt">&lt;value&gt;</span>Tom<span class="nt">&lt;/value&gt;</span>
@@ -262,10 +254,9 @@ jQuery(function(){
             <span class="nt">&lt;ref</span> <span class="na">bean=</span><span class="s">"beanId"</span> <span class="nt">/&gt;</span>
         <span class="nt">&lt;/list&gt;</span>
     <span class="nt">&lt;/property&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="map">装配Map</h3>
+<h3 id="装配map">装配Map</h3>
 
 <p><code class="highlighter-rouge">&lt;map&gt;</code>元素包含多个<code class="highlighter-rouge">&lt;entry&gt;</code>元素, <code class="highlighter-rouge">&lt;entry&gt;</code>元素由有个键和一个值组成</p>
 
@@ -278,32 +269,30 @@ jQuery(function(){
 
 <p>比如:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"map"</span><span class="nt">&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"map"</span><span class="nt">&gt;</span>
         <span class="nt">&lt;map&gt;</span>
             <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">"a"</span> <span class="na">value-ref=</span><span class="s">"helloService"</span> <span class="nt">/&gt;</span>
             <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">"b"</span> <span class="na">value-ref=</span><span class="s">"helloService"</span> <span class="nt">/&gt;</span>
             <span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">"c"</span> <span class="na">value-ref=</span><span class="s">"helloService"</span> <span class="nt">/&gt;</span>
         <span class="nt">&lt;/map&gt;</span>
     <span class="nt">&lt;/property&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="properties">装配Properties</h3>
+<h3 id="装配properties">装配Properties</h3>
 <p><code class="highlighter-rouge">Properties</code>类提供了和<code class="highlighter-rouge">Map</code>大致相同的功能, 只是它的键和值都必须是<code class="highlighter-rouge">String</code>类型</p>
 
 <p><code class="highlighter-rouge">&lt;props&gt;</code>元素包含多个<code class="highlighter-rouge">&lt;prop&gt;</code>元素, <code class="highlighter-rouge">&lt;prop&gt;</code>元素有个<code class="highlighter-rouge">key</code>属性. 比如:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"properties"</span><span class="nt">&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"properties"</span><span class="nt">&gt;</span>
         <span class="nt">&lt;props&gt;</span>
             <span class="nt">&lt;prop</span> <span class="na">key=</span><span class="s">"a"</span><span class="nt">&gt;</span>Tom<span class="nt">&lt;/prop&gt;</span>
             <span class="nt">&lt;prop</span> <span class="na">key=</span><span class="s">"b"</span><span class="nt">&gt;</span>Jim<span class="nt">&lt;/prop&gt;</span>
             <span class="nt">&lt;prop</span> <span class="na">key=</span><span class="s">"c"</span><span class="nt">&gt;</span>Michael<span class="nt">&lt;/prop&gt;</span>
         <span class="nt">&lt;/props&gt;</span>
     <span class="nt">&lt;/property&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="util-"><code class="highlighter-rouge">util-命名空间</code></h3>
+<h3 id="util-命名空间"><code class="highlighter-rouge">util-命名空间</code></h3>
 <p><code class="highlighter-rouge">util-命名空间</code>可以用来装配集合,  它有如下元素:</p>
 
 <ul>
@@ -317,7 +306,7 @@ jQuery(function(){
 
 <p>例如:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nt">&lt;util:list</span> <span class="na">id=</span><span class="s">"listBean"</span><span class="nt">&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nt">&lt;util:list</span> <span class="na">id=</span><span class="s">"listBean"</span><span class="nt">&gt;</span>
         <span class="nt">&lt;value&gt;</span>Tom<span class="nt">&lt;/value&gt;</span>
         <span class="nt">&lt;value&gt;</span>Michael<span class="nt">&lt;/value&gt;</span>
     <span class="nt">&lt;/util:list&gt;</span>
@@ -334,8 +323,7 @@ jQuery(function(){
         <span class="nt">&lt;prop</span> <span class="na">key=</span><span class="s">"key2"</span><span class="nt">&gt;</span>value2<span class="nt">&lt;/prop&gt;</span>
     <span class="nt">&lt;/util:properties&gt;</span>
     <span class="nt">&lt;util:properties</span> <span class="na">id=</span><span class="s">"properties"</span> <span class="na">location=</span><span class="s">"classpath:config.properties"</span> <span class="nt">/&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 

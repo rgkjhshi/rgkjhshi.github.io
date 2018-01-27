@@ -104,16 +104,16 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#section">写在最前面</a></li>
-  <li><a href="#docker">初识Docker</a></li>
-  <li><a href="#docker-1">Docker与传统虚拟机技术的对比</a></li>
-  <li><a href="#docker-engine">Docker Engine</a></li>
-  <li><a href="#docker-">Docker 架构</a></li>
+  <li><a href="#写在最前面" id="markdown-toc-写在最前面">写在最前面</a></li>
+  <li><a href="#初识docker" id="markdown-toc-初识docker">初识Docker</a></li>
+  <li><a href="#docker与传统虚拟机技术的对比" id="markdown-toc-docker与传统虚拟机技术的对比">Docker与传统虚拟机技术的对比</a></li>
+  <li><a href="#docker-engine" id="markdown-toc-docker-engine">Docker Engine</a></li>
+  <li><a href="#docker-架构" id="markdown-toc-docker-架构">Docker 架构</a></li>
 </ul>
 
 <hr />
 
-<h2 id="section">写在最前面</h2>
+<h2 id="写在最前面">写在最前面</h2>
 
 <p>学习<code class="highlighter-rouge">Docker</code>最好的方式就是看官方文档, 不过有时候官网的解释非常官方, 所以我把学习中用到的资料全都列在下面</p>
 
@@ -125,7 +125,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="docker">初识Docker</h2>
+<h2 id="初识docker">初识Docker</h2>
 
 <p><code class="highlighter-rouge">Docker</code>是什么其实不太好定义, 它是个新的东西, 原来没有. 官方是这么说的, <code class="highlighter-rouge">Docker</code>是一个开发、装载、运行程序的开源的平台, 致力于快速发布你的程序, 缩短了从写代码到发布上线之间的这个周期.</p>
 
@@ -133,7 +133,7 @@ jQuery(function(){
 
 <p><code class="highlighter-rouge">Docker</code>是一个开源项目, Go语言实现, 遵从<code class="highlighter-rouge">Apache 2.0</code>协议. <code class="highlighter-rouge">Docker</code>在<code class="highlighter-rouge">Linux容器技术(LXC)</code>上进一步封装, 使用户操作更简单, 像是操作一个轻量级的虚拟机.</p>
 
-<h2 id="docker-1">Docker与传统虚拟机技术的对比</h2>
+<h2 id="docker与传统虚拟机技术的对比">Docker与传统虚拟机技术的对比</h2>
 
 <p>一般都会拿<code class="highlighter-rouge">Docker</code>跟传统的虚拟机技术做比较, 下图是官网上的对比图:</p>
 
@@ -156,7 +156,7 @@ jQuery(function(){
 
 <p>命令行脚本或命令通过<code class="highlighter-rouge">REST API</code>跟<code class="highlighter-rouge">demon</code>进行交互, 许多其他的docker组件, 也使用<code class="highlighter-rouge">REST API</code>或者<code class="highlighter-rouge">CLI</code>.</p>
 
-<h2 id="docker-">Docker 架构</h2>
+<h2 id="docker-架构">Docker 架构</h2>
 
 <p>Docker是<code class="highlighter-rouge">client-server</code>架构, <code class="highlighter-rouge">Docker client</code>与<code class="highlighter-rouge">Docker daemon</code>交互来控制编译、运行、发布容器. <code class="highlighter-rouge">client</code>和<code class="highlighter-rouge">daemon</code>运行在同一个系统里, 也可以把<code class="highlighter-rouge">client</code>连接到远程的<code class="highlighter-rouge">daemon</code>上, 它们可以通过<code class="highlighter-rouge">socket</code>使用<code class="highlighter-rouge">RESTful API</code>交互</p>
 

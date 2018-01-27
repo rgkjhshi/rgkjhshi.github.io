@@ -105,12 +105,12 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#checknotnull">checkNotNull</a></li>
-  <li><a href="#checkargument">checkArgument</a></li>
-  <li><a href="#checkstate">checkState</a></li>
-  <li><a href="#checkelementindex">checkElementIndex</a></li>
-  <li><a href="#checkpositionindex">checkPositionIndex</a></li>
-  <li><a href="#checkpositionindexes">checkPositionIndexes</a></li>
+  <li><a href="#checknotnull" id="markdown-toc-checknotnull">checkNotNull</a></li>
+  <li><a href="#checkargument" id="markdown-toc-checkargument">checkArgument</a></li>
+  <li><a href="#checkstate" id="markdown-toc-checkstate">checkState</a></li>
+  <li><a href="#checkelementindex" id="markdown-toc-checkelementindex">checkElementIndex</a></li>
+  <li><a href="#checkpositionindex" id="markdown-toc-checkpositionindex">checkPositionIndex</a></li>
+  <li><a href="#checkpositionindexes" id="markdown-toc-checkpositionindexes">checkPositionIndexes</a></li>
 </ul>
 
 <hr />
@@ -119,10 +119,12 @@ jQuery(function(){
 <p>函数声明: <code class="highlighter-rouge">public static &lt;T&gt; T checkNotNull(T reference)</code><br />
 函数功能: 检查参数不为空, 否则抛出<code class="highlighter-rouge">NullPointerException</code><br />
 应用场景: 判断对象不为null<br />
-有三个重载函数
-* checkNotNull(T reference)
-* checkNotNull(T reference, Object errorMessage)
-* checkNotNull(T reference, String errorMessageTemplate, Object… errorMessageArgs)</p>
+有三个重载函数</p>
+<ul>
+  <li>checkNotNull(T reference)</li>
+  <li>checkNotNull(T reference, Object errorMessage)</li>
+  <li>checkNotNull(T reference, String errorMessageTemplate, Object… errorMessageArgs)</li>
+</ul>
 
 <p>第二个可自定义错误描述，第三个可以使用模板,如<code class="highlighter-rouge">("Age is %s", 18)</code>等</p>
 
@@ -148,9 +150,11 @@ jQuery(function(){
 <p>函数声明: <code class="highlighter-rouge">public static int checkElementIndex(int index, int size)</code><br />
 函数功能: 检查index范围属于[0, size), 否则抛出<code class="highlighter-rouge">IndexOutOfBoundsException</code><br />
 应用场景: 一个List只传入<code class="highlighter-rouge">list.size()</code>和要判断的下标即可<br />
-有两个重载函数:
-* checkElementIndex(int index, int size)
-* checkElementIndex(int index, int size, String desc)</p>
+有两个重载函数:</p>
+<ul>
+  <li>checkElementIndex(int index, int size)</li>
+  <li>checkElementIndex(int index, int size, String desc)</li>
+</ul>
 
 <p>第二个可以自己写描述, 如传入的是(5, 3, “index”)描述将是”index (4) must not be greater than size (3)”<br />
 第一个默认是”index”的描述</p>
@@ -167,7 +171,7 @@ jQuery(function(){
 
 <h2 id="checkpositionindexes">checkPositionIndexes</h2>
 <p>函数声明: <code class="highlighter-rouge">public static void checkPositionIndexes(int start, int end, int size)</code><br />
-函数功能: 检查 start和end属于[0, size]且start&lt;=end, 否则抛出<code class="highlighter-rouge">IndexOutOfBoundsException</code>  </p>
+函数功能: 检查 start和end属于[0, size]且start&lt;=end, 否则抛出<code class="highlighter-rouge">IndexOutOfBoundsException</code></p>
 
 <hr />
 

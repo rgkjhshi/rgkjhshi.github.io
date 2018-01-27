@@ -102,10 +102,10 @@ jQuery(function(){
             <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#ru">未授权读取(RU)</a></li>
-  <li><a href="#rc">授权读取(RC)</a></li>
-  <li><a href="#rr">可重复读取(RR)</a></li>
-  <li><a href="#s">串行化(S)</a></li>
+  <li><a href="#未授权读取ru" id="markdown-toc-未授权读取ru">未授权读取(RU)</a></li>
+  <li><a href="#授权读取rc" id="markdown-toc-授权读取rc">授权读取(RC)</a></li>
+  <li><a href="#可重复读取rr" id="markdown-toc-可重复读取rr">可重复读取(RR)</a></li>
+  <li><a href="#串行化s" id="markdown-toc-串行化s">串行化(S)</a></li>
 </ul>
 
 <hr />
@@ -113,29 +113,29 @@ jQuery(function(){
 
 <p><img src="/static/images/isolation.png" alt="隔离级别" title="隔离级别" /></p>
 
-<h2 id="ru">未授权读取(RU)</h2>
+<h2 id="未授权读取ru">未授权读取(RU)</h2>
 <p>未授权读取也被称作读未提交(<code class="highlighter-rouge">Read Uncommitted</code>)，这种隔离级别允许读取未提交的数据，隔离级别最低。<br />
-<code class="highlighter-rouge">RU</code>这种隔离级别中，允许<code class="highlighter-rouge">脏读</code>, 但不允许出现<code class="highlighter-rouge">丢失更新</code>。  </p>
+<code class="highlighter-rouge">RU</code>这种隔离级别中，允许<code class="highlighter-rouge">脏读</code>, 但不允许出现<code class="highlighter-rouge">丢失更新</code>。</p>
 
 <p><code class="highlighter-rouge">丢失更新</code>: 两个事务同时更新统一数据时, 会发生更新丢失。<br />
 <code class="highlighter-rouge">脏读</code>: 一个事务读取到另一个事务未提交的修改时, 会产生脏读。如:事务A把一数据从1<code class="highlighter-rouge">update</code>成2,<code class="highlighter-rouge">update</code>成3直到<code class="highlighter-rouge">update</code>成9, 事务B每次<code class="highlighter-rouge">select</code>都能看到事务A的中间值(比如2,3或7)，对B来说这些就是脏数据。</p>
 
-<h2 id="rc">授权读取(RC)</h2>
+<h2 id="授权读取rc">授权读取(RC)</h2>
 <p>授权读取也被称为读已提交(<code class="highlighter-rouge">Read Committed</code>)，这种隔离级别只允许读取已经被提交的数据。<br />
-<code class="highlighter-rouge">RC</code>这种隔离级别中允许出现<code class="highlighter-rouge">不可重复读</code>, 但不允许<code class="highlighter-rouge">脏读</code>  </p>
+<code class="highlighter-rouge">RC</code>这种隔离级别中允许出现<code class="highlighter-rouge">不可重复读</code>, 但不允许<code class="highlighter-rouge">脏读</code></p>
 
 <p><code class="highlighter-rouge">不可重复读</code>: 同一查询在同一事务中多次进行，由于其他提交事务所做的 <strong>修改或删除</strong>，每次返回不同的结果集，这就发生非重复读。 如:事务A操作数据1, 要把它<code class="highlighter-rouge">update</code>成9, 事务B第一次<code class="highlighter-rouge">select</code>发现是1, 此时事务A提交了, 事务B再次<code class="highlighter-rouge">select</code>发现变成了9, 这种现象叫做<code class="highlighter-rouge">不可重复读</code>。 <br />
 它的危害也很明显, 因为B第一次读取的时候是1, 若果要对它进行+1在更新回去, 就会变成2, 但实际上这是不对的。(这里你不能用mysql做实验, 因为mysql不再这个隔离级别, 所以这种情况在mysql中不会发生)</p>
 
-<h2 id="rr">可重复读取(RR)</h2>
+<h2 id="可重复读取rr">可重复读取(RR)</h2>
 <p>可重复读取(Repeatable Read), 这种隔离级别保证在一个事务中，多次读取到的数据都是和事务开始时是一样的。<br />
 <code class="highlighter-rouge">RR</code>这种隔离级别允许出现<code class="highlighter-rouge">幻读</code>，但不允许<code class="highlighter-rouge">不可重复读</code>。</p>
 
-<p><code class="highlighter-rouge">幻读</code>: 同一查询在同一事务中多次进行，由于其他提交事务所做的 <strong>插入</strong> 操作，每次返回不同的结果集，此时发生幻像读。在<code class="highlighter-rouge">RR</code>中, 事务B读取到的数据值都是跟事务开始时一致(所以可以重复读), 但若事务A新<code class="highlighter-rouge">insert</code>了一条数据, 事务B是可见的, 因此对于事务B来说，开始时没有这个数据，但是过了一会儿却多出来一条数据(数据不一致了)，因此对于事务B来说就很莫名其妙。  </p>
+<p><code class="highlighter-rouge">幻读</code>: 同一查询在同一事务中多次进行，由于其他提交事务所做的 <strong>插入</strong> 操作，每次返回不同的结果集，此时发生幻像读。在<code class="highlighter-rouge">RR</code>中, 事务B读取到的数据值都是跟事务开始时一致(所以可以重复读), 但若事务A新<code class="highlighter-rouge">insert</code>了一条数据, 事务B是可见的, 因此对于事务B来说，开始时没有这个数据，但是过了一会儿却多出来一条数据(数据不一致了)，因此对于事务B来说就很莫名其妙。</p>
 
 <p>MySql就是在<code class="highlighter-rouge">RR</code>隔离级别上的, 但它在此基础上又加了<code class="highlighter-rouge">gap</code>锁, 保证了不会出现<code class="highlighter-rouge">幻读</code>。其实MySql中并没有区分<code class="highlighter-rouge">不可重复读</code>和<code class="highlighter-rouge">幻读</code>,MySql统称为<code class="highlighter-rouge">幻读</code>并且禁止了<code class="highlighter-rouge">幻读</code>现象的出现。</p>
 
-<h2 id="s">串行化(S)</h2>
+<h2 id="串行化s">串行化(S)</h2>
 <p>串行化(Serializable)是最严格的事务隔离级别，它要求所有的事务都被串行执行。</p>
 
 <hr />

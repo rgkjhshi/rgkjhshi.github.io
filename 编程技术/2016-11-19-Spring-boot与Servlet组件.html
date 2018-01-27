@@ -102,29 +102,29 @@ jQuery(function(){
             <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#servlet">Servlet组件注册</a></li>
-  <li><a href="#filter">注册Filter</a>    <ul>
-      <li><a href="#section">方式一</a></li>
-      <li><a href="#section-1">方式二</a></li>
-      <li><a href="#section-2">方式三</a></li>
+  <li><a href="#servlet组件注册" id="markdown-toc-servlet组件注册">Servlet组件注册</a></li>
+  <li><a href="#注册filter" id="markdown-toc-注册filter">注册Filter</a>    <ul>
+      <li><a href="#方式一" id="markdown-toc-方式一">方式一</a></li>
+      <li><a href="#方式二" id="markdown-toc-方式二">方式二</a></li>
+      <li><a href="#方式三" id="markdown-toc-方式三">方式三</a></li>
     </ul>
   </li>
-  <li><a href="#listener">注册Listener</a></li>
-  <li><a href="#servlet-1">注册Servlet</a></li>
+  <li><a href="#注册listener" id="markdown-toc-注册listener">注册Listener</a></li>
+  <li><a href="#注册servlet" id="markdown-toc-注册servlet">注册Servlet</a></li>
 </ul>
 
 <hr />
 
-<h2 id="servlet">Servlet组件注册</h2>
+<h2 id="servlet组件注册">Servlet组件注册</h2>
 
 <p><code class="highlighter-rouge">Servlet</code>的组件包括<code class="highlighter-rouge">Filter</code>, <code class="highlighter-rouge">Listener</code>, <code class="highlighter-rouge">Servlet</code>, 具体详情可参考<a href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2016-11-16-Servlet%E8%AF%A6%E8%A7%A3.html">Servlet详解</a>.<br />
 普通的web项目都是从<code class="highlighter-rouge">web.xml</code>中配置, <code class="highlighter-rouge">Spring boot</code>中为我们提供了很多注册的方式. 我们先以<code class="highlighter-rouge">Filter</code>举例, 然后再介绍<code class="highlighter-rouge">Listener</code>和<code class="highlighter-rouge">Servlet</code>的注册, 他们的注册方式基本一致.</p>
 
 <hr />
 
-<h2 id="filter">注册Filter</h2>
+<h2 id="注册filter">注册Filter</h2>
 
-<h3 id="section">方式一</h3>
+<h3 id="方式一">方式一</h3>
 <p>直接作为一个<code class="highlighter-rouge">Bean</code>注册.<br />
 自定义<code class="highlighter-rouge">Filter</code>通常可以实现<code class="highlighter-rouge">Filter</code>接口, 或者可以继承<code class="highlighter-rouge">Spring</code>提供的<code class="highlighter-rouge">GenericFilterBean</code>.<br />
 当<code class="highlighter-rouge">Spring Boot</code>监测到有<code class="highlighter-rouge">javax.servlet.Filter</code>的<code class="highlighter-rouge">bean</code>时就会自动加入过滤器调用链.</p>
@@ -136,17 +136,16 @@ jQuery(function(){
 
 <p>代码如下:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Component</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Component</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyFilter</span> <span class="kd">extends</span> <span class="n">GenericFilterBean</span> <span class="o">{</span>
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">doFilter</span><span class="o">(</span><span class="n">ServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">ServletResponse</span> <span class="n">response</span><span class="o">,</span> <span class="n">FilterChain</span> <span class="n">chain</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">ServletException</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">doFilter</span><span class="o">(</span><span class="n">ServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">ServletResponse</span> <span class="n">response</span><span class="o">,</span> <span class="n">FilterChain</span> <span class="n">chain</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">ServletException</span> <span class="o">{</span>
         <span class="c1">//  some code</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="section-1">方式二</h3>
+<h3 id="方式二">方式二</h3>
 <p>通过<code class="highlighter-rouge">FilterRegistrationBean</code>注册, 这个类实现了<code class="highlighter-rouge">ServletContextInitializer</code>接口</p>
 
 <ul>
@@ -155,10 +154,10 @@ jQuery(function(){
 
 <p>比如还是注册上面写的那个<code class="highlighter-rouge">MyFilter</code>, 注册及配置的代码如下:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nd">@Configuration</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Configuration</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">WebMvcConfig</span> <span class="kd">extends</span> <span class="n">WebMvcConfigurerAdapter</span> <span class="o">{</span>
     <span class="nd">@Bean</span>
-    <span class="kd">public</span> <span class="n">FilterRegistrationBean</span> <span class="n">registMyFilter</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">FilterRegistrationBean</span> <span class="nf">registMyFilter</span><span class="o">()</span> <span class="o">{</span>
         <span class="n">FilterRegistrationBean</span> <span class="n">registrationBean</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FilterRegistrationBean</span><span class="o">();</span>
         <span class="n">registrationBean</span><span class="o">.</span><span class="na">setFilter</span><span class="o">(</span><span class="k">new</span> <span class="n">MyFilter</span><span class="o">());</span>
         <span class="n">registrationBean</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"myFilter"</span><span class="o">);</span>
@@ -167,15 +166,14 @@ jQuery(function(){
         <span class="k">return</span> <span class="n">registrationBean</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="section-2">方式三</h3>
+<h3 id="方式三">方式三</h3>
 <p>使用<code class="highlighter-rouge">@ServletComponentScan</code>扫描<code class="highlighter-rouge">@WebFilter</code>注解自动注册</p>
 
 <p>这种方式需要在 <strong>主配置类</strong> 上加<code class="highlighter-rouge">@ServletComponentScan</code>注解, 在我们的<code class="highlighter-rouge">MyFilter</code>类上加<code class="highlighter-rouge">@WebFilter</code>注解. 代码如下:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// 主配置类</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 主配置类</span>
 <span class="nd">@SpringBootApplication</span>
 <span class="nd">@ServletComponentScan</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Application</span> <span class="o">{</span>
@@ -185,16 +183,15 @@ jQuery(function(){
 <span class="nd">@WebFilter</span><span class="o">(</span><span class="n">filterName</span> <span class="o">=</span> <span class="s">"myFilter"</span><span class="o">,</span> <span class="n">urlPatterns</span> <span class="o">=</span> <span class="s">"/*"</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyFilter</span> <span class="kd">extends</span> <span class="n">GenericFilterBean</span> <span class="o">{</span>
     <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="n">doFilter</span><span class="o">(</span><span class="n">ServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">ServletResponse</span> <span class="n">response</span><span class="o">,</span> <span class="n">FilterChain</span> <span class="n">chain</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">ServletException</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">doFilter</span><span class="o">(</span><span class="n">ServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">ServletResponse</span> <span class="n">response</span><span class="o">,</span> <span class="n">FilterChain</span> <span class="n">chain</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">ServletException</span> <span class="o">{</span>
         <span class="c1">//  some code</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="listener">注册Listener</h2>
+<h2 id="注册listener">注册Listener</h2>
 <p><code class="highlighter-rouge">Listener</code>的注册方式跟<code class="highlighter-rouge">Filter</code>一样, 只是继承或实现的接口, 添加的注解不一样.</p>
 
 <ul>
@@ -205,7 +202,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="servlet-1">注册Servlet</h2>
+<h2 id="注册servlet">注册Servlet</h2>
 <p>在<code class="highlighter-rouge">Spring</code>项目中, 都是通过<code class="highlighter-rouge">DispatcherServlet</code>分发, 基本不需要自定义<code class="highlighter-rouge">Servlet</code>. 下面仅介绍使用方式</p>
 
 <ul>

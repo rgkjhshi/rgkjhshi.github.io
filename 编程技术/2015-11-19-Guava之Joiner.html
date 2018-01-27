@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="keywords" content="Guava之Joiner, 编程技术, Guava, 逆水行舟" />
-    <meta name="description" content="Guava之Joiner, 编程技术, Guava, Joiner在Guava的com.google.common.base包中, 算是字符处理工具, 其作用是连接多个元素, 可当作连接器来使用  " />
+    <meta name="description" content="Guava之Joiner, 编程技术, Guava, Joiner在Guava的com.google.common.base包中, 算是字符处理工具, 其作用是连接多个元素, 可当作连接器来使用" />
 
     <title>逆水行舟</title>
 
@@ -99,20 +99,20 @@ jQuery(function(){
     <div class="uk-grid">
         <div  class="uk-width-4-4">
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
-            <p><code class="highlighter-rouge">Joiner</code>在Guava的<code class="highlighter-rouge">com.google.common.base</code>包中, 算是字符处理工具, 其作用是连接多个元素, 可当作连接器来使用  </p>
+            <p><code class="highlighter-rouge">Joiner</code>在Guava的<code class="highlighter-rouge">com.google.common.base</code>包中, 算是字符处理工具, 其作用是连接多个元素, 可当作连接器来使用</p>
 
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#joiner-">生成 Joiner 的方法</a></li>
-  <li><a href="#join-">join 方法</a></li>
-  <li><a href="#appendto-">appendTo 方法</a></li>
-  <li><a href="#mapjoiner">MapJoiner</a></li>
+  <li><a href="#生成-joiner-的方法" id="markdown-toc-生成-joiner-的方法">生成 Joiner 的方法</a></li>
+  <li><a href="#join-方法" id="markdown-toc-join-方法">join 方法</a></li>
+  <li><a href="#appendto-方法" id="markdown-toc-appendto-方法">appendTo 方法</a></li>
+  <li><a href="#mapjoiner" id="markdown-toc-mapjoiner">MapJoiner</a></li>
 </ul>
 
 <hr />
 
-<h2 id="joiner-">生成 Joiner 的方法</h2>
+<h2 id="生成-joiner-的方法">生成 Joiner 的方法</h2>
 <p>工厂方法:</p>
 
 <ul>
@@ -127,22 +127,20 @@ jQuery(function(){
   <li><code class="highlighter-rouge">Joiner skipNulls()</code></li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Joiner</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="s">"; "</span><span class="o">).</span><span class="na">skipNulls</span><span class="o">().</span><span class="na">join</span><span class="o">(</span><span class="s">"Harry"</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="s">"Ron"</span><span class="o">,</span> <span class="s">"Hermione"</span><span class="o">);</span> <span class="c1">// Harry; Ron; Hermione</span>
-</code></pre>
-</div>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Joiner</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="s">"; "</span><span class="o">).</span><span class="na">skipNulls</span><span class="o">().</span><span class="na">join</span><span class="o">(</span><span class="s">"Harry"</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="s">"Ron"</span><span class="o">,</span> <span class="s">"Hermione"</span><span class="o">);</span> <span class="c1">// Harry; Ron; Hermione</span>
+</code></pre></div></div>
 
 <p><strong>注意</strong>: Joiner类是不可变的, 即它是线程安全的, 可以将其定义为<code class="highlighter-rouge">static final</code>常量<br />
 像下面这样使用是 <strong>错误</strong> 的:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Joiner</span> <span class="n">joiner</span> <span class="o">=</span> <span class="n">Joiner</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="sc">','</span><span class="o">);</span>   <span class="c1">// joiner 是不可变的</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Joiner</span> <span class="n">joiner</span> <span class="o">=</span> <span class="n">Joiner</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="sc">','</span><span class="o">);</span>   <span class="c1">// joiner 是不可变的</span>
 <span class="n">joiner</span><span class="o">.</span><span class="na">skipNulls</span><span class="o">();</span>   <span class="c1">// 这里返回了个新的Joiner, 原来的joiner并没变</span>
 <span class="n">joiner</span><span class="o">.</span><span class="na">join</span><span class="o">(</span><span class="s">"wrong"</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="s">"wrong"</span><span class="o">);</span> <span class="c1">// 这就直接报NullPointerException了, 原来的joiner没有skipNull功能</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="join-">join 方法</h2>
+<h2 id="join-方法">join 方法</h2>
 <p>返回连接之后的字符串, 返回的字符串都是<code class="highlighter-rouge">final</code>的:</p>
 
 <ul>
@@ -152,13 +150,12 @@ jQuery(function(){
   <li><code class="highlighter-rouge">public final String join(Object first, Object second, Object... rest)</code></li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Joiner</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="s">","</span><span class="o">).</span><span class="na">join</span><span class="o">(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">7</span><span class="o">));</span> <span class="c1">// returns "1,5,7"</span>
-</code></pre>
-</div>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Joiner</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="s">","</span><span class="o">).</span><span class="na">join</span><span class="o">(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">7</span><span class="o">));</span> <span class="c1">// returns "1,5,7"</span>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="appendto-">appendTo 方法</h2>
+<h2 id="appendto-方法">appendTo 方法</h2>
 <p>把后面的参数以字符串的方式添加到第一个参数后面<br />
 <code class="highlighter-rouge">java.lang.Appendable</code>接口的子类(如<code class="highlighter-rouge">StringBuilder</code> <code class="highlighter-rouge">BufferedWriter</code>等), 都可以作为第一个参数</p>
 
@@ -173,9 +170,8 @@ jQuery(function(){
   <li><code class="highlighter-rouge">&lt;A extends Appendable&gt; A appendTo(A appendable, Object first, Object second, Object... rest)</code></li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Joiner</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="s">","</span><span class="o">).</span><span class="na">appendTo</span><span class="o">(</span><span class="k">new</span> <span class="n">StringBuilder</span><span class="o">(</span><span class="s">"list:"</span><span class="o">),</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)).</span><span class="na">toString</span><span class="o">();</span> <span class="c1">// list:1,2,3</span>
-</code></pre>
-</div>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Joiner</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="s">","</span><span class="o">).</span><span class="na">appendTo</span><span class="o">(</span><span class="k">new</span> <span class="n">StringBuilder</span><span class="o">(</span><span class="s">"list:"</span><span class="o">),</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">)).</span><span class="na">toString</span><span class="o">();</span> <span class="c1">// list:1,2,3</span>
+</code></pre></div></div>
 
 <hr />
 
@@ -186,12 +182,11 @@ jQuery(function(){
   <li><code class="highlighter-rouge">MapJoiner withKeyValueSeparator(String keyValueSeparator)</code></li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="n">Maps</span><span class="o">.</span><span class="na">newHashMap</span><span class="o">();</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="n">Maps</span><span class="o">.</span><span class="na">newHashMap</span><span class="o">();</span>
 <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"a"</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
 <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"b"</span><span class="o">,</span> <span class="mi">2</span><span class="o">);</span>
 <span class="n">Joiner</span><span class="o">.</span><span class="na">on</span><span class="o">(</span><span class="s">";"</span><span class="o">).</span><span class="na">withKeyValueSeparator</span><span class="o">(</span><span class="s">"-&gt;"</span><span class="o">).</span><span class="na">join</span><span class="o">(</span><span class="n">map</span><span class="o">);</span> <span class="c1">// b-&gt;2;a-&gt;1</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 

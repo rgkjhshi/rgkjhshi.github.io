@@ -106,13 +106,13 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#charmatcher">获取CharMatcher</a></li>
-  <li><a href="#section">使用字符匹配器</a></li>
+  <li><a href="#获取charmatcher" id="markdown-toc-获取charmatcher">获取CharMatcher</a></li>
+  <li><a href="#使用字符匹配器" id="markdown-toc-使用字符匹配器">使用字符匹配器</a></li>
 </ul>
 
 <hr />
 
-<h2 id="charmatcher">获取CharMatcher</h2>
+<h2 id="获取charmatcher">获取CharMatcher</h2>
 <p>CharMatcher中的常量可以满足大多数字符匹配需求</p>
 
 <table>
@@ -205,7 +205,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="section">使用字符匹配器</h2>
+<h2 id="使用字符匹配器">使用字符匹配器</h2>
 <p>返回是否匹配(<code class="highlighter-rouge">boolean</code>)的方法:</p>
 
 <ul>
@@ -238,15 +238,14 @@ jQuery(function(){
 
 <p>示例:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">CharMatcher</span><span class="o">.</span><span class="na">is</span><span class="o">(</span><span class="sc">'a'</span><span class="o">).</span><span class="na">removeFrom</span><span class="o">(</span><span class="s">"bazaar"</span><span class="o">);</span>  <span class="c1">// "bzr"</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CharMatcher</span><span class="o">.</span><span class="na">is</span><span class="o">(</span><span class="sc">'a'</span><span class="o">).</span><span class="na">removeFrom</span><span class="o">(</span><span class="s">"bazaar"</span><span class="o">);</span>  <span class="c1">// "bzr"</span>
 <span class="n">CharMatcher</span><span class="o">.</span><span class="na">is</span><span class="o">(</span><span class="sc">'a'</span><span class="o">).</span><span class="na">retainFrom</span><span class="o">(</span><span class="s">"bazaar"</span><span class="o">);</span>  <span class="c1">// "aaa"</span>
 <span class="n">CharMatcher</span><span class="o">.</span><span class="na">is</span><span class="o">(</span><span class="sc">'a'</span><span class="o">).</span><span class="na">replaceFrom</span><span class="o">(</span><span class="s">"radar"</span><span class="o">,</span> <span class="sc">'o'</span><span class="o">);</span> <span class="c1">// "rodor"</span>
 <span class="n">CharMatcher</span><span class="o">.</span><span class="na">is</span><span class="o">(</span><span class="sc">'a'</span><span class="o">).</span><span class="na">replaceFrom</span><span class="o">(</span><span class="s">"yaha"</span><span class="o">,</span> <span class="s">"oo"</span><span class="o">);</span> <span class="c1">// "yoohoo"</span>
 <span class="n">CharMatcher</span><span class="o">.</span><span class="na">anyOf</span><span class="o">(</span><span class="s">"ab"</span><span class="o">).</span><span class="na">trimFrom</span><span class="o">(</span><span class="s">"abacatbab"</span><span class="o">);</span> <span class="c1">// "cat"</span>
 <span class="n">CharMatcher</span><span class="o">.</span><span class="na">inRange</span><span class="o">(</span><span class="sc">'\0'</span><span class="o">,</span> <span class="sc">' '</span><span class="o">).</span><span class="na">trimFrom</span><span class="o">(</span><span class="n">str</span><span class="o">);</span> <span class="c1">// 等同于 str.trim()</span>
 <span class="n">CharMatcher</span><span class="o">.</span><span class="na">anyOf</span><span class="o">(</span><span class="s">"eko"</span><span class="o">).</span><span class="na">collapseFrom</span><span class="o">(</span><span class="s">"bookkeeper"</span><span class="o">,</span> <span class="sc">'-'</span><span class="o">)</span> <span class="c1">// "b-p-r"</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 

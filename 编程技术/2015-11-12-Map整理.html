@@ -104,26 +104,27 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#map">Map继承关系图</a></li>
-  <li><a href="#map-1">Map基本操作</a></li>
-  <li><a href="#hashmaphashtable">HashMap与HashTable</a></li>
-  <li><a href="#hashmapidentityhashmap">HashMap与IdentityHashMap</a></li>
-  <li><a href="#sortedmaptreemap">SortedMap接口和TreeMap</a></li>
-  <li><a href="#enummap">EnumMap</a></li>
-  <li><a href="#properties">Properties</a></li>
-  <li><a href="#map-2">Map的选择</a></li>
-  <li><a href="#null">关于null</a></li>
+  <li><a href="#map继承关系图" id="markdown-toc-map继承关系图">Map继承关系图</a></li>
+  <li><a href="#map基本操作" id="markdown-toc-map基本操作">Map基本操作</a></li>
+  <li><a href="#hashmap与hashtable" id="markdown-toc-hashmap与hashtable">HashMap与HashTable</a></li>
+  <li><a href="#hashmap与identityhashmap" id="markdown-toc-hashmap与identityhashmap">HashMap与IdentityHashMap</a></li>
+  <li><a href="#linkedhashmap" id="markdown-toc-linkedhashmap">LinkedHashMap</a></li>
+  <li><a href="#sortedmap接口和treemap" id="markdown-toc-sortedmap接口和treemap">SortedMap接口和TreeMap</a></li>
+  <li><a href="#enummap" id="markdown-toc-enummap">EnumMap</a></li>
+  <li><a href="#properties" id="markdown-toc-properties">Properties</a></li>
+  <li><a href="#map的选择" id="markdown-toc-map的选择">Map的选择</a></li>
+  <li><a href="#关于null" id="markdown-toc-关于null">关于null</a></li>
 </ul>
 
 <hr />
 
-<h2 id="map">Map继承关系图</h2>
+<h2 id="map继承关系图">Map继承关系图</h2>
 
 <p><img src="/static/images/map.png" alt="Map继承关系图" title="Map结构图" /></p>
 
 <hr />
 
-<h2 id="map-1">Map基本操作</h2>
+<h2 id="map基本操作">Map基本操作</h2>
 
 <ul>
   <li><code class="highlighter-rouge">int size()</code>: 返回map大小</li>
@@ -142,7 +143,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="hashmaphashtable">HashMap与HashTable</h2>
+<h2 id="hashmap与hashtable">HashMap与HashTable</h2>
 <ul>
   <li>Hashtable是线程安全的，而HashMap不是线程安全的</li>
   <li>Hashtable不允许null作为key和value，而HashMap则可以使用null作为key和value</li>
@@ -151,19 +152,19 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="hashmapidentityhashmap">HashMap与IdentityHashMap</h2>
+<h2 id="hashmap与identityhashmap">HashMap与IdentityHashMap</h2>
 <ul>
   <li><code class="highlighter-rouge">IdentityHashMap</code>认为两个key相等: 两个key严格相等(<code class="highlighter-rouge">key1 == key2</code>)</li>
   <li><code class="highlighter-rouge">HashMap</code>则认为两个key相等: <code class="highlighter-rouge">key1.equals(key2)</code>且<code class="highlighter-rouge">hashCode</code>相同</li>
 </ul>
 
 <hr />
-<p>## LinkedHashMap
-<code class="highlighter-rouge">LinkedHashMap</code>可以记住key-value对的添加时的顺序</p>
+<h2 id="linkedhashmap">LinkedHashMap</h2>
+<p><code class="highlighter-rouge">LinkedHashMap</code>可以记住key-value对的添加时的顺序</p>
 
 <hr />
 
-<h2 id="sortedmaptreemap">SortedMap接口和TreeMap</h2>
+<h2 id="sortedmap接口和treemap">SortedMap接口和TreeMap</h2>
 <p>内置比较器(<code class="highlighter-rouge">Comparator</code>),可比较前后顺序, <code class="highlighter-rouge">TreeMap</code>默认按照自然顺序排序, 不允许null作为key</p>
 
 <hr />
@@ -187,7 +188,7 @@ jQuery(function(){
   <li><code class="highlighter-rouge">storeToXML(OutputStream os, String comment, String encoding)</code>: 写到XML中, 可以指定编码</li>
 </ul>
 
-<h2 id="map-2">Map的选择</h2>
+<h2 id="map的选择">Map的选择</h2>
 <ul>
   <li>若要保留插入时的顺序, 可用<code class="highlighter-rouge">LinkedHashMap</code></li>
   <li>若要求key完全匹配(同一对象)，可用<code class="highlighter-rouge">IdentityHashMap</code></li>
@@ -196,7 +197,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="null">关于null</h2>
+<h2 id="关于null">关于null</h2>
 <ul>
   <li><code class="highlighter-rouge">Hashtable</code>的key、value均不能为null</li>
   <li><code class="highlighter-rouge">TreeMap</code>与<code class="highlighter-rouge">EnumMap</code>不允许key为null</li>

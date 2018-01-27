@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="keywords" content="MySQL数据类型, 点滴积累, MySQL, 逆水行舟" />
-    <meta name="description" content="MySQL数据类型, 点滴积累, MySQL, MySQL中的数据类型以及使用时需要注意的地方记录如下  " />
+    <meta name="description" content="MySQL数据类型, 点滴积累, MySQL, MySQL中的数据类型以及使用时需要注意的地方记录如下" />
 
     <title>逆水行舟</title>
 
@@ -99,21 +99,21 @@ jQuery(function(){
     <div class="uk-grid">
         <div  class="uk-width-4-4">
             <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
-            <p>MySQL中的数据类型以及使用时需要注意的地方记录如下  </p>
+            <p>MySQL中的数据类型以及使用时需要注意的地方记录如下</p>
 
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#section">数字类型</a></li>
-  <li><a href="#section-1">日期类型</a></li>
-  <li><a href="#section-2">字符类型</a></li>
+  <li><a href="#数字类型" id="markdown-toc-数字类型">数字类型</a></li>
+  <li><a href="#日期类型" id="markdown-toc-日期类型">日期类型</a></li>
+  <li><a href="#字符类型" id="markdown-toc-字符类型">字符类型</a></li>
 </ul>
 
 <hr />
 
-<h2 id="section">数字类型</h2>
+<h2 id="数字类型">数字类型</h2>
 
-<p>数字类型包括:  </p>
+<p>数字类型包括:</p>
 
 <ul>
   <li><code class="highlighter-rouge"> TINYINT, SMALLINT, MEDIUMINT,  INT, BIGINT </code></li>
@@ -204,9 +204,8 @@ jQuery(function(){
 
 <p>下面这段代码注意：</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="nv">`status`</span> <span class="n">TINYINT</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="n">UNSIGNED</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="n">AUTO_INCREMENT</span>
-</code></pre>
-</div>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nv">`status`</span> <span class="n">TINYINT</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="n">UNSIGNED</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="n">AUTO_INCREMENT</span>
+</code></pre></div></div>
 
 <ol>
   <li>整数类型后面的长度表示显示数字时的宽度。</li>
@@ -215,7 +214,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="section-1">日期类型</h2>
+<h2 id="日期类型">日期类型</h2>
 
 <ul>
   <li>
@@ -229,7 +228,7 @@ jQuery(function(){
   </li>
 </ul>
 
-<p>注意:  </p>
+<p>注意:</p>
 
 <ol>
   <li><code class="highlighter-rouge">DATETIME</code>在5.6之后占5个字节</li>
@@ -238,7 +237,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="section-2">字符类型</h2>
+<h2 id="字符类型">字符类型</h2>
 
 <ul>
   <li><code class="highlighter-rouge">CHAR</code> : 定长文本字符类型</li>
@@ -249,7 +248,7 @@ jQuery(function(){
   <li><code class="highlighter-rouge">BLOB</code> : 大变长二进制字符类型</li>
 </ul>
 
-<p>注意:  </p>
+<p>注意:</p>
 
 <ol>
   <li><code class="highlighter-rouge">VARCHAR</code> 类型最多能存储65535个字节长度的数据，如果采用 <code class="highlighter-rouge">UTF8</code> 编码，则每个字符占3字节，即最大长度为 <code class="highlighter-rouge">65535/3=21845</code> 个字符</li>

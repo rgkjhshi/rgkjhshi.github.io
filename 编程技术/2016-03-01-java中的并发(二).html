@@ -104,20 +104,20 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#section">并发相关接口图</a></li>
-  <li><a href="#runnable">Runnable</a></li>
-  <li><a href="#callable">Callable</a></li>
-  <li><a href="#executor">Executor</a>    <ul>
-      <li><a href="#executorservice">ExecutorService</a></li>
+  <li><a href="#并发相关接口图" id="markdown-toc-并发相关接口图">并发相关接口图</a></li>
+  <li><a href="#runnable" id="markdown-toc-runnable">Runnable</a></li>
+  <li><a href="#callable" id="markdown-toc-callable">Callable</a></li>
+  <li><a href="#executor" id="markdown-toc-executor">Executor</a>    <ul>
+      <li><a href="#executorservice" id="markdown-toc-executorservice">ExecutorService</a></li>
     </ul>
   </li>
-  <li><a href="#future">Future</a></li>
-  <li><a href="#section-1">总结及示例</a></li>
+  <li><a href="#future" id="markdown-toc-future">Future</a></li>
+  <li><a href="#总结及示例" id="markdown-toc-总结及示例">总结及示例</a></li>
 </ul>
 
 <hr />
 
-<h2 id="section">并发相关接口图</h2>
+<h2 id="并发相关接口图">并发相关接口图</h2>
 
 <p><img src="/static/images/concurrent.png" alt="并发相关接口关系图" title="并发相关接口关系图" /></p>
 
@@ -162,7 +162,7 @@ jQuery(function(){
   <li><code class="highlighter-rouge">V get(long timeout, TimeUnit unit)</code>: 获取执行结果, 如果在指定时间内, 还没获取到结果, 就直接返回<code class="highlighter-rouge">null</code></li>
 </ul>
 
-<h2 id="section-1">总结及示例</h2>
+<h2 id="总结及示例">总结及示例</h2>
 
 <ul>
   <li><code class="highlighter-rouge">Runnable</code>和<code class="highlighter-rouge">Callable</code>是可执行的单位(一个无返回值, 一个有返回值)</li>
@@ -172,19 +172,19 @@ jQuery(function(){
 
 <p>下面是一个例子:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ConcurrentTest</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ConcurrentTest</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
         <span class="c1">// 创建一个执行器</span>
         <span class="n">ExecutorService</span> <span class="n">executor</span> <span class="o">=</span> <span class="n">Executors</span><span class="o">.</span><span class="na">newFixedThreadPool</span><span class="o">(</span><span class="mi">3</span><span class="o">);</span>
         <span class="c1">// 1.Runnable通过Future返回结果为空</span>
         <span class="n">Future</span><span class="o">&lt;?&gt;</span> <span class="n">future1</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="na">submit</span><span class="o">(</span><span class="k">new</span> <span class="n">Runnable</span><span class="o">()</span> <span class="o">{</span>
-            <span class="kd">public</span> <span class="kt">void</span> <span class="n">run</span><span class="o">()</span> <span class="o">{</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
                 <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"runnable running."</span><span class="o">);</span>
             <span class="o">}</span>
         <span class="o">});</span>
         <span class="c1">// 2.Callable通过Future能返回结果</span>
         <span class="n">Future</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">future2</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="na">submit</span><span class="o">(</span><span class="k">new</span> <span class="n">Callable</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;()</span> <span class="o">{</span>
-            <span class="kd">public</span> <span class="n">String</span> <span class="n">call</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+            <span class="kd">public</span> <span class="n">String</span> <span class="nf">call</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
                 <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"callable running."</span><span class="o">);</span>
                 <span class="k">return</span> <span class="s">"CallableResult"</span><span class="o">;</span>
             <span class="o">}</span>
@@ -199,8 +199,7 @@ jQuery(function(){
         <span class="n">executor</span><span class="o">.</span><span class="na">shutdown</span><span class="o">();</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 

@@ -104,102 +104,95 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#mysqldump">mysqldump导出数据</a></li>
-  <li><a href="#section">索引操作</a>    <ul>
-      <li><a href="#section-1">删除索引</a></li>
-      <li><a href="#section-2">创建索引</a></li>
+  <li><a href="#mysqldump导出数据" id="markdown-toc-mysqldump导出数据">mysqldump导出数据</a></li>
+  <li><a href="#索引操作" id="markdown-toc-索引操作">索引操作</a>    <ul>
+      <li><a href="#删除索引" id="markdown-toc-删除索引">删除索引</a></li>
+      <li><a href="#创建索引" id="markdown-toc-创建索引">创建索引</a></li>
     </ul>
   </li>
-  <li><a href="#section-3">字段操作</a>    <ul>
-      <li><a href="#section-4">删除字段</a></li>
-      <li><a href="#section-5">添加字段</a></li>
-      <li><a href="#section-6">修改字段</a></li>
+  <li><a href="#字段操作" id="markdown-toc-字段操作">字段操作</a>    <ul>
+      <li><a href="#删除字段" id="markdown-toc-删除字段">删除字段</a></li>
+      <li><a href="#添加字段" id="markdown-toc-添加字段">添加字段</a></li>
+      <li><a href="#修改字段" id="markdown-toc-修改字段">修改字段</a></li>
     </ul>
   </li>
-  <li><a href="#section-7">修改注释</a>    <ul>
-      <li><a href="#section-8">修改字段注释</a></li>
-      <li><a href="#section-9">修改表注释</a></li>
+  <li><a href="#修改注释" id="markdown-toc-修改注释">修改注释</a>    <ul>
+      <li><a href="#修改字段注释" id="markdown-toc-修改字段注释">修改字段注释</a></li>
+      <li><a href="#修改表注释" id="markdown-toc-修改表注释">修改表注释</a></li>
     </ul>
   </li>
 </ul>
 
 <hr />
 
-<h2 id="mysqldump">mysqldump导出数据</h2>
+<h2 id="mysqldump导出数据">mysqldump导出数据</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>mysqldump -h hostname -P port -u username -pPassword --no-create-info --skip-lock-tables --tables dbname tablename &gt; backup.sql
-</code></pre>
-</div>
-
-<hr />
-
-<h2 id="section">索引操作</h2>
-
-<h3 id="section-1">删除索引</h3>
-
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">drop</span> <span class="k">index</span> <span class="n">index_name</span> <span class="k">on</span> <span class="k">table_name</span><span class="p">;</span>           <span class="c1">-- 直接使用drop语句
-</span><span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="k">drop</span> <span class="k">index</span> <span class="n">index_name</span><span class="p">;</span>  <span class="c1">-- drop语句作为alter语句的一部分使用
-</span></code></pre>
-</div>
-
-<h3 id="section-2">创建索引</h3>
-
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">create</span> <span class="k">index</span> <span class="n">index_name</span> <span class="k">on</span> <span class="k">table_name</span> <span class="p">(</span><span class="n">column_list</span><span class="p">);</span>         <span class="c1">-- 创建普通索引
-</span><span class="k">create</span> <span class="k">unique</span> <span class="k">index</span> <span class="n">index_name</span> <span class="k">on</span> <span class="k">table_name</span> <span class="p">(</span><span class="n">column_list</span><span class="p">);</span>  <span class="c1">-- 创建唯一索引
-</span>
-<span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="k">add</span> <span class="k">index</span> <span class="n">index_name</span> <span class="p">(</span><span class="n">column_list</span><span class="p">);</span>   <span class="c1">-- 普通索引
-</span><span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="k">add</span> <span class="k">unique</span> <span class="n">index_name</span> <span class="p">(</span><span class="n">column_list</span><span class="p">);</span>   <span class="c1">-- 唯一索引
-</span><span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="k">add</span> <span class="k">unique</span> <span class="k">index</span> <span class="n">index_name</span> <span class="p">(</span><span class="n">column_list</span><span class="p">);</span>   <span class="c1">-- 跟上面一样, 另一种写法
-</span><span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="k">add</span> <span class="k">primary</span> <span class="k">key</span> <span class="p">(</span><span class="n">column_list</span><span class="p">);</span>        <span class="c1">-- 主键索引
-</span></code></pre>
-</div>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mysqldump <span class="nt">-h</span> hostname <span class="nt">-P</span> port <span class="nt">-u</span> username <span class="nt">-pPassword</span> <span class="nt">--no-create-info</span> <span class="nt">--skip-lock-tables</span> <span class="nt">--tables</span> dbname tablename <span class="o">&gt;</span> backup.sql
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="section-3">字段操作</h2>
+<h2 id="索引操作">索引操作</h2>
 
-<h3 id="section-4">删除字段</h3>
+<h3 id="删除索引">删除索引</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="k">drop</span> <span class="k">column_name</span><span class="p">;</span>
-<span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="k">drop</span> <span class="k">column</span> <span class="k">column_name</span><span class="p">;</span>  <span class="c1">-- 另一种写法
-</span></code></pre>
-</div>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">drop</span> <span class="k">index</span> <span class="n">index_name</span> <span class="k">on</span> <span class="k">table_name</span><span class="p">;</span>           <span class="c1">-- 直接使用drop语句</span>
+<span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="k">drop</span> <span class="k">index</span> <span class="n">index_name</span><span class="p">;</span>  <span class="c1">-- drop语句作为alter语句的一部分使用</span>
+</code></pre></div></div>
 
-<h3 id="section-5">添加字段</h3>
+<h3 id="创建索引">创建索引</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">-- 只是举个例子，根据需要修改
-</span><span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="k">add</span> <span class="k">column_name</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="s1">''</span> <span class="k">COMMENT</span> <span class="s1">'注释'</span><span class="p">;</span>  <span class="c1">-- 在表最后添加
-</span><span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="k">add</span> <span class="k">column_name</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="s1">''</span> <span class="k">COMMENT</span> <span class="s1">'注释'</span> <span class="k">after</span> <span class="k">column_name</span><span class="p">;</span> <span class="c1">-- 在具体某个字段后添加
-</span><span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="k">add</span> <span class="k">column</span> <span class="k">column_name</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="s1">''</span> <span class="k">COMMENT</span> <span class="s1">'注释'</span><span class="p">;</span>  <span class="c1">-- 另一种写法
-</span></code></pre>
-</div>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">create</span> <span class="k">index</span> <span class="n">index_name</span> <span class="k">on</span> <span class="k">table_name</span> <span class="p">(</span><span class="n">column_list</span><span class="p">);</span>         <span class="c1">-- 创建普通索引</span>
+<span class="k">create</span> <span class="k">unique</span> <span class="k">index</span> <span class="n">index_name</span> <span class="k">on</span> <span class="k">table_name</span> <span class="p">(</span><span class="n">column_list</span><span class="p">);</span>  <span class="c1">-- 创建唯一索引</span>
 
-<h3 id="section-6">修改字段</h3>
-
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">-- 可修改字段名称, 类型, 默认值, 注释, 以及顺序
--- change 用于改名字
-</span><span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="n">change</span> <span class="n">old_name</span> <span class="n">new_name</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="s1">''</span> <span class="k">COMMENT</span> <span class="s1">'注释'</span><span class="p">;</span>  
-<span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="n">change</span> <span class="k">column</span> <span class="n">old_name</span> <span class="n">new_name</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="s1">''</span> <span class="k">COMMENT</span> <span class="s1">'注释'</span><span class="p">;</span>  <span class="c1">-- 另一种写法
--- modify 不能改名字
-</span><span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="k">modify</span> <span class="k">column_name</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="s1">''</span> <span class="k">COMMENT</span> <span class="s1">'注释'</span><span class="p">;</span>
-<span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="k">modify</span> <span class="k">column</span> <span class="k">column_name</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="s1">''</span> <span class="k">COMMENT</span> <span class="s1">'注释'</span><span class="p">;</span>  <span class="c1">-- 另一种写法
-</span></code></pre>
-</div>
+<span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="k">add</span> <span class="k">index</span> <span class="n">index_name</span> <span class="p">(</span><span class="n">column_list</span><span class="p">);</span>   <span class="c1">-- 普通索引</span>
+<span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="k">add</span> <span class="k">unique</span> <span class="n">index_name</span> <span class="p">(</span><span class="n">column_list</span><span class="p">);</span>   <span class="c1">-- 唯一索引</span>
+<span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="k">add</span> <span class="k">unique</span> <span class="k">index</span> <span class="n">index_name</span> <span class="p">(</span><span class="n">column_list</span><span class="p">);</span>   <span class="c1">-- 跟上面一样, 另一种写法</span>
+<span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="k">add</span> <span class="k">primary</span> <span class="k">key</span> <span class="p">(</span><span class="n">column_list</span><span class="p">);</span>        <span class="c1">-- 主键索引</span>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="section-7">修改注释</h2>
+<h2 id="字段操作">字段操作</h2>
 
-<h3 id="section-8">修改字段注释</h3>
+<h3 id="删除字段">删除字段</h3>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="k">drop</span> <span class="k">column_name</span><span class="p">;</span>
+<span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="k">drop</span> <span class="k">column</span> <span class="k">column_name</span><span class="p">;</span>  <span class="c1">-- 另一种写法</span>
+</code></pre></div></div>
+
+<h3 id="添加字段">添加字段</h3>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- 只是举个例子，根据需要修改</span>
+<span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="k">add</span> <span class="k">column_name</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="s1">''</span> <span class="k">COMMENT</span> <span class="s1">'注释'</span><span class="p">;</span>  <span class="c1">-- 在表最后添加</span>
+<span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="k">add</span> <span class="k">column_name</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="s1">''</span> <span class="k">COMMENT</span> <span class="s1">'注释'</span> <span class="k">after</span> <span class="k">column_name</span><span class="p">;</span> <span class="c1">-- 在具体某个字段后添加</span>
+<span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="k">add</span> <span class="k">column</span> <span class="k">column_name</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="s1">''</span> <span class="k">COMMENT</span> <span class="s1">'注释'</span><span class="p">;</span>  <span class="c1">-- 另一种写法</span>
+</code></pre></div></div>
+
+<h3 id="修改字段">修改字段</h3>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- 可修改字段名称, 类型, 默认值, 注释, 以及顺序</span>
+<span class="c1">-- change 用于改名字</span>
+<span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="n">change</span> <span class="n">old_name</span> <span class="n">new_name</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="s1">''</span> <span class="k">COMMENT</span> <span class="s1">'注释'</span><span class="p">;</span>  
+<span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="n">change</span> <span class="k">column</span> <span class="n">old_name</span> <span class="n">new_name</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="s1">''</span> <span class="k">COMMENT</span> <span class="s1">'注释'</span><span class="p">;</span>  <span class="c1">-- 另一种写法</span>
+<span class="c1">-- modify 不能改名字</span>
+<span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="k">modify</span> <span class="k">column_name</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="s1">''</span> <span class="k">COMMENT</span> <span class="s1">'注释'</span><span class="p">;</span>
+<span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="k">modify</span> <span class="k">column</span> <span class="k">column_name</span> <span class="n">varchar</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="k">DEFAULT</span> <span class="s1">''</span> <span class="k">COMMENT</span> <span class="s1">'注释'</span><span class="p">;</span>  <span class="c1">-- 另一种写法</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="修改注释">修改注释</h2>
+
+<h3 id="修改字段注释">修改字段注释</h3>
 
 <p>跟修改字段一样, 把注释换成新注释就好</p>
 
-<h3 id="section-9">修改表注释</h3>
+<h3 id="修改表注释">修改表注释</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="k">COMMENT</span> <span class="s1">'注释'</span><span class="p">;</span>
-<span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="k">COMMENT</span><span class="o">=</span><span class="s1">'注释'</span><span class="p">;</span> <span class="c1">-- 另一种写法
-</span></code></pre>
-</div>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="k">COMMENT</span> <span class="s1">'注释'</span><span class="p">;</span>
+<span class="k">alter</span> <span class="k">table</span> <span class="k">table_name</span> <span class="k">COMMENT</span><span class="o">=</span><span class="s1">'注释'</span><span class="p">;</span> <span class="c1">-- 另一种写法</span>
+</code></pre></div></div>
 
 <hr />
 

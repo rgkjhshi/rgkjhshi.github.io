@@ -102,19 +102,19 @@ jQuery(function(){
             <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#section">日志的配置</a>    <ul>
-      <li><a href="#section-1">日志配置文件</a></li>
-      <li><a href="#section-2">输出到日志文件</a></li>
-      <li><a href="#section-3">日志级别</a></li>
-      <li><a href="#section-4">日志格式</a></li>
+  <li><a href="#日志的配置" id="markdown-toc-日志的配置">日志的配置</a>    <ul>
+      <li><a href="#日志配置文件" id="markdown-toc-日志配置文件">日志配置文件</a></li>
+      <li><a href="#输出到日志文件" id="markdown-toc-输出到日志文件">输出到日志文件</a></li>
+      <li><a href="#日志级别" id="markdown-toc-日志级别">日志级别</a></li>
+      <li><a href="#日志格式" id="markdown-toc-日志格式">日志格式</a></li>
     </ul>
   </li>
-  <li><a href="#section-5">如何写自己的日志配置文件</a></li>
+  <li><a href="#如何写自己的日志配置文件" id="markdown-toc-如何写自己的日志配置文件">如何写自己的日志配置文件</a></li>
 </ul>
 
 <hr />
 
-<h2 id="section">日志的配置</h2>
+<h2 id="日志的配置">日志的配置</h2>
 <p><code class="highlighter-rouge">Spring Boot</code>支持各种日志工具, 最常用的是<code class="highlighter-rouge">Logback</code>. 我们可以对日志进行配置, 由于日志是在<code class="highlighter-rouge">ApplicationContext</code>创建之前初始化的, 所以对日志的配置不能通过在<code class="highlighter-rouge">@Configuration</code>配置类上使用<code class="highlighter-rouge">@PropertySources</code>注解加载进来. 可以使用系统变量或者外部配置<code class="highlighter-rouge">application.properties</code>来加载.  配置文件中可以指定这些属性:</p>
 
 <ul>
@@ -170,32 +170,31 @@ jQuery(function(){
   </tbody>
 </table>
 
-<h3 id="section-1">日志配置文件</h3>
+<h3 id="日志配置文件">日志配置文件</h3>
 <p><code class="highlighter-rouge">logging.config</code>属性用于指定日志配置文件的位置, 以<code class="highlighter-rouge">logback</code>为例.</p>
 
 <ul>
   <li>如果不指定该属性, <code class="highlighter-rouge">logback</code>本身会默认寻找<code class="highlighter-rouge">classpath</code>下的配置文件, 寻找顺序为:
-<code class="highlighter-rouge">logback.groovy &gt; logback-test.xml &gt; logback.xml</code>;  </li>
+<code class="highlighter-rouge">logback.groovy &gt; logback-test.xml &gt; logback.xml</code>;</li>
   <li><code class="highlighter-rouge">Spring Boot</code>又加了俩默认的配置文件:<code class="highlighter-rouge">logback-spring.groovy &gt; logback-spring.xml</code>, 这俩优先级低于上面的那三个. 推荐指定使用<code class="highlighter-rouge">logback-spring.xml</code>.</li>
   <li>不指定配置文件时, 寻找上面的配置文件, 制定了则加载指定的配置文件. 如:<code class="highlighter-rouge">logging.config=classpath:logback-abc.xml</code>, 则会加载<code class="highlighter-rouge">classpath</code>下的<code class="highlighter-rouge">logback-abc.xml</code>文件</li>
 </ul>
 
 <p>使用<code class="highlighter-rouge">groovy</code>需要添加<code class="highlighter-rouge">groovy</code>的包依赖:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>org.codehaus.groovy<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>groovy<span class="nt">&lt;/artifactId&gt;</span>
     <span class="nt">&lt;version&gt;</span>2.4.7<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="section-2">输出到日志文件</h3>
+<h3 id="输出到日志文件">输出到日志文件</h3>
 <p><code class="highlighter-rouge">logging.file</code>和<code class="highlighter-rouge">logging.path</code>这俩属性用于指定日志文件输出的位置. 默认情况下<code class="highlighter-rouge">Spring Boot</code>只会把日志输出到<code class="highlighter-rouge">console</code>, 添加了这两个属性(任意一个即可), 才会把日志输出到文件里.</p>
 
 <ul>
   <li>两个属性都不指定, 只输出到控制台, 不输出到文件</li>
-  <li><code class="highlighter-rouge">logging.file</code>指定文件, 可以是相对路径, 可以是绝对路径.  </li>
+  <li><code class="highlighter-rouge">logging.file</code>指定文件, 可以是相对路径, 可以是绝对路径.</li>
   <li><code class="highlighter-rouge">logging.path</code>指定目录, 若制定了目录, 则会输出日志到指定目录下的<code class="highlighter-rouge">spring.log</code>文件中</li>
   <li>两个同时指定, 以<code class="highlighter-rouge">logging.file</code>为准</li>
 </ul>
@@ -203,18 +202,17 @@ jQuery(function(){
 <p>在<code class="highlighter-rouge">spring-boot</code>包里关于<code class="highlighter-rouge">logback</code>的配置<code class="highlighter-rouge">file-appender.xml</code>中定义了文件输出到<code class="highlighter-rouge">${LOG_FILE}</code>, 在同一包下的<code class="highlighter-rouge">base.xml</code>文件里有这么一句:<code class="highlighter-rouge">&lt;property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/spring.log}"/&gt;</code>. 稍微分析下就知道为什么以<code class="highlighter-rouge">logging.file</code>为主, 指定<code class="highlighter-rouge">logging.path</code>时会输出到该目录下的<code class="highlighter-rouge">spring.log</code>文件里了.<br />
 注意上面语句中多次嵌套使用了<code class="highlighter-rouge">${key:-defaultVlaue}</code>形式</p>
 
-<h3 id="section-3">日志级别</h3>
+<h3 id="日志级别">日志级别</h3>
 <p><code class="highlighter-rouge">logging.level.*</code>用于指定日志级别, 比如:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>logging.level.root<span class="o">=</span>WARN
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>logging.level.root<span class="o">=</span>WARN
 logging.level.org.springframework.web<span class="o">=</span>DEBUG
 logging.level.org.hibernate<span class="o">=</span>ERROR
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>注意: 该属性配置的日志级别优先级要高于日志配置文件(如<code class="highlighter-rouge">logback.xml</code>), 即日志配置文件中与该属性定义的日志级别不一致时, 以该属性定义的级别为准.</p>
 
-<h3 id="section-4">日志格式</h3>
+<h3 id="日志格式">日志格式</h3>
 
 <ul>
   <li><code class="highlighter-rouge">ogging.pattern.console</code>指定在控制台输出的日志格式;</li>
@@ -229,7 +227,7 @@ logging.level.org.hibernate<span class="o">=</span>ERROR
 
 <hr />
 
-<h2 id="section-5">如何写自己的日志配置文件</h2>
+<h2 id="如何写自己的日志配置文件">如何写自己的日志配置文件</h2>
 
 <p><code class="highlighter-rouge">spring-boot</code>包里有四个相关的<code class="highlighter-rouge">xml</code>文件:</p>
 
@@ -244,7 +242,7 @@ logging.level.org.hibernate<span class="o">=</span>ERROR
 
 <p>比如我们可以这样定义<code class="highlighter-rouge">logback.xml</code></p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
 <span class="nt">&lt;configuration&gt;</span>
     <span class="c">&lt;!-- 这里面定义了 CONSOLE_LOG_PATTERN, FILE_LOG_PATTERN 等日志格式, 还定义了一些日志级别 --&gt;</span>
     <span class="nt">&lt;include</span> <span class="na">resource=</span><span class="s">"org/springframework/boot/logging/logback/defaults.xml"</span><span class="nt">/&gt;</span>
@@ -291,11 +289,10 @@ logging.level.org.hibernate<span class="o">=</span>ERROR
         <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">"ERROR_FILE"</span> <span class="nt">/&gt;</span>
     <span class="nt">&lt;/root&gt;</span>
 <span class="nt">&lt;/configuration&gt;</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ul>
-  <li>上例中, 日志会输出到文件<code class="highlighter-rouge">XXX.log</code>, 错误日志单独输出到一个<code class="highlighter-rouge">XXX_error.log</code>文件, 日志文件并每天打包一次.  </li>
+  <li>上例中, 日志会输出到文件<code class="highlighter-rouge">XXX.log</code>, 错误日志单独输出到一个<code class="highlighter-rouge">XXX_error.log</code>文件, 日志文件并每天打包一次.</li>
   <li>上例中, 应用配置(<code class="highlighter-rouge">application.properties</code>)里用于指定日志文件名文件位置的属性(<code class="highlighter-rouge">logging.file</code>和<code class="highlighter-rouge">logging.path</code>)将不起作用, 因为例子里没有用到这些属性, 其他配置(比如日志级别)仍有作用.</li>
   <li>上例中的哪个<code class="highlighter-rouge">${catalina.base}</code>算是一个系统变量, 表示应用所在目录, 文件名(位置)完全可以自己指定, 也可参考<code class="highlighter-rouge">spring-boot</code>包里的使用方式.</li>
 </ul>

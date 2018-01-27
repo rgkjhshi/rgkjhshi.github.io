@@ -102,20 +102,20 @@ jQuery(function(){
             <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#servlet">Servlet</a>    <ul>
-      <li><a href="#servlet-1">Servlet生命周期</a></li>
-      <li><a href="#servlet-2">Servlet配置</a></li>
-      <li><a href="#servletconfig">ServletConfig</a></li>
-      <li><a href="#servletcontext">ServletContext</a></li>
+  <li><a href="#servlet" id="markdown-toc-servlet">Servlet</a>    <ul>
+      <li><a href="#servlet生命周期" id="markdown-toc-servlet生命周期">Servlet生命周期</a></li>
+      <li><a href="#servlet配置" id="markdown-toc-servlet配置">Servlet配置</a></li>
+      <li><a href="#servletconfig" id="markdown-toc-servletconfig">ServletConfig</a></li>
+      <li><a href="#servletcontext" id="markdown-toc-servletcontext">ServletContext</a></li>
     </ul>
   </li>
-  <li><a href="#filter">Filter</a>    <ul>
-      <li><a href="#filter-1">Filter生命周期</a></li>
-      <li><a href="#decorator">装饰器模式(decorator)</a></li>
+  <li><a href="#filter" id="markdown-toc-filter">Filter</a>    <ul>
+      <li><a href="#filter生命周期" id="markdown-toc-filter生命周期">Filter生命周期</a></li>
+      <li><a href="#装饰器模式decorator" id="markdown-toc-装饰器模式decorator">装饰器模式(decorator)</a></li>
     </ul>
   </li>
-  <li><a href="#listener">Listener</a>    <ul>
-      <li><a href="#servlet-3">Servlet监听器</a></li>
+  <li><a href="#listener" id="markdown-toc-listener">Listener</a>    <ul>
+      <li><a href="#servlet监听器" id="markdown-toc-servlet监听器">Servlet监听器</a></li>
     </ul>
   </li>
 </ul>
@@ -130,7 +130,7 @@ jQuery(function(){
   <li><code class="highlighter-rouge">Servlet</code>接口有两个实现类<code class="highlighter-rouge">HttpServlet --&gt; GenericServlet</code>, <code class="highlighter-rouge">HttpServlet</code>重写了<code class="highlighter-rouge">service</code>方法, 根据请求方式自动调用<code class="highlighter-rouge">doGet</code>或<code class="highlighter-rouge">doPost</code>方法, 我们一般继承这个类, 重写<code class="highlighter-rouge">doGet、doPost</code>即可.</li>
 </ul>
 
-<h3 id="servlet-1">Servlet生命周期</h3>
+<h3 id="servlet生命周期">Servlet生命周期</h3>
 
 <p><img src="/static/images/servlet.png" alt="Servlet生命周期" title="Servlet生命周期" /></p>
 
@@ -143,7 +143,7 @@ jQuery(function(){
   <li>图中没画出<code class="highlighter-rouge">Servlet</code>的消亡, <code class="highlighter-rouge">Servlet</code>对象被创建后常驻内存, 继续为其他请求服务; web应用停止前调用<code class="highlighter-rouge">Servlet</code>的<code class="highlighter-rouge">destroy()</code>方法, <code class="highlighter-rouge">Servlet</code>生命周期才结束</li>
 </ul>
 
-<h3 id="servlet-2">Servlet配置</h3>
+<h3 id="servlet配置">Servlet配置</h3>
 
 <ul>
   <li>上面的<code class="highlighter-rouge">Servlet</code>是有第一个请求时被创建, 可以在<code class="highlighter-rouge">web.xml</code>中通过<code class="highlighter-rouge">&lt;load-on-startup&gt;</code>元素指定在web容器启动时就直接初始化<code class="highlighter-rouge">Servlet</code></li>
@@ -162,17 +162,16 @@ jQuery(function(){
 
 <p>在<code class="highlighter-rouge">Servlet</code>类中, 我们可以获取<code class="highlighter-rouge">ServletConfig</code>中的参数</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">ServletConfig</span> <span class="n">config</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">getServletConfig</span><span class="o">();</span> <span class="c1">// 这个方法继承自GenericServlet</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ServletConfig</span> <span class="n">config</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">getServletConfig</span><span class="o">();</span> <span class="c1">// 这个方法继承自GenericServlet</span>
 <span class="n">String</span> <span class="n">value</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="s">"charset"</span><span class="o">);</span>  <span class="c1">// 这可获取我们配置的参数</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <h3 id="servletcontext">ServletContext</h3>
 <p><code class="highlighter-rouge">ServletContext</code>表示应用的上下文, 在Web容器在启动时, 会为每个Web应用程序都创建一个对应的<code class="highlighter-rouge">ServletContext</code>对象, 一个应用只有一个<code class="highlighter-rouge">ServletContext</code>对象, 被所有的<code class="highlighter-rouge">Servlet</code>共享.</p>
 
 <p><code class="highlighter-rouge">ServletContext</code>的属性可以通过<code class="highlighter-rouge">web.xml</code>中的<code class="highlighter-rouge">&lt;context-param&gt;</code>标签来指定, 在程序中可以这样获取这些属性:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// ServletConfig 里维护了 ServletContext 对象的引用</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// ServletConfig 里维护了 ServletContext 对象的引用</span>
 <span class="n">ServletContext</span> <span class="n">context</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">getServletConfig</span><span class="o">().</span><span class="na">getServletContext</span><span class="o">();</span>
 <span class="c1">// 因为 Servlet类实现了 ServletConfig 接口, 所以也可以直接获取</span>
 <span class="n">ServletContext</span> <span class="n">context1</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">getServletContext</span><span class="o">();</span>
@@ -180,8 +179,7 @@ jQuery(function(){
 <span class="n">context</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="s">"data"</span><span class="o">);</span>
 <span class="c1">// 获取 &lt;display-name&gt; 标签配置的应用名</span>
 <span class="n">context</span><span class="o">.</span><span class="na">getServletContextName</span><span class="o">();</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
@@ -191,10 +189,10 @@ jQuery(function(){
 
 <p>web服务器把所有的<code class="highlighter-rouge">Filter</code>按注册顺序组成一个<code class="highlighter-rouge">filterChain</code>, 在调用<code class="highlighter-rouge">Filter</code>的<code class="highlighter-rouge">doFilter()</code>方法时, 会传递<code class="highlighter-rouge">filterChain</code>对象进来. <code class="highlighter-rouge">filterChain</code>也有个<code class="highlighter-rouge">doFilter</code>方法, 当调用<code class="highlighter-rouge">filterChain.doFilter()</code>时, web服务器会检查<code class="highlighter-rouge">filterChain</code>中是否还有<code class="highlighter-rouge">filter</code>, 如果有, 则调用下一个<code class="highlighter-rouge">filter</code>.</p>
 
-<h3 id="filter-1">Filter生命周期</h3>
+<h3 id="filter生命周期">Filter生命周期</h3>
 <p><code class="highlighter-rouge">Filter</code>的创建和销毁由web服务器负责. web服务器启动时创建<code class="highlighter-rouge">Filter</code>实例对象, 并调用其<code class="highlighter-rouge">init</code>方法, 完成对象的初始化, 为用户请求作好拦截的准备. <code class="highlighter-rouge">Filter</code>对象只创建一次, <code class="highlighter-rouge">init</code>方法只执行一次. <code class="highlighter-rouge">Filter</code>也有初始化参数, 被封装到<code class="highlighter-rouge">FilterConfig</code>中, 它有个方法<code class="highlighter-rouge">getServletContext()</code>可获取<code class="highlighter-rouge">ServletContext</code></p>
 
-<h3 id="decorator">装饰器模式(decorator)</h3>
+<h3 id="装饰器模式decorator">装饰器模式(decorator)</h3>
 <p>在<code class="highlighter-rouge">Servlet API</code>中体现了一种设计模式: 装饰器模式</p>
 
 <p>装饰器模式的实现步骤:</p>
@@ -221,7 +219,7 @@ jQuery(function(){
   <li>监听器: 对事件源发生的动作做出反应的对象. 由开发人员编写, 在事件监听器中, 可通过事件对象拿到事件源, 从而对事件源上的操作进行处理.</li>
 </ul>
 
-<h3 id="servlet-3">Servlet监听器</h3>
+<h3 id="servlet监听器">Servlet监听器</h3>
 <p><code class="highlighter-rouge">Servlet</code>中的监听器不是直接注册在事件源上的, 而是由由WEB容器负责注册.</p>
 
 <p>在<code class="highlighter-rouge">Servlet</code>规范中定义了多种类型的监听器, 它们用于监听的事件源分别为<code class="highlighter-rouge">ServletContext</code>, <code class="highlighter-rouge">HttpSession</code>和<code class="highlighter-rouge">ServletRequest</code>这三个对象.</p>

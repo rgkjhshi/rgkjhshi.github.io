@@ -104,19 +104,19 @@ jQuery(function(){
 <hr />
 
 <ul id="markdown-toc">
-  <li><a href="#section">存储结构</a></li>
-  <li><a href="#section-1">需要知道的概念</a></li>
-  <li><a href="#section-2">构造方法</a></li>
-  <li><a href="#hash">关于hash定位</a></li>
-  <li><a href="#put">添加元素put</a></li>
-  <li><a href="#remove">删除元素remove</a></li>
-  <li><a href="#get">获取元素get</a></li>
-  <li><a href="#sizecontainsvalue">锁全段操作size/containsValue</a></li>
+  <li><a href="#存储结构" id="markdown-toc-存储结构">存储结构</a></li>
+  <li><a href="#需要知道的概念" id="markdown-toc-需要知道的概念">需要知道的概念</a></li>
+  <li><a href="#构造方法" id="markdown-toc-构造方法">构造方法</a></li>
+  <li><a href="#关于hash定位" id="markdown-toc-关于hash定位">关于hash定位</a></li>
+  <li><a href="#添加元素put" id="markdown-toc-添加元素put">添加元素put</a></li>
+  <li><a href="#删除元素remove" id="markdown-toc-删除元素remove">删除元素remove</a></li>
+  <li><a href="#获取元素get" id="markdown-toc-获取元素get">获取元素get</a></li>
+  <li><a href="#锁全段操作sizecontainsvalue" id="markdown-toc-锁全段操作sizecontainsvalue">锁全段操作size/containsValue</a></li>
 </ul>
 
 <hr />
 
-<h2 id="section">存储结构</h2>
+<h2 id="存储结构">存储结构</h2>
 <p><code class="highlighter-rouge">HashMap</code>的数据结构是数组加链表的形式。结构大体如下:</p>
 
 <p><img src="/static/images/ConcurrentHashMap.png" alt="ConcurrentHashMap结构图" title="ConcurrentHashMap结构图" /></p>
@@ -125,18 +125,17 @@ jQuery(function(){
 
 <p>我们来看看<code class="highlighter-rouge">Segment</code>的结构, 跟<code class="highlighter-rouge">HashMap</code>里的结构非常类似:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="kd">static</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">Segment</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="kd">extends</span> <span class="n">ReentrantLock</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">static</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">Segment</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="kd">extends</span> <span class="n">ReentrantLock</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
         <span class="kd">transient</span> <span class="kd">volatile</span> <span class="n">HashEntry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;[]</span> <span class="n">table</span><span class="o">;</span> <span class="c1">// 桶, 除了类型, 其他跟HashMap里的table一样</span>
         <span class="kd">transient</span> <span class="kt">int</span> <span class="n">count</span><span class="o">;</span>     <span class="c1">// HashEntry的总个数, 对应HashMap里的size</span>
         <span class="kd">transient</span> <span class="kt">int</span> <span class="n">modCount</span><span class="o">;</span>  <span class="c1">// 同HashMap</span>
         <span class="kd">transient</span> <span class="kt">int</span> <span class="n">threshold</span><span class="o">;</span> <span class="c1">// 同HashMap, 用于rehash, rehash时只会改变table的大小, segments大小确定之后就不会再变了</span>
     <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="section-1">需要知道的概念</h2>
+<h2 id="需要知道的概念">需要知道的概念</h2>
 <p><code class="highlighter-rouge">ConcurrentHashMap</code>比<code class="highlighter-rouge">HashMap</code>多了一层, 新增了几个概念:</p>
 
 <ul>
@@ -148,12 +147,12 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="section-2">构造方法</h2>
+<h2 id="构造方法">构造方法</h2>
 <p><code class="highlighter-rouge">ConcurrentHashMap</code>有重载了5个构造方法, 实现都是类似的, 直接从代码中解释</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="kd">public</span> <span class="nf">ConcurrentHashMap</span><span class="p">(</span><span class="kt">int</span> <span class="n">initialCapacity</span><span class="o">,</span> <span class="kt">float</span> <span class="n">loadFactor</span><span class="o">,</span> <span class="kt">int</span> <span class="n">concurrencyLevel</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="nf">ConcurrentHashMap</span><span class="o">(</span><span class="kt">int</span> <span class="n">initialCapacity</span><span class="o">,</span> <span class="kt">float</span> <span class="n">loadFactor</span><span class="o">,</span> <span class="kt">int</span> <span class="n">concurrencyLevel</span><span class="o">)</span> <span class="o">{</span>
        <span class="k">if</span> <span class="o">(!(</span><span class="n">loadFactor</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">||</span> <span class="n">initialCapacity</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">concurrencyLevel</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="o">)</span>
-           <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">();</span>
+           <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">();</span>
        <span class="k">if</span> <span class="o">(</span><span class="n">concurrencyLevel</span> <span class="o">&gt;</span> <span class="n">MAX_SEGMENTS</span><span class="o">)</span>
            <span class="n">concurrencyLevel</span> <span class="o">=</span> <span class="n">MAX_SEGMENTS</span><span class="o">;</span>
        <span class="c1">// Find power-of-two sizes best matching arguments</span>
@@ -181,18 +180,17 @@ jQuery(function(){
        <span class="n">UNSAFE</span><span class="o">.</span><span class="na">putOrderedObject</span><span class="o">(</span><span class="n">ss</span><span class="o">,</span> <span class="n">SBASE</span><span class="o">,</span> <span class="n">s0</span><span class="o">);</span> <span class="c1">// 只有segments[0]有值, 这是为了给创建其他位置的segment时提供模板</span>
        <span class="k">this</span><span class="o">.</span><span class="na">segments</span> <span class="o">=</span> <span class="n">ss</span><span class="o">;</span>
    <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="hash">关于hash定位</h2>
+<h2 id="关于hash定位">关于hash定位</h2>
 <p><code class="highlighter-rouge">ConcurrentHashMap</code>中的定位分两部分, 一部分是定位段<code class="highlighter-rouge">segments</code>, 一部分是定位桶<code class="highlighter-rouge">table</code>, 两个都直接使用<code class="highlighter-rouge">key</code>的哈希值<code class="highlighter-rouge">hash</code>进行定位; 段<code class="highlighter-rouge">segments</code>通过<code class="highlighter-rouge">hash</code>的高位定位, 桶<code class="highlighter-rouge">table</code>通过<code class="highlighter-rouge">hash</code>的低位定位.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// 定位段: hash值无符号右移(32-n)位, 比如默认16时, n=4; 然后再与低n位按位与, 就得到了在段中的位置j</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// 定位段: hash值无符号右移(32-n)位, 比如默认16时, n=4; 然后再与低n位按位与, 就得到了在段中的位置j</span>
     <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="o">(</span><span class="n">hash</span> <span class="o">&gt;&gt;&gt;</span> <span class="n">segmentShift</span><span class="o">)</span> <span class="o">&amp;</span> <span class="n">segmentMask</span><span class="o">;</span>
     <span class="c1">// 获取segment的函数</span>
-    <span class="kd">private</span> <span class="n">Segment</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">segmentForHash</span><span class="o">(</span><span class="kt">int</span> <span class="n">h</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">Segment</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="nf">segmentForHash</span><span class="o">(</span><span class="kt">int</span> <span class="n">h</span><span class="o">)</span> <span class="o">{</span>
         <span class="c1">// SBASE为数组中第一个元素的偏移地址, SSHIFT为数组寻址的换算因子, 两个必须配合使用</span>
         <span class="c1">// 这两行代码相当于在segments中获取下标为j的Segment</span>
         <span class="kt">long</span> <span class="n">u</span> <span class="o">=</span> <span class="o">(((</span><span class="n">h</span> <span class="o">&gt;&gt;&gt;</span> <span class="n">segmentShift</span><span class="o">)</span> <span class="o">&amp;</span> <span class="n">segmentMask</span><span class="o">)</span> <span class="o">&lt;&lt;</span> <span class="n">SSHIFT</span><span class="o">)</span> <span class="o">+</span> <span class="n">SBASE</span><span class="o">;</span>
@@ -202,12 +200,11 @@ jQuery(function(){
     <span class="c1">// 定位桶: hash直接取低位和(table的长度-1)按位与, 就得到了在桶中的下标index</span>
     <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="o">(</span><span class="n">tab</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">&amp;</span> <span class="n">hash</span><span class="o">;</span>
     <span class="n">HashEntry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">first</span> <span class="o">=</span> <span class="n">entryAt</span><span class="o">(</span><span class="n">tab</span><span class="o">,</span> <span class="n">index</span><span class="o">);</span>  <span class="c1">// 获取桶中下标为index的结点</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="put">添加元素put</h2>
+<h2 id="添加元素put">添加元素put</h2>
 
 <ul>
   <li>刚创建的<code class="highlighter-rouge">ConcurrentHashMap</code>中的<code class="highlighter-rouge">segments</code>只有位置<code class="highlighter-rouge">0</code>不为空, 其他位置还没创建<code class="highlighter-rouge">Segment</code></li>
@@ -217,11 +214,11 @@ jQuery(function(){
   <li><code class="highlighter-rouge">put</code>操作时要在对应的<code class="highlighter-rouge">segment</code>上加锁</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// ConcurrentHashMap的put,外层不加锁, 段内加锁</span>
-    <span class="kd">public</span> <span class="n">V</span> <span class="n">put</span><span class="o">(</span><span class="n">K</span> <span class="n">key</span><span class="o">,</span> <span class="n">V</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// ConcurrentHashMap的put,外层不加锁, 段内加锁</span>
+    <span class="kd">public</span> <span class="n">V</span> <span class="nf">put</span><span class="o">(</span><span class="n">K</span> <span class="n">key</span><span class="o">,</span> <span class="n">V</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">Segment</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">s</span><span class="o">;</span>
         <span class="k">if</span> <span class="o">(</span><span class="n">value</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="n">NullPointerException</span><span class="o">();</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">NullPointerException</span><span class="o">();</span>
         <span class="kt">int</span> <span class="n">hash</span> <span class="o">=</span> <span class="n">hash</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>                            <span class="c1">// 获取key的哈希值</span>
         <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="o">(</span><span class="n">hash</span> <span class="o">&gt;&gt;&gt;</span> <span class="n">segmentShift</span><span class="o">)</span> <span class="o">&amp;</span> <span class="n">segmentMask</span><span class="o">;</span>   <span class="c1">// 段索引</span>
         <span class="k">if</span> <span class="o">((</span><span class="n">s</span> <span class="o">=</span> <span class="o">(</span><span class="n">Segment</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;)</span><span class="n">UNSAFE</span><span class="o">.</span><span class="na">getObject</span>          <span class="c1">// 获取j位置的Segment, 如果为null, 则创建</span>
@@ -230,7 +227,7 @@ jQuery(function(){
         <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">hash</span><span class="o">,</span> <span class="n">value</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>           <span class="c1">// 转嫁给了Segment的put</span>
     <span class="o">}</span>
     <span class="c1">// Segment的put, 这里面才会加锁</span>
-    <span class="kd">final</span> <span class="n">V</span> <span class="n">put</span><span class="o">(</span><span class="n">K</span> <span class="n">key</span><span class="o">,</span> <span class="kt">int</span> <span class="n">hash</span><span class="o">,</span> <span class="n">V</span> <span class="n">value</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">onlyIfAbsent</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="n">V</span> <span class="nf">put</span><span class="o">(</span><span class="n">K</span> <span class="n">key</span><span class="o">,</span> <span class="kt">int</span> <span class="n">hash</span><span class="o">,</span> <span class="n">V</span> <span class="n">value</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">onlyIfAbsent</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">HashEntry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">node</span> <span class="o">=</span> <span class="n">tryLock</span><span class="o">()</span> <span class="o">?</span> <span class="kc">null</span> <span class="o">:</span>  <span class="c1">// 尝试加锁, 加锁成功返回true, 否则返回false</span>
             <span class="n">scanAndLockForPut</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">hash</span><span class="o">,</span> <span class="n">value</span><span class="o">);</span>  <span class="c1">// 加锁失败时, 循环尝试加锁, 试几次后, 阻塞等待加锁(这个函数中还试图创建HashEntry)</span>
         <span class="n">V</span> <span class="n">oldValue</span><span class="o">;</span>
@@ -261,7 +258,7 @@ jQuery(function(){
                     <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">&gt;</span> <span class="n">threshold</span> <span class="o">&amp;&amp;</span> <span class="n">tab</span><span class="o">.</span><span class="na">length</span> <span class="o">&lt;</span> <span class="n">MAXIMUM_CAPACITY</span><span class="o">)</span>  <span class="c1">// 看是否需要扩容</span>
                         <span class="n">rehash</span><span class="o">(</span><span class="n">node</span><span class="o">);</span>  <span class="c1">// 扩容</span>
                     <span class="k">else</span>
-                        <span class="n">setEntryAt</span><span class="o">(</span><span class="n">tab</span><span class="o">,</span> <span class="n">index</span><span class="o">,</span> <span class="n">node</span><span class="o">);</span>  <span class="c1">// 头插, 放到桶位置的链表头</span>
+                        <span class="nf">setEntryAt</span><span class="o">(</span><span class="n">tab</span><span class="o">,</span> <span class="n">index</span><span class="o">,</span> <span class="n">node</span><span class="o">);</span>  <span class="c1">// 头插, 放到桶位置的链表头</span>
                     <span class="o">++</span><span class="n">modCount</span><span class="o">;</span>  <span class="c1">// 修改次数加一</span>
                     <span class="n">count</span> <span class="o">=</span> <span class="n">c</span><span class="o">;</span>   <span class="c1">// 记录结点数量</span>
                     <span class="n">oldValue</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>  <span class="c1">// 新结点, 被替换掉的旧值为null</span>
@@ -273,26 +270,25 @@ jQuery(function(){
         <span class="o">}</span>
         <span class="k">return</span> <span class="n">oldValue</span><span class="o">;</span>
     <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="remove">删除元素remove</h2>
+<h2 id="删除元素remove">删除元素remove</h2>
 
 <ul>
   <li>remove元素也是先定位到段<code class="highlighter-rouge">segment</code>, 再转化为<code class="highlighter-rouge">segment.remove()</code></li>
   <li><code class="highlighter-rouge">remove</code>操作时也要在相应的<code class="highlighter-rouge">segment</code>上加锁</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// 外层remove加锁</span>
-    <span class="kd">public</span> <span class="n">V</span> <span class="n">remove</span><span class="o">(</span><span class="n">Object</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// 外层remove加锁</span>
+    <span class="kd">public</span> <span class="n">V</span> <span class="nf">remove</span><span class="o">(</span><span class="n">Object</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
         <span class="kt">int</span> <span class="n">hash</span> <span class="o">=</span> <span class="n">hash</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
         <span class="n">Segment</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">s</span> <span class="o">=</span> <span class="n">segmentForHash</span><span class="o">(</span><span class="n">hash</span><span class="o">);</span>  <span class="c1">// 定位段</span>
         <span class="k">return</span> <span class="n">s</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">?</span> <span class="kc">null</span> <span class="o">:</span> <span class="n">s</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">hash</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span> <span class="c1">// 转交给段remove</span>
     <span class="o">}</span>
     <span class="c1">// 段内的remove, 需要加锁</span>
-    <span class="kd">final</span> <span class="n">V</span> <span class="n">remove</span><span class="o">(</span><span class="n">Object</span> <span class="n">key</span><span class="o">,</span> <span class="kt">int</span> <span class="n">hash</span><span class="o">,</span> <span class="n">Object</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="n">V</span> <span class="nf">remove</span><span class="o">(</span><span class="n">Object</span> <span class="n">key</span><span class="o">,</span> <span class="kt">int</span> <span class="n">hash</span><span class="o">,</span> <span class="n">Object</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">if</span> <span class="o">(!</span><span class="n">tryLock</span><span class="o">())</span>   <span class="c1">// 先加锁</span>
             <span class="n">scanAndLock</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">hash</span><span class="o">);</span>
         <span class="n">V</span> <span class="n">oldValue</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
@@ -326,18 +322,17 @@ jQuery(function(){
         <span class="o">}</span>
         <span class="k">return</span> <span class="n">oldValue</span><span class="o">;</span>
     <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
-<h2 id="get">获取元素get</h2>
+<h2 id="获取元素get">获取元素get</h2>
 
 <ul>
   <li><code class="highlighter-rouge">get</code>操作不需要加锁(弱一致性)</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="kd">public</span> <span class="n">V</span> <span class="nf">get</span><span class="p">(</span><span class="n">Object</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="n">V</span> <span class="nf">get</span><span class="o">(</span><span class="n">Object</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
         <span class="n">Segment</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">s</span><span class="o">;</span>        <span class="c1">// 段</span>
         <span class="n">HashEntry</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span><span class="n">V</span><span class="o">&gt;[]</span> <span class="n">tab</span><span class="o">;</span>  <span class="c1">// 段内table</span>
         <span class="kt">int</span> <span class="n">h</span> <span class="o">=</span> <span class="n">hash</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>     <span class="c1">// hash值</span>
@@ -360,24 +355,22 @@ jQuery(function(){
         <span class="o">}</span>
         <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
     <span class="o">}</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
 <hr />
 
-<h2 id="sizecontainsvalue">锁全段操作size/containsValue</h2>
+<h2 id="锁全段操作sizecontainsvalue">锁全段操作size/containsValue</h2>
 
 <ul>
   <li><code class="highlighter-rouge">size</code>和<code class="highlighter-rouge">containsValue</code>操作的代价比较大, 需要锁住所有的段</li>
 </ul>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// 两个操作里都有这段代码, 把所有的段都加锁</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// 两个操作里都有这段代码, 把所有的段都加锁</span>
     <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">segments</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span>
         <span class="n">ensureSegment</span><span class="o">(</span><span class="n">j</span><span class="o">).</span><span class="na">lock</span><span class="o">();</span> <span class="c1">// force creation</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <hr />
 
