@@ -92,6 +92,14 @@ foreach主要用在in语句中，它可以在SQL语句中遍历一个集合。
         #{item}  
     </foreach>  
 </select>
+<!-- 批量更新或插入, 若唯一键存在则更新, 不存在则插入 -->
+<insert id="batchInsertOrUpdate" parameterType="UserInfo" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tableName (name, password, age, email, gender) VALUES
+    <foreach collection="list" index="index" item="user" separator=",">
+      (#{user.name}, #{user.password}, #{user.age}, #{user.email}, #{user.gender})
+    </foreach>
+    ON DUPLICATE KEY UPDATE name = VALUES(name);
+</insert>
 ~~~
 
 * `item`声明可以用在元素体内的集合项，相当于集合每一个元素进行迭代时的别名  
