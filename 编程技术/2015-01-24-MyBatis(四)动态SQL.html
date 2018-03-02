@@ -183,6 +183,14 @@ jQuery(function(){
         #{item}  
     <span class="nt">&lt;/foreach&gt;</span>  
 <span class="nt">&lt;/select&gt;</span>
+<span class="c">&lt;!-- 批量更新或插入, 若唯一键存在则更新, 不存在则插入 --&gt;</span>
+<span class="nt">&lt;insert</span> <span class="na">id=</span><span class="s">"batchInsertOrUpdate"</span> <span class="na">parameterType=</span><span class="s">"UserInfo"</span> <span class="na">useGeneratedKeys=</span><span class="s">"true"</span> <span class="na">keyProperty=</span><span class="s">"id"</span><span class="nt">&gt;</span>
+    INSERT INTO tableName (name, password, age, email, gender) VALUES
+    <span class="nt">&lt;foreach</span> <span class="na">collection=</span><span class="s">"list"</span> <span class="na">index=</span><span class="s">"index"</span> <span class="na">item=</span><span class="s">"user"</span> <span class="na">separator=</span><span class="s">","</span><span class="nt">&gt;</span>
+      (#{user.name}, #{user.password}, #{user.age}, #{user.email}, #{user.gender})
+    <span class="nt">&lt;/foreach&gt;</span>
+    ON DUPLICATE KEY UPDATE name = VALUES(name);
+<span class="nt">&lt;/insert&gt;</span>
 </code></pre></div></div>
 
 <ul>
