@@ -113,6 +113,7 @@ jQuery(function(){
   <li><a href="#远程拷贝-scp" id="markdown-toc-远程拷贝-scp">远程拷贝 <em>scp</em></a></li>
   <li><a href="#修改权限-chmod" id="markdown-toc-修改权限-chmod">修改权限 <em>chmod</em></a></li>
   <li><a href="#查看端口占用情况" id="markdown-toc-查看端口占用情况">查看端口占用情况</a></li>
+  <li><a href="#查看目录大小" id="markdown-toc-查看目录大小">查看目录大小</a></li>
 </ul>
 
 <hr />
@@ -207,6 +208,11 @@ find ./mydir -type d | xargs chmod 755
 <p>不用<code class="highlighter-rouge">sudo</code>看不到<code class="highlighter-rouge">PID/Program name</code></p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo netstat -tunlp
+</code></pre></div></div>
+
+<h2 id="查看目录大小">查看目录大小</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>du dir -ah --max-depth=1
 </code></pre></div></div>
 
 <hr />
