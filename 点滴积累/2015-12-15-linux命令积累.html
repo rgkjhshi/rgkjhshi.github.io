@@ -113,7 +113,7 @@ jQuery(function(){
   <li><a href="#远程拷贝-scp" id="markdown-toc-远程拷贝-scp">远程拷贝 <em>scp</em></a></li>
   <li><a href="#修改权限-chmod" id="markdown-toc-修改权限-chmod">修改权限 <em>chmod</em></a></li>
   <li><a href="#查看端口占用情况" id="markdown-toc-查看端口占用情况">查看端口占用情况</a></li>
-  <li><a href="#查看目录大小" id="markdown-toc-查看目录大小">查看目录大小</a></li>
+  <li><a href="#查看磁盘空间" id="markdown-toc-查看磁盘空间">查看磁盘空间</a></li>
 </ul>
 
 <hr />
@@ -210,9 +210,14 @@ find ./mydir -type d | xargs chmod 755
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo netstat -tunlp
 </code></pre></div></div>
 
-<h2 id="查看目录大小">查看目录大小</h2>
+<h2 id="查看磁盘空间">查看磁盘空间</h2>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>du dir -ah --max-depth=1
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 查看硬盘剩余空间</span>
+df <span class="nt">-h</span>
+<span class="c"># 查看目录占用空间</span>
+du <span class="nt">-hs</span> dir
+<span class="c"># 列出一级目录所占空间</span>
+du <span class="nt">-ah</span> <span class="nt">--max-depth</span><span class="o">=</span>1 dir
 </code></pre></div></div>
 
 <hr />
