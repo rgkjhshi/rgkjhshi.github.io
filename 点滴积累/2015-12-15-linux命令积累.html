@@ -105,9 +105,10 @@ jQuery(function(){
 
 <ul id="markdown-toc">
   <li><a href="#抓取命令-grep" id="markdown-toc-抓取命令-grep">抓取命令 <em>grep</em></a>    <ul>
-      <li><a href="#抓去时间大于某个值" id="markdown-toc-抓去时间大于某个值">抓去时间大于某个值</a></li>
+      <li><a href="#抓取时间大于某个值" id="markdown-toc-抓取时间大于某个值">抓取时间大于某个值</a></li>
     </ul>
   </li>
+  <li><a href="#awk" id="markdown-toc-awk">awk</a></li>
   <li><a href="#链接命令-ln" id="markdown-toc-链接命令-ln">链接命令 <em>ln</em></a></li>
   <li><a href="#打包命令-tar" id="markdown-toc-打包命令-tar">打包命令 <em>tar</em></a></li>
   <li><a href="#远程拷贝-scp" id="markdown-toc-远程拷贝-scp">远程拷贝 <em>scp</em></a></li>
@@ -140,13 +141,41 @@ jQuery(function(){
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>向前显示5行: grep "2016-6-23 12:00:00" -B5 --color access.log
 </code></pre></div></div>
 
-<h3 id="抓去时间大于某个值">抓去时间大于某个值</h3>
+<h3 id="抓取时间大于某个值">抓取时间大于某个值</h3>
 <p>配合<code class="highlighter-rouge">sed</code>命令和<code class="highlighter-rouge">awk</code>命令</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ grep "运行时间为" qcredit.log  | sed 's/ms//' | awk -F ':' '{if($5&gt;100) print}'
 </code></pre></div></div>
 
 <p>通过<code class="highlighter-rouge">sed</code>命令把字符串里的<code class="highlighter-rouge">ms</code>换成空串, <code class="highlighter-rouge">awk</code>命令 <code class="highlighter-rouge">-F ':'</code> 表示用<code class="highlighter-rouge">:</code>对文本分割, <code class="highlighter-rouge">$5</code>对应分割后的时间那一列</p>
+
+<hr />
+
+<h2 id="awk">awk</h2>
+
+<ul>
+  <li>使用方式:<code class="highlighter-rouge">awk [-F 分隔符] 'commands' filename</code>, 其中<code class="highlighter-rouge">-F</code>可选, 不写默认以<code class="highlighter-rouge">空格</code>或<code class="highlighter-rouge">制表符</code>分割</li>
+</ul>
+
+<p>内置变量(具体参考<code class="highlighter-rouge">man</code>手册):</p>
+
+<ul>
+  <li>FS : 域分隔符, 即-F选项指定的分隔符</li>
+  <li>RS : 记录分隔符</li>
+  <li>NF : 当前记录域的个数</li>
+  <li>NR : 已读的记录数</li>
+  <li>FNR : 当前行在文件中的行号</li>
+</ul>
+
+<p>常用示例:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 以 : 分割, 打印第7列($0表示整行)</span>
+<span class="nb">cat</span> /etc/passwd | awk  <span class="nt">-F</span> <span class="s1">':'</span>  <span class="s1">'{print $7}'</span>
+<span class="c"># 打印列数超过10列的行</span>
+awk <span class="s1">'{if(NF&gt;10) print $0}'</span>
+<span class="c"># 在开头和结尾打印一些东西</span>
+<span class="nb">cat</span> /etc/passwd | awk  <span class="nt">-F</span> <span class="s1">':'</span>  <span class="s1">'BEGIN {print "name,shell"}  {print $1","$7} END {print "aaa,bbb"}'</span>
+</code></pre></div></div>
 
 <hr />
 
