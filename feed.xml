@@ -5,9 +5,176 @@
     <description>Michael King's Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 21 Jun 2018 15:23:10 +0800</pubDate>
-    <lastBuildDate>Thu, 21 Jun 2018 15:23:10 +0800</lastBuildDate>
+    <pubDate>Tue, 26 Jun 2018 14:30:44 +0800</pubDate>
+    <lastBuildDate>Tue, 26 Jun 2018 14:30:44 +0800</lastBuildDate>
     <generator>Jekyll v3.6.2</generator>
+    
+      <item>
+        <title>MySQL中的连接查询</title>
+        <description>&lt;hr /&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#条件连接&quot; id=&quot;markdown-toc-条件连接&quot;&gt;条件连接&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#等值连接&quot; id=&quot;markdown-toc-等值连接&quot;&gt;等值连接&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#自然连接&quot; id=&quot;markdown-toc-自然连接&quot;&gt;自然连接&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#内连接&quot; id=&quot;markdown-toc-内连接&quot;&gt;内连接&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#using-与-on&quot; id=&quot;markdown-toc-using-与-on&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;using&lt;/code&gt; 与 &lt;code class=&quot;highlighter-rouge&quot;&gt;on&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#内连接与自然连接&quot; id=&quot;markdown-toc-内连接与自然连接&quot;&gt;内连接与自然连接&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#外连接&quot; id=&quot;markdown-toc-外连接&quot;&gt;外连接&lt;/a&gt;    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;#左连接&quot; id=&quot;markdown-toc-左连接&quot;&gt;左连接&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#左连接-1&quot; id=&quot;markdown-toc-左连接-1&quot;&gt;左连接&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#右连接&quot; id=&quot;markdown-toc-右连接&quot;&gt;右连接&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;#全连接&quot; id=&quot;markdown-toc-全连接&quot;&gt;全连接&lt;/a&gt;        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;#union与union-all&quot; id=&quot;markdown-toc-union与union-all&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;union&lt;/code&gt;与&lt;code class=&quot;highlighter-rouge&quot;&gt;union all&lt;/code&gt;&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#交叉连接&quot; id=&quot;markdown-toc-交叉连接&quot;&gt;交叉连接&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;条件连接&quot;&gt;条件连接&lt;/h2&gt;
+&lt;p&gt;或叫&lt;code class=&quot;highlighter-rouge&quot;&gt;逗号连接&lt;/code&gt;, 在多个表的笛卡尔积中选取满足条件的行的连接, 如&lt;code class=&quot;highlighter-rouge&quot;&gt;select * from A,B where A.a &amp;gt; A.b&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;等值连接&quot;&gt;等值连接&lt;/h2&gt;
+&lt;p&gt;特殊的条件连接, 当条件为&lt;code class=&quot;highlighter-rouge&quot;&gt;某字段=某字段&lt;/code&gt;时, 即为等值连接。如&lt;code class=&quot;highlighter-rouge&quot;&gt;select * from A,B where A.a=B.b&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;自然连接&quot;&gt;自然连接&lt;/h2&gt;
+&lt;p&gt;对两张表中&lt;code class=&quot;highlighter-rouge&quot;&gt;字段名和数据类型都相同&lt;/code&gt;的字段进行等值连接, 再将表中重复的字段去掉, 即为&lt;code class=&quot;highlighter-rouge&quot;&gt;自然连接&lt;/code&gt;。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;写法 : &lt;code class=&quot;highlighter-rouge&quot;&gt;NATURAL JOIN&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;条件 : &lt;code class=&quot;highlighter-rouge&quot;&gt;列名相同&lt;/code&gt;且&lt;code class=&quot;highlighter-rouge&quot;&gt;类型相同&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;不允许带&lt;code class=&quot;highlighter-rouge&quot;&gt;on/using&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;示例:&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;-- A中有a,b,c字段, B中有c,d字段&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;natural&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;join&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;-- 结果等同于下面&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;B&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;内连接&quot;&gt;内连接&lt;/h2&gt;
+&lt;p&gt;使用比较运算符(&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;&amp;gt;=&lt;/code&gt;)根据每个表共有的列值匹配两个表中的行&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;写法: &lt;code class=&quot;highlighter-rouge&quot;&gt;(INNER) JOIN&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;可以不写&lt;code class=&quot;highlighter-rouge&quot;&gt;on/using&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;示例:&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;-- 等值&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;join&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;on&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;-- 非等值&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;join&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;on&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;-- 带条件&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;join&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;on&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;-- using&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;join&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;using-与-on&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;using&lt;/code&gt; 与 &lt;code class=&quot;highlighter-rouge&quot;&gt;on&lt;/code&gt;&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;using&lt;/code&gt;与&lt;code class=&quot;highlighter-rouge&quot;&gt;on&lt;/code&gt;都可以达到等值连接的效果, 但二者直接也有差别&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;on&lt;/code&gt;可以设置条件, 而&lt;code class=&quot;highlighter-rouge&quot;&gt;using&lt;/code&gt;不可设置条件,只能指明使用哪些字段进行等值连接&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;on&lt;/code&gt;不会去掉重复列, 而&lt;code class=&quot;highlighter-rouge&quot;&gt;using&lt;/code&gt;会去掉重列(去重效果与自然连接的效果一样)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;内连接与自然连接&quot;&gt;内连接与自然连接&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;自然连接&lt;/code&gt;只能是同名属性的等值连接, 而&lt;code class=&quot;highlighter-rouge&quot;&gt;内连接&lt;/code&gt;可以使用&lt;code class=&quot;highlighter-rouge&quot;&gt;on&lt;/code&gt;子句来指定连接条件&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;自然连接&lt;/code&gt;的结果会去掉重复列, 而&lt;code class=&quot;highlighter-rouge&quot;&gt;内连接&lt;/code&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;on&lt;/code&gt;子句进行等值连接时, 重复列不会被去掉&lt;/li&gt;
+  &lt;li&gt;当&lt;code class=&quot;highlighter-rouge&quot;&gt;内连接&lt;/code&gt;使用&lt;code class=&quot;highlighter-rouge&quot;&gt;using&lt;/code&gt;子句时, 若指定所有同名同类型属性, 则与&lt;code class=&quot;highlighter-rouge&quot;&gt;自然连接&lt;/code&gt;的结果一样&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;外连接&quot;&gt;外连接&lt;/h2&gt;
+&lt;p&gt;外连接包括左连接、右连接、全连接&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;所有外连接必须使用&lt;code class=&quot;highlighter-rouge&quot;&gt;on/using&lt;/code&gt;子句提供相应的连接条件&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;左连接&quot;&gt;左连接&lt;/h3&gt;
+&lt;p&gt;左表的所有行, 右表的匹配行。如果左表的某行在右表中没有匹配行, 则在结果集中右表的所有列均为空值&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;写法 : &lt;code class=&quot;highlighter-rouge&quot;&gt;LEFT [OUTER] JOIN&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;左连接-1&quot;&gt;左连接&lt;/h3&gt;
+&lt;p&gt;左表的所有行, 右表的匹配行。如果左表的某行在右表中没有匹配行, 则在结果集中右表的所有列均为空值&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;写法 : &lt;code class=&quot;highlighter-rouge&quot;&gt;LEFT [OUTER] JOIN&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;示例:&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;-- on&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;left&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;join&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;on&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;-- using&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;left&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;outer&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;join&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;右连接&quot;&gt;右连接&lt;/h3&gt;
+&lt;p&gt;右表的所有行, 左表的匹配行。如果右表的某行在左表中没有匹配行, 则在结果集中左表的所有列均为空值&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;写法 : &lt;code class=&quot;highlighter-rouge&quot;&gt;RIGHT [OUTER] JOIN&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;全连接&quot;&gt;全连接&lt;/h3&gt;
+&lt;p&gt;左表和右表中的所有行, 当某行在另一个表中没有匹配行时, 显示为空值&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;写法 : &lt;code class=&quot;highlighter-rouge&quot;&gt;FULL [OUTER] JOIN&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;MySQL&lt;/code&gt;不支持全连接, 可以采用&lt;code class=&quot;highlighter-rouge&quot;&gt;左外 + union + 右外&lt;/code&gt;达到等效目的&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;-- 使用 左外 + union + 右外 达到 full join 的效果&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;left&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;outer&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;join&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;on&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;union&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;right&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;outer&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;join&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;on&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;union与union-all&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;union&lt;/code&gt;与&lt;code class=&quot;highlighter-rouge&quot;&gt;union all&lt;/code&gt;&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;UNION&lt;/code&gt;操作符用于合并两个或多个&lt;code class=&quot;highlighter-rouge&quot;&gt;SELECT&lt;/code&gt;语句的结果集&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;UNION&lt;/code&gt;内部的&lt;code class=&quot;highlighter-rouge&quot;&gt;SELECT&lt;/code&gt;语句必须拥有相同数量的列, 列也必须拥有相似的数据类型&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;UNION&lt;/code&gt;会去掉重复的值, &lt;code class=&quot;highlighter-rouge&quot;&gt;UNION ALL&lt;/code&gt;会保留重复的值&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;交叉连接&quot;&gt;交叉连接&lt;/h2&gt;
+&lt;p&gt;交叉联接返回左表中的所有行，左表中的每一行与右表中的所有行组合。交叉联接也称作笛卡尔积&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;写法 : &lt;code class=&quot;highlighter-rouge&quot;&gt;CROSS JOIN&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;可以不写&lt;code class=&quot;highlighter-rouge&quot;&gt;on/using&lt;/code&gt;, 不写是时等同于笛卡尔积&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;示例:&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;-- 笛卡尔积&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;cross&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;join&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;-- on&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;cross&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;join&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;on&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Tue, 26 Jun 2018 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2018-06-26-MySQL%E4%B8%AD%E7%9A%84%E8%BF%9E%E6%8E%A5%E6%9F%A5%E8%AF%A2.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2018-06-26-MySQL%E4%B8%AD%E7%9A%84%E8%BF%9E%E6%8E%A5%E6%9F%A5%E8%AF%A2.html</guid>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
     
       <item>
         <title>设计模式一</title>
@@ -1706,397 +1873,6 @@
         <pubDate>Mon, 22 May 2017 00:00:00 +0800</pubDate>
         <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-22-ConcurrentHashMap%E8%AF%A6%E8%A7%A3.html</link>
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-22-ConcurrentHashMap%E8%AF%A6%E8%A7%A3.html</guid>
-        
-        <category>Java</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>排序算法</title>
-        <description>&lt;p&gt;基本的排序算法&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#插入类排序&quot; id=&quot;markdown-toc-插入类排序&quot;&gt;插入类排序&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#直接插入排序&quot; id=&quot;markdown-toc-直接插入排序&quot;&gt;直接插入排序&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#折半插入排序&quot; id=&quot;markdown-toc-折半插入排序&quot;&gt;折半插入排序&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#交换类排序&quot; id=&quot;markdown-toc-交换类排序&quot;&gt;交换类排序&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#冒泡排序&quot; id=&quot;markdown-toc-冒泡排序&quot;&gt;冒泡排序&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#快速排序&quot; id=&quot;markdown-toc-快速排序&quot;&gt;快速排序&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#选择类排序&quot; id=&quot;markdown-toc-选择类排序&quot;&gt;选择类排序&lt;/a&gt;    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;#简单选择排序&quot; id=&quot;markdown-toc-简单选择排序&quot;&gt;简单选择排序&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#堆排序&quot; id=&quot;markdown-toc-堆排序&quot;&gt;堆排序&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;#归并排序&quot; id=&quot;markdown-toc-归并排序&quot;&gt;归并排序&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;插入类排序&quot;&gt;插入类排序&lt;/h2&gt;
-&lt;p&gt;插入类排序基本思想在于, 每次将一个元素插入到前面已经排好序的子序列中, 包括&lt;code class=&quot;highlighter-rouge&quot;&gt;直接插入排序&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;折半插入排序&lt;/code&gt;、&lt;code class=&quot;highlighter-rouge&quot;&gt;希尔排序&lt;/code&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;直接插入排序&quot;&gt;直接插入排序&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;基本思想: 一个数组, 左边有序(起始只有一个元素), 把右边元素依次插入到左边的有序表&lt;/li&gt;
-  &lt;li&gt;算法步骤:
-    &lt;ol&gt;
-      &lt;li&gt;找到元素&lt;code class=&quot;highlighter-rouge&quot;&gt;L[i]&lt;/code&gt;在左边有序表&lt;code class=&quot;highlighter-rouge&quot;&gt;L[1 ~ i-1]&lt;/code&gt;的插入位置&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;将&lt;code class=&quot;highlighter-rouge&quot;&gt;L[k ~ i-1]&lt;/code&gt;所有元素全部后移一个位置(必须临时存放原来的&lt;code class=&quot;highlighter-rouge&quot;&gt;L[i]&lt;/code&gt;)&lt;/li&gt;
-      &lt;li&gt;把元素 &lt;code class=&quot;highlighter-rouge&quot;&gt;L(i)&lt;/code&gt;复制到&lt;code class=&quot;highlighter-rouge&quot;&gt;L[k]&lt;/code&gt;&lt;/li&gt;
-    &lt;/ol&gt;
-  &lt;/li&gt;
-  &lt;li&gt;算法描述:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// 直接插入排序&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;insertSort&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[],&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;                       &lt;span class=&quot;c1&quot;&gt;// 依次将A[1]~A[n-1]插入到前面已排序序列(初始的有序表只有A[0])&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;                           &lt;span class=&quot;c1&quot;&gt;// 若A[i]小于前驱, 需将A[i]插入有序表&lt;/span&gt;
-            &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;temp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;                              &lt;span class=&quot;c1&quot;&gt;// 临时存放待插入元素&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;temp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 向前查找待插入位置&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;                         &lt;span class=&quot;c1&quot;&gt;// 向后挪位&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;temp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;                             &lt;span class=&quot;c1&quot;&gt;// 复制到插入位置&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;空间复杂度: &lt;code class=&quot;highlighter-rouge&quot;&gt;O(1)&lt;/code&gt;, 借助于了一个临时存放单元&lt;/li&gt;
-  &lt;li&gt;时间复杂度: &lt;code class=&quot;highlighter-rouge&quot;&gt;O(n^2)&lt;/code&gt;, 最好情况下, 元素已经有序, 时间复杂度为&lt;code class=&quot;highlighter-rouge&quot;&gt;O(n)&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;稳定性: 稳定&lt;/li&gt;
-  &lt;li&gt;适用场景: 基本有序&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;折半插入排序&quot;&gt;折半插入排序&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;基本思想: 也是左边有序, 右边依次插入有序表, 不同的是找插入位置&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;时, 使用折半查找法&lt;/li&gt;
-  &lt;li&gt;算法描述:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;c1&quot;&gt;// 折半插入排序(递增排序)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;binaryInsertSort&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[],&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;// 依次将A[1]~A[n-1]插入到前面已排序序列&lt;/span&gt;
-            &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tmp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;                  &lt;span class=&quot;c1&quot;&gt;// 临时存放待插入元素&lt;/span&gt;
-            &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;low&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;                     &lt;span class=&quot;c1&quot;&gt;// 折半查找的范围&lt;/span&gt;
-            &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;high&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;low&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;high&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;            &lt;span class=&quot;c1&quot;&gt;// 折半查找(low == high 总会发生)&lt;/span&gt;
-                &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;low&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;high&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 取中间点&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tmp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;          &lt;span class=&quot;c1&quot;&gt;// 查找左半子表&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;high&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;                     &lt;span class=&quot;c1&quot;&gt;// 查找右半子表&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;low&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// 程序到这里会出现 high + 1 == low&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;high&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 统一移动元素, 空出插入位置&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 向后挪位&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;high&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tmp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;空间复杂度: &lt;code class=&quot;highlighter-rouge&quot;&gt;O(1)&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;时间复杂度: &lt;code class=&quot;highlighter-rouge&quot;&gt;O(n^2)&lt;/code&gt;, 仅减少了比较次数, 大约为&lt;code class=&quot;highlighter-rouge&quot;&gt;O(nlogn)&lt;/code&gt;(&lt;code class=&quot;highlighter-rouge&quot;&gt;log&lt;/code&gt;表示以2为底的对数), 且比较次数与初始顺序无关&lt;/li&gt;
-  &lt;li&gt;稳定性: 稳定&lt;/li&gt;
-  &lt;li&gt;适用场景: 数据量不大&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;交换类排序&quot;&gt;交换类排序&lt;/h2&gt;
-&lt;p&gt;交换类排序的基本思想在于, 根据两个元素的比较结果来交换两个元素在序列中的位置, 包括&lt;code class=&quot;highlighter-rouge&quot;&gt;冒泡排序&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;快速排序&lt;/code&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;冒泡排序&quot;&gt;冒泡排序&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;基本思想: 从后向前(也可从前向后)依次比较相邻两元素, 若为逆序则交换, 这样一趟冒泡会把最小的元素交换到第一个位置; 下一趟冒泡时, 第一个元素就不再参与了, 这样每次都把最小元素交换到前面, 总共进行&lt;code class=&quot;highlighter-rouge&quot;&gt;n-1&lt;/code&gt;趟冒泡就可以了.&lt;/li&gt;
-  &lt;li&gt;算法描述:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;c1&quot;&gt;// 冒泡排序(递增排序)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;bubbleSort&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[],&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;       &lt;span class=&quot;c1&quot;&gt;// 总共需要n-1趟冒泡&lt;/span&gt;
-            &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;flag&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;               &lt;span class=&quot;c1&quot;&gt;// 用于记录本趟是否发生了交换, 只要有一趟没发生交换, 就说明已经有序了&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;--)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;// 一趟冒泡&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;          &lt;span class=&quot;c1&quot;&gt;// 相邻元素比较&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;swap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;          &lt;span class=&quot;c1&quot;&gt;// 交换&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;flag&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;flag&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 如果这趟没发生交换, 说明已经有序了&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;空间复杂度: &lt;code class=&quot;highlighter-rouge&quot;&gt;O(1)&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;时间复杂度: &lt;code class=&quot;highlighter-rouge&quot;&gt;O(n^2)&lt;/code&gt;, 最好情况下, 元素已经有序, 时间复杂度为&lt;code class=&quot;highlighter-rouge&quot;&gt;O(n)&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;稳定性: 稳定&lt;/li&gt;
-  &lt;li&gt;适用场景: 基本有序&lt;/li&gt;
-  &lt;li&gt;另附关于交换两个单元的方法:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;c1&quot;&gt;// 借助临时单元&lt;/span&gt;
-    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tmp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tmp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// 直接交换&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 注意有可能溢出&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// 位操作交换&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;^&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;^&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;^&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;快速排序&quot;&gt;快速排序&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;基本思想: 基于分治法, 在n个元素中任取一个元素&lt;code class=&quot;highlighter-rouge&quot;&gt;pivot&lt;/code&gt;(一般为第一个元素)作为基准, 一趟排序后把数据分成两部分, 左边&lt;code class=&quot;highlighter-rouge&quot;&gt;L[0 ~ k-1]&lt;/code&gt;和 右边&lt;code class=&quot;highlighter-rouge&quot;&gt;L[k+1 ~ n-1]&lt;/code&gt;, 使得左边元素都小于&lt;code class=&quot;highlighter-rouge&quot;&gt;pivot&lt;/code&gt;, 右边都大于&lt;code class=&quot;highlighter-rouge&quot;&gt;pivot&lt;/code&gt;, 而&lt;code class=&quot;highlighter-rouge&quot;&gt;pivot&lt;/code&gt;直接复制到&lt;code class=&quot;highlighter-rouge&quot;&gt;L[k]&lt;/code&gt;上, 这个过程成为一趟快排; 然后对左子表和右子表分别进行上述过程, 直到每部分只有一个元素或为空为止, 即所有元素都放在了最终位置上.&lt;/li&gt;
-  &lt;li&gt;算法描述:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;c1&quot;&gt;// 快速排序&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;quickSort&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[],&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;left&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 跳出递归的条件&lt;/span&gt;
-            &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pivotPos&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;partition&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 划分函数, 找到pivot的位置&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;quickSort&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pivotPos&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;          &lt;span class=&quot;c1&quot;&gt;// 排序左子表&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;quickSort&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pivotPos&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;         &lt;span class=&quot;c1&quot;&gt;// 排序右子表&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// 划分函数, 一趟排序的过程&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;partition&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[],&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pivot&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;           &lt;span class=&quot;c1&quot;&gt;// 任取一个元素作为基准, 这里用第一个元素作为基准&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;left&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;         &lt;span class=&quot;c1&quot;&gt;// 循环跳出的条件&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;left&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pivot&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;// 从后向前找到第一个小于pivot的元素&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;// 把小于pivot的元素换到左边&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;left&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pivot&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;     &lt;span class=&quot;c1&quot;&gt;// 从前向后找到第一个大于pivot的元素&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;// 把大于pivot的元素换到右边&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 跳出循环总会有 left == right&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pivot&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;空间复杂度: &lt;code class=&quot;highlighter-rouge&quot;&gt;O(n)&lt;/code&gt;, 栈深度最好为&lt;code class=&quot;highlighter-rouge&quot;&gt;log(n+1)&lt;/code&gt;, 最坏为&lt;code class=&quot;highlighter-rouge&quot;&gt;n-1&lt;/code&gt;, 平均栈深度&lt;code class=&quot;highlighter-rouge&quot;&gt;O(logn)&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;时间复杂度: 最好&lt;code class=&quot;highlighter-rouge&quot;&gt;O(nlogn)&lt;/code&gt;, 最坏(有序时最坏)&lt;code class=&quot;highlighter-rouge&quot;&gt;O(n^2)&lt;/code&gt;, 平均接近最好情况; &lt;code class=&quot;highlighter-rouge&quot;&gt;快排是是所有排序算法中平均性能最优的&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;稳定性: 不稳定&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;选择类排序&quot;&gt;选择类排序&lt;/h2&gt;
-&lt;p&gt;选择类排序的基本思想在于, 每趟都从待排序列中选取一个最小值作为序列的第i个元素,直到第&lt;code class=&quot;highlighter-rouge&quot;&gt;n-1&lt;/code&gt;趟, 待排序列只剩下一个元素. 包括&lt;code class=&quot;highlighter-rouge&quot;&gt;简单选择排序&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;堆排序&lt;/code&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;简单选择排序&quot;&gt;简单选择排序&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;基本思想: 第&lt;code class=&quot;highlighter-rouge&quot;&gt;i&lt;/code&gt;趟从&lt;code class=&quot;highlighter-rouge&quot;&gt;L[i ~ n]&lt;/code&gt;中选择关键字最小的元素与&lt;code class=&quot;highlighter-rouge&quot;&gt;L[i]&lt;/code&gt;交换, 这样每趟都可确定一个元素的最终位置, 经过&lt;code class=&quot;highlighter-rouge&quot;&gt;n-1&lt;/code&gt;趟就可以使整个序列有序.&lt;/li&gt;
-  &lt;li&gt;算法描述:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;c1&quot;&gt;// 简单选择排序&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;selectSort&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[],&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;      &lt;span class=&quot;c1&quot;&gt;// 一共进行 n-1 趟&lt;/span&gt;
-            &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;min&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;                       &lt;span class=&quot;c1&quot;&gt;// 记录最小元素位置&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 从 A[i+1 ~ n-1]中选择最小元素&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;min&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;           &lt;span class=&quot;c1&quot;&gt;// 更新最小元素位置&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;min&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;min&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;                    &lt;span class=&quot;c1&quot;&gt;// 最小的与第i个位置交换&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;swap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;min&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;空间复杂度: &lt;code class=&quot;highlighter-rouge&quot;&gt;O(1)&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;时间复杂度: &lt;code class=&quot;highlighter-rouge&quot;&gt;O(n^2)&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;稳定性: 不稳定&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;堆排序&quot;&gt;堆排序&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;特点: 在排序过程中, 把&lt;code class=&quot;highlighter-rouge&quot;&gt;L[1 ~ n]&lt;/code&gt;看成是一颗&lt;code class=&quot;highlighter-rouge&quot;&gt;完全二叉树&lt;/code&gt;的顺序存储结构, 利用完全二叉树中父节点和子节点的内在关系, 在当前无需区中选择关键字最大(或最小)的元素&lt;/li&gt;
-  &lt;li&gt;完全二叉树: 若二叉树除最后一层外, 其它各层的结点数都达到最大个数, 最后一层所有的结点都连续集中在最左边, 这就是完全二叉树&lt;/li&gt;
-  &lt;li&gt;小根堆: &lt;code class=&quot;highlighter-rouge&quot;&gt;L[1~n]&lt;/code&gt;满足 &lt;code class=&quot;highlighter-rouge&quot;&gt;L[i]&amp;lt;=L[2i]&lt;/code&gt;且&lt;code class=&quot;highlighter-rouge&quot;&gt;L[i]&amp;lt;=L[2i+1]&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;大根堆: &lt;code class=&quot;highlighter-rouge&quot;&gt;L[1~n]&lt;/code&gt;满足 &lt;code class=&quot;highlighter-rouge&quot;&gt;L[i]&amp;gt;=L[2i]&lt;/code&gt;且&lt;code class=&quot;highlighter-rouge&quot;&gt;L[i]&amp;gt;=L[2i+1]&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;大根堆示例:(左右兄弟结点没有大小关系)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;/static/images/maxHeap.png&quot; alt=&quot;maxHeap&quot; title=&quot;maxHeap&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;算法思想: 堆排序主要包括两个步骤
-    &lt;ol&gt;
-      &lt;li&gt;创建初始堆: 堆排序的关键就是构造初始堆. &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt;个结点的完全二叉树, 最后一个结点一定是&lt;code class=&quot;highlighter-rouge&quot;&gt;n/2&lt;/code&gt;个结点的子结点, 所以我们从&lt;code class=&quot;highlighter-rouge&quot;&gt;n/2&lt;/code&gt;结点开始保证它是一个堆, 然后不断向前调整, 保证每个结点都大于左右子结点(不大于则交换). 当然在过程中可能因为交换破坏了下一级的堆, 这时要继续调整下一级堆, 保证子树构造成堆为止. 反复调整直到根结点.&lt;/li&gt;
-      &lt;li&gt;排序输出: 大根堆里堆顶元素一定是最大的, 因此每次输出堆顶元素, 然后把堆顶元素与堆底元素交换, 在把剩余的元素(刚才的堆顶元素已经在堆底, 可调整的元素个数-1)调整成堆, 再次输出堆顶元素, 依次类推, 就是按由大到小的顺序把元素全部输出了.&lt;/li&gt;
-    &lt;/ol&gt;
-  &lt;/li&gt;
-  &lt;li&gt;算法描述:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;c1&quot;&gt;// 创建大根堆&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;buildMaxHeap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[],&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// n为参与建堆的元素个数&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;--)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;      &lt;span class=&quot;c1&quot;&gt;// 从n/2到0, 依次调整&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;adjustDown&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// 向下调整(可用于删除元素)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;adjustDown&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[],&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// k为要调整结点下标, n为要调整的元素个数&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;temp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;     &lt;span class=&quot;c1&quot;&gt;// 调整k为根的子树&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;                           &lt;span class=&quot;c1&quot;&gt;// 如果下标是从0开始的, 则0的左子结点下标为1&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;     &lt;span class=&quot;c1&quot;&gt;// 左右子结点中, 取较大的那个结点跟temp比&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// i是左右子结点中较大的那个&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;temp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;                     &lt;span class=&quot;c1&quot;&gt;// temp &amp;gt;= A[i]时, 此时的k是temp应该调整到的位置&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;                              &lt;span class=&quot;c1&quot;&gt;// 找到temp该在的位置时, 筛选结束&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;                                &lt;span class=&quot;c1&quot;&gt;// 没找到temp该在的位置时, 还要继续调整&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;                        &lt;span class=&quot;c1&quot;&gt;// 先把A[i]调整到父结点上&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;                              &lt;span class=&quot;c1&quot;&gt;// 修改k值, 以便继续向下筛选&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 出了循环, k这颗子树就调整完毕了&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;temp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// 堆排序&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;heapSort&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[],&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;// 对前n个元素建堆&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;buildMaxHeap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;                  &lt;span class=&quot;c1&quot;&gt;// 创建初始堆&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;--)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;// n-1趟交换建堆过程&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]);&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;// 输出&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;swap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;                   &lt;span class=&quot;c1&quot;&gt;// 交换堆顶和堆底元素, 为的是把堆底元素撇出去&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;adjustDown&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;         &lt;span class=&quot;c1&quot;&gt;// 把剩余的 i-1 个元素调整成堆&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]);&lt;/span&gt;            &lt;span class=&quot;c1&quot;&gt;// 把最后一个元素输出&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;堆的删除和插入
-    &lt;ol&gt;
-      &lt;li&gt;堆顶删除, 把堆顶和堆底交换, 对根结点进行向下调整(剩余元素)&lt;/li&gt;
-      &lt;li&gt;堆底插入, 再对这个结点进行向上调整. 向上调整的算法如下:&lt;/li&gt;
-    &lt;/ol&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;c1&quot;&gt;// 向上调整(可用于添加元素)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;adjustUp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[],&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 添加元素只能从堆底添加, n为要调整的元素个数, 所以添加的元素下标k=n-1&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;                      &lt;span class=&quot;c1&quot;&gt;// 新添加元素的下标&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;temp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;                      &lt;span class=&quot;c1&quot;&gt;// p为双亲结点&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;temp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;     &lt;span class=&quot;c1&quot;&gt;// 若结点大于双亲结点, 则将双亲结点向下调, 并继续向上比较&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;                    &lt;span class=&quot;c1&quot;&gt;// 双亲结点下调&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;                          &lt;span class=&quot;c1&quot;&gt;// 记录调整到的节点位置&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;                      &lt;span class=&quot;c1&quot;&gt;// 继续向上比较&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;                   &lt;span class=&quot;c1&quot;&gt;// 下标从0开始的话, 必须有这一步, 不然会出现死循环&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 出循环时的n即为最终应该在的位置&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;temp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;添加元素的一个例子:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;nd&quot;&gt;@Test&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;mainTest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;};&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 一共10个元素&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;buildMaxHeap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;             &lt;span class=&quot;c1&quot;&gt;// 前9个元素建堆&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;adjustUp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;                     &lt;span class=&quot;c1&quot;&gt;// 添加第10个元素(下标为9)进去&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 排序输出&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;--)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;// n-1趟交换建堆过程&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]);&lt;/span&gt;              &lt;span class=&quot;c1&quot;&gt;// 输出&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;swap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;                         &lt;span class=&quot;c1&quot;&gt;// 交换堆顶和堆底元素, 为的是把堆底元素撇出去&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;adjustDown&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;               &lt;span class=&quot;c1&quot;&gt;// 把剩余的 i-1 个元素调整成堆&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]);&lt;/span&gt;                  &lt;span class=&quot;c1&quot;&gt;// 把最后一个元素输出&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;空间复杂度: &lt;code class=&quot;highlighter-rouge&quot;&gt;O(1)&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;时间复杂度: 建堆&lt;code class=&quot;highlighter-rouge&quot;&gt;O(n)&lt;/code&gt;, 调整&lt;code class=&quot;highlighter-rouge&quot;&gt;O(h)&lt;/code&gt;, 平均&lt;code class=&quot;highlighter-rouge&quot;&gt;O(nlogn)&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;稳定性: 不稳定&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;归并排序&quot;&gt;归并排序&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;算法思想: 把两个有序表合并成一个有序表&lt;/li&gt;
-  &lt;li&gt;算法描述:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;c1&quot;&gt;// 归并排序 A[left, right]&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;mergeSort&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[],&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;left&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;left&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;      &lt;span class=&quot;c1&quot;&gt;// 从中间划分两个序列&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;mergeSort&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;           &lt;span class=&quot;c1&quot;&gt;// 左边递归排序&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;mergeSort&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;      &lt;span class=&quot;c1&quot;&gt;// 右边递归排序&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;merge&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;// 归并&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;// A[left, mid] 和 A[mid+1, right] 各自有序, 把他们合并成一个有序表&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;merge&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[],&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 这是个辅助单元&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 把A[left, right]复制到B中&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// i表示左边, j表示右边, k表示合并后的下标&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 比较B左右两端中的元素大小, 小的复制到A中&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++];&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++];&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 若左边未复制完, 复制&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++];&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 若右边未复制完, 复制&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++];&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;空间复杂度: &lt;code class=&quot;highlighter-rouge&quot;&gt;O(n)&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;时间复杂度: &lt;code class=&quot;highlighter-rouge&quot;&gt;O(nlogn)&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;2路归并&lt;/code&gt;底数为&lt;code class=&quot;highlighter-rouge&quot;&gt;2&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;K路归并&lt;/code&gt;底数为&lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;稳定性: 稳定&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-</description>
-        <pubDate>Thu, 18 May 2017 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-18-%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-05-18-%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95.html</guid>
         
         <category>Java</category>
         
