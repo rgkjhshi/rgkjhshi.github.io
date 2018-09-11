@@ -354,11 +354,11 @@ $ docker run -d -P --name web -v /src/webapp:/opt/webapp:ro training/webapp pyth
 <p>上面例子中, 删除挂载数据卷的容器, 并不会删除挂载的数据卷, 除非在删除最后一个引用该数据卷的容器时指定<code class="highlighter-rouge">-v</code>标记</p>
 
 <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 删除容器不会删除数据卷</span>
-<span class="nv">$ </span>docker rm db1
+<span class="nv">$ </span>docker <span class="nb">rm </span>db1
 <span class="c"># 添加 -v 由于不是最后一个引用数据卷的容器, 所以数据卷仍没被删除</span>
-<span class="nv">$ </span>docker rm <span class="nt">-v</span> dbstore
+<span class="nv">$ </span>docker <span class="nb">rm</span> <span class="nt">-v</span> dbstore
 <span class="c"># 删除最后一个引用数据卷的容器时,添加 -v , 数据卷被删除</span>
-<span class="nv">$ </span>docker rm <span class="nt">-v</span> db2
+<span class="nv">$ </span>docker <span class="nb">rm</span> <span class="nt">-v</span> db2
 </code></pre></div></div>
 <p>如果删除了最后一个引用数据卷的容器时没有加<code class="highlighter-rouge">-v</code>, 将会出现<code class="highlighter-rouge">dangling</code>状态(悬挂,没人用了)的<code class="highlighter-rouge">volume</code>.</p>
 
@@ -375,7 +375,7 @@ $ docker run -d -P --name web -v /src/webapp:/opt/webapp:ro training/webapp pyth
 <span class="c"># 查看 dangling 的 volume</span>
 <span class="nv">$ </span>docker volume <span class="nb">ls</span> <span class="nt">-f</span> <span class="nv">dangling</span><span class="o">=</span><span class="nb">true</span>
 <span class="c"># 删除 volume</span>
-<span class="nv">$ </span>docker volume rm &lt;volume name&gt;
+<span class="nv">$ </span>docker volume <span class="nb">rm</span> &lt;volume name&gt;
 </code></pre></div></div>
 
 <h3 id="volume的其他用法"><code class="highlighter-rouge">volume</code>的其他用法</h3>

@@ -413,8 +413,8 @@ $ touch Dockerfile
 <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># This is a comment</span>
 FROM ubuntu:14.04
 MAINTAINER Kate Smith &lt;ksmith@example.com&gt;
-RUN apt-get update <span class="o">&amp;&amp;</span> apt-get install <span class="nt">-y</span> ruby ruby-dev
-RUN gem install sinatra
+RUN apt-get update <span class="o">&amp;&amp;</span> apt-get <span class="nb">install</span> <span class="nt">-y</span> ruby ruby-dev
+RUN gem <span class="nb">install </span>sinatra
 </code></pre></div></div>
 
 <p>上面<code class="highlighter-rouge">#</code>开头的是注释, 下面是指令, 指令的格式类似于<code class="highlighter-rouge">INSTRUCTION statement</code>, 每条指令都会创建镜像的一层</p>

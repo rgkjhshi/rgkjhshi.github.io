@@ -170,11 +170,11 @@ jQuery(function(){
 <p>常用示例:</p>
 
 <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 以 : 分割, 打印第7列($0表示整行)</span>
-<span class="nb">cat</span> /etc/passwd | awk  <span class="nt">-F</span> <span class="s1">':'</span>  <span class="s1">'{print $7}'</span>
+<span class="nb">cat</span> /etc/passwd | <span class="nb">awk</span>  <span class="nt">-F</span> <span class="s1">':'</span>  <span class="s1">'{print $7}'</span>
 <span class="c"># 打印列数超过10列的行</span>
-awk <span class="s1">'{if(NF&gt;10) print $0}'</span>
+<span class="nb">awk</span> <span class="s1">'{if(NF&gt;10) print $0}'</span>
 <span class="c"># 在开头和结尾打印一些东西</span>
-<span class="nb">cat</span> /etc/passwd | awk  <span class="nt">-F</span> <span class="s1">':'</span>  <span class="s1">'BEGIN {print "name,shell"}  {print $1","$7} END {print "aaa,bbb"}'</span>
+<span class="nb">cat</span> /etc/passwd | <span class="nb">awk</span>  <span class="nt">-F</span> <span class="s1">':'</span>  <span class="s1">'BEGIN {print "name,shell"}  {print $1","$7} END {print "aaa,bbb"}'</span>
 </code></pre></div></div>
 
 <hr />
@@ -242,11 +242,11 @@ find ./mydir -type d | xargs chmod 755
 <h2 id="查看磁盘空间">查看磁盘空间</h2>
 
 <div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 查看硬盘剩余空间</span>
-df <span class="nt">-h</span>
+<span class="nb">df</span> <span class="nt">-h</span>
 <span class="c"># 查看目录占用空间</span>
-du <span class="nt">-hs</span> dir
+<span class="nb">du</span> <span class="nt">-hs</span> <span class="nb">dir</span>
 <span class="c"># 列出一级目录所占空间</span>
-du <span class="nt">-ah</span> <span class="nt">--max-depth</span><span class="o">=</span>1 dir
+<span class="nb">du</span> <span class="nt">-ah</span> <span class="nt">--max-depth</span><span class="o">=</span>1 <span class="nb">dir</span>
 </code></pre></div></div>
 
 <hr />

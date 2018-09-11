@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="SpringMVC实体对象绑定参数时自定义对应关系, 编程技术,  逆水行舟" />
+    <meta name="description" content="SpringMVC实体对象绑定参数时自定义对应关系, 编程技术,  " />
+
+    <title>逆水行舟</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2018-09-11-SpringMVC%E5%AE%9E%E4%BD%93%E5%AF%B9%E8%B1%A1%E7%BB%91%E5%AE%9A%E5%8F%82%E6%95%B0%E6%97%B6%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AF%B9%E5%BA%94%E5%85%B3%E7%B3%BB.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="/static/js/jquery.qrcode.min.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="/static/js/uikit.min.js"></script>
+    <!-- quietflow -->
+    <!-- <script type="text/javascript" src="http://loveshisong.cn/static/js/quietflow.min.js"></script> -->
+    <!-- UK sticky -->
+    <script type="text/javascript" src="/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "shisong"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" data-uk-sticky>
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <script type="text/javascript">
+jQuery(function(){
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2018-09-11-SpringMVC%E5%AE%9E%E4%BD%93%E5%AF%B9%E8%B1%A1%E7%BB%91%E5%AE%9A%E5%8F%82%E6%95%B0%E6%97%B6%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AF%B9%E5%BA%94%E5%85%B3%E7%B3%BB.html"
+    });
+})
+</script>
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>SpringMVC实体对象绑定参数时自定义对应关系</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <hr />
+
+<ul id="markdown-toc">
+  <li><a href="#问题背景" id="markdown-toc-问题背景">问题背景</a></li>
+  <li><a href="#场景描述" id="markdown-toc-场景描述">场景描述</a></li>
+  <li><a href="#自定义注解" id="markdown-toc-自定义注解">自定义注解</a></li>
+  <li><a href="#定义databinder" id="markdown-toc-定义databinder">定义<code class="highlighter-rouge">DataBinder</code></a></li>
+  <li><a href="#定义modelattributemethodprocessor" id="markdown-toc-定义modelattributemethodprocessor">定义<code class="highlighter-rouge">ModelAttributeMethodProcessor</code></a></li>
+  <li><a href="#添加到spring中" id="markdown-toc-添加到spring中">添加到Spring中</a></li>
+</ul>
+
+<hr />
+
+<h2 id="问题背景">问题背景</h2>
+<p>通常情况下, 后端的变量命名方式都是<code class="highlighter-rouge">驼峰命名法(Camel Case)</code>, 而前端就不一定了, 有的用的是<code class="highlighter-rouge">Snake Case</code>(即多个单词之间用<code class="highlighter-rouge">_</code>隔开)。 在不改变命名的情况下, 如何把不同名字的参数进行绑定呢？比如<code class="highlighter-rouge">user_name</code>绑定到<code class="highlighter-rouge">userName</code>上。</p>
+
+<ul>
+  <li>可以通过<code class="highlighter-rouge">@RequestParam("user_name") String userName</code>这种形式, 但是当参数过多时也不优雅</li>
+  <li>通常情况我们会定义一个实体对象来接收参数, 但参数名不同无法自动绑定, 我们可以通过本文的方法实现非常简单的绑定</li>
+</ul>
+
+<h2 id="场景描述">场景描述</h2>
+<p>如下一个<code class="highlighter-rouge">Controller</code>参数是通过一个实体<code class="highlighter-rouge">Test</code>接收的, 但是要接收的参数名称跟实体类的字段名称对应不上</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Controller</span>
+<span class="nd">@RestController</span>
+<span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/test/"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestController</span> <span class="o">{</span>
+    <span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"index.htm"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">home</span><span class="o">(</span><span class="n">Test</span> <span class="n">test</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"It works!"</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="c1">// Test实体</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+    <span class="c1">//  要接收参数 user_name</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">userName</span><span class="o">;</span>
+    <span class="c1">//  要接收参数 home_address</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">address</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>如上, <code class="highlighter-rouge">Test</code>中的字段分别叫<code class="highlighter-rouge">userName</code>和<code class="highlighter-rouge">address</code>, 但参数却为<code class="highlighter-rouge">user_name</code>和<code class="highlighter-rouge">home_address</code>. 接下来我们就要实现这种绑定关系</p>
+
+<h2 id="自定义注解">自定义注解</h2>
+<p>定义如下的注解, 注解只允许添加到字段上, 需要指明别名列表(即把参数中的别名绑定到实体字段上)</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Target</span><span class="o">(</span><span class="n">ElementType</span><span class="o">.</span><span class="na">FIELD</span><span class="o">)</span>
+<span class="nd">@Retention</span><span class="o">(</span><span class="n">RetentionPolicy</span><span class="o">.</span><span class="na">RUNTIME</span><span class="o">)</span>
+<span class="kd">public</span> <span class="nd">@interface</span> <span class="n">ValueFrom</span> <span class="o">{</span>
+    <span class="cm">/**
+     * 参数名(别名)列表
+     */</span>
+    <span class="n">String</span><span class="o">[]</span> <span class="nf">value</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>然后我们的实体类加上相应的注解</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Test实体加上注解后</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+    <span class="c1">// 表明 userName 字段的值来自于参数中的 user_name</span>
+    <span class="nd">@ValueFrom</span><span class="o">(</span><span class="s">"user_name"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">userName</span><span class="o">;</span>
+
+    <span class="nd">@ValueFrom</span><span class="o">(</span><span class="s">"home_address"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="n">String</span> <span class="n">address</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="定义databinder">定义<code class="highlighter-rouge">DataBinder</code></h2>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AliasDataBinder</span> <span class="kd">extends</span> <span class="n">ExtendedServletRequestDataBinder</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="nf">AliasDataBinder</span><span class="o">(</span><span class="n">Object</span> <span class="n">target</span><span class="o">,</span> <span class="n">String</span> <span class="n">objectName</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">target</span><span class="o">,</span> <span class="n">objectName</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 复写addBindValues方法
+     * @param mpvs 这里面存的就是请求参数的key-value对
+     * @param request 请求本身, 这里没有用到
+     */</span>
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">addBindValues</span><span class="o">(</span><span class="n">MutablePropertyValues</span> <span class="n">mpvs</span><span class="o">,</span> <span class="n">ServletRequest</span> <span class="n">request</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">addBindValues</span><span class="o">(</span><span class="n">mpvs</span><span class="o">,</span> <span class="n">request</span><span class="o">);</span>
+        <span class="c1">// 处理要绑定参数的对象</span>
+        <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">targetClass</span> <span class="o">=</span> <span class="n">getTarget</span><span class="o">().</span><span class="na">getClass</span><span class="o">();</span>
+        <span class="c1">// 获取对象的所有字段(拿到Test类的字段)</span>
+        <span class="n">Field</span><span class="o">[]</span> <span class="n">fields</span> <span class="o">=</span> <span class="n">targetClass</span><span class="o">.</span><span class="na">getDeclaredFields</span><span class="o">();</span>
+        <span class="c1">// 处理所有字段</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">Field</span> <span class="n">field</span> <span class="o">:</span> <span class="n">fields</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// 原始字段上的注解</span>
+            <span class="n">ValueFrom</span> <span class="n">valueFromAnnotation</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="na">getAnnotation</span><span class="o">(</span><span class="n">ValueFrom</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+            <span class="c1">// 若参数中包含原始字段或者字段没有别名注解, 则跳过该字段</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">mpvs</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">field</span><span class="o">.</span><span class="na">getName</span><span class="o">())</span> <span class="o">||</span> <span class="n">valueFromAnnotation</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="c1">// 参数中没有原始字段且字段上有别名注解, 则依次取别名列表中的别名, 在参数中最先找到的别名的值赋值给原始字段</span>
+            <span class="k">for</span> <span class="o">(</span><span class="n">String</span> <span class="n">alias</span> <span class="o">:</span> <span class="n">valueFromAnnotation</span><span class="o">.</span><span class="na">value</span><span class="o">())</span> <span class="o">{</span>
+                <span class="c1">// 若参数中包含该别名, 则把别名的值赋值给原始字段</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">mpvs</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">alias</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="c1">// 给原始字段赋值</span>
+                    <span class="n">mpvs</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">field</span><span class="o">.</span><span class="na">getName</span><span class="o">(),</span> <span class="n">mpvs</span><span class="o">.</span><span class="na">getPropertyValue</span><span class="o">(</span><span class="n">alias</span><span class="o">).</span><span class="na">getValue</span><span class="o">());</span>
+                    <span class="c1">// 跳出循环防止取其它别名</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>自定义的数据绑定器(<code class="highlighter-rouge">AliasDataBinder</code>)要继承自<code class="highlighter-rouge">ExtendedServletRequestDataBinder</code></li>
+  <li>复写<code class="highlighter-rouge">addBindValues</code>方法, 该方法的第一个参数<code class="highlighter-rouge">MutablePropertyValues</code>里面存的就是请求参数的<code class="highlighter-rouge">key-value</code>对, 第二个参数是<code class="highlighter-rouge">ServletRequest</code>, 这里没有用到</li>
+  <li><code class="highlighter-rouge">getTarget()</code>是继承自<code class="highlighter-rouge">DataBinder</code>的方法, 可以获取参数要绑定的实体类对象</li>
+  <li>遍历<code class="highlighter-rouge">targetClass</code>的所有字段, 字段上有注解则处理, 没有则不处理</li>
+  <li>从内层的循环可以看出, 注解其实可以添加多个别名参数, 这里会取出第一个有值的参数</li>
+</ul>
+
+<h2 id="定义modelattributemethodprocessor">定义<code class="highlighter-rouge">ModelAttributeMethodProcessor</code></h2>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">AliasModelAttributeMethodProcessor</span> <span class="kd">extends</span> <span class="n">ServletModelAttributeMethodProcessor</span> <span class="kd">implements</span> <span class="n">ApplicationContextAware</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">ApplicationContext</span> <span class="n">applicationContext</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">AliasModelAttributeMethodProcessor</span><span class="o">(</span><span class="kt">boolean</span> <span class="n">annotationNotRequired</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">annotationNotRequired</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setApplicationContext</span><span class="o">(</span><span class="n">ApplicationContext</span> <span class="n">applicationContext</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BeansException</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">applicationContext</span> <span class="o">=</span> <span class="n">applicationContext</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">bindRequestParameters</span><span class="o">(</span><span class="n">WebDataBinder</span> <span class="n">binder</span><span class="o">,</span> <span class="n">NativeWebRequest</span> <span class="n">request</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">AliasDataBinder</span> <span class="n">aliasBinder</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AliasDataBinder</span><span class="o">(</span><span class="n">binder</span><span class="o">.</span><span class="na">getTarget</span><span class="o">(),</span> <span class="n">binder</span><span class="o">.</span><span class="na">getObjectName</span><span class="o">());</span>
+        <span class="n">RequestMappingHandlerAdapter</span> <span class="n">requestMappingHandlerAdapter</span> <span class="o">=</span> <span class="n">applicationContext</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="n">RequestMappingHandlerAdapter</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">requestMappingHandlerAdapter</span><span class="o">.</span><span class="na">getWebBindingInitializer</span><span class="o">().</span><span class="na">initBinder</span><span class="o">(</span><span class="n">aliasBinder</span><span class="o">);</span>
+        <span class="n">aliasBinder</span><span class="o">.</span><span class="na">bind</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getNativeRequest</span><span class="o">(</span><span class="n">ServletRequest</span><span class="o">.</span><span class="na">class</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>自定义的属性处理器要继承自<code class="highlighter-rouge">ServletModelAttributeMethodProcessor</code>, 重写<code class="highlighter-rouge">bindRequestParameters</code>方法, 这个方法就是绑定数据对象的时候调用的方法。</li>
+  <li>实现<code class="highlighter-rouge">ApplicationContextAware</code>是为了获取<code class="highlighter-rouge">ApplicationContext</code></li>
+</ul>
+
+<p>使用<code class="highlighter-rouge">SpringMVC</code>时, 所有的请求都是最先经过<code class="highlighter-rouge">DispatcherServlet</code>的, 然后由<code class="highlighter-rouge">DispatcherServlet</code>选择合适的<code class="highlighter-rouge">HandlerMapping</code>和<code class="highlighter-rouge">HandlerAdapter</code>来处理请求, <code class="highlighter-rouge">HandlerMapping</code>的作用就是找到请求所对应的方, 而<code class="highlighter-rouge">HandlerAdapter</code>则来处理和请求相关的的各种事情。我们这里用的请求参数绑定也是通过<code class="highlighter-rouge">HandlerAdapter</code>来做的, 父类<code class="highlighter-rouge">ServletModelAttributeMethodProcessor</code>实际上实现了<code class="highlighter-rouge">HandlerMethodArgumentResolver</code>接口。该接口有两个方法如下:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">HandlerMethodArgumentResolver</span> <span class="o">{</span>
+
+    <span class="cm">/**
+     * 返回是否支持这种参数
+    */</span>
+    <span class="kt">boolean</span> <span class="nf">supportsParameter</span><span class="o">(</span><span class="n">MethodParameter</span> <span class="n">parameter</span><span class="o">);</span>
+    <span class="cm">/**
+     * 是具体处理参数的方法
+    */</span>
+    <span class="n">Object</span> <span class="nf">resolveArgument</span><span class="o">(</span><span class="n">MethodParameter</span> <span class="n">parameter</span><span class="o">,</span> <span class="n">ModelAndViewContainer</span> <span class="n">mavContainer</span><span class="o">,</span> <span class="n">NativeWebRequest</span> <span class="n">webRequest</span><span class="o">,</span> <span class="n">WebDataBinderFactory</span> <span class="n">binderFactory</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>之所以单独拿出来说, 是因为后面还会涉及到。<code class="highlighter-rouge">ServletModelAttributeMethodProcessor</code>是用来处理复杂对象的(非基本类型), 比如我们定义的<code class="highlighter-rouge">Test</code>。</p>
+
+<h2 id="添加到spring中">添加到Spring中</h2>
+
+<p>我们定义好了属性处理器, 还要把它添加到Spring中才能生效</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Configuration</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">WebMvcConfig</span> <span class="kd">implements</span> <span class="n">WebMvcConfigurer</span> <span class="o">{</span>
+    <span class="nd">@Bean</span>
+    <span class="kd">protected</span> <span class="n">AliasModelAttributeMethodProcessor</span> <span class="nf">processor</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">AliasModelAttributeMethodProcessor</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>构造器中传了一个参数<code class="highlighter-rouge">true</code>, 这是因为<code class="highlighter-rouge">ModelAttributeMethodProcessor</code>是否支持某种类型的参数，是这样判断的</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// ServletModelAttributeMethodProcessor的父类</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ModelAttributeMethodProcessor</span> <span class="kd">implements</span> <span class="n">HandlerMethodArgumentResolver</span><span class="o">,</span> <span class="n">HandlerMethodReturnValueHandler</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">supportsParameter</span><span class="o">(</span><span class="n">MethodParameter</span> <span class="n">parameter</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">(</span><span class="n">parameter</span><span class="o">.</span><span class="na">hasParameterAnnotation</span><span class="o">(</span><span class="n">ModelAttribute</span><span class="o">.</span><span class="na">class</span><span class="o">)</span> <span class="o">||</span>
+                <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">annotationNotRequired</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">BeanUtils</span><span class="o">.</span><span class="na">isSimpleProperty</span><span class="o">(</span><span class="n">parameter</span><span class="o">.</span><span class="na">getParameterType</span><span class="o">())));</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>首先, 判断参数对象对象是否有<code class="highlighter-rouge">ModelAttribute</code>注解, 有则处理; 如果没有，则判断<code class="highlighter-rouge">annotationNotRequired</code>(注解 <strong>不是</strong> 必需的), 如果为<code class="highlighter-rouge">true</code>(表示非必需)并且参数对象不是简单对象, 则处理。这里参数对象<code class="highlighter-rouge">Test</code>是没有<code class="highlighter-rouge">ModelAttribute</code>注解的, 所以我们就需要传参为<code class="highlighter-rouge">true</code>, 表示不一定需要注解。</p>
+
+<p>通过以上步骤, 则可以灵活控制参数的对应关系了。</p>
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/SpringMVC实体对象绑定参数时自定义对应关系" data-title="SpringMVC实体对象绑定参数时自定义对应关系" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2018-09-11-SpringMVC%E5%AE%9E%E4%BD%93%E5%AF%B9%E8%B1%A1%E7%BB%91%E5%AE%9A%E5%8F%82%E6%95%B0%E6%97%B6%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AF%B9%E5%BA%94%E5%85%B3%E7%B3%BB.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
+
+</body>
+
+</html>
