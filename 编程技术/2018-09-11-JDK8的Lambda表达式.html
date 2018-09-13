@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="keywords" content="JDK8的Lambda表达式, 编程技术,  逆水行舟" />
+    <meta name="description" content="JDK8的Lambda表达式, 编程技术,  " />
+
+    <title>逆水行舟</title>
+
+    <!-- ico图标 -->
+    <link rel="shortcut icon" type="image/x-icon" media="screen" href="/static/favicon.ico" />
+    <!-- 搜索引擎收入相关 -->
+    <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2018-09-11-JDK8%E7%9A%84Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F.html" />
+    <!-- rss输出源 -->
+    <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml"  />
+    <!-- jquery -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+    <!-- qrcode -->
+    <script type="text/javascript" src="/static/js/jquery.qrcode.min.js"></script>
+    <!-- UK core js -->
+    <script type="text/javascript" src="/static/js/uikit.min.js"></script>
+    <!-- quietflow -->
+    <!-- <script type="text/javascript" src="http://loveshisong.cn/static/js/quietflow.min.js"></script> -->
+    <!-- UK sticky -->
+    <script type="text/javascript" src="/static/js/components/sticky.min.js"></script>
+    <!-- 本站js -->
+    <script type="text/javascript" src="/static/js/script.js"></script>
+    <!-- uk css-->
+    <link rel="stylesheet" type="text/css" href="/static/css/uikit.min.css" />
+    <!-- 基本样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+    <!-- 本站样式 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css" />
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" type="text/css" href="/static/css/highlight.css" />
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {
+            short_name: "shisong"
+        };
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';
+            ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</head>
+
+
+<body>
+
+    <header class="header" data-uk-sticky>
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="headwapper">
+            <div class="navbar uk-float-left">
+                <a class="uk-navbar-brand uk-hidden-small" href="http://loveshisong.cn"> 逆水行舟 -- Michael King's Blog </a>
+                <a class="uk-visible-small uk-icon-home uk-icon-large" href="http://loveshisong.cn"></a>
+            </div>
+            <div class="navbar uk-float-right">
+                <ul class="navbar-nav">
+                    <li><a href="/pages/archive.html" title="归档" class="uk-icon-folder uk-icon-small"></a></li>
+                    <li><a href="/pages/categories.html" title="目录分类" class="uk-icon-list uk-icon-small"></a></li>
+                    <li><a href="/pages/tags.html" title="标签" class="uk-icon-tags uk-icon-small"></a></li>
+                    <li><a href="/pages/about.html" title="About Me" class="uk-icon-user uk-icon-small"></a></li>
+                    <li><a href="https://github.com/rgkjhshi" title="Github" class="uk-icon-github uk-icon-small"></a></li>
+                    <li><a href="/feed.xml" title="RSS" class="uk-icon-rss uk-icon-small"></a></li>
+                </ul>
+            </div>
+        <div>
+    </div>
+</header>
+<!-- header end -->
+
+
+    <div class="uk-container uk-container-center">
+        <script type="text/javascript">
+jQuery(function(){
+	jQuery('#qrcode').qrcode({
+        width: 150,
+        height: 150,
+        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2018-09-11-JDK8%E7%9A%84Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F.html"
+    });
+})
+</script>
+<!-- 日志默认模板 -->
+<div class="uk-container content">
+    <div class="page-title">
+        <h1>JDK8的Lambda表达式</h1>
+    </div>
+    <div class="uk-grid">
+        <div  class="uk-width-4-4">
+            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <hr />
+
+<ul id="markdown-toc">
+  <li><a href="#什么是λ表达式" id="markdown-toc-什么是λ表达式">什么是λ表达式</a></li>
+  <li><a href="#λ表达式的类型它是object吗" id="markdown-toc-λ表达式的类型它是object吗">λ表达式的类型（它是Object吗？）</a></li>
+  <li><a href="#λ表达式的使用" id="markdown-toc-λ表达式的使用">λ表达式的使用</a>    <ul>
+      <li><a href="#λ表达式用在何处" id="markdown-toc-λ表达式用在何处">λ表达式用在何处</a></li>
+      <li><a href="#λ表达式与集合类批处理操作或者叫块操作" id="markdown-toc-λ表达式与集合类批处理操作或者叫块操作">λ表达式与集合类批处理操作(或者叫块操作)</a></li>
+      <li><a href="#λ表达式的更多用法" id="markdown-toc-λ表达式的更多用法">λ表达式的更多用法</a></li>
+    </ul>
+  </li>
+  <li><a href="#其它相关概念" id="markdown-toc-其它相关概念">其它相关概念</a>    <ul>
+      <li><a href="#捕获capture" id="markdown-toc-捕获capture">捕获(<code class="highlighter-rouge">Capture</code>)</a></li>
+      <li><a href="#方法引用method-reference" id="markdown-toc-方法引用method-reference">方法引用(<code class="highlighter-rouge">Method reference</code>)</a></li>
+      <li><a href="#默认方法default-method" id="markdown-toc-默认方法default-method">默认方法(<code class="highlighter-rouge">Default method</code>)</a></li>
+      <li><a href="#生成器函数generator-function" id="markdown-toc-生成器函数generator-function">生成器函数(<code class="highlighter-rouge">Generator function</code>)</a></li>
+    </ul>
+  </li>
+  <li><a href="#参考资料" id="markdown-toc-参考资料">参考资料</a></li>
+</ul>
+
+<hr />
+<h2 id="什么是λ表达式">什么是λ表达式</h2>
+<p>λ表达式本质上是一个匿名方法。让我们来看下面这个例子：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">int</span> <span class="nf">add</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">y</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>转成λ表达式后是这个样子：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">y</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="o">;</span>
+</code></pre></div></div>
+
+<p>参数类型也可以省略，Java编译器会根据上下文推断出来：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//返回两数之和</span>
+<span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="o">;</span>
+</code></pre></div></div>
+<p>或者</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//显式指明返回值</span>
+<span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span> <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="o">;</span> <span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>可见λ表达式有三部分组成：参数列表，箭头(<code class="highlighter-rouge">-&gt;</code>)，以及一个表达式或语句块。</li>
+</ul>
+
+<p>下面这个例子里的λ表达式没有参数，也没有返回值（相当于一个方法接受0个参数，返回<code class="highlighter-rouge">void</code>，其实就是<code class="highlighter-rouge">Runnable</code>里<code class="highlighter-rouge">run</code>方法的一个实现）：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">()</span> <span class="o">-&gt;</span> <span class="o">{</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Hello Lambda!"</span><span class="o">);</span> <span class="o">}</span>
+</code></pre></div></div>
+<p>如果只有一个参数且可以被Java推断出类型，那么参数列表的括号也可以省略：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">c</span> <span class="o">-&gt;</span> <span class="o">{</span> <span class="k">return</span> <span class="n">c</span><span class="o">.</span><span class="na">size</span><span class="o">();</span> <span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="λ表达式的类型它是object吗">λ表达式的类型（它是Object吗？）</h2>
+<p>λ表达式可以被当做是一个<code class="highlighter-rouge">Object</code>(注意措辞)。λ表达式的类型，叫做”目标类型(<code class="highlighter-rouge">target type</code>)”。λ表达式的目标类型是”函数接口(<code class="highlighter-rouge">functional interface</code>)”，这是JDK8新引入的概念。 <strong>它的定义是：一个接口，如果只有一个显式声明的抽象方法，那么它就是一个函数接口。</strong> 一般用<code class="highlighter-rouge">@FunctionalInterface</code>标注出来(也可以不标)。举例如下：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@FunctionalInterface</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Runnable</span> <span class="o">{</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">();</span> <span class="o">}</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Callable</span><span class="o">&lt;</span><span class="n">V</span><span class="o">&gt;</span> <span class="o">{</span> <span class="n">V</span> <span class="nf">call</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span><span class="o">;</span> <span class="o">}</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">ActionListener</span> <span class="o">{</span> <span class="kt">void</span> <span class="nf">actionPerformed</span><span class="o">(</span><span class="n">ActionEvent</span> <span class="n">e</span><span class="o">);</span> <span class="o">}</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Comparator</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">{</span> <span class="kt">int</span> <span class="nf">compare</span><span class="o">(</span><span class="n">T</span> <span class="n">o1</span><span class="o">,</span> <span class="n">T</span> <span class="n">o2</span><span class="o">);</span> <span class="kt">boolean</span> <span class="nf">equals</span><span class="o">(</span><span class="n">Object</span> <span class="n">obj</span><span class="o">);</span> <span class="o">}</span>
+</code></pre></div></div>
+
+<p>注意最后这个<code class="highlighter-rouge">Comparator</code>接口。它里面声明了两个方法，貌似不符合函数接口的定义，但它的确是函数接口。这是因为<code class="highlighter-rouge">equals</code>方法是<code class="highlighter-rouge">Object</code>的，所有的接口都会声明<code class="highlighter-rouge">Object</code>的<code class="highlighter-rouge">public</code>方法——虽然大多是隐式的。所以，<code class="highlighter-rouge">Comparator</code>显式的声明了<code class="highlighter-rouge">equals</code>不影响它依然是个函数接口。你可以用一个λ表达式为一个函数接口赋值：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Runnable</span> <span class="n">r1</span> <span class="o">=</span> <span class="o">()</span> <span class="o">-&gt;</span> <span class="o">{</span><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Hello Lambda!"</span><span class="o">);};</span>
+</code></pre></div></div>
+
+<p>然后再赋值给一个<code class="highlighter-rouge">Object</code>：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Object</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">r1</span><span class="o">;</span>
+</code></pre></div></div>
+<p>但却不能这样干：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// ERROR! Object is not a functional interface!</span>
+<span class="n">Object</span> <span class="n">obj</span> <span class="o">=</span> <span class="o">()</span> <span class="o">-&gt;</span> <span class="o">{</span><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Hello Lambda!"</span><span class="o">);};</span>
+</code></pre></div></div>
+<p>必须显式的转型成一个函数接口才可以：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// correct</span>
+<span class="n">Object</span> <span class="n">o</span> <span class="o">=</span> <span class="o">(</span><span class="n">Runnable</span><span class="o">)</span> <span class="o">()</span> <span class="o">-&gt;</span> <span class="o">{</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"hi"</span><span class="o">);</span> <span class="o">};</span>
+</code></pre></div></div>
+<p>一个λ表达式只有在转型成一个函数接口后才能被当做<code class="highlighter-rouge">Object</code>使用。所以下面这句也不能编译：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//错误! 目标类型不明</span>
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="o">()</span> <span class="o">-&gt;</span> <span class="o">{}</span> <span class="o">);</span>
+</code></pre></div></div>
+<p>必须先转型:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 正确</span>
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="o">(</span><span class="n">Runnable</span><span class="o">)()</span> <span class="o">-&gt;</span> <span class="o">{}</span> <span class="o">);</span>
+</code></pre></div></div>
+<p>假设你自己写了一个函数接口，长的跟<code class="highlighter-rouge">Runnable</code>一模一样：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@FunctionalInterface</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">MyRunnable</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>那么</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Runnable</span> <span class="n">r1</span> <span class="o">=</span>    <span class="o">()</span> <span class="o">-&gt;</span> <span class="o">{</span><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Hello Lambda!"</span><span class="o">);};</span>
+<span class="n">MyRunnable2</span> <span class="n">r2</span> <span class="o">=</span> <span class="o">()</span> <span class="o">-&gt;</span> <span class="o">{</span><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Hello Lambda!"</span><span class="o">);};</span>
+</code></pre></div></div>
+<p>都是正确的写法。这说明一个λ表达式可以有多个目标类型（函数接口），只要函数匹配成功即可。但需注意一个λ表达式必须至少有一个目标类型。JDK预定义了很多函数接口以避免用户重复定义。最典型的是<code class="highlighter-rouge">Function</code>：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@FunctionalInterface</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Function</span><span class="o">&lt;</span><span class="n">T</span><span class="o">,</span> <span class="n">R</span><span class="o">&gt;</span> <span class="o">{</span>  
+    <span class="n">R</span> <span class="nf">apply</span><span class="o">(</span><span class="n">T</span> <span class="n">t</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>这个接口代表一个函数，接受一个T类型的参数，并返回一个<code class="highlighter-rouge">R</code>类型的返回值。另一个预定义函数接口叫做<code class="highlighter-rouge">Consumer</code>，跟<code class="highlighter-rouge">Function</code>的唯一不同是它没有返回值。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@FunctionalInterface</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Consumer</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="kt">void</span> <span class="nf">accept</span><span class="o">(</span><span class="n">T</span> <span class="n">t</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>还有一个<code class="highlighter-rouge">Predicate</code>，用来判断某项条件是否满足。经常用来进行筛滤操作：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@FunctionalInterface</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Predicate</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="kt">boolean</span> <span class="nf">test</span><span class="o">(</span><span class="n">T</span> <span class="n">t</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>综上所述，一个λ表达式其实就是定义了一个匿名方法，只不过这个方法必须符合至少一个函数接口。</p>
+
+<h2 id="λ表达式的使用">λ表达式的使用</h2>
+<h3 id="λ表达式用在何处">λ表达式用在何处</h3>
+<p>λ表达式主要用于替换以前广泛使用的内部匿名类，各种回调，比如事件响应器、传入<code class="highlighter-rouge">Thread</code>类的<code class="highlighter-rouge">Runnable</code>等。看下面的例子：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Thread</span> <span class="n">oldSchool</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Thread</span><span class="o">(</span> <span class="k">new</span> <span class="n">Runnable</span> <span class="o">()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"This is from an anonymous class."</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span> <span class="o">);</span>
+<span class="n">Thread</span> <span class="n">gaoDuanDaQiShangDangCi</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Thread</span><span class="o">(</span> <span class="o">()</span> <span class="o">-&gt;</span> <span class="o">{</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"This is from an anonymous method (lambda exp)."</span><span class="o">);</span>
+<span class="o">}</span> <span class="o">);</span>
+</code></pre></div></div>
+
+<p>注意第二个线程里的λ表达式，你并不需要显式地把它转成一个<code class="highlighter-rouge">Runnable</code>，因为Java能根据上下文自动推断出来：一个<code class="highlighter-rouge">Thread</code>的构造函数接受一个<code class="highlighter-rouge">Runnable</code>参数，而传入的λ表达式正好符合其<code class="highlighter-rouge">run()</code>函数，所以Java编译器推断它为<code class="highlighter-rouge">Runnable</code>。</p>
+
+<p>从形式上看，λ表达式只是为你节省了几行代码。但将λ表达式引入Java的动机并不仅仅为此。<code class="highlighter-rouge">Java8</code>有一个短期目标和一个长期目标。短期目标是：配合”集合类批处理操作”的内部迭代和并行处理(下面将要讲到); 长期目标是将<code class="highlighter-rouge">Java</code>向函数式编程语言这个方向引导(并不是要完全变成一门函数式编程语言，只是让它有更多的函数式编程语言的特性)，也正是由于这个原因，Oracle并没有简单地使用内部类去实现λ表达式，而是使用了一种更动态、更灵活、易于将来扩展和改变的策略(<code class="highlighter-rouge">invokedynamic</code>)。</p>
+
+<h3 id="λ表达式与集合类批处理操作或者叫块操作">λ表达式与集合类批处理操作(或者叫块操作)</h3>
+<p>上文提到了集合类的批处理操作。这是<code class="highlighter-rouge">Java8</code>的另一个重要特性，它与λ表达式的配合使用乃是<code class="highlighter-rouge">Java8</code>的最主要特性。集合类的批处理操作API的目的是实现集合类的”内部迭代”，并期望充分利用现代多核CPU进行并行计算。</p>
+
+<p><code class="highlighter-rouge">Java8</code>之前集合类的迭代(<code class="highlighter-rouge">Iteration</code>)都是外部的，即客户代码。而内部迭代意味着改由Java类库来进行迭代，而不是客户代码。例如：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 外部迭代</span>
+<span class="k">for</span><span class="o">(</span><span class="n">Object</span> <span class="nl">o:</span> <span class="n">list</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">o</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>可以写成：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//forEach函数实现内部迭代</span>
+<span class="n">list</span><span class="o">.</span><span class="na">forEach</span><span class="o">(</span><span class="n">o</span> <span class="o">-&gt;</span> <span class="o">{</span><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">o</span><span class="o">);});</span>
+</code></pre></div></div>
+
+<p>集合类(包括<code class="highlighter-rouge">List</code>)现在都有一个<code class="highlighter-rouge">forEach</code>方法，对元素进行迭代(遍历)，所以我们不需要再写<code class="highlighter-rouge">for</code>循环了。<code class="highlighter-rouge">forEach</code>方法接受一个函数接口<code class="highlighter-rouge">Consumer</code>做参数，所以可以使用λ表达式。</p>
+
+<p>这种内部迭代方法广泛存在于各种语言，如C++的STL算法库、Python、ruby、Scala等。</p>
+
+<p>Java8为集合类引入了另一个重要概念：流(<code class="highlighter-rouge">stream</code>)。一个流通常以一个集合类实例为其数据源，然后在其上定义各种操作。流的API设计使用了管道(<code class="highlighter-rouge">pipelines</code>)模式。对流的一次操作会返回另一个流。如同IO的API或者<code class="highlighter-rouge">StringBuffer</code>的<code class="highlighter-rouge">append</code>方法那样，从而多个不同的操作可以在一个语句里串起来。看下面的例子：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">List</span><span class="o">&lt;</span><span class="n">Shape</span><span class="o">&gt;</span> <span class="n">shapes</span> <span class="o">=</span> <span class="o">...</span>
+<span class="n">shapes</span><span class="o">.</span><span class="na">stream</span><span class="o">()</span>
+  <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">s</span> <span class="o">-&gt;</span> <span class="n">s</span><span class="o">.</span><span class="na">getColor</span><span class="o">()</span> <span class="o">==</span> <span class="n">BLUE</span><span class="o">)</span>
+  <span class="o">.</span><span class="na">forEach</span><span class="o">(</span><span class="n">s</span> <span class="o">-&gt;</span> <span class="n">s</span><span class="o">.</span><span class="na">setColor</span><span class="o">(</span><span class="n">RED</span><span class="o">));</span>
+</code></pre></div></div>
+
+<p>首先调用<code class="highlighter-rouge">stream</code>方法，以集合类对象shapes里面的元素为数据源，生成一个流。然后在这个流上调用<code class="highlighter-rouge">filter</code>方法，挑出蓝色的，返回另一个流。最后调用<code class="highlighter-rouge">forEach</code>方法将这些蓝色的物体喷成红色。(<code class="highlighter-rouge">forEach</code>方法不再返回流，而是一个终端方法，类似于<code class="highlighter-rouge">StringBuffer</code>在调用若干<code class="highlighter-rouge">append</code>之后的那个<code class="highlighter-rouge">toString</code>)</p>
+
+<p><code class="highlighter-rouge">filter</code>方法的参数是<code class="highlighter-rouge">Predicate</code>类型，<code class="highlighter-rouge">forEach</code>方法的参数是<code class="highlighter-rouge">Consumer</code>类型，它们都是函数接口，所以可以使用λ表达式。</p>
+
+<p>还有一个方法叫<code class="highlighter-rouge">parallelStream()</code>，顾名思义它和<code class="highlighter-rouge">stream()</code>一样，只不过指明要并行处理，以期充分利用现代CPU的多核特性。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 或shapes.stream().parallel()</span>
+<span class="n">shapes</span><span class="o">.</span><span class="na">parallelStream</span><span class="o">();</span>
+</code></pre></div></div>
+
+<p>来看更多的例子。下面是典型的大数据处理方法，<code class="highlighter-rouge">Filter-Map-Reduce</code>：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//给出一个String类型的数组，找出其中所有不重复的素数</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">distinctPrimary</span><span class="o">(</span><span class="n">String</span><span class="o">...</span> <span class="n">numbers</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">l</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="n">numbers</span><span class="o">);</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">r</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="na">stream</span><span class="o">()</span>
+            <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">e</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="n">Integer</span><span class="o">(</span><span class="n">e</span><span class="o">))</span>
+            <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">e</span> <span class="o">-&gt;</span> <span class="n">Primes</span><span class="o">.</span><span class="na">isPrime</span><span class="o">(</span><span class="n">e</span><span class="o">))</span>
+            <span class="o">.</span><span class="na">distinct</span><span class="o">()</span>
+            <span class="o">.</span><span class="na">collect</span><span class="o">(</span><span class="n">Collectors</span><span class="o">.</span><span class="na">toList</span><span class="o">());</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"distinctPrimary result is: "</span> <span class="o">+</span> <span class="n">r</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>第一步: 传入一系列<code class="highlighter-rouge">String</code>(假设都是合法的数字)，转成一个<code class="highlighter-rouge">List</code>，然后调用<code class="highlighter-rouge">stream()</code>方法生成流。</li>
+  <li>第二步: 调用流的<code class="highlighter-rouge">map</code>方法把每个元素由<code class="highlighter-rouge">String</code>转成<code class="highlighter-rouge">Integer</code>，得到一个新的流。<code class="highlighter-rouge">map</code>方法接受一个<code class="highlighter-rouge">Function</code>类型的参数，上面介绍了，<code class="highlighter-rouge">Function</code>是个函数接口，所以这里用λ表达式。</li>
+  <li>第三步: 调用流的<code class="highlighter-rouge">filter</code>方法，过滤那些不是素数的数字，并得到一个新流。<code class="highlighter-rouge">filter</code>方法接受一个<code class="highlighter-rouge">Predicate</code>类型的参数，上面介绍了，<code class="highlighter-rouge">Predicate</code>是个函数接口，所以这里用λ表达式。</li>
+  <li>第四步: 调用流的<code class="highlighter-rouge">distinct</code>方法，去掉重复，并得到一个新流。这本质上是另一个<code class="highlighter-rouge">filter</code>操作。</li>
+  <li>第五步: 用<code class="highlighter-rouge">collect</code>方法将最终结果收集到一个<code class="highlighter-rouge">List</code>里面去。<code class="highlighter-rouge">collect</code>方法接受一个<code class="highlighter-rouge">Collector</code>类型的参数，这个参数指明如何收集最终结果。在这个例子中，结果简单地收集到一个<code class="highlighter-rouge">List</code>中。我们也可以用<code class="highlighter-rouge">Collectors.toMap(e-&gt;e, e-&gt;e)</code>把结果收集到一个<code class="highlighter-rouge">Map</code>中，它的意思是：把结果收到一个<code class="highlighter-rouge">Map</code>，用这些素数自身既作为键又作为值。<code class="highlighter-rouge">toMap</code>方法接受两个<code class="highlighter-rouge">Function</code>类型的参数，分别用以生成键和值，<code class="highlighter-rouge">Function</code>是个函数接口，所以这里都用λ表达式。</li>
+</ul>
+
+<p>你可能会觉得在这个例子里，<code class="highlighter-rouge">List l</code>被迭代了好多次，<code class="highlighter-rouge">map，filter，distinct</code>都分别是一次循环，效率会不好。实际并非如此。这些返回另一个<code class="highlighter-rouge">Stream</code>的方法都是”<code class="highlighter-rouge">懒(lazy)</code>“的，而最后返回最终结果的<code class="highlighter-rouge">collect</code>方法则是”<code class="highlighter-rouge">急(eager)</code>“的。在遇到<code class="highlighter-rouge">eager</code>方法之前，<code class="highlighter-rouge">lazy</code>的方法不会执行。</p>
+
+<p>当遇到<code class="highlighter-rouge">eager</code>方法时，前面的<code class="highlighter-rouge">lazy</code>方法才会被依次执行。而且是管道贯通式执行。这意味着每一个元素依次通过这些管道。例如有个元素“3”，首先它被<code class="highlighter-rouge">map</code>成整数型3；然后通过<code class="highlighter-rouge">filter</code>，发现是素数，被保留下来；又通过<code class="highlighter-rouge">distinct</code>，如果已经有一个3了，那么就直接丢弃，如果还没有则保留。这样，3个操作其实只经过了一次循环。</p>
+
+<p>除<code class="highlighter-rouge">collect</code>外其它的<code class="highlighter-rouge">eager</code>操作还有<code class="highlighter-rouge">forEach，toArray，reduce</code>等。</p>
+
+<p>下面来看一下也许是最常用的收集器方法，<code class="highlighter-rouge">groupingBy</code>：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//给出一个String类型的数组，找出其中各个素数，并统计其出现次数</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">primaryOccurrence</span><span class="o">(</span><span class="n">String</span><span class="o">...</span> <span class="n">numbers</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">l</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="n">numbers</span><span class="o">);</span>
+    <span class="n">Map</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="n">r</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="na">stream</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">e</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="n">Integer</span><span class="o">(</span><span class="n">e</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">e</span> <span class="o">-&gt;</span> <span class="n">Primes</span><span class="o">.</span><span class="na">isPrime</span><span class="o">(</span><span class="n">e</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">collect</span><span class="o">(</span> <span class="n">Collectors</span><span class="o">.</span><span class="na">groupingBy</span><span class="o">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">p</span><span class="o">,</span> <span class="n">Collectors</span><span class="o">.</span><span class="na">summingInt</span><span class="o">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="mi">1</span><span class="o">))</span> <span class="o">);</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"primaryOccurrence result is: "</span> <span class="o">+</span> <span class="n">r</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>注意这一行：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Collectors</span><span class="o">.</span><span class="na">groupingBy</span><span class="o">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">p</span><span class="o">,</span> <span class="n">Collectors</span><span class="o">.</span><span class="na">summingInt</span><span class="o">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="mi">1</span><span class="o">))</span>
+</code></pre></div></div>
+
+<p>它的意思是：把结果收集到一个<code class="highlighter-rouge">Map</code>中，用统计到的各个素数自身作为键，其出现次数作为值。</p>
+
+<p>下面是一个<code class="highlighter-rouge">reduce</code>的例子：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//给出一个String类型的数组，求其中所有不重复素数的和</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">distinctPrimarySum</span><span class="o">(</span><span class="n">String</span><span class="o">...</span> <span class="n">numbers</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">l</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="n">numbers</span><span class="o">);</span>
+    <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="na">stream</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">e</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="n">Integer</span><span class="o">(</span><span class="n">e</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">e</span> <span class="o">-&gt;</span> <span class="n">Primes</span><span class="o">.</span><span class="na">isPrime</span><span class="o">(</span><span class="n">e</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">distinct</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">reduce</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span><span class="n">y</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="o">);</span> <span class="c1">// equivalent to .sum()</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"distinctPrimarySum result is: "</span> <span class="o">+</span> <span class="n">sum</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">reduce</code>方法用来产生单一的一个最终结果。</p>
+
+<p>流有很多预定义的reduce操作，如<code class="highlighter-rouge">sum()，max()，min()</code>等。</p>
+
+<p>再举个现实世界里的栗子比如：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 统计年龄在25-35岁的男女人数、比例</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">boysAndGirls</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">&gt;</span> <span class="n">persons</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">Map</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="n">persons</span><span class="o">.</span><span class="na">parallelStream</span><span class="o">().</span><span class="na">filter</span><span class="o">(</span><span class="n">p</span> <span class="o">-&gt;</span> <span class="n">p</span><span class="o">.</span><span class="na">getAge</span><span class="o">()&gt;=</span><span class="mi">25</span> <span class="o">&amp;&amp;</span> <span class="n">p</span><span class="o">.</span><span class="na">getAge</span><span class="o">()&lt;=</span><span class="mi">35</span><span class="o">).</span>
+        <span class="n">collect</span><span class="o">(</span>
+            <span class="n">Collectors</span><span class="o">.</span><span class="na">groupingBy</span><span class="o">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">p</span><span class="o">.</span><span class="na">getSex</span><span class="o">(),</span> <span class="n">Collectors</span><span class="o">.</span><span class="na">summingInt</span><span class="o">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="mi">1</span><span class="o">))</span>
+    <span class="o">);</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"boysAndGirls result is "</span> <span class="o">+</span> <span class="n">result</span><span class="o">);</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">", ratio (male : female) is "</span> <span class="o">+</span> <span class="o">(</span><span class="kt">float</span><span class="o">)</span><span class="n">result</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">Person</span><span class="o">.</span><span class="na">MALE</span><span class="o">)/</span><span class="n">result</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">Person</span><span class="o">.</span><span class="na">FEMALE</span><span class="o">));</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="λ表达式的更多用法">λ表达式的更多用法</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 嵌套的λ表达式</span>
+<span class="n">Callable</span><span class="o">&lt;</span><span class="n">Runnable</span><span class="o">&gt;</span> <span class="n">c1</span> <span class="o">=</span> <span class="o">()</span> <span class="o">-&gt;</span> <span class="o">()</span> <span class="o">-&gt;</span> <span class="o">{</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Nested lambda"</span><span class="o">);</span> <span class="o">};</span>
+<span class="n">c1</span><span class="o">.</span><span class="na">call</span><span class="o">().</span><span class="na">run</span><span class="o">();</span>
+<span class="c1">// 用在条件表达式中</span>
+<span class="n">Callable</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">c2</span> <span class="o">=</span> <span class="kc">true</span> <span class="o">?</span> <span class="o">(()</span> <span class="o">-&gt;</span> <span class="mi">42</span><span class="o">)</span> <span class="o">:</span> <span class="o">(()</span> <span class="o">-&gt;</span> <span class="mi">24</span><span class="o">);</span>
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">c2</span><span class="o">.</span><span class="na">call</span><span class="o">());</span>
+<span class="c1">// 定义一个递归函数，注意须用this限定</span>
+<span class="kd">protected</span> <span class="n">UnaryOperator</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">factorial</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-&gt;</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="n">i</span> <span class="o">*</span> <span class="k">this</span><span class="o">.</span><span class="na">factorial</span><span class="o">.</span><span class="na">apply</span><span class="o">(</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">);</span>
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">factorial</span><span class="o">.</span><span class="na">apply</span><span class="o">(</span><span class="mi">3</span><span class="o">));</span>
+</code></pre></div></div>
+
+<p>在Java中，随声明随调用的方式是不行的，比如下面这样，声明了一个λ表达式<code class="highlighter-rouge">(x, y) -&gt; x + y</code>，同时企图通过传入实参<code class="highlighter-rouge">(2, 3)</code>来调用它：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">five</span> <span class="o">=</span> <span class="o">(</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">)</span> <span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">);</span> <span class="c1">// ERROR! try to call a lambda in-place</span>
+</code></pre></div></div>
+
+<p>这在C++中是可以的，但Java中不行。Java的λ表达式只能用作赋值、传参、返回值等。</p>
+
+<h2 id="其它相关概念">其它相关概念</h2>
+<h3 id="捕获capture">捕获(<code class="highlighter-rouge">Capture</code>)</h3>
+<p>捕获的概念在于解决在λ表达式中我们可以使用哪些外部变量(即除了它自己的参数和内部定义的本地变量)的问题。</p>
+
+<p>与内部类非常相似，但有不同点。不同点在于内部类总是持有一个其外部类对象的引用。而λ表达式呢，除非在它内部用到了其外部类（包围类）对象的方法或者成员，否则它就不持有这个对象的引用。</p>
+
+<p>在Java8以前，如果要在内部类访问外部对象的一个本地变量，那么这个变量必须声明为final才行。在Java8中，这种限制被去掉了，代之以一个新的概念，”effectively final”。它的意思是你可以声明为<code class="highlighter-rouge">final</code>，也可以不声明<code class="highlighter-rouge">final</code>但是按照<code class="highlighter-rouge">final</code>来用，也就是一次赋值永不改变。换句话说，保证它加上<code class="highlighter-rouge">final</code>前缀后不会出编译错误。</p>
+
+<p>在Java8中，内部类和λ表达式都可以访问<code class="highlighter-rouge">effectively final</code>的本地变量。λ表达式的例子如下：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//包围类的成员变量</span>
+<span class="kt">int</span> <span class="n">tmp1</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+<span class="c1">//包围类的静态成员变量</span>
+<span class="kd">static</span> <span class="kt">int</span> <span class="n">tmp2</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">testCapture</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c1">// 没有声明为final，但是effectively final的本地变量</span>
+    <span class="kt">int</span> <span class="n">tmp3</span> <span class="o">=</span> <span class="mi">3</span><span class="o">;</span>
+    <span class="c1">// 声明为final的本地变量</span>
+    <span class="kd">final</span> <span class="kt">int</span> <span class="n">tmp4</span> <span class="o">=</span> <span class="mi">4</span><span class="o">;</span>
+    <span class="c1">// 普通本地变量</span>
+    <span class="kt">int</span> <span class="n">tmp5</span> <span class="o">=</span> <span class="mi">5</span><span class="o">;</span>
+    <span class="n">Function</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="n">f1</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-&gt;</span> <span class="n">i</span> <span class="o">+</span> <span class="n">tmp1</span><span class="o">;</span>
+    <span class="n">Function</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="n">f2</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-&gt;</span> <span class="n">i</span> <span class="o">+</span> <span class="n">tmp2</span><span class="o">;</span>
+    <span class="n">Function</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="n">f3</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-&gt;</span> <span class="n">i</span> <span class="o">+</span> <span class="n">tmp3</span><span class="o">;</span>
+    <span class="n">Function</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="n">f4</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-&gt;</span> <span class="n">i</span> <span class="o">+</span> <span class="n">tmp4</span><span class="o">;</span>
+    <span class="n">Function</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="n">f5</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-&gt;</span> <span class="o">{</span>
+        <span class="c1">// 编译错！对tmp5赋值导致它不是effectively final的</span>
+        <span class="n">tmp5</span>  <span class="o">+=</span> <span class="n">i</span><span class="o">;</span>
+        <span class="k">return</span> <span class="n">tmp5</span><span class="o">;</span>
+    <span class="o">};</span>
+    <span class="c1">// 编译错！对tmp5赋值导致它不是effectively final的</span>
+    <span class="n">tmp5</span> <span class="o">=</span> <span class="mi">9</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Java要求本地变量<code class="highlighter-rouge">final</code>或者<code class="highlighter-rouge">effectively final</code>的原因是多线程并发问题。内部类、λ表达式都有可能在不同的线程中执行，允许多个线程同时修改一个本地变量不符合Java的设计理念。</p>
+
+<h3 id="方法引用method-reference">方法引用(<code class="highlighter-rouge">Method reference</code>)</h3>
+<p><strong>任何一个λ表达式都可以代表某个函数接口的唯一方法的匿名描述符。我们也可以使用某个类的某个具体方法来代表这个描述符，叫做方法引用。</strong> 例如：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nl">Integer:</span><span class="o">:</span><span class="n">parseInt</span> <span class="c1">//静态方法引用</span>
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">::</span><span class="n">print</span> <span class="c1">//实例方法引用</span>
+<span class="nl">Person:</span><span class="o">:</span><span class="k">new</span>       <span class="c1">//构造器引用</span>
+</code></pre></div></div>
+<p>下面是一组例子，教你使用方法引用代替λ表达式：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// c1 与 c2 是一样的（静态方法引用）</span>
+<span class="n">Comparator</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">c2</span> <span class="o">=</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">Integer</span><span class="o">.</span><span class="na">compare</span><span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">);</span>
+<span class="n">Comparator</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">c1</span> <span class="o">=</span> <span class="nl">Integer:</span><span class="o">:</span><span class="n">compare</span><span class="o">;</span>
+<span class="c1">// 下面两句是一样的（实例方法引用1）</span>
+<span class="n">persons</span><span class="o">.</span><span class="na">forEach</span><span class="o">(</span><span class="n">e</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">e</span><span class="o">));</span>
+<span class="n">persons</span><span class="o">.</span><span class="na">forEach</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">::</span><span class="n">println</span><span class="o">);</span>
+<span class="c1">// 下面两句是一样的（实例方法引用2）</span>
+<span class="n">persons</span><span class="o">.</span><span class="na">forEach</span><span class="o">(</span><span class="n">person</span> <span class="o">-&gt;</span> <span class="n">person</span><span class="o">.</span><span class="na">eat</span><span class="o">());</span>
+<span class="n">persons</span><span class="o">.</span><span class="na">forEach</span><span class="o">(</span><span class="nl">Person:</span><span class="o">:</span><span class="n">eat</span><span class="o">);</span>
+<span class="c1">// 下面两句是一样的（构造器引用）</span>
+<span class="n">strList</span><span class="o">.</span><span class="na">stream</span><span class="o">().</span><span class="na">map</span><span class="o">(</span><span class="n">s</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="n">Integer</span><span class="o">(</span><span class="n">s</span><span class="o">));</span>
+<span class="n">strList</span><span class="o">.</span><span class="na">stream</span><span class="o">().</span><span class="na">map</span><span class="o">(</span><span class="nl">Integer:</span><span class="o">:</span><span class="k">new</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>使用方法引用，你的程序会变得更短些。现在<code class="highlighter-rouge">distinctPrimarySum</code>方法可以改写如下：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">void</span> <span class="nf">distinctPrimarySum</span><span class="o">(</span><span class="n">String</span><span class="o">...</span> <span class="n">numbers</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">l</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="n">numbers</span><span class="o">);</span>
+    <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="na">stream</span><span class="o">().</span><span class="na">map</span><span class="o">(</span><span class="nl">Integer:</span><span class="o">:</span><span class="k">new</span><span class="o">).</span><span class="na">filter</span><span class="o">(</span><span class="nl">Primes:</span><span class="o">:</span><span class="n">isPrime</span><span class="o">).</span><span class="na">distinct</span><span class="o">().</span><span class="na">sum</span><span class="o">();</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"distinctPrimarySum result is: "</span> <span class="o">+</span> <span class="n">sum</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>还有一些其它的方法引用:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">super</span><span class="p">::</span><span class="nx">toString</span> <span class="c1">//引用某个对象的父类方法</span>
+<span class="nb">String</span><span class="p">[]::</span><span class="k">new</span> <span class="c1">//引用一个数组的构造器</span>
+</code></pre></div></div>
+
+<h3 id="默认方法default-method">默认方法(<code class="highlighter-rouge">Default method</code>)</h3>
+<p>Java8中，接口声明里可以有方法实现了，叫做默认方法。在此之前，接口里的方法全部是抽象方法。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">MyInterface</span> <span class="o">{</span>
+    <span class="n">String</span> <span class="nf">m1</span><span class="o">();</span>
+    <span class="k">default</span> <span class="n">String</span> <span class="nf">m2</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"Hello default method!"</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>这实际上混淆了接口和抽象类，但一个类仍然可以实现多个接口，而只能继承一个抽象类。</p>
+
+<p>这么做的原因是：由于<code class="highlighter-rouge">Collection</code>库需要为批处理操作添加新的方法，如<code class="highlighter-rouge">forEach()，stream()</code>等，但是不能修改现有的<code class="highlighter-rouge">Collection</code>接口——如果那样做的话所有的实现类都要进行修改，包括很多客户自制的实现类。所以只好使用这种妥协的办法。</p>
+
+<p>如此一来，我们就面临一种类似多继承的问题。如果类<code class="highlighter-rouge">Sub</code>继承了两个接口，<code class="highlighter-rouge">Base1</code>和<code class="highlighter-rouge">Base2</code>，而这两个接口恰好具有完全相同的两个默认方法，那么就会产生冲突。这时<code class="highlighter-rouge">Sub</code>类就必须通过重载来显式指明自己要使用哪一个接口的实现（或者提供自己的实现）：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Sub</span> <span class="kd">implements</span> <span class="n">Base1</span><span class="o">,</span> <span class="n">Base2</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">hello</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">Base1</span><span class="o">.</span><span class="na">super</span><span class="o">.</span><span class="na">hello</span><span class="o">();</span> <span class="c1">//使用Base1的实现</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>除了默认方法，Java8的接口也可以有静态方法的实现：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">MyInterf</span> <span class="o">{</span>
+    <span class="n">String</span> <span class="nf">m1</span><span class="o">();</span>
+    <span class="k">default</span> <span class="n">String</span> <span class="nf">m2</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"Hello default method!"</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">static</span> <span class="n">String</span> <span class="nf">m3</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"Hello static method in Interface!"</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="生成器函数generator-function">生成器函数(<code class="highlighter-rouge">Generator function</code>)</h3>
+<p>有时候一个流的数据源不一定是一个已存在的集合对象，也可能是个”生成器函数”。一个生成器函数会产生一系列元素，供给一个流。 <code class="highlighter-rouge">Stream.generate(Supplier s)</code>就是一个生成器函数。其中参数<code class="highlighter-rouge">Supplier</code>是一个函数接口，里面有唯一的抽象方法<code class="highlighter-rouge">get()</code>。</p>
+
+<p>下面这个例子生成并打印5个随机数：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Stream</span><span class="o">.</span><span class="na">generate</span><span class="o">(</span><span class="nl">Math:</span><span class="o">:</span><span class="n">random</span><span class="o">).</span><span class="na">limit</span><span class="o">(</span><span class="mi">5</span><span class="o">).</span><span class="na">forEach</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">::</span><span class="n">println</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>注意这个<code class="highlighter-rouge">limit(5)</code>，如果没有这个调用，那么这条语句会永远地执行下去。也就是说这个生成器是无穷的。这种调用叫做终结操作，或者短路(<code class="highlighter-rouge">short-circuiting</code>)操作。</p>
+
+<h2 id="参考资料">参考资料</h2>
+
+<ul>
+  <li>OpenJdk: <a href="http://openjdk.java.net/projects/lambda/">http://openjdk.java.net/projects/lambda/</a></li>
+  <li>ORACLE: <a href="http://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html">http://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html</a></li>
+  <li>原文转载自：<a href="http://blog.csdn.net/ioriogami/article/details/12782141/">http://blog.csdn.net/ioriogami/article/details/12782141/</a></li>
+</ul>
+
+        </div>
+    </div>
+
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <div class="ds-thread" data-thread-key="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/JDK8的Lambda表达式" data-title="JDK8的Lambda表达式" data-url="/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2018-09-11-JDK8%E7%9A%84Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F.html"></div>
+    <!-- 多说评论框 end -->
+</div>
+
+    </div>
+
+    <!-- 回到顶部 -->
+    <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+        <a href="javascript:void(0);">
+            <div class="arrow"></div>
+            <div class="stick"></div>
+        </a>
+    </div>
+
+    <footer class="footer">
+    <!-- 导航栏 -->
+    <div class="uk-container uk-container-center">
+        <div class="uk-container footwapper">
+            <div class="uk-grid">
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text"> 京ICP备14015515号-1 </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                    <span class="foot-text">
+                        <a href="http://www.amazingcounters.com"><img border="0" src="http://cc.amazingcounters.com/counter.php?i=3195706&c=9587431" alt="AmazingCounters.com"></a>
+                    </span>
+                </div>
+                <div class="uk-width-1-3 uk-text-center">
+                <span class="foot-text"> <i class="uk-icon-copyright"></i>2015 Michael King. </span>
+                </div>
+                <div class="uk-hidden">
+                    <span class="foot-text">
+                        <!-- cnzz统计工具 -->
+                        <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254308303'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254308303%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));</script>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer end -->
+
+
+</body>
+
+</html>
