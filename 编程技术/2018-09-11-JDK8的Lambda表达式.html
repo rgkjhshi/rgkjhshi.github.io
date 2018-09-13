@@ -234,7 +234,7 @@ jQuery(function(){
 
 <h2 id="λ表达式的使用">λ表达式的使用</h2>
 <h3 id="λ表达式用在何处">λ表达式用在何处</h3>
-<p>λ表达式主要用于替换以前广泛使用的内部匿名类，各种回调，比如事件响应器、传入<code class="highlighter-rouge">Thread</code>类的<code class="highlighter-rouge">Runnable</code>等。看下面的例子：</p>
+<p><strong>λ表达式主要用于替换以前广泛使用的内部匿名类，各种回调，比如事件响应器、传入<code class="highlighter-rouge">Thread</code>类的<code class="highlighter-rouge">Runnable</code>等。</strong> 看下面的例子：</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Thread</span> <span class="n">oldSchool</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Thread</span><span class="o">(</span> <span class="k">new</span> <span class="n">Runnable</span> <span class="o">()</span> <span class="o">{</span>
     <span class="nd">@Override</span>
@@ -252,7 +252,7 @@ jQuery(function(){
 <p>从形式上看，λ表达式只是为你节省了几行代码。但将λ表达式引入Java的动机并不仅仅为此。<code class="highlighter-rouge">Java8</code>有一个短期目标和一个长期目标。短期目标是：配合”集合类批处理操作”的内部迭代和并行处理(下面将要讲到); 长期目标是将<code class="highlighter-rouge">Java</code>向函数式编程语言这个方向引导(并不是要完全变成一门函数式编程语言，只是让它有更多的函数式编程语言的特性)，也正是由于这个原因，Oracle并没有简单地使用内部类去实现λ表达式，而是使用了一种更动态、更灵活、易于将来扩展和改变的策略(<code class="highlighter-rouge">invokedynamic</code>)。</p>
 
 <h3 id="λ表达式与集合类批处理操作或者叫块操作">λ表达式与集合类批处理操作(或者叫块操作)</h3>
-<p>上文提到了集合类的批处理操作。这是<code class="highlighter-rouge">Java8</code>的另一个重要特性，它与λ表达式的配合使用乃是<code class="highlighter-rouge">Java8</code>的最主要特性。集合类的批处理操作API的目的是实现集合类的”内部迭代”，并期望充分利用现代多核CPU进行并行计算。</p>
+<p><strong>集合类的批处理操作是<code class="highlighter-rouge">Java8</code>的另一个重要特性，它与λ表达式的配合使用乃是<code class="highlighter-rouge">Java8</code>的最主要特性。集合类的批处理操作API的目的是实现集合类的”内部迭代”，并期望充分利用现代多核CPU进行并行计算。</strong></p>
 
 <p><code class="highlighter-rouge">Java8</code>之前集合类的迭代(<code class="highlighter-rouge">Iteration</code>)都是外部的，即客户代码。而内部迭代意味着改由Java类库来进行迭代，而不是客户代码。例如：</p>
 
