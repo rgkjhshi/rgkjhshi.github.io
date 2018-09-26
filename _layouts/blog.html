@@ -1,7 +1,7 @@
 ---
 layout: default
 ---
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 jQuery(function(){
 	jQuery('#qrcode').qrcode({
         width: 150,
@@ -9,7 +9,7 @@ jQuery(function(){
         text: "{{ page.url | prepend: site.baseurl | prepend: site.url }}"
     });
 })
-</script>
+</script> -->
 <!-- 日志默认模板 -->
 <div class="uk-container content">
     <div class="page-title">
@@ -17,12 +17,25 @@ jQuery(function(){
     </div>
     <div class="uk-grid">
         <div  class="uk-width-4-4">
-            <div id="qrcode" class="uk-float-right uk-thumbnail"></div>
+            <!-- <div id="qrcode" class="uk-float-right uk-thumbnail"></div> -->
             {{ content }}
         </div>
     </div>
 
-    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-    <div class="ds-thread" data-thread-key="{{ page.id }}" data-title="{{ page.title }}" data-url="{{ page.url }}"></div>
-    <!-- 多说评论框 end -->
+    <!-- gitalk评论框 start (一个网页只需插入一次) -->
+    <!-- <div id="gitalk-container">
+        <script type="text/javascript">
+            var gitalk = new Gitalk({
+                // gitalk的主要参数
+                clientID: `9dc0d8d7df27d927c04e`,
+                clientSecret: `48882a3ff7b351d89e7e67b4c61c7301d64afca2`,
+                repo: `rgkjhshi.github.io`,
+                owner: 'rgkjhshi',
+                admin: ['rgkjhshi'],
+                id: '{{ page.title }}',
+            });
+            gitalk.render('gitalk-container');
+        </script>
+    </div> -->
+    <!-- gitalk评论框 end -->
 </div>
