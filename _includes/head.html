@@ -1,41 +1,42 @@
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="keywords" content="{{ page.title }}, {% for category in page.categories %}{{ category }},{% endfor %} {% for tag in page.tags %}{{ tag }},{% endfor %} {{ site.title }}" />
-    <meta name="description" content="{{ page.title }}, {% for category in page.categories %}{{ category }},{% endfor %} {% for tag in page.tags %}{{ tag }},{% endfor %} {% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}" />
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="{{ page.title }}, {% for category in page.categories %}{{ category }},{% endfor %} {% for tag in page.tags %}{{ tag }},{% endfor %} {{ site.title }}" />
+  <meta name="description" content="{{ page.title }}, {% for category in page.categories %}{{ category }},{% endfor %} {% for tag in page.tags %}{{ tag }},{% endfor %} {% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}"
+  />
 
-    <title>{{ site.title }}</title>
+  <title>{{ site.title }}</title>
 
-    <!-- ico图标 -->
-    <link rel="shortcut icon" type="image/x-icon" media="screen" href="{{ '/static/favicon.ico' | prepend: site.baseurl }}" />
-    <!-- 搜索引擎收入相关 -->
-    <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}" />
-    <!-- rss输出源 -->
-    <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ '/feed.xml' | prepend: site.baseurl | prepend: site.url }}"  />
-    <!-- jquery -->
-    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
-    <!-- qrcode -->
-    <script type="text/javascript" src="{{ '/static/js/jquery.qrcode.min.js' | prepend:site.baseurl  }}"></script>
-    <!-- UK core js -->
-    <script type="text/javascript" src="{{ '/static/js/uikit.min.js' | prepend:site.baseurl  }}"></script>
-    <!-- quietflow -->
-    <!-- <script type="text/javascript" src="{{ '/static/js/quietflow.min.js' | prepend:site.baseurl | prepend: site.url  }}"></script> -->
-    <!-- UK sticky -->
-    <script type="text/javascript" src="{{ '/static/js/components/sticky.min.js' | prepend:site.baseurl }}"></script>
-    <!-- 本站js -->
-    <script type="text/javascript" src="{{ '/static/js/script.js' | prepend:site.baseurl }}"></script>
-    <!-- uk css-->
-    <link rel="stylesheet" type="text/css" href="{{ '/static/css/uikit.min.css' | prepend: site.baseurl }}" />
-    <!-- 基本样式 -->
-    <link rel="stylesheet" type="text/css" href="{{ '/static/css/base.css' | prepend: site.baseurl }}" />
-    <!-- 本站样式 -->
-    <link rel="stylesheet" type="text/css" href="{{ '/static/css/main.css' | prepend: site.baseurl }}" />
-    <!-- 代码高亮 -->
-    <link rel="stylesheet" type="text/css" href="{{ '/static/css/highlight.css' | prepend: site.baseurl }}" />
+  <!-- ico图标 -->
+  <link rel="shortcut icon" type="image/x-icon" media="screen" href="{{ '/static/favicon.ico' | prepend: site.baseurl }}" />
+  <!-- 搜索引擎收入相关 -->
+  <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}" />
+  <!-- rss输出源 -->
+  <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ '/feed.xml' | prepend: site.baseurl | prepend: site.url }}" />
+  <!-- jquery -->
+  <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js"></script>
+  <!-- qrcode -->
+  <script type="text/javascript" src="{{ '/static/js/jquery.qrcode.min.js' | prepend:site.baseurl  }}"></script>
+  <!-- UK core js -->
+  <script type="text/javascript" src="{{ '/static/js/uikit.min.js' | prepend:site.baseurl  }}"></script>
+  <!-- quietflow -->
+  <!-- <script type="text/javascript" src="{{ '/static/js/quietflow.min.js' | prepend:site.baseurl | prepend: site.url  }}"></script> -->
+  <!-- UK sticky -->
+  <script type="text/javascript" src="{{ '/static/js/components/sticky.min.js' | prepend:site.baseurl }}"></script>
+  <!-- 本站js -->
+  <script type="text/javascript" src="{{ '/static/js/script.js' | prepend:site.baseurl }}"></script>
+  <!-- uk css-->
+  <link rel="stylesheet" type="text/css" href="{{ '/static/css/uikit.min.css' | prepend: site.baseurl }}" />
+  <!-- 基本样式 -->
+  <link rel="stylesheet" type="text/css" href="{{ '/static/css/base.css' | prepend: site.baseurl }}" />
+  <!-- 本站样式 -->
+  <link rel="stylesheet" type="text/css" href="{{ '/static/css/main.css' | prepend: site.baseurl }}" />
+  <!-- 代码高亮 -->
+  <link rel="stylesheet" type="text/css" href="{{ '/static/css/highlight.css' | prepend: site.baseurl }}" />
 
-    <!-- gitalk start (一个网页只需插入一次) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
-    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
-    <!-- gitalk end -->
+  <!-- gitalk start (一个网页只需插入一次) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+  <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+  <!-- gitalk end -->
 </head>
