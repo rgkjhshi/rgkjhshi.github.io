@@ -5,8 +5,8 @@
     <description>Michael King's Blog</description>
     <link>http://loveshisong.cn/</link>
     <atom:link href="http://loveshisong.cn/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 08 Oct 2018 15:34:17 +0800</pubDate>
-    <lastBuildDate>Mon, 08 Oct 2018 15:34:17 +0800</lastBuildDate>
+    <pubDate>Wed, 23 Jan 2019 18:10:57 +0800</pubDate>
+    <lastBuildDate>Wed, 23 Jan 2019 18:10:57 +0800</lastBuildDate>
     <generator>Jekyll v3.8.3</generator>
     
       <item>
@@ -431,9 +431,9 @@
   &lt;li&gt;原文转载自：&lt;a href=&quot;http://blog.csdn.net/ioriogami/article/details/12782141/&quot;&gt;http://blog.csdn.net/ioriogami/article/details/12782141/&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 </description>
-        <pubDate>Tue, 11 Sep 2018 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2018-09-11-JDK8%E7%9A%84Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2018-09-11-JDK8%E7%9A%84Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F.html</guid>
+        <pubDate>Thu, 13 Sep 2018 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2018-09-13-JDK8%E7%9A%84Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2018-09-13-JDK8%E7%9A%84Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F.html</guid>
         
         
         <category>编程技术</category>
@@ -642,6 +642,34 @@
         <pubDate>Tue, 11 Sep 2018 00:00:00 +0800</pubDate>
         <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2018-09-11-SpringMVC%E5%AE%9E%E4%BD%93%E5%AF%B9%E8%B1%A1%E7%BB%91%E5%AE%9A%E5%8F%82%E6%95%B0%E6%97%B6%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AF%B9%E5%BA%94%E5%85%B3%E7%B3%BB.html</link>
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2018-09-11-SpringMVC%E5%AE%9E%E4%BD%93%E5%AF%B9%E8%B1%A1%E7%BB%91%E5%AE%9A%E5%8F%82%E6%95%B0%E6%97%B6%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AF%B9%E5%BA%94%E5%85%B3%E7%B3%BB.html</guid>
+        
+        
+        <category>编程技术</category>
+        
+      </item>
+    
+      <item>
+        <title>mysql常用功能积累</title>
+        <description>&lt;hr /&gt;
+
+&lt;ul id=&quot;markdown-toc&quot;&gt;
+  &lt;li&gt;&lt;a href=&quot;#from_unixtime-按天查询&quot; id=&quot;markdown-toc-from_unixtime-按天查询&quot;&gt;FROM_UNIXTIME 按天查询&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+&lt;h2 id=&quot;from_unixtime-按天查询&quot;&gt;FROM_UNIXTIME 按天查询&lt;/h2&gt;
+&lt;p&gt;DB中如果存的是时间戳(比如create_time类型为int),&lt;code class=&quot;highlighter-rouge&quot;&gt;FROM_UNIXTIME&lt;/code&gt;函数支持转换时间戳为字符串&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;FROM_UNIXTIME&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create_time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'%Y年%m月%d日'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;那么按天分组统计的语句大概是这样子&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FROM_UNIXTIME&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create_time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'%Y-%m-%d'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;day&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;table&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;create_time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1544544000&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;group&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;by&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FROM_UNIXTIME&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create_time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'%Y-%m-%d'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Mon, 10 Sep 2018 00:00:00 +0800</pubDate>
+        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2018-09-10-mysql%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD%E7%A7%AF%E7%B4%AF.html</link>
+        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2018-09-10-mysql%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD%E7%A7%AF%E7%B4%AF.html</guid>
         
         
         <category>编程技术</category>
@@ -1827,162 +1855,6 @@
         <pubDate>Sat, 30 Sep 2017 00:00:00 +0800</pubDate>
         <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-09-30-Spring%E4%B8%AD%E7%9A%84XML%E9%85%8D%E7%BD%AE%E7%9A%84%E5%86%99%E6%B3%95.html</link>
         <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-09-30-Spring%E4%B8%AD%E7%9A%84XML%E9%85%8D%E7%BD%AE%E7%9A%84%E5%86%99%E6%B3%95.html</guid>
-        
-        <category>Spring</category>
-        
-        
-        <category>编程技术</category>
-        
-      </item>
-    
-      <item>
-        <title>Spring Bean的生命周期</title>
-        <description>&lt;hr /&gt;
-
-&lt;ul id=&quot;markdown-toc&quot;&gt;
-  &lt;li&gt;&lt;a href=&quot;#生命周期&quot; id=&quot;markdown-toc-生命周期&quot;&gt;生命周期&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;#测试示例&quot; id=&quot;markdown-toc-测试示例&quot;&gt;测试示例&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;生命周期&quot;&gt;生命周期&lt;/h2&gt;
-&lt;p&gt;普通的&lt;code class=&quot;highlighter-rouge&quot;&gt;Java&lt;/code&gt;程序中一个对象通过关键字&lt;code class=&quot;highlighter-rouge&quot;&gt;new&lt;/code&gt;进行实例化, 而在&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;容器里, &lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;的生命周期由&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;来控制, 而&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;中对&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;的生命周期的控制非常细致, 我们可以通过&lt;code class=&quot;highlighter-rouge&quot;&gt;Spring&lt;/code&gt;提供的扩展点来自定义&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;的创建过程.&lt;/p&gt;
-
-&lt;p&gt;下图是一个典型的生命周期过程:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/static/images/bean_lifecycle.png&quot; alt=&quot;Bean生命周期&quot; title=&quot;Bean生命周期&quot; /&gt;&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;对&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;进行实例化, 相当于调用构造函数, &lt;code class=&quot;highlighter-rouge&quot;&gt;new&lt;/code&gt;出一个对象&lt;/li&gt;
-  &lt;li&gt;将&lt;code class=&quot;highlighter-rouge&quot;&gt;值&lt;/code&gt;和&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean的引用&lt;/code&gt;注入到&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;对应的属性中&lt;/li&gt;
-  &lt;li&gt;若&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanNameAware&lt;/code&gt;接口, Spring将Bean的ID传递给&lt;code class=&quot;highlighter-rouge&quot;&gt;setBeanName(String name)&lt;/code&gt;方法. (实现&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanNameAware&lt;/code&gt;主要是为了通过Bean的引用来 &lt;strong&gt;获取&lt;/strong&gt; Bean的ID)&lt;/li&gt;
-  &lt;li&gt;若&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactoryAware&lt;/code&gt;接口, Spring将调用&lt;code class=&quot;highlighter-rouge&quot;&gt;setBeanFactory(BeanFactory beanFactory)&lt;/code&gt;方法, 将&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactory&lt;/code&gt;容器实例传入. (实现&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactoryAware&lt;/code&gt;主要目的是为了获取Spring容器, 如Bean通过Spring容器发布事件等)&lt;/li&gt;
-  &lt;li&gt;若&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;ApplicationContextAware&lt;/code&gt;接口, Spring容器将调用&lt;code class=&quot;highlighter-rouge&quot;&gt;setApplicationContext(ApplicationContext applicationContext)&lt;/code&gt;方法, 将应用上下文的引用传入. (作用与&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactoryAware&lt;/code&gt;类似都是为了获取Spring容器, 不同的是Spring容器在调用&lt;code class=&quot;highlighter-rouge&quot;&gt;setApplicationContext&lt;/code&gt;方法时会把自己作为参数传入, 而Spring容器在调用&lt;code class=&quot;highlighter-rouge&quot;&gt;setBeanFactory&lt;/code&gt;前需要程序员自己指定&lt;code class=&quot;highlighter-rouge&quot;&gt;setBeanFactory&lt;/code&gt;里的参数&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanFactory&lt;/code&gt;)&lt;/li&gt;
-  &lt;li&gt;若&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanPostProcessor&lt;/code&gt;接口, Spring将调用它们的&lt;code class=&quot;highlighter-rouge&quot;&gt;预初始化方法: postProcessBeforeInitialization(Object bean, String beanName)&lt;/code&gt;方法. (作用是在Bean实例创建成功后对进行增强处理, 如对Bean进行修改, 增加某个功能)&lt;/li&gt;
-  &lt;li&gt;调用&lt;code class=&quot;highlighter-rouge&quot;&gt;@PostConstruct&lt;/code&gt;注解的方法, 该方法必须无参数, 不能抛受检查异常, 返回值必须为&lt;code class=&quot;highlighter-rouge&quot;&gt;void&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;若&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;InitializingBean&lt;/code&gt;接口, Spring将调用它们的&lt;code class=&quot;highlighter-rouge&quot;&gt;afterPropertiesSet()&lt;/code&gt;方法.&lt;/li&gt;
-  &lt;li&gt;调用自定义初始化方法, 即&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;bean init-method=&quot;&quot; /&amp;gt;&lt;/code&gt;或&lt;code class=&quot;highlighter-rouge&quot;&gt;@Bean(initMethod = &quot;&quot;)&lt;/code&gt;声明的方法.&lt;/li&gt;
-  &lt;li&gt;若&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanPostProcessor&lt;/code&gt;接口的实现类, Spring将调用它们的&lt;code class=&quot;highlighter-rouge&quot;&gt;后初始化方法: postProcessAfterInitialization(Object bean, String beanName)&lt;/code&gt;方法.&lt;/li&gt;
-  &lt;li&gt;此时&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;已经准备就绪, 可以被应用程序使用了, 它将一直驻留在应用上下文中, 直到应用上下文被销毁&lt;/li&gt;
-  &lt;li&gt;调用&lt;code class=&quot;highlighter-rouge&quot;&gt;@PreDestroy&lt;/code&gt;注解的方法, 该方法必须无参数, 不能抛受检查异常, 返回值必须为&lt;code class=&quot;highlighter-rouge&quot;&gt;void&lt;/code&gt;.&lt;/li&gt;
-  &lt;li&gt;若&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;实现了&lt;code class=&quot;highlighter-rouge&quot;&gt;DisposableBean&lt;/code&gt;接口, Spring将调用它的&lt;code class=&quot;highlighter-rouge&quot;&gt;destroy()&lt;/code&gt;方法.&lt;/li&gt;
-  &lt;li&gt;调用自定义销毁方法, 即&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;bean destroy-method=&quot;&quot; /&amp;gt;&lt;/code&gt;或&lt;code class=&quot;highlighter-rouge&quot;&gt;@Bean(destroyMethod = &quot;&quot;)&lt;/code&gt;声明的方法.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;注意&lt;/code&gt;: 黄色部分标识的&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanPostProcessor&lt;/code&gt;接口有点特殊, 如果我们定义了一个实现&lt;code class=&quot;highlighter-rouge&quot;&gt;BeanPostProcessor&lt;/code&gt;接口的&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;(后处理器), 那么在这个&lt;code class=&quot;highlighter-rouge&quot;&gt;Bean&lt;/code&gt;所在的容器中的 &lt;strong&gt;其他所有Bean&lt;/strong&gt; 在初始化前后都会执行该后处理器的方法&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&quot;测试示例&quot;&gt;测试示例&lt;/h2&gt;
-&lt;p&gt;如果我们在xml文件中有这样的配置&lt;/p&gt;
-
-&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;lifecycleService&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;XXX.service.LifecycleService&quot;&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;init-method=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;initMethod&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;destroy-method=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;destroyMethod&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Bean的定义如下:&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// 后处理器&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@Service&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MyBeanPostProcessor&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeanPostProcessor&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Logger&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LoggerFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LifecycleService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;postProcessBeforeInitialization&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;beanName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeansException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 每一个没有实现BeanPostProcessor接口的Bean都会调用&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bean&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LifecycleService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;BeanPostProcessor.postProcessBeforeInitialization()方法, beanName={}&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;beanName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;postProcessAfterInitialization&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;beanName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeansException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// 每一个没有实现BeanPostProcessor接口的Bean都会调用&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bean&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LifecycleService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;BeanPostProcessor.postProcessBeforeInitialization()方法, beanName={}&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;beanName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// 一个普通的Bean, 在上面的xml文件中声明&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LifecycleService&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeanNameAware&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeanFactoryAware&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ApplicationContextAware&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;InitializingBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DisposableBean&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Logger&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LoggerFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LifecycleService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;LifecycleService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;1. 构造方法&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-        &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;setBeanName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;beanName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;2. BeanNameAware.setBeanName()方法, 用于获取Bean的ID&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-        &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;setBeanFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BeanFactory&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;beanFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeansException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;3. BeanFactoryAware.setBeanFactory()方法&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-        &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;setApplicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ApplicationContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;applicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeansException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;4. ApplicationContextAware.setApplicationContext()方法&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-        &lt;span class=&quot;nd&quot;&gt;@PostConstruct&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;init&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;5. @PostConstruct&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-        &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;afterPropertiesSet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;6. InitializingBean.afterPropertiesSet()方法&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;initMethod&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;7. initMethod&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-        &lt;span class=&quot;c1&quot;&gt;// bean就绪&lt;/span&gt;
-
-        &lt;span class=&quot;nd&quot;&gt;@PreDestroy&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;preDestory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;8. @PreDestroy&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-        &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;destroy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;9. DisposableBean.destroy()方法&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;destroyMethod&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;10. destroyMethod&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;这个例子的输出结果为:&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;构造方法&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeanNameAware&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setBeanName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;方法&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;用于获取&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Bean&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;的&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ID&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BeanFactoryAware&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setBeanFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;方法&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ApplicationContextAware&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setApplicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;方法&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;BeanPostProcessor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;postProcessBeforeInitialization&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;方法&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;beanName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lifecycleService&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nd&quot;&gt;@PostConstruct&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;InitializingBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;afterPropertiesSet&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;方法&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;initMethod&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;BeanPostProcessor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;postProcessBeforeInitialization&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;方法&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;beanName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lifecycleService&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nd&quot;&gt;@PreDestroy&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DisposableBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;destroy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;方法&lt;/span&gt;
-&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;destroyMethod&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;hr /&gt;
-</description>
-        <pubDate>Mon, 14 Aug 2017 00:00:00 +0800</pubDate>
-        <link>http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-08-14-Spring-Bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.html</link>
-        <guid isPermaLink="true">http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2017-08-14-Spring-Bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.html</guid>
         
         <category>Spring</category>
         

@@ -97,7 +97,7 @@ jQuery(function(){
       <li><a href="#系统system类加载器" id="markdown-toc-系统system类加载器">系统(System)类加载器</a></li>
     </ul>
   </li>
-  <li><a href="#双亲委派机制x" id="markdown-toc-双亲委派机制x">双亲委派机制x</a></li>
+  <li><a href="#双亲委派机制" id="markdown-toc-双亲委派机制">双亲委派机制</a></li>
   <li><a href="#程序验证" id="markdown-toc-程序验证">程序验证</a>    <ul>
       <li><a href="#验证一-parent的验证" id="markdown-toc-验证一-parent的验证">验证一: parent的验证</a></li>
       <li><a href="#验证二-默认的类加载器" id="markdown-toc-验证二-默认的类加载器">验证二: 默认的类加载器</a></li>
@@ -131,7 +131,7 @@ jQuery(function(){
 
 <hr />
 
-<h2 id="双亲委派机制x">双亲委派机制x</h2>
+<h2 id="双亲委派机制">双亲委派机制</h2>
 
 <p>JVM在加载类时默认采用的是双亲委派机制，就是某个特定的类加载器在接到加载类的请求时，首先将加载任务委托给双亲加载器，依次递归，如果双亲加载器可以完成类加载任务，就成功返回；只有双亲类加载器无法完成此加载任务时，才自己去加载。<br />
 注意这里的双亲并不是继承上的关系，而是指的<code class="highlighter-rouge">ClassLoader</code>中的一个字段。在源码中更容易描述双亲委派机制：</p>
