@@ -5,8 +5,8 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="keywords" content="mysql常用功能积累, 编程技术,  逆水行舟" />
-  <meta name="description" content="mysql常用功能积累, 编程技术,  "
+  <meta name="keywords" content="百望山,   逆水行舟" />
+  <meta name="description" content="百望山,   Michael King's Blog"
   />
 
   <title>逆水行舟</title>
@@ -14,7 +14,7 @@
   <!-- ico图标 -->
   <link rel="shortcut icon" type="image/x-icon" media="screen" href="/static/favicon.ico" />
   <!-- 搜索引擎收入相关 -->
-  <link rel="canonical" href="http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2018-09-10-mysql%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD%E7%A7%AF%E7%B4%AF.html" />
+  <link rel="canonical" href="http://loveshisong.cn/trip/baiwangshan" />
   <!-- rss输出源 -->
   <link rel="alternate" type="application/rss+xml" title="逆水行舟" href="http://loveshisong.cn/feed.xml" />
   <!-- jquery -->
@@ -74,51 +74,65 @@ jQuery(function(){
 	jQuery('#qrcode').qrcode({
         width: 150,
         height: 150,
-        text: "http://loveshisong.cn/%E7%BC%96%E7%A8%8B%E6%8A%80%E6%9C%AF/2018-09-10-mysql%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD%E7%A7%AF%E7%B4%AF.html"
+        text: "http://loveshisong.cn/trip/baiwangshan"
     });
 })
 </script> -->
 <!-- 日志默认模板 -->
 <div class="uk-container content">
     <div class="page-title">
-        <h1>mysql常用功能积累</h1>
+        <h1>百望山</h1>
     </div>
     <div class="uk-grid">
         <div  class="uk-width-4-4">
             <!-- <div id="qrcode" class="uk-float-right uk-thumbnail"></div> -->
-            <hr />
-
-<ul id="markdown-toc">
-  <li><a href="#from_unixtime-按天查询" id="markdown-toc-from_unixtime-按天查询">FROM_UNIXTIME 按天查询</a></li>
-  <li><a href="#创建用户" id="markdown-toc-创建用户">创建用户</a></li>
+            <ul id="markdown-toc">
+  <li><a href="#百望山一日游" id="markdown-toc-百望山一日游">百望山一日游</a>    <ul>
+      <li><a href="#时间安排" id="markdown-toc-时间安排">时间安排</a></li>
+      <li><a href="#交通" id="markdown-toc-交通">交通</a></li>
+      <li><a href="#门票" id="markdown-toc-门票">门票</a></li>
+      <li><a href="#注意事项" id="markdown-toc-注意事项">注意事项</a></li>
+      <li><a href="#景点介绍" id="markdown-toc-景点介绍">景点介绍</a></li>
+    </ul>
+  </li>
 </ul>
 
 <hr />
-<h2 id="from_unixtime-按天查询">FROM_UNIXTIME 按天查询</h2>
-<p>DB中如果存的是时间戳(比如create_time类型为int),<code class="highlighter-rouge">FROM_UNIXTIME</code>函数支持转换时间戳为字符串</p>
 
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">FROM_UNIXTIME</span><span class="p">(</span><span class="n">create_time</span><span class="p">,</span> <span class="s1">'%Y年%m月%d日'</span><span class="p">)</span>
-</code></pre></div></div>
-<p>那么按天分组统计的语句大概是这样子</p>
+<h2 id="百望山一日游">百望山一日游</h2>
 
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">select</span> <span class="n">FROM_UNIXTIME</span><span class="p">(</span><span class="n">create_time</span><span class="p">,</span> <span class="s1">'%Y-%m-%d'</span><span class="p">)</span> <span class="k">as</span> <span class="k">day</span><span class="p">,</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">as</span> <span class="k">count</span> <span class="k">from</span> <span class="k">table</span> <span class="k">where</span> <span class="n">create_time</span><span class="o">&gt;</span><span class="mi">1544544000</span> <span class="k">group</span> <span class="k">by</span> <span class="n">FROM_UNIXTIME</span><span class="p">(</span><span class="n">create_time</span><span class="p">,</span> <span class="s1">'%Y-%m-%d'</span><span class="p">)</span>
-</code></pre></div></div>
+<h3 id="时间安排">时间安排</h3>
+<ol>
+  <li>周六早上10:00, 百望山门口集合</li>
+</ol>
 
-<h2 id="创建用户">创建用户</h2>
+<h3 id="交通">交通</h3>
 
+<ol>
+  <li>距离较近，暂不租车了。可以乘坐地铁到<code class="highlighter-rouge">16号线的马连洼站</code>，<code class="highlighter-rouge">A口</code>出步行900米就到了</li>
+</ol>
+
+<h3 id="门票">门票</h3>
 <ul>
-  <li>格式: <code class="highlighter-rouge">grant select on 数据库.* to 用户名@登录主机 identified by '密码'</code></li>
+  <li><code class="highlighter-rouge">6元</code></li>
 </ul>
 
-<p>比如：</p>
+<h3 id="注意事项">注意事项</h3>
+<ol>
+  <li>天气较热，涂好防晒霜，可带个防晒服</li>
+  <li>最好带瓶水，带点零食，可以一起吃</li>
+  <li>我会带扑克、uknow等桌游，另外我尽量带个野餐布</li>
+  <li>游玩时间大概半天，一般3小时左右</li>
+  <li>景区开放时间：06:00-20:00</li>
+</ol>
 
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- 所有数据库的所有权限</span>
-<span class="k">grant</span> <span class="k">all</span> <span class="k">privileges</span> <span class="k">on</span> <span class="o">*</span><span class="p">.</span><span class="o">*</span> <span class="k">to</span> <span class="n">root</span><span class="o">@</span><span class="n">localhost</span> <span class="n">identified</span> <span class="k">by</span> <span class="s1">'password'</span><span class="p">;</span>
-<span class="c1">-- 数据库mydb里的所有表，在所有主机上都可登录</span>
-<span class="k">grant</span> <span class="k">all</span> <span class="k">privileges</span> <span class="k">on</span> <span class="n">mydb</span><span class="p">.</span><span class="o">*</span> <span class="k">to</span> <span class="n">root</span><span class="o">@</span><span class="s1">'%'</span> <span class="n">identified</span> <span class="k">by</span> <span class="s1">'password'</span><span class="p">;</span>
-<span class="c1">-- 最后记得刷新权限设置</span>
-<span class="n">flush</span> <span class="k">privileges</span><span class="p">;</span>
-</code></pre></div></div>
+<h3 id="景点介绍">景点介绍</h3>
+
+<p>百望山属太行山余脉，海拔210米，面积200余公顷。民间传说北宋杨六郎与辽兵在山下大战，佘太君登山观战为六郎助威，因此又叫“望儿山”。</p>
+
+<p>百望山景点有 佘太君庙、教子台、回头石、老龙头、望京楼望儿台、黑山扈抗战纪念园 等。</p>
+
+<hr />
 
         </div>
     </div>
@@ -133,7 +147,7 @@ jQuery(function(){
                 repo: `rgkjhshi.github.io`,
                 owner: 'rgkjhshi',
                 admin: ['rgkjhshi'],
-                id: 'mysql常用功能积累',
+                id: '百望山',
             });
             gitalk.render('gitalk-container');
         </script>
