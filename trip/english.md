@@ -24,6 +24,13 @@ tag:
 | 10:00 | 基辅   | KBP 鲍里斯波尔国际机场 D  | 乌克兰国际航空PS111                        | 飞3h25m  |
 | 11:25 | 伦敦   | LGW 盖特威尔克机场 S     |                                          |          |
 
+### 住宿
+* 公寓型住宅，房东：Julia
+* 入住: 10-01 周二 15:00
+* 退房: 10-06 周日 11:00
+* 地址: 83 Willesden Lane Apartment B, 伦敦, 英格兰 NW6 7RR, 英国
+* Double Room in zone 2 Kilburn/Queens Park
+
 ### 10-06 周日 伦敦 -> 北京
 * 中转阿联酋阿布扎比，行李直达，总时长16h15m
 
