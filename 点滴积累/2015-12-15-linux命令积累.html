@@ -96,6 +96,7 @@ jQuery(function(){
     </ul>
   </li>
   <li><a href="#awk" id="markdown-toc-awk">awk</a></li>
+  <li><a href="#去重排序" id="markdown-toc-去重排序">去重排序</a></li>
   <li><a href="#链接命令-ln" id="markdown-toc-链接命令-ln">链接命令 <em>ln</em></a></li>
   <li><a href="#打包命令-tar" id="markdown-toc-打包命令-tar">打包命令 <em>tar</em></a></li>
   <li><a href="#远程拷贝-scp" id="markdown-toc-远程拷贝-scp">远程拷贝 <em>scp</em></a></li>
@@ -163,6 +164,21 @@ jQuery(function(){
 <span class="c"># 在开头和结尾打印一些东西</span>
 <span class="nb">cat</span> /etc/passwd | <span class="nb">awk</span>  <span class="nt">-F</span> <span class="s1">':'</span>  <span class="s1">'BEGIN {print "name,shell"}  {print $1","$7} END {print "aaa,bbb"}'</span>
 </code></pre></div></div>
+
+<hr />
+
+<h2 id="去重排序">去重排序</h2>
+
+<p>组合使用<code class="highlighter-rouge">sort</code>和<code class="highlighter-rouge">uniq</code>, 如:<code class="highlighter-rouge">sort test.txt | uniq -c | sort -rn</code></p>
+
+<p>其中:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">uniq</code>命令只能对相邻行进行去重复操作,所以在进行去重前,先要对文本行进行排序,使重复行集中到一起: <code class="highlighter-rouge">sort test.txt</code></li>
+  <li>去掉相邻的重复行: <code class="highlighter-rouge">sort test.txt | uniq</code></li>
+  <li><code class="highlighter-rouge">uniq -c</code>可以实现对重复次数进行统计, 文本行去重并按重复次数排序: <code class="highlighter-rouge">sort test.txt | uniq -c</code></li>
+  <li><code class="highlighter-rouge">sort -n</code>可以识别每行开头的数字，并按其大小对文本行进行排序。默认是按升序排列，如果想要按降序要加<code class="highlighter-rouge">-r</code>选项(<code class="highlighter-rouge">sort -rn</code>)</li>
+</ul>
 
 <hr />
 
